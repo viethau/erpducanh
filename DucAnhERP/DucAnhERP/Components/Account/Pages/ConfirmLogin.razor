@@ -1,0 +1,153 @@
+﻿@page "/Account/ConfirmLogin"
+
+@using System.ComponentModel.DataAnnotations
+@using DucAnhERP.Models
+@using DucAnhERP.Shared
+@using Microsoft.AspNetCore.Identity
+@using System.Text
+
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject IdentityRedirectManager RedirectManager
+@inject ILoginService LoginService
+@inject UserState UserState
+
+<PageTitle>Confirm Login</PageTitle>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5 card-primary">
+                <div class="card-header">
+                    <h2 class="card-title">Xác Thực Đăng nhập</h2>
+                </div>
+                <StatusMessage Message="@errorMessage" MessageClass="@messageClass" />
+                <EditForm Model="Input" method="post" OnValidSubmit="VerifyCode" FormName="confirmLogin">
+                    <DataAnnotationsValidator />
+                    <div class="card-body">
+                        <div>
+                            <p>Chúng tôi đã gửi một email kèm mã xác thực đến địa chỉ của bạn.</p>
+                            <p>Vui lòng kiểm tra email và nhập mã xác thực gồm 6 ký tự để hoàn tất đăng nhập:</p>
+                            <p class="text-muted">Nếu bạn không thấy email trong hộp thư đến, vui lòng kiểm tra thư mục Thư rác hoặc Spam.</p>
+                            <div>
+                                <InputText @bind-Value="Input.Code" maxlength="6" class="form-control text-center " />
+                                <ValidationMessage For="() => Input.Code" class="text-danger" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary btn-block">Xác nhận</button>
+                        <a href="/Account/Login" class="btn btn-block">Quay lại màn hình đăng nhập</a>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string? errorMessage;
+    private string? messageClass;
+
+    [SupplyParameterFromForm]
+    private InputModel Input { get; set; } = new();
+
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
+
+    [SupplyParameterFromQuery]
+    private bool RememberMe { get; set; }
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    private void ResendVerificationCode()
+    {
+    }
+
+    private async Task VerifyCode()
+    {
+        var email = UserState.Email;
+
+        if (string.IsNullOrEmpty(email) && string.IsNullOrEmpty(Input.Code))
+        {
+            errorMessage = "Lỗi bất thường xảy ra, vui lòng thử lại.";
+            messageClass = Constant.DANGER;
+            return;
+        }
+
+        if (LoginService.VerifyCode(email, Input.Code))
+        {
+            LoginService.ClearVerificationCode(email);
+            // This doesn't count login failures towards account lockout
+            // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+            var result = await SignInManager.PasswordSignInAsync(UserState.Email, UserState.Password, RememberMe, lockoutOnFailure: true);
+            if (result.Succeeded)
+            {
+                var user = await UserManager.FindByNameAsync(email);
+                if (user == null)
+                {
+                    return;
+                }
+                await UserManager.SetLockoutEndDateAsync(user, null);
+
+                // Kiểm tra session
+                var existingSession = await UserSessionService.GetByUserName(user.UserName);
+
+                // Nếu đã login tại nơi khác
+                if (existingSession != null)
+                {
+                    // Xóa phiên đăng nhập cũ
+                    await UserSessionService.DeleteById(existingSession.Id);
+                }
+
+                // Tạo phiên đăng nhập mới
+                var userSession = new UserSession
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        UserName = user.UserName,
+                        LoginAt = DateTime.UtcNow,
+                        LastActive = DateTime.UtcNow,
+                        IsActive = 1
+                    };
+
+                await UserSessionService.Insert(userSession);
+
+                HttpContext.Session.SetString("sessionId", userSession.Id);
+                HttpContext.Session.SetString("userName", userSession.UserName);
+
+                RedirectManager.RedirectTo(ReturnUrl);
+            }
+            else if (result.IsLockedOut)
+            {
+                RedirectManager.RedirectTo("Account/Lockout");
+            }
+            else
+            {
+                errorMessage = "Lỗi: Thông tin đăng nhập không đúng.";
+                messageClass = Constant.DANGER;
+                return;
+            }
+
+        }
+        else
+        {
+            errorMessage = "Mã xác thực không đúng hoặc đã hết hạn.";
+            messageClass = Constant.DANGER;
+            return;
+        }
+    }
+
+
+    private sealed class InputModel
+    {
+        [Required(ErrorMessage = "Bạn phải nhập mã xác thực!")]
+        [StringLength(6, MinimumLength = 6, ErrorMessage = "Mã xác thực gồm 6 ký tự")]
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Mã xác thực gồm các ký tự từ 0-9")]
+        public string Code { get; set; } = "";
+    }
+
+}

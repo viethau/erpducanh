@@ -1,0 +1,558 @@
+﻿@page "/MPermissions/createQuyen/{majorId}"
+@using DucAnhERP.Models
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Components.Pages.Common
+@using DucAnhERP.SeedWork
+@using DucAnhERP.Shared
+@using Microsoft.AspNetCore.Authorization
+@inject NavigationManager navigation;
+@attribute [Authorize]
+
+<div class="d-flex">
+    <div class="col-6">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Cài đặt phân quyền</h3>
+            </div>
+
+            <EditForm Model="mpermission" FormName="CreateQuyen" Context="formContext">
+                <DataAnnotationsValidator />
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="company">Chi nhánh</label>
+                        <InputSelect id="company" class="form-control" ValueExpression="@(() => mpermission.CompanyId)" Value="@mpermission.CompanyId" ValueChanged="@((string value) => OnChangeCompany(value))">
+                            <option value="" selected>Chọn chi nhánh</option>
+                            @if (listCompanies != null)
+                            {
+                                @foreach (var company in listCompanies)
+                                {
+                                    <option value="@company.Id">@company.CompanyName</option>
+                                }
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="()=>mpermission.CompanyId"></ValidationMessage>
+                    </div>
+                    <div class="form-group">
+                        <label for="parentMajor">Nghiệp vụ</label>
+                        <InputSelect id="parentMajor" disabled class="form-control" @bind-Value="mpermission.MajorId">
+                            @if (parentMajor != null)
+                            {
+                                <option selected value="@parentMajor.Id">@parentMajor.MajorName</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="()=>mpermission.MajorId"></ValidationMessage>
+                    </div>
+                    <div class="form-group">
+                        <label for="childMajor">Phân loại</label>
+                        <InputSelect id="childMajor" class="form-control" ValueExpression="@(() => mpermission.ScreenId)" Value="@mpermission.ScreenId" ValueChanged="@((string value) => OnChangeMajor(value))">
+                            <option value="" selected>Chọn phân loại</option>
+                            @foreach (var major in listMajor)
+                            {
+                                <option value="@major.Id">@major.MajorName</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="()=>mpermission.ScreenId"></ValidationMessage>
+                    </div>
+                    <div class="form-group">
+                        <label for="selectUser">Người dùng</label>
+                        <InputSelect class="form-control" ValueExpression="@(() => mpermission.UserId)" Value="@mpermission.UserId" ValueChanged="@((string value) => OnChangeUser(value))">
+                            <option value="" selected>Chọn người dùng</option>
+                            @if (listUser != null)
+                            {
+                                @foreach (var user in listUser)
+                                {
+                                    <option value="@user.Id">@user.LastName @user.FirstName</option>
+                                }
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="()=>mpermission.UserId"></ValidationMessage>
+                    </div>
+                    <div class="form-group">
+                        <div class="custom-control custom-switch">
+                            <input class="custom-control-input btn" type="checkbox" @bind="mpermission.IsChecked" id="confirmPermission">
+                            <label class="custom-control-label btn" for="confirmPermission">Xác nhận cài đặt phân quyền</label>
+                        </div>
+                        <ValidationMessage For="()=>mpermission.IsChecked"></ValidationMessage>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary" @onclick="@(() => ValidateRegister(formContext))">Đăng ký</button>
+                    <button type="submit" class="btn btn-danger" @onclick="@(() => ValidateDelete(formContext))">Xóa quyền</button>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+    @if (listCorePermission.Any())
+    {
+        <div class="col-6">
+            <div>
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Phân quyền</h3>
+                    </div>
+                    <div class="card-body">
+                        <fieldset class="group">
+                            @if (listCorePermission.Any())
+                            {
+                                <legend>@listCorePermission.FirstOrDefault().ScreenName</legend>
+                            }
+
+                            @foreach (var permission in listCorePermission)
+                            {
+                                <div class="custom-control custom-switch">
+
+                                    <input class="custom-control-input btn" type="checkbox" id="@permission.Id" @bind="permission.IsChecked" />
+                                    <label class="custom-control-label btn" for="@permission.Id">
+                                        @permission.PermissionName
+                                    </label>
+                                </div>
+                            }
+
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Danh sách quyền theo chi nhánh, nghiệp vụ, người dùng</h3>
+    </div>
+    <div class="card-body">
+        @if (!listUserPermission.Any())
+        {
+            <div class="pt-4 pl-4">
+                <div class="callout callout-warning">
+                    <h5>Hãy chọn chi nhánh, nghiệp vụ, người dùng!</h5>
+                </div>
+            </div>
+        }
+        @if (listUserPermission.Any())
+        {
+            <table class="table table-hover table-bordered">
+                <thead class="bg-info">
+                    <tr>
+                        <th class="text-center" scope="col">
+                            <div class="pb-3">No.</div>
+                        </th>
+                        <th class="text-center" scope="col">
+                            <div class="pb-3">
+                                Chi nhánh
+                            </div>
+                        </th>
+                        <th class="text-center" scope="col">
+                            <div class="pb-3">Nghiệp vụ</div>
+                        </th>
+                        <th class="text-center" scope="col">
+                            <div class="pb-3">Phân loại nghiệp vụ</div>
+                        </th>
+                        <th class="text-center" scope="col">
+                            <div class="pb-3">Người dùng</div>
+                        </th>
+                        <th class="text-center" scope="col">
+                            <div class="pb-3">Quyền thao tác</div>
+                        </th>
+                        <th class="text-center" scope="col">
+                            <div class="pb-3">Quyền cài đặt</div>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var permission in listUserPermission)
+                    {
+                        <tr>
+                            <th class="text-center" scope="row">@(listUserPermission.IndexOf(permission) + 1)</th>
+                            <td class="text-left">@permission.CompanyId</td>
+                            <td class="text-left">@permission.MajorId</td>
+                            <td class="text-center">@permission.ScreenId</td>
+                            <td class="text-left">@permission.UserId</td>
+                            <td class="text-center">@permission.PermissionId</td>
+                            <td class="text-center">lala</td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+        }
+
+    </div>
+
+</div>
+
+<ErrorModal @ref="errorModal"></ErrorModal>
+<ErrorModal @ref="permissionErrorModal" OnResponseClick="CheckPermission"></ErrorModal>
+<SuccessModal @ref="successModal" OnResponseClick="Redirect"></SuccessModal>
+<ConfirmModal @ref="confirmModal" OnResponseClick="PermissionRegister"></ConfirmModal>
+<ConfirmModal @ref="confirmDeleteModal" OnResponseClick="DeletePermission"></ConfirmModal>
+
+@code {
+    [SupplyParameterFromForm(FormName = "CreateQuyen")]
+    private MajorUserPermissionModel mpermission { get; set; } = new();
+
+    private List<MMajor> listMajor = new List<MMajor>();
+
+    private List<MCompany> listCompanies = new List<MCompany>();
+
+    private List<ApplicationUser> listUser = new List<ApplicationUser>();
+
+    private List<PermissionModel> listCorePermission = new List<PermissionModel>();
+
+    private List<MMajorUserPermission> listUserPermission = new List<MMajorUserPermission>();
+
+    private MMajor parentMajor;
+
+    private DateTime baseTime;
+
+    private string deleteId;
+
+    [Parameter, SupplyParameterFromQuery]
+    public string? majorId { get; set; }
+
+    [Parameter]
+    public SuccessModal successModal { get; set; }
+
+    [Parameter]
+    public ErrorModal errorModal { get; set; }
+
+    [Parameter]
+    public ErrorModal permissionErrorModal { get; set; }
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+
+    [Parameter]
+    public ConfirmModal confirmDeleteModal { get; set; }
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var isValid = await LoginService.CheckLogin();
+        if (!isValid)
+        {
+
+            navigation.NavigateTo("/Account/Login", forceLoad: true);
+        }
+        parentMajor = await MajorService.GetById(majorId);
+
+        // Check quyền xem màn hình
+        var permission = await MajorUserPermissionService.CheckPermission("ff9590bc-7b3b-4f9b-a7fd-913c248beadf", "7d3ea4cc-b3dc-4adc-8411-a7f033935284", Constant.VIEW);
+
+        if (!permission)
+        {
+            permissionErrorModal.Title = "Lỗi!";
+            permissionErrorModal.message = "Bạn không có quyền truy cập nội dung này!";
+            permissionErrorModal.openModal();
+            return;
+        }
+
+
+        listUser = await UserService.GetAll();
+        if (parentMajor != null)
+        {
+            mpermission.MajorId = parentMajor.Id;
+        }
+        listMajor = await MajorService.GetMajorByParentId(majorId);
+        listCompanies = await CompanyService.GetAllCompanies();
+        baseTime = DateTime.Now;
+    }
+
+    private async Task OnChangeMajor(string value)
+    {
+        if (string.IsNullOrEmpty(mpermission.CompanyId))
+        {
+            errorModal.Title = "Lỗi!";
+            errorModal.message = "Bạn phải chọn chi nhánh để xem các quyền!";
+            errorModal.openModal();
+            return;
+        }
+        mpermission.ScreenId = value;
+        listCorePermission = await PermissionService.GetAllCorePermission(value, mpermission.CompanyId);
+        await LoadSetPermission();
+    }
+
+    private async Task OnChangeUser(string value)
+    {
+        mpermission.UserId = value;
+        await LoadSetPermission();
+
+    }
+
+    private async Task OnChangeCompany(string value)
+    {
+        mpermission.CompanyId = value;
+        listCorePermission = await PermissionService.GetAllCorePermission(mpermission.ScreenId, value);
+        await LoadSetPermission();
+
+    }
+
+    private async Task PermissionRegister(bool isConfirm)
+    {
+        try
+        {
+            if (isConfirm)
+            {
+                var isRegisted = await PermissionControlService.InsertPermission(mpermission, listCorePermission);
+                if (isRegisted)
+                {
+                    successModal.Title = "Đăng ký thành công!";
+                    successModal.message = "Cài đặt phân quyền và phân quyền thành công!";
+                    successModal.openModal();
+                }
+            }
+        }
+        catch (Exception exception)
+        {
+            errorModal.Title = "Lỗi!";
+            errorModal.message = exception.Message;
+            errorModal.openModal();
+        }
+
+        return;
+    }
+
+
+    private async Task DeletePermission(bool isConfirm)
+    {
+        try
+        {
+            if (isConfirm)
+            {
+                string[] ids = { deleteId };
+                // Check data bị update bởi người dùng khác
+                var isValid = await PermissionControlService.CheckExclusive(ids, baseTime);
+
+                if (isValid)
+                {
+                    await PermissionControlService.DeleteById(deleteId);
+                    successModal.Title = "Xóa quyền thành công!";
+                    successModal.message = "Xóa cài đặt phân quyền thành công!";
+                    successModal.openModal();
+                }
+            }
+
+        }
+        catch (Exception exception)
+        {
+            errorModal.Title = "Lỗi!";
+            errorModal.message = exception.Message;
+            errorModal.openModal();
+        }
+
+        return;
+    }
+
+    private void CheckPermission(bool isConfirm)
+    {
+        navigation.NavigateTo("#");
+    }
+
+    private async Task ValidateDelete(EditContext formContext)
+    {
+        try
+        {
+            // Validate client
+            bool isValid = formContext.Validate();
+            if (!isValid)
+            {
+                return;
+            }
+
+            // Check quyền xóa
+            var permissionCheck = await MajorUserPermissionService.CheckPermission("ff9590bc-7b3b-4f9b-a7fd-913c248beadf", "7d3ea4cc-b3dc-4adc-8411-a7f033935284", Constant.DELETE);
+
+            if (!permissionCheck)
+            {
+                errorModal.Title = "Lỗi!";
+                errorModal.message = "Bạn không có quyền truy cập nội dung này!";
+                errorModal.openModal();
+                return;
+            }
+
+            // Validate server
+            // Check trường hợp đã tồn tại data tương ứng
+            var existedPermission = await PermissionControlService.IsExistPermission(mpermission.CompanyId, mpermission.MajorId, mpermission.UserId);
+            if (existedPermission == null)
+            {
+                errorModal.Title = "Lỗi!";
+                errorModal.message = "Người dùng bạn chọn chưa có quyền để xóa!";
+                errorModal.openModal();
+                return;
+            }
+
+            deleteId = existedPermission.Id;
+            confirmDeleteModal.Title = "Xác nhận xóa!";
+            confirmDeleteModal.message = "Bạn có chắc chắn muốn xóa quyền không?";
+            confirmDeleteModal.openModal();
+
+        }
+        catch (Exception exception)
+        {
+            errorModal.Title = "Lỗi!";
+            errorModal.message = exception.Message;
+            errorModal.openModal();
+        }
+
+        return;
+    }
+
+
+    private async Task ValidateRegister(EditContext formContext)
+    {
+        try
+        {
+            // Validate client
+            bool isValid = formContext.Validate();
+            if (!isValid)
+            {
+                return;
+            }
+
+            // Check quyền đăng ký
+            var permissionCheck = await MajorUserPermissionService.CheckPermission("ff9590bc-7b3b-4f9b-a7fd-913c248beadf", "7d3ea4cc-b3dc-4adc-8411-a7f033935284", Constant.ADD);
+
+            if (!permissionCheck)
+            {
+                errorModal.Title = "Lỗi!";
+                errorModal.message = "Bạn không có quyền truy cập nội dung này!";
+                errorModal.openModal();
+                return;
+            }
+
+            // Validate server
+            int totalCheckedPermissions = 0;
+            int viewPermissionsCount = 0;
+
+            foreach (var permission in listCorePermission)
+            {
+                if (permission.IsChecked)
+                {
+                    totalCheckedPermissions++;
+                    if (permission.PermissionType == 1)
+                    {
+                        viewPermissionsCount++;
+                    }
+                }
+            }
+
+            // Check bắt buộc phải chọn 1 quyền
+            if (totalCheckedPermissions == 0)
+            {
+                errorModal.Title = "Lỗi!";
+                errorModal.message = "Bạn phải chọn ít nhất 1 quyền!";
+                errorModal.openModal();
+                return;
+            }
+
+            // Check trường hợp chọn quyền Xuất, Thêm, Sửa, Xóa mà không chọn quyền Xem
+            if (viewPermissionsCount == 0 && totalCheckedPermissions > 0)
+            {
+                errorModal.Title = "Lỗi!";
+                errorModal.message = "Phải có quyền Xem để thực hiện các hành động khác!";
+                errorModal.openModal();
+                return;
+            }
+
+            // Check trường hợp đã tồn tại data tương ứng
+            var existedPermission = await PermissionControlService.IsExistPermission(mpermission.CompanyId, mpermission.MajorId, mpermission.UserId);
+            if (existedPermission != null)
+            {
+                errorModal.Title = "Lỗi!";
+                errorModal.message = "Người dùng bạn chọn đã có quyền!";
+                errorModal.openModal();
+                return;
+            }
+
+            // Chi nhánh, nghiệp vụ, người dùng phải ở trạng thái hoạt động
+            var company = await CompanyService.GetById(mpermission.CompanyId);
+            if (company == null)
+            {
+                errorModal.Title = "Lỗi!";
+                errorModal.message = "Chi nhánh không tồn tại. Vui lòng tải lại trang!";
+                errorModal.openModal();
+                return;
+            }
+
+            var major = await MajorService.GetById(mpermission.MajorId);
+
+            if (major == null)
+            {
+                errorModal.Title = "Lỗi!";
+                errorModal.message = "Nghiệp vụ không tồn tại. Vui lòng tải lại trang!";
+                errorModal.openModal();
+                return;
+            }
+
+            var majorType = await MajorService.GetById(mpermission.ScreenId);
+            if (majorType == null)
+            {
+                errorModal.Title = "Lỗi!";
+                errorModal.message = "Phân loại nghiệp vụ không tồn tại. Vui lòng tải lại trang!";
+                errorModal.openModal();
+                return;
+            }
+
+            var user = UserService.GetById(mpermission.UserId);
+            if (user == null)
+            {
+                errorModal.Title = "Lỗi!";
+                errorModal.message = "Người dùng không tồn tại. Vui lòng tải lại trang!";
+                errorModal.openModal();
+                return;
+            }
+
+            // Hiển thị modal xác nhận đăng ký
+            confirmModal.openModal();
+        }
+        catch (Exception exception)
+        {
+            errorModal.Title = "Lỗi!";
+            errorModal.message = exception.Message;
+            errorModal.openModal();
+        }
+
+        return;
+    }
+
+    private void Redirect()
+    {
+        navigation.Refresh(forceReload: true);
+
+    }
+
+    private async Task LoadSetPermission()
+    {
+        listUserPermission = await MajorUserPermissionService.GetByCompanyUser(mpermission.CompanyId, mpermission.ScreenId, mpermission.UserId);
+        if (listUserPermission.Any())
+        {
+            foreach (var userPermission in listUserPermission)
+            {
+                foreach (var corePermission in listCorePermission)
+                {
+                    if (userPermission.CompanyId.Equals(mpermission.CompanyId) && userPermission.MajorId.Equals(corePermission.MajorId) && userPermission.ScreenId.Equals(corePermission.ScreenId) && userPermission.PermissionId == corePermission.Id)
+                    {
+                        corePermission.IsChecked = true;
+                    }
+                }
+            }
+        }
+        else
+        {
+            foreach (var corePermission in listCorePermission)
+            {
+                corePermission.IsChecked = false;
+            }
+        }
+
+    }
+
+
+
+}

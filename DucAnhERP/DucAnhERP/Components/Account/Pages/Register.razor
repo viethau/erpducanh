@@ -1,0 +1,286 @@
+﻿@page "/Account/Register"
+
+@using System.ComponentModel.DataAnnotations
+@using System.Text
+@using System.Text.Encodings.Web
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.WebUtilities
+@using DucAnhERP.Data
+@using DucAnhERP.Models
+@using DucAnhERP.Shared
+
+@inject UserManager<IdentityUser> UserManager
+@inject IUserStore<IdentityUser> UserStore
+@inject SignInManager<IdentityUser> SignInManager
+@inject ILogger<Register> Logger
+@inject NavigationManager NavigationManager
+@inject IdentityRedirectManager RedirectManager
+@inject HttpClient HttpClient
+@attribute [AllowAnonymous]
+
+<PageTitle>Đăng ký sử dụng hệ thống</PageTitle>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="text-center">Đăng ký sử dụng hệ thống</h1>
+            <StatusMessage Message="@Message" />
+            <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
+                <DataAnnotationsValidator />
+                <div class="card">
+                    <div class="card-body">
+                        <h4>Thông tin cá nhân</h4>
+                        <hr />
+                        <div class="form-floating mb-3">
+                            <label for="surname">Họ <span class="text-danger">*</span></label>
+                            <InputText @bind-Value="Input.LastName" class="form-control" id="surname" placeholder="Họ" />
+                            <ValidationMessage For="() => Input.LastName" class="text-danger" />
+                        </div>
+                        <div class="form-floating mb-3">
+                            <label for="firstname">Tên đệm và tên <span class="text-danger">*</span></label>
+                            <InputText @bind-Value="Input.FirstName" class="form-control" id="firstname" placeholder="Tên đệm và tên" />
+                            <ValidationMessage For="() => Input.FirstName" class="text-danger" />
+                        </div>
+                        <div class="form-floating mb-3">
+                            <label for="dob">Ngày sinh <span class="text-danger">*</span></label>
+                            <InputDate @bind-Value="Input.Dob" class="form-control" id="dob" placeholder="Ngày sinh" />
+                            <ValidationMessage For="() => Input.Dob" class="text-danger" />
+                        </div>
+                        <div class="form-floating mb-3">
+                            <label for="phone">Số điện thoại <span class="text-danger">*</span></label>
+                            <InputText @bind-Value="Input.PhoneNumber" class="form-control" id="phone" placeholder="Số điện thoại" />
+                            <ValidationMessage For="() => Input.PhoneNumber" class="text-danger" />
+                        </div>
+                        <div class="form-floating mb-3">
+                            <label for="email">Email <span class="text-danger">*</span></label>
+                            <InputText @bind-Value="Input.Email" class="form-control" id="email" placeholder="Email" />
+                            <ValidationMessage For="() => Input.Email" class="text-danger" />
+                        </div>
+                        <h4>Thông tin doanh nghiệp</h4>
+                        <hr />
+                        <div class="form-floating mb-3">
+                            <label for="companyName">Tên doanh nghiệp <span class="text-danger">*</span></label>
+                            <InputText @bind-Value="Input.CompanyName" class="form-control" id="companyName" placeholder="Tên doanh nghiệp" />
+                            <ValidationMessage For="() => Input.CompanyName" class="text-danger" />
+                        </div>
+                        <div class="form-floating mb-3">
+                            <label for="address">Địa chỉ <span class="text-danger">*</span></label>
+                            <InputTextArea @bind-Value="Input.Address" class="form-control" id="address" placeholder="Địa chỉ" style="height: 100px;" />
+                            <ValidationMessage For="() => Input.Address" class="text-danger" />
+                        </div>
+                        <div class="form-floating mb-3">
+                            <label for="tax">Mã số thuế <span class="text-danger">*</span></label>
+                            <InputText @bind-Value="Input.Tax" class="form-control" id="tax" placeholder="Mã số thuế" />
+                            <ValidationMessage For="() => Input.Tax" class="text-danger" />
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
+                        <a href="/Account/Login" class="btn btn-default w-100 mt-1">Quay lại màn hình Đăng nhập</a>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    private IEnumerable<IdentityError>? identityErrors;
+
+    [SupplyParameterFromForm]
+    private RegisterModel Input { get; set; } = new();
+
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
+
+    public string? Message;
+
+    public async Task RegisterUser()
+    {
+        if (UserService.GetByUserName(Input.Email) != null)
+        {
+            Message = "Lỗi: Email bạn nhập đã tồn tại trong hệ thống!";
+            return;
+        }
+
+        if (UserService.IsExistByPhoneNumber(Input.PhoneNumber))
+        {
+            Message = "Lỗi: Số điện thoại bạn nhập đã tồn tại trong hệ thống!";
+            return;
+        }
+
+        var company = CreateCompany();
+        var user = CreateUser();
+        var password = HelperService.GeneratePassword(8);
+        await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+        var emailStore = GetEmailStore();
+        await emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+        var lockOutStore = GetLockoutStore();
+        await lockOutStore.SetLockoutEnabledAsync(user, true, CancellationToken.None);
+        var appUser = CreateAppUser(company.Id, user);
+
+
+        await CompanyService.Insert(company);
+        var resultUser = await UserManager.CreateAsync(user, password);
+        await UserService.Insert(appUser);
+
+        if (!resultUser.Succeeded)
+        {
+            identityErrors = resultUser.Errors;
+            return;
+        }
+
+        Logger.LogInformation("User created a new account with password.");
+
+        var userId = await UserManager.GetUserIdAsync(user);
+        var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+        var callbackUrl = NavigationManager.GetUriWithQueryParameters(
+            NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
+            new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
+
+        // Gửi mail xác nhận đăng ký
+        await SendMail(appUser, callbackUrl, password);
+
+        RedirectManager.RedirectTo(
+            "Account/RegisterConfirmation",
+            new() { ["email"] = Input.Email, ["returnUrl"] = ReturnUrl });
+
+    }
+
+    private ApplicationUser CreateAppUser(string companyId, IdentityUser iUser)
+    {
+        try
+        {
+            var user = Activator.CreateInstance<ApplicationUser>();
+            user.Id = Guid.NewGuid().ToString();
+            user.UserId = iUser.Id;
+            user.UserName = iUser.UserName;
+            user.Address = Input.Address;
+            user.ContractId = Guid.NewGuid().ToString();
+            user.Dob = (DateTime)Input.Dob;
+            user.FirstName = Input.FirstName;
+            user.LastName = Input.LastName;
+            user.PhoneNumber = Input.PhoneNumber;
+            user.IsActive = 0;
+            user.IsFirstLogin = 1;
+            user.CreateAt = DateTime.Now;
+            user.CreateBy = Input.Email;
+            user.UpdateAt = DateTime.Now;
+            user.UpdateBy = Input.Email;
+            user.Email = Input.Email;
+            user.CompanyId = companyId;
+            user.DeptId = "";
+
+            return user;
+        }
+        catch
+        {
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
+                $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor.");
+        }
+    }
+
+    private IdentityUser CreateUser()
+    {
+        try
+        {
+            var user = Activator.CreateInstance<IdentityUser>();
+            user.PhoneNumber = Input.PhoneNumber;
+            return user;
+        }
+        catch
+        {
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
+                $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor.");
+        }
+    }
+
+    private IUserEmailStore<IdentityUser> GetEmailStore()
+    {
+        if (!UserManager.SupportsUserEmail)
+        {
+            throw new NotSupportedException("The default UI requires a user store with email support.");
+        }
+        return (IUserEmailStore<IdentityUser>)UserStore;
+    }
+
+    private IUserLockoutStore<IdentityUser> GetLockoutStore()
+    {
+        if (!UserManager.SupportsUserLockout)
+        {
+            throw new NotSupportedException("The default UI requires a user store with email support.");
+        }
+        return (IUserLockoutStore<IdentityUser>)UserStore;
+    }
+
+    private async Task SendMail(ApplicationUser user, string callBackUrl, string randomPassword)
+    {
+        // Tạo mới đối tượng
+        var emailHistory = new EmailHistory();
+
+        // Nội dung mail
+        string content = "";
+
+        content += "<div class=\"email-container\">";
+        content += "<div class=\"header\">";
+        content += "<h1>Đăng Ký Tài Khoản Thành Công</h1>";
+        content += "</div>";
+        content += "<div class=\"content\">";
+        content += "";
+        content += "<p>Xin chào,</p>";
+        content += "<p>Bạn đã đăng ký sử dụng hệ thống quản lý doanh nghiệp thành công. Tài khoản của bạn là:</p>";
+        content += "<p><strong>Tài khoản:</strong> " + user.Email + "</p>";
+        content += "<p><strong>Mật khẩu:</strong> " + System.Net.WebUtility.HtmlEncode(randomPassword) + "</p>";
+        content += "<p>Vui lòng truy cập theo đường dẫn dưới đây và thực hiện đăng nhập, đổi mật khẩu lần đầu tiên để kích hoạt tài khoản.</p>";
+        content += "<p><a href=\"" + callBackUrl + "\">Click vào đây để kích hoạt</a></p>";
+        content += "<p>Xin chân thành cảm ơn!</p>";
+        content += "<p><strong>Lưu ý:</strong></p>";
+        content += "<p>Tài khoản chỉ có hiệu lực trong vòng 1 tuần.</p>";
+        content += "<p>Đây là email được gửi tự động từ hệ thống, vui lòng không trả lời vào địa chỉ này. Mọi thông tin thắc mắc xin vui lòng liên hệ: <a href=\"mailto:xxxxxxxx@gmail.com\">xxxxxxxx@gmail.com</a></p>";
+        content += "</div>";
+        content += "<div class=\"footer\">";
+        content += "";
+        content += "<p>Trân trọng,</p>";
+        content += "<p>Công ty cổ phần xây dựng Đức Anh</p>";
+        content += "</div>";
+        content += "</div>";
+
+        // Gán giá trị cho các thuộc tính
+        emailHistory.Id = Guid.NewGuid().ToString();
+        emailHistory.Receiver = user.Email;
+        emailHistory.Subject = "Xác Nhận Đăng Ký Tài Khoản";
+        emailHistory.Content = content;
+        emailHistory.CompanyId = user.CompanyId;
+        emailHistory.MajorId = "";
+        emailHistory.ScreenId = "";
+        emailHistory.CreateAt = DateTime.Now;
+        emailHistory.CreateBy = "System";
+
+        // Thực hiện gửi mail
+        await EmailService.SendEmail(emailHistory);
+    }
+
+
+    private MCompany CreateCompany()
+    {
+        try
+        {
+            var company = Activator.CreateInstance<MCompany>();
+            company.Id = Guid.NewGuid().ToString();
+            company.ParentId = null;
+            company.CompanyName = Input.CompanyName;
+            company.CompanyType = Constant.HEAD_COMPANY;
+            company.Phone = Input.PhoneNumber;
+            company.Email = Input.Email;
+            company.Address = Input.Address;
+            company.CreateAt = DateTime.Now;
+            company.CreateBy = "System";
+            company.IsActive = 1;
+            return company;
+        }
+        catch
+        {
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(MCompany)}'. " +
+                $"Ensure that '{nameof(MCompany)}' is not an abstract class and has a parameterless constructor.");
+        }
+    }
+}

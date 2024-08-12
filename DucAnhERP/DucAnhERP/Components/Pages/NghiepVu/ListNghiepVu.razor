@@ -1,0 +1,235 @@
+﻿@page "/MMajors/listNghiepVu"
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using System.Linq
+@using DucAnhERP.SeedWork
+@using Microsoft.AspNetCore.Authorization
+@inject NavigationManager navigation
+@attribute [Authorize]
+
+<h3>Danh sách thông tin nghiệp vụ</h3>
+
+<div class="mt-4 pl-5">
+    <EditForm Model="majorModel" FormName="SearchNghiepVu" OnValidSubmit="@Search">
+        <DataAnnotationsValidator />
+        <div class="d-flex">
+            <div class="form-group">
+                <label for="parentMajor">Nghiệp vụ cha</label>
+                <InputSelect class="form-control" @bind-Value="majorModel.ParentId">
+                    <option value="" selected>Chọn nghiệp vụ cha nếu có!</option>
+                    @if (listParentMajor != null)
+                    {
+                        @foreach (var major in listParentMajor)
+                        {
+                            <option value="@major.Id">@major.MajorName</option>
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="()=>majorModel.ParentId"></ValidationMessage>
+            </div>
+            <div class="form-group ml-5">
+                <label for="majorName">Tên nghiệp vụ</label>
+                <InputText class="form-control" id="majorName" @bind-Value="majorModel.MajorName" />
+                <ValidationMessage For="()=>majorModel.MajorName"></ValidationMessage>
+            </div>
+            <div class="form-group ml-5">
+                <label for="table">Tên bảng</label>
+                <InputText class="form-control" id="table" @bind-Value="majorModel.Table" />
+            </div>
+
+            <div class="form-group ml-5">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-primary form-control">Tìm kiếm</button>
+            </div>
+
+            <div class="form-group ml-5">
+                <label>&nbsp;</label>
+                <a href="/MMajors/createNghiepVu" class="btn btn-primary form-control">Tạo mới</a>
+            </div>
+        </div>
+
+    </EditForm>
+</div>
+
+@if (!listMajor.Any())
+{
+    <div class="pt-4 pl-4">
+        <div class="callout callout-warning">
+            <h5>Không có dữ liệu tương ứng!</h5>
+        </div>
+    </div>
+}
+
+
+<div class="row mt-4">
+    <table class="table table-hover table-bordered">
+        <thead class="bg-info">
+            <tr>
+                <th class="text-center" rowspan="2" scope="col">
+                    <div class="pb-3">No.</div>
+                </th>
+                <th onclick="@(() => SortTable("ParentName"))" rowspan="2" class="text-center sortable" scope="col">
+                    <div class="pb-3">
+                        Nghiệp vụ cha
+                        <span class="arrow @(GetSortStyle("ParentName"))"></span>
+                    </div>
+                </th>
+                <th onclick="@(() => SortTable("MajorName"))" rowspan="2" class="text-center sortable" scope="col">
+                    <div class="pb-3">Tên nghiệp vụ</div>
+                    <span class="arrow @(GetSortStyle("MajorName"))"></span>
+                </th>
+                <th onclick="@(() => SortTable("Order"))" rowspan="2" class="text-center sortable" scope="col" sortable>
+                    <div class="pb-3">Thứ tự sắp xếp</div>
+                    <span class="arrow @(GetSortStyle("Order"))"></span> 
+                </th>
+                <th onclick="@(() => SortTable("Table"))" rowspan="2" class="text-center sortable" scope="col" sortable>
+                    <div class="pb-3">Tên bảng</div>
+                    <span class="arrow @(GetSortStyle("Table"))"></span> 
+                    </th>
+                <th class="text-center" colspan="2" scope="col">Thông tin tạo</th>
+
+            </tr>
+            <tr>
+                <th class="text-center" scope="col">Người tạo</th>
+                <th class="text-center" scope="col">Ngày tạo</th>
+            </tr>
+        </thead>
+        @if (listMajor.Any())
+        {
+            <tbody>
+                @foreach (var major in listMajor)
+                {
+                    <tr>
+                        <th class="text-center" scope="row">@(listMajor.IndexOf(major) + 1)</th>
+                        <td class="text-left">@major.ParentName</td>
+                        <td class="text-left">@major.MajorName</td>
+                        <td class="text-center">@major.Order</td>
+                        <td class="text-left">@major.Table</td>
+                        <td class="text-center">@major.CreateBy</td>
+                        <td class="text-center">@major.CreateAt</td>
+                    </tr>
+                }
+
+            </tbody>
+        }
+
+    </table>
+
+</div>
+
+@if (listMajor.Any())
+{
+    <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+}
+
+
+
+@code {
+    public List<MajorModel> listMajor
+    {
+        get;
+        set;
+    } = new();
+
+    public List<MajorModel> listModel
+    {
+        get;
+        set;
+    } = new();
+
+    [SupplyParameterFromForm(FormName = "SearchNghiepVu")]
+    public MajorModel majorModel
+    {
+        get;
+        set;
+    }
+
+    public MetaData MetaData
+    {
+        get;
+        set;
+    }
+
+    private List<MMajor> listParentMajor = new List<MMajor>();
+
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        majorModel = new();
+        listParentMajor = await MajorService.GetAllParentMajor();
+        await LoadMajor();
+    }
+
+    // Xử lý tìm kiếm
+    public async Task Search()
+    {
+        majorModel.PageNumber = 1;
+        await LoadMajor();
+    }
+
+    // Truy vấn data theo điều kiện tìm kiếm
+    private async Task LoadMajor()
+    {
+        var majors = await MajorService.GetAll(majorModel);
+        listModel = majors;
+        listMajor = Paging(majors);
+
+    }
+
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        majorModel.PageNumber = 1;
+        Paging(listModel);
+    }
+
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        majorModel.PageNumber = page;
+        Paging(listModel);
+    }
+
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+
+        majorModel.PageNumber = 1;
+        majorModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+
+    // Xử lý paging
+    private List<MajorModel> Paging(List<MajorModel> majors)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = majors.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        majors = majors.Skip((majorModel.PageNumber - 1) * majorModel.PageSize).Take(majorModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listMajor.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var major in majors)
+        {
+            listMajor.Add(major);
+        }
+
+        // Tạo pagelist mới
+        var pagelist = new PageList<MajorModel>(listMajor, count, majorModel.PageNumber, majorModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return majors;
+    }
+
+
+}

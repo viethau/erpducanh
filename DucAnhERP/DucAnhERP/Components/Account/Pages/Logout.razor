@@ -1,0 +1,37 @@
+﻿@page "/Account/Logout"
+
+@using System.ComponentModel.DataAnnotations
+@using DucAnhERP.Models
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject NavigationManager NavigationManager
+@inject IdentityRedirectManager RedirectManager
+
+@code {
+
+    private RegisterModel Input { get; set; } = new();
+
+    [CascadingParameter]
+    private HttpContext? HttpContext { get; set; }
+
+    protected async override Task OnParametersSetAsync()
+    {
+        await SignInManager.SignOutAsync();
+        var userName = HttpContext.Session.GetString("userName");
+        var sessionId = HttpContext.Session.GetString("sessionId");
+        HttpContext.Session.Clear();
+        if (HttpContext.Request.Cookies.TryGetValue("AspNetCore.Session", out string sessionValue))
+        {
+            HttpContext.Response.Cookies.Delete("AspNetCore.Session");
+        }
+        if (!string.IsNullOrEmpty(sessionId))
+        {
+            await UserSessionService.DeleteById(sessionId);
+        }
+
+        NavigationManager.NavigateTo("/Account/Login");
+    }
+}

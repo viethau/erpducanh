@@ -1,0 +1,163 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Identity
+@using DucAnhERP.Models
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [AllowAnonymous]
+
+@if (isDisplay)
+{
+    <div class="show" id="notificationModal" tabindex="-1" style="display:block; position: absolute; top: 5%; left: 0; right: 0; margin: auto; z-index: 100;" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header alert alert-info">
+                    <h5 class="modal-title" id="notificationModalLabel">Thông báo</h5>
+                    <button type="button" class="btn-default" data-bs-dismiss="modal" aria-label="Close" @onclick="HideModal">X</button>
+                </div>
+                <div class="modal-body">
+                    @if (!listCategories.Any())
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            Không có thông báo nào
+                        </div>
+                    }
+                    else if (notificationCount == 0)
+                    {
+                        <div class="alert alert-info alert-autohide" role="alert">
+                            Bạn đã xem hết thông báo!
+                        </div>
+                    }
+                    <div class="row" style="max-height: 230px;">
+                        <div class="col-md-3">
+                            <div class="list-group">
+                                @if (listCategories.Any())
+                                {
+                                    @foreach (var category in listCategories)
+                                    {
+                                        <button class="list-group-item list-group-item-action" @onclick="() => SelectCategory(category.Item1)">
+                                            @category.Item2
+                                            @if (@category.Item3 > 0)
+                                            {
+                                                <span class="badge badge-danger ml-1"> @category.Item3</span>
+                                            }
+                                        </button>
+                                    }
+                                }
+
+                            </div>
+                        </div>
+                        <div class="col-md-9" style="max-height: 230px; overflow-y: auto;">
+                            @if (listNotificationsByCategory != null)
+                            {
+                                <div class="list-group">
+                                    @foreach (var notification in listNotificationsByCategory)
+                                    {
+                                        <button class="list-group-item list-group-item-action @((notification.IsRead == 1 ? "" : "list-group-item-danger"))" onclick="@(() => SelectNotification(notification))">
+                                            @notification.Subject
+                                        </button>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    @if (notificationModel != null)
+                    {
+                        <hr>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <div>
+                                    @((MarkupString)notificationModel.Content)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <!-- Thông tin ngày tạo -->
+                                <p class="text-muted">Ngày tạo: @notificationModel.CreateAt.ToShortDateString() @notificationModel.CreateAt.ToShortTimeString() </p>
+                            </div>
+                            <div class="col-md-6">
+                                <!-- Thông tin người tạo -->
+                                <p class="text-muted">Người tạo: @notificationModel.CreateBy</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+    private bool isDisplay = false;
+
+    public string userName { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnResponseClick { get; set; }
+
+    private List<(string, string, int)> listCategories = new();
+
+    private List<NotificationModel> listNotifications = new();
+
+    private List<NotificationModel> listNotificationsByCategory = new();
+
+    private NotificationModel? notificationModel;
+
+    private int notificationCount { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        userName = authState.User.Identity.Name;
+
+    }
+
+    public async Task ShowModal()
+    {
+        listNotifications = await EmailService.GetAllNotiByUser(userName);
+        listCategories = await EmailService.GetAllCategoriesByUser(userName);
+        notificationCount = listCategories.Sum(category => category.Item3);
+        isDisplay = true;
+        StateHasChanged();
+    }
+
+    public void HideModal()
+    {
+        isDisplay = false;
+        StateHasChanged();
+    }
+
+    private void SelectCategory(string majorId)
+    {
+        listNotificationsByCategory = listNotifications.Where(x => x.MajorId == majorId).OrderBy(x => x.IsRead).ToList();
+        notificationModel = null;
+    }
+
+    private async Task SelectNotification(NotificationModel notification)
+    {
+        notificationModel = notification;
+        notificationModel.IsRead = 1;
+        await EmailService.Update(notificationModel);
+        listCategories = await EmailService.GetAllCategoriesByUser(userName);
+        notificationCount = listCategories.Sum(category => category.Item3);
+        await OnResponseClick.InvokeAsync(true);
+        StateHasChanged();
+    }
+
+    private async Task UpdateStatus()
+    {
+        listNotifications = await EmailService.GetAllNotiByUser(userName);
+        listCategories = await EmailService.GetAllCategoriesByUser(userName);
+        notificationCount = listCategories.Sum(category => category.Item3);
+    }
+
+
+}

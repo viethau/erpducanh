@@ -1,0 +1,43 @@
+﻿@if (Show)
+{
+    <div class="model show" tabindex="-1" role="dialog" style="display:block; position: absolute; top: 5%; left: 0; right: 0; margin: auto; z-index: 100;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success">
+                    <div class="model-title">
+                        <h3>@Title</h3>
+                    </div>
+                </div>
+                <div class="modal-body">@message</div>
+                <div class="modal-footer">
+                    <button class="btn btn-success justify-content-center" @onclick="() => closeModal(true)">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@code {
+    public bool Show { get; set; }
+
+    [Parameter]
+    public string Title { get; set; } = "Đăng ký thành công!";
+
+    [Parameter]
+    public string message { get; set; } = "Bạn đã đăng ký thành công.";
+
+    [Parameter]
+    public EventCallback<bool> OnResponseClick { get; set; }
+
+    public void openModal()
+    {
+        Show = true;
+        StateHasChanged();
+    }
+
+    public async Task closeModal(bool value)
+    {
+        Show = false;
+        await OnResponseClick.InvokeAsync(value);
+    }
+
+}

@@ -1,0 +1,28 @@
+﻿@using System.Net.Http
+@using System.Net.Http.Json
+@using DucAnhERP.Repository
+@using DucAnhERP.Services
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.JSInterop
+@using DucAnhERP
+@using DucAnhERP.Components
+@inject IMajorRepository MajorService
+@inject ICompanyRepository CompanyService
+@inject IUserRepository UserService
+@inject IPermissionRepository PermissionService
+@inject IMajorUserPermissionRepository MajorUserPermissionService
+@inject IPermissionControlRepository PermissionControlService
+@inject IEmailHistoryRepository EmailService
+@inject IHelperService HelperService
+@inject UserState UserState
+@inject IUserSessionRepository UserSessionService
+@inject ILoginService LoginService
+@inject ISortService SortService
+@inject IDepartmentRepository DepartmentService
+@inject IApprovalDeptSettingRepository ApprovalDeptSettingService
+@inject IApprovalStepSettingRepository ApprovalStepSettingService

@@ -1,0 +1,96 @@
+﻿@page "/Account/ConfirmEmail"
+
+@using System.Text
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.WebUtilities
+@using DucAnhERP.Data
+@using DucAnhERP.Models
+
+@inject UserManager<IdentityUser> UserManager
+@inject IdentityRedirectManager RedirectManager
+
+<PageTitle>Confirm email</PageTitle>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                @if (isSucceed)
+                {
+                    <div class="card-header bg-success">
+                        <h3 class="text-center">Xác Nhận Email Thành Công</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <p class="text-center">Email của bạn đã được xác nhận thành công.</p>
+                        <p class="text-center">Bây giờ bạn có thể đăng nhập vào hệ thống.</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a class="btn btn-primary" href="/Account/Login">Đăng nhập vào hệ thống</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="card-header bg-danger">
+                        <h3 class="text-center">Xác Nhận Email Thất Bại</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-center">Xác nhận thất bại.</p>
+                        <p class="text-center">Vui lòng liên lạc với người quản trị hệ thống.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromQuery]
+    private string? UserId { get; set; }
+
+    [SupplyParameterFromQuery]
+    private string? Code { get; set; }
+
+    private bool isSucceed;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (UserId is null || Code is null)
+        {
+            RedirectManager.RedirectTo("");
+        }
+
+        var user = await UserManager.FindByIdAsync(UserId);
+        var appUser = await UserService.GetById(UserId, 0);
+        if (user is null || appUser is null)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+            isSucceed = false;
+        }
+        else
+        {
+            var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Code));
+            var result = await UserManager.ConfirmEmailAsync(user, code);
+            isSucceed = result.Succeeded;
+
+            if (isSucceed)
+            {
+                appUser.IsActive = 1;
+                appUser.UpdateAt = DateTime.Now;
+                appUser.UpdateBy = "Người quản trị hệ thống";
+                await UserService.Update(appUser);
+            }
+            else
+            {
+                var company = await CompanyService.GetById(appUser.CompanyId);
+                if (company != null)
+                {
+                    await CompanyService.DeleteById(company.Id);
+                }
+            }
+
+        }
+    }
+}

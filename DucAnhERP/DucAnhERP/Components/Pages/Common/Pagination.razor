@@ -1,0 +1,98 @@
+﻿@using DucAnhERP.SeedWork
+
+<div class="d-flex justify-content-between align-middle pl-5 pr-5">
+    <div class="bb-grid-pagination-text">@currentRecord trên <b>@MetaData.TotalCount</b> bản ghi</div>
+
+    <nav aria-label="Pagination links">
+        <ul class="pagination justify-content-start" role="button">
+            @foreach (var link in _pagingLinks)
+            {
+                <li @onclick="() => OnSelectedPage(link)" style="cursor: pointer;" class="page-item @(link.Enable ? null : "disabled") @(link.Active ? "active" : null)">
+                    <span class="page-link" href="#">@link.Text</span>
+                </li>
+            }
+        </ul>
+    </nav>
+
+    <div>
+        <div class="d-flex justify-content-center align-middle">
+            <div>
+                <InputSelect class="form-control" name="pageSize" role="button" ValueExpression="@(() => MetaData.PageSize)" Value="@MetaData.PageSize" ValueChanged="@((int value) => OnChangePageSize(value))">
+                    <option class="mx-1 rounded-3" value="5" selected">5</option>
+                    <option class="mx-1 rounded-3" value="10">10</option>
+                    <option class="mx-1 rounded-3" value="20">20</option>
+                    <option class="mx-1 rounded-3" value="50">50</option>
+                </InputSelect>
+            </div>
+            <div class="my-auto ml-1">bản ghi trên trang</div>
+        </div>
+    </div>
+
+
+</div>
+@code {
+    [Parameter]
+    public MetaData MetaData { get; set; }
+
+    [Parameter]
+    public int Spread { get; set; }
+
+    [Parameter]
+    public EventCallback<int> SelectedPage { get; set; }
+
+    [Parameter]
+    public EventCallback<int> ChangePageSize { get; set; }
+
+    private List<PagingLink> _pagingLinks;
+
+    private string currentRecord { get; set; }
+
+
+    protected override void OnParametersSet()
+    {
+        CreatePaginationLinks();
+        CalCurrentRecord();
+    }
+
+
+    private void CreatePaginationLinks()
+    {
+        _pagingLinks = new List<PagingLink>();
+        _pagingLinks.Add(new PagingLink(1, MetaData.HasPrevious, "Trang đầu"));
+        _pagingLinks.Add(new PagingLink(MetaData.CurrentPage - 1, MetaData.HasPrevious, "Trang trước"));
+        for (int i = 1; i <= MetaData.TotalPages; i++)
+        {
+            if (i >= MetaData.CurrentPage - Spread && i <= MetaData.CurrentPage + Spread)
+            {
+                _pagingLinks.Add(new PagingLink(i, true, i.ToString()) { Active = MetaData.CurrentPage == i });
+            }
+        }
+        
+        _pagingLinks.Add(new PagingLink(MetaData.CurrentPage + 1, MetaData.HasNext, "Trang sau"));
+        _pagingLinks.Add(new PagingLink(MetaData.TotalPages, MetaData.HasNext, "Trang cuối"));
+    }
+
+    private async Task OnSelectedPage(PagingLink link)
+    {
+        if (link.Page == MetaData.CurrentPage || !link.Enable)
+        {
+            return;
+        }
+        MetaData.CurrentPage = link.Page;
+        await SelectedPage.InvokeAsync(link.Page);
+    }
+
+    private async Task OnChangePageSize(int value)
+    {
+        await ChangePageSize.InvokeAsync(value);
+    }
+
+    private void CalCurrentRecord()
+    {
+        int startRecord = Math.Min((MetaData.CurrentPage - 1) * MetaData.PageSize + 1, MetaData.TotalCount);
+        int endRecord = Math.Min(MetaData.CurrentPage * MetaData.PageSize, MetaData.TotalCount);
+        currentRecord = $"{startRecord} đến {endRecord}";
+    }
+
+    
+}

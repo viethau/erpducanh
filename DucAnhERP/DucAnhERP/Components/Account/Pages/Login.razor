@@ -1,0 +1,218 @@
+﻿@page "/Account/Login"
+
+@using System.ComponentModel.DataAnnotations
+@using DucAnhERP.Shared
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using DucAnhERP.Data
+@using DucAnhERP.Models
+@using System.Text
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject NavigationManager NavigationManager
+@inject IdentityRedirectManager RedirectManager
+@inject UserManager<IdentityUser> UserManager
+@inject IEmailHistoryRepository EmailService
+@inject UserState UserState
+@inject ILoginService LoginService
+@inject HttpClient HttpClient
+@attribute [AllowAnonymous]
+
+<PageTitle>Log in</PageTitle>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5 card-primary">
+                <div class="card-header">
+                    <h2 class="card-title">Đăng nhập</h2>
+                </div>
+                <StatusMessage Message="@errorMessage" MessageClass="@messageClass" />
+                @if (!string.IsNullOrEmpty(warning))
+                {
+                    <div class="alert alert-warning" role="alert">
+                        @warning
+                    </div>
+                }
+                <div class="card-body">
+                    <EditForm Model="Input" method="post" OnValidSubmit="LoginUser" FormName="login">
+                        <DataAnnotationsValidator />
+                        <div class="form-group">
+                            <label for="username">Tên người dùng</label>
+                            <InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="email@example.com" />
+                            <ValidationMessage For="() => Input.Email" class="text-danger" />
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Mật khẩu</label>
+                            <InputText type="password" @bind-Value="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
+                            <ValidationMessage For="() => Input.Password" class="text-danger" />
+                        </div>
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <InputCheckbox @bind-Value="Input.RememberMe" class="form-check-input" />
+                                Nhớ mật khẩu cho lần đăng nhập sau
+                            </label>
+                        </div>
+                        <div class="form-group mt-3">
+                            <a href="/forgotpassword">Quên mật khẩu?</a>
+                        </div>
+                        <div class="form-group">
+                            <a href="/resendconfirmationemail">Gửi lại email xác nhận</a>
+                        </div>
+                        <div class="form-group">
+                            <p class="text-center">Bạn chưa có tài khoản? <a href="/Account/Register">Đăng ký tài khoản mới</a></p>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string? errorMessage;
+
+    private string? messageClass;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromForm]
+    private LoginModel Input { get; set; } = new();
+
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
+
+    private string userEmail { get; set; }
+
+    private string warning = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (HttpContext != null && HttpMethods.IsGet(HttpContext.Request.Method))
+        {
+            // Clear the existing external cookie to ensure a clean login process
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+        }
+        await SignInManager.SignOutAsync();
+    }
+
+    public async Task LoginUser()
+    {
+        var user = await UserManager.FindByNameAsync(Input.Email);
+
+        // Kiểm tra Email không tồn tại
+        if (user == null)
+        {
+            errorMessage = "Email không tồn tại trong hệ thống!";
+            messageClass = Constant.DANGER;
+            return;
+        }
+
+        var notActiveUser = await UserService.GetById(user.Id, isActive: 0);
+
+        // Kiểm tra trạng thái kích hoạt tài khoản
+        if (notActiveUser != null)
+        {
+            errorMessage = "Tài khoản của bạn chưa được kích hoạt! Vui lòng kiểm tra mail để kích hoạt tài khoản.";
+            messageClass = Constant.DANGER;
+            await UserManager.AccessFailedAsync(user);
+            return;
+        }
+
+        // Kiểm tra password
+        var passwordCheck = await UserManager.CheckPasswordAsync(user, Input.Password);
+        if (!passwordCheck)
+        {
+            errorMessage = "Mật khẩu không đúng!";
+            messageClass = Constant.DANGER;
+            await UserManager.AccessFailedAsync(user);
+
+            // Nếu tài khoản đã bị khóa thì di chuyển đến màn hình khóa
+            if (await UserManager.GetLockoutEndDateAsync(user) != null)
+            {
+                await UserManager.ResetAccessFailedCountAsync(user);
+                RedirectManager.RedirectTo("Account/Lockout");
+            }
+
+            // Nếu số lần đăng nhập sai lớn hơn 1 thì hiển thị cảnh báo
+            var accessFailedCount = await UserManager.GetAccessFailedCountAsync(user);
+            if (accessFailedCount > 0)
+            {
+                warning = $"Bạn đã đăng nhập thất bại {user.AccessFailedCount} lần. Còn {5 - user.AccessFailedCount} lần tài khoản sẽ bị khóa.";
+            }
+            else
+            {
+                warning = "";
+            }
+            return;
+        }
+
+        // Nếu tài khoản đã bị khóa thì di chuyển đến màn hình khóa
+        if (await UserManager.GetLockoutEndDateAsync(user) != null)
+        {
+            await UserManager.ResetAccessFailedCountAsync(user);
+            RedirectManager.RedirectTo("Account/Lockout");
+        }
+
+        var validateUser = await UserService.GetById(user.Id, isActive: 1);
+        // Kiểm tra login lần đầu
+        if (validateUser.IsFirstLogin == 1)
+        {
+            UserState.Email = user.Email;
+            RedirectManager.RedirectTo("/Account/ChangePassword", new() { ["isFirstLogin"] = "1" });
+        }
+
+        // Gửi mã xác thực:
+        // var code = LoginService.GenerateVerificationCode(user.Email);
+        UserState.Email = Input.Email;
+        UserState.Password = Input.Password;
+        // await SendMail(validateUser, code);
+        RedirectManager.RedirectTo("/Account/ConfirmLogin", new() { ["rememberMe"] = Input.RememberMe, ["returnUrl"] = ReturnUrl });
+    }
+
+    private async Task SendMail(ApplicationUser user, string code)
+    {
+        // Tạo mới đối tượng
+        var emailHistory = new EmailHistory();
+
+        // Nội dung mail
+        var content = "";
+
+        content += "<div class=\"email-container\">";
+        content += "<div class=\"header\">";
+        content += "<h1>Xác Thực Đăng Nhập</h1>";
+        content += "</div>";
+        content += "<div class=\"content\">";
+        content += "<p>Xin chào,</p>";
+        content += "<p>Mã xác nhận của bạn để đăng nhập vào hệ thống là:</p>";
+        content += "<h2>" + code + "</h2>";
+        content += "<p>Vui lòng nhập mã này vào biểu mẫu xác nhận để hoàn tất quá trình đăng nhập. Mã này chỉ có hiệu lực trong vòng 1 phút.</p>";
+        content += "<p>Xin chân thành cảm ơn!</p>";
+        content += "<p><strong>Lưu ý:</strong></p>";
+        content += "<p>Tài khoản chỉ có hiệu lực trong vòng 1 tuần.</p>";
+        content += "<p>Đây là email được gửi tự động từ hệ thống, vui lòng không trả lời vào địa chỉ này. Mọi thông tin thắc mắc xin vui lòng liên hệ: <a href=\"mailto:xxxxxxxx@gmail.com\">xxxxxxxx@gmail.com</a></p>";
+        content += "</div>";
+        content += "<div class=\"footer\">";
+        content += "<p>Trân trọng,</p>";
+        content += "<p>Công ty cổ phần xây dựng Đức Anh</p>";
+        content += "</div>";
+        content += "</div>";
+
+        // Gán giá trị cho các thuộc tính
+        emailHistory.Id = Guid.NewGuid().ToString();
+        emailHistory.Receiver = user.Email;
+        emailHistory.Subject = "Mã Xác Nhận Đăng Nhập";
+        emailHistory.Content = content;
+        emailHistory.CompanyId = user.CompanyId;
+        emailHistory.MajorId = "";
+        emailHistory.ScreenId = "";
+        emailHistory.CreateAt = DateTime.Now;
+        emailHistory.CreateBy = "System";
+
+        // Thực hiện gửi mail
+        await EmailService.SendEmail(emailHistory);
+    }
+}

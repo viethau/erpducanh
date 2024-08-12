@@ -1,0 +1,522 @@
+﻿@implements IDisposable
+
+@inject NavigationManager NavigationManager
+
+
+<aside class="main-sidebar elevation-4 sidebar-dark-cyan sidemenu_backgroud">
+
+    <a href="https://www.google.com/maps" class="brand-link text-sm bg-cyan p-20">
+        <img src="adminlte/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">Trang chủ</span>
+    </a>
+
+    <div class="sidebar os-theme-dark">
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column text-sm" data-widget="treeview" role="menu" data-accordion="false">
+
+                @* Nhân sự *@
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>
+                            Nhân sự
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview" style="display: none;">
+                        <li class="nav-item">
+                            <NavLink href="phanquyencaidats" class="nav-link">
+                                <p class="pl-4">Hợp đồng</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="caidatduyets" class="nav-link">
+                                <p class="pl-4">Bộ phận chức vụ</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="phanquyenthaotacs" class="nav-link">
+                                <p class="pl-4">Lương</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                <p class="pl-4">Bảo hiểm</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                <p class="pl-4">Chấm công</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                <p class="pl-4">Điều chuyển</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                <p class="pl-4">Thanh lý</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                <p class="pl-4">Cài đặt công</p>
+                            </NavLink>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link">
+                                <p class="pl-4">
+                                    Cài đặt
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+                                <li class="nav-item">
+                                    <NavLink href="/MPermissions/createQuyen/ff9590bc-7b3b-4f9b-a7fd-913c248beadf" class="nav-link">
+                                        <p class="pl-4">Phân quyền</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="/createPhongBanDuyet/ff9590bc-7b3b-4f9b-a7fd-913c248beadf" class="nav-link">
+                                        <p class="pl-4">Cài đặt phòng ban duyệt</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="/createLuotDuyet/ff9590bc-7b3b-4f9b-a7fd-913c248beadf" class="nav-link">
+                                        <p class="pl-4">Cài đặt số lượt duyệt</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Cài đặt người duyệt</p>
+                                    </NavLink>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </li>
+
+                @* Quản lý thiết bị *@
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="nav-icon fas fa-truck"></i>
+                        <p>
+                            Quản lý thiết bị
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview" style="display: none;">
+                        <li class="nav-item">
+                            <NavLink href="phanquyencaidats" class="nav-link">
+                                <p class="pl-4">Tài sản cố định</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="caidatduyets" class="nav-link">
+                                <p class="pl-4">Quản lý thiết bị</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="phanquyenthaotacs" class="nav-link">
+                                <p class="pl-4">Người vận hành</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                <p class="pl-4">Nhiên liệu</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                <p class="pl-4">Điều chuyển</p>
+                            </NavLink>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link">
+                                <p class="pl-4">
+                                    Cài đặt
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Phân quyền</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Cài đặt phòng ban duyệt</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Cài đặt số lượt duyệt</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Cài đặt người duyệt</p>
+                                    </NavLink>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                @* Thí nghiệm *@
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="nav-icon fas fa-vial"></i>
+                        <p>
+                            Thí nghiệm
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview" style="display: none;">
+                        <li class="nav-item">
+                            <NavLink href="phanquyencaidats" class="nav-link">
+                                <p class="pl-4">Định mức</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="caidatduyets" class="nav-link">
+                                <p class="pl-4">Cấp phối</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="phanquyenthaotacs" class="nav-link">
+                                <p class="pl-4">Thí nghiệm</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                <p class="pl-4">Bảng tính giá</p>
+                            </NavLink>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link">
+                                <p class="pl-4">
+                                    Cài đặt
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Phân quyền</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Cài đặt phòng ban duyệt</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Cài đặt số lượt duyệt</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Cài đặt người duyệt</p>
+                                    </NavLink>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                @* Hợp đồng bê tông *@
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="nav-icon fas fa-building"></i>
+                        <p>
+                            Hợp đồng bê tông
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview" style="display: none;">
+                        <li class="nav-item">
+                            <NavLink href="phanquyencaidats" class="nav-link">
+                                <p class="pl-4">Hợp đồng bán bê tông</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="phanquyencaidats" class="nav-link">
+                                <p class="pl-4">Hợp đồng mua bê tông</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="caidatduyets" class="nav-link">
+                                <p class="pl-4">Hợp đồng thuê bơm</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="phanquyenthaotacs" class="nav-link">
+                                <p class="pl-4">Hợp đồng thuê xe</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                <p class="pl-4">Lịch xuất hàng</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="phanquyencaidats" class="nav-link">
+                                <p class="pl-4">Xuất bê tông</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="caidatduyets" class="nav-link">
+                                <p class="pl-4">Giá cước</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="phanquyenthaotacs" class="nav-link">
+                                <p class="pl-4">Giá vật liệu</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                <p class="pl-4">Giá công trộn</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                <p class="pl-4">Lương sản lượng</p>
+                            </NavLink>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link">
+                                <p class="pl-4">
+                                    Cài đặt
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Phân quyền</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Cài đặt phòng ban duyệt</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Cài đặt số lượt duyệt</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Cài đặt người duyệt</p>
+                                    </NavLink>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                @* Nhập kho *@
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="nav-icon fas fa-download"></i>
+                        <p>
+                            Nhập kho
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview" style="display: none;">
+                        <li class="nav-item">
+                            <NavLink href="phanquyencaidats" class="nav-link">
+                                <p class="pl-4">Hợp đồng mua vật liệu</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="phanquyencaidats" class="nav-link">
+                                <p class="pl-4">Hợp đồng thuê xe</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="caidatduyets" class="nav-link">
+                                <p class="pl-4">Lịch nhập kho</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="phanquyenthaotacs" class="nav-link">
+                                <p class="pl-4">Nhập kho - Vật liệu</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                <p class="pl-4">Nhập kho - Thiết bị</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="phanquyencaidats" class="nav-link">
+                                <p class="pl-4">Nhập kho - Phụ tùng</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="caidatduyets" class="nav-link">
+                                <p class="pl-4">Nhập kho - Phiếu đề nghị</p>
+                            </NavLink>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link">
+                                <p class="pl-4">
+                                    Cài đặt
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Phân quyền</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Cài đặt phòng ban duyệt</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Cài đặt số lượt duyệt</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Cài đặt người duyệt</p>
+                                    </NavLink>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                @* Xuất kho *@
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="nav-icon fas fa-upload"></i>
+                        <p>
+                            Xuất kho
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview" style="display: none;">
+                        <li class="nav-item">
+                            <NavLink href="phanquyencaidats" class="nav-link">
+                                <p class="pl-4">Lịch xuất kho</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="phanquyencaidats" class="nav-link">
+                                <p class="pl-4">Xuất kho</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="caidatduyets" class="nav-link">
+                                <p class="pl-4">Phiếu đề nghị</p>
+                            </NavLink>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link">
+                                <p class="pl-4">
+                                    Cài đặt
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Phân quyền</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Cài đặt phòng ban duyệt</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Cài đặt số lượt duyệt</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="PhanQuyenDuyets" class="nav-link">
+                                        <p class="pl-4">Cài đặt người duyệt</p>
+                                    </NavLink>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                @* Cài đặt hệ thống *@
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="nav-icon fas fa-wrench"></i>
+                        <p>
+                            Cài đặt hệ thống
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview" style="display: none;">
+                        <li class="nav-item">
+                            <NavLink href="/MMajors/listNghiepVu" class="nav-link">
+                                <p class="pl-4">Danh sách nghiệp vụ</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="/MMajors/createNghiepVu" class="nav-link">
+                                <p class="pl-4">Tạo thông tin nghiệp vụ</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="phanquyencaidats" class="nav-link">
+                                <p class="pl-4">Tạo thông tin quyền</p>
+                            </NavLink>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </nav>
+
+    </div>
+
+</aside>
+
+@code {
+    private string? currentUrl;
+
+    protected override void OnInitialized()
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+}
+

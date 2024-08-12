@@ -1,0 +1,67 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.SignalR.Client
+@using DucAnhERP.Models
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [AllowAnonymous]
+
+<div class="notification-bell">
+    <button type="submit" class="custom-button" title="@title" @onclick="ShowModal">
+        <i class="fa fa-bell text-white">
+            @if (notiCount > 0)
+            {
+                <span class="notification-count" id="notificationCount">@notiCount</span>
+            }
+        </i>
+    </button>
+</div>
+
+@code {
+    private HubConnection hubConnection;
+
+    private int notiCount;
+
+    private List<string> messages = new List<string>();
+
+    private string userName;
+
+    private string title => notiCount > 0 ? "" : "Bạn không có thông báo mới nào!";
+
+    [Parameter]
+    public EventCallback<bool> OnResponseClick { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            userName = authState.User.Identity.Name;
+            notiCount = await EmailService.GetUnreadNotiByUser(userName);
+        }
+
+        hubConnection = new HubConnectionBuilder().WithUrl(Navigation.ToAbsoluteUri("/notificationHub")).Build();
+
+        hubConnection.On<string>("ReceiveMessage", async (message) =>
+        {
+            notiCount = await EmailService.GetUnreadNotiByUser(userName);
+            await InvokeAsync(StateHasChanged);
+        });
+
+        await hubConnection.StartAsync();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await hubConnection.DisposeAsync();
+    }
+
+    private async Task ShowModal()
+    {
+        await OnResponseClick.InvokeAsync(true);
+    }
+
+    public async Task UpdateNotificationCount()
+    {
+        notiCount = await EmailService.GetUnreadNotiByUser(userName);
+    }
+}

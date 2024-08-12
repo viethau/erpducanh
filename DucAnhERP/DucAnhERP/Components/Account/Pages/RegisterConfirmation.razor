@@ -1,0 +1,60 @@
+﻿@page "/Account/RegisterConfirmation"
+
+@using System.Text
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.WebUtilities
+@using DucAnhERP.Data
+@using DucAnhERP.Models
+
+@inject UserManager<IdentityUser> UserManager
+@inject NavigationManager NavigationManager
+@inject IdentityRedirectManager RedirectManager
+
+<PageTitle>Register confirmation</PageTitle>
+
+<StatusMessage Message="@statusMessage" />
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mt-5">
+                <div class="card-header bg-success text-white text-center">
+                    <h4>Đăng ký thành công</h4>
+                </div>
+                <div class="card-body text-center">
+                    <p class="lead">Cảm ơn bạn đã đăng ký tài khoản!</p>
+                    <p>Chúng tôi đã gửi một email xác nhận đến địa chỉ email mà bạn đã đăng ký. Vui lòng kiểm tra email và làm theo hướng dẫn để kích hoạt tài khoản của bạn.</p>
+                    <p class="text-muted">Nếu bạn không thấy email trong hộp thư đến, vui lòng kiểm tra thư mục Thư rác hoặc Spam.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string? statusMessage;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromQuery]
+    private string? Email { get; set; }
+
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Email is null)
+        {
+            RedirectManager.RedirectTo("");
+        }
+
+        var user = await UserManager.FindByEmailAsync(Email);
+        if (user is null)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+            statusMessage = "Lỗi: Không tìm thấy người dùng tương ứng với email.";
+        }
+    }
+}

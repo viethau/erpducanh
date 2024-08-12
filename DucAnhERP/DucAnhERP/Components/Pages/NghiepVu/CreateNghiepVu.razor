@@ -1,0 +1,117 @@
+﻿@page "/MMajors/createNghiepVu"
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using Microsoft.AspNetCore.Authorization
+@inject NavigationManager navigation;
+@attribute [Authorize]
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Tạo thông tin nghiệp vụ</h3>
+    </div>
+
+    <EditForm Model="mmajor" FormName="CreateNghiepVu" OnValidSubmit="@ValidateServer">
+        <DataAnnotationsValidator />
+        <div class="card-body">
+            <div class="form-group w-25">
+                <label for="parentMajor">Nghiệp vụ cha</label>
+                <InputSelect class="form-control" @bind-Value="mmajor.ParentId">
+                    <option value="" selected>Chọn nghiệp vụ cha nếu có!</option>
+                    @if (listParentMajor != null)
+                    {
+                        @foreach (var major in listParentMajor)
+                        {
+                            <option value="@major.Id">@major.MajorName</option>
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="()=>mmajor.ParentId"></ValidationMessage>
+            </div>
+            <div class="form-group w-25">
+                <label for="majorName">Tên nghiệp vụ</label>
+                <InputText class="form-control" id="majorName" @bind-Value="mmajor.MajorName" />
+                <ValidationMessage For="()=>mmajor.MajorName"></ValidationMessage>
+            </div>
+            <div class="form-group w-25">
+                <label for="order">Thứ tự sắp xếp</label>
+                <InputNumber min="0" class="form-control" id="order" @bind-Value="mmajor.Order" />
+                <ValidationMessage For="()=>mmajor.Order"></ValidationMessage>
+            </div>
+            <div class="form-group w-25">
+                <label for="table">Tên bảng</label>
+                <InputText class="form-control" id="table" @bind-Value="mmajor.Table" />
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Đăng ký</button>
+        </div>
+    </EditForm>
+</div>
+<SuccessModal @ref="successModal" OnResponseClick="Redirect"></SuccessModal>
+<ErrorModal @ref="errorModal"></ErrorModal>
+<ConfirmModal @ref="confirmModal" OnResponseClick="CreateMajor"></ConfirmModal>
+
+
+@code {
+    [SupplyParameterFromForm(FormName = "CreateNghiepVu")]
+    private MMajor mmajor { get; set; } = new();
+
+    private List<MMajor> listParentMajor = new List<MMajor>();
+
+    [Parameter]
+    public SuccessModal successModal { get; set; }
+
+    [Parameter]
+    public ErrorModal errorModal { get; set; }
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        listParentMajor = await MajorService.GetAllParentMajor();
+    }
+
+    protected async Task CreateMajor(bool isCreate)
+    {
+        if (isCreate)
+        {
+            var result = await MajorService.AddMajor(mmajor);
+            if (result != null)
+            {
+                successModal.openModal();
+            }
+        } else
+        {
+            StateHasChanged();
+        }
+
+
+    }
+
+    private async Task ValidateServer()
+    {
+        //Validate
+        var majorObj = await MajorService.GetMajorByName(mmajor.MajorName);
+
+        if (majorObj != null)
+        {
+            if (majorObj.Table == mmajor.Table)
+            {
+                errorModal.Title = "Lỗi!";
+                errorModal.message = "Đã tồn tại tên nghiệp vụ và tên bảng giống nội dung bạn đã nhập. Vui lòng thay đổi nội dung nhập và thử lại!";
+                errorModal.openModal();
+                return;
+            }
+        }
+
+        confirmModal.openModal();
+    }
+
+    private void Redirect()
+    {
+        mmajor = new();
+    }
+
+}
