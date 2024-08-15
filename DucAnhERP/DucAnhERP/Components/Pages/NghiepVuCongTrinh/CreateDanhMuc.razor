@@ -1,0 +1,97 @@
+﻿@page "/NghiepVuCongTrinh/DanhMuc"
+@using DucAnhERP.Models
+@inject IDanhMucRepository DanhMucRepository
+@inject INhomDanhMucRepository NhomDanhMucRepository
+
+<div class="m-5">
+
+
+    <h3>Thêm DanhMuc Mới</h3>
+    <EditForm Model="newDanhMuc" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="row">
+                <div class="col-5"> 
+                    <div class="form-group">
+                <label for="IdNhomDanhMuc">Group Category Id</label>
+                <InputSelect id="IdNhomDanhMuc" class="form-control" @bind-Value="newDanhMuc.IdNhomDanhMuc">
+                    <option value="">Nhóm danh mục...</option>
+                    @foreach (var nhom in nhomDanhMucs)
+                    {
+                        <option value="@nhom.Id">@nhom.Ten</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="() => newDanhMuc.IdNhomDanhMuc" class="text-danger" />
+            </div>
+        </div
+             <div class="col-5">
+                 
+                <div class="form-group">
+                    <label for="Ten">Name</label>
+                    <InputText id="Ten" class="form-control" @bind-Value="newDanhMuc.Ten" />
+                    <ValidationMessage For="() => newDanhMuc.Ten" class="text-danger" />
+
+                </div>
+             </div>
+               <div class="col-2">
+                   <button type="submit" class="btn btn-primary">Thêm</button>
+                </div>
+        </div>
+       
+        
+    </EditForm>
+    <h3 class="mt-5">Danh sách DanhMuc</h3>
+
+    @if (danhMucs == null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <table class="table table-border ">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>GroupCategoryId</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int stt = 1;
+                }
+                @foreach (var danhmuc in danhMucs)
+                {
+                    <tr>
+                        <td>@stt</td>
+                        <td>@danhmuc.IdNhomDanhMuc</td>
+                        <td>@danhmuc.Ten</td>
+                    </tr>
+                    stt++;
+                }
+            </tbody>
+        </table>
+    }
+
+</div>
+
+@code {
+    private List<DanhMuc> danhMucs = new List<DanhMuc>();
+    private List<NhomDanhMuc> nhomDanhMucs = new List<NhomDanhMuc>();
+    private DanhMuc newDanhMuc = new DanhMuc();
+
+    protected override async Task OnInitializedAsync()
+    {
+        danhMucs = await DanhMucRepository.GetAll();
+        nhomDanhMucs = await NhomDanhMucRepository.GetAll();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await DanhMucRepository.Insert(newDanhMuc);
+        danhMucs = await DanhMucRepository.GetAll();
+        newDanhMuc = new DanhMuc(); // Reset form
+    }
+
+
+}

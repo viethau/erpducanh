@@ -422,6 +422,43 @@ namespace DucAnhERP.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "DSNhomDanhMuc",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Ten = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NhomDanhMuc", x => x.Id);
+                }
+            );
+
+            migrationBuilder.CreateTable(
+                name: "DSDanhMuc",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    IdNhomDanhMuc = table.Column<string>(nullable: true),
+                    Ten = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DanhMuc", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DanhMuc_NhomDanhMuc_IdNhomDanhMuc",
+                        column: x => x.IdNhomDanhMuc,
+                        principalTable: "NhomDanhMuc",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                }
+             );
+            migrationBuilder.CreateIndex(
+               name: "IX_DanhMuc_IdNhomDanhMuc",
+               table: "DanhMuc",
+               column: "IdNhomDanhMuc");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -460,6 +497,7 @@ namespace DucAnhERP.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
         }
 
         /// <inheritdoc />
@@ -524,6 +562,13 @@ namespace DucAnhERP.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "DanhMuc");
+
+            migrationBuilder.DropTable(
+                name: "NhomDanhMuc");
+
         }
     }
 }

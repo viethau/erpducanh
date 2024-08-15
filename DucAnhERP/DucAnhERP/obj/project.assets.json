@@ -4616,19 +4616,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\VietHau\\.nuget\\packages\\": {}
+    "C:\\Users\\qminh\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\VietHau\\Desktop\\DucAnhERP\\DucAnhERP\\DucAnhERP.csproj",
+      "projectUniqueName": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\DucAnhERP.csproj",
       "projectName": "DucAnhERP",
-      "projectPath": "C:\\Users\\VietHau\\Desktop\\DucAnhERP\\DucAnhERP\\DucAnhERP.csproj",
-      "packagesPath": "C:\\Users\\VietHau\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\VietHau\\Desktop\\DucAnhERP\\DucAnhERP\\obj\\",
+      "projectPath": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\DucAnhERP.csproj",
+      "packagesPath": "C:\\Users\\qminh\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\VietHau\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\qminh\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4637,7 +4637,8 @@
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "C:\\Program Files\\dotnet\\library-packs": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {},
+        "https://packagesource1": {}
       },
       "frameworks": {
         "net8.0": {

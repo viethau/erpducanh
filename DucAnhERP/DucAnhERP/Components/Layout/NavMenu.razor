@@ -5,7 +5,7 @@
 
 <aside class="main-sidebar elevation-4 sidebar-dark-cyan sidemenu_backgroud">
 
-    <a href="https://www.google.com/maps" class="brand-link text-sm bg-cyan p-20">
+    <a href="/" class="brand-link text-sm bg-cyan p-20">
         <img src="adminlte/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">Trang chủ</span>
     </a>
@@ -98,6 +98,35 @@
 
                     </ul>
                 </li>
+
+                @* Nghiệp vụ công trình qminh-12/08/2024 *@
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="nav-icon fas  fa-road"></i>
+                        <p>
+                            Nghiệp vụ công trình
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview" style="display: none;">
+                        <li class="nav-item">
+                            <NavLink href="/NghiepVuCongtrinh/listThoatNuocMua" class="nav-link">
+                                <p class="pl-4">Thoát nước mưa </p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="/NghiepVuCongtrinh/CreateThoatNuocMua" class="nav-link">
+                                <p class="pl-4">Tạo thoát nước mưa</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="/NghiepVuCongtrinh/DanhMuc" class="nav-link">
+                                <p class="pl-4">Danh mục</p>
+                            </NavLink>
+                        </li>
+                    </ul>
+                </li>
+
 
                 @* Quản lý thiết bị *@
                 <li class="nav-item">

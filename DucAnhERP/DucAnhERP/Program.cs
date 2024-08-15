@@ -42,6 +42,8 @@ builder.Services.AddScoped<IApprovalStepSettingRepository, ApprovalStepSettingRe
 builder.Services.AddSingleton<UserState>();
 builder.Services.AddSingleton<ILoginService, LoginService>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+builder.Services.AddScoped<IDanhMucRepository, DanhMucRepository>();
+builder.Services.AddScoped<INhomDanhMucRepository, NhomNhomDanhMucRepository>();
 
 builder.Services.AddAuthentication(options =>
     {
