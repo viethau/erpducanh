@@ -2,7 +2,7 @@
 
 namespace DucAnhERP.Repository
 {
-    public interface INhomDanhMucRepository : IBaseRepository<NhomDanhMuc>
+    public interface INhomDanhMucRepository : IBaseRepository<MNhomDanhMuc>
     {
     }
 }

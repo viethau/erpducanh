@@ -2,7 +2,7 @@
 
 namespace DucAnhERP.Models
 {
-    public class MMajor
+    public class MMajor 
     {
         [Key]
         public string Id { get; set; }

@@ -13,14 +13,14 @@ namespace DucAnhERP.Services
         {
             _context = context;
         }
-        public async Task<List<NhomDanhMuc>> GetAll()
+        public async Task<List<MNhomDanhMuc>> GetAll()
         {
             using var context = _context.CreateDbContext();
             var entity = await context.DSNhomDanhMuc.ToListAsync();
             return entity;
         }
 
-        public async Task Update(NhomDanhMuc NhomDanhMuc)
+        public async Task Update(MNhomDanhMuc NhomDanhMuc)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(NhomDanhMuc.Id);
@@ -34,7 +34,7 @@ namespace DucAnhERP.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task UpdateMulti(NhomDanhMuc[] NhomDanhMuc)
+        public async Task UpdateMulti(MNhomDanhMuc[] NhomDanhMuc)
         {
             using var context = _context.CreateDbContext();
             string[] ids = NhomDanhMuc.Select(x => x.Id).ToArray();
@@ -76,7 +76,7 @@ namespace DucAnhERP.Services
         }
 
 
-        public async Task<NhomDanhMuc> GetById(string id)
+        public async Task<MNhomDanhMuc> GetById(string id)
         {
             using var context = _context.CreateDbContext();
             var entity = await context.DSNhomDanhMuc.Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
@@ -90,7 +90,7 @@ namespace DucAnhERP.Services
         }
 
 
-        public async Task Insert(NhomDanhMuc entity)
+        public async Task Insert(MNhomDanhMuc entity)
         {
             using var context = _context.CreateDbContext();
             if (entity == null)
