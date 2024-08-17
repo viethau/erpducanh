@@ -454,6 +454,88 @@ namespace DucAnhERP.Migrations
                         onDelete: ReferentialAction.Restrict);
                 }
              );
+
+            migrationBuilder.CreateTable(
+                   name: "DSHopRanhThang",
+                   columns: table => new
+                   {
+                       Id = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                       ThongTinLyTrinh_TuyenDuong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                       ThongTinLyTrinh_LyTrinhTaiTimHoGa = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                       ThongTinChungHoGa_TenHoGaSauPhanLoai = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                       ThongTinChungHoGa_TenHoGaTheoBanVe = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                       ThongTinChungHoGa_HinhThucHoGa = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                       ThongTinChungHoGa_KetCauMuMo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                       ThongTinTamDanHoGa_HinhThucDayHoGa = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                       ThongTinChungHoGa_KetCauTuong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                       ThongTinChungHoGa_HinhThucMongHoGa = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                       ThongTinChungHoGa_KetCauMong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                       ThongTinChungHoGa_ChatMatTrong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                       ThongTinChungHoGa_ChatMatNgoai = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                       PhuBiHoGa_CDai = table.Column<double>(type: "float", nullable: false),
+                       PhuBiHoGa_CRong = table.Column<double>(type: "float", nullable: false),
+                       BeTongLotMong_D = table.Column<double>(type: "float", nullable: false),
+                       BeTongLotMong_R = table.Column<double>(type: "float", nullable: false),
+                       BeTongLotMong_C = table.Column<double>(type: "float", nullable: false),
+                       BeTongMongHoGa_D = table.Column<double>(type: "float", nullable: false),
+                       BeTongMongHoGa_R = table.Column<double>(type: "float", nullable: false),
+                       TBeTongMongHoGa_C = table.Column<double>(type: "float", nullable: false),
+                       DeHoGa_D = table.Column<double>(type: "float", nullable: false),
+                       DeHoGa_R = table.Column<double>(type: "float", nullable: false),
+                       DeHoGa_C = table.Column<double>(type: "float", nullable: false),
+                       TuongHoGa_D = table.Column<double>(type: "float", nullable: false),
+                       TuongHoGa_R = table.Column<double>(type: "float", nullable: false),
+                       TuongHoGa_CdTuong = table.Column<double>(type: "float", nullable: false),
+                       DamGiuaHoGa_D = table.Column<double>(type: "float", nullable: false),
+                       DamGiuaHoGa_R = table.Column<double>(type: "float", nullable: false),
+                       DamGiuaHoGa_C = table.Column<double>(type: "float", nullable: false),
+                       DamGiuaHoGa_CdDam = table.Column<double>(type: "float", nullable: false),
+                       DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa = table.Column<double>(type: "float", nullable: false),
+                       ChatMatTrong_D = table.Column<double>(type: "float", nullable: false),
+                       ChatMatTrong_R = table.Column<double>(type: "float", nullable: false),
+                       ChatMatNgoaiCanh_D = table.Column<double>(type: "float", nullable: false),
+                       ChatMatNgoaiCanh_R = table.Column<double>(type: "float", nullable: false),
+                       MuMoThotDuoi_D = table.Column<double>(type: "float", nullable: false),
+                       MuMoThotDuoi_R = table.Column<double>(type: "float", nullable: false),
+                       MuMoThotDuoi_C = table.Column<double>(type: "float", nullable: false),
+                       MuMoThotDuoi_CdTuong = table.Column<double>(type: "float", nullable: false),
+                       MuMoThotTren_D = table.Column<double>(type: "float", nullable: false),
+                       MuMoThotTren_R = table.Column<double>(type: "float", nullable: false),
+                       MuMoThotTren_C = table.Column<double>(type: "float", nullable: false),
+                       MuMoThotTren_CdTuong = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi1_Loai = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi1_CanhDai = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi1_CanhRong = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi1_CanhCheo = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi2_Loai = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi2_CanhDai = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi2_CanhRong = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi2_CanhCheo = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi3_Loai = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi3_CanhDai = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi3_CanhRong = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi3_CanhCheo = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi4_Loai = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi4_CanhDai = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi4_CanhRong = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi4_CanhCheo = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi5_Loai = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi5_CanhDai = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi5_CanhRong = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi5_CanhCheo = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi6_Loai = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi6_CanhDai = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi6_CanhRong = table.Column<double>(type: "float", nullable: false),
+                       HinhThucDauNoi6_CanhCheo = table.Column<double>(type: "float", nullable: false),
+                       ToaDoX = table.Column<double>(type: "float", nullable: false),
+                       ToaDoY = table.Column<double>(type: "float", nullable: false)
+                   },
+                   constraints: table =>
+                   {
+                       table.PrimaryKey("PK_HopRanhThang", x => x.Id);
+                   });
+
+
             migrationBuilder.CreateIndex(
                name: "IX_DanhMuc_IdNhomDanhMuc",
                table: "DanhMuc",
@@ -497,8 +579,10 @@ namespace DucAnhERP.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
+        
         }
+         
+
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -564,10 +648,12 @@ namespace DucAnhERP.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "DanhMuc");
+                name: "DSDanhMuc");
 
             migrationBuilder.DropTable(
-                name: "NhomDanhMuc");
+                name: "DSNhomDanhMuc");
+            migrationBuilder.DropTable(
+              name: "DSHopRanhThang");
 
         }
     }

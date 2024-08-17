@@ -14,34 +14,34 @@
         <DataAnnotationsValidator />
         <ValidationSummary />
         <div class="row">
-                <div class="col-5"> 
-                    <div class="form-group">
-                <label for="IdNhomDanhMuc">Nhóm danh mục</label>
-                <InputSelect id="IdNhomDanhMuc" class="form-control" @bind-Value="newDanhMuc.IdNhomDanhMuc">
-                    <option value="">Nhóm danh mục...</option>
-                    @foreach (var nhom in nhomDanhMucs)
-                    {
-                        <option value="@nhom.Id">@nhom.Ten</option>
-                    }
-                </InputSelect>
-                <ValidationMessage For="() => newDanhMuc.IdNhomDanhMuc" class="text-danger" />
+            <div class="col-5">
+                <div class="form-group">
+                    <label for="IdNhomDanhMuc">Nhóm danh mục</label>
+                    <InputSelect id="IdNhomDanhMuc" class="form-control" @bind-Value="newDanhMuc.IdNhomDanhMuc">
+                        <option value="">Nhóm danh mục...</option>
+                        @foreach (var nhom in nhomDanhMucs)
+                        {
+                            <option value="@nhom.Id">@nhom.Ten</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="() => newDanhMuc.IdNhomDanhMuc" class="text-danger" />
+                </div>
             </div>
-        </div>
-             <div class="col-5">
-                 
+            <div class="col-5">
+
                 <div class="form-group">
                     <label for="Ten">Tên</label>
                     <InputText id="Ten" class="form-control" @bind-Value="newDanhMuc.Ten" />
                     <ValidationMessage For="() => newDanhMuc.Ten" class="text-danger" />
 
                 </div>
-             </div>
-               <div class="col-2">
-                   <button type="submit" class="btn btn-primary">Thêm</button>
-                </div>
+            </div>
+            <div class="col-2">
+                <button type="submit" class="btn btn-primary">Thêm</button>
+            </div>
         </div>
     </EditForm>
-   
+
     <h3 class="mt-5">Danh sách danh mục</h3>
     @if (!listDanhMuc.Any())
     {
@@ -52,52 +52,52 @@
         </div>
     }
     <div class="row mt-3">
-            <table class="table table-hover table-bordered">
-                <thead class="bg-info">
-                    <tr>
+        <table class="table table-hover table-bordered">
+            <thead class="bg-info">
+                <tr>
                     <th class="text-center" scope="col">
                         <div class="pb-3">STT  </div>
-                        </th>
+                    </th>
 
                     <th onclick="@(() => SortTable("TenNhom"))" class="text-center sortable" scope="col" sortable>
                         <div class="pb-3">Nhóm danh mục  <span class="arrow @(GetSortStyle("TenNhom"))"></span></div>
-                           
-                        </th>
+
+                    </th>
                     <th onclick="@(() => SortTable("Ten"))" class="text-center sortable" scope="col" sortable>
                         <div class="pb-3">Tên  <span class="arrow @(GetSortStyle("Ten"))"></span></div>
-                        </th>
-                    </tr>
-                 
-                </thead>
-                @if (listDanhMuc.Any())
-                {
-                
+                    </th>
+                </tr>
+
+            </thead>
+            @if (listDanhMuc.Any())
+            {
+
                 <tbody>
                     @{
                         int stt = 1;
                     }
                     @foreach (var dm in listDanhMuc)
                     {
-                            
-                            <tr>
-                                <td class="text-center">@stt</td>
-                                <td class="text-left">@dm.TenNhom</td>
-                                <td class="text-center">@dm.Ten</td>
+
+                        <tr>
+                            <td class="text-center">@stt</td>
+                            <td class="text-left">@dm.TenNhom</td>
+                            <td class="text-center">@dm.Ten</td>
                         </tr>
                         stt++;
                     }
 
-                    </tbody>
-                }
+                </tbody>
+            }
 
-            </table>
+        </table>
 
-        </div>
+    </div>
 
-     @if (listDanhMuc.Any())
-     {
-      <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
-     }
+    @if (listDanhMuc.Any())
+    {
+        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+    }
 
 </div>
 

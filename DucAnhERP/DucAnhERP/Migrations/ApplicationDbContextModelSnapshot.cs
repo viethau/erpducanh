@@ -396,6 +396,24 @@ namespace DucAnhERP.Migrations
                     b.ToTable("MCompanies");
                 });
 
+            modelBuilder.Entity("DucAnhERP.Models.MDanhMuc", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("IdNhomDanhMuc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Ten")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DSDanhMuc");
+                });
+
             modelBuilder.Entity("DucAnhERP.Models.MDepartment", b =>
                 {
                     b.Property<string>("Id")
@@ -510,6 +528,20 @@ namespace DucAnhERP.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MMajorUserPermissions");
+                });
+
+            modelBuilder.Entity("DucAnhERP.Models.MNhomDanhMuc", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Ten")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DSNhomDanhMuc");
                 });
 
             modelBuilder.Entity("DucAnhERP.Models.MPermission", b =>

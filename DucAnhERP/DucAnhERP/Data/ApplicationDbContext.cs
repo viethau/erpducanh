@@ -11,7 +11,6 @@ namespace DucAnhERP.Data
     {
         private readonly IHubContext<NotificationHub> _hubContext;
 
-
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IHubContext<NotificationHub> hubContext) : base(options)
         {
             _hubContext = hubContext;
@@ -41,7 +40,6 @@ namespace DucAnhERP.Data
         public DbSet<ApprovalStaffSetting> ApprovalStaffSettings { get; set; }
         public DbSet<MNhomDanhMuc> DSNhomDanhMuc { get; set; }
         public DbSet<MDanhMuc> DSDanhMuc { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
