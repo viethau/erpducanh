@@ -44,6 +44,8 @@ builder.Services.AddSingleton<ILoginService, LoginService>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 builder.Services.AddScoped<IDanhMucRepository, DanhMucRepository>();
 builder.Services.AddScoped<INhomDanhMucRepository, NhomNhomDanhMucRepository>();
+builder.Services.AddScoped <IHopRanhThangRepository, HopRanhThangRepository>();
+
 
 builder.Services.AddAuthentication(options =>
     {

@@ -24,8 +24,7 @@ namespace DucAnhERP.Models
         [Required(ErrorMessage = "Bạn phải nhập  kết cấu mũ mố !")]
         public string ThongTinChungHoGa_KetCauMuMo { get; set; }
         [Required(ErrorMessage = "Bạn phải nhập hình thức đậy hố ga!")]
-        public string ThongTinTamDanHoGa_HinhThucDayHoGa { get; set; }
-        [Required(ErrorMessage = "Bạn phải nhập Kết cấu tường!")]
+        
         public string ThongTinChungHoGa_KetCauTuong { get; set; }
         [Required(ErrorMessage = "Bạn phải nhập Hình thức móng hố ga !")]
         public string ThongTinChungHoGa_HinhThucMongHoGa { get; set; }
@@ -546,7 +545,7 @@ namespace DucAnhERP.Models
 
         //Thông tin móng đường truyền dẫn
 
-        [Required(ErrorMessage = "Bạn phải nhập Loại móng!")]
+        [Required(ErrorMessage = "Bạn phải nhập Phân loại móng cống tròn, cống hộp!")]
         public string ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop { get; set; }
         [Required(ErrorMessage = "Bạn phải nhập loại móng!")]
         public string ThongTinMongDuongTruyenDan_LoaiMong { get; set; }

@@ -40,6 +40,7 @@ namespace DucAnhERP.Data
         public DbSet<ApprovalStaffSetting> ApprovalStaffSettings { get; set; }
         public DbSet<MNhomDanhMuc> DSNhomDanhMuc { get; set; }
         public DbSet<MDanhMuc> DSDanhMuc { get; set; }
+        public DbSet<MHopRanhThang> DSHopRanhThang { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

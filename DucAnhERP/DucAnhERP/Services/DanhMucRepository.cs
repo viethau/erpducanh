@@ -138,15 +138,20 @@ namespace DucAnhERP.Services
 
         public async Task Insert(MDanhMuc entity)
         {
-            using var context = _context.CreateDbContext();
-            if (entity == null)
+            try
             {
-                throw new Exception("Không có bản ghi nào để thêm!");
-            }
+                using var context = _context.CreateDbContext();
+                if (entity == null)
+                {
+                    throw new Exception("Không có bản ghi nào để thêm!");
+                }
 
-            entity.Id = Guid.NewGuid().ToString();
-            context.DSDanhMuc.Add(entity);
-            await context.SaveChangesAsync();
+                context.DSDanhMuc.Add(entity);
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex) { 
+                Console.WriteLine(ex.ToString());
+            }
         }
 
 
