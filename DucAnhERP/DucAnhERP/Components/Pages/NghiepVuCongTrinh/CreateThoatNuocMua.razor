@@ -19,7 +19,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col">
-                        <h4>Thông tin lý trình lll</h4>
+                        <h4>Thông tin lý trình </h4>
                         <hr />
                         <div class="row">
                             <div class="form-floating col-6">
@@ -1392,8 +1392,8 @@
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="ThongTinRanhThang_CCaoHangLangBaoVe">C.Cao hàng lang bảo vệ(m)<span class="text-danger">*</span></label>
-                                <InputNumber @bind-Value="Input.ThongTinRanhThang_CCaoHangLangBaoVe" class="form-control" id="ThongTinRanhThang_CCaoHangLangBaoVe" placeholder="C.Cao hàng lang bảo vệ" />
-                                <ValidationMessage For="() => Input.ThongTinRanhThang_CCaoHangLangBaoVe" class="text-danger" />
+                                <InputNumber @bind-Value="Input.ThongTinRanhThang_CCaoHanhLangBaoVe" class="form-control" id="ThongTinRanhThang_CCaoHangLangBaoVe" placeholder="C.Cao hàng lang bảo vệ" />
+                                <ValidationMessage For="() => Input.ThongTinRanhThang_CCaoHanhLangBaoVe" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="ThongTinRanhThang_CRongHanhLangBaoVe">C.Rộng hành lang bảo vệ(m)<span class="text-danger">*</span></label>
@@ -1681,7 +1681,12 @@
             </div>
         </div>
     </EditForm>
+    
 </div>
+
+<SuccessModal @ref="successModal"></SuccessModal>
+<ErrorModal @ref="errorModal"></ErrorModal>
+<ConfirmModal @ref="confirmModal"></ConfirmModal>
 
 
 @code {
@@ -1689,8 +1694,15 @@
     private MHopRanhThang Input { get; set; } = new();
 
     private List<MDanhMuc> DSDanhMuc = new List<MDanhMuc>();
-    private List<MDanhMuc> DSDM_Thep = new List<MDanhMuc>();
-    private List<MDanhMuc> DSDM_HHHoGa = new List<MDanhMuc>();
+
+    [Parameter]
+    public SuccessModal successModal { get; set; }
+
+    [Parameter]
+    public ErrorModal errorModal { get; set; }
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
 
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
@@ -1705,11 +1717,14 @@
 
     }
 
+
     private async Task HandleValidSubmit()
     {
         Console.WriteLine(Input);
         await HopRanhThangRepository.Insert(Input);
-        
+        successModal.Title="Thông báo";
+        successModal.message ="Thêm thoát nước mưa dọc phía trái tuyến thành công";
+        successModal.openModal();
     }
 
     public List<MDanhMuc> FindByIdNhomDanhMuc(string idNhomDanhMuc)
@@ -1718,5 +1733,5 @@
     }
 
 
-
+    
 }

@@ -6,6 +6,8 @@
 @using DucAnhERP.SeedWork
 @using Microsoft.AspNetCore.Authorization
 @inject NavigationManager navigation
+@inject IHopRanhThangRepository HopRanhThangRepository
+@inject IDanhMucRepository DanhMucRepository
 @attribute [Authorize]
 
 <style>
@@ -25,6 +27,14 @@
             <h5>BẢNG TỔNG HỢP THÔNG TIN HỆ THỐNG THOÁT NƯỚC MƯA DỌC PHÍA TRÁI TUYẾN</h5>
         </div>
         <div>
+            @if (!listHopRanhThang.Any())
+            {
+                <div class="pt-3 pl-4">
+                    <div class="callout callout-warning">
+                        <h5>Không có dữ liệu tương ứng!</h5>
+                    </div>
+                </div>
+            }
             <table class="table-bordered " cellpadding="0" cellspacing="0">
                 <thead>
                     <tr class="nowrap">
@@ -686,10 +696,451 @@
 
                     </tr>
                 </thead>
-                <tbody></tbody>
-            </table>
+                @if (listHopRanhThang.Any())
+                {
 
+                    <tbody>
+                        @{
+                            int stt = 1;
+                        }
+                        @foreach (var item in listHopRanhThang)
+                        {
+                            
+                            <tr onclick="alert(@item.Id)">
+                                <td class="text-center">@stt</td>
+                                <td class="text-center">@item.ThongTinLyTrinh_TuyenDuong </td>
+                                <td class="text-center">@item.ThongTinLyTrinh_LyTrinhTaiTimHoGa </td>
+                                <td class="text-center">@item.ThongTinChungHoGa_TenHoGaSauPhanLoai </td>
+                                <td class="text-center">@item.ThongTinChungHoGa_TenHoGaTheoBanVe </td>
+                                <td class="text-center">@GetTenDanhMucById(item.ThongTinChungHoGa_HinhThucHoGa) </td>
+                                <td class="text-center">@GetTenDanhMucById(item.ThongTinChungHoGa_KetCauMuMo)  </td>
+                                <td class="text-center">@GetTenDanhMucById(item.ThongTinChungHoGa_KetCauTuong) </td>
+                                <td class="text-center">@GetTenDanhMucById(item.ThongTinChungHoGa_HinhThucMongHoGa) </td>
+                                <td class="text-center">@GetTenDanhMucById(item.ThongTinChungHoGa_KetCauMong) </td>
+                                <td class="text-center">@GetTenDanhMucById(item.ThongTinChungHoGa_ChatMatTrong) </td>
+                                <td class="text-center">@GetTenDanhMucById(item.ThongTinChungHoGa_ChatMatNgoai)  </td>
+                                <td class="text-center">@item.PhuBiHoGa_CDai  </td>
+                                <td class="text-center">@item.PhuBiHoGa_CRong   </td>
+                                <td class="text-center">@item.BeTongLotMong_D   </td>
+                                <td class="text-center">@item.BeTongLotMong_R   </td>
+                                <td class="text-center">@item.BeTongLotMong_C   </td>
+                                <td class="text-center">@item.BeTongMongHoGa_D  </td>
+                                <td class="text-center">@item.BeTongMongHoGa_R  </td>
+                                <td class="text-center">  </td>
+                                <td class="text-center">@item.TBeTongMongHoGa_C   </td>
+                                <td class="text-center">@item.DeHoGa_D   </td>
+                                <td class="text-center">@item.DeHoGa_R   </td>
+                                <td class="text-center">@item.DeHoGa_C   </td>
+                                <td class="text-center">@item.TuongHoGa_D   </td>
+                                <td class="text-center">@item.TuongHoGa_R  </td>
+                                <td class="text-center">@item.TuongHoGa_CdTuong   </td>
+                                <td class="text-center">@item.DamGiuaHoGa_D  </td>
+                                <td class="text-center">@item.DamGiuaHoGa_R   </td>
+                                <td class="text-center">@item.DamGiuaHoGa_C   </td>
+                                <td class="text-center">@item.DamGiuaHoGa_CdDam   </td>
+                                <td class="text-center">@item.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa   </td>
+                                <td class="text-center">@item.ChatMatTrong_D  </td>
+                                <td class="text-center">@item.ChatMatTrong_R  </td>
+                                <td class="text-center">@item.ChatMatNgoaiCanh_D   </td>
+                                <td class="text-center">@item.ChatMatNgoaiCanh_R  </td>
+                                <td class="text-center">@item.MuMoThotDuoi_D   </td>
+                                <td class="text-center">@item.MuMoThotDuoi_R   </td>
+                                <td class="text-center">@item.MuMoThotDuoi_C   </td>
+                                <td class="text-center">@item.MuMoThotDuoi_CdTuong   </td>
+                                <td class="text-center">@item.MuMoThotTren_D  </td>
+                                <td class="text-center">@item.MuMoThotTren_R   </td>
+                                <td class="text-center">@item.MuMoThotTren_C   </td>
+                                <td class="text-center">@item.MuMoThotTren_CdTuong   </td>
+                                <td class="text-center">@item.HinhThucDauNoi1_Loai   </td>
+                                <td class="text-center">@item.HinhThucDauNoi1_CanhDai   </td>
+                                <td class="text-center">@item.HinhThucDauNoi1_CanhRong   </td>
+                                <td class="text-center">@item.HinhThucDauNoi1_CanhCheo   </td>
+                                <td class="text-center">@item.HinhThucDauNoi2_Loai   </td>
+                                <td class="text-center">@item.HinhThucDauNoi2_CanhDai   </td>
+                                <td class="text-center">@item.HinhThucDauNoi2_CanhRong   </td>
+                                <td class="text-center">@item.HinhThucDauNoi2_CanhCheo  </td>
+                                <td class="text-center">@item.HinhThucDauNoi3_Loai   </td>
+                                <td class="text-center">@item.HinhThucDauNoi3_CanhDai   </td>
+                                <td class="text-center">@item.HinhThucDauNoi3_CanhRong  </td>
+                                <td class="text-center">@item.HinhThucDauNoi3_CanhCheo   </td>
+                                <td class="text-center">@item.HinhThucDauNoi4_Loai   </td>
+                                <td class="text-center">@item.HinhThucDauNoi4_CanhDai   </td>
+                                <td class="text-center">@item.HinhThucDauNoi4_CanhRong  </td>
+                                <td class="text-center">@item.HinhThucDauNoi4_CanhCheo   </td>
+                                <td class="text-center">@item.HinhThucDauNoi5_Loai   </td>
+                                <td class="text-center">@item.HinhThucDauNoi5_CanhDai   </td>
+                                <td class="text-center">@item.HinhThucDauNoi5_CanhRong   </td>
+                                <td class="text-center">@item.HinhThucDauNoi5_CanhCheo   </td>
+                                <td class="text-center">@item.HinhThucDauNoi6_Loai   </td>
+                                <td class="text-center">@item.HinhThucDauNoi6_CanhDai   </td>
+                                <td class="text-center">@item.HinhThucDauNoi6_CanhRong   </td>
+                                <td class="text-center">@item.HinhThucDauNoi6_CanhCheo  </td>
+                                <td class="text-center">@item.HinhThucDauNoi7_Loai  </td>
+                                <td class="text-center">@item.HinhThucDauNoi7_CanhDai   </td>
+                                <td class="text-center">@item.HinhThucDauNoi7_CanhRong </td>
+                                <td class="text-center">@item.HinhThucDauNoi7_CanhCheo   </td>
+                                <td class="text-center">@item.HinhThucDauNoi8_Loai   </td>
+                                <td class="text-center">@item.HinhThucDauNoi8_CanhDai   </td>
+                                <td class="text-center">@item.HinhThucDauNoi8_CanhRong   </td>
+                                <td class="text-center">@item.HinhThucDauNoi8_CanhCheo </td>
+                                <td class="text-center">@item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa </td>
+                                <td class="text-center">@item.ThongTinTamDanHoGa2_HinhThucDayHoGa  </td>
+                                <td class="text-center">@item.ThongTinTamDanHoGa2_DuongKinh  </td>
+                                <td class="text-center">@item.ThongTinTamDanHoGa2_ChieuDay   </td>
+                                <td class="text-center">@item.ThongTinTamDanHoGa2_D   </td>
+                                <td class="text-center">@item.ThongTinTamDanHoGa2_R   </td>
+                                <td class="text-center">@item.ThongTinTamDanHoGa2_C </td>
+                                <td class="text-center">@item.ThongTinTamDanHoGa2_SoLuongNapDay </td>
+                                <td class="text-center">@item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao   </td>
+                                <td class="text-center">@item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa  </td>
+                                <td class="text-center">@item.ThongTinCaoDoHoGa_CaoDoTuNhien   </td>
+                                <td class="text-center">@item.ThongTinCaoDoHoGa_CdDinhViaHeHoanThien  </td>
+                                <td class="text-center">@item.ThongTinCaoDoHoGa_CaoDoDinhK98  </td>
+                                <td class="text-center">@item.ThongTinCaoDoHoGa_CdDayHoGa   </td>
+                                <td class="text-center">@item.ThongTinCaoDoHoGa_CdDinhHoGa   </td>
+                                <td class="text-center">@item.ThongTinMaiDao_ChieuRongDayDaoNho    </td>
+                                <td class="text-center">@item.ThongTinMaiDao_TyLeMoMai </td>
+                                <td class="text-center">@item.ThongTinMaiDao_SoCanhMaiTrai </td>
+                                <td class="text-center">@item.ThongTinMaiDao_SoCanhMaiPhai  </td>
+                                <td class="text-center">@item.ToaDoX  </td>
+                                <td class="text-center">@item.ToaDoY  </td>
+                                <td class="text-center">@item.ThongTinLyTrinhTruyenDan_TuLyTrinh </td>
+                                <td class="text-center">@item.ThongTinLyTrinhTruyenDan_DenLyTrinh </td>
+                                <td class="text-center">@item.ThongTinLyTrinhTruyenDan_TuHoGa </td>
+                                <td class="text-center">@item.ThongTinLyTrinhTruyenDan_DenHoGa </td>
+                                <td class="text-center">@item.ThongTinDuongTruyenDan_HinhThucTruyenDan </td>
+                                <td class="text-center">@item.ThongTinDuongTruyenDan_LoaiTruyenDan </td>
+                                <td class="text-center">@item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai   </td>
+                                <td class="text-center">@item.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien   </td>
+                                <td class="text-center">@item.TTCDSLCauKienDuongTruyenDan_ChieuDaiMoiNoiCKien </td>
+                                <td class="text-center">@item.TTCDSLCauKienDuongTruyenDan_SoLuongCKienDungDeTinhChieuDaiBoSung  </td>
+                                <td class="text-center">@item.TTCDSLCauKienDuongTruyenDan_TongChieuDai </td>
+                                <td class="text-center">@item.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop </td>
+                                <td class="text-center">@item.ThongTinMongDuongTruyenDan_LoaiMong </td>
+                                <td class="text-center">@item.ThongTinMongDuongTruyenDan_HinhThucMong </td>
+                                <td class="text-center">@item.ThongTinDeCong_TenLoaiDeCong </td>
+                                <td class="text-center">@item.ThongTinDeCong_CauTaoDeCong   </td>
+                                <td class="text-center">@item.ThongTinDeCong_D   </td>
+                                <td class="text-center">@item.ThongTinDeCong_R </td>
+                                <td class="text-center">@item.ThongTinDeCong_C </td>
+                                <td class="text-center">@item.ThongTinDeCong_SlDeCong01CauKienTruyenDan </td>
+                                <td class="text-center">@item.ThongTinDeCong_Kl01DeCong </td>
+                                <td class="text-center">@item.ThongTinCauTaoCongTron_CDayPhuBi </td>
+                                <td class="text-center">@item.ThongTinCauTaoCongTron_SoCanh   </td>
+                                <td class="text-center">@item.ThongTinCauTaoCongTron_LongSuDung   </td>
+                                <td class="text-center">@item.ThongTinCauTaoCongTron_CCaoLotMong   </td>
+                                <td class="text-center">@item.ThongTinCauTaoCongTron_CRongLotMong   </td>
+                                <td class="text-center">@item.ThongTinCauTaoCongTron_CCaoMong  </td>
+                                <td class="text-center">@item.ThongTinCauTaoCongTron_CRongMong </td>
+                                <td class="text-center">@item.ThongTinCauTaoCongTron_CCaoDe </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CauTaoTuong </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CauTaoMuMo </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_ChatMatTrong </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_ChatMatNgoai </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CCaoLotMong   </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CRongLotMong   </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CCaoMong   </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CRongMong   </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CCaoDe  </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CRongDe  </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CDayTuong01Ben   </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_SoLuongTuong   </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CRongLongSuDung   </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CCaoTuongCongHop </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CCaoMuMoThotDuoi   </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CRongMuMoDuoi   </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CCaoMuMoThotTren   </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CRongMuMoTren </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_LoaiThanhChong </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CauTaoThanhChong   </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CCaoThanhChong   </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CRongThanhChong   </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_CDai </td>
+                                <td class="text-center">@item.TTKTHHCongHopRanh_SoLuongThanhChong </td>
+                                <td class="text-center">@item.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi </td>
+                                <td class="text-center">@item.ThongTinKichThuocHinhHocOngNhua_SoCanh   </td>
+                                <td class="text-center">@item.ThongTinKichThuocHinhHocOngNhua_LongSuDung   </td>
+                                <td class="text-center">@item.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat   </td>
+                                <td class="text-center">@item.ThongTinKichThuocHinhHocOngNhua_CCaoDapCat </td>
+                                <td class="text-center">@item.ThongTinRanhThang_HinhThucMai </td>
+                                <td class="text-center">@item.ThongTinRanhThang_CauTaoChanKhay </td>
+                                <td class="text-center">@item.ThongTinRanhThang_CauTaoGiangDinh </td>
+                                <td class="text-center">@item.ThongTinRanhThang_HinhThucHanhLangBaoVe </td>
+                                <td class="text-center">@item.ThongTinRanhThang_PhanLoaiChanKhay   </td>
+                                <td class="text-center">@item.ThongTinRanhThang_CCaoLotChanKhay   </td>
+                                <td class="text-center">@item.ThongTinRanhThang_CRongLotChanKhay   </td>
+                                <td class="text-center">@item.ThongTinRanhThang_SoLuongLotChanKhay   </td>
+                                <td class="text-center">@item.ThongTinRanhThang_CCaoMongChanKhay   </td>
+                                <td class="text-center">@item.ThongTinRanhThang_CRongMongChanKhay   </td>
+                                <td class="text-center">@item.ThongTinRanhThang_SoLuongMongChanKhay </td>
+                                <td class="text-center">@item.ThongTinRanhThang_CCaoLot   </td>
+                                <td class="text-center">@item.ThongTinRanhThang_CRongLot   </td>
+                                <td class="text-center">@item.ThongTinRanhThang_CCaoMong   </td>
+                                <td class="text-center">@item.ThongTinRanhThang_CRongMong </td>
+                                <td class="text-center">@item.ThongTinRanhThang_PhanLoaiMai  </td>
+                                <td class="text-center">@item.ThongTinRanhThang_CRongMai   </td>
+                                <td class="text-center">@item.ThongTinRanhThang_CDayMai  </td>
+                                <td class="text-center">@item.ThongTinRanhThang_SoLuongMai </td>
+                                <td class="text-center">@item.ThongTinRanhThang_PhanLoaiGiangDinh </td>
+                                <td class="text-center">@item.ThongTinRanhThang_CCaoLotGiangDinh   </td>
+                                <td class="text-center">@item.ThongTinRanhThang_CRongLotGiangDinh </td>
+                                <td class="text-center">@item.ThongTinRanhThang_SoLuongLotGiangDinh   </td>
+                                <td class="text-center">@item.ThongTinRanhThang_CCaoMongGiangDinh  </td>
+                                <td class="text-center">@item.ThongTinRanhThang_CRongMongGiangDinh </td>
+                                <td class="text-center">@item.ThongTinRanhThang_SoLuongMongGiangDinh </td>
+                                <td class="text-center">@item.ThongTinRanhThang_PhanLoaiHanhLangBaoVe </td>
+                                <td class="text-center">@item.ThongTinRanhThang_CCaoHanhLangBaoVe </td>
+                                <td class="text-center">@item.ThongTinRanhThang_CRongHanhLangBaoVe </td>
+                                <td class="text-center">@item.ThongTinRanhThang_SoLuongHangLangBaoVe </td>
+                                <td class="text-center">@item.TTTDCongHoRanh_TenLoaiTamDanTieuChuan </td>
+                                <td class="text-center">@item.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan </td>
+                                <td class="text-center">@item.TTTDCongHoRanh_CDai </td>
+                                <td class="text-center">@item.TTTDCongHoRanh_CRong </td>
+                                <td class="text-center">@item.TTTDCongHoRanh_CCao </td>
+                                <td class="text-center">@item.TTTDCongHoRanh_TenLoaiTamDanLoai02 </td>
+                                <td class="text-center">@item.TTTDCongHoRanh_CauTaoTamDanTruyenDan </td>
+                                <td class="text-center">@item.TTTDCongHoRanh_CRong1 </td>
+                                <td class="text-center">@item.TTTDCongHoRanh_CCao1 </td>
+                                <td class="text-center">@item.TTTDCongHoRanh_ChieuDaiMoiNoi </td>
+                                <td class="text-center">@item.TTTDCongHoRanh_SoLuongTDanDungDeTinhChieuDaiBoSung </td>
+                                <td class="text-center">@item.CDThuongLuu_HienTrangTruocKhiDaoThuongLuu   </td>
+                                <td class="text-center">@item.CDThuongLuu_DayDongChay    </td>
+                                <td class="text-center">@item.CDThuongLuu_DinhTrongLongSuDung </td>
+                                <td class="text-center">@item.CDThuongLuu_ChieuCaoRanhThangTuDayDongChayDenDinh </td>
+                                <td class="text-center">@item.CDHaLu_HienTrangTruocKhiDaoHaLuu    </td>
+                                <td class="text-center">@item.CDHaLu_DayDongChay    </td>
+                                <td class="text-center">@item.CDHaLu_DinhTrongLongSuDung   </td>
+                                <td class="text-center">@item.CDHaLu_ChieuCaoRanhThangTuDayDongChayDenDinh  </td>
+                                <td class="text-center">@item.TTMDRanhOngThang_ChieuRongDayDaoNho    </td>
+                                <td class="text-center">@item.TTMDRanhOngThang_TyLeMoMai </td>
+                                <td class="text-center">@item.TTMDRanhOngThang_SoCanhMaiTrai   </td>
+                                <td class="text-center">@item.TTMDRanhOngThang_SoCanhMaiPhai   </td>
+                                <td class="text-center">@item.TTMDRanhOngThang_ChieuRongDayDaoNho1    </td>
+                                <td class="text-center">@item.TTMDRanhOngThang_TyLeMoMai1 </td>
+                                <td class="text-center">@item.TTMDRanhOngThang_SoCanhMaiTrai1   </td>
+                                <td class="text-center">@item.TTMDRanhOngThang_SoCanhMaiPhai1 </td>
+                                <td class="text-center">@item.TuToaDoX </td>
+                                <td class="text-center">@item.TuToaDoY </td>
+                                <td class="text-center">@item.DenToaDoX </td>
+                                <td class="text-center">@item.DenToaDoY </td>
+
+                            </tr>
+                            stt++;
+                        }
+
+                    </tbody>
+                }
+            </table>
+            @if (listHopRanhThang.Any())
+            {
+                <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+            }
 
         </div>
     </div>
 </div>
+
+@code{
+    public List<MDanhMuc> listDanhMuc = new();
+
+    public List<HopRanhThangModel> listHopRanhThang
+    {
+        get;
+        set;
+    } = new();
+
+    public List<HopRanhThangModel> listModel
+    {
+        get;
+        set;
+    } = new();
+
+    public MetaData MetaData
+    {
+        get;
+        set;
+    }
+
+    public HopRanhThangModel hopRanhThangModel
+    {
+        get;
+        set;
+    }
+
+
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        hopRanhThangModel = new();
+        await LoadData();
+    }
+
+
+    // Truy vấn data theo điều kiện tìm kiếm
+    private async Task LoadData()
+    {
+        listDanhMuc = await DanhMucRepository.GetAll();
+        var hopranhthangs = await HopRanhThangRepository.GetData();
+        listModel = hopranhthangs;
+        listHopRanhThang = Paging(hopranhthangs);
+        Console.WriteLine(listHopRanhThang);
+    }
+
+    public string GetTenDanhMucById(string id)
+    {
+        var danhMuc = listDanhMuc.FirstOrDefault(dm => dm.Id == id);
+        return danhMuc != null ? danhMuc.Ten : null;
+    }
+
+    public double GetCCaoTuong(double AF16, double CY16, double CU16, double AD16)
+    {
+        double result;
+
+        if (AF16 > 0)
+        {
+            result = CY16 - CU16 - AD16;
+        }
+        else
+        {
+            result = CY16 - CU16;
+        }
+
+        return Math.Round(result, 2);
+    }
+
+    public double GetTuongHoGa_C(string K16, string H16, string G16, double Z16, double AD16, double AO16, double AS16)
+    {
+        if (K16 == "Có" && H16 == "Tường xây gạch")
+        {
+            if (G16 == "Mũ mố xây gạch")
+            {
+                return Z16 + AD16 + AO16 + AS16;
+            }
+            else
+            {
+                return Z16 + AD16 + AO16;
+            }
+        }
+        else if (K16 == "Có" && H16 == "Tường bê tông")
+        {
+            if (G16 == "Mũ mố xây gạch")
+            {
+                return AS16;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else if (K16 == "Không" && G16 == "Mũ mố xây gạch")
+        {
+            return AS16;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public double GetChatMatNgoaiCanh_C(string L16, string H16, string G16, double Z16, double AE16, double AO16, double AS16, double AT16)
+    {
+        if (L16 == "Có" && H16 == "Tường xây gạch")
+        {
+            if (G16 == "Mũ mố xây gạch")
+            {
+                return Z16 + AE16 + AO16 + AS16 + AT16;
+            }
+            else
+            {
+                return Z16 + AE16;
+            }
+        }
+        else if (L16 == "Có" && H16 == "Tường bê tông")
+        {
+            if (G16 == "Mũ mố xây gạch")
+            {
+                return AS16 + AT16;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else if (L16 == "Không" && G16 == "Mũ mố xây gạch")
+        {
+            return AS16 + AT16;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public double GetTTVLDHG_ChieuCaoDaoDat(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double CR16, double CJ16)
+    {
+        if (string.IsNullOrEmpty(ThongTinVatLieuDaoHoGa_LoaiVatLieuDao) || ThongTinVatLieuDaoHoGa_LoaiVatLieuDao == "Đào đá")
+        {
+            return 0;
+        }
+        else
+        {
+            return CR16 - CJ16;
+        }
+    }
+    
+
+
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        hopRanhThangModel.PageNumber = 1;
+        Paging(listModel);
+    }
+
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        hopRanhThangModel.PageNumber = page;
+        Paging(listHopRanhThang);
+    }
+
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+
+        hopRanhThangModel.PageNumber = 1;
+        hopRanhThangModel.pageSize = pageSize;
+        Paging(listHopRanhThang);
+    }
+    // Xử lý paging
+    private List<HopRanhThangModel> Paging(List<HopRanhThangModel> hopRanhThangs)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = hopRanhThangs.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        hopRanhThangs = hopRanhThangs.Skip((hopRanhThangModel.PageNumber - 1) * hopRanhThangModel.PageSize).Take(hopRanhThangModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listHopRanhThang.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var major in hopRanhThangs)
+        {
+            listHopRanhThang.Add(major);
+        }
+
+        // Tạo pagelist mới
+
+        var pagelist = new PageList<HopRanhThangModel>(listHopRanhThang, count, hopRanhThangModel.PageNumber, hopRanhThangModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return hopRanhThangs;
+    }
+}

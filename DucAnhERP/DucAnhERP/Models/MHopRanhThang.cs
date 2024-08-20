@@ -817,9 +817,9 @@ namespace DucAnhERP.Models
         [Range(0, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
         public Double ThongTinRanhThang_SoLuongMongGiangDinh { get; set; }
         [Required(ErrorMessage = "Bạn phải nhập Phân loại hành lang bảo vệ !")]
-        public Double ThongTinRanhThang_PhanLoaiHanhLangBaoVe { get; set; }
+        public string ThongTinRanhThang_PhanLoaiHanhLangBaoVe { get; set; }
         [Required(ErrorMessage = "Bạn phải nhập C.Cao hàng lang bảo vệ !")]
-        public Double ThongTinRanhThang_CCaoHangLangBaoVe { get; set; }
+        public Double ThongTinRanhThang_CCaoHanhLangBaoVe { get; set; }
         [Required(ErrorMessage = "Bạn phải nhập C.Rộng hành lang bảo vệ !")]
         public Double ThongTinRanhThang_CRongHanhLangBaoVe { get; set; }
         [Required(ErrorMessage = "Bạn phải nhập Số lượng hàng lang bảo vệ!")]
@@ -969,6 +969,8 @@ namespace DucAnhERP.Models
         [Required(ErrorMessage = "Bạn phải nhập tọa độ Y")]
         [RegularExpression(@"^-?\d+(\.\d{1,6})?$", ErrorMessage = "Tọa độ X phải là số hợp lệ với tối đa 6 chữ số thập phân.")]
         public Double DenToaDoY { get; set; }
+
+        public DateTime CreateAt { get; set; } = DateTime.Now;
 
     }
 
