@@ -307,7 +307,7 @@
                        @*Thông tin cao độ hố ga *@
                         <td>Cao độ tự nhiên (m)</td>
                         <td>CĐ đỉnh vỉa hè hoàn thiện (m)</td>
-                        <td class="text-danger">Cao độ đỉnh K98 (m)</td>
+                        <td>Cao độ đỉnh K98 (m)</td>
                         <td class="text-danger">Cao độ hiện trạng trước khi đào (m)</td>
                         <td class="text-danger">Đáy đào (m)</td>
                         <td class="text-danger">C.Sâu đào (m)</td>
@@ -726,13 +726,15 @@
                                 <td class="text-center">@item.BeTongLotMong_C   </td>
                                 <td class="text-center">@item.BeTongMongHoGa_D  </td>
                                 <td class="text-center">@item.BeTongMongHoGa_R  </td>
-                                <td class="text-center">  </td>
                                 <td class="text-center">@item.TBeTongMongHoGa_C   </td>
                                 <td class="text-center">@item.DeHoGa_D   </td>
                                 <td class="text-center">@item.DeHoGa_R   </td>
                                 <td class="text-center">@item.DeHoGa_C   </td>
                                 <td class="text-center">@item.TuongHoGa_D   </td>
                                 <td class="text-center">@item.TuongHoGa_R  </td>
+
+                                <td class="text-center text-danger">TuongHoGa_C</td>
+
                                 <td class="text-center">@item.TuongHoGa_CdTuong   </td>
                                 <td class="text-center">@item.DamGiuaHoGa_D  </td>
                                 <td class="text-center">@item.DamGiuaHoGa_R   </td>
@@ -741,8 +743,14 @@
                                 <td class="text-center">@item.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa   </td>
                                 <td class="text-center">@item.ChatMatTrong_D  </td>
                                 <td class="text-center">@item.ChatMatTrong_R  </td>
+
+                                <td class="text-center text-danger">ChatMatTrong_C</td>
+
                                 <td class="text-center">@item.ChatMatNgoaiCanh_D   </td>
                                 <td class="text-center">@item.ChatMatNgoaiCanh_R  </td>
+
+                                <td class="text-center text-danger">ChatMatNgoaiCanh_C</td>
+                                
                                 <td class="text-center">@item.MuMoThotDuoi_D   </td>
                                 <td class="text-center">@item.MuMoThotDuoi_R   </td>
                                 <td class="text-center">@item.MuMoThotDuoi_C   </td>
@@ -783,19 +791,39 @@
                                 <td class="text-center">@item.HinhThucDauNoi8_CanhDai   </td>
                                 <td class="text-center">@item.HinhThucDauNoi8_CanhRong   </td>
                                 <td class="text-center">@item.HinhThucDauNoi8_CanhCheo </td>
+
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa </td>
-                                <td class="text-center">@item.ThongTinTamDanHoGa2_HinhThucDayHoGa  </td>
+                                <td class="text-center">@GetTenDanhMucById(item.ThongTinTamDanHoGa2_HinhThucDayHoGa)  </td>
+
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_DuongKinh  </td>
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_ChieuDay   </td>
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_D   </td>
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_R   </td>
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_C </td>
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_SoLuongNapDay </td>
-                                <td class="text-center">@item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao   </td>
+                                <td class="text-center">@GetTenDanhMucById(item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao)   </td>
                                 <td class="text-center">@item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa  </td>
+
+                                <td class="text-center text-danger">ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat</td>
+                                <td class="text-center text-danger">ThongTinVatLieuDaoHoGa_TongChieuCaoDao</td>
+
                                 <td class="text-center">@item.ThongTinCaoDoHoGa_CaoDoTuNhien   </td>
                                 <td class="text-center">@item.ThongTinCaoDoHoGa_CdDinhViaHeHoanThien  </td>
                                 <td class="text-center">@item.ThongTinCaoDoHoGa_CaoDoDinhK98  </td>
+
+                                <td class="text-center text-danger">@ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao(item.ThongTinCaoDoHoGa_CaoDoTuNhien, item.ThongTinCaoDoHoGa_CaoDoDinhK98, item.ThongTinCaoDoHoGa_CdDinhViaHeHoanThien)</td>
+                                <td class="text-center text-danger">@item.ThongTinCaoDoHoGa_DayDao</td>
+                                <td class="text-center text-danger">item.ThongTinCaoDoHoGa_CSauDao</td>
+                                <td class="text-center text-danger">@item.ThongTinCaoDoHoGa_DinhLotMong</td>
+                                <td class="text-center text-danger">@item.ThongTinCaoDoHoGa_CdDinhMong</td>
+
+                                <td class="text-center text-danger">@item.ThongTinCaoDoHoGa_CCaoTuong</td>
+                                <td class="text-center text-danger">@item.ThongTinCaoDoHoGa_DinhTuongDuoiDamGiuaTuong</td>
+                                <td class="text-center text-danger">@item.ThongTinCaoDoHoGa_DinhDamGiuaTuong</td>
+                                <td class="text-center text-danger">@item.ThongTinCaoDoHoGa_DinhDamGiuaTuong</td>
+                                <td class="text-center text-danger">@item.ThongTinCaoDoHoGa_DinhMuMoThotDuoi</td>
+                                 	  	  	  	 
+
                                 <td class="text-center">@item.ThongTinCaoDoHoGa_CdDayHoGa   </td>
                                 <td class="text-center">@item.ThongTinCaoDoHoGa_CdDinhHoGa   </td>
                                 <td class="text-center">@item.ThongTinMaiDao_ChieuRongDayDaoNho    </td>
@@ -931,10 +959,12 @@
                     </tbody>
                 }
             </table>
-            @if (listHopRanhThang.Any())
-            {
-                <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
-            }
+          <div class="mt-4">
+                @if (listHopRanhThang.Any())
+                {
+                    <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+                }
+          </div>
 
         </div>
     </div>
@@ -981,9 +1011,10 @@
     {
         listDanhMuc = await DanhMucRepository.GetAll();
         var hopranhthangs = await HopRanhThangRepository.GetData();
-        listModel = hopranhthangs;
-        listHopRanhThang = Paging(hopranhthangs);
-        Console.WriteLine(listHopRanhThang);
+        var convertDatas = await ConvertData(hopranhthangs);
+        listModel = convertDatas;
+        listHopRanhThang = Paging(convertDatas);
+
     }
 
     public string GetTenDanhMucById(string id)
@@ -992,101 +1023,124 @@
         return danhMuc != null ? danhMuc.Ten : null;
     }
 
-    public double GetCCaoTuong(double AF16, double CY16, double CU16, double AD16)
-    {
-        double result;
 
-        if (AF16 > 0)
+    public async Task<List<HopRanhThangModel>> ConvertData(List<HopRanhThangModel> list)
+    {
+        if (list == null || list.Count == 0)
         {
-            result = CY16 - CU16 - AD16;
+            Console.WriteLine("Danh sách trống.");
         }
         else
         {
-            result = CY16 - CU16;
+            list.ForEach(item =>
+            {
+                item.ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao = ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao(item.ThongTinCaoDoHoGa_CaoDoTuNhien,item.ThongTinCaoDoHoGa_CaoDoDinhK98,item.ThongTinCaoDoHoGa_CdDinhViaHeHoanThien);
+                item.ThongTinCaoDoHoGa_CdDinhMong = ThongTinCaoDoHoGa_CdDinhMong(item.ThongTinChungHoGa_HinhThucHoGa, item.ThongTinChungHoGa_HinhThucMongHoGa, item.ThongTinCaoDoHoGa_CdDayHoGa, item.DeHoGa_C);
+                item.ThongTinCaoDoHoGa_DinhLotMong = ThongTinCaoDoHoGa_DinhLotMong(item.ThongTinChungHoGa_HinhThucMongHoGa, item.ThongTinCaoDoHoGa_CdDinhMong, item.TBeTongMongHoGa_C);
+                item.ThongTinCaoDoHoGa_DayDao = ThongTinCaoDoHoGa_DayDao(item.ThongTinChungHoGa_HinhThucHoGa, item.ThongTinChungHoGa_HinhThucMongHoGa, item.ThongTinCaoDoHoGa_DinhLotMong, item.BeTongLotMong_C, item.ThongTinCaoDoHoGa_CdDayHoGa, item.DeHoGa_C);
+                item.ThongTinCaoDoHoGa_CSauDao = ThongTinCaoDoHoGa_CSauDao(item.ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao, item.ThongTinCaoDoHoGa_DayDao);
+                item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat = ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat(item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, item.ThongTinCaoDoHoGa_CSauDao, item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa);
+                item.ThongTinVatLieuDaoHoGa_TongChieuCaoDao = (item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa + item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat);
+                item.TuongHoGa_C = item.ThongTinCaoDoHoGa_CCaoTuong;
+
+            });
+        }
+
+        return list;
+    }
+
+
+
+    public double ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao(double ThongTinCaoDoHoGa_CaoDoTuNhien, double ThongTinCaoDoHoGa_CaoDoDinhK98, double ThongTinCaoDoHoGa_CdDinhViaHeHoanThien)
+    {
+        double result;
+
+        if (ThongTinCaoDoHoGa_CaoDoTuNhien < ThongTinCaoDoHoGa_CaoDoDinhK98)
+        {
+            result = ThongTinCaoDoHoGa_CaoDoDinhK98;
+        }
+        else if (ThongTinCaoDoHoGa_CaoDoTuNhien >= ThongTinCaoDoHoGa_CdDinhViaHeHoanThien)
+        {
+            result = ThongTinCaoDoHoGa_CdDinhViaHeHoanThien;
+        }
+        else
+        {
+            result = ThongTinCaoDoHoGa_CaoDoTuNhien;
         }
 
         return Math.Round(result, 2);
     }
 
-    public double GetTuongHoGa_C(string K16, string H16, string G16, double Z16, double AD16, double AO16, double AS16)
+    public double ThongTinCaoDoHoGa_CdDinhMong(string ThongTinChungHoGa_HinhThucHoGa, string ThongTinChungHoGa_HinhThucMongHoGa, double ThongTinCaoDoHoGa_CdDayHoGa, double DeHoGa_C)
     {
-        if (K16 == "Có" && H16 == "Tường xây gạch")
+        ThongTinChungHoGa_HinhThucHoGa = GetTenDanhMucById(ThongTinChungHoGa_HinhThucHoGa);
+        ThongTinChungHoGa_HinhThucMongHoGa = GetTenDanhMucById(ThongTinChungHoGa_HinhThucMongHoGa);
+        if (ThongTinChungHoGa_HinhThucHoGa.ToUpper().Trim() == "Lắp đặt".ToUpper() 
+        && ThongTinChungHoGa_HinhThucMongHoGa.ToUpper().Trim() == "Có móng".ToUpper())
         {
-            if (G16 == "Mũ mố xây gạch")
-            {
-                return Z16 + AD16 + AO16 + AS16;
-            }
-            else
-            {
-                return Z16 + AD16 + AO16;
-            }
-        }
-        else if (K16 == "Có" && H16 == "Tường bê tông")
-        {
-            if (G16 == "Mũ mố xây gạch")
-            {
-                return AS16;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        else if (K16 == "Không" && G16 == "Mũ mố xây gạch")
-        {
-            return AS16;
+            return ThongTinCaoDoHoGa_CdDayHoGa - DeHoGa_C;
         }
         else
         {
-            return 0;
+            return ThongTinCaoDoHoGa_CdDayHoGa;
         }
     }
 
-    public double GetChatMatNgoaiCanh_C(string L16, string H16, string G16, double Z16, double AE16, double AO16, double AS16, double AT16)
+    public double ThongTinCaoDoHoGa_DinhLotMong(string ThongTinChungHoGa_HinhThucMongHoGa, double ThongTinCaoDoHoGa_CdDinhMong, double TBeTongMongHoGa_C)
     {
-        if (L16 == "Có" && H16 == "Tường xây gạch")
+        if (ThongTinChungHoGa_HinhThucMongHoGa == "Không có móng")
         {
-            if (G16 == "Mũ mố xây gạch")
-            {
-                return Z16 + AE16 + AO16 + AS16 + AT16;
-            }
-            else
-            {
-                return Z16 + AE16;
-            }
-        }
-        else if (L16 == "Có" && H16 == "Tường bê tông")
-        {
-            if (G16 == "Mũ mố xây gạch")
-            {
-                return AS16 + AT16;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        else if (L16 == "Không" && G16 == "Mũ mố xây gạch")
-        {
-            return AS16 + AT16;
+            return 0;
         }
         else
         {
-            return 0;
+            return ThongTinCaoDoHoGa_CdDinhMong - TBeTongMongHoGa_C;
         }
     }
 
-    public double GetTTVLDHG_ChieuCaoDaoDat(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double CR16, double CJ16)
+    public double ThongTinCaoDoHoGa_DayDao(string ThongTinChungHoGa_HinhThucHoGa, string ThongTinChungHoGa_HinhThucMongHoGa, double ThongTinCaoDoHoGa_DinhLotMong, double BeTongLotMong_C, double ThongTinCaoDoHoGa_CdDayHoGa, double DeHoGa_C)
     {
-        if (string.IsNullOrEmpty(ThongTinVatLieuDaoHoGa_LoaiVatLieuDao) || ThongTinVatLieuDaoHoGa_LoaiVatLieuDao == "Đào đá")
+        double result;
+        ThongTinChungHoGa_HinhThucMongHoGa = GetTenDanhMucById(ThongTinChungHoGa_HinhThucMongHoGa).ToUpper().Trim();
+        ThongTinChungHoGa_HinhThucHoGa = GetTenDanhMucById(ThongTinChungHoGa_HinhThucHoGa).ToUpper().Trim();
+        if (ThongTinChungHoGa_HinhThucMongHoGa == "Có móng".ToUpper())
+        {
+            result = ThongTinCaoDoHoGa_DinhLotMong - BeTongLotMong_C;
+        }
+        else if (ThongTinChungHoGa_HinhThucHoGa == "Lắp đặt".ToUpper() && ThongTinChungHoGa_HinhThucMongHoGa == "Không có móng".ToUpper())
+        {
+            result = ThongTinCaoDoHoGa_CdDayHoGa - DeHoGa_C;
+        }
+        else
+        {
+            result = ThongTinCaoDoHoGa_CdDayHoGa;
+        }
+
+        return Math.Round(result, 2);
+    }
+
+    public double ThongTinCaoDoHoGa_CSauDao(double ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao, double ThongTinCaoDoHoGa_DayDao)
+    {
+        return Math.Round(ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao - ThongTinCaoDoHoGa_DayDao, 2);
+    }
+
+    public double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinCaoDoHoGa_CSauDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa)
+    {
+        ThongTinVatLieuDaoHoGa_LoaiVatLieuDao = GetTenDanhMucById(ThongTinVatLieuDaoHoGa_LoaiVatLieuDao).ToUpper().Trim();
+        if (string.IsNullOrEmpty(ThongTinVatLieuDaoHoGa_LoaiVatLieuDao))
+        {
+            return 0;
+        }
+        else if (ThongTinVatLieuDaoHoGa_LoaiVatLieuDao == "Đào đá".ToUpper())
         {
             return 0;
         }
         else
         {
-            return CR16 - CJ16;
+            return ThongTinCaoDoHoGa_CSauDao - ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa;
         }
     }
+
     
 
 

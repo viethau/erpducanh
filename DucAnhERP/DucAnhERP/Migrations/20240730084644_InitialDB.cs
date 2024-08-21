@@ -542,6 +542,11 @@ namespace DucAnhERP.Migrations
                  ThongTinTamDanHoGa2_R = table.Column<double>(type: "float", nullable: false),
                  ThongTinTamDanHoGa2_C = table.Column<double>(type: "float", nullable: false),
                  ThongTinTamDanHoGa2_SoLuongNapDay = table.Column<int>(type: "int", nullable: false),
+
+                 TTVLDCongRanh_LoaiVatLieuDao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                 TTVLDCongRanh_TLChieuCaoDaoDa = table.Column<double>(type: "float", nullable: false),
+                 TTVLDCongRanh_HLChieuCaoDaoDa = table.Column<double>(type: "float", nullable: false),
+
                  ThongTinVatLieuDaoHoGa_LoaiVatLieuDao = table.Column<string>(type: "nvarchar(max)", nullable: true),
                  ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa = table.Column<double>(type: "float", nullable: false),
                  ThongTinCaoDoHoGa_CaoDoTuNhien = table.Column<double>(type: "float", nullable: false),

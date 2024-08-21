@@ -31,6 +31,7 @@ namespace DucAnhERP.ViewModel
         public Double DeHoGa_C { get; set; }
         public Double TuongHoGa_D { get; set; }
         public Double TuongHoGa_R { get; set; }
+        public Double TuongHoGa_C { get; set; }
         public Double TuongHoGa_CdTuong { get; set; }
         public Double DamGiuaHoGa_D { get; set; }
         public Double DamGiuaHoGa_R { get; set; }
@@ -39,8 +40,10 @@ namespace DucAnhERP.ViewModel
         public Double DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa { get; set; }
         public Double ChatMatTrong_D { get; set; }
         public Double ChatMatTrong_R { get; set; }
+        public Double ChatMatTrong_C { get; set; }
         public Double ChatMatNgoaiCanh_D { get; set; }
         public Double ChatMatNgoaiCanh_R { get; set; }
+        public Double ChatMatNgoaiCanh_C { get; set; }
         public Double MuMoThotDuoi_D { get; set; }
         public Double MuMoThotDuoi_R { get; set; }
         public Double MuMoThotDuoi_C { get; set; }
@@ -91,15 +94,68 @@ namespace DucAnhERP.ViewModel
         public int ThongTinTamDanHoGa2_SoLuongNapDay { get; set; }
         public string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao { get; set; }
         public Double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa { get; set; }
+        public Double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat { get; set; }
+        public Double ThongTinVatLieuDaoHoGa_TongChieuCaoDao { get; set; }
+
         public Double ThongTinCaoDoHoGa_CaoDoTuNhien { get; set; }
         public Double ThongTinCaoDoHoGa_CdDinhViaHeHoanThien { get; set; }
         public Double ThongTinCaoDoHoGa_CaoDoDinhK98 { get; set; }
+
+        public Double ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao { get; set; }
+        public Double ThongTinCaoDoHoGa_DayDao { get; set; }
+        public Double ThongTinCaoDoHoGa_CSauDao { get; set; }
+        public Double ThongTinCaoDoHoGa_DinhLotMong { get; set; }
+        public Double ThongTinCaoDoHoGa_CdDinhMong { get; set; }
+
+
         public Double ThongTinCaoDoHoGa_CdDayHoGa { get; set; }
+        public Double ThongTinCaoDoHoGa_CCaoTuong { get; set; }
+        public Double ThongTinCaoDoHoGa_DinhTuongDuoiDamGiuaTuong { get; set; }
+        public Double ThongTinCaoDoHoGa_DinhDamGiuaTuong { get; set; }
+        public Double ThongTinCaoDoHoGa_DinhTuong { get; set; }
+        public Double ThongTinCaoDoHoGa_DinhMuMoThotDuoi { get; set; }
+
         public Double ThongTinCaoDoHoGa_CdDinhHoGa { get; set; }
+
+        public Double ThongTinCaoDoHoGa_TongChieuCaoHoGa { get; set; }
+        public Double ThongTinCaoDoHoGa_ChenhCaoDinhHoGaVaHienTrangDao { get; set; }
+        public Double ThongTinCaoDoHoGa_TongChieuCaoChiemChoDapTra { get; set; }
+
+        public Double TTCCCCDTHT_ChieuCaoLotDat { get; set; }
+        public Double TTCCCCDTHT_ChieuCaoMongDat { get; set; }
+        public Double TTCCCCDTHT_ChieuCaoTuongDat { get; set; }
+        public Double TTCCCCDTHT_ChieuCaoLotDa { get; set; }
+        public Double TTCCCCDTHT_ChieuCaoMongDa { get; set; }
+        public Double TTCCCCDTHT_ChieuCaoTuongDa { get; set; }
+        public Double TTCCCCDTHT_TongCieuCaoDat { get; set; }
+        public Double TTCCCCDTHT_TongChieuCaoDa { get; set; }
+        public Double TTCCCCDTHT_ChenhDatSoVoiTK { get; set; }
+        public Double TTCCCCDTHT_ChenhDaSoVoiTK { get; set; }
+
         public Double ThongTinMaiDao_ChieuRongDayDaoNho { get; set; }
         public Double ThongTinMaiDao_TyLeMoMai { get; set; }
         public int ThongTinMaiDao_SoCanhMaiTrai { get; set; }
         public int ThongTinMaiDao_SoCanhMaiPhai { get; set; }
+
+        public Double TTKLD_CRongDaoDayLonDat { get; set; }
+        public Double TTKLD_CRongDaoDayLonDa { get; set; }
+        public Double TTKLD_DienTichDaoDat { get; set; }
+        public Double TTKLD_DienTichDaoDa { get; set; }
+        public Double TTKLD_TongDtDao { get; set; }
+        public Double TTKLD_KlDaoDat { get; set; }
+        public Double TTKLD_KlDaoDa { get; set; }
+        public Double TTKLD_TongKlDao { get; set; }
+        public Double TTKLD_KlChiemChoDat { get; set; }
+        public Double TTKLD_KlChiemChoDa { get; set; }
+        public Double TTKLD_TongChiemCho { get; set; }
+        public Double TTKLD_KlDapTraDat { get; set; }
+        public Double TTKLD_KlDapTraDa { get; set; }
+        public Double TTKLD_TongDapTra { get; set; }
+        public Double TTKLD_KlThuaDat { get; set; }
+        public Double TTKLD_KlThuaDa { get; set; }
+        public Double TTKLD_TongThua { get; set; }
+
+
         public Double ToaDoX { get; set; }
         public Double ToaDoY { get; set; }
         public Double ThongTinLyTrinhTruyenDan_TuLyTrinh { get; set; }
@@ -113,6 +169,15 @@ namespace DucAnhERP.ViewModel
         public Double TTCDSLCauKienDuongTruyenDan_ChieuDaiMoiNoiCKien { get; set; }
         public int TTCDSLCauKienDuongTruyenDan_SoLuongCKienDungDeTinhChieuDaiBoSung { get; set; }
         public Double TTCDSLCauKienDuongTruyenDan_TongChieuDai { get; set; }
+
+        public Double TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl { get; set; }
+        public Double TTCDSLCauKienDuongTruyenDan_SlCauKienNguyen { get; set; }
+        public Double TTCDSLCauKienDuongTruyenDan_CDaiCanDeLapDatDuocTheoSoCkNguyen { get; set; }
+        public Double TTCDSLCauKienDuongTruyenDan_TongCDaiLapDatTheoSoCkNguyen { get; set; }
+        public Double TTCDSLCauKienDuongTruyenDan_CDaiThucTeConThuaThieuSoVoiCRongLongMuMoHoGa { get; set; }
+        public Double TTCDSLCauKienDuongTruyenDan_XacDinhOngCongCanThem { get; set; }
+        public Double TTCDSLCauKienDuongTruyenDan_CDaiConThuaThieuSauTinhTheoCkTinhKl { get; set; }
+
         public string ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop { get; set; }
         public string ThongTinMongDuongTruyenDan_LoaiMong { get; set; }
         public string ThongTinMongDuongTruyenDan_HinhThucMong { get; set; }
@@ -123,14 +188,19 @@ namespace DucAnhERP.ViewModel
         public Double ThongTinDeCong_C { get; set; }
         public Double ThongTinDeCong_SlDeCong01CauKienTruyenDan { get; set; }
         public Double ThongTinDeCong_Kl01DeCong { get; set; }
+        public Double ThongTinDeCong_TongSoLuongDC { get; set; }
+        public Double ThongTinDeCong_TongKLDeCong { get; set; }
+
         public Double ThongTinCauTaoCongTron_CDayPhuBi { get; set; }
         public Double ThongTinCauTaoCongTron_SoCanh { get; set; }
         public Double ThongTinCauTaoCongTron_LongSuDung { get; set; }
+        public Double ThongTinCauTaoCongTron_CCaoCauKien { get; set; }
         public Double ThongTinCauTaoCongTron_CCaoLotMong { get; set; }
         public Double ThongTinCauTaoCongTron_CRongLotMong { get; set; }
         public Double ThongTinCauTaoCongTron_CCaoMong { get; set; }
         public Double ThongTinCauTaoCongTron_CRongMong { get; set; }
         public Double ThongTinCauTaoCongTron_CCaoDe { get; set; }
+        public Double ThongTinCauTaoCongTron_TongCCaoCong { get; set; }
         public string TTKTHHCongHopRanh_CauTaoTuong { get; set; }
         public string TTKTHHCongHopRanh_CauTaoMuMo { get; set; }
         public string TTKTHHCongHopRanh_ChatMatTrong { get; set; }
@@ -145,6 +215,11 @@ namespace DucAnhERP.ViewModel
         public Double TTKTHHCongHopRanh_SoLuongTuong { get; set; }
         public Double TTKTHHCongHopRanh_CRongLongSuDung { get; set; }
         public Double TTKTHHCongHopRanh_CCaoTuongCongHop { get; set; }
+         
+
+        public Double TTKTHHCongHopRanh_CCaoTuongRanh { get; set; }
+        public Double TTKTHHCongHopRanh_CCaoTuongGop { get; set; }
+
         public Double TTKTHHCongHopRanh_CCaoMuMoThotDuoi { get; set; }
         public Double TTKTHHCongHopRanh_CRongMuMoDuoi { get; set; }
         public Double TTKTHHCongHopRanh_CCaoMuMoThotTren { get; set; }
@@ -155,9 +230,17 @@ namespace DucAnhERP.ViewModel
         public Double TTKTHHCongHopRanh_CRongThanhChong { get; set; }
         public Double TTKTHHCongHopRanh_CDai { get; set; }
         public Double TTKTHHCongHopRanh_SoLuongThanhChong { get; set; }
+              
+        public Double TTKTHHCongHopRanh_CCaoChatMatTrong { get; set; }
+        public Double TTKTHHCongHopRanh_CCaoChatmatNgoai { get; set; }
+        public Double TTKTHHCongHopRanh_TongChieuCao { get; set; }
+
         public Double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi { get; set; }
         public int ThongTinKichThuocHinhHocOngNhua_SoCanh { get; set; }
         public Double ThongTinKichThuocHinhHocOngNhua_LongSuDung { get; set; }
+        public Double ThongTinKichThuocHinhHocOngNhua_TongCCaoOng { get; set; }
+
+
         public Double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat { get; set; }
         public Double ThongTinKichThuocHinhHocOngNhua_CCaoDapCat { get; set; }
         public string ThongTinRanhThang_HinhThucMai { get; set; }
@@ -192,23 +275,191 @@ namespace DucAnhERP.ViewModel
         public int ThongTinRanhThang_SoLuongHangLangBaoVe { get; set; }
         public string TTTDCongHoRanh_TenLoaiTamDanTieuChuan { get; set; }
         public string TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan { get; set; }
+        public string TTTDCongHoRanh_SoLuong { get; set; }
         public Double TTTDCongHoRanh_CDai { get; set; }
         public Double TTTDCongHoRanh_CRong { get; set; }
         public Double TTTDCongHoRanh_CCao { get; set; }
         public string TTTDCongHoRanh_TenLoaiTamDanLoai02 { get; set; }
         public string TTTDCongHoRanh_CauTaoTamDanTruyenDan { get; set; }
+        public string TTTDCongHoRanh_SoLuong1 { get; set; }
+        public string TTTDCongHoRanh_CDai1 { get; set; }
         public Double TTTDCongHoRanh_CRong1 { get; set; }
         public Double TTTDCongHoRanh_CCao1 { get; set; }
         public Double TTTDCongHoRanh_ChieuDaiMoiNoi { get; set; }
         public int TTTDCongHoRanh_SoLuongTDanDungDeTinhChieuDaiBoSung { get; set; }
+                
+        public Double TTTDCongHoRanh_SLCauKienNguyen { get; set; }
+        public Double TTTDCongHoRanh_ChieuDaiTheoSoCKNguyen { get; set; }
+        public Double TTTDCongHoRanh_TongChieuDaiTheoCKNguyen { get; set; }
+        public Double TTTDCongHoRanh_ChieuDaiThucTe { get; set; }
+        public Double TTTDCongHoRanh_XacDinhOngCongCanThem { get; set; }
+
         public Double CDThuongLuu_HienTrangTruocKhiDaoThuongLuu { get; set; }
+        public Double CDThuongLuu_DayDaoGop { get; set; }
+        public Double CDThuongLuu_ChieuSauDao { get; set; }
+        public Double CDThuongLuu_DayDaoCongTron { get; set; }
+        public Double CDThuongLuu_DayDaoCongHop { get; set; }
+        public Double CDThuongLuu_DayDaoRanh { get; set; }
+        public Double CDThuongLuu_DayDaoOngNhua { get; set; }
+        public Double CDThuongLuu_DayDaoGiangDinhRanhThang { get; set; }
+        public Double CDThuongLuu_DayDaoChanKhayRanhThang { get; set; }
+        public Double CDThuongLuu_DayDaoRanhThang { get; set; }
+        public Double CDThuongLuu_DinhLotGop { get; set; }
+        public Double CDThuongLuu_DinhLotRanhThang { get; set; }
+        public Double CDThuongLuu_DinhLotChanKhayRanhThang { get; set; }
+        public Double CDThuongLuu_DinhLotGiangDinhRanhThang { get; set; }
+        public Double CDThuongLuu_DinhLotOngNhua { get; set; }
+        public Double CDThuongLuu_DinhLotCongTron { get; set; }
+        public Double CDThuongLuu_DinhLotCongHop { get; set; }
+        public Double CDThuongLuu_DinhLotRanh { get; set; }
+        public Double CDThuongLuu_DinhMongGop { get; set; }
+        public Double CDThuongLuu_DinhMongRanhThang { get; set; }
+        public Double CDThuongLuu_DinhMongChanKhay { get; set; }
+        public Double CDThuongLuu_DinhMongCongTron { get; set; }
+        public Double CDThuongLuu_DinhMongCongHop { get; set; }
+        public Double CDThuongLuu_DinhMongRanh { get; set; }
+        public Double CDThuongLuu_DinhDeCong { get; set; }
         public Double CDThuongLuu_DayDongChay { get; set; }
+        public Double CDThuongLuu_CCaoTuongCongRanh { get; set; }
+        public Double CDThuongLuu_DinhTuongCHopRanh { get; set; }
+        public Double CDThuongLuu_DinhMuMoThotDuoiCongHopRanh { get; set; }
+        public Double CDThuongLuu_DinhGiangDinhRanhThang { get; set; }
+        public Double CDThuongLuu_DinhGop { get; set; }
         public Double CDThuongLuu_DinhTrongLongSuDung { get; set; }
+        public Double CDThuongLuu_DinhCongTron { get; set; }
+        public Double CDThuongLuu_DinhCongHop { get; set; }
+        public Double CDThuongLuu_DinhRanh { get; set; }
+        public Double CDThuongLuu_DinhOngNhua { get; set; }
+        public Double CDThuongLuu_DinhDapCat { get; set; }
         public Double CDThuongLuu_ChieuCaoRanhThangTuDayDongChayDenDinh { get; set; }
+        public Double CDThuongLuu_DinhRanhThang { get; set; }
         public Double CDHaLu_HienTrangTruocKhiDaoHaLuu { get; set; }
+
+        public Double CDHaLu_DayDaoGop { get; set; }
+        public Double CDHaLu_ChieuSauDao { get; set; }
+        public Double CDHaLu_DayDaoCongTron { get; set; }
+        public Double CDHaLu_DayDaoCongHop { get; set; }
+        public Double CDHaLu_DayDaoRanh { get; set; }
+        public Double CDHaLu_DayDaoOngNhua { get; set; }
+        public Double CDHaLu_DayDaoGiangDinhRanhThang { get; set; }
+        public Double CDHaLu_DayDaoChanKhayRanhThang { get; set; }
+        public Double CDHaLu_DayDaoRanhThang { get; set; }
+        public Double CDHaLu_DinhLotGop { get; set; }
+        public Double CDHaLu_DinhLotRanhThang { get; set; }
+        public Double CDHaLu_DinhLotChanKhayRanhThang { get; set; }
+        public Double CDHaLu_DinhLotGiangDinhRanhThang { get; set; }
+        public Double CDHaLu_DinhLotOngNhua { get; set; }
+        public Double CDHaLu_DinhLotCongTron { get; set; }
+        public Double CDHaLu_DinhLotCongHop { get; set; }
+        public Double CDHaLu_DinhLotRanh { get; set; }
+        public Double CDHaLu_DinhMongGop { get; set; }
+        public Double CDHaLu_DinhMongRanhThang { get; set; }
+        public Double CDHaLu_DinhMongChanKhay { get; set; }
+        public Double CDHaLu_DinhMongCongTron { get; set; }
+        public Double CDHaLu_DinhMongCongHop { get; set; }
+        public Double CDHaLu_DinhMongRanh { get; set; }
+        public Double CDHaLu_DinhDeCong { get; set; }
         public Double CDHaLu_DayDongChay { get; set; }
+        public Double CDHaLu_CCaoTuongCongRanh { get; set; }
+        public Double CDHaLu_DinhTuongCHopRanh { get; set; }
+        public Double CDHaLu_DinhMuMoThotDuoiCongHopRanh { get; set; }
+        public Double CDHaLu_DinhGiangDinhRanhThang { get; set; }
+        public Double CDHaLu_DinhGop { get; set; }
         public Double CDHaLu_DinhTrongLongSuDung { get; set; }
+        public Double CDHaLu_DinhCongTron { get; set; }
+        public Double CDHaLu_DinhCongHop { get; set; }
+        public Double CDHaLu_DinhRanh { get; set; }
+        public Double CDHaLu_DinhOngNhua { get; set; }
+        public Double CDHaLu_DinhDapCat { get; set; }
         public Double CDHaLu_ChieuCaoRanhThangTuDayDongChayDenDinh { get; set; }
+        public Double CDHaLu_DinhRanhThang { get; set; }
+
+
+        public string TTVLDCongRanh_LoaiVatLieuDao { get; set; }
+
+        public Double TTVLDCongRanh_TLChieuCaoDaoDa { get; set; }
+        public Double TTVLDCongRanh_TLChieuCaoDaoDat { get; set; }
+        public Double TTVLDCongRanh_TLTongChieuSauDao { get; set; }
+        public Double TTVLDCongRanh_HLChieuCaoDaoDa { get; set; }
+        public Double TTVLDCongRanh_HLChieuCaoDaoDat { get; set; }
+        public Double TTVLDCongRanh_HLTongChieuSauDao { get; set; }
+
+        public Double TTCCCCT_CCaoLotDatTLuu { get; set; }
+        public Double TTCCCCT_CCaoLotDatHLuu { get; set; }
+        public Double TTCCCCT_CCaoLotDatMongTBinh { get; set; }
+        public Double TTCCCCT_CCaoLotDaTLuu { get; set; }
+        public Double TTCCCCT_CCaoLotDaHLuu { get; set; }
+        public Double TTCCCCT_CCaoLotDaMongTBinh { get; set; }
+        public Double TTCCCCT_CCaoMongDatTLuu { get; set; }
+        public Double TTCCCCT_CCaoMongDatHLuu { get; set; }
+        public Double TTCCCCT_CCaoMongDatTBinh { get; set; }
+        public Double TTCCCCT_CCaoMongDaTLuu { get; set; }
+        public Double TTCCCCT_CCaoMongDaHLuu { get; set; }
+        public Double TTCCCCT_CCaoMongDaTBinh { get; set; }
+        public Double TTCCCCT_CCaoDeDatTLuu { get; set; }
+        public Double TTCCCCT_CCaoDeDatHLuu { get; set; }
+        public Double TTCCCCT_CCaoDeDatTBinh { get; set; }
+        public Double TTCCCCT_CCaoDeDaTLuu { get; set; }
+        public Double TTCCCCT_CCaoDeDaHLuu { get; set; }
+        public Double TTCCCCT_CCaoDeDaTBinh { get; set; }
+        public Double TTCCCCT_CCaoCongDatTLuu { get; set; }
+        public Double TTCCCCT_CCaoCongDatHLuu { get; set; }
+        public Double TTCCCCT_CCongCongDatTBinh { get; set; }
+        public Double TTCCCCT_CCaoCongDaTLuu { get; set; }
+        public Double TTCCCCT_CCaoCongDaHLuu { get; set; }
+        public Double TTCCCCT_CCongCongDaTBinh { get; set; }
+
+        public Double TTCCCCCHR_CCaoLotDatTLuu { get; set; }
+        public Double TTCCCCCHR_CCaoLotDatHLuu { get; set; }
+        public Double TTCCCCCHR_CCaoLotDatTBinh { get; set; }
+        public Double TTCCCCCHR_CCaoLotDaTLuu { get; set; }
+        public Double TTCCCCCHR_CCaoLotDaHLuu { get; set; }
+        public Double TTCCCCCHR_CCaoLotDaTBinh { get; set; }
+        public Double TTCCCCCHR_CCaoMongDatTLuu { get; set; }
+        public Double TTCCCCCHR_CCaoMongDatHLuu { get; set; }
+        public Double TTCCCCCHR_CCaoMongDatTBinh { get; set; }
+        public Double TTCCCCCHR_CCaoMongDaTLuu { get; set; }
+        public Double TTCCCCCHR_CCaoMongDaHLuu { get; set; }
+        public Double TTCCCCCHR_CCaoMongDaTBinh { get; set; }
+        public Double TTCCCCCHR_CCaoTuongDatTLuu { get; set; }
+        public Double TTCCCCCHR_CCaoTuongDatHLuu { get; set; }
+        public Double TTCCCCCHR_CCaoTuongDatTBinh { get; set; }
+        public Double TTCCCCCHR_CCaoTuongDaTLuu { get; set; }
+        public Double TTCCCCCHR_CCaoTuongDaHLuu { get; set; }
+        public Double TTCCCCCHR_CCaoTuongDaTBinh { get; set; }
+
+        public Double TTCCCCON_CCaoDemCatDatTLuu { get; set; }
+        public Double TTCCCCON_CCaoDemCatDatHLuu { get; set; }
+        public Double TTCCCCON_CCaoDemCatDatTBinh { get; set; }
+        public Double TTCCCCON_CCaoDemCatDaTLuu { get; set; }
+        public Double TTCCCCON_CCaoDemCatDaHLuu { get; set; }
+        public Double TTCCCCON_CCaoDemCatDaTBinh { get; set; }
+        public Double TTCCCCON_CCaoOngDatTLuu { get; set; }
+        public Double TTCCCCON_CCaoOngDatHLuu { get; set; }
+        public Double TTCCCCON_CCaoDatTBinh { get; set; }
+        public Double TTCCCCON_CCaoOngDaTLuu { get; set; }
+        public Double TTCCCCON_CCaoOngDaHLuu { get; set; }
+        public Double TTCCCCON_CCaoDaTBinh { get; set; }
+        public Double TTCCCCON_CCaoDapCatDatTLuu { get; set; }
+        public Double TTCCCCON_CCaoDapCatDatHLuu { get; set; }
+        public Double TTCCCCON_CCaoDapCatDatTBinh { get; set; }
+        public Double TTCCCCON_CCaoDapCatDaTLuu { get; set; }
+        public Double TTCCCCON_CCaoDapCatDaHLuu { get; set; }
+        public Double TTCCCCON_CCaoDapCatDaTBinh { get; set; }
+
+        public Double TTCCRT_LotDatThuongLuu { get; set; }
+        public Double TTCCRT_LotDatHaLuu { get; set; }
+        public Double TTCCRT_LotDatTrungBinh { get; set; }
+        public Double TTCCRT_LotDaThuongLuu { get; set; }
+        public Double TTCCRT_LotDaHaLuu { get; set; }
+        public Double TTCCRT_LotDaTrungBinh { get; set; }
+        public Double TTCCRT_MongDatThuongLuu { get; set; }
+        public Double TTCCRT_MongDatHaLuu { get; set; }
+        public Double TTCCRT_MongDatTrungBinh { get; set; }
+        public Double TTCCRT_MongDaThuongLuu { get; set; }
+        public Double TTCCRT_MongDaHaLuu { get; set; }
+        public Double TTCCRT_MongDaTrungBinh { get; set; }
+
         public Double TTMDRanhOngThang_ChieuRongDayDaoNho { get; set; }
         public Double TTMDRanhOngThang_TyLeMoMai { get; set; }
         public int TTMDRanhOngThang_SoCanhMaiTrai { get; set; }
@@ -217,6 +468,72 @@ namespace DucAnhERP.ViewModel
         public Double TTMDRanhOngThang_TyLeMoMai1 { get; set; }
         public int TTMDRanhOngThang_SoCanhMaiTrai1 { get; set; }
         public Double TTMDRanhOngThang_SoCanhMaiPhai1 { get; set; }
+
+        public Double DTDTLCRONRT_CRongDaoDatDayLon { get; set; }
+        public Double DTDTLCRONRT_DTichDaoDat { get; set; }
+        public Double DTDTLCRONRT_CRongDaoDaDayLon { get; set; }
+        public Double DTDTLCRONRT_DTichDaoDa { get; set; }
+        public Double DTDHLCRONRT_CRongDaoDatDayLon { get; set; }
+        public Double DTDHLCRONRT_DTichDaoDat { get; set; }
+        public Double DTDHLCRONRT_CRongDaoDaDayLon { get; set; }
+        public Double DTDHLCRONRT_DTichDaoDa { get; set; }
+        public Double DTDCKRD_CKCRongDaoDayLon { get; set; }
+        public Double DTDCKRD_CKDTichDao { get; set; }
+        public Double DTDCKRD_CRongDaoDayLon { get; set; }
+        public Double DTDCKRD_DTichDao { get; set; }
+
+
+
+        public Double TKLD_KlDaoDat { get; set; }
+        public Double TKLD_KlDaoDa { get; set; }
+        public Double TKLD_TongKlDaoCongRanhOngNhuaRanhThang { get; set; }
+        public Double TKLD_ChanKhay { get; set; }
+        public Double TKLD_GiangDinh { get; set; }
+        public Double TKLD_TongKlDaoDatChanKhayRanhDinh { get; set; }
+        public Double TKLD_TongKlDaoDat { get; set; }
+        public Double TKLD_TongKlDaoDa { get; set; }
+        public Double TKLD_TongKlDao { get; set; }
+        public Double TKLD_KlCChoDatCongTron { get; set; }
+        public Double TKLD_KlCChoDaCongTron { get; set; }
+        public Double TKLD_TongKlChiemChoCTron { get; set; }
+        public Double TKLD_KlCChoDatCongHop { get; set; }
+        public Double TKLD_KlCChoDaCongHop { get; set; }
+        public Double TKLD_TongKlCChoCongHop { get; set; }
+        public Double TKLD_KlCChoDatRanh { get; set; }
+        public Double TKLD_KlCChoDaRanh { get; set; }
+        public Double TKLD_TongKlCChoRanh { get; set; }
+        public Double TKLD_KlCChoDatOngNhua { get; set; }
+        public Double TKLD_KlCChoDaOngNhua { get; set; }
+        public Double TKLD_TongKlCChoOngNhua { get; set; }
+        public Double TKLD_KlCChoDatRanhThang { get; set; }
+        public Double TKLD_KlCChoDaRanhThang { get; set; }
+        public Double TKLD_TongKlCChoRanhThang { get; set; }
+        public Double TKLD_KlCChoDatChanKhay { get; set; }
+        public Double TKLD_KlCChoDatChanGiangDinh { get; set; }
+        public Double TKLD_TongKlCChoDat { get; set; }
+        public Double TKLD_TongKlCChoDa { get; set; }
+        public Double TKLD_TongKlCCho { get; set; }
+        public Double TKLD_KlCChoDat { get; set; }
+        public Double TKLD_KlCChoDa { get; set; }
+        public Double TKLD_TongChiemCho { get; set; }
+        public Double TKLD_KlDapTraDat { get; set; }
+        public Double TKLD_KlDapTraDa { get; set; }
+        public Double TKLD_TongKlDapTra { get; set; }
+        public Double TKLD_KlThuaDat { get; set; }
+        public Double TKLD_KlThuaDa { get; set; }
+        public Double TKLD_TongKLThua { get; set; }
+
+        public Double DTDC_TLCSauDap { get; set; }
+        public Double DTDC_TLCRongDapDayLon { get; set; }
+        public Double DTDC_TLDTichDap { get; set; }
+        public Double DTDC_HLCSauDap { get; set; }
+        public Double DTDC_HLCRongDapDayLon { get; set; }
+        public Double DTDC_HLDTichDap { get; set; }
+            
+        public Double TTKLDC_KlDapCatTruocChiemCho { get; set; }
+        public Double TTKLDC_KlChiemCho { get; set; }
+        public Double TTKLDC_KlDapCatSauChiemCho { get; set; }
+
         public Double TuToaDoX { get; set; }
         public Double TuToaDoY { get; set; }
         public Double DenToaDoX { get; set; }

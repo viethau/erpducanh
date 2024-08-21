@@ -1235,7 +1235,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                
+
+                 <div class="row">
                     <div class="col">
                         <h4 class="mt-2"> Thông tin rãnh thang</h4>
                         <hr />
@@ -1387,7 +1389,7 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="ThongTinRanhThang_PhanLoaiHanhLangBaoVe">Phân loại hành lang bảo vệ(m)<span class="text-danger">*</span></label>
-                                <InputNumber @bind-Value="Input.ThongTinRanhThang_PhanLoaiHanhLangBaoVe" class="form-control" id="ThongTinRanhThang_PhanLoaiHanhLangBaoVe" placeholder="Phân loại hành lang bảo vệ" />
+                                <InputText @bind-Value="Input.ThongTinRanhThang_PhanLoaiHanhLangBaoVe" class="form-control" id="ThongTinRanhThang_PhanLoaiHanhLangBaoVe" placeholder="Phân loại hành lang bảo vệ" />
                                 <ValidationMessage For="() => Input.ThongTinRanhThang_PhanLoaiHanhLangBaoVe" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
@@ -1409,6 +1411,10 @@
                         </div>
                     </div>
                 </div>
+
+
+         
+
                 <div class="row">
                     <div class="col">
                         <h4 class="mt-2 "> Thông tin tấm đan cống hộp, rãnh</h4>
@@ -1583,6 +1589,43 @@
                 </div>
                 <div class="row">
                     <div class="col">
+                        <h4 class="mt-2">Thông tin vật liệu đào cống, rãnh</h4>
+                        <hr />
+                        <div class="row">
+                            <div class="form-floating col-sm-6 col-md-4">
+                                <label for="TTVLDCongRanh_LoaiVatLieuDao">Loại vật liệu đào<span class="text-danger">*</span></label>
+                                <select id="TTVLDCongRanh_LoaiVatLieuDao" class="form-control" @bind="Input.TTVLDCongRanh_LoaiVatLieuDao">
+                                    <option value="">Loại vật liệu đào ...</option>
+                                    @foreach (var dm in FindByIdNhomDanhMuc("HG_LVLDHoGa"))
+                                    {
+                                        <option value="@dm.Id">@dm.Ten</option>
+                                    }
+                                </select>
+                                <ValidationMessage For="() => Input.TTVLDCongRanh_LoaiVatLieuDao" class="text-danger" />
+                            </div>
+                        </div>
+                        <h5> Thượng lưu</h5>
+                        <div class="row">
+                            <div class="form-floating col-sm-6 col-md-4">
+                                <label for="TTVLDCongRanh_TLChieuCaoDaoDa">Chiều cao đào đá (m)<span class="text-danger">*</span></label>
+                                <InputNumber @bind-Value="Input.TTVLDCongRanh_TLChieuCaoDaoDa" class="form-control" id="TTVLDCongRanh_TLChieuCaoDaoDa" placeholder="Chiều cao đào đá " />
+                                <ValidationMessage For="() => Input.TTVLDCongRanh_TLChieuCaoDaoDa" class="text-danger" />
+                            </div>
+
+                        </div>
+                        <h5> Hạ lưu</h5>
+                        <div class="row">
+                            <div class="form-floating col-sm-6 col-md-4">
+                                <label for="TTVLDCongRanh_HLChieuCaoDaoDa">Chiều cao đào đá (m)<span class="text-danger">*</span></label>
+                                <InputNumber @bind-Value="Input.TTVLDCongRanh_HLChieuCaoDaoDa" class="form-control" id="TTVLDCongRanh_HLChieuCaoDaoDa" placeholder="Chiều cao đào đá " />
+                                <ValidationMessage For="() => Input.TTVLDCongRanh_HLChieuCaoDaoDa" class="text-danger" />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
                         <h4 class="mt-2">Thông tin mái đào</h4>
                         <hr />
                         <h5>Thông tin mái đào cống, rãnh, ống nhựa, rãnh thang</h5>
@@ -1632,8 +1675,6 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
                 <div class="row">
                     <div class="col">

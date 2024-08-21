@@ -913,13 +913,18 @@ namespace DucAnhERP.Models
 
 
         ////Thông tin vật liệu đào cống, rãnh
-        //[Required(ErrorMessage = "Bạn phải nhập Loại vật liệu đào!")]
-        //public string TTVLDCongRanh_LoaiVatLieuDao { get; set; }
+        [Required(ErrorMessage = "Bạn phải nhập Loại vật liệu đào!")]
+        public string TTVLDCongRanh_LoaiVatLieuDao { get; set; }
 
-        //[Required(ErrorMessage = "Bạn phải nhập Chiều cao đào đá!")]
-        //public string TTVLDCongRanh_TLChieuCaoDaoDa { get; set; }
-        //[Required(ErrorMessage = "Bạn phải nhập Chiều cao đào đá!")]
-        //public string TTVLDCongRanh_HLChieuCaoDaoDa { get; set; }
+        [Required(ErrorMessage = "Bạn phải nhập Chiều cao đào đá thượng lưu!")]
+        [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
+        [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
+        public Double TTVLDCongRanh_TLChieuCaoDaoDa { get; set; }
+
+        [Required(ErrorMessage = "Bạn phải nhập Chiều cao đào đá hạ lưu!")]
+        [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
+        [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
+        public Double TTVLDCongRanh_HLChieuCaoDaoDa { get; set; }
 
         //Thông tin mái đào
         //Thông tin mái đào cống, rãnh, ống nhựa, rãnh thang
