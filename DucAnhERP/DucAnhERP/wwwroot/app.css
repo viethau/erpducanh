@@ -6,6 +6,12 @@ a, .btn-link {
     color: #006bb7;
 }
 
+.our-table {
+    position: relative;
+    width: 1626px;
+    overflow-x: scroll;
+}
+
 .btn-primary {
     color: #fff;
     background-color: #1b6ec2;
@@ -143,6 +149,8 @@ h1:focus {
 .alert-autohide {
     animation: fadeOut 5s forwards;
 }
+
+
 
 @keyframes fadeOut {
     0% {

@@ -568,15 +568,18 @@
                                 <InputNumber @bind-Value="Input.ThongTinTamDanHoGa2_ChieuDay" class="form-control" id="ThongTinTamDanHoGa2_ChieuDay" placeholder="Chiều dầy" />
                                 <ValidationMessage For="() => Input.ThongTinTamDanHoGa2_ChieuDay" class="text-danger" />
                             </div>
+                        </div>
+                        <h5>Loại vuông hoặc chữ nhật</h5>
+                        <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="ThongTinTamDanHoGa2_D">Chiều dài (m)<span class="text-danger">*</span></label>
                                 <InputNumber @bind-Value="Input.ThongTinTamDanHoGa2_D" class="form-control" id="ThongTinTamDanHoGa2_D" placeholder="Chiều dài" />
                                 <ValidationMessage For="() => Input.ThongTinTamDanHoGa2_D" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
-                                <label for="ThongTinTamDanHoGa2_C">Chiều rộng (m)<span class="text-danger">*</span></label>
-                                <InputNumber @bind-Value="Input.ThongTinTamDanHoGa2_C" class="form-control" id="ThongTinTamDanHoGa2_C" placeholder="Chiều rộng" />
-                                <ValidationMessage For="() => Input.ThongTinTamDanHoGa2_C" class="text-danger" />
+                                <label for="ThongTinTamDanHoGa2_R">Chiều rộng (m)<span class="text-danger">*</span></label>
+                                <InputNumber @bind-Value="Input.ThongTinTamDanHoGa2_R" class="form-control" id="ThongTinTamDanHoGa2_R" placeholder="Chiều rộng" />
+                                <ValidationMessage For="() => Input.ThongTinTamDanHoGa2_R" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="ThongTinTamDanHoGa2_C">Chiều cao (m)<span class="text-danger">*</span></label>
@@ -643,9 +646,9 @@
                                 <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_CdDinhViaHeHoanThien" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-4">
-                                <label for="ThongTinCaoDoHoGa_CdDinhViaHeHoanThien">Cao độ đỉnh K98 (m)<span class="text-danger">*</span></label>
-                                <InputNumber @bind-Value="Input.ThongTinCaoDoHoGa_CdDinhViaHeHoanThien" class="form-control" id="ThongTinCaoDoHoGa_CdDinhViaHeHoanThien" placeholder="Cao độ đỉnh K98" />
-                                <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_CdDinhViaHeHoanThien" class="text-danger" />
+                                <label for="ThongTinCaoDoHoGa_CaoDoDinhK98">Cao độ đỉnh K98 (m)<span class="text-danger">*</span></label>
+                                <InputNumber @bind-Value="Input.ThongTinCaoDoHoGa_CaoDoDinhK98" class="form-control" id="ThongTinCaoDoHoGa_CaoDoDinhK98" placeholder="Cao độ đỉnh K98" />
+                                <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_CaoDoDinhK98" class="text-danger" />
                             </div>
                             @* <div class="form-floating col-sm-6 col-md-3">
                             <label for="ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao">Cao độ hiện trạng trước khi đào (m)<span class="text-danger">*</span></label>
