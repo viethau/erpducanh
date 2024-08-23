@@ -241,6 +241,10 @@ namespace DucAnhERP.Services
                             CDHaLu_DayDongChay = MHopRanhThang.CDHaLu_DayDongChay,
                             CDHaLu_DinhTrongLongSuDung = MHopRanhThang.CDHaLu_DinhTrongLongSuDung,
                             CDHaLu_ChieuCaoRanhThangTuDayDongChayDenDinh = MHopRanhThang.CDHaLu_ChieuCaoRanhThangTuDayDongChayDenDinh,
+                            TTVLDCongRanh_LoaiVatLieuDao = MHopRanhThang.TTVLDCongRanh_LoaiVatLieuDao,
+                            TTVLDCongRanh_TLChieuCaoDaoDa = MHopRanhThang.TTVLDCongRanh_TLChieuCaoDaoDa,
+                            TTVLDCongRanh_HLChieuCaoDaoDa = MHopRanhThang.TTVLDCongRanh_HLChieuCaoDaoDa,
+
                             TTMDRanhOngThang_ChieuRongDayDaoNho = MHopRanhThang.TTMDRanhOngThang_ChieuRongDayDaoNho,
                             TTMDRanhOngThang_TyLeMoMai = MHopRanhThang.TTMDRanhOngThang_TyLeMoMai,
                             TTMDRanhOngThang_SoCanhMaiTrai = MHopRanhThang.TTMDRanhOngThang_SoCanhMaiTrai,

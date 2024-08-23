@@ -71,6 +71,10 @@
                         <td colspan="4">D.Tích đào thượng lưu cống, rãnh, ống nhựa, rãnh thang</td>
                         <td colspan="4">D.Tích đào hạ lưu cống, rãnh, ống nhựa, rãnh thang</td>
                         <td colspan="4">D.Tích đào chân khay, giằng đỉnh</td>
+                        <td colspan="38">Thông tin khối lượng đào</td>
+                        <td colspan="6"> D.Tích đắp cát</td>
+                        <td colspan="3" rowspan="2"> Thông tin KL đắp cát</td>
+                        <td colspan="4"> Tọa độ</td>
                     </tr>
                     <tr>
                         <td colspan="2">Thông tin phủ bì hố ga (m)</td>
@@ -186,6 +190,25 @@
                         <td colspan="2">Đào đá</td>
                         <td colspan="2">Chân khay</td>
                         <td colspan="2">C.Rộng đào đáy lớn (m)</td>
+
+
+                        <td colspan="3"> KL đào cống, rãnh, ống nhựa, rãnh thang</td>
+                        <td colspan="3">Kl đào đất chân khay + giằng đỉnh rãnh thang</td>
+                        <td colspan="3">Tổng KL đào</td>
+                        <td colspan="3">KL C.Chỗ C.Tròn</td>
+                        <td colspan="3">KL C.Chỗ C.hộp</td>
+                        <td colspan="3">KL C.Chỗ rãnh xây + bê tông</td>
+                        <td colspan="3">KL C.Chỗ ống nhựa</td>
+                        <td colspan="8">KL C.Chỗ rãnh thang</td>
+                        <td colspan="3">Tổng KL chiếm chỗ</td>
+                        <td colspan="3">Kl đắp trả	</td>
+                        <td colspan="3">KL thừa</td>
+
+                        <td colspan="3">Thượng lưu</td>
+                        <td colspan="3">Hạ lưu</td> 
+                        		
+                        <td colspan="2">Từ tọa độ</td>
+                        <td colspan="2">Đến tọa độ	</td>
 
                     </tr>
                     <tr>
@@ -693,8 +716,64 @@
                         <td class="text-danger">D.Tích đào (m2)</td>
                         <td class="text-danger">C.Rộng đào đáy lớn (m)</td>
                         <td class="text-danger">D.Tích đào (m2)</td>
+                        @* Thông tin khối lượng đào *@
+                        <td class="text-danger">KL đào đất (m3)</td>
+                        <td class="text-danger">KL đào đá (m3)</td>
+                        <td class="text-danger">Tổng KL đào cống, rãnh, ống nhựa, rãnh thang (m3)</td>
+                        <td class="text-danger">Chân khay (m3)</td>
+                        <td class="text-danger">Giằng đỉnh (m3)</td>
+                        <td class="text-danger">Tổng KL đào đất chân khay + rảnh đỉnh (m3)</td>
+                        <td class="text-danger">Tổng KL đào đất (m3)</td>
+                        <td class="text-danger">Tổng KL đào đá (m3)</td>
+                        <td class="text-danger">Tổng KL đào (m3)</td>
+                        <td class="text-danger">KL C.Chỗ đất cống tròn (m3)</td>
+                        <td class="text-danger">KL C.Chỗ đá cống tròn (m3)</td>
+                        <td class="text-danger">Tổng KL chiếm chỗ C.Tròn (m3)</td>
+                        <td class="text-danger">KL C.chỗ đất cống hộp (m3)</td>
+                        <td class="text-danger">KL C.chỗ đá cống hộp (m3)</td>
+                        <td class="text-danger">Tổng KL C.chỗ cống hộp (m3)</td>
+                        <td class="text-danger">KL C.chỗ đất rãnh (m3)</td>
+                        <td class="text-danger">KL C.chỗ đá rãnh (m3)</td>
+                        <td class="text-danger">Tổng KL C.chỗ rãnh (m3)</td>
+                        <td class="text-danger">KL C.Chỗ đất ống nhựa (m)</td>
+                        <td class="text-danger">KL C.Chỗ đá ống nhựa (m3)</td>
+                        <td class="text-danger">Tổng KL C.Chỗ ống nhựa (m3)</td>
+                        <td class="text-danger">KL C.Chỗ đất rãnh thang (m3)</td>
+                        <td class="text-danger">KL C.Chỗ đá rãnh thang (m3)</td>
+                        <td class="text-danger">Tổng KL C.Chỗ rãnh thang (m3)</td>
+                        <td class="text-danger">KL C.Chố đất chân khay (m3)</td>
+                        <td class="text-danger">KL C.Chố đất chân giằng đỉnh (m3)</td>
+                        <td class="text-danger">Tổng KL C.Chỗ đất (m3)</td>
+                        <td class="text-danger">Tổng KL C.Chỗ đá (m3)</td>
+                        <td class="text-danger">Tổng KL C.Chỗ (m3)</td>
+                        <td class="text-danger">KL C.chỗ đất (m3)</td>
+                        <td class="text-danger">KL C.Chỗ đá (m3)</td>
+                        <td class="text-danger">Tổng chiếm chỗ (m3)</td>
+                        <td class="text-danger">KL đắp trả đất (m3)</td>
+                        <td class="text-danger">KL đắp trả đá (m3)</td>
+                        <td class="text-danger">Tổng KL đắp trả (m3)</td>
+                        <td class="text-danger">KL thừa đất (m3)</td>
+                        <td class="text-danger">KL thừa đá (m3)</td>
+                        <td class="text-danger">Tổng KL thừa (m3) </td>
+                        @*D.Tích đắp cát *@
+                        <td class="text-danger">C.Sâu đắp (m)</td>
+                        <td class="text-danger">C.Rộng đắp đáy lớn (m)</td>
+                        <td class="text-danger">D.Tích đắp (m2)</td>
+                        <td class="text-danger">C.Sâu đắp (m)</td>
+                        <td class="text-danger">C.Rộng đắp đáy lớn (m)</td>
+                        <td class="text-danger">D.Tích đắp (m2)</td>
+                        @*Thông tin KL đắp cát *@
+                        <td class="text-danger">KL đắp cát trước chiếm chỗ (m3)</td>
+                        <td class="text-danger">KL chiếm chỗ (m3)</td>
+                        <td class="text-danger">KL đắp cát sau chiếm chỗ (m3) </td>
+                        @* Tọa độ	 *@
+                        <td>X</td>
+                        <td>Y</td>
+                        <td>X</td>
+                        <td>Y</td>
 
                     </tr>
+
                 </thead>
                 @if (listHopRanhThang.Any())
                 {
@@ -995,14 +1074,8 @@
                                 <td>@item.TTTDCongHoRanh_ChieuDaiThucTe</td>
                                 <td class="text-center text-danger">@item.TTTDCongHoRanh_XacDinhOngCongCanThem</td>
 
-                                <td class="text-center">@item.TTTDCongHoRanh_SLCauKienNguyen </td>
-                                <td class="text-center">@item.TTTDCongHoRanh_ChieuDaiTheoSoCKNguyen </td>
-                                <td class="text-center">@item.TTTDCongHoRanh_TongChieuDaiTheoCKNguyen </td>
-                                <td class="text-center">@item.TTTDCongHoRanh_ChieuDaiThucTe </td>
-                                <td class="text-center">@item.TTTDCongHoRanh_XacDinhOngCongCanThem </td>
-
-                                <td class="text-center">@item.CDThuongLuu_HienTrangTruocKhiDaoThuongLuu</td>
-
+                                <td>@item.CDThuongLuu_HienTrangTruocKhiDaoThuongLuu</td>
+                                <td>@item.CDThuongLuu_DayDaoGop</td>
                                 <td>@item.CDThuongLuu_ChieuSauDao</td>
                                 <td>@item.CDThuongLuu_DayDaoCongTron</td>
                                 <td>@item.CDThuongLuu_DayDaoCongHop</td>
@@ -1030,14 +1103,142 @@
                                 <td>@item.CDThuongLuu_CCaoTuongCongRanh</td>
                                 <td>@item.CDThuongLuu_DinhTuongCHopRanh</td>
                                 <td>@item.CDThuongLuu_DinhMuMoThotDuoiCongHopRanh</td>
-                                <td>@item.CDThuongLuu_DinhGiangDinhRanhThang </td>
+                                <td>@item.CDThuongLuu_DinhGiangDinhRanhThang</td>
+                                <td>@item.CDThuongLuu_DinhGop</td>
+                                <td>@item.CDThuongLuu_DinhTrongLongSuDung</td>
+                                <td>@item.CDThuongLuu_DinhCongTron</td>
+                                <td>@item.CDThuongLuu_DinhCongHop</td>
+                                <td>@item.CDThuongLuu_DinhRanh</td>
+                                <td>@item.CDThuongLuu_DinhOngNhua</td>
+                                <td>@item.CDThuongLuu_DinhDapCat</td>
+                                <td>@item.CDThuongLuu_ChieuCaoRanhThangTuDayDongChayDenDinh</td>
+                                <td>@item.CDThuongLuu_DinhRanhThang </td>
 
-                                <td class="text-center">@item.CDThuongLuu_DinhTrongLongSuDung </td>
-                                <td class="text-center">@item.CDThuongLuu_ChieuCaoRanhThangTuDayDongChayDenDinh </td>
-                                <td class="text-center">@item.CDHaLu_HienTrangTruocKhiDaoHaLuu </td>
-                                <td class="text-center">@item.CDHaLu_DayDongChay </td>
-                                <td class="text-center">@item.CDHaLu_DinhTrongLongSuDung</td>
-                                <td class="text-center">@item.CDHaLu_ChieuCaoRanhThangTuDayDongChayDenDinh  </td>
+                                <td>@item.CDHaLu_HienTrangTruocKhiDaoHaLuu</td>
+                                <td>@item.CDHaLu_DayDaoGop</td>
+                                <td>@item.CDHaLu_ChieuSauDao</td>
+                                <td>@item.CDHaLu_DayDaoCongTron</td>
+                                <td>@item.CDHaLu_DayDaoCongHop</td>
+                                <td>@item.CDHaLu_DayDaoRanh</td>
+                                <td>@item.CDHaLu_DayDaoOngNhua</td>
+                                <td>@item.CDHaLu_DayDaoGiangDinhRanhThang</td>
+                                <td>@item.CDHaLu_DayDaoChanKhayRanhThang</td>
+                                <td>@item.CDHaLu_DayDaoRanhThang</td>
+                                <td>@item.CDHaLu_DinhLotGop</td>
+                                <td>@item.CDHaLu_DinhLotRanhThang</td>
+                                <td>@item.CDHaLu_DinhLotChanKhayRanhThang</td>
+                                <td>@item.CDHaLu_DinhLotGiangDinhRanhThang</td>
+                                <td>@item.CDHaLu_DinhLotOngNhua</td>
+                                <td>@item.CDHaLu_DinhLotCongTron</td>
+                                <td>@item.CDHaLu_DinhLotCongHop</td>
+                                <td>@item.CDHaLu_DinhLotRanh</td>
+                                <td>@item.CDHaLu_DinhMongGop</td>
+                                <td>@item.CDHaLu_DinhMongRanhThang</td>
+                                <td>@item.CDHaLu_DinhMongChanKhay</td>
+                                <td>@item.CDHaLu_DinhMongCongTron</td>
+                                <td>@item.CDHaLu_DinhMongCongHop</td>
+                                <td>@item.CDHaLu_DinhMongRanh</td>
+                                <td>@item.CDHaLu_DinhDeCong</td>
+                                <td>@item.CDHaLu_DayDongChay</td>
+                                <td>@item.CDHaLu_CCaoTuongCongRanh</td>
+                                <td>@item.CDHaLu_DinhTuongCHopRanh</td>
+                                <td>@item.CDHaLu_DinhMuMoThotDuoiCongHopRanh</td>
+                                <td>@item.CDHaLu_DinhGiangDinhRanhThang</td>
+                                <td>@item.CDHaLu_DinhGop</td>
+                                <td>@item.CDHaLu_DinhTrongLongSuDung</td>
+                                <td>@item.CDHaLu_DinhCongTron</td>
+                                <td>@item.CDHaLu_DinhCongHop</td>
+                                <td>@item.CDHaLu_DinhRanh</td>
+                                <td>@item.CDHaLu_DinhOngNhua</td>
+                                <td>@item.CDHaLu_DinhDapCat</td>
+                                <td>@item.CDHaLu_ChieuCaoRanhThangTuDayDongChayDenDinh</td>
+                                <td>@item.CDHaLu_DinhRanhThang </td>
+
+                                <td>@GetTenDanhMucById(item.TTVLDCongRanh_LoaiVatLieuDao) </td>
+                                <td>@item.TTVLDCongRanh_TLChieuCaoDaoDa</td>
+                                <td>@item.TTVLDCongRanh_TLChieuCaoDaoDat</td>
+                                <td>@item.TTVLDCongRanh_TLTongChieuSauDao</td>
+                                <td>@item.TTVLDCongRanh_HLChieuCaoDaoDa</td>
+                                <td>@item.TTVLDCongRanh_HLChieuCaoDaoDat</td>
+                                <td>@item.TTVLDCongRanh_HLTongChieuSauDao  </td>
+
+
+                                <td>@item.TTCCCCT_CCaoLotDatTLuu </td>
+                                <td>@item.TTCCCCT_CCaoLotDatHLuu </td>
+                                <td>@item.TTCCCCT_CCaoLotDatMongTBinh </td>
+                                <td>@item.TTCCCCT_CCaoLotDaTLuu </td>
+                                <td>@item.TTCCCCT_CCaoLotDaHLuu </td>
+                                <td>@item.TTCCCCT_CCaoLotDaMongTBinh </td>
+                                <td>@item.TTCCCCT_CCaoMongDatTLuu </td>
+                                <td>@item.TTCCCCT_CCaoMongDatHLuu </td>
+                                <td>@item.TTCCCCT_CCaoMongDatTBinh </td>
+                                <td>@item.TTCCCCT_CCaoMongDaTLuu </td>
+                                <td>@item.TTCCCCT_CCaoMongDaHLuu </td>
+                                <td>@item.TTCCCCT_CCaoMongDaTBinh </td>
+                                <td>@item.TTCCCCT_CCaoDeDatTLuu </td>
+                                <td>@item.TTCCCCT_CCaoDeDatHLuu </td>
+                                <td>@item.TTCCCCT_CCaoDeDatTBinh </td>
+                                <td>@item.TTCCCCT_CCaoDeDaTLuu </td>
+                                <td>@item.TTCCCCT_CCaoDeDaHLuu </td>
+                                <td>@item.TTCCCCT_CCaoDeDaTBinh </td>
+                                <td>@item.TTCCCCT_CCaoCongDatTLuu </td>
+                                <td>@item.TTCCCCT_CCaoCongDatHLuu </td>
+                                <td>@item.TTCCCCT_CCongCongDatTBinh </td>
+                                <td>@item.TTCCCCT_CCaoCongDaTLuu </td>
+                                <td>@item.TTCCCCT_CCaoCongDaHLuu </td>
+                                <td>@item.TTCCCCT_CCongCongDaTBinh </td>
+
+                                <td>@item.TTCCCCCHR_CCaoLotDatTLuu </td>
+                                <td>@item.TTCCCCCHR_CCaoLotDatHLuu </td>
+                                <td>@item.TTCCCCCHR_CCaoLotDatTBinh </td>
+                                <td>@item.TTCCCCCHR_CCaoLotDaTLuu </td>
+                                <td>@item.TTCCCCCHR_CCaoLotDaHLuu </td>
+                                <td>@item.TTCCCCCHR_CCaoLotDaTBinh </td>
+                                <td>@item.TTCCCCCHR_CCaoMongDatTLuu </td>
+                                <td>@item.TTCCCCCHR_CCaoMongDatHLuu </td>
+                                <td>@item.TTCCCCCHR_CCaoMongDatTBinh </td>
+                                <td>@item.TTCCCCCHR_CCaoMongDaTLuu </td>
+                                <td>@item.TTCCCCCHR_CCaoMongDaHLuu </td>
+                                <td>@item.TTCCCCCHR_CCaoMongDaTBinh </td>
+                                <td>@item.TTCCCCCHR_CCaoTuongDatTLuu </td>
+                                <td>@item.TTCCCCCHR_CCaoTuongDatHLuu </td>
+                                <td>@item.TTCCCCCHR_CCaoTuongDatTBinh </td>
+                                <td>@item.TTCCCCCHR_CCaoTuongDaTLuu </td>
+                                <td>@item.TTCCCCCHR_CCaoTuongDaHLuu </td>
+                                <td>@item.TTCCCCCHR_CCaoTuongDaTBinh  </td>
+
+                                <td>@item.TTCCCCON_CCaoDemCatDatTLuu  </td>
+                                <td>@item.TTCCCCON_CCaoDemCatDatHLuu  </td>
+                                <td>@item.TTCCCCON_CCaoDemCatDatTBinh  </td>
+                                <td>@item.TTCCCCON_CCaoDemCatDaTLuu  </td>
+                                <td>@item.TTCCCCON_CCaoDemCatDaHLuu  </td>
+                                <td>@item.TTCCCCON_CCaoDemCatDaTBinh  </td>
+                                <td>@item.TTCCCCON_CCaoOngDatTLuu  </td>
+                                <td>@item.TTCCCCON_CCaoOngDatHLuu  </td>
+                                <td>@item.TTCCCCON_CCaoDatTBinh  </td>
+                                <td>@item.TTCCCCON_CCaoOngDaTLuu  </td>
+                                <td>@item.TTCCCCON_CCaoOngDaHLuu  </td>
+                                <td>@item.TTCCCCON_CCaoDaTBinh  </td>
+                                <td>@item.TTCCCCON_CCaoDapCatDatTLuu  </td>
+                                <td>@item.TTCCCCON_CCaoDapCatDatHLuu  </td>
+                                <td>@item.TTCCCCON_CCaoDapCatDatTBinh  </td>
+                                <td>@item.TTCCCCON_CCaoDapCatDaTLuu  </td>
+                                <td>@item.TTCCCCON_CCaoDapCatDaHLuu  </td>
+                                <td>@item.TTCCCCON_CCaoDapCatDaTBinh</td>
+
+                                <td>@item.TTCCRT_LotDatThuongLuu</td>
+                                <td>@item.TTCCRT_LotDatHaLuu</td>
+                                <td>@item.TTCCRT_LotDatTrungBinh</td>
+                                <td>@item.TTCCRT_LotDaThuongLuu</td>
+                                <td>@item.TTCCRT_LotDaHaLuu</td>
+                                <td>@item.TTCCRT_LotDaTrungBinh</td>
+                                <td>@item.TTCCRT_MongDatThuongLuu</td>
+                                <td>@item.TTCCRT_MongDatHaLuu</td>
+                                <td>@item.TTCCRT_MongDatTrungBinh</td>
+                                <td>@item.TTCCRT_MongDaThuongLuu</td>
+                                <td>@item.TTCCRT_MongDaHaLuu</td>
+                                <td>@item.TTCCRT_MongDaTrungBinh</td>
+
                                 <td class="text-center">@item.TTMDRanhOngThang_ChieuRongDayDaoNho </td>
                                 <td class="text-center">@item.TTMDRanhOngThang_TyLeMoMai </td>
                                 <td class="text-center">@item.TTMDRanhOngThang_SoCanhMaiTrai</td>
@@ -1046,6 +1247,71 @@
                                 <td class="text-center">@item.TTMDRanhOngThang_TyLeMoMai1 </td>
                                 <td class="text-center">@item.TTMDRanhOngThang_SoCanhMaiTrai1</td>
                                 <td class="text-center">@item.TTMDRanhOngThang_SoCanhMaiPhai1 </td>
+
+                                <td>@item.DTDTLCRONRT_CRongDaoDatDayLon</td>
+                                <td>@item.DTDTLCRONRT_DTichDaoDat</td>
+                                <td>@item.DTDTLCRONRT_CRongDaoDaDayLon</td>
+                                <td>@item.DTDTLCRONRT_DTichDaoDa</td>
+                                <td>@item.DTDHLCRONRT_CRongDaoDatDayLon</td>
+                                <td>@item.DTDHLCRONRT_DTichDaoDat</td>
+                                <td>@item.DTDHLCRONRT_CRongDaoDaDayLon</td>
+                                <td>@item.DTDHLCRONRT_DTichDaoDa</td>
+                                <td>@item.DTDCKRD_CKCRongDaoDayLon</td>
+                                <td>@item.DTDCKRD_CKDTichDao</td>
+                                <td>@item.DTDCKRD_CRongDaoDayLon</td>
+                                <td>@item.DTDCKRD_DTichDao</td>
+
+
+
+                                <td>@item.TKLD_KlDaoDat</td>
+                                <td>@item.TKLD_KlDaoDa</td>
+                                <td>@item.TKLD_TongKlDaoCongRanhOngNhuaRanhThang</td>
+                                <td>@item.TKLD_ChanKhay</td>
+                                <td>@item.TKLD_GiangDinh</td>
+                                <td>@item.TKLD_TongKlDaoDatChanKhayRanhDinh</td>
+                                <td>@item.TKLD_TongKlDaoDat</td>
+                                <td>@item.TKLD_TongKlDaoDa</td>
+                                <td>@item.TKLD_TongKlDao</td>
+                                <td>@item.TKLD_KlCChoDatCongTron</td>
+                                <td>@item.TKLD_KlCChoDaCongTron</td>
+                                <td>@item.TKLD_TongKlChiemChoCTron</td>
+                                <td>@item.TKLD_KlCChoDatCongHop</td>
+                                <td>@item.TKLD_KlCChoDaCongHop</td>
+                                <td>@item.TKLD_TongKlCChoCongHop</td>
+                                <td>@item.TKLD_KlCChoDatRanh</td>
+                                <td>@item.TKLD_KlCChoDaRanh</td>
+                                <td>@item.TKLD_TongKlCChoRanh</td>
+                                <td>@item.TKLD_KlCChoDatOngNhua</td>
+                                <td>@item.TKLD_KlCChoDaOngNhua</td>
+                                <td>@item.TKLD_TongKlCChoOngNhua</td>
+                                <td>@item.TKLD_KlCChoDatRanhThang</td>
+                                <td>@item.TKLD_KlCChoDaRanhThang</td>
+                                <td>@item.TKLD_TongKlCChoRanhThang</td>
+                                <td>@item.TKLD_KlCChoDatChanKhay</td>
+                                <td>@item.TKLD_KlCChoDatChanGiangDinh</td>
+                                <td>@item.TKLD_TongKlCChoDat</td>
+                                <td>@item.TKLD_TongKlCChoDa</td>
+                                <td>@item.TKLD_TongKlCCho</td>
+                                <td>@item.TKLD_KlCChoDat</td>
+                                <td>@item.TKLD_KlCChoDa</td>
+                                <td>@item.TKLD_TongChiemCho</td>
+                                <td>@item.TKLD_KlDapTraDat</td>
+                                <td>@item.TKLD_KlDapTraDa</td>
+                                <td>@item.TKLD_TongKlDapTra</td>
+                                <td>@item.TKLD_KlThuaDat</td>
+                                <td>@item.TKLD_KlThuaDa</td>
+                                <td>@item.TKLD_TongKLThua</td>
+                                <td>@item.DTDC_TLCSauDap</td>
+                                <td>@item.DTDC_TLCRongDapDayLon</td>
+                                <td>@item.DTDC_TLDTichDap</td>
+                                <td>@item.DTDC_HLCSauDap</td>
+                                <td>@item.DTDC_HLCRongDapDayLon</td>
+                                <td>@item.DTDC_HLDTichDap </td>
+
+                                <td>@item.TTKLDC_KlDapCatTruocChiemCho</td>
+                                <td>@item.TTKLDC_KlChiemCho</td>
+                                <td>@item.TTKLDC_KlDapCatSauChiemCho </td>
+
                                 <td class="text-center">@item.TuToaDoX </td>
                                 <td class="text-center">@item.TuToaDoY </td>
                                 <td class="text-center">@item.DenToaDoX </td>
@@ -1212,12 +1478,155 @@
                 item.TTTDCongHoRanh_ChieuDaiThucTe = TTTDCongHoRanh_ChieuDaiThucTe(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.TTTDCongHoRanh_TongChieuDaiTheoCKNguyen, item.TTCDSLCauKienDuongTruyenDan_TongChieuDai);
                 item.TTTDCongHoRanh_XacDinhOngCongCanThem = TTTDCongHoRanh_XacDinhOngCongCanThem(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.TTTDCongHoRanh_ChieuDaiThucTe);
 
+                item.CDThuongLuu_DinhDeCong = CDThuongLuu_DinhDeCong(item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDThuongLuu_DayDongChay, item.ThongTinCauTaoCongTron_CDayPhuBi);
+                item.CDThuongLuu_DinhMongRanh = CDThuongLuu_DinhMongRanh(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDThuongLuu_DayDongChay);
+                item.CDThuongLuu_DinhMongCongHop = CDThuongLuu_DinhMongCongHop(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDThuongLuu_DayDongChay, item.TTKTHHCongHopRanh_CCaoDe);
+                item.CDThuongLuu_DinhMongCongTron = CDThuongLuu_DinhMongCongTron(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDThuongLuu_DayDongChay, item.ThongTinCauTaoCongTron_CDayPhuBi, item.CDThuongLuu_DinhDeCong, item.ThongTinCauTaoCongTron_CCaoDe);
+                item.CDThuongLuu_DinhMongChanKhay = CDThuongLuu_DinhMongChanKhay(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinRanhThang_CauTaoChanKhay, item.CDThuongLuu_DayDongChay);
+                item.CDThuongLuu_DinhMongRanhThang = CDThuongLuu_DinhMongRanhThang(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDThuongLuu_DayDongChay);
+                item.CDThuongLuu_DinhMongGop = CDThuongLuu_DinhMongGop(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDThuongLuu_DayDongChay, item.ThongTinCauTaoCongTron_CDayPhuBi, item.CDThuongLuu_DinhDeCong, item.ThongTinCauTaoCongTron_CCaoDe, item.TTKTHHCongHopRanh_CCaoDe);
+                item.CDThuongLuu_DinhLotRanh = CDThuongLuu_DinhLotRanh(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDThuongLuu_DinhMongRanh, item.TTKTHHCongHopRanh_CCaoMong);
+                item.CDThuongLuu_DinhLotCongHop = CDThuongLuu_DinhLotCongHop(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDThuongLuu_DinhMongCongHop, item.TTKTHHCongHopRanh_CCaoMong);
+                item.CDThuongLuu_DinhLotCongTron = CDThuongLuu_DinhLotCongTron(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDThuongLuu_DinhMongCongTron, item.ThongTinCauTaoCongTron_CCaoMong);
+                item.CDThuongLuu_DinhLotOngNhua = CDThuongLuu_DinhLotOngNhua(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDThuongLuu_DayDongChay, item.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi);
+                item.CDThuongLuu_DinhLotGiangDinhRanhThang = CDThuongLuu_DinhLotGiangDinhRanhThang(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinRanhThang_CauTaoGiangDinh, item.CDThuongLuu_DinhRanhThang, item.ThongTinRanhThang_CCaoMongGiangDinh);
+                item.CDThuongLuu_DinhLotChanKhayRanhThang = CDThuongLuu_DinhLotChanKhayRanhThang(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinRanhThang_CauTaoChanKhay, item.CDThuongLuu_DayDongChay, item.ThongTinRanhThang_CCaoMongChanKhay);
+                item.CDThuongLuu_DinhLotRanhThang = CDThuongLuu_DinhLotRanhThang(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDThuongLuu_DayDongChay, item.ThongTinRanhThang_CCaoMong);
+                item.CDThuongLuu_DinhLotGop = CDThuongLuu_DinhLotGop(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDThuongLuu_DayDongChay, item.ThongTinRanhThang_CCaoMong, item.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, item.CDThuongLuu_DinhMongCongTron, item.ThongTinCauTaoCongTron_CCaoMong, item.CDThuongLuu_DinhMongCongHop, item.TTKTHHCongHopRanh_CCaoMong, item.CDThuongLuu_DinhMongRanh);
+                item.CDThuongLuu_DayDaoRanhThang = CDThuongLuu_DayDaoRanhThang(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDThuongLuu_DinhLotRanhThang, item.ThongTinRanhThang_CCaoLot, item.CDThuongLuu_DayDongChay);
+                item.CDThuongLuu_DayDaoChanKhayRanhThang = CDThuongLuu_DayDaoChanKhayRanhThang(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinRanhThang_CauTaoChanKhay, item.CDThuongLuu_DinhLotChanKhayRanhThang, item.ThongTinRanhThang_CCaoLotChanKhay, item.CDThuongLuu_DayDongChay);
+                item.CDThuongLuu_DayDaoGiangDinhRanhThang = CDThuongLuu_DayDaoGiangDinhRanhThang(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinRanhThang_CauTaoGiangDinh, item.CDThuongLuu_DinhLotGiangDinhRanhThang, item.ThongTinRanhThang_CCaoLotGiangDinh, item.CDThuongLuu_DinhRanhThang);
+                item.CDThuongLuu_DayDaoOngNhua = CDThuongLuu_DayDaoOngNhua(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDThuongLuu_DayDongChay, item.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, item.CDThuongLuu_DinhLotOngNhua, item.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat);
+                item.CDThuongLuu_DayDaoRanh = CDThuongLuu_DayDaoRanh(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.CDThuongLuu_DinhLotRanh, item.TTKTHHCongHopRanh_CCaoLotMong);
+                item.CDThuongLuu_DayDaoCongHop = CDThuongLuu_DayDaoCongHop(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDThuongLuu_DayDongChay, item.TTKTHHCongHopRanh_CCaoDe, item.CDThuongLuu_DinhLotCongHop, item.TTKTHHCongHopRanh_CCaoLotMong);
+                item.CDThuongLuu_DayDaoCongTron = CDThuongLuu_DayDaoCongTron(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDThuongLuu_DayDongChay, item.ThongTinCauTaoCongTron_CDayPhuBi, item.CDThuongLuu_DinhDeCong, item.ThongTinCauTaoCongTron_CCaoDe, item.CDThuongLuu_DinhLotCongTron, item.ThongTinCauTaoCongTron_CCaoLotMong);
+                item.CDThuongLuu_DayDaoGop = CDThuongLuu_DayDaoGop(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDThuongLuu_DayDongChay, item.ThongTinCauTaoCongTron_CDayPhuBi, item.CDThuongLuu_DinhDeCong, item.ThongTinCauTaoCongTron_CCaoDe, item.CDThuongLuu_DinhLotCongTron, item.ThongTinCauTaoCongTron_CCaoLotMong, item.TTKTHHCongHopRanh_CCaoDe, item.CDThuongLuu_DinhLotCongHop, item.TTKTHHCongHopRanh_CCaoLotMong, item.CDThuongLuu_DinhLotRanh, item.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, item.CDThuongLuu_DinhLotOngNhua, item.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, item.CDThuongLuu_DinhLotRanhThang, item.ThongTinRanhThang_CCaoLot);
+                item.CDThuongLuu_ChieuSauDao = CDThuongLuu_ChieuSauDao(item.CDThuongLuu_HienTrangTruocKhiDaoThuongLuu, item.CDThuongLuu_DayDaoGop);
+
+                item.CDHaLu_DinhRanhThang = CDHaLu_DinhRanhThang(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.CDHaLu_DayDongChay, item.CDHaLu_ChieuCaoRanhThangTuDayDongChayDenDinh);
+                item.CDHaLu_DinhDapCat = CDHaLu_DinhDapCat(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.CDHaLu_DinhOngNhua, item.ThongTinKichThuocHinhHocOngNhua_CCaoDapCat);
+                item.CDHaLu_DinhOngNhua = CDHaLu_DinhOngNhua(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.CDHaLu_DinhTrongLongSuDung, item.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi);
+                item.CDHaLu_DinhRanh = CDHaLu_DinhRanh(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.CDHaLu_DinhTrongLongSuDung, item.TTKTHHCongHopRanh_CCaoMuMoThotTren);
+                item.CDHaLu_DinhCongHop = CDHaLu_DinhCongHop(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.CDHaLu_DinhTrongLongSuDung, item.TTKTHHCongHopRanh_CCaoMuMoThotTren);
+                item.CDHaLu_DinhCongTron = CDHaLu_DinhCongTron(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.CDHaLu_DinhTrongLongSuDung, item.ThongTinCauTaoCongTron_CDayPhuBi);
+                item.CDHaLu_DinhGop = CDHaLu_DinhGop(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.CDHaLu_DinhTrongLongSuDung, item.ThongTinCauTaoCongTron_CDayPhuBi, item.TTKTHHCongHopRanh_CCaoMuMoThotTren, item.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, item.CDHaLu_DayDongChay, item.CDHaLu_ChieuCaoRanhThangTuDayDongChayDenDinh);
+                item.CDHaLu_DinhGiangDinhRanhThang = CDHaLu_DinhGiangDinhRanhThang(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinRanhThang_CauTaoGiangDinh, item.CDHaLu_DinhRanhThang);
+                item.CDHaLu_DinhMuMoThotDuoiCongHopRanh = CDHaLu_DinhMuMoThotDuoiCongHopRanh(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.CDHaLu_DinhCongHop, item.TTKTHHCongHopRanh_CCaoMuMoThotTren, item.CDHaLu_DinhRanh);
+                item.CDHaLu_DinhTuongCHopRanh = CDHaLu_DinhTuongCHopRanh(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.CDHaLu_DinhMuMoThotDuoiCongHopRanh, item.TTKTHHCongHopRanh_CCaoMuMoThotDuoi);
+                item.CDHaLu_CCaoTuongCongRanh = CDHaLu_CCaoTuongCongRanh(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.CDHaLu_DinhTuongCHopRanh, item.CDHaLu_DayDongChay);
+                item.CDHaLu_DinhDeCong = CDHaLu_DinhDeCong(item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDHaLu_DayDongChay, item.ThongTinCauTaoCongTron_CDayPhuBi);
+                item.CDHaLu_DinhMongRanh = CDHaLu_DinhMongRanh(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDHaLu_DayDongChay);
+                item.CDHaLu_DinhMongCongHop = CDHaLu_DinhMongCongHop(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDHaLu_DayDongChay, item.TTKTHHCongHopRanh_CCaoDe);
+                item.CDHaLu_DinhMongCongTron = CDHaLu_DinhMongCongTron(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDHaLu_DayDongChay, item.ThongTinCauTaoCongTron_CDayPhuBi, item.CDHaLu_DinhDeCong, item.ThongTinCauTaoCongTron_CCaoDe);
+                item.CDHaLu_DinhMongChanKhay = CDHaLu_DinhMongChanKhay(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinRanhThang_CauTaoChanKhay, item.CDHaLu_DayDongChay);
+                item.CDHaLu_DinhMongRanhThang = CDHaLu_DinhMongRanhThang(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDHaLu_DayDongChay);
+                item.CDHaLu_DinhMongGop = CDHaLu_DinhMongGop(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDHaLu_DayDongChay, item.ThongTinCauTaoCongTron_CDayPhuBi, item.CDHaLu_DinhDeCong, item.ThongTinCauTaoCongTron_CCaoDe, item.TTKTHHCongHopRanh_CCaoDe);
+                item.CDHaLu_DinhLotRanh = CDHaLu_DinhLotRanh(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDHaLu_DinhMongRanh, item.TTKTHHCongHopRanh_CCaoMong);
+                item.CDHaLu_DinhLotCongHop = CDHaLu_DinhLotCongHop(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDHaLu_DinhMongCongHop, item.TTKTHHCongHopRanh_CCaoMong);
+                item.CDHaLu_DinhLotCongTron = CDHaLu_DinhLotCongTron(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDHaLu_DinhMongCongTron, item.ThongTinCauTaoCongTron_CCaoMong);
+                item.CDHaLu_DinhLotOngNhua = CDHaLu_DinhLotOngNhua(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDHaLu_DayDongChay, item.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi);
+                item.CDHaLu_DinhLotGiangDinhRanhThang = CDHaLu_DinhLotGiangDinhRanhThang(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinRanhThang_CauTaoGiangDinh, item.CDHaLu_DinhRanhThang, item.ThongTinRanhThang_CCaoMongGiangDinh);
+                item.CDHaLu_DinhLotChanKhayRanhThang = CDHaLu_DinhLotChanKhayRanhThang(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinRanhThang_CauTaoChanKhay, item.CDHaLu_DayDongChay, item.ThongTinRanhThang_CCaoMongChanKhay);
+                item.CDHaLu_DinhLotRanhThang = CDHaLu_DinhLotRanhThang(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDHaLu_DayDongChay, item.ThongTinRanhThang_CCaoMong);
+                item.CDHaLu_DinhLotGop = CDHaLu_DinhLotGop(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDHaLu_DayDongChay, item.ThongTinRanhThang_CCaoMong, item.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, item.CDHaLu_DinhMongCongTron, item.ThongTinCauTaoCongTron_CCaoMong, item.CDHaLu_DinhMongCongHop, item.TTKTHHCongHopRanh_CCaoMong, item.CDHaLu_DinhMongRanh);
+                item.CDHaLu_DayDaoRanhThang = CDHaLu_DayDaoRanhThang(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDHaLu_DinhLotRanhThang, item.ThongTinRanhThang_CCaoLot, item.CDHaLu_DayDongChay);
+                item.CDHaLu_DayDaoChanKhayRanhThang = CDHaLu_DayDaoChanKhayRanhThang(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinRanhThang_CauTaoChanKhay, item.CDHaLu_DinhLotChanKhayRanhThang, item.ThongTinRanhThang_CCaoLotChanKhay, item.CDHaLu_DayDongChay);
+                item.CDHaLu_DayDaoGiangDinhRanhThang = CDHaLu_DayDaoGiangDinhRanhThang(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinRanhThang_CauTaoGiangDinh, item.CDHaLu_DinhLotGiangDinhRanhThang, item.ThongTinRanhThang_CCaoLotGiangDinh, item.CDHaLu_DinhRanhThang);
+                item.CDHaLu_DayDaoOngNhua = CDHaLu_DayDaoOngNhua(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDHaLu_DayDongChay, item.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, item.CDHaLu_DinhLotOngNhua, item.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat);
+                item.CDHaLu_DayDaoRanh = CDHaLu_DayDaoRanh(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.CDHaLu_DinhLotRanh, item.TTKTHHCongHopRanh_CCaoLotMong);
+                item.CDHaLu_DayDaoCongHop = CDHaLu_DayDaoCongHop(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDHaLu_DayDongChay, item.TTKTHHCongHopRanh_CCaoDe, item.CDHaLu_DinhLotCongHop, item.TTKTHHCongHopRanh_CCaoLotMong);
+                item.CDHaLu_DayDaoCongTron = CDHaLu_DayDaoCongTron(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDHaLu_DayDongChay, item.ThongTinCauTaoCongTron_CDayPhuBi, item.CDHaLu_DinhDeCong, item.ThongTinCauTaoCongTron_CCaoDe, item.CDHaLu_DinhLotCongTron, item.ThongTinCauTaoCongTron_CCaoLotMong);
+                item.CDHaLu_DayDaoGop = CDHaLu_DayDaoGop(item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.ThongTinMongDuongTruyenDan_LoaiMong, item.CDHaLu_DayDongChay, item.ThongTinCauTaoCongTron_CDayPhuBi, item.CDHaLu_DinhDeCong, item.ThongTinCauTaoCongTron_CCaoDe, item.CDHaLu_DinhLotCongTron, item.ThongTinCauTaoCongTron_CCaoLotMong);
+                item.CDHaLu_ChieuSauDao = CDHaLu_ChieuSauDao(item.CDHaLu_DayDaoGop, item.CDHaLu_HienTrangTruocKhiDaoHaLuu);
+
+                item.TTVLDCongRanh_TLChieuCaoDaoDat = TTVLDCongRanh_TLChieuCaoDaoDat(item.TTVLDCongRanh_LoaiVatLieuDao, item.CDThuongLuu_ChieuSauDao, item.TTVLDCongRanh_TLChieuCaoDaoDa);
+                item.TTVLDCongRanh_TLTongChieuSauDao = item.TTVLDCongRanh_TLChieuCaoDaoDa + item.TTVLDCongRanh_TLChieuCaoDaoDat;
+                item.TTVLDCongRanh_HLChieuCaoDaoDat = TTVLDCongRanh_HLChieuCaoDaoDat(item.TTVLDCongRanh_LoaiVatLieuDao, item.CDHaLu_ChieuSauDao, item.TTVLDCongRanh_HLChieuCaoDaoDa);
+                item.TTVLDCongRanh_HLTongChieuSauDao = item.TTVLDCongRanh_HLChieuCaoDaoDa + item.TTVLDCongRanh_HLChieuCaoDaoDat;
+
+                item.TTCCCCT_CCaoLotDatTLuu = TTCCCCT_CCaoLotDatTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDat, item.ThongTinCauTaoCongTron_CCaoLotMong);
+                item.TTCCCCT_CCaoLotDatHLuu = TTCCCCT_CCaoLotDatHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDat, item.ThongTinCauTaoCongTron_CCaoLotMong);
+                item.TTCCCCT_CCaoLotDatMongTBinh = (item.TTCCCCT_CCaoLotDatTLuu + item.TTCCCCT_CCaoLotDatHLuu) / 2;
+                item.TTCCCCT_CCaoLotDaTLuu = TTCCCCT_CCaoLotDaTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDa, item.TTVLDCongRanh_TLTongChieuSauDao, item.TTCCCCT_CCaoLotDatTLuu, item.ThongTinCauTaoCongTron_CCaoLotMong);
+                item.TTCCCCT_CCaoLotDaHLuu = TTCCCCT_CCaoLotDaHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDa, item.TTVLDCongRanh_HLTongChieuSauDao, item.TTCCCCT_CCaoLotDatHLuu, item.ThongTinCauTaoCongTron_CCaoLotMong);
+                item.TTCCCCT_CCaoLotDaMongTBinh = (item.TTCCCCT_CCaoLotDaTLuu + item.TTCCCCT_CCaoLotDaHLuu) / 2;
+                item.TTCCCCT_CCaoMongDatTLuu = TTCCCCT_CCaoMongDatTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDat, item.ThongTinCauTaoCongTron_CCaoLotMong, item.ThongTinCauTaoCongTron_CCaoMong);
+                item.TTCCCCT_CCaoMongDatHLuu = TTCCCCT_CCaoMongDatHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDat, item.ThongTinCauTaoCongTron_CCaoLotMong, item.ThongTinCauTaoCongTron_CCaoMong);
+                item.TTCCCCT_CCaoMongDatTBinh = (item.TTCCCCT_CCaoMongDatTLuu + item.TTCCCCT_CCaoMongDatHLuu) / 2;
+                item.TTCCCCT_CCaoMongDaTLuu = TTCCCCT_CCaoMongDaTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDa, item.ThongTinCauTaoCongTron_CCaoLotMong, item.ThongTinCauTaoCongTron_CCaoMong, item.TTVLDCongRanh_TLTongChieuSauDao, item.TTCCCCT_CCaoMongDatTLuu, item.TTCCCCT_CCaoLotDaTLuu);
+                item.TTCCCCT_CCaoMongDaHLuu = TTCCCCT_CCaoMongDaHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDa, item.ThongTinCauTaoCongTron_CCaoLotMong, item.ThongTinCauTaoCongTron_CCaoMong, item.TTVLDCongRanh_HLTongChieuSauDao, item.TTCCCCT_CCaoMongDatHLuu, item.TTCCCCT_CCaoLotDaHLuu);
+                item.TTCCCCT_CCaoMongDaTBinh = (item.TTCCCCT_CCaoMongDaTLuu + item.TTCCCCT_CCaoMongDaHLuu) / 2;
+                item.TTCCCCT_CCaoDeDatTLuu = TTCCCCT_CCaoDeDatTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDat, item.ThongTinCauTaoCongTron_CCaoLotMong, item.ThongTinCauTaoCongTron_CCaoMong, item.ThongTinCauTaoCongTron_CCaoDe);
+                item.TTCCCCT_CCaoDeDatHLuu = TTCCCCT_CCaoDeDatHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDat, item.ThongTinCauTaoCongTron_CCaoLotMong, item.ThongTinCauTaoCongTron_CCaoMong, item.ThongTinCauTaoCongTron_CCaoDe);
+                item.TTCCCCT_CCaoDeDatTBinh = (item.TTCCCCT_CCaoDeDatTLuu + item.TTCCCCT_CCaoDeDatHLuu) / 2;
+                item.TTCCCCT_CCaoDeDaTLuu = TTCCCCT_CCaoDeDaTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDa, item.ThongTinCauTaoCongTron_CCaoLotMong, item.ThongTinCauTaoCongTron_CCaoMong, item.ThongTinCauTaoCongTron_CCaoDe, item.TTVLDCongRanh_TLTongChieuSauDao, item.TTCCCCT_CCaoDeDatTLuu, item.TTCCCCT_CCaoLotDaTLuu, item.TTCCCCT_CCaoMongDaTLuu);
+                item.TTCCCCT_CCaoDeDaHLuu = TTCCCCT_CCaoDeDaHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDa, item.ThongTinCauTaoCongTron_CCaoLotMong, item.ThongTinCauTaoCongTron_CCaoMong, item.ThongTinCauTaoCongTron_CCaoDe, item.TTVLDCongRanh_HLTongChieuSauDao, item.TTCCCCT_CCaoDeDatHLuu, item.TTCCCCT_CCaoLotDaHLuu, item.TTCCCCT_CCaoMongDaHLuu);
+                item.TTCCCCT_CCaoDeDaTBinh = (item.TTCCCCT_CCaoDeDaTLuu + item.TTCCCCT_CCaoDeDaHLuu) / 2;
+                item.TTCCCCT_CCaoCongDatTLuu = TTCCCCT_CCaoCongDatTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDat, item.ThongTinCauTaoCongTron_CCaoLotMong, item.ThongTinCauTaoCongTron_CCaoMong, item.ThongTinCauTaoCongTron_CCaoDe, item.ThongTinCauTaoCongTron_TongCCaoCong);
+                item.TTCCCCT_CCaoCongDatHLuu = TTCCCCT_CCaoCongDatHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDat, item.ThongTinCauTaoCongTron_CCaoLotMong, item.ThongTinCauTaoCongTron_CCaoMong, item.ThongTinCauTaoCongTron_CCaoDe, item.ThongTinCauTaoCongTron_TongCCaoCong);
+                item.TTCCCCT_CCongCongDatTBinh = (item.TTCCCCT_CCaoCongDatTLuu + item.TTCCCCT_CCaoCongDatHLuu) / 2;
+                item.TTCCCCT_CCaoCongDaTLuu = TTCCCCT_CCaoCongDaTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDa, item.TTVLDCongRanh_TLTongChieuSauDao, item.TTCCCCT_CCaoCongDatTLuu, item.ThongTinCauTaoCongTron_CCaoCauKien, item.ThongTinCauTaoCongTron_TongCCaoCong, item.ThongTinCauTaoCongTron_CCaoLotMong, item.ThongTinCauTaoCongTron_CCaoMong, item.ThongTinCauTaoCongTron_CCaoDe, item.TTCCCCT_CCaoLotDaTLuu, item.TTCCCCT_CCaoMongDaTLuu, item.TTCCCCT_CCaoDeDaTLuu);
+                item.TTCCCCT_CCaoCongDaHLuu = TTCCCCT_CCaoCongDaHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDa, item.TTVLDCongRanh_HLTongChieuSauDao, item.TTCCCCT_CCaoCongDatHLuu, item.ThongTinCauTaoCongTron_CCaoCauKien, item.ThongTinCauTaoCongTron_TongCCaoCong, item.ThongTinCauTaoCongTron_CCaoLotMong, item.ThongTinCauTaoCongTron_CCaoMong, item.ThongTinCauTaoCongTron_CCaoDe, item.TTCCCCT_CCaoLotDaHLuu, item.TTCCCCT_CCaoMongDaHLuu, item.TTCCCCT_CCaoDeDaHLuu);
+                item.TTCCCCT_CCongCongDaTBinh = (item.TTCCCCT_CCaoCongDaTLuu + item.TTCCCCT_CCaoCongDaHLuu) / 2;
+
+                item.TTCCCCCHR_CCaoLotDatTLuu = TTCCCCCHR_CCaoLotDatTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDat, item.TTKTHHCongHopRanh_CCaoLotMong);
+                item.TTCCCCCHR_CCaoLotDatHLuu = TTCCCCCHR_CCaoLotDatHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDat, item.TTKTHHCongHopRanh_CCaoLotMong);
+                item.TTCCCCCHR_CCaoLotDatTBinh = (item.TTCCCCCHR_CCaoLotDatTLuu + item.TTCCCCCHR_CCaoLotDatHLuu) / 2;
+                item.TTCCCCCHR_CCaoLotDaTLuu = TTCCCCCHR_CCaoLotDaTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDa, item.TTVLDCongRanh_TLTongChieuSauDao, item.TTKTHHCongHopRanh_CCaoLotMong, item.TTCCCCCHR_CCaoLotDatTLuu);
+                item.TTCCCCCHR_CCaoLotDaHLuu = TTCCCCCHR_CCaoLotDaHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDa, item.TTVLDCongRanh_HLTongChieuSauDao, item.TTKTHHCongHopRanh_CCaoLotMong, item.TTCCCCCHR_CCaoLotDatHLuu);
+                item.TTCCCCCHR_CCaoLotDaTBinh = (item.TTCCCCCHR_CCaoLotDaTLuu + item.TTCCCCCHR_CCaoLotDaHLuu) / 2;
+                item.TTCCCCCHR_CCaoMongDatTLuu = TTCCCCCHR_CCaoMongDatTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDat, item.TTKTHHCongHopRanh_CCaoLotMong, item.TTKTHHCongHopRanh_CCaoMong);
+                item.TTCCCCCHR_CCaoMongDatHLuu = TTCCCCCHR_CCaoMongDatHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDat, item.TTKTHHCongHopRanh_CCaoLotMong, item.TTKTHHCongHopRanh_CCaoMong);
+                item.TTCCCCCHR_CCaoMongDatTBinh = (item.TTCCCCCHR_CCaoMongDatTLuu + item.TTCCCCCHR_CCaoMongDatHLuu) / 2;
+                item.TTCCCCCHR_CCaoMongDaTLuu = TTCCCCCHR_CCaoMongDaTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDa, item.TTKTHHCongHopRanh_CCaoLotMong, item.TTKTHHCongHopRanh_CCaoMong, item.TTVLDCongRanh_TLTongChieuSauDao, item.TTCCCCCHR_CCaoMongDatTLuu, item.TTCCCCCHR_CCaoLotDaTLuu);
+                item.TTCCCCCHR_CCaoMongDaHLuu = TTCCCCCHR_CCaoMongDaHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDa, item.TTKTHHCongHopRanh_CCaoLotMong, item.TTKTHHCongHopRanh_CCaoMong, item.TTVLDCongRanh_HLTongChieuSauDao, item.TTCCCCCHR_CCaoMongDatHLuu, item.TTCCCCCHR_CCaoLotDaHLuu);
+                item.TTCCCCCHR_CCaoMongDaTBinh = (item.TTCCCCCHR_CCaoMongDaTLuu + item.TTCCCCCHR_CCaoMongDaHLuu) / 2;
+                item.TTCCCCCHR_CCaoTuongDatTLuu = TTCCCCCHR_CCaoTuongDatTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDat, item.TTKTHHCongHopRanh_CCaoLotMong, item.TTKTHHCongHopRanh_CCaoMong, item.TTKTHHCongHopRanh_TongChieuCao);
+                item.TTCCCCCHR_CCaoTuongDatHLuu = TTCCCCCHR_CCaoTuongDatHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDat, item.TTKTHHCongHopRanh_CCaoLotMong, item.TTKTHHCongHopRanh_CCaoMong, item.TTKTHHCongHopRanh_TongChieuCao);
+                item.TTCCCCCHR_CCaoTuongDatTBinh = (item.TTCCCCCHR_CCaoTuongDatTLuu + item.TTCCCCCHR_CCaoTuongDatHLuu) / 2;
+                item.TTCCCCCHR_CCaoTuongDaTLuu = TTCCCCCHR_CCaoTuongDaTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDa, item.TTKTHHCongHopRanh_CCaoLotMong, item.TTKTHHCongHopRanh_CCaoMong, item.TTKTHHCongHopRanh_TongChieuCao, item.TTVLDCongRanh_TLTongChieuSauDao, item.TTCCCCCHR_CCaoTuongDatTLuu, item.TTCCCCCHR_CCaoLotDaTLuu, item.TTCCCCCHR_CCaoMongDaTLuu);
+                item.TTCCCCCHR_CCaoTuongDaHLuu = TTCCCCCHR_CCaoTuongDaHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDa, item.TTKTHHCongHopRanh_CCaoLotMong, item.TTKTHHCongHopRanh_CCaoMong, item.TTKTHHCongHopRanh_TongChieuCao, item.TTVLDCongRanh_HLTongChieuSauDao, item.TTCCCCCHR_CCaoTuongDatHLuu, item.TTCCCCCHR_CCaoLotDaHLuu, item.TTCCCCCHR_CCaoMongDaHLuu);
+                item.TTCCCCCHR_CCaoTuongDaTBinh = (item.TTCCCCCHR_CCaoTuongDaTLuu + item.TTCCCCCHR_CCaoTuongDaHLuu) / 2;
+                item.TTCCCCON_CCaoDemCatDatTLuu = TTCCCCON_CCaoDemCatDatTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDat, item.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat);
+                item.TTCCCCON_CCaoDemCatDatHLuu = TTCCCCON_CCaoDemCatDatHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDat, item.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat);
+                item.TTCCCCON_CCaoDemCatDatTBinh = (item.TTCCCCON_CCaoDemCatDatTLuu + item.TTCCCCON_CCaoDemCatDatHLuu) / 2;
+                item.TTCCCCON_CCaoDemCatDaTLuu = TTCCCCON_CCaoDemCatDaTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDa, item.TTVLDCongRanh_TLTongChieuSauDao, item.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, item.TTCCCCON_CCaoDemCatDatTLuu);
+                item.TTCCCCON_CCaoDemCatDaHLuu = TTCCCCON_CCaoDemCatDaHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDa, item.TTVLDCongRanh_HLTongChieuSauDao, item.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, item.TTCCCCON_CCaoDemCatDatHLuu);
+                item.TTCCCCON_CCaoDemCatDaTBinh = (item.TTCCCCON_CCaoDemCatDaTLuu + item.TTCCCCON_CCaoDemCatDaHLuu) / 2;
+                item.TTCCCCON_CCaoOngDatTLuu = TTCCCCON_CCaoOngDatTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDat, item.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, item.ThongTinKichThuocHinhHocOngNhua_TongCCaoOng);
+                item.TTCCCCON_CCaoOngDatHLuu = TTCCCCON_CCaoOngDatHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDat, item.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, item.ThongTinKichThuocHinhHocOngNhua_TongCCaoOng);
+                item.TTCCCCON_CCaoDatTBinh = (item.TTCCCCON_CCaoOngDatTLuu + item.TTCCCCON_CCaoOngDatHLuu) / 2;
+                item.TTCCCCON_CCaoOngDaTLuu = TTCCCCON_CCaoOngDaTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDa, item.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, item.ThongTinKichThuocHinhHocOngNhua_TongCCaoOng, item.TTVLDCongRanh_TLTongChieuSauDao, item.TTCCCCON_CCaoOngDatTLuu, item.TTCCCCON_CCaoDemCatDaTLuu);
+                item.TTCCCCON_CCaoOngDaHLuu = TTCCCCON_CCaoOngDaHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDa, item.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, item.ThongTinKichThuocHinhHocOngNhua_TongCCaoOng, item.TTVLDCongRanh_HLTongChieuSauDao, item.TTCCCCON_CCaoOngDatHLuu, item.TTCCCCON_CCaoDemCatDaHLuu);
+                item.TTCCCCON_CCaoDaTBinh = (item.TTCCCCON_CCaoOngDaTLuu + item.TTCCCCON_CCaoOngDaHLuu) / 2;
+                item.TTCCCCON_CCaoDapCatDatTLuu = TTCCCCON_CCaoDapCatDatTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDat, item.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, item.ThongTinKichThuocHinhHocOngNhua_TongCCaoOng, item.ThongTinKichThuocHinhHocOngNhua_CCaoDapCat);
+                item.TTCCCCON_CCaoDapCatDatHLuu = TTCCCCON_CCaoDapCatDatHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDat, item.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, item.ThongTinKichThuocHinhHocOngNhua_TongCCaoOng, item.ThongTinKichThuocHinhHocOngNhua_CCaoDapCat);
+                item.TTCCCCON_CCaoDapCatDatTBinh = (item.TTCCCCON_CCaoDapCatDatTLuu + item.TTCCCCON_CCaoDapCatDatHLuu) / 2;
+                item.TTCCCCON_CCaoDapCatDaTLuu = TTCCCCON_CCaoDapCatDaTLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDa, item.ThongTinKichThuocHinhHocOngNhua_TongCCaoOng, item.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, item.ThongTinKichThuocHinhHocOngNhua_CCaoDapCat, item.TTVLDCongRanh_TLTongChieuSauDao, item.TTCCCCON_CCaoDapCatDatTLuu, item.TTCCCCON_CCaoDemCatDaTLuu, item.TTCCCCON_CCaoOngDaTLuu);
+                item.TTCCCCON_CCaoDapCatDaHLuu = TTCCCCON_CCaoDapCatDaHLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDa, item.ThongTinKichThuocHinhHocOngNhua_TongCCaoOng, item.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, item.ThongTinKichThuocHinhHocOngNhua_CCaoDapCat, item.TTVLDCongRanh_HLTongChieuSauDao, item.TTCCCCON_CCaoDapCatDatHLuu, item.TTCCCCON_CCaoDemCatDaTLuu, item.TTCCCCON_CCaoOngDaTLuu);
+                item.TTCCCCON_CCaoDapCatDaTBinh = (item.TTCCCCON_CCaoDapCatDaTLuu + item.TTCCCCON_CCaoDapCatDaHLuu) / 2;
+                item.TTCCRT_LotDatThuongLuu = TTCCRT_LotDatThuongLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDat, item.ThongTinRanhThang_CCaoLot);
+                item.TTCCRT_LotDatHaLuu = TTCCRT_LotDatHaLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDat, item.ThongTinRanhThang_CCaoLot);
+                item.TTCCRT_LotDatTrungBinh = (item.TTCCRT_LotDatThuongLuu + item.TTCCRT_LotDatHaLuu) / 2;
+                item.TTCCRT_LotDaThuongLuu = TTCCRT_LotDaThuongLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDa, item.TTVLDCongRanh_TLTongChieuSauDao, item.ThongTinRanhThang_CCaoLot, item.TTCCRT_LotDatThuongLuu);
+                item.TTCCRT_LotDaHaLuu = TTCCRT_LotDaHaLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDa, item.TTVLDCongRanh_HLTongChieuSauDao, item.ThongTinRanhThang_CCaoLot, item.TTCCRT_LotDatHaLuu);
+                item.TTCCRT_LotDaTrungBinh = (item.TTCCRT_LotDaThuongLuu + item.TTCCRT_LotDaHaLuu) / 2;
+                item.TTCCRT_MongDatThuongLuu = TTCCRT_MongDatThuongLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDat, item.ThongTinRanhThang_CCaoLot, item.ThongTinRanhThang_CCaoMong);
+                item.TTCCRT_MongDatHaLuu = TTCCRT_MongDatHaLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDat, item.ThongTinRanhThang_CCaoLot, item.ThongTinRanhThang_CCaoMong);
+                item.TTCCRT_MongDatTrungBinh = (item.TTCCRT_MongDatThuongLuu + item.TTCCRT_MongDatHaLuu) / 2;
+                item.TTCCRT_MongDaThuongLuu = TTCCRT_MongDaThuongLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_TLChieuCaoDaoDa, item.ThongTinRanhThang_CCaoLot, item.ThongTinRanhThang_CCaoMong, item.TTVLDCongRanh_TLTongChieuSauDao, item.TTCCRT_MongDatThuongLuu, item.TTCCRT_LotDaThuongLuu);
+                item.TTCCRT_MongDaHaLuu = TTCCRT_MongDaHaLuu(item.TTVLDCongRanh_LoaiVatLieuDao, item.TTVLDCongRanh_HLChieuCaoDaoDa, item.ThongTinRanhThang_CCaoLot, item.ThongTinRanhThang_CCaoMong, item.TTVLDCongRanh_HLTongChieuSauDao, item.TTCCRT_MongDatHaLuu, item.TTCCRT_LotDaHaLuu);
+                item.TTCCRT_MongDaTrungBinh = (item.TTCCRT_MongDaThuongLuu + item.TTCCRT_MongDaHaLuu) / 2;
+
 
             });
         }
-
         return list;
     }
+
+
+
+
 
 
 
@@ -1289,12 +1698,10 @@
 
         return Math.Round(result, 2);
     }
-
     public double ThongTinCaoDoHoGa_CSauDao(double ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao, double ThongTinCaoDoHoGa_DayDao)
     {
         return Math.Round(ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao - ThongTinCaoDoHoGa_DayDao, 2);
     }
-
     public double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinCaoDoHoGa_CSauDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa)
     {
         ThongTinVatLieuDaoHoGa_LoaiVatLieuDao = GetTenDanhMucById(ThongTinVatLieuDaoHoGa_LoaiVatLieuDao).ToUpper().Trim();
@@ -1803,9 +2210,25 @@
     public int TTTDCongHoRanh_SLCauKienNguyen(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double TTCDSLCauKienDuongTruyenDan_TongChieuDai, double TTTDCongHoRanh_Cdai, double TTTDCongHoRanh_ChieuDaiMoiNoi)
     {
         ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
-        return (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
-            ? (int)(TTCDSLCauKienDuongTruyenDan_TongChieuDai / (TTTDCongHoRanh_Cdai + TTTDCongHoRanh_ChieuDaiMoiNoi))
-            : 0;
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper()
+            || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper()
+            || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
+        {
+            double denominator = TTTDCongHoRanh_Cdai + TTTDCongHoRanh_ChieuDaiMoiNoi;
+            if (denominator != 0)
+            {
+                return (int)(TTCDSLCauKienDuongTruyenDan_TongChieuDai / denominator);
+            }
+            else
+            {
+                // Trường hợp nếu mẫu số bằng 0, trả về 0
+                return 0;
+            }
+        }
+        else
+        {
+            return 0;
+        }
     }
     public double TTTDCongHoRanh_ChieuDaiTheoSoCKNguyen(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double TTTDCongHoRanh_SLCauKienNguyen, double TTTDCongHoRanh_ChieuDaiMoiNoi)
     {
@@ -1837,6 +2260,2202 @@
         }
         return "0";
     }
+
+
+    public double CDThuongLuu_DinhDeCong(string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi)
+    {
+        ThongTinMongDuongTruyenDan_LoaiMong = GetTenDanhMucById(ThongTinMongDuongTruyenDan_LoaiMong).ToUpper().Trim();
+        if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông kết hợp đế".ToUpper() || ThongTinMongDuongTruyenDan_LoaiMong == "Đế".ToUpper())
+        {
+            return CDThuongLuu_DayDongChay - ThongTinCauTaoCongTron_CDayPhuBi;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double CDThuongLuu_DinhMongRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if ((ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() && ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper()) ||
+            (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper() && ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper()))
+        {
+            return CDThuongLuu_DayDongChay;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double CDThuongLuu_DinhMongCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double TTKTHHCongHopRanh_CCaoDe)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper() && ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+        {
+            return CDThuongLuu_DayDongChay - TTKTHHCongHopRanh_CCaoDe;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double CDThuongLuu_DinhMongCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDThuongLuu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống tròn".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                return CDThuongLuu_DayDongChay - ThongTinCauTaoCongTron_CDayPhuBi;
+            }
+            else if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông kết hợp đế".ToUpper())
+            {
+                return CDThuongLuu_DinhDeCong - ThongTinCauTaoCongTron_CCaoDe;
+            }
+        }
+        return 0;
+    }
+    public double CDThuongLuu_DinhMongChanKhay(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinRanhThang_CauTaoChanKhay, double CDThuongLuu_DayDongChay)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper())
+        {
+            if (ThongTinRanhThang_CauTaoChanKhay == "Bê tông".ToUpper() || ThongTinRanhThang_CauTaoChanKhay == "Bê tông cốt thép".ToUpper())
+            {
+                return CDThuongLuu_DayDongChay;
+            }
+        }
+        return 0;
+    }
+    public double CDThuongLuu_DinhMongRanhThang(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper() && ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+        {
+            return CDThuongLuu_DayDongChay;
+        }
+        return 0;
+    }
+    public double CDThuongLuu_DinhMongGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDThuongLuu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe, double TTKTHHCongHopRanh_CCaoDe)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                return CDThuongLuu_DayDongChay;
+            }
+            return 0;
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống tròn".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                return CDThuongLuu_DayDongChay - ThongTinCauTaoCongTron_CDayPhuBi;
+            }
+            else if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông kết hợp đế".ToUpper())
+            {
+                return CDThuongLuu_DinhDeCong - ThongTinCauTaoCongTron_CCaoDe;
+            }
+            return 0;
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                return CDThuongLuu_DayDongChay - TTKTHHCongHopRanh_CCaoDe;
+            }
+            return 0;
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper())
+        {
+            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() && ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                return CDThuongLuu_DayDongChay;
+            }
+            else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper() && ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                return CDThuongLuu_DayDongChay;
+            }
+            return 0;
+        }
+        return 0;
+    }
+    public double CDThuongLuu_DinhLotRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DinhMongRanh, double TTKTHHCongHopRanh_CCaoMong)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if ((ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper()) && ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+        {
+            return CDThuongLuu_DinhMongRanh - TTKTHHCongHopRanh_CCaoMong;
+        }
+        return 0;
+    }
+    public double CDThuongLuu_DinhLotCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DinhMongCongHop, double TTKTHHCongHopRanh_CCaoMong)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper() && ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+        {
+            return CDThuongLuu_DinhMongCongHop - TTKTHHCongHopRanh_CCaoMong;
+        }
+        return 0;
+    }
+    public double CDThuongLuu_DinhLotCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DinhMongCongTron, double ThongTinCauTaoCongTron_CCaoMong)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống tròn".ToUpper() && (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper() || ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông kết hợp đế".ToUpper()))
+        {
+            return CDThuongLuu_DinhMongCongTron - ThongTinCauTaoCongTron_CCaoMong;
+        }
+        return 0;
+    }
+    public double CDThuongLuu_DinhLotOngNhua(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Ống nhựa".ToUpper() && ThongTinMongDuongTruyenDan_LoaiMong == "Đắp cát".ToUpper())
+        {
+            return CDThuongLuu_DayDongChay - ThongTinKichThuocHinhHocOngNhua_CDayPhuBi;
+        }
+        return 0;
+    }
+    public double CDThuongLuu_DinhLotGiangDinhRanhThang(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinRanhThang_CauTaoGiangDinh, double CDThuongLuu_DinhRanhThang, double ThongTinRanhThang_CCaoMongGiangDinh)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper() && (ThongTinRanhThang_CauTaoGiangDinh == "Bê tông".ToUpper() || ThongTinRanhThang_CauTaoGiangDinh == "Bê tông cốt thép".ToUpper()))
+        {
+            return CDThuongLuu_DinhRanhThang - ThongTinRanhThang_CCaoMongGiangDinh;
+        }
+        return 0;
+    }
+    public double CDThuongLuu_DinhLotChanKhayRanhThang(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinRanhThang_CauTaoChanKhay, double CDThuongLuu_DayDongChay, double ThongTinRanhThang_CCaoMongChanKhay)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper() && (ThongTinRanhThang_CauTaoChanKhay == "Bê tông".ToUpper() || ThongTinRanhThang_CauTaoChanKhay == "Bê tông cốt thép".ToUpper()))
+        {
+            return CDThuongLuu_DayDongChay - ThongTinRanhThang_CCaoMongChanKhay;
+        }
+        return 0;
+    }
+    public double CDThuongLuu_DinhLotRanhThang(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double ThongTinRanhThang_CCaoMong)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper() && ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+        {
+            return CDThuongLuu_DayDongChay - ThongTinRanhThang_CCaoMong;
+        }
+        return 0;
+    }
+    public double CDThuongLuu_DinhLotGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double ThongTinRanhThang_CCaoMong, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDThuongLuu_DinhMongCongTron, double ThongTinCauTaoCongTron_CCaoMong, double CDThuongLuu_DinhMongCongHop, double TTKTHHCongHopRanh_CCaoMong, double CDThuongLuu_DinhMongRanh)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                return CDThuongLuu_DayDongChay - ThongTinRanhThang_CCaoMong;
+            }
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Ống nhựa".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Đắp cát".ToUpper())
+            {
+                return CDThuongLuu_DayDongChay - ThongTinKichThuocHinhHocOngNhua_CDayPhuBi;
+            }
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống tròn".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper() || ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông kết hợp đế".ToUpper())
+            {
+                return CDThuongLuu_DinhMongCongTron - ThongTinCauTaoCongTron_CCaoMong;
+            }
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                return CDThuongLuu_DinhMongCongHop - TTKTHHCongHopRanh_CCaoMong;
+            }
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                return CDThuongLuu_DinhMongRanh - TTKTHHCongHopRanh_CCaoMong;
+            }
+        }
+
+        return 0;
+    }
+    public double CDThuongLuu_DayDaoRanhThang(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DinhLotRanhThang, double ThongTinRanhThang_CCaoLot, double CDThuongLuu_DayDongChay)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                return CDThuongLuu_DinhLotRanhThang - ThongTinRanhThang_CCaoLot;
+            }
+            else
+            {
+                return CDThuongLuu_DayDongChay;
+            }
+        }
+        return 0;
+    }
+    public double CDThuongLuu_DayDaoChanKhayRanhThang(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinRanhThang_CauTaoChanKhay, double CDThuongLuu_DinhLotChanKhayRanhThang, double ThongTinRanhThang_CCaoLotChanKhay, double CDThuongLuu_DayDongChay)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper())
+        {
+            if (ThongTinRanhThang_CauTaoChanKhay == "Bê tông".ToUpper() || ThongTinRanhThang_CauTaoChanKhay == "Bê tông cốt thép".ToUpper())
+            {
+                return CDThuongLuu_DinhLotChanKhayRanhThang - ThongTinRanhThang_CCaoLotChanKhay;
+            }
+            else
+            {
+                return CDThuongLuu_DayDongChay;
+            }
+        }
+        return 0;
+    }
+    public double CDThuongLuu_DayDaoGiangDinhRanhThang(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinRanhThang_CauTaoGiangDinh, double CDThuongLuu_DinhLotGiangDinhRanhThang, double ThongTinRanhThang_CCaoLotGiangDinh, double CDThuongLuu_DinhRanhThang)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper())
+        {
+            if (ThongTinRanhThang_CauTaoGiangDinh == "Bê tông".ToUpper() || ThongTinRanhThang_CauTaoGiangDinh == "Bê tông cốt thép".ToUpper())
+            {
+                return CDThuongLuu_DinhLotGiangDinhRanhThang - ThongTinRanhThang_CCaoLotGiangDinh;
+            }
+            else
+            {
+                return CDThuongLuu_DinhRanhThang;
+            }
+        }
+        return 0;
+    }
+    public double CDThuongLuu_DayDaoOngNhua(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDThuongLuu_DinhLotOngNhua, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Ống nhựa".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Không đắp cát".ToUpper())
+            {
+                return CDThuongLuu_DayDongChay - ThongTinKichThuocHinhHocOngNhua_CDayPhuBi;
+            }
+            else if (ThongTinMongDuongTruyenDan_LoaiMong == "Đắp cát".ToUpper())
+            {
+                return CDThuongLuu_DinhLotOngNhua - ThongTinKichThuocHinhHocOngNhua_CCaoDemCat;
+            }
+        }
+        return 0;
+    }
+    public double CDThuongLuu_DayDaoRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhLotRanh, double TTKTHHCongHopRanh_CCaoLotMong)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper())
+        {
+            return CDThuongLuu_DinhLotRanh - TTKTHHCongHopRanh_CCaoLotMong;
+        }
+        return 0;
+    }
+    public double CDThuongLuu_DayDaoCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double TTKTHHCongHopRanh_CCaoDe, double CDThuongLuu_DinhLotCongHop, double TTKTHHCongHopRanh_CCaoLotMong)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Không có móng".ToUpper())
+            {
+                return CDThuongLuu_DayDongChay - TTKTHHCongHopRanh_CCaoDe;
+            }
+            else if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                return CDThuongLuu_DinhLotCongHop - TTKTHHCongHopRanh_CCaoLotMong;
+            }
+        }
+        return 0;
+    }
+    public double CDThuongLuu_DayDaoCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDThuongLuu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe, double CDThuongLuu_DinhLotCongTron, double ThongTinCauTaoCongTron_CCaoLotMong)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống tròn".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Không có móng".ToUpper())
+            {
+                return CDThuongLuu_DayDongChay - ThongTinCauTaoCongTron_CDayPhuBi;
+            }
+            else if (ThongTinMongDuongTruyenDan_LoaiMong == "Đế".ToUpper())
+            {
+                return CDThuongLuu_DinhDeCong - ThongTinCauTaoCongTron_CCaoDe;
+            }
+            else if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper() || ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông kết hợp đế".ToUpper())
+            {
+                return CDThuongLuu_DinhLotCongTron - ThongTinCauTaoCongTron_CCaoLotMong;
+            }
+        }
+        return 0;
+    }
+    public double CDThuongLuu_DayDaoGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDThuongLuu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe, double CDThuongLuu_DinhLotCongTron, double ThongTinCauTaoCongTron_CCaoLotMong, double TTKTHHCongHopRanh_CCaoDe, double CDThuongLuu_DinhLotCongHop, double TTKTHHCongHopRanh_CCaoLotMong, double CDThuongLuu_DinhLotRanh, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDThuongLuu_DinhLotOngNhua, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, double CDThuongLuu_DinhLotRanhThang, double ThongTinRanhThang_CCaoLot)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống tròn".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Không có móng".ToUpper())
+            {
+                return Math.Round(CDThuongLuu_DayDongChay - ThongTinCauTaoCongTron_CDayPhuBi, 2);
+            }
+            else if (ThongTinMongDuongTruyenDan_LoaiMong == "Đế".ToUpper())
+            {
+                return Math.Round(CDThuongLuu_DinhDeCong - ThongTinCauTaoCongTron_CCaoDe, 2);
+            }
+            else if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper() || ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông kết hợp đế".ToUpper())
+            {
+                return Math.Round(CDThuongLuu_DinhLotCongTron - ThongTinCauTaoCongTron_CCaoLotMong, 2);
+            }
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Không có móng".ToUpper())
+            {
+                return Math.Round(CDThuongLuu_DayDongChay - TTKTHHCongHopRanh_CCaoDe, 2);
+            }
+            else if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                return Math.Round(CDThuongLuu_DinhLotCongHop - TTKTHHCongHopRanh_CCaoLotMong, 2);
+            }
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper())
+        {
+            return Math.Round(CDThuongLuu_DinhLotRanh - TTKTHHCongHopRanh_CCaoLotMong, 2);
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Ống nhựa".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Không đắp cát".ToUpper())
+            {
+                return Math.Round(CDThuongLuu_DayDongChay - ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, 2);
+            }
+            else if (ThongTinMongDuongTruyenDan_LoaiMong == "Đắp cát".ToUpper())
+            {
+                return Math.Round(CDThuongLuu_DinhLotOngNhua - ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, 2);
+            }
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                return Math.Round(CDThuongLuu_DinhLotRanhThang - ThongTinRanhThang_CCaoLot, 2);
+            }
+            else
+            {
+                return Math.Round(CDThuongLuu_DayDongChay, 2);
+            }
+        }
+
+        return 0;
+    }
+    public double CDThuongLuu_ChieuSauDao(double CDThuongLuu_HienTrangTruocKhiDaoThuongLuu, double CDThuongLuu_DayDaoGop)
+    {
+        return CDThuongLuu_DayDaoGop > 0 ? CDThuongLuu_HienTrangTruocKhiDaoThuongLuu - CDThuongLuu_DayDaoGop : 0;
+    }
+
+
+    public double CDHaLu_DinhRanhThang(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DayDongChay, double CDHaLu_ChieuCaoRanhThangTuDayDongChayDenDinh)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        return ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper() ? Math.Round(CDHaLu_DayDongChay + CDHaLu_ChieuCaoRanhThangTuDayDongChayDenDinh, 2) : 0;
+    }
+    public double CDHaLu_DinhDapCat(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhOngNhua, double ThongTinKichThuocHinhHocOngNhua_CCaoDapCat)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        return ThongTinDuongTruyenDan_HinhThucTruyenDan == "Ống nhựa".ToUpper() ? Math.Round(CDHaLu_DinhOngNhua + ThongTinKichThuocHinhHocOngNhua_CCaoDapCat, 2) : 0;
+    }
+    public double CDHaLu_DinhOngNhua(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        return ThongTinDuongTruyenDan_HinhThucTruyenDan == "Ống nhựa".ToUpper() ? Math.Round(CDHaLu_DinhTrongLongSuDung + ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, 2) : 0;
+    }
+    public double CDHaLu_DinhRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double TTKTHHCongHopRanh_CCaoMuMoThotTren)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        return (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper())
+            ? Math.Round(CDHaLu_DinhTrongLongSuDung + TTKTHHCongHopRanh_CCaoMuMoThotTren, 2)
+            : 0;
+    }
+    public double CDHaLu_DinhCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double TTKTHHCongHopRanh_CCaoMuMoThotTren)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        return ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper()
+            ? Math.Round(CDHaLu_DinhTrongLongSuDung + TTKTHHCongHopRanh_CCaoMuMoThotTren, 2)
+            : 0;
+    }
+    public double CDHaLu_DinhCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double ThongTinCauTaoCongTron_CDayPhuBi)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        return ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống tròn".ToUpper()
+            ? Math.Round(CDHaLu_DinhTrongLongSuDung + ThongTinCauTaoCongTron_CDayPhuBi, 2)
+            : 0;
+    }
+    public double CDHaLu_DinhGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double ThongTinCauTaoCongTron_CDayPhuBi, double TTKTHHCongHopRanh_CCaoMuMoThotTren, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDHaLu_DayDongChay, double CDHaLu_ChieuCaoRanhThangTuDayDongChayDenDinh)
+    {
+        double result = 0;
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống tròn".ToUpper())
+        {
+            result = CDHaLu_DinhTrongLongSuDung + ThongTinCauTaoCongTron_CDayPhuBi;
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
+        {
+            result = CDHaLu_DinhTrongLongSuDung + TTKTHHCongHopRanh_CCaoMuMoThotTren;
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper())
+        {
+            result = CDHaLu_DinhTrongLongSuDung + TTKTHHCongHopRanh_CCaoMuMoThotTren;
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Ống nhựa".ToUpper())
+        {
+            result = CDHaLu_DinhTrongLongSuDung + ThongTinKichThuocHinhHocOngNhua_CDayPhuBi;
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper())
+        {
+            result = CDHaLu_DayDongChay + CDHaLu_ChieuCaoRanhThangTuDayDongChayDenDinh;
+        }
+
+        return Math.Round(result, 2);
+    }
+    public double CDHaLu_DinhGiangDinhRanhThang(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinRanhThang_CauTaoGiangDinh, double CDHaLu_DinhRanhThang)
+    {
+        double result = 0;
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper() && (ThongTinRanhThang_CauTaoGiangDinh == "Bê tông".ToUpper() || ThongTinRanhThang_CauTaoGiangDinh == "Bê tông cốt thép".ToUpper()))
+        {
+            result = CDHaLu_DinhRanhThang;
+        }
+
+        return Math.Round(result, 2);
+    }
+    public double CDHaLu_DinhMuMoThotDuoiCongHopRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhCongHop, double TTKTHHCongHopRanh_CCaoMuMoThotTren, double CDHaLu_DinhRanh)
+    {
+        double result = 0;
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
+        {
+            result = CDHaLu_DinhCongHop - TTKTHHCongHopRanh_CCaoMuMoThotTren;
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper())
+        {
+            result = CDHaLu_DinhRanh - TTKTHHCongHopRanh_CCaoMuMoThotTren;
+        }
+
+        return Math.Round(result, 2);
+    }
+    public double CDHaLu_DinhTuongCHopRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhMuMoThotDuoiCongHopRanh, double TTKTHHCongHopRanh_CCaoMuMoThotDuoi)
+    {
+        double result = 0;
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
+        {
+            result = CDHaLu_DinhMuMoThotDuoiCongHopRanh - TTKTHHCongHopRanh_CCaoMuMoThotDuoi;
+        }
+
+        return Math.Round(result, 2);
+    }
+    public double CDHaLu_CCaoTuongCongRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTuongCHopRanh, double CDHaLu_DayDongChay)
+    {
+        double result = 0;
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
+        {
+            result = CDHaLu_DinhTuongCHopRanh - CDHaLu_DayDongChay;
+        }
+
+        return Math.Round(result, 2);
+    }
+    public double CDHaLu_DinhDeCong(string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi)
+    {
+        double result = 0;
+        ThongTinMongDuongTruyenDan_LoaiMong = GetTenDanhMucById(ThongTinMongDuongTruyenDan_LoaiMong).ToUpper().Trim();
+        if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông kết hợp đế".ToUpper() || ThongTinMongDuongTruyenDan_LoaiMong == "Đế".ToUpper())
+        {
+            result = CDHaLu_DayDongChay - ThongTinCauTaoCongTron_CDayPhuBi;
+        }
+
+        return Math.Round(result, 2);
+    }
+    public double CDHaLu_DinhMongRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay)
+    {
+        double result = 0;
+        ThongTinMongDuongTruyenDan_LoaiMong = GetTenDanhMucById(ThongTinMongDuongTruyenDan_LoaiMong).ToUpper().Trim();
+        if ((ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper()) && ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+        {
+            result = CDHaLu_DayDongChay;
+        }
+
+        return result;
+    }
+    public double CDHaLu_DinhMongCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double TTKTHHCongHopRanh_CCaoDe)
+    {
+        double result = 0;
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper() && ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+        {
+            result = CDHaLu_DayDongChay - TTKTHHCongHopRanh_CCaoDe;
+        }
+
+        return result;
+    }
+    public double CDHaLu_DinhMongCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDHaLu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe)
+    {
+        double result = 0;
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống tròn".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                result = CDHaLu_DayDongChay - ThongTinCauTaoCongTron_CDayPhuBi;
+            }
+            else if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông kết hợp đế".ToUpper())
+            {
+                result = CDHaLu_DinhDeCong - ThongTinCauTaoCongTron_CCaoDe;
+            }
+        }
+
+        return result;
+    }
+    public double CDHaLu_DinhMongChanKhay(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinRanhThang_CauTaoChanKhay, double CDHaLu_DayDongChay)
+    {
+        double result = 0;
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper() && (ThongTinRanhThang_CauTaoChanKhay == "Bê tông".ToUpper() || ThongTinRanhThang_CauTaoChanKhay == "Bê tông cốt thép".ToUpper()))
+        {
+            result = CDHaLu_DayDongChay;
+        }
+
+        return result;
+    }
+    public double CDHaLu_DinhMongRanhThang(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay)
+    {
+        double result = 0;
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper() && ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+        {
+            result = CDHaLu_DayDongChay;
+        }
+
+        return result;
+    }
+    public double CDHaLu_DinhMongGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDHaLu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe, double TTKTHHCongHopRanh_CCaoDe)
+    {
+        double result = 0;
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                result = CDHaLu_DayDongChay;
+            }
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống tròn".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                result = CDHaLu_DayDongChay - ThongTinCauTaoCongTron_CDayPhuBi;
+            }
+            else if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông kết hợp đế".ToUpper())
+            {
+                result = CDHaLu_DinhDeCong - ThongTinCauTaoCongTron_CCaoDe;
+            }
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                result = CDHaLu_DayDongChay - TTKTHHCongHopRanh_CCaoDe;
+            }
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                result = CDHaLu_DayDongChay;
+            }
+        }
+
+        return result;
+    }
+    public double CDHaLu_DinhLotRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DinhMongRanh, double TTKTHHCongHopRanh_CCaoMong)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if ((ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper()) && ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+        {
+            return CDHaLu_DinhMongRanh - TTKTHHCongHopRanh_CCaoMong;
+        }
+
+        return 0;
+    }
+    public double CDHaLu_DinhLotCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DinhMongCongHop, double TTKTHHCongHopRanh_CCaoMong)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper() && ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+        {
+            return CDHaLu_DinhMongCongHop - TTKTHHCongHopRanh_CCaoMong;
+        }
+
+        return 0;
+    }
+    public double CDHaLu_DinhLotCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DinhMongCongTron, double ThongTinCauTaoCongTron_CCaoMong)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống tròn".ToUpper() && (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper() || ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông kết hợp đế".ToUpper()))
+        {
+            return CDHaLu_DinhMongCongTron - ThongTinCauTaoCongTron_CCaoMong;
+        }
+
+        return 0;
+    }
+    public double CDHaLu_DinhLotOngNhua(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Ống nhựa".ToUpper() && ThongTinMongDuongTruyenDan_LoaiMong == "Đắp cát".ToUpper())
+        {
+            return CDHaLu_DayDongChay - ThongTinKichThuocHinhHocOngNhua_CDayPhuBi;
+        }
+
+        return 0;
+    }
+    public double CDHaLu_DinhLotGiangDinhRanhThang(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinRanhThang_CauTaoGiangDinh, double CDHaLu_DinhRanhThang, double ThongTinRanhThang_CCaoMongGiangDinh)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper() && (ThongTinRanhThang_CauTaoGiangDinh == "Bê tông".ToUpper() || ThongTinRanhThang_CauTaoGiangDinh == "Bê tông cốt thép".ToUpper()))
+        {
+            return CDHaLu_DinhRanhThang - ThongTinRanhThang_CCaoMongGiangDinh;
+        }
+
+        return 0;
+    }
+    public double CDHaLu_DinhLotChanKhayRanhThang(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinRanhThang_CauTaoChanKhay, double CDHaLu_DayDongChay, double ThongTinRanhThang_CCaoMongChanKhay)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper() && (ThongTinRanhThang_CauTaoChanKhay == "Bê tông".ToUpper() || ThongTinRanhThang_CauTaoChanKhay == "Bê tông cốt thép".ToUpper()))
+        {
+            return CDHaLu_DayDongChay - ThongTinRanhThang_CCaoMongChanKhay;
+        }
+        return 0;
+    }
+    public double CDHaLu_DinhLotRanhThang(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinRanhThang_CCaoMong)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper() && ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+        {
+            return CDHaLu_DayDongChay - ThongTinRanhThang_CCaoMong;
+        }
+
+        return 0;
+    }
+    public double CDHaLu_DinhLotGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinRanhThang_CCaoMong, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDHaLu_DinhMongCongTron, double ThongTinCauTaoCongTron_CCaoMong, double CDHaLu_DinhMongCongHop, double TTKTHHCongHopRanh_CCaoMong, double CDHaLu_DinhMongRanh)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                return CDHaLu_DayDongChay - ThongTinRanhThang_CCaoMong;
+            }
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Ống nhựa".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Đắp cát".ToUpper())
+            {
+                return CDHaLu_DayDongChay - ThongTinKichThuocHinhHocOngNhua_CDayPhuBi;
+            }
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống tròn".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper() || ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông kết hợp đế".ToUpper())
+            {
+                return CDHaLu_DinhMongCongTron - ThongTinCauTaoCongTron_CCaoMong;
+            }
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                return CDHaLu_DinhMongCongHop - TTKTHHCongHopRanh_CCaoMong;
+            }
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                return CDHaLu_DinhMongRanh - TTKTHHCongHopRanh_CCaoMong;
+            }
+        }
+
+        return 0;
+    }
+    public double CDHaLu_DayDaoRanhThang(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DinhLotRanhThang, double ThongTinRanhThang_CCaoLot, double CDHaLu_DayDongChay)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+            {
+                return CDHaLu_DinhLotRanhThang - ThongTinRanhThang_CCaoLot;
+            }
+            else
+            {
+                return CDHaLu_DayDongChay;
+            }
+        }
+
+        return 0;
+    }
+    public double CDHaLu_DayDaoChanKhayRanhThang(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinRanhThang_CauTaoChanKhay, double CDHaLu_DinhLotChanKhayRanhThang, double ThongTinRanhThang_CCaoLotChanKhay, double CDHaLu_DayDongChay)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper())
+        {
+            if (ThongTinRanhThang_CauTaoChanKhay == "Bê tông".ToUpper() || ThongTinRanhThang_CauTaoChanKhay == "Bê tông cốt thép".ToUpper())
+            {
+                return CDHaLu_DinhLotChanKhayRanhThang - ThongTinRanhThang_CCaoLotChanKhay;
+            }
+            else
+            {
+                return CDHaLu_DayDongChay;
+            }
+        }
+
+        return 0;
+    }
+    public double CDHaLu_DayDaoGiangDinhRanhThang(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinRanhThang_CauTaoGiangDinh, double CDHaLu_DinhLotGiangDinhRanhThang, double ThongTinRanhThang_CCaoLotGiangDinh, double CDHaLu_DinhRanhThang)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper())
+        {
+            if (ThongTinRanhThang_CauTaoGiangDinh == "Bê tông".ToUpper() || ThongTinRanhThang_CauTaoGiangDinh == "Bê tông cốt thép".ToUpper())
+            {
+                return CDHaLu_DinhLotGiangDinhRanhThang - ThongTinRanhThang_CCaoLotGiangDinh;
+            }
+            else
+            {
+                return CDHaLu_DinhRanhThang;
+            }
+        }
+
+        return 0;
+    }
+    public double CDHaLu_DayDaoOngNhua(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDHaLu_DinhLotOngNhua, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Ống nhựa".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Không đắp cát".ToUpper())
+            {
+                return CDHaLu_DayDongChay - ThongTinKichThuocHinhHocOngNhua_CDayPhuBi;
+            }
+            else if (ThongTinMongDuongTruyenDan_LoaiMong == "Đắp cát".ToUpper())
+            {
+                return CDHaLu_DinhLotOngNhua - ThongTinKichThuocHinhHocOngNhua_CCaoDemCat;
+            }
+        }
+
+        return 0;
+    }
+    public double CDHaLu_DayDaoRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhLotRanh, double TTKTHHCongHopRanh_CCaoLotMong)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper())
+        {
+            return CDHaLu_DinhLotRanh - TTKTHHCongHopRanh_CCaoLotMong;
+        }
+
+        return 0;
+    }
+    public double CDHaLu_DayDaoCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double TTKTHHCongHopRanh_CCaoDe, double CDHaLu_DinhLotCongHop, double TTKTHHCongHopRanh_CCaoLotMong)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper() && ThongTinMongDuongTruyenDan_LoaiMong == "Không có móng".ToUpper())
+        {
+            return CDHaLu_DayDongChay - TTKTHHCongHopRanh_CCaoDe;
+        }
+        else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper() && ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper())
+        {
+            return CDHaLu_DinhLotCongHop - TTKTHHCongHopRanh_CCaoLotMong;
+        }
+
+        return 0;
+    }
+    public double CDHaLu_DayDaoCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDHaLu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe, double CDHaLu_DinhLotCongTron, double ThongTinCauTaoCongTron_CCaoLotMong)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống tròn".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Không có móng".ToUpper())
+            {
+                return CDHaLu_DayDongChay - ThongTinCauTaoCongTron_CDayPhuBi;
+            }
+            else if (ThongTinMongDuongTruyenDan_LoaiMong == "Đế".ToUpper())
+            {
+                return CDHaLu_DinhDeCong - ThongTinCauTaoCongTron_CCaoDe;
+            }
+            else if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper() || ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông kết hợp đế".ToUpper())
+            {
+                return CDHaLu_DinhLotCongTron - ThongTinCauTaoCongTron_CCaoLotMong;
+            }
+        }
+
+        return 0;
+    }
+    public double CDHaLu_DayDaoGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDHaLu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe, double CDHaLu_DinhLotCongTron, double ThongTinCauTaoCongTron_CCaoLotMong)
+    {
+        ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+        if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống tròn".ToUpper())
+        {
+            if (ThongTinMongDuongTruyenDan_LoaiMong == "Không có móng".ToUpper())
+            {
+                return CDHaLu_DayDongChay - ThongTinCauTaoCongTron_CDayPhuBi;
+            }
+            else if (ThongTinMongDuongTruyenDan_LoaiMong == "Đế".ToUpper())
+            {
+                return CDHaLu_DinhDeCong - ThongTinCauTaoCongTron_CCaoDe;
+            }
+            else if (ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông".ToUpper() || ThongTinMongDuongTruyenDan_LoaiMong == "Móng bê tông kết hợp đế".ToUpper())
+            {
+                return CDHaLu_DinhLotCongTron - ThongTinCauTaoCongTron_CCaoLotMong;
+            }
+        }
+
+        return 0;
+    }
+    public double CDHaLu_ChieuSauDao(double CDHaLu_DayDaoGop, double CDHaLu_HienTrangTruocKhiDaoHaLuu)
+    {
+        if (CDHaLu_DayDaoGop > 0)
+        {
+            return CDHaLu_HienTrangTruocKhiDaoHaLuu - CDHaLu_DayDaoGop;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public double TTVLDCongRanh_TLChieuCaoDaoDat(string TTVLDCongRanh_LoaiVatLieuDao, double CDThuongLuu_ChieuSauDao, double TTVLDCongRanh_TLChieuCaoDaoDa)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+        if (string.IsNullOrEmpty(TTVLDCongRanh_LoaiVatLieuDao))
+        {
+            return 0;
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "Đào đá".ToUpper())
+        {
+            return 0;
+        }
+        else
+        {
+            return CDThuongLuu_ChieuSauDao - TTVLDCongRanh_TLChieuCaoDaoDa;
+        }
+    }
+    public double TTVLDCongRanh_HLChieuCaoDaoDat(string TTVLDCongRanh_LoaiVatLieuDao, double KU16, double MJ16)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+        if (string.IsNullOrEmpty(TTVLDCongRanh_LoaiVatLieuDao))
+        {
+            return 0;
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "Đào đá".ToUpper())
+        {
+            return 0;
+        }
+        else
+        {
+            return KU16 - MJ16;
+        }
+    }
+
+
+    public double TTCCCCT_CCaoLotDatTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDat, double ThongTinCauTaoCongTron_CCaoLotMong)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+        if (TTVLDCongRanh_LoaiVatLieuDao == "Đào đất".ToUpper() || TTVLDCongRanh_LoaiVatLieuDao == "Đào đất + đào đá".ToUpper())
+        {
+            return TTVLDCongRanh_TLChieuCaoDaoDat >= ThongTinCauTaoCongTron_CCaoLotMong ? ThongTinCauTaoCongTron_CCaoLotMong : TTVLDCongRanh_TLChieuCaoDaoDat;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCT_CCaoLotDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double ThongTinCauTaoCongTron_CCaoLotMong)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+        if (TTVLDCongRanh_LoaiVatLieuDao == "Đào đất".ToUpper() || TTVLDCongRanh_LoaiVatLieuDao == "Đào đất + đào đá".ToUpper())
+        {
+            return TTVLDCongRanh_HLChieuCaoDaoDat >= ThongTinCauTaoCongTron_CCaoLotMong ? ThongTinCauTaoCongTron_CCaoLotMong : TTVLDCongRanh_HLChieuCaoDaoDat;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCT_CCaoLotDaTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double TTVLDCongRanh_TLTongChieuSauDao, double TTCCCCT_CCaoLotDatTLuu, double ThongTinCauTaoCongTron_CCaoLotMong)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+        if (TTVLDCongRanh_LoaiVatLieuDao == "Đào đá".ToUpper())
+        {
+            return TTVLDCongRanh_TLChieuCaoDaoDa >= ThongTinCauTaoCongTron_CCaoLotMong ? ThongTinCauTaoCongTron_CCaoLotMong : TTVLDCongRanh_TLChieuCaoDaoDa;
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "Đào đất + Đào đá".ToUpper())
+        {
+            if (TTVLDCongRanh_TLTongChieuSauDao >= ThongTinCauTaoCongTron_CCaoLotMong)
+            {
+                return TTCCCCT_CCaoLotDatTLuu < ThongTinCauTaoCongTron_CCaoLotMong ? ThongTinCauTaoCongTron_CCaoLotMong - TTCCCCT_CCaoLotDatTLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCT_CCaoLotDaHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDa, double TTVLDCongRanh_HLTongChieuSauDao, double TTCCCCT_CCaoLotDatHLuu, double ThongTinCauTaoCongTron_CCaoLotMong)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            return TTVLDCongRanh_HLChieuCaoDaoDa >= ThongTinCauTaoCongTron_CCaoLotMong ? ThongTinCauTaoCongTron_CCaoLotMong : TTVLDCongRanh_HLChieuCaoDaoDa;
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLTongChieuSauDao >= ThongTinCauTaoCongTron_CCaoLotMong)
+            {
+                return TTCCCCT_CCaoLotDatHLuu < ThongTinCauTaoCongTron_CCaoLotMong ? ThongTinCauTaoCongTron_CCaoLotMong - TTCCCCT_CCaoLotDatHLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCT_CCaoMongDatTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDat, double ThongTinCauTaoCongTron_CCaoLotMong, double ThongTinCauTaoCongTron_CCaoMong)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLChieuCaoDaoDat <= ThongTinCauTaoCongTron_CCaoLotMong)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_TLChieuCaoDaoDat >= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong)
+            {
+                return ThongTinCauTaoCongTron_CCaoMong;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDat - ThongTinCauTaoCongTron_CCaoLotMong;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCT_CCaoMongDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double ThongTinCauTaoCongTron_CCaoLotMong, double ThongTinCauTaoCongTron_CCaoMong)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLChieuCaoDaoDat <= ThongTinCauTaoCongTron_CCaoLotMong)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_HLChieuCaoDaoDat >= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong)
+            {
+                return ThongTinCauTaoCongTron_CCaoMong;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDat - ThongTinCauTaoCongTron_CCaoLotMong;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCT_CCaoMongDaTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double ThongTinCauTaoCongTron_CCaoLotMong, double ThongTinCauTaoCongTron_CCaoMong, double TTVLDCongRanh_TLTongChieuSauDao, double TTCCCCT_CCaoMongDatTLuu, double TTCCCCT_CCaoLotDaTLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLChieuCaoDaoDa <= ThongTinCauTaoCongTron_CCaoLotMong)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_TLChieuCaoDaoDa >= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong)
+            {
+                return ThongTinCauTaoCongTron_CCaoMong;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa - ThongTinCauTaoCongTron_CCaoLotMong;
+            }
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLTongChieuSauDao >= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong)
+            {
+                return TTCCCCT_CCaoMongDatTLuu < ThongTinCauTaoCongTron_CCaoMong ? ThongTinCauTaoCongTron_CCaoMong - TTCCCCT_CCaoMongDatTLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa - TTCCCCT_CCaoLotDaTLuu;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCT_CCaoMongDaHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDa, double ThongTinCauTaoCongTron_CCaoLotMong, double ThongTinCauTaoCongTron_CCaoMong, double TTVLDCongRanh_HLTongChieuSauDao, double TTCCCCT_CCaoMongDatHLuu, double TTCCCCT_CCaoLotDaHLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLChieuCaoDaoDa <= ThongTinCauTaoCongTron_CCaoLotMong)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_HLChieuCaoDaoDa >= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong)
+            {
+                return ThongTinCauTaoCongTron_CCaoMong;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa - ThongTinCauTaoCongTron_CCaoLotMong;
+            }
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLTongChieuSauDao >= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong)
+            {
+                return TTCCCCT_CCaoMongDatHLuu < ThongTinCauTaoCongTron_CCaoMong ? ThongTinCauTaoCongTron_CCaoMong - TTCCCCT_CCaoMongDatHLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa - TTCCCCT_CCaoLotDaHLuu;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCT_CCaoDeDatTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDat, double ThongTinCauTaoCongTron_CCaoLotMong, double ThongTinCauTaoCongTron_CCaoMong, double ThongTinCauTaoCongTron_CCaoDe)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLChieuCaoDaoDat <= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_TLChieuCaoDaoDat >= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong + ThongTinCauTaoCongTron_CCaoDe)
+            {
+                return ThongTinCauTaoCongTron_CCaoDe;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDat - (ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong);
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCT_CCaoDeDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double ThongTinCauTaoCongTron_CCaoLotMong, double ThongTinCauTaoCongTron_CCaoMong, double ThongTinCauTaoCongTron_CCaoDe)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLChieuCaoDaoDat <= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_HLChieuCaoDaoDat >= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong + ThongTinCauTaoCongTron_CCaoDe)
+            {
+                return ThongTinCauTaoCongTron_CCaoDe;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDat - (ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong);
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCT_CCaoDeDaTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double ThongTinCauTaoCongTron_CCaoLotMong, double ThongTinCauTaoCongTron_CCaoMong, double ThongTinCauTaoCongTron_CCaoDe, double TTVLDCongRanh_TLTongChieuSauDao, double TTCCCCT_CCaoDeDatTLuu, double TTCCCCT_CCaoLotDaTLuu, double TTCCCCT_CCaoMongDaTLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLChieuCaoDaoDa <= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_TLChieuCaoDaoDa >= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong + ThongTinCauTaoCongTron_CCaoDe)
+            {
+                return ThongTinCauTaoCongTron_CCaoDe;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa - (ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong);
+            }
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLTongChieuSauDao >= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong + ThongTinCauTaoCongTron_CCaoDe)
+            {
+                return TTCCCCT_CCaoDeDatTLuu < ThongTinCauTaoCongTron_CCaoDe ? ThongTinCauTaoCongTron_CCaoDe - TTCCCCT_CCaoDeDatTLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa - (TTCCCCT_CCaoLotDaTLuu + TTCCCCT_CCaoMongDaTLuu);
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCT_CCaoDeDaHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDa, double ThongTinCauTaoCongTron_CCaoLotMong, double ThongTinCauTaoCongTron_CCaoMong, double ThongTinCauTaoCongTron_CCaoDe, double TTVLDCongRanh_HLTongChieuSauDao, double TTCCCCT_CCaoDeDatHLuu, double TTCCCCT_CCaoLotDaHLuu, double TTCCCCT_CCaoMongDaHLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLChieuCaoDaoDa <= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_HLChieuCaoDaoDa >= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong + ThongTinCauTaoCongTron_CCaoDe)
+            {
+                return ThongTinCauTaoCongTron_CCaoDe;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa - (ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong);
+            }
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLTongChieuSauDao >= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong + ThongTinCauTaoCongTron_CCaoDe)
+            {
+                return TTCCCCT_CCaoDeDatHLuu < ThongTinCauTaoCongTron_CCaoDe ? ThongTinCauTaoCongTron_CCaoDe - TTCCCCT_CCaoDeDatHLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa - (TTCCCCT_CCaoLotDaHLuu + TTCCCCT_CCaoMongDaHLuu);
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCT_CCaoCongDatTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDat, double ThongTinCauTaoCongTron_CCaoLotMong, double ThongTinCauTaoCongTron_CCaoMong, double ThongTinCauTaoCongTron_CCaoDe, double ThongTinCauTaoCongTron_TongCCaoCong)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLChieuCaoDaoDat <= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong + ThongTinCauTaoCongTron_CCaoDe)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_TLChieuCaoDaoDat >= ThongTinCauTaoCongTron_TongCCaoCong)
+            {
+                return ThongTinCauTaoCongTron_TongCCaoCong;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDat - (ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong + ThongTinCauTaoCongTron_CCaoDe);
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCT_CCaoCongDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double ThongTinCauTaoCongTron_CCaoLotMong, double ThongTinCauTaoCongTron_CCaoMong, double ThongTinCauTaoCongTron_CCaoDe, double ThongTinCauTaoCongTron_TongCCaoCong)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLChieuCaoDaoDat <= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong + ThongTinCauTaoCongTron_CCaoDe)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_HLChieuCaoDaoDat >= ThongTinCauTaoCongTron_TongCCaoCong)
+            {
+                return ThongTinCauTaoCongTron_TongCCaoCong;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDat - (ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong + ThongTinCauTaoCongTron_CCaoDe);
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCT_CCaoCongDaTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double TTVLDCongRanh_TLTongChieuSauDao, double TTCCCCT_CCaoCongDatTLuu, double ThongTinCauTaoCongTron_CCaoCauKien, double ThongTinCauTaoCongTron_TongCCaoCong, double ThongTinCauTaoCongTron_CCaoLotMong, double ThongTinCauTaoCongTron_CCaoMong, double ThongTinCauTaoCongTron_CCaoDe, double TTCCCCT_CCaoLotDaTLuu, double TTCCCCT_CCaoMongDaTLuu, double TTCCCCT_CCaoDeDaTLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLChieuCaoDaoDa <= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong + ThongTinCauTaoCongTron_CCaoDe)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_TLChieuCaoDaoDa >= ThongTinCauTaoCongTron_TongCCaoCong)
+            {
+                return ThongTinCauTaoCongTron_TongCCaoCong;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa - (ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong + ThongTinCauTaoCongTron_CCaoDe);
+            }
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLTongChieuSauDao >= ThongTinCauTaoCongTron_TongCCaoCong)
+            {
+                return TTCCCCT_CCaoCongDatTLuu < ThongTinCauTaoCongTron_CCaoCauKien ? ThongTinCauTaoCongTron_CCaoCauKien - TTCCCCT_CCaoCongDatTLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa - (TTCCCCT_CCaoLotDaTLuu + TTCCCCT_CCaoMongDaTLuu + TTCCCCT_CCaoDeDaTLuu);
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCT_CCaoCongDaHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDa, double TTVLDCongRanh_HLTongChieuSauDao, double TTCCCCT_CCaoCongDatHLuu, double ThongTinCauTaoCongTron_CCaoCauKien, double ThongTinCauTaoCongTron_TongCCaoCong, double ThongTinCauTaoCongTron_CCaoLotMong, double ThongTinCauTaoCongTron_CCaoMong, double ThongTinCauTaoCongTron_CCaoDe, double TTCCCCT_CCaoLotDaHLuu, double TTCCCCT_CCaoMongDaHLuu, double TTCCCCT_CCaoDeDaHLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLChieuCaoDaoDa <= ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong + ThongTinCauTaoCongTron_CCaoDe)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_HLChieuCaoDaoDa >= ThongTinCauTaoCongTron_TongCCaoCong)
+            {
+                return ThongTinCauTaoCongTron_TongCCaoCong;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa - (ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong + ThongTinCauTaoCongTron_CCaoDe);
+            }
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLTongChieuSauDao >= ThongTinCauTaoCongTron_TongCCaoCong)
+            {
+                return TTCCCCT_CCaoCongDatHLuu < ThongTinCauTaoCongTron_CCaoCauKien ? ThongTinCauTaoCongTron_CCaoCauKien - TTCCCCT_CCaoCongDatHLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa - (TTCCCCT_CCaoLotDaHLuu + TTCCCCT_CCaoMongDaHLuu + TTCCCCT_CCaoDeDaHLuu);
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public double TTCCCCCHR_CCaoLotDatTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDat, double TTKTHHCongHopRanh_CCaoLotMong)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            return TTVLDCongRanh_TLChieuCaoDaoDat >= TTKTHHCongHopRanh_CCaoLotMong ? TTKTHHCongHopRanh_CCaoLotMong : TTVLDCongRanh_TLChieuCaoDaoDat;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCCHR_CCaoLotDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double TTKTHHCongHopRanh_CCaoLotMong)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            return TTVLDCongRanh_HLChieuCaoDaoDat >= TTKTHHCongHopRanh_CCaoLotMong ? TTKTHHCongHopRanh_CCaoLotMong : TTVLDCongRanh_HLChieuCaoDaoDat;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCCHR_CCaoLotDaTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double TTVLDCongRanh_TLTongChieuSauDao, double TTKTHHCongHopRanh_CCaoLotMong, double TTCCCCCHR_CCaoLotDatTLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            return TTVLDCongRanh_TLChieuCaoDaoDa >= TTKTHHCongHopRanh_CCaoLotMong ? TTKTHHCongHopRanh_CCaoLotMong : TTVLDCongRanh_TLChieuCaoDaoDa;
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLTongChieuSauDao >= TTKTHHCongHopRanh_CCaoLotMong)
+            {
+                return TTCCCCCHR_CCaoLotDatTLuu < TTKTHHCongHopRanh_CCaoLotMong ? TTKTHHCongHopRanh_CCaoLotMong - TTCCCCCHR_CCaoLotDatTLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCCHR_CCaoLotDaHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDa, double TTVLDCongRanh_HLTongChieuSauDao, double TTKTHHCongHopRanh_CCaoLotMong, double TTCCCCCHR_CCaoLotDatHLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            return TTVLDCongRanh_HLChieuCaoDaoDa >= TTKTHHCongHopRanh_CCaoLotMong ? TTKTHHCongHopRanh_CCaoLotMong : TTVLDCongRanh_HLChieuCaoDaoDa;
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLTongChieuSauDao >= TTKTHHCongHopRanh_CCaoLotMong)
+            {
+                return TTCCCCCHR_CCaoLotDatHLuu < TTKTHHCongHopRanh_CCaoLotMong ? TTKTHHCongHopRanh_CCaoLotMong - TTCCCCCHR_CCaoLotDatHLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCCHR_CCaoMongDatTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDat, double TTKTHHCongHopRanh_CCaoLotMong, double TTKTHHCongHopRanh_CCaoMong)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLChieuCaoDaoDat <= TTKTHHCongHopRanh_CCaoLotMong)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_TLChieuCaoDaoDat >= TTKTHHCongHopRanh_CCaoLotMong + TTKTHHCongHopRanh_CCaoMong)
+            {
+                return TTKTHHCongHopRanh_CCaoMong;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDat - TTKTHHCongHopRanh_CCaoLotMong;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCCHR_CCaoMongDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double TTKTHHCongHopRanh_CCaoLotMong, double TTKTHHCongHopRanh_CCaoMong)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLChieuCaoDaoDat <= TTKTHHCongHopRanh_CCaoLotMong)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_HLChieuCaoDaoDat >= TTKTHHCongHopRanh_CCaoLotMong + TTKTHHCongHopRanh_CCaoMong)
+            {
+                return TTKTHHCongHopRanh_CCaoMong;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDat - TTKTHHCongHopRanh_CCaoLotMong;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCCHR_CCaoMongDaTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double TTKTHHCongHopRanh_CCaoLotMong, double TTKTHHCongHopRanh_CCaoMong, double TTVLDCongRanh_TLTongChieuSauDao, double TTCCCCCHR_CCaoMongDatTLuu, double TTCCCCCHR_CCaoLotDaTLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLChieuCaoDaoDa <= TTKTHHCongHopRanh_CCaoLotMong)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_TLChieuCaoDaoDa >= TTKTHHCongHopRanh_CCaoLotMong + TTKTHHCongHopRanh_CCaoMong)
+            {
+                return TTKTHHCongHopRanh_CCaoMong;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa - TTKTHHCongHopRanh_CCaoLotMong;
+            }
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLTongChieuSauDao >= TTKTHHCongHopRanh_CCaoLotMong + TTKTHHCongHopRanh_CCaoMong)
+            {
+                return TTCCCCCHR_CCaoMongDatTLuu < TTKTHHCongHopRanh_CCaoMong ? TTKTHHCongHopRanh_CCaoMong - TTCCCCCHR_CCaoMongDatTLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa - TTCCCCCHR_CCaoLotDaTLuu;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCCHR_CCaoMongDaHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDa, double TTKTHHCongHopRanh_CCaoLotMong, double TTKTHHCongHopRanh_CCaoMong, double TTVLDCongRanh_HLTongChieuSauDao, double TTCCCCCHR_CCaoMongDatHLuu, double TTCCCCCHR_CCaoLotDaHLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLChieuCaoDaoDa <= TTKTHHCongHopRanh_CCaoLotMong)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_HLChieuCaoDaoDa >= TTKTHHCongHopRanh_CCaoLotMong + TTKTHHCongHopRanh_CCaoMong)
+            {
+                return TTKTHHCongHopRanh_CCaoMong;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa - TTKTHHCongHopRanh_CCaoLotMong;
+            }
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLTongChieuSauDao >= TTKTHHCongHopRanh_CCaoLotMong + TTKTHHCongHopRanh_CCaoMong)
+            {
+                return TTCCCCCHR_CCaoMongDatHLuu < TTKTHHCongHopRanh_CCaoMong ? TTKTHHCongHopRanh_CCaoMong - TTCCCCCHR_CCaoMongDatHLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa - TTCCCCCHR_CCaoLotDaHLuu;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCCHR_CCaoTuongDatTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDat, double TTKTHHCongHopRanh_CCaoLotMong, double TTKTHHCongHopRanh_CCaoMong, double TTKTHHCongHopRanh_TongChieuCao)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            double giaTriToiDa = TTKTHHCongHopRanh_CCaoLotMong + TTKTHHCongHopRanh_CCaoMong;
+
+            if (TTVLDCongRanh_TLChieuCaoDaoDat <= giaTriToiDa)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_TLChieuCaoDaoDat >= TTKTHHCongHopRanh_TongChieuCao - giaTriToiDa)
+            {
+                return TTKTHHCongHopRanh_TongChieuCao - giaTriToiDa;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDat - giaTriToiDa;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCCHR_CCaoTuongDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double TTKTHHCongHopRanh_CCaoLotMong, double TTKTHHCongHopRanh_CCaoMong, double TTKTHHCongHopRanh_TongChieuCao)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            double giaTriToiDa = TTKTHHCongHopRanh_CCaoLotMong + TTKTHHCongHopRanh_CCaoMong;
+
+            if (TTVLDCongRanh_HLChieuCaoDaoDat <= giaTriToiDa)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_HLChieuCaoDaoDat >= TTKTHHCongHopRanh_TongChieuCao - giaTriToiDa)
+            {
+                return TTKTHHCongHopRanh_TongChieuCao - giaTriToiDa;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDat - giaTriToiDa;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCCHR_CCaoTuongDaTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double TTKTHHCongHopRanh_CCaoLotMong, double TTKTHHCongHopRanh_CCaoMong, double TTKTHHCongHopRanh_TongChieuCao, double TTVLDCongRanh_TLTongChieuSauDao, double TTCCCCCHR_CCaoTuongDatTLuu, double TTCCCCCHR_CCaoLotDaTLuu, double TTCCCCCHR_CCaoMongDaTLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            double giaTriToiDa = TTKTHHCongHopRanh_CCaoLotMong + TTKTHHCongHopRanh_CCaoMong;
+
+            if (TTVLDCongRanh_TLChieuCaoDaoDa <= giaTriToiDa)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_TLChieuCaoDaoDa >= TTKTHHCongHopRanh_TongChieuCao)
+            {
+                return TTKTHHCongHopRanh_TongChieuCao - giaTriToiDa;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa - giaTriToiDa;
+            }
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLTongChieuSauDao >= TTKTHHCongHopRanh_TongChieuCao)
+            {
+                double giaTriToiDa = TTKTHHCongHopRanh_TongChieuCao - (TTKTHHCongHopRanh_CCaoLotMong + TTKTHHCongHopRanh_CCaoMong);
+                if (TTCCCCCHR_CCaoTuongDatTLuu < giaTriToiDa)
+                {
+                    return giaTriToiDa - TTCCCCCHR_CCaoTuongDatTLuu;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa - (TTCCCCCHR_CCaoLotDaTLuu + TTCCCCCHR_CCaoMongDaTLuu);
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCCHR_CCaoTuongDaHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDa, double TTKTHHCongHopRanh_CCaoLotMong, double TTKTHHCongHopRanh_CCaoMong, double TTKTHHCongHopRanh_TongChieuCao, double TTVLDCongRanh_HLTongChieuSauDao, double TTCCCCCHR_CCaoTuongDatHLuu, double TTCCCCCHR_CCaoLotDaHLuu, double TTCCCCCHR_CCaoMongDaHLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            double giaTriToiDa = TTKTHHCongHopRanh_CCaoLotMong + TTKTHHCongHopRanh_CCaoMong;
+
+            if (TTVLDCongRanh_HLChieuCaoDaoDa <= giaTriToiDa)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_HLChieuCaoDaoDa >= TTKTHHCongHopRanh_TongChieuCao)
+            {
+                return TTKTHHCongHopRanh_TongChieuCao - giaTriToiDa;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa - giaTriToiDa;
+            }
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLTongChieuSauDao >= TTKTHHCongHopRanh_TongChieuCao)
+            {
+                double giaTriToiDa = TTKTHHCongHopRanh_TongChieuCao - (TTKTHHCongHopRanh_CCaoLotMong + TTKTHHCongHopRanh_CCaoMong);
+                if (TTCCCCCHR_CCaoTuongDatHLuu < giaTriToiDa)
+                {
+                    return giaTriToiDa - TTCCCCCHR_CCaoTuongDatHLuu;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa - (TTCCCCCHR_CCaoLotDaHLuu + TTCCCCCHR_CCaoMongDaHLuu);
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCON_CCaoDemCatDatTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDat, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            return TTVLDCongRanh_TLChieuCaoDaoDat >= ThongTinKichThuocHinhHocOngNhua_CCaoDemCat ? ThongTinKichThuocHinhHocOngNhua_CCaoDemCat : TTVLDCongRanh_TLChieuCaoDaoDat;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCON_CCaoDemCatDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            return TTVLDCongRanh_HLChieuCaoDaoDat >= ThongTinKichThuocHinhHocOngNhua_CCaoDemCat ? ThongTinKichThuocHinhHocOngNhua_CCaoDemCat : TTVLDCongRanh_HLChieuCaoDaoDat;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCON_CCaoDemCatDaTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double TTVLDCongRanh_TLTongChieuSauDao, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, double TTCCCCON_CCaoDemCatDatTLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            return TTVLDCongRanh_TLChieuCaoDaoDa >= ThongTinKichThuocHinhHocOngNhua_CCaoDemCat ? ThongTinKichThuocHinhHocOngNhua_CCaoDemCat : TTVLDCongRanh_TLChieuCaoDaoDa;
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLTongChieuSauDao >= ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
+            {
+                return TTCCCCON_CCaoDemCatDatTLuu < ThongTinKichThuocHinhHocOngNhua_CCaoDemCat ? ThongTinKichThuocHinhHocOngNhua_CCaoDemCat - TTCCCCON_CCaoDemCatDatTLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCON_CCaoDemCatDaHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDa, double TTVLDCongRanh_HLTongChieuSauDao, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, double TTCCCCON_CCaoDemCatDatHLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            return TTVLDCongRanh_HLChieuCaoDaoDa >= ThongTinKichThuocHinhHocOngNhua_CCaoDemCat ? ThongTinKichThuocHinhHocOngNhua_CCaoDemCat : TTVLDCongRanh_HLChieuCaoDaoDa;
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLTongChieuSauDao >= ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
+            {
+                return TTCCCCON_CCaoDemCatDatHLuu < ThongTinKichThuocHinhHocOngNhua_CCaoDemCat ? ThongTinKichThuocHinhHocOngNhua_CCaoDemCat - TTCCCCON_CCaoDemCatDatHLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCON_CCaoOngDatTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDat, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, double ThongTinKichThuocHinhHocOngNhua_TongCCaoOng)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLChieuCaoDaoDat <= ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_TLChieuCaoDaoDat >= ThongTinKichThuocHinhHocOngNhua_CCaoDemCat + ThongTinKichThuocHinhHocOngNhua_TongCCaoOng)
+            {
+                return ThongTinKichThuocHinhHocOngNhua_TongCCaoOng;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDat - ThongTinKichThuocHinhHocOngNhua_CCaoDemCat;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCON_CCaoOngDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, double ThongTinKichThuocHinhHocOngNhua_TongCCaoOng)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLChieuCaoDaoDat <= ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_HLChieuCaoDaoDat >= ThongTinKichThuocHinhHocOngNhua_CCaoDemCat + ThongTinKichThuocHinhHocOngNhua_TongCCaoOng)
+            {
+                return ThongTinKichThuocHinhHocOngNhua_TongCCaoOng;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDat - ThongTinKichThuocHinhHocOngNhua_CCaoDemCat;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public double TTCCCCON_CCaoOngDaTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, double ThongTinKichThuocHinhHocOngNhua_TongCCaoOng, double TTVLDCongRanh_TLTongChieuSauDao, double TTCCCCON_CCaoOngDatTLuu, double TTCCCCON_CCaoDemCatDaTLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLChieuCaoDaoDa <= ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_TLChieuCaoDaoDa >= ThongTinKichThuocHinhHocOngNhua_CCaoDemCat + ThongTinKichThuocHinhHocOngNhua_TongCCaoOng)
+            {
+                return ThongTinKichThuocHinhHocOngNhua_TongCCaoOng;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa - ThongTinKichThuocHinhHocOngNhua_CCaoDemCat;
+            }
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLTongChieuSauDao >= ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
+            {
+                if (TTCCCCON_CCaoOngDatTLuu < ThongTinKichThuocHinhHocOngNhua_TongCCaoOng)
+                {
+                    return ThongTinKichThuocHinhHocOngNhua_TongCCaoOng - TTCCCCON_CCaoOngDatTLuu;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa - TTCCCCON_CCaoDemCatDaTLuu;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCON_CCaoOngDaHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDa, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, double ThongTinKichThuocHinhHocOngNhua_TongCCaoOng, double TTVLDCongRanh_HLTongChieuSauDao, double TTCCCCON_CCaoOngDatHLuu, double TTCCCCON_CCaoDemCatDaHLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLChieuCaoDaoDa <= ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_HLChieuCaoDaoDa >= ThongTinKichThuocHinhHocOngNhua_CCaoDemCat + ThongTinKichThuocHinhHocOngNhua_TongCCaoOng)
+            {
+                return ThongTinKichThuocHinhHocOngNhua_TongCCaoOng;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa - ThongTinKichThuocHinhHocOngNhua_CCaoDemCat;
+            }
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLTongChieuSauDao >= ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
+            {
+                if (TTCCCCON_CCaoOngDatHLuu < ThongTinKichThuocHinhHocOngNhua_TongCCaoOng)
+                {
+                    return ThongTinKichThuocHinhHocOngNhua_TongCCaoOng - TTCCCCON_CCaoOngDatHLuu;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa - TTCCCCON_CCaoDemCatDaHLuu;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCON_CCaoDapCatDatTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDat, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, double ThongTinKichThuocHinhHocOngNhua_TongCCaoOng, double ThongTinKichThuocHinhHocOngNhua_CCaoDapCat)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLChieuCaoDaoDat <= ThongTinKichThuocHinhHocOngNhua_CCaoDemCat + ThongTinKichThuocHinhHocOngNhua_TongCCaoOng)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_TLChieuCaoDaoDat >= ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat + ThongTinKichThuocHinhHocOngNhua_CCaoDapCat)
+            {
+                return ThongTinKichThuocHinhHocOngNhua_CCaoDapCat;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDat - (ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat);
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCON_CCaoDapCatDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, double ThongTinKichThuocHinhHocOngNhua_TongCCaoOng, double ThongTinKichThuocHinhHocOngNhua_CCaoDapCat)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLChieuCaoDaoDat <= ThongTinKichThuocHinhHocOngNhua_CCaoDemCat + ThongTinKichThuocHinhHocOngNhua_TongCCaoOng)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_HLChieuCaoDaoDat >= ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat + ThongTinKichThuocHinhHocOngNhua_CCaoDapCat)
+            {
+                return ThongTinKichThuocHinhHocOngNhua_CCaoDapCat;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDat - (ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat);
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCON_CCaoDapCatDaTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double ThongTinKichThuocHinhHocOngNhua_TongCCaoOng, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, double ThongTinKichThuocHinhHocOngNhua_CCaoDapCat, double TTVLDCongRanh_TLTongChieuSauDao, double TTCCCCON_CCaoDapCatDatTLuu, double TTCCCCON_CCaoDemCatDaTLuu, double TTCCCCON_CCaoOngDaTLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLChieuCaoDaoDa <= ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_TLChieuCaoDaoDa >= ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat + ThongTinKichThuocHinhHocOngNhua_CCaoDapCat)
+            {
+                return ThongTinKichThuocHinhHocOngNhua_CCaoDapCat;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa - (ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat);
+            }
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLTongChieuSauDao >= ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat + ThongTinKichThuocHinhHocOngNhua_CCaoDapCat)
+            {
+                return TTCCCCON_CCaoDapCatDatTLuu < ThongTinKichThuocHinhHocOngNhua_CCaoDapCat ? ThongTinKichThuocHinhHocOngNhua_CCaoDapCat - TTCCCCON_CCaoDapCatDatTLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa - (TTCCCCON_CCaoDemCatDaTLuu + TTCCCCON_CCaoOngDaTLuu);
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCCCON_CCaoDapCatDaHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDa, double ThongTinKichThuocHinhHocOngNhua_TongCCaoOng, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, double ThongTinKichThuocHinhHocOngNhua_CCaoDapCat, double TTVLDCongRanh_HLTongChieuSauDao, double TTCCCCON_CCaoDapCatDatHLuu, double TTCCCCON_CCaoDemCatDaTLuu, double TTCCCCON_CCaoOngDaTLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLChieuCaoDaoDa <= ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_HLChieuCaoDaoDa >= ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat + ThongTinKichThuocHinhHocOngNhua_CCaoDapCat)
+            {
+                return ThongTinKichThuocHinhHocOngNhua_CCaoDapCat;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa - (ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat);
+            }
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLTongChieuSauDao >= ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat + ThongTinKichThuocHinhHocOngNhua_CCaoDapCat)
+            {
+                return TTCCCCON_CCaoDapCatDatHLuu < ThongTinKichThuocHinhHocOngNhua_CCaoDapCat ? ThongTinKichThuocHinhHocOngNhua_CCaoDapCat - TTCCCCON_CCaoDapCatDatHLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa - (TTCCCCON_CCaoDemCatDaTLuu + TTCCCCON_CCaoOngDaTLuu);
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCRT_LotDatThuongLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDat, double ThongTinRanhThang_CCaoLot)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            return TTVLDCongRanh_TLChieuCaoDaoDat >= ThongTinRanhThang_CCaoLot ? ThongTinRanhThang_CCaoLot : TTVLDCongRanh_TLChieuCaoDaoDat;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCRT_LotDatHaLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double ThongTinRanhThang_CCaoLot)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            return TTVLDCongRanh_HLChieuCaoDaoDat >= ThongTinRanhThang_CCaoLot ? ThongTinRanhThang_CCaoLot : TTVLDCongRanh_HLChieuCaoDaoDat;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCRT_LotDaThuongLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double TTVLDCongRanh_TLTongChieuSauDao, double ThongTinRanhThang_CCaoLot, double TTCCRT_LotDatThuongLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            return TTVLDCongRanh_TLChieuCaoDaoDa >= ThongTinRanhThang_CCaoLot ? ThongTinRanhThang_CCaoLot : TTVLDCongRanh_TLChieuCaoDaoDa;
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLTongChieuSauDao >= ThongTinRanhThang_CCaoLot)
+            {
+                return TTCCRT_LotDatThuongLuu < ThongTinRanhThang_CCaoLot ? ThongTinRanhThang_CCaoLot - TTCCRT_LotDatThuongLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCRT_LotDaHaLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDa, double TTVLDCongRanh_HLTongChieuSauDao, double ThongTinRanhThang_CCaoLot, double TTCCRT_LotDatHaLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            return TTVLDCongRanh_HLChieuCaoDaoDa >= ThongTinRanhThang_CCaoLot ? ThongTinRanhThang_CCaoLot : TTVLDCongRanh_HLChieuCaoDaoDa;
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLTongChieuSauDao >= ThongTinRanhThang_CCaoLot)
+            {
+                return TTCCRT_LotDatHaLuu < ThongTinRanhThang_CCaoLot ? ThongTinRanhThang_CCaoLot - TTCCRT_LotDatHaLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCRT_MongDatThuongLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDat, double ThongTinRanhThang_CCaoLot, double ThongTinRanhThang_CCaoMong)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLChieuCaoDaoDat <= ThongTinRanhThang_CCaoLot)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_TLChieuCaoDaoDat >= ThongTinRanhThang_CCaoLot + ThongTinRanhThang_CCaoMong)
+            {
+                return ThongTinRanhThang_CCaoMong;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDat - ThongTinRanhThang_CCaoLot;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCRT_MongDatHaLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double ThongTinRanhThang_CCaoLot, double ThongTinRanhThang_CCaoMong)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT" || TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLChieuCaoDaoDat <= ThongTinRanhThang_CCaoLot)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_HLChieuCaoDaoDat >= ThongTinRanhThang_CCaoLot + ThongTinRanhThang_CCaoMong)
+            {
+                return ThongTinRanhThang_CCaoMong;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDat - ThongTinRanhThang_CCaoLot;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCRT_MongDaThuongLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double ThongTinRanhThang_CCaoLot, double ThongTinRanhThang_CCaoMong, double TTVLDCongRanh_TLTongChieuSauDao, double TTCCRT_MongDatThuongLuu, double TTCCRT_LotDaThuongLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLChieuCaoDaoDa <= ThongTinRanhThang_CCaoLot)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_TLChieuCaoDaoDa >= ThongTinRanhThang_CCaoLot + ThongTinRanhThang_CCaoMong)
+            {
+                return ThongTinRanhThang_CCaoMong;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa - ThongTinRanhThang_CCaoLot;
+            }
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_TLTongChieuSauDao >= ThongTinRanhThang_CCaoLot + ThongTinRanhThang_CCaoMong)
+            {
+                return TTCCRT_MongDatThuongLuu < ThongTinRanhThang_CCaoMong ? ThongTinRanhThang_CCaoMong - TTCCRT_MongDatThuongLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_TLChieuCaoDaoDa - TTCCRT_LotDaThuongLuu;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public double TTCCRT_MongDaHaLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDa, double ThongTinRanhThang_CCaoLot, double ThongTinRanhThang_CCaoMong, double TTVLDCongRanh_HLTongChieuSauDao, double TTCCRT_MongDatHaLuu, double TTCCRT_LotDaHaLuu)
+    {
+        TTVLDCongRanh_LoaiVatLieuDao = GetTenDanhMucById(TTVLDCongRanh_LoaiVatLieuDao).ToUpper().Trim();
+
+        if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLChieuCaoDaoDa <= ThongTinRanhThang_CCaoLot)
+            {
+                return 0;
+            }
+            else if (TTVLDCongRanh_HLChieuCaoDaoDa >= ThongTinRanhThang_CCaoLot + ThongTinRanhThang_CCaoMong)
+            {
+                return ThongTinRanhThang_CCaoMong;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa - ThongTinRanhThang_CCaoLot;
+            }
+        }
+        else if (TTVLDCongRanh_LoaiVatLieuDao == "ĐÀO ĐẤT + ĐÀO ĐÁ")
+        {
+            if (TTVLDCongRanh_HLTongChieuSauDao >= ThongTinRanhThang_CCaoLot + ThongTinRanhThang_CCaoMong)
+            {
+                return TTCCRT_MongDatHaLuu < ThongTinRanhThang_CCaoMong ? ThongTinRanhThang_CCaoMong - TTCCRT_MongDatHaLuu : 0;
+            }
+            else
+            {
+                return TTVLDCongRanh_HLChieuCaoDaoDa - TTCCRT_LotDaHaLuu;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+
+
+
+
+
+
+
 
 
 
