@@ -121,7 +121,6 @@ namespace DucAnhERP.Services
             return true;
         }
 
-
         public async Task<MDanhMuc> GetById(string id)
         {
             using var context = _context.CreateDbContext();
@@ -134,7 +133,6 @@ namespace DucAnhERP.Services
 
             return entity;
         }
-
 
         public async Task Insert(MDanhMuc entity)
         {
@@ -153,6 +151,9 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
             }
         }
+
+
+
 
 
     }

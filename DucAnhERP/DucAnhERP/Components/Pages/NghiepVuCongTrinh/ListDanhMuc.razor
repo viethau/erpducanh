@@ -1,0 +1,245 @@
+﻿@page "/NghiepVuCongTrinh/DanhMuc"
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using System.Linq
+@using DucAnhERP.SeedWork
+@using Microsoft.AspNetCore.Authorization
+@inject IDanhMucRepository DanhMucRepository
+@inject INhomDanhMucRepository NhomDanhMucRepository
+
+<div class="m-5">
+    <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
+        <BodyTemplate>
+            <EditForm Model="newDanhMuc" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="IdNhomDanhMuc">Nhóm danh mục</label>
+                            <InputSelect id="IdNhomDanhMuc" class="form-control" @bind-Value="newDanhMuc.IdNhomDanhMuc">
+                                <option value="">Nhóm danh mục...</option>
+                                @foreach (var nhom in nhomDanhMucs)
+                                {
+                                    <option value="@nhom.Id">@nhom.Ten</option>
+                                }
+                            </InputSelect>
+                            <ValidationMessage For="() => newDanhMuc.IdNhomDanhMuc" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-6">
+
+                        <div class="form-group">
+                            <label for="Ten">Tên</label>
+                            <InputText id="Ten" class="form-control" @bind-Value="newDanhMuc.Ten" />
+                            <ValidationMessage For="() => newDanhMuc.Ten" class="text-danger" />
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row justify-content-end">
+                    <button class="btn btn-primary mr-2" type="submit">Save</button>
+                    <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+                </div>
+            </EditForm>
+        </BodyTemplate>
+    </CustomModal>
+
+    <button class="btn btn-primary" @onclick="ShowModal">Thêm danh mục</button>
+    <h3 class="mt-2">Danh sách danh mục</h3>
+    @if (!listDanhMuc.Any())
+    {
+        <div class="pt-3 pl-4">
+            <div class="callout callout-warning">
+                <h5>Không có dữ liệu tương ứng!</h5>
+            </div>
+        </div>
+    }
+    <div class="row mt-3">
+        <table class="table table-hover table-bordered">
+            <thead class="bg-info">
+                <tr>
+                    <th class="text-center" scope="col">
+                        <div class="pb-3">STT  </div>
+                    </th>
+
+                    <th onclick="@(() => SortTable("TenNhom"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Nhóm danh mục  <span class="arrow @(GetSortStyle("TenNhom"))"></span></div>
+
+                    </th>
+                    <th onclick="@(() => SortTable("Ten"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Tên  <span class="arrow @(GetSortStyle("Ten"))"></span></div>
+                    </th>
+                </tr>
+
+            </thead>
+            @if (listDanhMuc.Any())
+            {
+
+                <tbody>
+                    @{
+                        int stt = 1;
+                    }
+                    @foreach (var dm in listDanhMuc)
+                    {
+
+                        <tr>
+                            <td class="text-center">@stt</td>
+                            <td class="text-left">@dm.TenNhom</td>
+                            <td class="text-center">@dm.Ten</td>
+                        </tr>
+                        stt++;
+                    }
+
+                </tbody>
+            }
+
+        </table>
+
+    </div>
+
+    @if (listDanhMuc.Any())
+    {
+        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+    }
+
+</div>
+
+@code {
+    private List<MNhomDanhMuc> nhomDanhMucs = new List<MNhomDanhMuc>();
+    private MDanhMuc newDanhMuc = new MDanhMuc();
+
+    private bool isModalVisible = false;
+    private string TitleModal = "Thêm mới danh mục";
+
+    private void ShowModal()
+    {
+        isModalVisible = true;
+    }
+
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+    }
+
+    private void HandleSave()
+    {
+        // Logic for saving
+        isModalVisible = false;
+    }
+
+    private void HandleCancel()
+    {
+        // Logic for canceling
+        isModalVisible = false;
+    }
+
+
+    public List<DanhMucModel> listDanhMuc
+    {
+        get;
+        set;
+    } = new();
+
+    public List<DanhMucModel> listModel
+    {
+        get;
+        set;
+    } = new();
+
+    public MetaData MetaData
+    {
+        get;
+        set;
+    }
+
+    public DanhMucModel dmModel
+    {
+        get;
+        set;
+    }
+
+
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        dmModel = new();
+        nhomDanhMucs = await NhomDanhMucRepository.GetAll();
+        await LoadDanhMuc();
+    }
+
+
+    // Truy vấn data theo điều kiện tìm kiếm
+    private async Task LoadDanhMuc()
+    {
+        var danhmucs = await DanhMucRepository.GetAllDM();
+        listModel = danhmucs;
+        listDanhMuc = Paging(danhmucs);
+        Console.WriteLine(listDanhMuc);
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await DanhMucRepository.Insert(newDanhMuc);
+        newDanhMuc = new MDanhMuc();
+        await LoadDanhMuc();
+        isModalVisible = false;
+    }
+
+
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        dmModel.PageNumber = 1;
+        Paging(listModel);
+    }
+
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        dmModel.PageNumber = page;
+        Paging(listModel);
+    }
+
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+
+        dmModel.PageNumber = 1;
+        dmModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+    // Xử lý paging
+    private List<DanhMucModel> Paging(List<DanhMucModel> danhmucs)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = danhmucs.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        danhmucs = danhmucs.Skip((dmModel.PageNumber - 1) * dmModel.PageSize).Take(dmModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listDanhMuc.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var major in danhmucs)
+        {
+            listDanhMuc.Add(major);
+        }
+
+        // Tạo pagelist mới
+        var pagelist = new PageList<DanhMucModel>(listDanhMuc, count, dmModel.PageNumber, dmModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return danhmucs;
+    }
+
+}
