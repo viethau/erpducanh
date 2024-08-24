@@ -1,0 +1,82 @@
+﻿@code {
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnClose { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public RenderFragment BodyTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment FooterTemplate { get; set; }
+
+    [Parameter]
+    public string BodyCssClass { get; set; }
+
+    [Parameter]
+    public string DialogCssClass { get; set; }
+
+    [Parameter]
+    public string FooterCssClass { get; set; }
+
+    [Parameter]
+    public string HeaderCssClass { get; set; }
+
+    [Parameter]
+    public bool CloseOnEscape { get; set; } = true;
+
+    [Parameter]
+    public bool IsScrollable { get; set; } = false;
+
+    [Parameter]
+    public bool IsVerticallyCentered { get; set; } = false;
+
+    [Parameter]
+    public bool ShowCloseButton { get; set; } = true;
+
+    [Parameter]
+    public string Size { get; set; } = "modal-dialog";
+
+    private void CloseModal()
+    {
+        IsVisible = false;
+        OnClose.InvokeAsync(IsVisible);
+    }
+}
+
+@if (IsVisible)
+{
+    <div class="modal" style="display:block;" tabindex="-1" @onkeydown="HandleKeyDown">
+        <div class="@Size @DialogCssClass @(IsVerticallyCentered ? "modal-dialog-centered" : "")">
+            <div class="modal-content">
+                <div class="modal-header @HeaderCssClass">
+                    <h5 class="modal-title">@Title</h5>
+                    @if (ShowCloseButton)
+                    {
+                        <button type="button" class="close" @onclick="CloseModal">×</button>
+                    }
+                </div>
+                <div class="modal-body @BodyCssClass @(IsScrollable ? "modal-body-scrollable" : "")">
+                    @BodyTemplate
+                </div>
+                <div class="modal-footer @FooterCssClass">
+                    @FooterTemplate
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (CloseOnEscape && e.Key == "Escape")
+        {
+            CloseModal();
+        }
+    }
+}

@@ -9,6 +9,20 @@
 @inject INhomDanhMucRepository NhomDanhMucRepository
 
 <div class="m-5">
+
+    <button @onclick="ShowModal">Open Modal</button>
+
+    <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="My Custom Modal" Size="modal-lg">
+        <BodyTemplate>
+            <p>This is the content of the modal.</p>
+        </BodyTemplate>
+        <FooterTemplate>
+            <button class="btn btn-primary" @onclick="HandleSave">Save</button>
+            <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+        </FooterTemplate>
+    </CustomModal>
+
+
     <h3>Thêm DanhMuc Mới</h3>
     <EditForm Model="newDanhMuc" OnValidSubmit="HandleValidSubmit">
         <DataAnnotationsValidator />
@@ -43,6 +57,9 @@
     </EditForm>
 
     <h3 class="mt-5">Danh sách danh mục</h3>
+
+   
+
     @if (!listDanhMuc.Any())
     {
         <div class="pt-3 pl-4">
@@ -104,6 +121,32 @@
 @code {
     private List<MNhomDanhMuc> nhomDanhMucs = new List<MNhomDanhMuc>();
     private MDanhMuc newDanhMuc = new MDanhMuc();
+
+    private bool isModalVisible = false;
+
+    private void ShowModal()
+    {
+        isModalVisible = true;
+    }
+
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+    }
+
+    private void HandleSave()
+    {
+        // Logic for saving
+        isModalVisible = false;
+    }
+
+    private void HandleCancel()
+    {
+        // Logic for canceling
+        isModalVisible = false;
+    }
+
+
     public List<DanhMucModel> listDanhMuc
     {
         get;
