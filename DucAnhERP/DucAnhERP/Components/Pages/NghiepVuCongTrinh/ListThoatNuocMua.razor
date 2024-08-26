@@ -9,6 +9,7 @@
 @inject NavigationManager navigation
 @inject IHopRanhThangRepository HopRanhThangRepository
 @inject IDanhMucRepository DanhMucRepository
+@inject DucAnhERP.Services.ToastService ToastService
 @attribute [Authorize]
 
 <style>
@@ -23,6 +24,1729 @@
         }
 </style>
 <div class="container-fluid">
+  
+    <button class="mx-2 my-3 btn btn-primary" @onclick="ShowModal">Thêm mới </button>
+    <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
+        <BodyTemplate>
+            <EditForm Model="Input" method="post" FormName="CreaThêm mớite" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div>
+                    <div>
+                        <div class="row">
+                            <div class="col">
+                                <h4>Thông tin lý trình </h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-6">
+                                        <label for="ThongTinLyTrinh_TuyenDuong">Tuyến đường <span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinLyTrinh_TuyenDuong" class="form-control" id="ThongTinLyTrinh_TuyenDuong" placeholder="Tuyến đường" />
+                                        <ValidationMessage For="() => Input.ThongTinLyTrinh_TuyenDuong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-6">
+                                        <label for="ThongTinLyTrinh_LyTrinhTaiTimHoGa">Lý trình tại tim hố ga <span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinLyTrinh_LyTrinhTaiTimHoGa" class="form-control" id="ThongTinLyTrinh_LyTrinhTaiTimHoGa" placeholder="Lý trình tại tim hố ga" />
+                                        <ValidationMessage For="() => Input.ThongTinLyTrinh_LyTrinhTaiTimHoGa" class="text-danger" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2">Thông tin chung hố ga</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4 col-lg-4 ">
+                                        <label for="ThongTinChungHoGa_TenHoGaSauPhanLoai">Tên hố ga sau phân loại <span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinChungHoGa_TenHoGaSauPhanLoai" class="form-control" id="ThongTinChungHoGa_TenHoGaSauPhanLoai" placeholder="Tên hố ga sau phân loại" />
+                                        <ValidationMessage For="() => Input.ThongTinChungHoGa_TenHoGaSauPhanLoai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4 col-lg-4">
+                                        <label for="ThongTinChungHoGa_TenHoGaTheoBanVe">Tên hố ga theo bản vẽ <span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinChungHoGa_TenHoGaTheoBanVe" class="form-control" id="ThongTinChungHoGa_TenHoGaTheoBanVe" placeholder="Tên hố ga theo bản vẽ" />
+                                        <ValidationMessage For="() => Input.ThongTinChungHoGa_TenHoGaTheoBanVe" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4 col-lg-4">
+                                        <label for="ThongTinChungHoGa_HinhThucHoGa"> Hình thức hố ga <span class="text-danger">*</span></label>
+                                        <select id="ThongTinChungHoGa_HinhThucHoGa" class="form-control" @bind="Input.ThongTinChungHoGa_HinhThucHoGa">
+                                            <option value="">Hình thức hố ga ...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("HG_HTHGa"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.ThongTinChungHoGa_HinhThucHoGa" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4 col-lg-4">
+                                        <label for="ThongTinChungHoGa_KetCauMuMo"> Kết cấu mũ mố <span class="text-danger">*</span></label>
+                                        <select id="ThongTinChungHoGa_KetCauMuMo" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauMuMo">
+                                            <option value="">Kết cấu mũ mố ...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("HG_LMMHoGa"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.ThongTinChungHoGa_KetCauMuMo" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4 col-lg-4">
+                                        <label for="ThongTinChungHoGa_KetCauTuong"> Kết cấu tường <span class="text-danger">*</span></label>
+                                        <select id="ThongTinChungHoGa_KetCauTuong" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauTuong">
+                                            <option value="">Kết cấu tường ...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("HG_LTHoGa"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.ThongTinChungHoGa_KetCauTuong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4 col-lg-4">
+                                        <label for="ThongTinChungHoGa_HinhThucMongHoGa"> Hình thức móng hố ga <span class="text-danger">*</span></label>
+                                        <select id="ThongTinChungHoGa_HinhThucMongHoGa" class="form-control" @bind="Input.ThongTinChungHoGa_HinhThucMongHoGa">
+                                            <option value="">Hình thức móng hố ga  ...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("HG_HTMHoGa"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.ThongTinChungHoGa_HinhThucMongHoGa" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4 col-lg-4">
+                                        <label for="ThongTinChungHoGa_KetCauMong"> Kết cấu móng <span class="text-danger">*</span></label>
+                                        <select id="ThongTinChungHoGa_KetCauMong" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauMong">
+                                            <option value="">Kết cấu móng ...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("HG_HTMHoGa"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.ThongTinChungHoGa_KetCauMong" class="text-danger" />
+                                    </div>
+
+                                    <div class="form-floating col-sm-6 col-md-4 col-lg-4">
+                                        <label for="ThongTinChungHoGa_ChatMatTrong"> Chát mặt trong <span class="text-danger">*</span></label>
+                                        <select id="ThongTinChungHoGa_ChatMatTrong" class="form-control" @bind="Input.ThongTinChungHoGa_ChatMatTrong">
+                                            <option value="">Chát mặt trong ...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("DM_CoKhong"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.ThongTinChungHoGa_ChatMatTrong" class="text-danger" />
+                                    </div>
+
+                                    <div class="form-floating col-sm-6 col-md-4 col-lg-4">
+                                        <label for="ThongTinChungHoGa_ChatMatNgoai"> Chát mặt ngoài <span class="text-danger">*</span></label>
+                                        <select id="ThongTinChungHoGa_ChatMatNgoai" class="form-control" @bind="Input.ThongTinChungHoGa_ChatMatNgoai">
+                                            <option value="">Chát mặt ngoài ...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("DM_CoKhong"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.ThongTinChungHoGa_ChatMatNgoai" class="text-danger" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2">Thông tin kích thước hình học hố ga</h4>
+                                <hr />
+                                <h5 class="mt-2">1.Thông tin phủ bì hố ga (m)</h5>
+                                <div class="row">
+                                    <div class="form-floating col-6">
+                                        <label for="PhuBiHoGa_CDai">Chiểu dài (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.PhuBiHoGa_CDai" class="form-control" id="PhuBiHoGa_CDai" placeholder="Chiểu dài" />
+                                        <ValidationMessage For="() => Input.PhuBiHoGa_CDai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-6">
+                                        <label for="PhuBiHoGa_CRong">Chiều rộng (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.PhuBiHoGa_CRong" class="form-control" id="PhuBiHoGa_CRong" placeholder="Chiều rộng" />
+                                        <ValidationMessage For="() => Input.PhuBiHoGa_CRong" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5 class="mt-2">2.Kích thước hình học bê tông lót móng hố ga (m)</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="BeTongLotMong_D">Chiểu dài (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.BeTongLotMong_D" class="form-control" id="BeTongLotMong_D" placeholder="Chiểu dài" />
+                                        <ValidationMessage For="() => Input.BeTongLotMong_D" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="BeTongLotMong_R">Chiều rộng (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.BeTongLotMong_R" class="form-control" id="BeTongLotMong_R" placeholder="Chiều rộng" />
+                                        <ValidationMessage For="() => Input.BeTongLotMong_R" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="BeTongLotMong_C">Chiều cao (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.BeTongLotMong_C" class="form-control" id="BeTongLotMong_C" placeholder="Chiều cao" />
+                                        <ValidationMessage For="() => Input.BeTongLotMong_C" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5 class="mt-2">3.Kích thước hình học bê tông móng hố ga (m)</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="BeTongMongHoGa_D">Chiểu dài (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.BeTongMongHoGa_D" class="form-control" id="BeTongMongHoGa_D" placeholder="Chiểu dài" />
+                                        <ValidationMessage For="() => Input.BeTongMongHoGa_D" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="BeTongLotMong_R">Chiều rộng (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.BeTongMongHoGa_R" class="form-control" id="BeTongMongHoGa_R" placeholder="Chiều rộng" />
+                                        <ValidationMessage For="() => Input.BeTongMongHoGa_R" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TBeTongMongHoGa_C">Chiều cao (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TBeTongMongHoGa_C" class="form-control" id="TBeTongMongHoGa_C" placeholder="Chiều cao" />
+                                        <ValidationMessage For="() => Input.TBeTongMongHoGa_C" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5 class="mt-2">4.KTHH đế hố ga(m)</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="DeHoGa_D">Chiểu dài (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.DeHoGa_D" class="form-control" id="DeHoGa_D" placeholder="Chiểu dài" />
+                                        <ValidationMessage For="() => Input.DeHoGa_D" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="DeHoGa_R">Chiều rộng (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.DeHoGa_R" class="form-control" id="DeHoGa_R" placeholder="Chiều rộng" />
+                                        <ValidationMessage For="() => Input.DeHoGa_R" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="DeHoGa_C">Chiều cao (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.DeHoGa_C" class="form-control" id="DeHoGa_C" placeholder="Chiều cao" />
+                                        <ValidationMessage For="() => Input.DeHoGa_C" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5 class="mt-2">5.Kích thước hình học tường hố ga (m)</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TuongHoGa_D">Chiểu dài (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TuongHoGa_D" class="form-control" id="TuongHoGa_D" placeholder="Chiểu dài" />
+                                        <ValidationMessage For="() => Input.TuongHoGa_D" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TuongHoGa_R">Chiều rộng (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TuongHoGa_R" class="form-control" id="TuongHoGa_R" placeholder="Chiều rộng" />
+                                        <ValidationMessage For="() => Input.TuongHoGa_R" class="text-danger" />
+                                    </div>
+                                    @*  <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="TuongHoGa_C">Chiều cao (m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.TuongHoGa_C" class="form-control" id="TuongHoGa_C" placeholder="Chiều cao" />
+                                    <ValidationMessage For="() => Input.TuongHoGa_C" class="text-danger" />
+                                    </div> *@
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="DeHoGa_C">Chiều dài tường (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TuongHoGa_CdTuong" class="form-control" id="TuongHoGa_CdTuong" placeholder="Chiều dài tường" />
+                                        <ValidationMessage For="() => Input.TuongHoGa_CdTuong" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5 class="mt-2">6.KTHH dầm giữa hố ga (m)</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="DamGiuaHoGa_D">Chiểu dài (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.DamGiuaHoGa_D" class="form-control" id="DamGiuaHoGa_D" placeholder="Chiểu dài" />
+                                        <ValidationMessage For="() => Input.DamGiuaHoGa_D" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="DamGiuaHoGa_R">Chiều rộng (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.DamGiuaHoGa_R" class="form-control" id="DamGiuaHoGa_R" placeholder="Chiều rộng" />
+                                        <ValidationMessage For="() => Input.DamGiuaHoGa_R" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="DamGiuaHoGa_C">Chiều cao (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.DamGiuaHoGa_C" class="form-control" id="DamGiuaHoGa_C" placeholder="Chiều cao" />
+                                        <ValidationMessage For="() => Input.DamGiuaHoGa_C" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="DamGiuaHoGa_CdDam">Chiều dài tường (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.DamGiuaHoGa_CdDam" class="form-control" id="DamGiuaHoGa_CdDam" placeholder="Chiều dài dầm" />
+                                        <ValidationMessage For="() => Input.DamGiuaHoGa_CdDam" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa">C.Cao dầm giữa tường so với đáy hố ga (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa" class="form-control" id="DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa" placeholder="Chiều dài dầm" />
+                                        <ValidationMessage For="() => Input.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5 class="mt-2">7.Chát hố ga mặt trong </h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ChatMatTrong_D">Chiểu dài (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ChatMatTrong_D" class="form-control" id="ChatMatTrong_D" placeholder="Chiểu dài" />
+                                        <ValidationMessage For="() => Input.ChatMatTrong_D" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ChatMatTrong_R">Chiều rộng (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ChatMatTrong_R" class="form-control" id="ChatMatTrong_R" placeholder="Chiều rộng" />
+                                        <ValidationMessage For="() => Input.ChatMatTrong_R" class="text-danger" />
+                                    </div>
+                                    @*  <div class="form-floating col-sm-6 col-md-4">
+                                    <label for="ChatMatTrong_C">Chiều cao (m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.ChatMatTrong_C" class="form-control" id="ChatMatTrong_C" placeholder="Chiều cao" />
+                                    <ValidationMessage For="() => Input.ChatMatTrong_C" class="text-danger" />
+                                    </div> *@
+                                </div>
+                                <h5 class="mt-2">8.Chát hố ga mặt ngoài, cạnh 01 +02 (m)  </h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-6">
+                                        <label for="ChatMatNgoaiCanh_D">Chiểu dài (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ChatMatNgoaiCanh_D" class="form-control" id="ChatMatNgoaiCanh_D" placeholder="Chiểu dài" />
+                                        <ValidationMessage For="() => Input.ChatMatNgoaiCanh_D" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-6">
+                                        <label for="ChatMatNgoaiCanh_R">Chiều rộng (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ChatMatNgoaiCanh_R" class="form-control" id="ChatMatNgoaiCanh_R" placeholder="Chiều rộng" />
+                                        <ValidationMessage For="() => Input.ChatMatNgoaiCanh_R" class="text-danger" />
+                                    </div>
+                                    @*  <div class="form-floating col-sm-6 col-md-4">
+                                    <label for="ChatMatNgoaiCanh_C">Chiều cao (m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.ChatMatNgoaiCanh_C" class="form-control" id="ChatMatNgoaiCanh_C" placeholder="Chiều cao" />
+                                    <ValidationMessage For="() => Input.ChatMatNgoaiCanh_C" class="text-danger" />
+                                    </div> *@
+                                </div>
+                                <h5 class="mt-2">9.Kích thước hình học tường mũ mố thớt dưới (m) </h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="MuMoThotDuoi_D">Chiểu dài (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.MuMoThotDuoi_D" class="form-control" id="MuMoThotDuoi_D" placeholder="Chiểu dài" />
+                                        <ValidationMessage For="() => Input.MuMoThotDuoi_D" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="MuMoThotDuoi_R">Chiều rộng (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.MuMoThotDuoi_R" class="form-control" id="MuMoThotDuoi_R" placeholder="Chiều rộng" />
+                                        <ValidationMessage For="() => Input.MuMoThotDuoi_R" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="MuMoThotDuoi_C">Chiều cao (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.MuMoThotDuoi_C" class="form-control" id="MuMoThotDuoi_C" placeholder="Chiều cao" />
+                                        <ValidationMessage For="() => Input.MuMoThotDuoi_C" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="MuMoThotDuoi_CdTuong">Chiều dài tường (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.MuMoThotDuoi_CdTuong" class="form-control" id="MuMoThotDuoi_CdTuong" placeholder="Chiều dài tường" />
+                                        <ValidationMessage For="() => Input.MuMoThotDuoi_CdTuong" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5 class="mt-2">10.Kích thước hình học tường mũ mố thớt trên (m) (m) </h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="MuMoThotTren_D">Chiểu dài (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.MuMoThotTren_D" class="form-control" id="MuMoThotTren_D" placeholder="Chiểu dài" />
+                                        <ValidationMessage For="() => Input.MuMoThotTren_D" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="MuMoThotTren_R">Chiều rộng (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.MuMoThotTren_R" class="form-control" id="MuMoThotTren_R" placeholder="Chiều rộng" />
+                                        <ValidationMessage For="() => Input.MuMoThotTren_R" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="MuMoThotTren_C">Chiều cao (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.MuMoThotTren_C" class="form-control" id="MuMoThotTren_C" placeholder="Chiều cao" />
+                                        <ValidationMessage For="() => Input.MuMoThotTren_C" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="MuMoThotTren_CdTuong">Chiều dài tường (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.MuMoThotTren_CdTuong" class="form-control" id="MuMoThotTren_CdTuong" placeholder="Chiều dài tường" />
+                                        <ValidationMessage For="() => Input.MuMoThotTren_CdTuong" class="text-danger" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2">Hạng mục chiếm chỗ hố ga</h4>
+                                <hr />
+                                <h5>Hình thức đấu nối</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi1_Loai">Loại <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi1_Loai" class="form-control" id="HinhThucDauNoi1_Loai" placeholder="Loại" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi1_Loai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi1_CanhDai">Cạnh dài <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi1_CanhDai" class="form-control" id="HinhThucDauNoi1_CanhDai" placeholder="Cạnh dài" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi1_CanhDai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi1_CanhRong">Cạnh rộng <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi1_CanhRong" class="form-control" id="HinhThucDauNoi1_CanhRong" placeholder="Cạnh rộng" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi1_CanhRong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi1_CanhCheo">Cạnh chéo <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi1_CanhCheo" class="form-control" id="HinhThucDauNoi1_CanhCheo" placeholder="Cạnh chéo" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi1_CanhCheo" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5>Hình thức đấu nối</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi2_Loai">Loại </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi2_Loai" class="form-control" id="HinhThucDauNoi2_Loai" placeholder="Loại" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi2_Loai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi2_CanhDai">Cạnh dài </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi2_CanhDai" class="form-control" id="HinhThucDauNoi2_CanhDai" placeholder="Cạnh dài" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi2_CanhDai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi2_CanhRong">Cạnh rộng </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi2_CanhRong" class="form-control" id="HinhThucDauNoi2_CanhRong" placeholder="Cạnh rộng" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi2_CanhRong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi2_CanhCheo">Cạnh chéo </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi2_CanhCheo" class="form-control" id="HinhThucDauNoi2_CanhCheo" placeholder="Cạnh chéo" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi2_CanhCheo" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5>Hình thức đấu nối</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi3_Loai">Loại </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi3_Loai" class="form-control" id="HinhThucDauNoi3_Loai" placeholder="Loại" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi3_Loai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi3_CanhDai">Cạnh dài </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi3_CanhDai" class="form-control" id="HinhThucDauNoi3_CanhDai" placeholder="Cạnh dài" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi3_CanhDai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi3_CanhRong">Cạnh rộng </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi3_CanhRong" class="form-control" id="HinhThucDauNoi3_CanhRong" placeholder="Cạnh rộng" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi3_CanhRong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi3_CanhCheo">Cạnh chéo </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi3_CanhCheo" class="form-control" id="HinhThucDauNoi3_CanhCheo" placeholder="Cạnh chéo" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi3_CanhCheo" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5>Hình thức đấu nối</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi4_Loai">Loại </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi4_Loai" class="form-control" id="HinhThucDauNoi4_Loai" placeholder="Loại" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi4_Loai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi4_CanhDai">Cạnh dài </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi4_CanhDai" class="form-control" id="HinhThucDauNoi4_CanhDai" placeholder="Cạnh dài" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi4_CanhDai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi4_CanhRong">Cạnh rộng </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi4_CanhRong" class="form-control" id="HinhThucDauNoi4_CanhRong" placeholder="Cạnh rộng" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi4_CanhRong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi4_CanhCheo">Cạnh chéo </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi4_CanhCheo" class="form-control" id="HinhThucDauNoi4_CanhCheo" placeholder="Cạnh chéo" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi4_CanhCheo" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5>Hình thức đấu nối</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi5_Loai">Loại </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi5_Loai" class="form-control" id="HinhThucDauNoi5_Loai" placeholder="Loại" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi5_Loai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi5_CanhDai">Cạnh dài </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi5_CanhDai" class="form-control" id="HinhThucDauNoi5_CanhDai" placeholder="Cạnh dài" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi5_CanhDai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi5_CanhRong">Cạnh rộng </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi5_CanhRong" class="form-control" id="HinhThucDauNoi5_CanhRong" placeholder="Cạnh rộng" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi5_CanhRong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi5_CanhCheo">Cạnh chéo </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi5_CanhCheo" class="form-control" id="HinhThucDauNoi5_CanhCheo" placeholder="Cạnh chéo" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi5_CanhCheo" class="text-danger" />
+                                    </div>
+                                </div>
+
+                                <h5>Hình thức đấu nối</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi6_Loai">Loại </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi6_Loai" class="form-control" id="HinhThucDauNoi6_Loai" placeholder="Loại" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi6_Loai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi6_CanhDai">Cạnh dài </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi6_CanhDai" class="form-control" id="HinhThucDauNoi6_CanhDai" placeholder="Cạnh dài" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi6_CanhDai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi6_CanhRong">Cạnh rộng </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi6_CanhRong" class="form-control" id="HinhThucDauNoi6_CanhRong" placeholder="Cạnh rộng" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi6_CanhRong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi6_CanhCheo">Cạnh chéo </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi6_CanhCheo" class="form-control" id="HinhThucDauNoi6_CanhCheo" placeholder="Cạnh chéo" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi6_CanhCheo" class="text-danger" />
+                                    </div>
+                                </div>
+
+                                <h5>Hình thức đấu nối</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi7_Loai">Loại </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi7_Loai" class="form-control" id="HinhThucDauNoi7_Loai" placeholder="Loại" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi7_Loai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi7_CanhDai">Cạnh dài </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi7_CanhDai" class="form-control" id="HinhThucDauNoi7_CanhDai" placeholder="Cạnh dài" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi7_CanhDai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi7_CanhRong">Cạnh rộng </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi7_CanhRong" class="form-control" id="HinhThucDauNoi7_CanhRong" placeholder="Cạnh rộng" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi7_CanhRong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi7_CanhCheo">Cạnh chéo </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi7_CanhCheo" class="form-control" id="HinhThucDauNoi7_CanhCheo" placeholder="Cạnh chéo" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi7_CanhCheo" class="text-danger" />
+                                    </div>
+                                </div>
+
+                                <h5>Hình thức đấu nối</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi8_Loai">Loại </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi8_Loai" class="form-control" id="HinhThucDauNoi8_Loai" placeholder="Loại" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi8_Loai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi8_CanhDai">Cạnh dài </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi8_CanhDai" class="form-control" id="HinhThucDauNoi8_CanhDai" placeholder="Cạnh dài" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi8_CanhDai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi8_CanhRong">Cạnh rộng </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi8_CanhRong" class="form-control" id="HinhThucDauNoi8_CanhRong" placeholder="Cạnh rộng" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi8_CanhRong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="HinhThucDauNoi8_CanhCheo">Cạnh chéo </label>
+                                        <InputNumber @bind-Value="Input.HinhThucDauNoi8_CanhCheo" class="form-control" id="HinhThucDauNoi8_CanhCheo" placeholder="Cạnh chéo" />
+                                        <ValidationMessage For="() => Input.HinhThucDauNoi8_CanhCheo" class="text-danger" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2"> Thông tin tấm đan hố ga</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-6">
+                                        <label for="ThongTinTamDanHoGa_PhanLoaiDayHoGa">Phân loại đậy hố ga <span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa" class="form-control" id="ThongTinTamDanHoGa2_PhanLoaiDayHoGa" placeholder="Phân loại đậy hố ga" />
+                                        <ValidationMessage For="() => Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-6">
+                                        <label for="ThongTinTamDanHoGa2_HinhThucDayHoGa"> Hình thức đậy hố ga <span class="text-danger">*</span></label>
+                                        <select id="gender" class="form-control" @bind="Input.ThongTinTamDanHoGa2_HinhThucDayHoGa">
+                                            <option value="">Hình thức đậy hố ga ...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("HG_HTDHoGa"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.ThongTinTamDanHoGa2_HinhThucDayHoGa" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5> Loại tròn</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinTamDanHoGa2_DuongKinh">Đường kính (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinTamDanHoGa2_DuongKinh" class="form-control" id="ThongTinTamDanHoGa2_PhanLoaiDayHoGa" placeholder="Đường kính" />
+                                        <ValidationMessage For="() => Input.ThongTinTamDanHoGa2_DuongKinh" class="text-danger" />
+                                    </div>
+
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinTamDanHoGa2_ChieuDay">Chiều dầy (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinTamDanHoGa2_ChieuDay" class="form-control" id="ThongTinTamDanHoGa2_ChieuDay" placeholder="Chiều dầy" />
+                                        <ValidationMessage For="() => Input.ThongTinTamDanHoGa2_ChieuDay" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5>Loại vuông hoặc chữ nhật</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinTamDanHoGa2_D">Chiều dài (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinTamDanHoGa2_D" class="form-control" id="ThongTinTamDanHoGa2_D" placeholder="Chiều dài" />
+                                        <ValidationMessage For="() => Input.ThongTinTamDanHoGa2_D" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinTamDanHoGa2_R">Chiều rộng (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinTamDanHoGa2_R" class="form-control" id="ThongTinTamDanHoGa2_R" placeholder="Chiều rộng" />
+                                        <ValidationMessage For="() => Input.ThongTinTamDanHoGa2_R" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinTamDanHoGa2_C">Chiều cao (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinTamDanHoGa2_C" class="form-control" id="ThongTinTamDanHoGa2_C" placeholder="Chiều cao" />
+                                        <ValidationMessage For="() => Input.ThongTinTamDanHoGa2_C" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinTamDanHoGa2_SoLuongNapDay">Số lượng nắp đậy (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinTamDanHoGa2_SoLuongNapDay" class="form-control" id="ThongTinTamDanHoGa2_SoLuongNapDay" placeholder="Số lượng nắp đậy" />
+                                        <ValidationMessage For="() => Input.ThongTinTamDanHoGa2_SoLuongNapDay" class="text-danger" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2"> Thông tin vật liệu đào hố ga</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-6">
+                                        <label for="ThongTinTamDanHoGa2_DuongKinh">Loại vật liệu đào<span class="text-danger">*</span></label>
+                                        <select id="ThongTinVatLieuDaoHoGa_LoaiVatLieuDao" class="form-control" @bind="Input.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao">
+                                            <option value="">Loại vật liệu đào ...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("HG_LVLDHoGa"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-6">
+                                        <label for="ThongTinTamDanHoGa2_DuongKinh">Chiều cao đào đá (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa" class="form-control" id="ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa" placeholder="Chiều cao đào đá" />
+                                        <ValidationMessage For="() => Input.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa" class="text-danger" />
+                                    </div>
+                                    @*  <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat">Chiều cao đào đất (m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat" class="form-control" id="ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat" placeholder="Chiều cao đào đất" />
+                                    <ValidationMessage For="() => Input.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="ThongTinVatLieuDaoHoGa_TongChieuCaoDao">Tổng chiều cao đào (m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.ThongTinVatLieuDaoHoGa_TongChieuCaoDao" class="form-control" id="ThongTinVatLieuDaoHoGa_TongChieuCaoDao" placeholder="Tổng chiều cao đào" />
+                                    <ValidationMessage For="() => Input.ThongTinVatLieuDaoHoGa_TongChieuCaoDao" class="text-danger" />
+                                    </div> *@
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2 "> Thông tin cao độ hố ga</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinCaoDoHoGa_CaoDoTuNhien">Cao độ tự nhiên (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinCaoDoHoGa_CaoDoTuNhien" class="form-control" id="ThongTinCaoDoHoGa_CaoDoTuNhien" placeholder="Cao độ tự nhiên (m)" />
+                                        <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_CaoDoTuNhien" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinCaoDoHoGa_CdDinhViaHeHoanThien">CĐ đỉnh vỉa hè hoàn thiện (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinCaoDoHoGa_CdDinhViaHeHoanThien" class="form-control" id="ThongTinCaoDoHoGa_CdDinhViaHeHoanThien" placeholder="CĐ đỉnh vỉa hè hoàn thiện (m)" />
+                                        <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_CdDinhViaHeHoanThien" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinCaoDoHoGa_CaoDoDinhK98">Cao độ đỉnh K98 (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinCaoDoHoGa_CaoDoDinhK98" class="form-control" id="ThongTinCaoDoHoGa_CaoDoDinhK98" placeholder="Cao độ đỉnh K98" />
+                                        <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_CaoDoDinhK98" class="text-danger" />
+                                    </div>
+                                    @* <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao">Cao độ hiện trạng trước khi đào (m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao" class="form-control" id="ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao" placeholder="Cao độ hiện trạng trước khi đào" />
+                                    <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="ThongTinCaoDoHoGa_DayDao">Đáy đào (m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.ThongTinCaoDoHoGa_DayDao" class="form-control" id="ThongTinCaoDoHoGa_DayDao" placeholder="Đáy đào" />
+                                    <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_DayDao" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="ThongTinCaoDoHoGa_CSauDao">C.Sâu đào (m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.ThongTinCaoDoHoGa_CSauDao" class="form-control" id="ThongTinCaoDoHoGa_CSauDao" placeholder="C.Sâu đào" />
+                                    <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_CSauDao" class="text-danger" />
+                                    </div
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="ThongTinCaoDoHoGa_CSauDao">C.Sâu đào (m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.ThongTinCaoDoHoGa_CSauDao" class="form-control" id="ThongTinCaoDoHoGa_CSauDao" placeholder="C.Sâu đào" />
+                                    <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_CSauDao" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="ThongTinCaoDoHoGa_DinhLotMong">Đỉnh lót móng (m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.ThongTinCaoDoHoGa_DinhLotMong" class="form-control" id="ThongTinCaoDoHoGa_DinhLotMong" placeholder="Đỉnh lót móng" />
+                                    <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_DinhLotMong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="ThongTinCaoDoHoGa_CdDinhMong">CĐ đỉnh móng  (m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.ThongTinCaoDoHoGa_CdDinhMong" class="form-control" id="ThongTinCaoDoHoGa_CdDinhMong" placeholder="CĐ đỉnh móng " />
+                                    <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_CdDinhMong" class="text-danger" />
+                                    </div> *@
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinCaoDoHoGa_CdDayHoGa">CĐ đáy hố ga  (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinCaoDoHoGa_CdDayHoGa" class="form-control" id="ThongTinCaoDoHoGa_CdDayHoGa" placeholder="CĐ đáy hố ga " />
+                                        <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_CdDayHoGa" class="text-danger" />
+                                    </div>
+                                    @* <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="ThongTinCaoDoHoGa_CCaoTuong">C.Cao tường (m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.ThongTinCaoDoHoGa_CCaoTuong" class="form-control" id="ThongTinCaoDoHoGa_CCaoTuong" placeholder="C.Cao tường" />
+                                    <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_CCaoTuong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="ThongTinCaoDoHoGa_DinhTuongDuoiDamGiuaTuong">Đỉnh tường dưới dầm giữa tường (m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.ThongTinCaoDoHoGa_DinhTuongDuoiDamGiuaTuong" class="form-control" id="ThongTinCaoDoHoGa_DinhTuongDuoiDamGiuaTuong" placeholder="Đỉnh tường dưới dầm giữa tường" />
+                                    <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_DinhTuongDuoiDamGiuaTuong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="ThongTinCaoDoHoGa_DinhDamGiuaTuong">Đỉnh dầm giữa tường<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.ThongTinCaoDoHoGa_DinhDamGiuaTuong" class="form-control" id="ThongTinCaoDoHoGa_DinhDamGiuaTuong" placeholder="Đỉnh dầm giữa tường" />
+                                    <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_DinhDamGiuaTuong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="ThongTinCaoDoHoGa_DinhTuong">Đỉnh tường(m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.ThongTinCaoDoHoGa_DinhTuong" class="form-control" id="ThongTinCaoDoHoGa_DinhTuong" placeholder="Đỉnh tường" />
+                                    <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_DinhTuong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="ThongTinCaoDoHoGa_DinhMuMoThotDuoi">Đỉnh mũ mố thớt dưới (m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.ThongTinCaoDoHoGa_DinhMuMoThotDuoi" class="form-control" id="ThongTinCaoDoHoGa_DinhDamGiuaTuong" placeholder="Đỉnh mũ mố thớt dưới" />
+                                    <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_DinhMuMoThotDuoi" class="text-danger" />
+                                    </div> *@
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinCaoDoHoGa_CdDinhHoGa">CĐ đỉnh hố ga (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinCaoDoHoGa_CdDinhHoGa" class="form-control" id="ThongTinCaoDoHoGa_CdDinhHoGa" placeholder="CĐ đỉnh hố ga" />
+                                        <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_CdDinhHoGa" class="text-danger" />
+                                    </div>
+                                    @*  <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="ThongTinCaoDoHoGa_TongChieuCaoHoGa">Tổng chiều cao hố ga(m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.ThongTinCaoDoHoGa_TongChieuCaoHoGa" class="form-control" id="ThongTinCaoDoHoGa_TongChieuCaoHoGa" placeholder="Tổng chiều cao hố ga" />
+                                    <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_TongChieuCaoHoGa" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="ThongTinCaoDoHoGa_ChenhCaoDinhHoGaVaHienTrangDao">Chênh cao đỉnh hố ga và hiện trạng đào (m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.ThongTinCaoDoHoGa_ChenhCaoDinhHoGaVaHienTrangDao" class="form-control" id="ThongTinCaoDoHoGa_ChenhCaoDinhHoGaVaHienTrangDao" placeholder="Chênh cao đỉnh hố ga và hiện trạng đào" />
+                                    <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_ChenhCaoDinhHoGaVaHienTrangDao" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="ThongTinCaoDoHoGa_TongChieuCaoChiemChoDapTra">Tổng chiều cao chiếm chỗ đắp trả (m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.ThongTinCaoDoHoGa_TongChieuCaoChiemChoDapTra" class="form-control" id="ThongTinCaoDoHoGa_TongChieuCaoChiemChoDapTra" placeholder="Tổng chiều cao chiếm chỗ đắp trả" />
+                                    <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_TongChieuCaoChiemChoDapTra" class="text-danger" />
+                                    </div> *@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2"> Thông tin mái đào</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinMaiDao_ChieuRongDayDaoNho">Chiều rộng đáy đào nhỏ (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinMaiDao_ChieuRongDayDaoNho" class="form-control" id="ThongTinMaiDao_ChieuRongDayDaoNho" placeholder="Chiều rộng đáy đào nhỏ (m)" />
+                                        <ValidationMessage For="() => Input.ThongTinMaiDao_ChieuRongDayDaoNho" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinMaiDao_TyLeMoMai">Tỷ lệ mở mái(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinMaiDao_TyLeMoMai" class="form-control" id="ThongTinMaiDao_TyLeMoMai" placeholder="Tỷ lệ mở mái" />
+                                        <ValidationMessage For="() => Input.ThongTinMaiDao_TyLeMoMai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinMaiDao_SoCanhMaiTrai">Số cạnh mái trái<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinMaiDao_SoCanhMaiTrai" class="form-control" id="ThongTinMaiDao_SoCanhMaiTrai" placeholder="Số cạnh mái trái" />
+                                        <ValidationMessage For="() => Input.ThongTinMaiDao_SoCanhMaiTrai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinMaiDao_SoCanhMaiPhai">Số cạnh mái phải (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinMaiDao_SoCanhMaiPhai" class="form-control" id="ThongTinMaiDao_SoCanhMaiPhai" placeholder="Số cạnh mái phải" />
+                                        <ValidationMessage For="() => Input.ThongTinMaiDao_SoCanhMaiPhai" class="text-danger" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2"> Tọa Độ</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-6">
+                                        <label for="ToaDoX">Tọa độ X<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ToaDoX" class="form-control" id="ToaDoX" placeholder="Số cạnh mái trái" />
+                                        <ValidationMessage For="() => Input.ToaDoX" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-6">
+                                        <label for="ToaDoY">Tọa độ Y<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ToaDoY" class="form-control" id="ToaDoY" placeholder="Số cạnh mái phải" />
+                                        <ValidationMessage For="() => Input.ToaDoY" class="text-danger" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2 "> Thông tin lý trình truyền dẫn</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinLyTrinhTruyenDan_TuLyTrinh">Từ lý trình <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinLyTrinhTruyenDan_TuLyTrinh" class="form-control" id="ThongTinLyTrinhTruyenDan_TuLyTrinh" placeholder="Từ lý trình" />
+                                        <ValidationMessage For="() => Input.ThongTinLyTrinhTruyenDan_TuLyTrinh" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinLyTrinhTruyenDan_DenLyTrinh">Đến lý trình<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinLyTrinhTruyenDan_DenLyTrinh" class="form-control" id="ThongTinLyTrinhTruyenDan_DenLyTrinh" placeholder="Đến lý trình" />
+                                        <ValidationMessage For="() => Input.ThongTinLyTrinhTruyenDan_DenLyTrinh" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinLyTrinhTruyenDan_TuHoGa">Từ hố ga<span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinLyTrinhTruyenDan_TuHoGa" class="form-control" id="ThongTinLyTrinhTruyenDan_TuHoGa" placeholder="Từ hố ga" />
+                                        <ValidationMessage For="() => Input.ThongTinLyTrinhTruyenDan_TuHoGa" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinLyTrinhTruyenDan_DenHoGa">Đến hố ga<span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinLyTrinhTruyenDan_DenHoGa" class="form-control" id="ThongTinLyTrinhTruyenDan_DenHoGa" placeholder="Đến hố ga" />
+                                        <ValidationMessage For="() => Input.ThongTinLyTrinhTruyenDan_DenHoGa" class="text-danger" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2"> Thông tin đường truyền dẫn</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinDuongTruyenDan_HinhThucTruyenDan">Hình thức truyền dẫn <span class="text-danger">*</span></label>
+                                        <select id="ThongTinDuongTruyenDan_HinhThucTruyenDan" class="form-control" @bind="Input.ThongTinDuongTruyenDan_HinhThucTruyenDan">
+                                            <option value="">Hình thức truyền dẫn ...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("TD_HTTruyenDan"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.ThongTinDuongTruyenDan_HinhThucTruyenDan" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinDuongTruyenDan_LoaiTruyenDan">Loại truyền dẫn <span class="text-danger">*</span></label>
+                                        <select id="ThongTinDuongTruyenDan_LoaiTruyenDan" class="form-control" @bind="Input.ThongTinDuongTruyenDan_LoaiTruyenDan">
+                                            <option value="">Loại truyền dẫn...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("TD_LTruyenDan"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.ThongTinDuongTruyenDan_HinhThucTruyenDan" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai">Tên loại truyền dẫn sau phân loại<span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai" class="form-control" id="ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai" placeholder="Tên loại truyền dẫn sau phân loại" />
+                                        <ValidationMessage For="() => Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai" class="text-danger" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2 "> Thông tin chiều dài và số lượng cấu kiện đường truyền dẫn</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien">Chiều dài 01 cấu kiện (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien" class="form-control" id="TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien" placeholder="Chiều dài 01 cấu kiện" />
+                                        <ValidationMessage For="() => Input.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="TTCDSLCauKienDuongTruyenDan_ChieuDaiMoiNoiCKien">Chiều dài mối nối C.Kiện (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTCDSLCauKienDuongTruyenDan_ChieuDaiMoiNoiCKien" class="form-control" id="TTCDSLCauKienDuongTruyenDan_ChieuDaiMoiNoiCKien" placeholder="Chiều dài mối nối C.Kiện" />
+                                        <ValidationMessage For="() => Input.TTCDSLCauKienDuongTruyenDan_ChieuDaiMoiNoiCKien" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="TTCDSLCauKienDuongTruyenDan_SoLuongCKienDungDeTinhChieuDaiBoSung">Số lượng C.Kiện dùng để tính chiều dài bổ sung (C.Kiện)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTCDSLCauKienDuongTruyenDan_SoLuongCKienDungDeTinhChieuDaiBoSung" class="form-control" id="TTCDSLCauKienDuongTruyenDan_SoLuongCKienDungDeTinhChieuDaiBoSung" placeholder="" />
+                                        <ValidationMessage For="() => Input.TTCDSLCauKienDuongTruyenDan_SoLuongCKienDungDeTinhChieuDaiBoSung" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="TTCDSLCauKienDuongTruyenDan_TongChieuDai">Tổng chiều dài (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTCDSLCauKienDuongTruyenDan_TongChieuDai" class="form-control" id="TTCDSLCauKienDuongTruyenDan_TongChieuDai" placeholder="Tổng chiều dài (m)" />
+                                        <ValidationMessage For="() => Input.TTCDSLCauKienDuongTruyenDan_TongChieuDai" class="text-danger" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2 "> Thông tin móng đường truyền dẫn</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop">Phân loại móng cống tròn, cống hộp <span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop" class="form-control" id="ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop" placeholder="Tên loại truyền dẫn sau phân loại" />
+                                        <ValidationMessage For="() => Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinMongDuongTruyenDan_LoaiMong">Loại móng <span class="text-danger">*</span></label>
+                                        <select id="ThongTinMongDuongTruyenDan_LoaiMong" class="form-control" @bind="Input.ThongTinMongDuongTruyenDan_LoaiMong">
+                                            <option value="">Loại móng...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("TD_LMTruyenDan"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.ThongTinMongDuongTruyenDan_LoaiMong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinMongDuongTruyenDan_HinhThucMong">Hình thức móng <span class="text-danger">*</span></label>
+                                        <select id="ThongTinMongDuongTruyenDan_HinhThucMong" class="form-control" @bind="Input.ThongTinMongDuongTruyenDan_HinhThucMong">
+                                            <option value="">Hình thức móng...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("TD_HTMTruyenDan"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.ThongTinMongDuongTruyenDan_HinhThucMong" class="text-danger" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2 "> Thông tin đế cống</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-6">
+                                        <label for="ThongTinDeCong_TenLoaiDeCong">Tên loại đế cống<span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinDeCong_TenLoaiDeCong" class="form-control" id="ThongTinDeCong_TenLoaiDeCong" placeholder="Tên loại truyền dẫn sau phân loại" />
+                                        <ValidationMessage For="() => Input.ThongTinDeCong_TenLoaiDeCong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-6">
+                                        <label for="ThongTinDeCong_CauTaoDeCong">Cấu tạo đế cống<span class="text-danger">*</span></label>
+                                        <select id="ThongTinDeCong_CauTaoDeCong" class="form-control" @bind="Input.ThongTinDeCong_CauTaoDeCong">
+                                            <option value="">Hình thức móng...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("TD_HTMTruyenDan"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.ThongTinDeCong_CauTaoDeCong" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5> KTHH đế cống</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinDeCong_D">Chiều dài<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinDeCong_D" class="form-control" id="ThongTinDeCong_D" placeholder="Chiều dài" />
+                                        <ValidationMessage For="() => Input.ThongTinDeCong_D" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinDeCong_R">Chiều rộng<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinDeCong_R" class="form-control" id="ThongTinDeCong_R" placeholder="Chiều rộng" />
+                                        <ValidationMessage For="() => Input.ThongTinDeCong_R" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinDeCong_C">Chiều Cao<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinDeCong_C" class="form-control" id="ThongTinDeCong_C" placeholder="Chiều cao" />
+                                        <ValidationMessage For="() => Input.ThongTinDeCong_C" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5> Khối lượng đế cống</h5>
+                                <div class="row">
+                                    <div class="form-floating col-6">
+                                        <label for="ThongTinDeCong_SlDeCong01CauKienTruyenDan">SL đế cống/01 cấu kiện truyền dẫn (C.Kiện)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinDeCong_SlDeCong01CauKienTruyenDan" class="form-control" id="ThongTinDeCong_SlDeCong01CauKienTruyenDan" placeholder="C.Kiện" />
+                                        <ValidationMessage For="() => Input.ThongTinDeCong_SlDeCong01CauKienTruyenDan" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-6">
+                                        <label for="ThongTinDeCong_Kl01DeCong">KL 01 đế cống<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinDeCong_Kl01DeCong" class="form-control" id="ThongTinDeCong_Kl01DeCong" placeholder="KL 01 đế cống" />
+                                        <ValidationMessage For="() => Input.ThongTinDeCong_Kl01DeCong" class="text-danger" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2"> Thông tin cấu tạo cống tròn</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinCauTaoCongTron_CDayPhuBi">C.Dầy phủ bì (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinCauTaoCongTron_CDayPhuBi" class="form-control" id="ThongTinCauTaoCongTron_CDayPhuBi" placeholder="C.Dầy phủ bì (m)" />
+                                        <ValidationMessage For="() => Input.ThongTinCauTaoCongTron_CDayPhuBi" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinCauTaoCongTron_SoCanh">Số cạnh <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinCauTaoCongTron_SoCanh" class="form-control" id="ThongTinCauTaoCongTron_SoCanh" placeholder="Số cạnh" />
+                                        <ValidationMessage For="() => Input.ThongTinCauTaoCongTron_SoCanh" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinCauTaoCongTron_LongSuDung">Lòng sử dụng (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinCauTaoCongTron_LongSuDung" class="form-control" id="ThongTinCauTaoCongTron_LongSuDung" placeholder="Lòng sử dụng" />
+                                        <ValidationMessage For="() => Input.ThongTinCauTaoCongTron_LongSuDung" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinCauTaoCongTron_CCaoLotMong">C.Cao lót móng (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinCauTaoCongTron_CCaoLotMong" class="form-control" id="ThongTinCauTaoCongTron_CCaoLotMong" placeholder="C.Cao lót móng" />
+                                        <ValidationMessage For="() => Input.ThongTinCauTaoCongTron_CCaoLotMong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinCauTaoCongTron_CRongLotMong">C.Rộng lót móng (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinCauTaoCongTron_CRongLotMong" class="form-control" id="ThongTinCauTaoCongTron_CRongLotMong" placeholder="C.Rộng lót móng" />
+                                        <ValidationMessage For="() => Input.ThongTinCauTaoCongTron_CRongLotMong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinCauTaoCongTron_CCaoMong">C.Cao móng (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinCauTaoCongTron_CCaoMong" class="form-control" id="ThongTinCauTaoCongTron_CCaoMong" placeholder="C.Cao móng" />
+                                        <ValidationMessage For="() => Input.ThongTinCauTaoCongTron_CCaoMong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinCauTaoCongTron_CRongMong"> C.Rộng móng (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinCauTaoCongTron_CRongMong" class="form-control" id="ThongTinCauTaoCongTron_CRongMong" placeholder=" C.Rộng móng" />
+                                        <ValidationMessage For="() => Input.ThongTinCauTaoCongTron_CRongMong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinCauTaoCongTron_CCaoDe">  C.Cao đế (tại vị trí đặt C.Kiện) (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinCauTaoCongTron_CCaoDe" class="form-control" id="ThongTinCauTaoCongTron_CRongMong" placeholder=" C.Cao đế" />
+                                        <ValidationMessage For="() => Input.ThongTinCauTaoCongTron_CCaoDe" class="text-danger" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2 "> Thông tin kích thước hình học cống hộp, rãnh</h4>
+                                <hr />
+                                <h5> Thông tin chung</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTKTHHCongHopRanh_CauTaoTuong">Cấu tạo tường<span class="text-danger">*</span></label>
+                                        <select id="TTKTHHCongHopRanh_CauTaoTuong" class="form-control" @bind="Input.TTKTHHCongHopRanh_CauTaoTuong">
+                                            <option value="">Cấu tạo tường...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("TD_LDanhTuong"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CauTaoTuong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTKTHHCongHopRanh_CauTaoMuMo">Cấu tạo mũ mố<span class="text-danger">*</span></label>
+                                        <select id="TTKTHHCongHopRanh_CauTaoMuMo" class="form-control" @bind="Input.TTKTHHCongHopRanh_CauTaoMuMo">
+                                            <option value="">Cấu tạo mũ mố...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("TD_LMMCongRanh"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CauTaoMuMo" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTKTHHCongHopRanh_ChatMatTrong">Chát mặt trong<span class="text-danger">*</span></label>
+                                        <select id="TTKTHHCongHopRanh_ChatMatTrong" class="form-control" @bind="Input.TTKTHHCongHopRanh_ChatMatTrong">
+                                            <option value="">Chát mặt trong...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("DM_CoKhong"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_ChatMatTrong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTKTHHCongHopRanh_ChatMatNgoai">Chát mặt ngoài<span class="text-danger">*</span></label>
+                                        <select id="TTKTHHCongHopRanh_ChatMatNgoai" class="form-control" @bind="Input.TTKTHHCongHopRanh_ChatMatNgoai">
+                                            <option value="">Chát mặt ngoài...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("DM_CoKhong"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_ChatMatNgoai" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5> Lót móng</h5>
+                                <div class="row">
+                                    <div class="form-floating col-6">
+                                        <label for="TTKTHHCongHopRanh_CCaoLotMong">C.Cao lót móng(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTKTHHCongHopRanh_CCaoLotMong" class="form-control" id="TTKTHHCongHopRanh_CCaoLotMong" placeholder="C.Cao lót móng" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CCaoLotMong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-6">
+                                        <label for="TTKTHHCongHopRanh_CRongLotMong">C.Rộng lót móng(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTKTHHCongHopRanh_CRongLotMong" class="form-control" id="TTKTHHCongHopRanh_CRongLotMong" placeholder="C.Rộng lót móng" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CRongLotMong" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5> Móng</h5>
+                                <div class="row">
+                                    <div class="form-floating col-6">
+                                        <label for="TTKTHHCongHopRanh_CCaoMong">C.Cao móng(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTKTHHCongHopRanh_CCaoMong" class="form-control" id="TTKTHHCongHopRanh_CCaoMong" placeholder="C.Cao móng" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CCaoMong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-6">
+                                        <label for="TTKTHHCongHopRanh_CRongMong">C.Rộng móng(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTKTHHCongHopRanh_CRongMong" class="form-control" id="TTKTHHCongHopRanh_CRongMong" placeholder="C.Rộng móng" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CRongMong" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5> Đế</h5>
+                                <div class="row">
+                                    <div class="form-floating col-6">
+                                        <label for="TTKTHHCongHopRanh_CCaoDe">C.Cao đế(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTKTHHCongHopRanh_CCaoDe" class="form-control" id="TTKTHHCongHopRanh_CCaoDe" placeholder="C.Cao đế" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CCaoDe" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-6">
+                                        <label for="TTKTHHCongHopRanh_CRongDe">C.Rộng đế(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTKTHHCongHopRanh_CRongDe" class="form-control" id="TTKTHHCongHopRanh_CRongDe" placeholder="C.Rộng đế" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CRongDe" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5>Thân</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTKTHHCongHopRanh_CDayTuong01Ben">C.Dầy tường 01 bên (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTKTHHCongHopRanh_CDayTuong01Ben" class="form-control" id="TTKTHHCongHopRanh_CDayTuong01Ben" placeholder="C.Dầy tường 01 bên" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CDayTuong01Ben" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTKTHHCongHopRanh_SoLuongTuong">Số lượng tường(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTKTHHCongHopRanh_SoLuongTuong" class="form-control" id="TTKTHHCongHopRanh_SoLuongTuong" placeholder="Số lượng tường" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_SoLuongTuong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTKTHHCongHopRanh_CRongLongSuDung">C.Rộng lòng sử dụng(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTKTHHCongHopRanh_CRongLongSuDung" class="form-control" id="TTKTHHCongHopRanh_CRongLongSuDung" placeholder="C.Rộng lòng sử dụng" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CRongLongSuDung" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTKTHHCongHopRanh_CCaoTuongCongHop">C.Cao tường cống hộp(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTKTHHCongHopRanh_CCaoTuongCongHop" class="form-control" id="TTKTHHCongHopRanh_CCaoTuongCongHop" placeholder="C.Cao tường cống hộp" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CCaoTuongCongHop" class="text-danger" />
+                                    </div>
+                                    @* <div class="form-floating col-sm-6 col-md-4">
+                                    <label for="TTKTHHCongHopRanh_CCaoTuongRanh">C.Cao tường rãnh(m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.TTKTHHCongHopRanh_CCaoTuongRanh" class="form-control" id="TTKTHHCongHopRanh_CCaoTuongRanh" placeholder="C.Cao tường rãnh" />
+                                    <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CCaoTuongRanh" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                    <label for="TTKTHHCongHopRanh_CCaoTuongGop">C.Cao tường gộp(m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.TTKTHHCongHopRanh_CCaoTuongGop" class="form-control" id="TTKTHHCongHopRanh_CCaoTuongGop" placeholder="C.Cao tường gộp" />
+                                    <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CCaoTuongGop" class="text-danger" />
+                                    </div> *@
+                                </div>
+                                <h5>Mũ mố</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="TTKTHHCongHopRanh_CCaoMuMoThotDuoi">C.Cao mũ mố thớt dưới(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTKTHHCongHopRanh_CCaoMuMoThotDuoi" class="form-control" id="TTKTHHCongHopRanh_CCaoMuMoThotDuoi" placeholder="C.Cao mũ mố thớt dưới" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CCaoMuMoThotDuoi" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="TTKTHHCongHopRanh_CRongMuMoDuoi">C.Rộng mũ mố dưới(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTKTHHCongHopRanh_CRongMuMoDuoi" class="form-control" id="TTKTHHCongHopRanh_CRongMuMoDuoi" placeholder="C.Rộng mũ mố dưới" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CRongMuMoDuoi" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="TTKTHHCongHopRanh_CCaoMuMoThotTren">C.Cao mũ mố thớt trên (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTKTHHCongHopRanh_CCaoMuMoThotTren" class="form-control" id="TTKTHHCongHopRanh_CCaoMuMoThotTren" placeholder="C.Cao mũ mố thớt trên" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CCaoMuMoThotTren" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="TTKTHHCongHopRanh_CRongMuMoTren">C.Rộng mũ mố trên(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTKTHHCongHopRanh_CRongMuMoTren" class="form-control" id="TTKTHHCongHopRanh_CRongMuMoTren" placeholder="C.Rộng mũ mố trên" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CRongMuMoTren" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5>Thanh chống</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTKTHHCongHopRanh_LoaiThanhChong">Loại thanh chống (m)<span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.TTKTHHCongHopRanh_LoaiThanhChong" class="form-control" id="TTKTHHCongHopRanh_LoaiThanhChong" placeholder="Loại thanh chống" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_LoaiThanhChong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTKTHHCongHopRanh_CauTaoThanhChong">Cấu tạo thanh chống<span class="text-danger">*</span></label>
+                                        <select id="TTKTHHCongHopRanh_CauTaoThanhChong" @bind="Input.TTKTHHCongHopRanh_CauTaoThanhChong" class="form-control">
+                                            <option value="">Cấu tạo thanh chống...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("TD_CTTChongRanh"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CauTaoThanhChong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTKTHHCongHopRanh_CCaoThanhChong">C.Cao thanh chống (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTKTHHCongHopRanh_CCaoThanhChong" class="form-control" id="TTKTHHCongHopRanh_CCaoThanhChong" placeholder="C.Cao thanh chống" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CCaoThanhChong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTKTHHCongHopRanh_CRongThanhChong">C.Rộng thanh chống(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTKTHHCongHopRanh_CRongThanhChong" class="form-control" id="TTKTHHCongHopRanh_CRongThanhChong" placeholder="C.Rộng thanh chống" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CRongThanhChong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTKTHHCongHopRanh_CDai">C.Dài(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTKTHHCongHopRanh_CDai" class="form-control" id="TTKTHHCongHopRanh_CDai" placeholder="C.Dài" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CDai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTKTHHCongHopRanh_SoLuongThanhChong">Số lượng thanh chống(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTKTHHCongHopRanh_SoLuongThanhChong" class="form-control" id="TTKTHHCongHopRanh_SoLuongThanhChong" placeholder="Số lượng thanh chống" />
+                                        <ValidationMessage For="() => Input.TTKTHHCongHopRanh_SoLuongThanhChong" class="text-danger" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2 "> Thông tin kích thước hình học ống nhựa</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinKichThuocHinhHocOngNhua_CDayPhuBi">C.Dầy phủ bì (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi" class="form-control" id="ThongTinKichThuocHinhHocOngNhua_CDayPhuBi" placeholder="C.Dầy phủ bì" />
+                                        <ValidationMessage For="() => Input.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinKichThuocHinhHocOngNhua_SoCanh">Số cạnh <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinKichThuocHinhHocOngNhua_SoCanh" class="form-control" id="ThongTinKichThuocHinhHocOngNhua_SoCanh" placeholder="Số cạnh" />
+                                        <ValidationMessage For="() => Input.ThongTinKichThuocHinhHocOngNhua_SoCanh" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinKichThuocHinhHocOngNhua_LongSuDung">Lòng sử dụng (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinKichThuocHinhHocOngNhua_LongSuDung" class="form-control" id="ThongTinKichThuocHinhHocOngNhua_LongSuDung" placeholder="Lòng sử dụng" />
+                                        <ValidationMessage For="() => Input.ThongTinKichThuocHinhHocOngNhua_LongSuDung" class="text-danger" />
+                                    </div>
+                                    @*   <div class="form-floating col-sm-6 col-md-4">
+                                    <label for="ThongTinKichThuocHinhHocOngNhua_TongCCaoOng">Tổng C.Cao ống (m) <span class="text-danger">*</span></label>
+                                    <InputNumber @bind-Value="Input.ThongTinKichThuocHinhHocOngNhua_TongCCaoOng" class="form-control" id="ThongTinKichThuocHinhHocOngNhua_TongCCaoOng" placeholder="Tổng C.Cao ống" />
+                                    <ValidationMessage For="() => Input.ThongTinKichThuocHinhHocOngNhua_TongCCaoOng" class="text-danger" />
+                                    </div> *@
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinKichThuocHinhHocOngNhua_CCaoDemCat">C.Cao đệm cátg (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat" class="form-control" id="ThongTinKichThuocHinhHocOngNhua_CCaoDemCat" placeholder="C.Cao đệm cát" />
+                                        <ValidationMessage For="() => Input.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinKichThuocHinhHocOngNhua_CCaoDapCat">C.Cao đắp cát (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinKichThuocHinhHocOngNhua_CCaoDapCat" class="form-control" id="ThongTinKichThuocHinhHocOngNhua_CCaoDapCat" placeholder="C.Cao đắp cát" />
+                                        <ValidationMessage For="() => Input.ThongTinKichThuocHinhHocOngNhua_CCaoDapCat" class="text-danger" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2"> Thông tin rãnh thang</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_HinhThucMai">Hình thức mái<span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinRanhThang_HinhThucMai" class="form-control" id="ThongTinRanhThang_HinhThucMai" placeholder="Hình thức mái" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_HinhThucMai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_CauTaoChanKhay">Cấu tạo chân khay<span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinRanhThang_CauTaoChanKhay" class="form-control" id="ThongTinRanhThang_CauTaoChanKhay" placeholder="Cấu tạo chân khay" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_CauTaoChanKhay" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_CauTaoGiangDinh">Cấu tạo giằng đỉnh<span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinRanhThang_CauTaoGiangDinh" class="form-control" id="ThongTinRanhThang_CauTaoGiangDinh" placeholder="Cấu tạo giằng đỉnh" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_CauTaoGiangDinh" class="text-danger" />
+                                    </div>
+
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_HinhThucHanhLangBaoVe">Hình thức hành lang bảo vệ<span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinRanhThang_HinhThucHanhLangBaoVe" class="form-control" id="TTKTHHCongHopRanh_ChatMatTrong" placeholder="Hình thức hành lang bảo vệ" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_HinhThucHanhLangBaoVe" class="text-danger" />
+                                    </div>
+
+                                </div>
+                                <h5> Thông tin móng</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_PhanLoaiChanKhay">C.Cao lót móng(m)<span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinRanhThang_PhanLoaiChanKhay" class="form-control" id="ThongTinRanhThang_PhanLoaiChanKhay" placeholder="Phân loại chân khay" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_PhanLoaiChanKhay" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_CCaoLotChanKhay">C.Cao lót chân khay(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_CCaoLotChanKhay" class="form-control" id="ThongTinRanhThang_CCaoLotChanKhay" placeholder="C.Cao lót chân khay" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_CCaoLotChanKhay" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_CRongLotChanKhay">C.Rộng lót chân khay (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_CRongLotChanKhay" class="form-control" id="ThongTinRanhThang_CRongLotChanKhay" placeholder="C.Rộng lót chân khay" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_CRongLotChanKhay" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_SoLuongLotChanKhay">Số lượng lót chân khay<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_SoLuongLotChanKhay" class="form-control" id="ThongTinRanhThang_SoLuongLotChanKhay" placeholder="Số lượng lót chân khay" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_SoLuongLotChanKhay" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_CCaoMongChanKhay">C.Cao móng chân khay(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_CCaoMongChanKhay" class="form-control" id="ThongTinRanhThang_CCaoMongChanKhay" placeholder="C.Cao móng chân khay" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_CCaoMongChanKhay" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_SoLuongMongChanKhay">Số lượng móng chân khay(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_SoLuongMongChanKhay" class="form-control" id="ThongTinRanhThang_SoLuongMongChanKhay" placeholder="Số lượng móng chân khay" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_SoLuongMongChanKhay" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_CCaoLot">C.Cao lót (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_CCaoLot" class="form-control" id="ThongTinRanhThang_CCaoLot" placeholder="C.Cao lót" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_CCaoLot" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_CRongLot">C.Rộng lót móng(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_CRongLot" class="form-control" id="ThongTinRanhThang_CRongLot" placeholder="C.Rộng lót móng" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_CRongLot" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_CCaoLot">C.Rộng lót(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_CCaoLot" class="form-control" id="ThongTinRanhThang_CCaoLot" placeholder="C.Rộng lót" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_CCaoLot" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_CCaoMong">C.Cao móng(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_CCaoMong" class="form-control" id="ThongTinRanhThang_CCaoMong" placeholder="C.Cao móng" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_CCaoMong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_CRongMong">C.Rộng móng(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_CRongMong" class="form-control" id="ThongTinRanhThang_CRongMong" placeholder="C.Rộng móng" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_CRongMong" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5> Thông tin mái</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_PhanLoaiMai">Phân loại mái(m)<span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinRanhThang_PhanLoaiMai" class="form-control" id="ThongTinRanhThang_PhanLoaiMai" placeholder="Phân loại mái" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_PhanLoaiMai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_CRongMai">C.Rộng mái (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_CRongMai" class="form-control" id="ThongTinRanhThang_CRongMai" placeholder="C.Rộng mái (m)" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_CRongMai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_CDayMai">C.Dầy mái(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_CDayMai" class="form-control" id="ThongTinRanhThang_CDayMai" placeholder="C.Dầy mái" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_CDayMai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_SoLuongMai">Số lượng mái(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_SoLuongMai" class="form-control" id="ThongTinRanhThang_SoLuongMai" placeholder="Số lượng mái" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_SoLuongMai" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5>Thông tin giằng đỉnh</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_PhanLoaiGiangDinh">Phân loại giằng đỉnh<span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinRanhThang_PhanLoaiGiangDinh" class="form-control" id="ThongTinRanhThang_PhanLoaiGiangDinh" placeholder="Phân loại giằng đỉnh" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_PhanLoaiGiangDinh" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_CCaoLotGiangDinh">C.Cao lót giằng đỉnh(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_CCaoLotGiangDinh" class="form-control" id="ThongTinRanhThang_CCaoLotGiangDinh" placeholder="C.Cao lót giằng đỉnh" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_CCaoLotGiangDinh" class="text-danger" />
+                                    </div>
+
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_CRongLotGiangDinh">C.Rộng lót giằng đỉnh(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_CRongLotGiangDinh" class="form-control" id="ThongTinRanhThang_CRongLotGiangDinh" placeholder="C.Rộng lót giằng đỉnh" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_CRongLotGiangDinh" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_SoLuongLotGiangDinh">Số lượng lót giằng đỉnh<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_SoLuongLotGiangDinh" class="form-control" id="ThongTinRanhThang_SoLuongLotGiangDinh" placeholder="Số lượng lót giằng đỉnh" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_SoLuongLotGiangDinh" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinRanhThang_CCaoMongGiangDinh">C.Cao móng giằng đỉnh <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_CCaoMongGiangDinh" class="form-control" id="ThongTinRanhThang_CCaoMongGiangDinh" placeholder="C.Cao móng giằng đỉnh " />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_CCaoMongGiangDinh" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="ThongTinRanhThang_CRongMongGiangDinh">C.Rộng móng giằng đỉnh(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_CRongMongGiangDinh" class="form-control" id="ThongTinRanhThang_CRongMongGiangDinh" placeholder="C.Rộng móng giằng đỉnh" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_CRongMongGiangDinh" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_SoLuongMongGiangDinh">Số lượng móng giằng đỉnhg<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_SoLuongMongGiangDinh" class="form-control" id="ThongTinRanhThang_SoLuongMongGiangDinh" placeholder="Số lượng móng giằng đỉnh" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_SoLuongMongGiangDinh" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5>Thông tin hành lang bảo vệ</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_PhanLoaiHanhLangBaoVe">Phân loại hành lang bảo vệ(m)<span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinRanhThang_PhanLoaiHanhLangBaoVe" class="form-control" id="ThongTinRanhThang_PhanLoaiHanhLangBaoVe" placeholder="Phân loại hành lang bảo vệ" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_PhanLoaiHanhLangBaoVe" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_CCaoHangLangBaoVe">C.Cao hàng lang bảo vệ(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_CCaoHanhLangBaoVe" class="form-control" id="ThongTinRanhThang_CCaoHangLangBaoVe" placeholder="C.Cao hàng lang bảo vệ" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_CCaoHanhLangBaoVe" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_CRongHanhLangBaoVe">C.Rộng hành lang bảo vệ(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_CRongHanhLangBaoVe" class="form-control" id="TTKTHHCongHopRanh_CCaoMuMoThotTren" placeholder="C.Rộng hành lang bảo vệ" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_CRongHanhLangBaoVe" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinRanhThang_SoLuongHangLangBaoVe">Số lượng hàng lang bảo vệ<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinRanhThang_SoLuongHangLangBaoVe" class="form-control" id="ThongTinRanhThang_SoLuongHangLangBaoVe" placeholder="Số lượng hàng lang bảo vệ" />
+                                        <ValidationMessage For="() => Input.ThongTinRanhThang_SoLuongHangLangBaoVe" class="text-danger" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2 "> Thông tin tấm đan cống hộp, rãnh</h4>
+                                <hr />
+                                <h5> Thông tin tấm đan tiêu chuẩn</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTTDCongHoRanh_TenLoaiTamDanTieuChuan">Tên loại tấm đan tiêu chuẩn<span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan" class="form-control" id="TTTDCongHoRanh_TenLoaiTamDanTieuChuan" placeholder="Tên loại tấm đan tiêu chuẩn" />
+                                        <ValidationMessage For="() => Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan">Cấu tạo tấm đan truyền dẫn tấm đan tiêu chuẩn<span class="text-danger">*</span></label>
+
+                                        <select id="TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan" class="form-control" @bind="Input.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan">
+                                            <option value="">Cấu tạo tấm đan...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("TD_CTTDTruyenDan"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan" class="text-danger" />
+                                    </div>
+                                    @* <div class="form-floating col-sm-6 col-md-4">
+                                    <label for="TTTDCongHoRanh_SoLuong">C.Rộng lót chân khay (m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.TTTDCongHoRanh_SoLuong" class="form-control" id="TTTDCongHoRanh_SoLuong" placeholder="C.Rộng lót chân khay" />
+                                    <ValidationMessage For="() => Input.TTTDCongHoRanh_SoLuong" class="text-danger" />
+                                    </div> *@
+
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTTDCongHoRanh_CDai">C.Dài <span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTTDCongHoRanh_CDai" class="form-control" id="TTTDCongHoRanh_CDai" placeholder="C.Dài " />
+                                        <ValidationMessage For="() => Input.TTTDCongHoRanh_CDai" class="text-danger" />
+                                    </div>
+
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTTDCongHoRanh_CRong">C.Rộng (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTTDCongHoRanh_CRong" class="form-control" id="TTTDCongHoRanh_CRong" placeholder="C.Rộng " />
+                                        <ValidationMessage For="() => Input.TTTDCongHoRanh_CRong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTTDCongHoRanh_CCao">C.Cao (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTTDCongHoRanh_CCao" class="form-control" id="TTTDCongHoRanh_CCao" placeholder="C.Cao " />
+                                        <ValidationMessage For="() => Input.TTTDCongHoRanh_CCao" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5> Thông tin tấm đan loại 02</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="TTTDCongHoRanh_TenLoaiTamDanLoai02">Tên loại tấm đan loại 02<span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.TTTDCongHoRanh_TenLoaiTamDanLoai02" class="form-control" id="TTTDCongHoRanh_TenLoaiTamDanLoai02" placeholder="Tên loại tấm đan loại 02" />
+                                        <ValidationMessage For="() => Input.TTTDCongHoRanh_TenLoaiTamDanLoai02" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="TTTDCongHoRanh_CauTaoTamDanTruyenDan">Cấu tạo tấm đan truyền dẫn<span class="text-danger">*</span></label>
+                                        <select id="TTTDCongHoRanh_CauTaoTamDanTruyenDan" class="form-control" @bind="Input.TTTDCongHoRanh_CauTaoTamDanTruyenDan">
+                                            <option value="">Cấu tạo tấm đan...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("TD_CTTDTruyenDan"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.TTTDCongHoRanh_CauTaoTamDanTruyenDan" class="text-danger" />
+                                    </div>
+                                    @* <div class="form-floating col-sm-6 col-md-4">
+                                    <label for="TTTDCongHoRanh_SoLuong1">Số lượng (m)<span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.TTTDCongHoRanh_SoLuong1" class="form-control" id="TTTDCongHoRanh_SoLuong1" placeholder="C.Rộng lót chân khay" />
+                                    <ValidationMessage For="() => Input.TTTDCongHoRanh_SoLuong1" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                    <label for="TTTDCongHoRanh_CDai1">C.Dài <span class="text-danger">*</span></label>
+                                    <InputText @bind-Value="Input.TTTDCongHoRanh_CDai1" class="form-control" id="TTTDCongHoRanh_CDai1" placeholder="C.Dài " />
+                                    <ValidationMessage For="() => Input.TTTDCongHoRanh_CDai1" class="text-danger" />
+                                    </div> *@
+
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="TTTDCongHoRanh_CRong1">C.Rộng (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTTDCongHoRanh_CRong1" class="form-control" id="TTTDCongHoRanh_CRong1" placeholder="C.Rộng " />
+                                        <ValidationMessage For="() => Input.TTTDCongHoRanh_CRong1" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="TTTDCongHoRanh_CCao1">C.Cao (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTTDCongHoRanh_CCao1" class="form-control" id="TTTDCongHoRanh_CCao1" placeholder="C.Cao " />
+                                        <ValidationMessage For="() => Input.TTTDCongHoRanh_CCao1" class="text-danger" />
+                                    </div>
+
+
+                                </div>
+                                <h5> Thông tin tính tấm đan bổ sung</h5>
+                                <div class="row">
+                                    <div class="form-floating col-6">
+                                        <label for="TTTDCongHoRanh_ChieuDaiMoiNoi">Chiều dài mối nối(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTTDCongHoRanh_ChieuDaiMoiNoi" class="form-control" id="TTTDCongHoRanh_ChieuDaiMoiNoi" placeholder="Chiều dài mối nối" />
+                                        <ValidationMessage For="() => Input.TTTDCongHoRanh_ChieuDaiMoiNoi" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-6 ">
+                                        <label for="TTTDCongHoRanh_SoLuongTDanDungDeTinhChieuDaiBoSung">Số lượng T.Đan dùng để tính chiều dài bổ sung (C.Kiện<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTTDCongHoRanh_SoLuongTDanDungDeTinhChieuDaiBoSung" class="form-control" id="TTTDCongHoRanh_SoLuongTDanDungDeTinhChieuDaiBoSung" placeholder="Số lượng T.Đan dùng để tính chiều dài bổ sung (C.Kiện" />
+                                        <ValidationMessage For="() => Input.TTTDCongHoRanh_SoLuongTDanDungDeTinhChieuDaiBoSung" class="text-danger" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2"> Cao độ thượng lưu</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="CDThuongLuu_HienTrangTruocKhiDaoThuongLuu">Hiện trạng trước khi đào thượng lưu(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.CDThuongLuu_HienTrangTruocKhiDaoThuongLuu" class="form-control" id="CDThuongLuu_HienTrangTruocKhiDaoThuongLuu" placeholder="Hiện trạng trước khi đào thượng lưu" />
+                                        <ValidationMessage For="() => Input.CDThuongLuu_HienTrangTruocKhiDaoThuongLuu" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5>Đỉnh móng thượng lưu</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="CDThuongLuu_DayDongChay">Đáy dòng chảy(m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.CDThuongLuu_DayDongChay" class="form-control" id="CDThuongLuu_DayDongChay" placeholder="Đáy dòng chảy" />
+                                        <ValidationMessage For="() => Input.CDThuongLuu_DayDongChay" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5> Đỉnh hoàn thiện thượng lưu</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-6">
+                                        <label for="CDThuongLuu_DinhTrongLongSuDung">Đỉnh trong lòng sử dụng (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.CDThuongLuu_DinhTrongLongSuDung" class="form-control" id="CDThuongLuu_DayDongChay" placeholder="Đỉnh trong lòng sử dụng" />
+                                        <ValidationMessage For="() => Input.CDThuongLuu_DinhTrongLongSuDung" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-6">
+                                        <label for="CDThuongLuu_ChieuCaoRanhThangTuDayDongChayDenDinh"> Chiều cao rãnh thang từ đáy dòng chảy đến đỉnh (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.CDThuongLuu_ChieuCaoRanhThangTuDayDongChayDenDinh" class="form-control" id="CDThuongLuu_ChieuCaoRanhThangTuDayDongChayDenDinh" placeholder="Chiều cao rãnh thang từ đáy dòng chảy đến đỉnh" />
+                                        <ValidationMessage For="() => Input.CDThuongLuu_ChieuCaoRanhThangTuDayDongChayDenDinh" class="text-danger" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2"> Cao độ hạ lưu</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="CDHaLu_HienTrangTruocKhiDaoHaLuu">Hiện trạng trước khi đào hạ lưu (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.CDHaLu_HienTrangTruocKhiDaoHaLuu" class="form-control" id="CDHaLu_HienTrangTruocKhiDaoHaLuu" placeholder="Hiện trạng trước khi đào hạ lưu" />
+                                        <ValidationMessage For="() => Input.CDHaLu_HienTrangTruocKhiDaoHaLuu" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5>Đỉnh móng hạ lưu</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="CDHaLu_DayDongChay">Đáy dòng chảy (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.CDHaLu_DayDongChay" class="form-control" id="CDHaLu_DayDongChay" placeholder="Đáy dòng chảy (m)" />
+                                        <ValidationMessage For="() => Input.CDHaLu_DayDongChay" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5>Đỉnh hoàn thiện hạ lưu</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-6">
+                                        <label for="CDHaLu_DinhTrongLongSuDung">Đỉnh trong lòng sử dụng (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.CDHaLu_DinhTrongLongSuDung" class="form-control" id="CDHaLu_DinhTrongLongSuDung" placeholder="Đỉnh trong lòng sử dụng (m)" />
+                                        <ValidationMessage For="() => Input.CDHaLu_DinhTrongLongSuDung" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-6">
+                                        <label for="CDHaLu_ChieuCaoRanhThangTuDayDongChayDenDinh"> Chiều cao rãnh thang từ đáy dòng chảy đến đỉnh (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.CDHaLu_ChieuCaoRanhThangTuDayDongChayDenDinh" class="form-control" id="CDHaLu_ChieuCaoRanhThangTuDayDongChayDenDinh" placeholder=" Chiều cao rãnh thang từ đáy dòng chảy đến đỉnh (m)" />
+                                        <ValidationMessage For="() => Input.CDHaLu_ChieuCaoRanhThangTuDayDongChayDenDinh" class="text-danger" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2">Thông tin vật liệu đào cống, rãnh</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTVLDCongRanh_LoaiVatLieuDao">Loại vật liệu đào<span class="text-danger">*</span></label>
+                                        <select id="TTVLDCongRanh_LoaiVatLieuDao" class="form-control" @bind="Input.TTVLDCongRanh_LoaiVatLieuDao">
+                                            <option value="">Loại vật liệu đào ...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("HG_LVLDHoGa"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.TTVLDCongRanh_LoaiVatLieuDao" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5> Thượng lưu</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTVLDCongRanh_TLChieuCaoDaoDa">Chiều cao đào đá (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTVLDCongRanh_TLChieuCaoDaoDa" class="form-control" id="TTVLDCongRanh_TLChieuCaoDaoDa" placeholder="Chiều cao đào đá " />
+                                        <ValidationMessage For="() => Input.TTVLDCongRanh_TLChieuCaoDaoDa" class="text-danger" />
+                                    </div>
+
+                                </div>
+                                <h5> Hạ lưu</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTVLDCongRanh_HLChieuCaoDaoDa">Chiều cao đào đá (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTVLDCongRanh_HLChieuCaoDaoDa" class="form-control" id="TTVLDCongRanh_HLChieuCaoDaoDa" placeholder="Chiều cao đào đá " />
+                                        <ValidationMessage For="() => Input.TTVLDCongRanh_HLChieuCaoDaoDa" class="text-danger" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2">Thông tin mái đào</h4>
+                                <hr />
+                                <h5>Thông tin mái đào cống, rãnh, ống nhựa, rãnh thang</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTMDRanhOngThang_ChieuRongDayDaoNho">Chiều rộng đáy đào nhỏ (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTMDRanhOngThang_ChieuRongDayDaoNho" class="form-control" id="TTMDRanhOngThang_ChieuRongDayDaoNho" placeholder="Chiều rộng đáy đào nhỏ" />
+                                        <ValidationMessage For="() => Input.TTMDRanhOngThang_ChieuRongDayDaoNho" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTMDRanhOngThang_TyLeMoMai">Tỷ lệ mở mái (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTMDRanhOngThang_TyLeMoMai" class="form-control" id="TTMDRanhOngThang_TyLeMoMai" placeholder="Tỷ lệ mở mái" />
+                                        <ValidationMessage For="() => Input.TTMDRanhOngThang_TyLeMoMai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="Số cạnh mái trái">Số cạnh mái trái (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTMDRanhOngThang_SoCanhMaiTrai" class="form-control" id="TTMDRanhOngThang_SoCanhMaiTrai" placeholder="Số cạnh mái trái" />
+                                        <ValidationMessage For="() => Input.TTMDRanhOngThang_SoCanhMaiTrai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="Số cạnh mái trái">Số cạnh mái phải (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTMDRanhOngThang_SoCanhMaiPhai" class="form-control" id="TTMDRanhOngThang_SoCanhMaiPhai" placeholder="Số cạnh mái phải" />
+                                        <ValidationMessage For="() => Input.TTMDRanhOngThang_SoCanhMaiPhai" class="text-danger" />
+                                    </div>
+                                </div>
+                                <h5> Thông tin mái đào chân khay, giằng đỉnh rãnh thang</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTMDRanhOngThang_ChieuRongDayDaoNho1">Chiều rộng đáy đào nhỏ (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTMDRanhOngThang_ChieuRongDayDaoNho1" class="form-control" id="TTMDRanhOngThang_ChieuRongDayDaoNho1" placeholder="Chiều rộng đáy đào nhỏ" />
+                                        <ValidationMessage For="() => Input.TTMDRanhOngThang_ChieuRongDayDaoNho1" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="TTMDRanhOngThang_TyLeMoMai1">Tỷ lệ mở mái (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTMDRanhOngThang_TyLeMoMai1" class="form-control" id="TTMDRanhOngThang_TyLeMoMai1" placeholder="Tỷ lệ mở mái" />
+                                        <ValidationMessage For="() => Input.TTMDRanhOngThang_TyLeMoMai1" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="Số cạnh mái trái">Số cạnh mái trái (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTMDRanhOngThang_SoCanhMaiTrai1" class="form-control" id="TTMDRanhOngThang_SoCanhMaiTrai1" placeholder="Số cạnh mái trái" />
+                                        <ValidationMessage For="() => Input.TTMDRanhOngThang_SoCanhMaiTrai1" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-4">
+                                        <label for="Số cạnh mái trái">Số cạnh mái phải (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTMDRanhOngThang_SoCanhMaiPhai1" class="form-control" id="TTMDRanhOngThang_SoCanhMaiPhai1" placeholder="Số cạnh mái phải" />
+                                        <ValidationMessage For="() => Input.TTMDRanhOngThang_SoCanhMaiPhai1" class="text-danger" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2">Tọa độ</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-6">
+                                        <h5>Từ tọa độ </h5>
+                                        <div class="row">
+                                            <div class="form-floating col-sm-6 col-md-6">
+                                                <label for="TuToaDoX">X <span class="text-danger">*</span></label>
+                                                <InputNumber @bind-Value="Input.TuToaDoX" class="form-control" id="TuToaDoX" placeholder="X" />
+                                                <ValidationMessage For="() => Input.TuToaDoX" class="text-danger" />
+                                            </div>
+                                            <div class="form-floating col-sm-6 col-md-6">
+                                                <label for="TuToaDoY">Y <span class="text-danger">*</span></label>
+                                                <InputNumber @bind-Value="Input.TuToaDoY" class="form-control" id="TuToaDoY" placeholder="Y" />
+                                                <ValidationMessage For="() => Input.TuToaDoY" class="text-danger" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <h5> Đến tọa độ </h5>
+                                        <div class="row">
+                                            <div class="form-floating col-sm-6 col-md-6">
+                                                <label for="DenToaDoX">X <span class="text-danger">*</span></label>
+                                                <InputNumber @bind-Value="Input.DenToaDoX" class="form-control" id="TuToaDoX" placeholder="X" />
+                                                <ValidationMessage For="() => Input.DenToaDoX" class="text-danger" />
+                                            </div>
+                                            <div class="form-floating col-sm-6 col-md-6">
+                                                <label for="DenToaDoY">Y <span class="text-danger">*</span></label>
+                                                <InputNumber @bind-Value="Input.DenToaDoY" class="form-control" id="DenToaDoY" placeholder="Y" />
+                                                <ValidationMessage For="() => Input.DenToaDoY" class="text-danger" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div  class="row my-5 d-flex justify-content-end" >
+                        <div >
+                            <button type="submit" class="btn btn-primary btn-sm btn-block">@TitleModal</button>
+                        </div>
+                    </div>
+                </div>
+            </EditForm>
+        </BodyTemplate>
+       
+     </CustomModal>
+
     <div>
         <div class="card-header mt-3">
             <h5>BẢNG TỔNG HỢP THÔNG TIN HỆ THỐNG THOÁT NƯỚC MƯA DỌC PHÍA TRÁI TUYẾN</h5>
@@ -36,7 +1760,7 @@
                     </div>
                 </div>
             }
-            <table class="table-bordered " cellpadding="0" cellspacing="0">
+            <table class="table table-bordered table-hover" cellpadding="1" cellspacing="2">
                 <thead>
                     <tr class="nowrap">
                         <td rowspan="3">STT</td>
@@ -786,7 +2510,7 @@
                         @foreach (var item in listHopRanhThang)
                         {
 
-                            <tr onclick="alert(@item.Id)">
+                            <tr title="Chỉnh sửa" class="hover" @onclick="()=>HandleChooseItem(item.Id)">
                                 <td class="text-center">@stt</td>
                                 <td class="text-center">@item.ThongTinLyTrinh_TuyenDuong </td>
                                 <td class="text-center">@item.ThongTinLyTrinh_LyTrinhTaiTimHoGa </td>
@@ -1333,9 +3057,12 @@
             }
         </div>
     </div>
+
 </div>
 
 @code {
+    [SupplyParameterFromForm]
+    private MHopRanhThang Input { get; set; } = new();
     public List<MDanhMuc> listDanhMuc = new();
 
     public List<HopRanhThangModel> listHopRanhThang
@@ -1389,6 +3116,69 @@
         var danhMuc = listDanhMuc.FirstOrDefault(dm => dm.Id == id);
         return danhMuc != null ? danhMuc.Ten : null;
     }
+
+    //modal
+    private bool isModalVisible = false;
+    private string TitleModal = "Thêm mới thông tin";
+    private void ShowModal()
+    {
+        isModalVisible = true;
+    }
+
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+    }
+
+    private void HandleSave()
+    {
+        // Logic for saving
+        isModalVisible = false;
+    }
+
+    private void HandleCancel()
+    {
+        // Logic for canceling
+        isModalVisible = false;
+    }
+
+
+    //Thêm sửa
+
+    private bool isEdit = false;
+    private async Task HandleChooseItem(string Id)
+    {
+        isEdit = true;
+        Input = await  HopRanhThangRepository.GetById(Id);
+        TitleModal = "Cập nhật thông tin";
+        isModalVisible = true;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        Console.WriteLine(Input);
+        if(isEdit){
+            await HopRanhThangRepository.Update(Input);
+            isModalVisible = false;
+            isEdit =false;
+            Input = new MHopRanhThang();
+            ToastService.ShowToast( "Thông báo","Cập nhật thành công.", cssClass: "toast-success",  iconClass: "bi bi-info-circle",progressBarClass: "bg-info", duration: 5000);
+            await LoadData();
+        }else{ 
+            await HopRanhThangRepository.Insert(Input);
+            isModalVisible = false;
+             ToastService.ShowToast( "Thông báo","Thêm thành công.", cssClass: "toast-success",  iconClass: "bi bi-info-circle",progressBarClass: "bg-info", duration: 5000);
+            await LoadData();
+
+        }
+       
+    }
+
+    public List<MDanhMuc> FindByIdNhomDanhMuc(string idNhomDanhMuc)
+    {
+        return listDanhMuc.Where(dm => dm.IdNhomDanhMuc == idNhomDanhMuc).ToList();
+    }
+
 
 
     // Sắp xếp data

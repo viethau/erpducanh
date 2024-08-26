@@ -9,6 +9,8 @@
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject SignInManager<IdentityUser> SignInManager
+
+
 <CascadingAuthenticationState>
 
     <AuthorizeView Context="authContext">
@@ -46,6 +48,7 @@
                 <div>
                     <NavMenu />
                     <div class="content-wrapper" style="min-height: 367.328px;height: 880px;overflow: scroll;">
+                        <Toast />
                         @Body
                     </div>
                     <div id="sidebar-overlay"></div>
@@ -53,6 +56,7 @@
 
             } else
             {
+                
                 @Body
 
                 <div id="blazor-error-ui">
@@ -63,6 +67,7 @@
             }
         </Authorized>
         <NotAuthorized>
+           
             @Body
         </NotAuthorized>
     </AuthorizeView>

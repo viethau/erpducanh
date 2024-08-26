@@ -1,0 +1,93 @@
+﻿@page "/NghiepVuCongtrinh/Excel"
+
+@using DucAnhERP.SeedWork
+@using OfficeOpenXml
+@inject IJSRuntime JSRuntime
+@using Microsoft.AspNetCore.Components.Forms
+
+
+<h3>Upload and Read Excel</h3>
+
+<InputFile OnChange="LoadFiles" multiple />
+
+
+<br />
+@if (TableData != null)
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                @foreach (var header in TableData.Headers)
+                {
+                    <th>@header</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var row in TableData.Rows)
+            {
+                <tr>
+                    @foreach (var cell in row)
+                    {
+                        <td>@cell</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private ExcelTableData TableData { get; set; }
+
+    private async Task LoadFiles(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            var file = e.File;
+            if (file != null)
+            {
+                using var stream = file.OpenReadStream();
+                using var package = new ExcelPackage(stream);
+                var worksheet = package.Workbook.Worksheets[0];
+
+                var headers = new List<string>();
+                var rows = new List<List<string>>();
+
+                // Đọc tiêu đề từ hàng đầu tiên (nếu có)
+                for (int col = worksheet.Dimension.Start.Column; col <= worksheet.Dimension.End.Column; col++)
+                {
+                    headers.Add(worksheet.Cells[worksheet.Dimension.Start.Row, col].Text);
+                }
+
+                // Đọc dữ liệu từ các hàng còn lại
+                for (int row = worksheet.Dimension.Start.Row + 1; row <= worksheet.Dimension.End.Row; row++)
+                {
+                    var rowData = new List<string>();
+                    for (int col = worksheet.Dimension.Start.Column; col <= worksheet.Dimension.End.Column; col++)
+                    {
+                        rowData.Add(worksheet.Cells[row, col].Text);
+                    }
+                    rows.Add(rowData);
+                }
+
+                TableData = new ExcelTableData
+                    {
+                        Headers = headers,
+                        Rows = rows
+                    };
+
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        catch (Exception ex)
+        {
+
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+}
+
+
+
