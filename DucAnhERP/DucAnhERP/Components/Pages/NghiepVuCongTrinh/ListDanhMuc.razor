@@ -7,6 +7,7 @@
 @using Microsoft.AspNetCore.Authorization
 @inject IDanhMucRepository DanhMucRepository
 @inject INhomDanhMucRepository NhomDanhMucRepository
+@inject DucAnhERP.Services.ToastService ToastService
 
 <div class="m-5">
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
@@ -72,6 +73,9 @@
                     <th onclick="@(() => SortTable("Ten"))" class="text-center sortable" scope="col" sortable>
                         <div class="pb-3">Tên  <span class="arrow @(GetSortStyle("Ten"))"></span></div>
                     </th>
+                    <th class="text-center" colspan="2" >
+                      
+                    </th>
                 </tr>
 
             </thead>
@@ -89,6 +93,18 @@
                             <td class="text-center">@stt</td>
                             <td class="text-left">@dm.TenNhom</td>
                             <td class="text-center">@dm.Ten</td>
+                            <td class="text-center">
+                                <button class="btn btn-primary" @onclick="()=>Edit(dm.Id)">
+                                    <i class="fas fa-edit"></i> Sửa
+                                </button>
+                            </td>
+                            <td class="text-center">
+
+                                <button class="btn btn-danger" @onclick="()=>ConfirmDelete(dm.Id,dm.Ten)">
+                                    <i class="fas fa-trash"></i> Xóa
+                                </button>
+                               
+                            </td>
                         </tr>
                         stt++;
                     }
@@ -104,7 +120,7 @@
     {
         <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
     }
-
+    <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
 </div>
 
 @code {
@@ -113,6 +129,7 @@
 
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới danh mục";
+    bool isEdit = false;
 
     private void ShowModal()
     {
@@ -136,6 +153,8 @@
         isModalVisible = false;
     }
 
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
 
     public List<DanhMucModel> listDanhMuc
     {
@@ -182,11 +201,67 @@
 
     private async Task HandleValidSubmit()
     {
-        await DanhMucRepository.Insert(newDanhMuc);
-        newDanhMuc = new MDanhMuc();
-        await LoadDanhMuc();
-        isModalVisible = false;
+        bool isTen = await DanhMucRepository.GetDMByTenNhomDanhMuc(newDanhMuc.Ten);
+        if (isTen)
+        {
+            ToastService.ShowToast("Thông báo", "Tên danh mục đã tồn tại.", cssClass: "toast-danger", iconClass: "bi bi-info-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+        else
+        {
+
+            if (isEdit)
+            {
+                await DanhMucRepository.Update(newDanhMuc);
+                ToastService.ShowToast("Thông báo", "Cập nhật danh mục thành công.", cssClass: "toast-danger", iconClass: "bi bi-info-circle", progressBarClass: "bg-info", duration: 5000);
+                await LoadDanhMuc();
+                isModalVisible = false;
+                newDanhMuc = new MDanhMuc();
+            }
+            else
+            {
+                await DanhMucRepository.Insert(newDanhMuc);
+                ToastService.ShowToast("Thông báo", "Thêm danh mục thành công.", cssClass: "toast-danger", iconClass: "bi bi-info-circle", progressBarClass: "bg-info", duration: 5000);
+                await LoadDanhMuc();
+                isModalVisible = false;
+                newDanhMuc = new MDanhMuc();
+            }
+        }
     }
+
+    private string deleteId;
+
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        deleteId = id;
+        confirmModal.Title = "Xác nhận xóa";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.openModal();
+       
+    }
+
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        if (confirmed)
+        {
+            if (!string.IsNullOrEmpty(deleteId))
+            {
+                // Thực hiện hành động xóa
+                await DanhMucRepository.DeleteById(deleteId);
+                ToastService.ShowToast("Thông báo", "Xóa danh mục thành công.", cssClass: "toast-danger", iconClass: "bi bi-info-circle", progressBarClass: "bg-info", duration: 5000);
+                await LoadDanhMuc();
+            }
+        }
+    }
+
+
+    private async Task Edit(string id)
+    {
+        TitleModal = "Cập nhật danh mục !";
+        newDanhMuc = await DanhMucRepository.GetById(id);
+        isEdit = true;
+        isModalVisible = true;
+    }
+
 
 
     // Sắp xếp data

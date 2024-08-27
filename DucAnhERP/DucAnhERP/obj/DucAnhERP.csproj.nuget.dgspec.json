@@ -47,9 +47,17 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "BlazorInputFile": {
+              "target": "Package",
+              "version": "[0.2.0, )"
+            },
             "EPPlus": {
               "target": "Package",
               "version": "[7.3.0, )"
+            },
+            "Microsoft.AspNetCore.Components.Forms": {
+              "target": "Package",
+              "version": "[8.0.8, )"
             },
             "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
               "target": "Package",

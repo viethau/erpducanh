@@ -464,13 +464,13 @@ namespace DucAnhERP.Migrations
                  ThongTinLyTrinh_LyTrinhTaiTimHoGa = table.Column<string>(type: "nvarchar(max)", nullable: true),
                  ThongTinChungHoGa_TenHoGaSauPhanLoai = table.Column<string>(type: "nvarchar(max)", nullable: true),
                  ThongTinChungHoGa_TenHoGaTheoBanVe = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 ThongTinChungHoGa_HinhThucHoGa = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 ThongTinChungHoGa_KetCauMuMo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 ThongTinChungHoGa_KetCauTuong = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 ThongTinChungHoGa_HinhThucMongHoGa = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 ThongTinChungHoGa_KetCauMong = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 ThongTinChungHoGa_ChatMatTrong = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 ThongTinChungHoGa_ChatMatNgoai = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                 ThongTinChungHoGa_HinhThucHoGa = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                 ThongTinChungHoGa_KetCauMuMo = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                 ThongTinChungHoGa_KetCauTuong = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                 ThongTinChungHoGa_HinhThucMongHoGa = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                 ThongTinChungHoGa_KetCauMong = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                 ThongTinChungHoGa_ChatMatTrong = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                 ThongTinChungHoGa_ChatMatNgoai = table.Column<string>(type: "nvarchar(100)", nullable: true),
                  PhuBiHoGa_CDai = table.Column<double>(type: "float", nullable: false),
                  PhuBiHoGa_CRong = table.Column<double>(type: "float", nullable: false),
                  BeTongLotMong_D = table.Column<double>(type: "float", nullable: false),
@@ -535,7 +535,7 @@ namespace DucAnhERP.Migrations
                  HinhThucDauNoi8_CanhRong = table.Column<double>(type: "float", nullable: false),
                  HinhThucDauNoi8_CanhCheo = table.Column<double>(type: "float", nullable: false),
                  ThongTinTamDanHoGa2_PhanLoaiDayHoGa = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 ThongTinTamDanHoGa2_HinhThucDayHoGa = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                 ThongTinTamDanHoGa2_HinhThucDayHoGa = table.Column<string>(type: "nvarchar(100)", nullable: true),
                  ThongTinTamDanHoGa2_DuongKinh = table.Column<double>(type: "float", nullable: false),
                  ThongTinTamDanHoGa2_ChieuDay = table.Column<double>(type: "float", nullable: false),
                  ThongTinTamDanHoGa2_D = table.Column<double>(type: "float", nullable: false),
@@ -543,11 +543,11 @@ namespace DucAnhERP.Migrations
                  ThongTinTamDanHoGa2_C = table.Column<double>(type: "float", nullable: false),
                  ThongTinTamDanHoGa2_SoLuongNapDay = table.Column<int>(type: "int", nullable: false),
 
-                 TTVLDCongRanh_LoaiVatLieuDao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                 TTVLDCongRanh_LoaiVatLieuDao = table.Column<string>(type: "nvarchar(100)", nullable: true),
                  TTVLDCongRanh_TLChieuCaoDaoDa = table.Column<double>(type: "float", nullable: false),
                  TTVLDCongRanh_HLChieuCaoDaoDa = table.Column<double>(type: "float", nullable: false),
 
-                 ThongTinVatLieuDaoHoGa_LoaiVatLieuDao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                 ThongTinVatLieuDaoHoGa_LoaiVatLieuDao = table.Column<string>(type: "nvarchar(100)", nullable: true),
                  ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa = table.Column<double>(type: "float", nullable: false),
                  ThongTinCaoDoHoGa_CaoDoTuNhien = table.Column<double>(type: "float", nullable: false),
                  ThongTinCaoDoHoGa_CdDinhViaHeHoanThien = table.Column<double>(type: "float", nullable: false),
@@ -564,18 +564,18 @@ namespace DucAnhERP.Migrations
                  ThongTinLyTrinhTruyenDan_DenLyTrinh = table.Column<double>(type: "float", nullable: false),
                  ThongTinLyTrinhTruyenDan_TuHoGa = table.Column<string>(type: "nvarchar(max)", nullable: true),
                  ThongTinLyTrinhTruyenDan_DenHoGa = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 ThongTinDuongTruyenDan_HinhThucTruyenDan = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 ThongTinDuongTruyenDan_LoaiTruyenDan = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                 ThongTinDuongTruyenDan_HinhThucTruyenDan = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                 ThongTinDuongTruyenDan_LoaiTruyenDan = table.Column<string>(type: "nvarchar(100)", nullable: true),
                  ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = table.Column<string>(type: "nvarchar(max)", nullable: true),
                  TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien = table.Column<double>(type: "float", nullable: false),
                  TTCDSLCauKienDuongTruyenDan_ChieuDaiMoiNoiCKien = table.Column<double>(type: "float", nullable: false),
                  TTCDSLCauKienDuongTruyenDan_SoLuongCKienDungDeTinhChieuDaiBoSung = table.Column<int>(type: "int", nullable: false),
                  TTCDSLCauKienDuongTruyenDan_TongChieuDai = table.Column<double>(type: "float", nullable: false),
                  ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 ThongTinMongDuongTruyenDan_LoaiMong = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 ThongTinMongDuongTruyenDan_HinhThucMong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                 ThongTinMongDuongTruyenDan_LoaiMong = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                 ThongTinMongDuongTruyenDan_HinhThucMong = table.Column<string>(type: "nvarchar(100)", nullable: true),
                  ThongTinDeCong_TenLoaiDeCong = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 ThongTinDeCong_CauTaoDeCong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                 ThongTinDeCong_CauTaoDeCong = table.Column<string>(type: "nvarchar(100)", nullable: true),
                  ThongTinDeCong_D = table.Column<double>(type: "float", nullable: false),
                  ThongTinDeCong_R = table.Column<double>(type: "float", nullable: false),
                  ThongTinDeCong_C = table.Column<double>(type: "float", nullable: false),
@@ -589,10 +589,10 @@ namespace DucAnhERP.Migrations
                  ThongTinCauTaoCongTron_CCaoMong = table.Column<double>(type: "float", nullable: false),
                  ThongTinCauTaoCongTron_CRongMong = table.Column<double>(type: "float", nullable: false),
                  ThongTinCauTaoCongTron_CCaoDe = table.Column<double>(type: "float", nullable: false),
-                 TTKTHHCongHopRanh_CauTaoTuong = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 TTKTHHCongHopRanh_CauTaoMuMo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 TTKTHHCongHopRanh_ChatMatTrong = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 TTKTHHCongHopRanh_ChatMatNgoai = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                 TTKTHHCongHopRanh_CauTaoTuong = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                 TTKTHHCongHopRanh_CauTaoMuMo = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                 TTKTHHCongHopRanh_ChatMatTrong = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                 TTKTHHCongHopRanh_ChatMatNgoai = table.Column<string>(type: "nvarchar(100)", nullable: true),
                  TTKTHHCongHopRanh_CCaoLotMong = table.Column<double>(type: "float", nullable: false),
                  TTKTHHCongHopRanh_CRongLotMong = table.Column<double>(type: "float", nullable: false),
                  TTKTHHCongHopRanh_CCaoMong = table.Column<double>(type: "float", nullable: false),
@@ -608,7 +608,7 @@ namespace DucAnhERP.Migrations
                  TTKTHHCongHopRanh_CCaoMuMoThotTren = table.Column<double>(type: "float", nullable: false),
                  TTKTHHCongHopRanh_CRongMuMoTren = table.Column<double>(type: "float", nullable: false),
                  TTKTHHCongHopRanh_LoaiThanhChong = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 TTKTHHCongHopRanh_CauTaoThanhChong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                 TTKTHHCongHopRanh_CauTaoThanhChong = table.Column<string>(type: "nvarchar(100)", nullable: true),
                  TTKTHHCongHopRanh_CCaoThanhChong = table.Column<double>(type: "float", nullable: false),
                  TTKTHHCongHopRanh_CRongThanhChong = table.Column<double>(type: "float", nullable: false),
                  TTKTHHCongHopRanh_CDai = table.Column<double>(type: "float", nullable: false),
@@ -649,12 +649,12 @@ namespace DucAnhERP.Migrations
                  ThongTinRanhThang_CRongHanhLangBaoVe = table.Column<double>(type: "float", nullable: false),
                  ThongTinRanhThang_SoLuongHangLangBaoVe = table.Column<int>(type: "int", nullable: false),
                  TTTDCongHoRanh_TenLoaiTamDanTieuChuan = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                 TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = table.Column<string>(type: "nvarchar(100)", nullable: true),
                  TTTDCongHoRanh_CDai = table.Column<double>(type: "float", nullable: false),
                  TTTDCongHoRanh_CRong = table.Column<double>(type: "float", nullable: false),
                  TTTDCongHoRanh_CCao = table.Column<double>(type: "float", nullable: false),
                  TTTDCongHoRanh_TenLoaiTamDanLoai02 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                 TTTDCongHoRanh_CauTaoTamDanTruyenDan = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                 TTTDCongHoRanh_CauTaoTamDanTruyenDan = table.Column<string>(type: "nvarchar(100)", nullable: true),
                  TTTDCongHoRanh_CRong1 = table.Column<double>(type: "float", nullable: false),
                  TTTDCongHoRanh_CCao1 = table.Column<double>(type: "float", nullable: false),
                  TTTDCongHoRanh_ChieuDaiMoiNoi = table.Column<double>(type: "float", nullable: false),
@@ -683,6 +683,163 @@ namespace DucAnhERP.Migrations
              constraints: table =>
              {
                  table.PrimaryKey("PK_HopRanhThang", x => x.Id);
+                 table.ForeignKey(
+                    name: "FK_ThongTinChungHoGa_HinhThucHoGa_DSDanhMuc",
+                    column: x => x.ThongTinChungHoGa_HinhThucHoGa,
+                    principalTable: "DSDanhMuc",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+
+                 table.ForeignKey(
+                    name: "FK_ThongTinChungHoGa_KetCauMuMo_DSDanhMuc",
+                    column: x => x.ThongTinChungHoGa_KetCauMuMo,
+                    principalTable: "DSDanhMuc",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+
+                 table.ForeignKey(
+                   name: "FK_ThongTinChungHoGa_KetCauTuong_DSDanhMuc",
+                   column: x => x.ThongTinChungHoGa_KetCauTuong,
+                   principalTable: "DSDanhMuc",
+                   principalColumn: "Id",
+                   onDelete: ReferentialAction.Cascade);
+
+                 table.ForeignKey(
+                      name: "FK_ThongTinChungHoGa_HinhThucMongHoGa_DSDanhMuc",
+                      column: x => x.ThongTinChungHoGa_HinhThucMongHoGa,
+                      principalTable: "DSDanhMuc",
+                      principalColumn: "Id",
+                      onDelete: ReferentialAction.Cascade);
+
+                 table.ForeignKey(
+                     name: "FK_ThongTinChungHoGa_KetCauMong_DSDanhMuc",
+                     column: x => x.ThongTinChungHoGa_KetCauMong,
+                     principalTable: "DSDanhMuc",
+                     principalColumn: "Id",
+                     onDelete: ReferentialAction.Cascade);
+
+                 table.ForeignKey(
+                     name: "FK_ThongTinChungHoGa_ChatMatTrong_DSDanhMuc",
+                     column: x => x.ThongTinChungHoGa_ChatMatTrong,
+                     principalTable: "DSDanhMuc",
+                     principalColumn: "Id",
+                     onDelete: ReferentialAction.Cascade);
+
+                 table.ForeignKey(
+                     name: "FK_ThongTinChungHoGa_ChatMatNgoai_DSDanhMuc",
+                     column: x => x.ThongTinChungHoGa_ChatMatNgoai,
+                     principalTable: "DSDanhMuc",
+                     principalColumn: "Id",
+                     onDelete: ReferentialAction.Cascade);
+
+
+                 table.ForeignKey(
+                     name: "FK_ThongTinTamDanHoGa2_HinhThucDayHoGa_DSDanhMuc",
+                     column: x => x.ThongTinTamDanHoGa2_HinhThucDayHoGa,
+                     principalTable: "DSDanhMuc",
+                     principalColumn: "Id",
+                     onDelete: ReferentialAction.Cascade);
+
+
+                 table.ForeignKey(
+                     name: "FK_ThongTinVatLieuDaoHoGa_LoaiVatLieuDao_DSDanhMuc",
+                     column: x => x.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao,
+                     principalTable: "DSDanhMuc",
+                     principalColumn: "Id",
+                     onDelete: ReferentialAction.Cascade);
+
+
+                 table.ForeignKey(
+                     name: "FK_ThongTinDuongTruyenDan_HinhThucTruyenDan_DSDanhMuc",
+                     column: x => x.ThongTinDuongTruyenDan_HinhThucTruyenDan,
+                     principalTable: "DSDanhMuc",
+                     principalColumn: "Id",
+                     onDelete: ReferentialAction.Cascade);
+
+
+                 table.ForeignKey(
+                     name: "FK_ThongTinDuongTruyenDan_LoaiTruyenDan_DSDanhMuc",
+                     column: x => x.ThongTinDuongTruyenDan_LoaiTruyenDan,
+                     principalTable: "DSDanhMuc",
+                     principalColumn: "Id",
+                     onDelete: ReferentialAction.Cascade);
+
+                 table.ForeignKey(
+                     name: "FK_ThongTinMongDuongTruyenDan_LoaiMong_DSDanhMuc",
+                     column: x => x.ThongTinMongDuongTruyenDan_LoaiMong,
+                     principalTable: "DSDanhMuc",
+                     principalColumn: "Id",
+                     onDelete: ReferentialAction.Cascade);
+
+                 table.ForeignKey(
+                     name: "FK_ThongTinMongDuongTruyenDan_HinhThucMong_DSDanhMuc",
+                     column: x => x.ThongTinMongDuongTruyenDan_HinhThucMong,
+                     principalTable: "DSDanhMuc",
+                     principalColumn: "Id",
+                     onDelete: ReferentialAction.Cascade);
+
+                 table.ForeignKey(
+                    name: "FK_ThongTinDeCong_CauTaoDeCong_DSDanhMuc",
+                    column: x => x.ThongTinDeCong_CauTaoDeCong,
+                    principalTable: "DSDanhMuc",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+
+                 table.ForeignKey(
+                    name: "FK_TTKTHHCongHopRanh_CauTaoTuong_DSDanhMuc",
+                    column: x => x.TTKTHHCongHopRanh_CauTaoTuong,
+                    principalTable: "DSDanhMuc",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+
+                 table.ForeignKey(
+                    name: "FK_TTKTHHCongHopRanh_CauTaoMuMo_DSDanhMuc",
+                    column: x => x.TTKTHHCongHopRanh_CauTaoMuMo,
+                    principalTable: "DSDanhMuc",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+
+                 table.ForeignKey(
+                    name: "FK_TTKTHHCongHopRanh_ChatMatTrong_DSDanhMuc",
+                    column: x => x.TTKTHHCongHopRanh_ChatMatTrong,
+                    principalTable: "DSDanhMuc",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+
+                 table.ForeignKey(
+                        name: "FK_TTKTHHCongHopRanh_ChatMatNgoai_DSDanhMuc",
+                        column: x => x.TTKTHHCongHopRanh_ChatMatNgoai,
+                        principalTable: "DSDanhMuc",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+
+                 table.ForeignKey(
+                    name: "FK_TTKTHHCongHopRanh_CauTaoThanhChong_DSDanhMuc",
+                    column: x => x.TTKTHHCongHopRanh_CauTaoThanhChong,
+                    principalTable: "DSDanhMuc",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+
+                 table.ForeignKey(
+                    name: "FK_TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_DSDanhMuc",
+                    column: x => x.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan,
+                    principalTable: "DSDanhMuc",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+
+                 table.ForeignKey(
+                    name: "FK_TTTDCongHoRanh_CauTaoTamDanTruyenDan_DSDanhMuc",
+                    column: x => x.TTTDCongHoRanh_CauTaoTamDanTruyenDan,
+                    principalTable: "DSDanhMuc",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
+
+                 table.ForeignKey(
+                    name: "FK_TTVLDCongRanh_LoaiVatLieuDao_DSDanhMuc",
+                    column: x => x.TTVLDCongRanh_LoaiVatLieuDao,
+                    principalTable: "DSDanhMuc",
+                    principalColumn: "Id",
+                    onDelete: ReferentialAction.Cascade);
              });
 
 

@@ -3,6 +3,7 @@ using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace DucAnhERP.Services
 {
@@ -48,6 +49,26 @@ namespace DucAnhERP.Services
 
             var data = await query.ToListAsync();
             return data;
+        }
+
+        public async Task<bool> GetDMByTenNhomDanhMuc(string Ten)
+        {
+            bool isSuccess =false;      
+            using var context = _context.CreateDbContext();
+            var query = context.DSDanhMuc
+                         .Where(danhMuc => danhMuc.Ten.ToUpper() == Ten.ToUpper())
+                         .Select(danhMuc => new MDanhMuc
+                         {
+                             Id = danhMuc.Id,
+                             IdNhomDanhMuc = danhMuc.IdNhomDanhMuc,
+                             Ten = danhMuc.Ten
+                         });
+
+            var data = await query.ToListAsync();
+
+            // Kiểm tra nếu danh sách kết quả rỗng hoặc không có dữ liệu khớp
+             isSuccess = data.Any();
+            return (isSuccess);
         }
 
         public async Task<List<MDanhMuc>> GetAll()
@@ -101,7 +122,8 @@ namespace DucAnhERP.Services
             {
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
             }
-          
+
+            context.Set<MDanhMuc>().Remove(entity);
             await context.SaveChangesAsync();
         }
 
@@ -114,9 +136,6 @@ namespace DucAnhERP.Services
                 {
                     throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
                 }
-
-             
-
             }
             return true;
         }
@@ -151,10 +170,5 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
             }
         }
-
-
-
-
-
     }
 }

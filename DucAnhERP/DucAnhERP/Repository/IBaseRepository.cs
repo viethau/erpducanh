@@ -12,6 +12,5 @@ namespace DucAnhERP.Repository
         Task DeleteById(string id);
         Task<bool> CheckExclusive(string[] ids, DateTime baseTime);
         Task Insert(T entity);
-
     }
 }

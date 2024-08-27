@@ -9,9 +9,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using DucAnhERP.Models;
+using OfficeOpenXml;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Đặt LicenseContext cho EPPlus
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 // Thiết định middleware của SignalR
 builder.Services.AddResponseCompression(opts =>
 {
@@ -47,7 +50,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuth
 builder.Services.AddScoped<IDanhMucRepository, DanhMucRepository>();
 builder.Services.AddScoped<INhomDanhMucRepository, NhomNhomDanhMucRepository>();
 builder.Services.AddScoped <IHopRanhThangRepository, HopRanhThangRepository>();
-
+builder.Services.AddScoped<IExcelRepository, ExcelRepository>();
 
 builder.Services.AddAuthentication(options =>
     {

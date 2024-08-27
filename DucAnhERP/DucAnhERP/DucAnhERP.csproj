@@ -8,7 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BlazorInputFile" Version="0.2.0" />
     <PackageReference Include="EPPlus" Version="7.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.6" />

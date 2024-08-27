@@ -114,7 +114,7 @@
                                         <label for="ThongTinChungHoGa_KetCauMong"> Kết cấu móng <span class="text-danger">*</span></label>
                                         <select id="ThongTinChungHoGa_KetCauMong" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauMong">
                                             <option value="">Kết cấu móng ...</option>
-                                            @foreach (var dm in FindByIdNhomDanhMuc("HG_HTMHoGa"))
+                                            @foreach (var dm in FindByIdNhomDanhMuc("HG_LMHoGa"))
                                             {
                                                 <option value="@dm.Id">@dm.Ten</option>
                                             }
@@ -1761,745 +1761,744 @@
                 </div>
             }
             <table class="table table-bordered table-hover" cellpadding="1" cellspacing="2">
-                <thead>
-                    <tr class="nowrap">
-                        <td rowspan="3">STT</td>
-                        <td colspan="2" rowspan="2">Thông tin lý trình</td>
-                        <td colspan="9" rowspan="2">Thông tin chung hố ga</td>
-                        <td colspan="34">Thông tin kích thước hình học hố ga</td>
-                        <td colspan="32">Hạng mục chiếm chỗ hố ga</td>
-                        <td colspan="8">Thông tin tấm đan hố ga</td>
-                        <td colspan="4" rowspan="2">Thông tin vật liệu đào hố ga</td>
-                        <td colspan="18" rowspan="2">Thông tin cao độ hố ga</td>
-                        <td colspan="10" rowspan="2"> Thông tin chiều cao C.Chỗ đắp trả hố thu</td>
-                        <td colspan="4" rowspan="2">Thông tin mái đào</td>
-                        <td colspan="17">Thông tin khối lượng đào</td>
-                        <td colspan="2" rowspan="2">Tọa độ</td>
-                        <td colspan="4" rowspan="2">Thông tin lý trình truyền dẫn</td>
-                        <td colspan="3" rowspan="2">Thông tin đường truyền dẫn</td>
-                        <td colspan="11" rowspan="2">Thông tin chiều dài và số lượng cấu kiện đường truyền dẫn</td>
-                        <td colspan="3" rowspan="2">Thông tin móng đường truyền dẫn</td>
-                        <td colspan="9">Thông tin đế cống</td>
-                        <td colspan="10" rowspan="2">Thông tin cấu tạo cống tròn</td>
-                        <td colspan="29">Thông tin kích thước hình học cống hộp, rãnh</td>
-                        <td colspan="6" rowspan="2">Thông tin kích thước hình học ống nhựa</td>
-                        <td colspan="30">Thông tin rãnh thang</td>
-                        <td colspan="19">Thông tin tấm đan cống hộp, rãnh</td>
-                        <td colspan="39">Cao độ thượng lưu</td>
-                        <td colspan="39">Cao độ hạ lưu</td>
-                        <td colspan="7">Thông tin vật liệu đào cống, rãnh</td>
-                        <td colspan="24">Thông tin C.Cao C.Chỗ cống tròn</td>
-                        <td colspan="18">Thông tin C.Cao C.Chỗ cống hộp, rãnh</td>
-                        <td colspan="18">Thông tin C.Cao C.Chỗ ống nhựa</td>
-                        <td colspan="12"> Thông tin chiếm chỗ rãnh thang (m)</td>
-                        <td colspan="8">Thông tin mái đào</td>
-                        <td colspan="4">D.Tích đào thượng lưu cống, rãnh, ống nhựa, rãnh thang</td>
-                        <td colspan="4">D.Tích đào hạ lưu cống, rãnh, ống nhựa, rãnh thang</td>
-                        <td colspan="4">D.Tích đào chân khay, giằng đỉnh</td>
-                        <td colspan="38">Thông tin khối lượng đào</td>
-                        <td colspan="6"> D.Tích đắp cát</td>
-                        <td colspan="3" rowspan="2"> Thông tin KL đắp cát</td>
-                        <td colspan="4"> Tọa độ</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">Thông tin phủ bì hố ga (m)</td>
-                        <td colspan="3">Kích thước hình học bê tông lót móng hố ga (m)</td>
-                        <td colspan="3">Kích thước hình học bê tông móng hố ga (m)</td>
-                        <td colspan="3">KTHH đế hố ga</td>
-                        <td colspan="4">Kích thước hình học tường hố ga (m)</td>
-                        <td colspan="5">KTHH dầm giữa hố ga</td>
-                        <td colspan="3">Chất hố ga mặt trong</td>
-                        <td colspan="3">Chất hố ga mặt ngoài, cạnh 01 +02 (m)</td>
-                        <td colspan="4">Kích thước hình học tường mũ mố thép dưới (m)</td>
-                        <td colspan="4">Kích thước hình học tường mũ mố thép trên (m)</td>
-
-                        <td colspan="4">Hình thức đấu nối</td>
-                        <td colspan="4">Hình thức đấu nối</td>
-                        <td colspan="4">Hình thức đấu nối</td>
-                        <td colspan="4">Hình thức đấu nối</td>
-                        <td colspan="4">Hình thức đấu nối</td>
-                        <td colspan="4">Hình thức đấu nối</td>
-                        <td colspan="4">Hình thức đấu nối</td>
-                        <td colspan="4">Hình thức đấu nối</td>
-
-                        <td rowspan="2">Phân loại đậy hố ga</td>
-                        <td rowspan="2">Hình thức đậy hố ga</td>
-                        <td colspan="2">Loại tròn</td>
-                        <td colspan="4">Loại vuông hoặc chữ nhật</td>
-
-                        <td colspan="5">Diện tích đào hố ga</td>
-                        <td colspan="12">Thông tin KL đào hố ga</td>
-
-                        <td rowspan="2">Tên loại đế cống</td>
-                        <td rowspan="2">Cấu tạo đế cống</td>
-                        <td colspan="3">KTHH đế cống</td>
-                        <td colspan="4">Khối lượng đế cống</td>
-
-                        <td colspan="4">Thông tin chung</td>
-                        <td colspan="2">Lót móng</td>
-                        <td colspan="2">Móng</td>
-                        <td colspan="2">Đế</td>
-                        <td colspan="6">Thân</td>
-                        <td colspan="4">Mũ mố</td>
-                        <td colspan="6">Thanh chống</td>
-                        <td colspan="2">Chát</td>
-                        <td rowspan="2" class="text-danger">Tổng chiều cao (m)</td>
-
-                        <td rowspan="2">Hình thức mái</td>
-                        <td rowspan="2">Cấu tạo chân khay</td>
-                        <td rowspan="2">Cấu tạo giằng đỉnh</td>
-                        <td rowspan="2">Hình thức hành lang bảo vệ</td>
-
-                        <td colspan="11">Thông tin móng</td>
-                        <td colspan="4">Thông tin mái</td>
-                        <td colspan="7">Thông tin giằng đỉnh </td>
-                        <td colspan="4">Thông tin hành lang bảo vệ </td>
-
-                        <td colspan="6">Thông tin tấm đan tiêu chuẩn</td>
-                        <td colspan="6">Thông tin tấm đan loại 02</td>
-                        <td colspan="7">Thông tin tính tấm đan bổ sung</td>
-
-                        <td rowspan="2">Hiện trạng trước khi đào thượng lưu (m)</td>
-                        <td colspan="9">Đáy đào thượng lưu</td>
-                        <td colspan="8">Đỉnh lót thượng lưu</td>
-                        <td colspan="8">Đỉnh móng thượng lưu</td>
-                        <td colspan="4">Mũ tường, tường thượng lưu</td>
-                        <td colspan="9">Đỉnh hoàn thiện thượng lưu</td>
-
-                        <td rowspan="2">Hiện trạng trước khi đào thượng lưu (m)</td>
-                        <td colspan="9">Đáy đào hạ lưu</td>
-                        <td colspan="8">Đỉnh lót hạ lưu</td>
-                        <td colspan="8">Đỉnh móng hạ lưu</td>
-                        <td colspan="4">Mũ tường, tường hạ lưu</td>
-                        <td colspan="9">Đỉnh hoàn thiện hạ lưu</td>
-
-                        <td rowspan="2">Loại vật liệu đào</td>
-                        <td colspan="3">Thượng lưu</td>
-                        <td colspan="3">Hạ lưu</td>
-
-                        <td colspan="3">Lót C.Chỗ đất</td>
-                        <td colspan="3">Lót C.Chỗ đá</td>
-                        <td colspan="3">móng C.Chỗ đất</td>
-                        <td colspan="3">móng C.Chỗ đá</td>
-                        <td colspan="3">Đế C.Chỗ đất</td>
-                        <td colspan="3">Đế C.Chỗ đá</td>
-                        <td colspan="3">Đỉnh cống C.Chỗ đất</td>
-                        <td colspan="3">Đỉnh cống C.Chỗ đá</td>
-
-                        <td colspan="3">C.Cao lót C.Chỗ đất	</td>
-                        <td colspan="3">C.Cao lót C.Chỗ đá</td>
-                        <td colspan="3">C.Cao móng C.Chỗ đất</td>
-                        <td colspan="3">C.Cao móng C.Chỗ đá	</td>
-                        <td colspan="3">C.Cao tường C.Chỗ đất</td>
-                        <td colspan="3">C.Cao tường C.Chỗ đá</td>
-
-                        <td colspan="3">C.Cao đệm cát C.Chỗ đất	</td>
-                        <td colspan="3">C.Cao đệm cát C.Chỗ đá</td>
-                        <td colspan="3">C.Cao ống C.Chỗ đất</td>
-                        <td colspan="3">C.Cao ống C.Chỗ đá	</td>
-                        <td colspan="3">C.Cao đắp cát C.Chỗ đất</td>
-                        <td colspan="3">C.Cao đắp cát C.Chỗ đá</td>
-
-                        <td colspan="3">C.Cao C.Chỗ đất đắp trả</td>
-                        <td colspan="3">C.Cao C.Chỗ đá đắp trả</td>
-                        <td colspan="3">C.Cao C.Chỗ đất đắp trả</td>
-                        <td colspan="3">C.Cao C.Chỗ đá đắp trả</td>
-
-                        <td colspan="4"> Thông tin mái đào cống, rãnh, ống nhựa, rãnh thang</td>
-                        <td colspan="4">Thông tin mái đào chân khay, giằng đỉnh rãnh thang</td>
-
-
-                        <td colspan="2">Đào đất</td>
-                        <td colspan="2">Đào đá</td>
-                        <td colspan="2">Đào đất</td>
-                        <td colspan="2">Đào đá</td>
-                        <td colspan="2">Chân khay</td>
-                        <td colspan="2">C.Rộng đào đáy lớn (m)</td>
-
-
-                        <td colspan="3"> KL đào cống, rãnh, ống nhựa, rãnh thang</td>
-                        <td colspan="3">Kl đào đất chân khay + giằng đỉnh rãnh thang</td>
-                        <td colspan="3">Tổng KL đào</td>
-                        <td colspan="3">KL C.Chỗ C.Tròn</td>
-                        <td colspan="3">KL C.Chỗ C.hộp</td>
-                        <td colspan="3">KL C.Chỗ rãnh xây + bê tông</td>
-                        <td colspan="3">KL C.Chỗ ống nhựa</td>
-                        <td colspan="8">KL C.Chỗ rãnh thang</td>
-                        <td colspan="3">Tổng KL chiếm chỗ</td>
-                        <td colspan="3">Kl đắp trả	</td>
-                        <td colspan="3">KL thừa</td>
-
-                        <td colspan="3">Thượng lưu</td>
-                        <td colspan="3">Hạ lưu</td>
-
-                        <td colspan="2">Từ tọa độ</td>
-                        <td colspan="2">Đến tọa độ	</td>
-
-                    </tr>
-                    <tr>
-                        <td>Tuyến đường</td>
-                        <td>Lộ trình tại tim hố ga</td>
-
-                        <td>Tên hố ga sau phân loại</td>
-                        <td>Tên hố ga theo bản vẽ</td>
-                        <td>Hình thức hố ga</td>
-                        <td>Kết cấu mũ mố</td>
-                        <td>Kết cấu tường</td>
-                        <td>Hình thức móng hố ga</td>
-                        <td>Kết cấu móng</td>
-                        <td>Chất mặt trong</td>
-                        <td>Chất mặt ngoài</td>
-
-                        @* Thông tin kích thước hình học hố ga *@
-                        <td>C.D dài (m)</td>
-                        <td>C.rộng (m)</td>
-
-                        <td>D (m)</td>
-                        <td>R (m)</td>
-                        <td>C (m)</td>
-
-                        <td>D (m)</td>
-                        <td>R (m)</td>
-                        <td>C (m)</td>
-
-                        <td>D (m)</td>
-                        <td>R (m)</td>
-                        <td>C (m)</td>
-
-                        <td>D (m)</td>
-                        <td>R (m)</td>
-                        <td class="text-danger">C (m)</td>
-                        <td>CD tường (m)</td>
-
-                        <td>D (m)</td>
-                        <td>R (m)</td>
-                        <td>C (m)</td>
-                        <td>CD dầm (m)</td>
-                        <td>C.Cao dầm giữa tường so với đáy hố ga (m)</td>
-
-                        <td>D (m)</td>
-                        <td>R (m)</td>
-                        <td class="text-danger">C (m)</td>
-
-                        <td>D (m)</td>
-                        <td>R (m)</td>
-                        <td class="text-danger">C (m)</td>
-
-                        <td>D (m)</td>
-                        <td>R (m)</td>
-                        <td>C (m)</td>
-                        <td>CD tường (m)</td>
-
-                        <td>D (m)</td>
-                        <td>R (m)</td>
-                        <td>C (m)</td>
-                        <td>CD tường (m)</td>
-
-                        @* Hạng mục chiếm chỗ hố ga *@
-                        <td>Loại</td>
-                        <td>Cạnh dài</td>
-                        <td>Cạnh rộng</td>
-                        <td>Cạnh chéo</td>
-
-                        <td>Loại</td>
-                        <td>Cạnh dài</td>
-                        <td>Cạnh rộng</td>
-                        <td>Cạnh chéo</td>
-
-                        <td>Loại</td>
-                        <td>Cạnh dài</td>
-                        <td>Cạnh rộng</td>
-                        <td>Cạnh chéo</td>
-
-                        <td>Loại</td>
-                        <td>Cạnh dài</td>
-                        <td>Cạnh rộng</td>
-                        <td>Cạnh chéo</td>
-
-                        <td>Loại</td>
-                        <td>Cạnh dài</td>
-                        <td>Cạnh rộng</td>
-                        <td>Cạnh chéo</td>
-
-                        <td>Loại</td>
-                        <td>Cạnh dài</td>
-                        <td>Cạnh rộng</td>
-                        <td>Cạnh chéo</td>
-
-                        <td>Loại</td>
-                        <td>Cạnh dài</td>
-                        <td>Cạnh rộng</td>
-                        <td>Cạnh chéo</td>
-
-                        <td>Loại</td>
-                        <td>Cạnh dài</td>
-                        <td>Cạnh rộng</td>
-                        <td>Cạnh chéo</td>
-
-                        @* Thông tin tấm đan hố ga *@
-                        <td>Đường kính (m) </td>
-                        <td>Chiều dầy (m)</td>
-
-                        <td>D (m) </td>
-                        <td>R (m) </td>
-                        <td>C (m)</td>
-                        <td>Số lượng nắp đậy (C.Kiện)</td>
-
-                        @* Thông tin vật liệu đào hố ga *@
-
-                        <td> Loại vật liệu đào</td>
-                        <td>Chiều cao đào đá (m) </td>
-                        <td class="text-danger">Chiều cao đào đất (m)</td>
-                        <td class="text-danger">Tổng chiều cao đào</td>
-
-                        @*Thông tin cao độ hố ga *@
-                        <td>Cao độ tự nhiên (m)</td>
-                        <td>CĐ đỉnh vỉa hè hoàn thiện (m)</td>
-                        <td>Cao độ đỉnh K98 (m)</td>
-                        <td class="text-danger">Cao độ hiện trạng trước khi đào (m)</td>
-                        <td class="text-danger">Đáy đào (m)</td>
-                        <td class="text-danger">C.Sâu đào (m)</td>
-                        <td class="text-danger">Đỉnh lót móng (m)</td>
-                        <td class="text-danger">CĐ đỉnh móng</td>
-                        <td>CĐ đáy hố ga (m)</td>
-                        <td class="text-danger">C.Cao tường (m)</td>
-                        <td class="text-danger">Đỉnh tường dưới dầm giữa tường (m)</td>
-                        <td class="text-danger">Đỉnh dầm giữa tường (m)</td>
-                        <td class="text-danger">Đỉnh tường (m)</td>
-                        <td class="text-danger">Đỉnh mũ mố thớt dưới (m)</td>
-                        <td>CĐ đỉnh hố ga (m)</td>
-                        <td class="text-danger">Tổng chiều cao hố ga</td>
-                        <td class="text-danger">Chênh cao đỉnh hố ga và hiện trạng đào (m)</td>
-                        <td class="text-danger">Tổng chiều cao chiếm chỗ đắp trả</td>
-
-                        @* Thông tin chiều cao C.Chỗ đắp trả hố thu *@
-                        <td class="text-danger">Chiều cao lót C.Chỗ đất (m)</td>
-                        <td class="text-danger">Chiều cao móng C.Chỗ đất (m)</td>
-                        <td class="text-danger">Chiều cao tường C.Chỗ đất (m)</td>
-                        <td class="text-danger">Chiều cao lót C.Chỗ đá (m)</td>
-                        <td class="text-danger">Chiều cao móng C.Chỗ đá (m)</td>
-                        <td class="text-danger">Chiều cao tường C.Chỗ đá (m)</td>
-                        <td class="text-danger">Tổng C.Cao C.Chỗ đất</td>
-                        <td class="text-danger">Tổng C.Cao C.Chỗ đá</td>
-                        <td class="text-danger">Chênh đất so với thiết kế</td>
-                        <td class="text-danger">Chênh đá so với thiết kế</td>
-
-                        @* Thông tin mái đào *@
-                        <td>Chiều rộng đáy đào nhỏ (m)</td>
-                        <td>Tỷ lệ mở mái (m)</td>
-                        <td>Số cạnh mái trái</td>
-                        <td>Số cạnh mái phải</td>
-
-                        @* Thông tin khối lượng đào *@
-                        <td class="text-danger">C.Rộng đào đáy lớn đất (m)</td>
-                        <td class="text-danger">C.Rộng đào đáy lớn đá (m)</td>
-                        <td class="text-danger">Diện tích đào đất (m2)</td>
-                        <td class="text-danger">Diện tích đào đá (m2)</td>
-                        <td class="text-danger">Tổng DT đào (m2)</td>
-                        <td class="text-danger">KL đào đất (m3)</td>
-                        <td class="text-danger">KL đào đá (m3)</td>
-                        <td class="text-danger">Tổng KL đào (m3)</td>
-                        <td class="text-danger">KL chiếm chỗ đất (m3)</td>
-                        <td class="text-danger">KL chiếm chỗ đá (m3)</td>
-                        <td class="text-danger">Tổng chiếm chỗ (m3)</td>
-                        <td class="text-danger">KL đắp trả đất (m3)</td>
-                        <td class="text-danger">KL đắp trả đá (m3)</td>
-                        <td class="text-danger">Tổng đắp trả (m3)</td>
-                        <td class="text-danger">KL thừa đất (m3)</td>
-                        <td class="text-danger">KL thừa đá (m3)</td>
-                        <td class="text-danger">Tổng thừa (m3)</td>
-
-                        @* Tọa độ *@
-                        <td>X</td>
-                        <td>Y</td>
-
-                        @* Thông tin lý trình truyền dẫn *@
-                        <td>Từ lý trình</td>
-                        <td>Đến lý trình</td>
-                        <td>Từ hố ga</td>
-                        <td>Đến hố ga</td>
-                        @* Thông tin đường truyền dẫn *@
-                        <td>Hình thức truyền dẫn</td>
-                        <td>Loại truyền dẫn</td>
-                        <td>Tên loại truyền dẫn sau phân loại</td>
-                        @* Thông tin chiều dài và số lượng cấu kiện đường truyền dẫn *@
-                        <td>Chiều dài 01 cấu kiện (m)</td>
-                        <td>Chiều dài mối nối C.Kiện (m)</td>
-                        <td>Số lượng C.Kiện dùng để tính chiều dài bổ sung (C.Kiện)</td>
-                        <td>Tổng chiều dài (m)</td>
-                        <td class="text-danger">SL cấu kiện tính KL</td>
-                        <td class="text-danger">SL cấu kiện nguyên</td>
-                        <td class="text-danger">Chiều dài cần để lắp đặt được theo số cấu kiện nguyên (m)</td>
-                        <td class="text-danger">Tổng chiều dài lắp đặt theo số cấu kiện nguyên (m)</td>
-                        <td class="text-danger">Chiều dài thực tế còn thừa (+)/thiếu (-) so với C.Rộng lòng mũ mố hố ga (m)</td>
-                        <td class="text-danger">Xác định ống cống cần thêm</td>
-                        <td class="text-danger">Chiều dài còn thừa (+)/thiếu (-) sau tính theo cấu kiện tính KL (m)</td>
-                        @* Thông tin móng đường truyền dẫn *@
-                        <td>Phân loại móng cống tròn, cống hộp</td>
-                        <td>Loại móng</td>
-                        <td>Hình thức móng</td>
-
-                        @* Thông tin đế cống *@
-                        <td>D</td>
-                        <td>R</td>
-                        <td>C</td>
-                        <td>SL đế cống/01 cấu kiện truyền dẫn (C.Kiện)</td>
-                        <td>KL 01 đế cống</td>
-                        <td class="text-danger">Tổng số lượng đế cống</td>
-                        <td class="text-danger">Tổng KL đế cống</td>
-
-                        @* Thông tin cấu tạo cống tròn *@
-                        <td>C.Dầy phủ bì (m)</td>
-                        <td>Số cạnh</td>
-                        <td>Lòng sử dụng (m)</td>
-                        <td class="text-danger">C.Cao cấu kiện</td>
-                        <td>C.Cao lót móng (m)</td>
-                        <td>C.Rộng lót móng</td>
-                        <td>C.Cao móng (m)</td>
-                        <td>C.Rộng móng (m)</td>
-                        <td>C.Cao đế (tại vị trí đặt C.Kiện) (m)</td>
-                        <td class="text-danger">Tổng C.Cao cống (m)</td>
-
-                        @* Thông tin kích thước hình học cống hộp, rãnh *@
-                        <td>Cấu tạo tường</td>
-                        <td>Cấu tạo mũ mố</td>
-                        <td>Chát mặt trong</td>
-                        <td>Chát mặt ngoài</td>
-                        <td>C.Cao lót móng (m)</td>
-                        <td>C.Rộng lót móng (m)</td>
-                        <td>C.Cao móng (m)</td>
-                        <td>C.Rộng móng (m)</td>
-                        <td>C.Cao đế (m)</td>
-                        <td>C.Rộng đế (m)</td>
-                        <td>C.Dầy tường 01 bên (m)</td>
-                        <td>Số lượng tường (m)</td>
-                        <td>C.Rộng lòng sử dụng (m)</td>
-                        <td>C.Cao tường cống hộp (m)</td>
-                        <td class="text-danger">C.Cao tường rãnh</td>
-                        <td class="text-danger">C.Cao tường gộp</td>
-                        <td>C.Cao mũ mố thớt dưới (m)</td>
-                        <td>C.Rộng mũ mố dưới</td>
-                        <td>C.Cao mũ mố thớt trên (m)</td>
-                        <td>C.Rộng mũ mố trên</td>
-                        <td>Loại thanh chống</td>
-                        <td>Cấu tạo thanh chống</td>
-                        <td>C.Cao thanh chống (m)</td>
-                        <td>C.Rộng thanh chống (m)</td>
-                        <td>C.Dài (m)</td>
-                        <td>Số lượng thanh chống (cái)</td>
-                        <td class="text-danger">C.Cao chát mặt trong (m)</td>
-                        <td class="text-danger">C.Cao chát mặt ngoài (m)</td>
-
-                        @* Thông tin kích thước hình học ống nhựa *@
-                        <td>C.Dầy phủ bì (m)</td>
-                        <td>Số cạnh</td>
-                        <td>Lòng sử dụng (m)</td>
-                        <td class="text-danger">Tổng C.Cao ống (m)</td>
-                        <td>C.Cao đệm cát (m)</td>
-                        <td>C.Cao đắp cát (m)</td>
-
-                        @* Thông tin rãnh thang *@
-                        <td>Phân loại chân khay</td>
-                        <td>C.Cao lót chân khay (m)</td>
-                        <td>C.Rộng lót chân khay (m)</td>
-                        <td>Số lượng lót chân khay</td>
-                        <td>C.Cao móng chân khay (m)</td>
-                        <td>C.Rộng móng chân khay (m)</td>
-                        <td>Số lượng móng chân khay</td>
-                        <td>C.Cao lót (m)</td>
-                        <td>C.Rộng lót (m)</td>
-                        <td>C.Cao móng (m)</td>
-                        <td>C.Rộng móng (m)</td>
-                        <td>Phân loại mái</td>
-                        <td>C.Rộng mái (m)</td>
-                        <td>C.Dầy mái (m)</td>
-                        <td>Số lượng mái (m)</td>
-                        <td>Phân loại giằng đỉnh</td>
-                        <td>C.Cao lót giằng đỉnh (m)</td>
-                        <td>C.Rộng lót giằng đỉnh (m)</td>
-                        <td>Số lượng lót giằng đỉnh</td>
-                        <td>C.Cao móng giằng đỉnh (m)</td>
-                        <td>C.Rộng móng giằng đỉnh (m)</td>
-                        <td>Số lượng móng giằng đỉnh</td>
-                        <td>Phân loại hành lang bảo vệ</td>
-                        <td>C.Cao hàng lang bảo vệ</td>
-                        <td>C.Rộng hành lang bảo vệ</td>
-                        <td>Số lượng hàng lang bảo vệ</td>
-
-                        @* Thông tin tấm đan cống hộp, rãnh *@
-                        <td>Tên loại tấm đan tiêu chuẩn</td>
-                        <td>Cấu tạo tấm đan truyền dẫn tấm đan tiêu chuẩn</td>
-                        <td class="text-danger">Số lượng</td>
-                        <td>C.Dài</td>
-                        <td>C.Rộng</td>
-                        <td>C.Cao</td>
-                        <td>Tên loại tấm đan loại 02</td>
-                        <td>Cấu tạo tấm đan truyền dẫn</td>
-                        <td class="text-danger">Số lượng</td>
-                        <td class="text-danger">C.Dài</td>
-                        <td>C.Rộng</td>
-                        <td>C.Cao</td>
-                        <td>Chiều dài mối nối (m)</td>
-                        <td>Số lượng T.Đan dùng để tính chiều dài bổ sung (C.Kiện)</td>
-                        <td class="text-danger">SL cấu kiện nguyên</td>
-                        <td class="text-danger">Chiều dài cần để lắp đặt được theo số CK nguyên (m)</td>
-                        <td class="text-danger">Tổng chiều dài lắp đặt theo số CK nguyên (m)</td>
-                        <td class="text-danger">Chiều dài thực tế còn thừa (+)/thiếu (-) so với C.Rộng lòng mũ mố hố ga (m)</td>
-                        <td class="text-danger">Xác định ống cống cần thêm</td>
-
-                        @* Cao độ thượng lưu *@
-                        <td class="text-danger">Đáy đào gộp (C.Tròn, C.Hộp, Rãnh, Ô.Nhựa, rãnh thang)</td>
-                        <td class="text-danger">Chiều sâu đào</td>
-                        <td class="text-danger">Đáy đào cống tròn (m)</td>
-                        <td class="text-danger">Đáy đào cống hộp (m)</td>
-                        <td class="text-danger">Đáy đào rãnh (m)</td>
-                        <td class="text-danger">Đáy đào ống nhựa (m)</td>
-                        <td class="text-danger">Đáy đào giằng đỉnh rãnh thang (m)</td>
-                        <td class="text-danger">Đáy đào chân khay rãnh thang (m)</td>
-                        <td class="text-danger">Đáy đào rãnh thang (m)</td>
-                        <td class="text-danger">Đỉnh lót gộp (C.Tròn, C.Hộp, Rãnh, ống nhựa, rãnh thang)</td>
-                        <td class="text-danger">Đỉnh lót rãnh thang</td>
-                        <td class="text-danger">Đỉnh lót chân khay rãnh thang</td>
-                        <td class="text-danger">Đỉnh lót giằng đỉnh rãnh thang</td>
-                        <td class="text-danger">Đỉnh lót ống nhựa</td>
-                        <td class="text-danger">Đỉnh lót cống tròn (m)</td>
-                        <td class="text-danger">Đỉnh lót cống hộp (m)</td>
-                        <td class="text-danger">Đỉnh lót rãnh (m)</td>
-                        <td class="text-danger">Đỉnh móng gộp (C.Tròn, C.Hộp, Rãnh, rãnh thang)</td>
-                        <td class="text-danger">Đỉnh móng rãnh thang (m)</td>
-                        <td class="text-danger">Đỉnh móng chân khay (m)</td>
-                        <td class="text-danger">Đỉnh móng cống tròn (m)</td>
-                        <td class="text-danger">Đỉnh móng cống hộp (m)</td>
-                        <td class="text-danger">Đỉnh móng rãnh (m)</td>
-                        <td class="text-danger">Đỉnh đế cống (m)</td>
-                        <td>Đáy dòng chảy (m)</td>
-                        <td class="text-danger">C.Cao tường cống, rãnh (m)</td>
-                        <td class="text-danger">Đỉnh tường C.Hộp, rãnh (m)</td>
-                        <td class="text-danger">Đỉnh mũ mố thớt dưới cống hộp rãnh (m)</td>
-                        <td class="text-danger">Đỉnh giằng đỉnh rãnh thang (m)</td>
-                        <td class="text-danger">Đỉnh gộp (C.Tròn, C.Hộp, rãnh, Ô.Nhựa, Rãnh thang (m)</td>
-                        <td>Đỉnh trong lòng sử dụng (m)</td>
-                        <td class="text-danger">Đỉnh cống tròn (m)</td>
-                        <td class="text-danger">Đỉnh cống hộp (m)</td>
-                        <td class="text-danger">Đỉnh rãnh (m)</td>
-                        <td class="text-danger">Đỉnh ống nhựa (m)</td>
-                        <td class="text-danger">Đỉnh đắp cát (m)</td>
-                        <td>Chiều cao rãnh thang từ đáy dòng chảy đến đỉnh (m)</td>
-                        <td class="text-danger">Đỉnh rãnh thang (m)</td>
-
-                        @* Cao độ hạ lưu *@
-                        <td class="text-danger">Đáy đào gộp (C.Tròn, C.Hộp, Rãnh, Ô.Nhựa, rãnh thang)</td>
-                        <td class="text-danger">Chiều sâu đào</td>
-                        <td class="text-danger">Đáy đào cống tròn (m)</td>
-                        <td class="text-danger"> Đáy đào cống hộp (m)</td>
-                        <td class="text-danger">Đáy đào rãnh (m)</td>
-                        <td class="text-danger">Đáy đào ống nhựa (m)</td>
-                        <td class="text-danger">Đáy đào giằng đỉnh rãnh thang (m)</td>
-                        <td class="text-danger">Đáy đào chân khay rãnh thang (m)</td>
-                        <td class="text-danger">Đáy đào rãnh thang (m)</td>
-                        <td class="text-danger">Đỉnh lót gộp (C.Tròn, C.Hộp, Rãnh, ống nhựa, rãnh thang)</td>
-                        <td class="text-danger">Đỉnh lót rãnh thang</td>
-                        <td class="text-danger">Đỉnh lót chân khay rãnh thang</td>
-                        <td class="text-danger">Đỉnh lót giằng đỉnh rãnh thang</td>
-                        <td class="text-danger">Đỉnh lót ống nhựa</td>
-                        <td class="text-danger">Đỉnh lót cống tròn (m)</td>
-                        <td class="text-danger">Đỉnh lót cống hộp (m)</td>
-                        <td class="text-danger">Đỉnh lót rãnh (m)</td>
-                        <td class="text-danger">Đỉnh móng gộp (C.Tròn, C.Hộp, Rãnh, rãnh thang)</td>
-                        <td class="text-danger">Đỉnh móng rãnh thang (m)</td>
-                        <td class="text-danger">Đỉnh móng chân khay (m)</td>
-                        <td class="text-danger">Đỉnh móng cống tròn (m)</td>
-                        <td class="text-danger">Đỉnh móng cống hộp (m)</td>
-                        <td class="text-danger">Đỉnh móng rãnh (m)</td>
-                        <td class="text-danger">Đỉnh đế cống (m)</td>
-                        <td>Đáy dòng chảy (m)</td>
-                        <td class="text-danger">C.Cao tường cống, rãnh (m)</td>
-                        <td class="text-danger">Đỉnh tường C.Hộp, rãnh (m)</td>
-                        <td class="text-danger">Đỉnh mũ mố thớt dưới cống hộp rãnh (m)</td>
-                        <td class="text-danger">Đỉnh giằng đỉnh rãnh thang (m)</td>
-                        <td class="text-danger">Đỉnh gộp (C.Tròn, C.Hộp, rãnh, Ô.Nhựa, Rãnh thang (m)</td>
-                        <td>Đỉnh trong lòng sử dụng (m)</td>
-                        <td class="text-danger">Đỉnh cống tròn (m)</td>
-                        <td class="text-danger">Đỉnh cống hộp (m)</td>
-                        <td class="text-danger">Đỉnh rãnh (m)</td>
-                        <td class="text-danger">Đỉnh ống nhựa (m)</td>
-                        <td class="text-danger">Đỉnh đắp cát (m)</td>
-                        <td>Chiều cao rãnh thang từ đáy dòng chảy đến đỉnh (m)</td>
-                        <td class="text-danger">Đỉnh rãnh thang (m)</td>
-
-                        @* Thông tin vật liệu đào cống, rãnh *@
-                        <td>Chiều cao đào đá (m)</td>
-                        <td class="text-danger">Chiều cao đào đất (m)</td>
-                        <td class="text-danger">Tổng chiều sâu đào</td>
-                        <td>Chiều cao đào đá (m)</td>
-                        <td class="text-danger">Chiều cao đào đất (m)</td>
-                        <td class="text-danger">Tổng chiều sâu đào</td>
-
-                        @* Thông tin C.Cao C.Chỗ cống tròn *@
-                        <td class="text-danger">C.Cao lót T.Lưu</td>
-                        <td class="text-danger">C.Cao lót H.lưu</td>
-                        <td class="text-danger">C.Cao lót móng T.Bình</td>
-                        <td class="text-danger">C.Cao lót T.Lưu</td>
-                        <td class="text-danger">C.Cao lót H.lưu</td>
-                        <td class="text-danger">C.Cao lót móng T.Bình</td>
-                        <td class="text-danger">C.Cao móng T.Lưu</td>
-                        <td class="text-danger">C.Cao móng H.Lưu</td>
-                        <td class="text-danger">C.Cao móng T.Bình</td>
-                        <td class="text-danger">C.Cao móng T.Lưu</td>
-                        <td class="text-danger">C.Cao móng H.Lưu</td>
-                        <td class="text-danger">C.Cao móng T.Bình</td>
-                        <td class="text-danger">C.Cao đế T.Lưu</td>
-                        <td class="text-danger">C.Cao đế H.Lưu</td>
-                        <td class="text-danger">C.Cao đế T.Bình</td>
-                        <td class="text-danger">C.Cao đế T.Lưu</td>
-                        <td class="text-danger">C.Cao đế H.Lưu</td>
-                        <td class="text-danger">C.Cao đế T.Bình</td>
-                        <td class="text-danger">C.Cao cống T.Lưu</td>
-                        <td class="text-danger">C.Cao cống H.Lưu</td>
-                        <td class="text-danger">C.Cao cống T.Bình</td>
-                        <td class="text-danger">C.Cao cống T.Lưu</td>
-                        <td class="text-danger">C.Cao cống H.Lưu</td>
-                        <td class="text-danger">C.Cao cống T.Bình</td>
-
-                        @* Thông tin C.Cao C.Chỗ cống hộp, rãnh *@
-
-                        <td class="text-danger">C.Cao lót T.Lưu</td>
-                        <td class="text-danger">C.Cao lót H.Lưu</td>
-                        <td class="text-danger">C.Cao lót T.Bình</td>
-                        <td class="text-danger">C.Cao lót T.Lưu</td>
-                        <td class="text-danger">C.Cao lót H.Lưu</td>
-                        <td class="text-danger">C.Cao lót T.Bình</td>
-                        <td class="text-danger">C.Cao móng T.Lưu</td>
-                        <td class="text-danger">C.Cao móng H.Lưu</td>
-                        <td class="text-danger">C.Cao móng T.Bình</td>
-                        <td class="text-danger">C.Cao móng T.Lưu</td>
-                        <td class="text-danger">C.Cao móng H.Lưu</td>
-                        <td class="text-danger">C.Cao móng T.Bình</td>
-                        <td class="text-danger">C.Cao tường T.Lưu</td>
-                        <td class="text-danger">C.Cao tường H.Lưu</td>
-                        <td class="text-danger">C.Cao tường T.Bình</td>
-                        <td class="text-danger">C.Cao tường T.Lưu</td>
-                        <td class="text-danger">C.Cao tường H.Lưu</td>
-                        <td class="text-danger">C.Cao tường T.Bình</td>
-
-                        @* Thông tin C.Cao C.Chỗ ống nhựa *@
-                        <td class="text-danger">C.Cao đệm cát T.Lưu</td>
-                        <td class="text-danger">C.Cao đệm cát H.Lưu</td>
-                        <td class="text-danger">C.Cao đệm cát T.Bình</td>
-                        <td class="text-danger">C.Cao đệm cát T.Lưu</td>
-                        <td class="text-danger">C.Cao đệm cát H.Lưu</td>
-                        <td class="text-danger">C.Cao đệm cát T.Bình</td>
-                        <td class="text-danger">C.Cao ống T.Lưu</td>
-                        <td class="text-danger">C.Cao ống H.Lưu</td>
-                        <td class="text-danger">C.Cao T.Bình</td>
-                        <td class="text-danger">C.Cao ống T.Lưu</td>
-                        <td class="text-danger">C.Cao ống H.Lưu</td>
-                        <td class="text-danger">C.Cao T.Bình</td>
-                        <td class="text-danger">C.Cao đắp cát T.Lưu</td>
-                        <td class="text-danger">C.Cao Đắp cát H.Lưu</td>
-                        <td class="text-danger">C.Cao đắp cát T.Bình</td>
-                        <td class="text-danger">C.Cao đắp cát T.Lưu</td>
-                        <td class="text-danger">C.Cao Đắp cát H.Lưu</td>
-                        <td class="text-danger">C.Cao đắp cát T.Bình</td>
-
-                        @* Thông tin chiếm chỗ rãnh thang (m) *@
-                        <td class="text-danger">Lót thượng lưu</td>
-                        <td class="text-danger">Lót hạ lưu</td>
-                        <td class="text-danger">Lót trung bình</td>
-                        <td class="text-danger">Lót thượng lưu</td>
-                        <td class="text-danger">Lót hạ lưu</td>
-                        <td class="text-danger">Lót trung bình</td>
-                        <td class="text-danger">Móng thượng lưu</td>
-                        <td class="text-danger">Móng hạ lưu</td>
-                        <td class="text-danger">Móng trung bình</td>
-                        <td class="text-danger">Móng thượng lưu</td>
-                        <td class="text-danger">Móng hạ lưu</td>
-                        <td class="text-danger">Móng trung bình</td>
-
-                        @* Thông tin mái đào *@
-                        <td>Chiều rộng đáy đào nhỏ (m)</td>
-                        <td>Tỷ lệ mở mái</td>
-                        <td>Số cạnh mái trái</td>
-                        <td>Số cạnh mái phải</td>
-                        <td>Chiều rộng đáy đào nhỏ (m)</td>
-                        <td>Tỷ lệ mở mái</td>
-                        <td>Số cạnh mái trái</td>
-                        <td>Số cạnh mái phải</td>
-
-                        @* D.Tích đào thượng lưu cống, rãnh, ống nhựa, rãnh thang *@
-                        <td class="text-danger">C.Rộng đào đáy lớn (m)</td>
-                        <td class="text-danger">D.Tích đào (m2)</td>
-                        <td class="text-danger">C.Rộng đào đáy lớn (m)</td>
-                        <td class="text-danger">D.Tích đào (m2)</td>
-                        @* D.Tích đào hạ lưu cống, rãnh, ống nhựa, rãnh thang *@
-                        <td class="text-danger">C.Rộng đào đáy lớn (m)</td>
-                        <td class="text-danger">D.Tích đào (m2)</td>
-                        <td class="text-danger">C.Rộng đào đáy lớn (m)</td>
-                        <td class="text-danger">D.Tích đào (m2)</td>
-                        @* D.Tích đào chân khay, giằng đỉnh  *@
-                        <td class="text-danger">C.Rộng đào đáy lớn (m)</td>
-                        <td class="text-danger">D.Tích đào (m2)</td>
-                        <td class="text-danger">C.Rộng đào đáy lớn (m)</td>
-                        <td class="text-danger">D.Tích đào (m2)</td>
-                        @* Thông tin khối lượng đào *@
-                        <td class="text-danger">KL đào đất (m3)</td>
-                        <td class="text-danger">KL đào đá (m3)</td>
-                        <td class="text-danger">Tổng KL đào cống, rãnh, ống nhựa, rãnh thang (m3)</td>
-                        <td class="text-danger">Chân khay (m3)</td>
-                        <td class="text-danger">Giằng đỉnh (m3)</td>
-                        <td class="text-danger">Tổng KL đào đất chân khay + rảnh đỉnh (m3)</td>
-                        <td class="text-danger">Tổng KL đào đất (m3)</td>
-                        <td class="text-danger">Tổng KL đào đá (m3)</td>
-                        <td class="text-danger">Tổng KL đào (m3)</td>
-                        <td class="text-danger">KL C.Chỗ đất cống tròn (m3)</td>
-                        <td class="text-danger">KL C.Chỗ đá cống tròn (m3)</td>
-                        <td class="text-danger">Tổng KL chiếm chỗ C.Tròn (m3)</td>
-                        <td class="text-danger">KL C.chỗ đất cống hộp (m3)</td>
-                        <td class="text-danger">KL C.chỗ đá cống hộp (m3)</td>
-                        <td class="text-danger">Tổng KL C.chỗ cống hộp (m3)</td>
-                        <td class="text-danger">KL C.chỗ đất rãnh (m3)</td>
-                        <td class="text-danger">KL C.chỗ đá rãnh (m3)</td>
-                        <td class="text-danger">Tổng KL C.chỗ rãnh (m3)</td>
-                        <td class="text-danger">KL C.Chỗ đất ống nhựa (m)</td>
-                        <td class="text-danger">KL C.Chỗ đá ống nhựa (m3)</td>
-                        <td class="text-danger">Tổng KL C.Chỗ ống nhựa (m3)</td>
-                        <td class="text-danger">KL C.Chỗ đất rãnh thang (m3)</td>
-                        <td class="text-danger">KL C.Chỗ đá rãnh thang (m3)</td>
-                        <td class="text-danger">Tổng KL C.Chỗ rãnh thang (m3)</td>
-                        <td class="text-danger">KL C.Chố đất chân khay (m3)</td>
-                        <td class="text-danger">KL C.Chố đất chân giằng đỉnh (m3)</td>
-                        <td class="text-danger">Tổng KL C.Chỗ đất (m3)</td>
-                        <td class="text-danger">Tổng KL C.Chỗ đá (m3)</td>
-                        <td class="text-danger">Tổng KL C.Chỗ (m3)</td>
-                        <td class="text-danger">KL C.chỗ đất (m3)</td>
-                        <td class="text-danger">KL C.Chỗ đá (m3)</td>
-                        <td class="text-danger">Tổng chiếm chỗ (m3)</td>
-                        <td class="text-danger">KL đắp trả đất (m3)</td>
-                        <td class="text-danger">KL đắp trả đá (m3)</td>
-                        <td class="text-danger">Tổng KL đắp trả (m3)</td>
-                        <td class="text-danger">KL thừa đất (m3)</td>
-                        <td class="text-danger">KL thừa đá (m3)</td>
-                        <td class="text-danger">Tổng KL thừa (m3) </td>
-                        @*D.Tích đắp cát *@
-                        <td class="text-danger">C.Sâu đắp (m)</td>
-                        <td class="text-danger">C.Rộng đắp đáy lớn (m)</td>
-                        <td class="text-danger">D.Tích đắp (m2)</td>
-                        <td class="text-danger">C.Sâu đắp (m)</td>
-                        <td class="text-danger">C.Rộng đắp đáy lớn (m)</td>
-                        <td class="text-danger">D.Tích đắp (m2)</td>
-                        @*Thông tin KL đắp cát *@
-                        <td class="text-danger">KL đắp cát trước chiếm chỗ (m3)</td>
-                        <td class="text-danger">KL chiếm chỗ (m3)</td>
-                        <td class="text-danger">KL đắp cát sau chiếm chỗ (m3) </td>
-                        @* Tọa độ	 *@
-                        <td>X</td>
-                        <td>Y</td>
-                        <td>X</td>
-                        <td>Y</td>
-
-                    </tr>
-
-                </thead>
+                 <thead>
+                     <tr class="nowrap">
+                         <th rowspan="3">STT</th>
+                         <th colspan="2" rowspan="2">Thông tin lý trình</th>
+                         <th colspan="9" rowspan="2">Thông tin chung hố ga</th>
+                         <th colspan="34">Thông tin kích thước hình học hố ga</th>
+                         <th colspan="32">Hạng mục chiếm chỗ hố ga</th>
+                         <th colspan="8">Thông tin tấm đan hố ga</th>
+                         <th colspan="4" rowspan="2">Thông tin vật liệu đào hố ga</th>
+                         <th colspan="18" rowspan="2">Thông tin cao độ hố ga</th>
+                         <th colspan="10" rowspan="2"> Thông tin chiều cao C.Chỗ đắp trả hố thu</th>
+                         <th colspan="4" rowspan="2">Thông tin mái đào</th>
+                         <th colspan="17">Thông tin khối lượng đào</th>
+                         <th colspan="2" rowspan="2">Tọa độ</th>
+                         <th colspan="4" rowspan="2">Thông tin lý trình truyền dẫn</th>
+                         <th colspan="3" rowspan="2">Thông tin đường truyền dẫn</th>
+                         <th colspan="11" rowspan="2">Thông tin chiều dài và số lượng cấu kiện đường truyền dẫn</th>
+                         <th colspan="3" rowspan="2">Thông tin móng đường truyền dẫn</th>
+                         <th colspan="9">Thông tin đế cống</th>
+                         <th colspan="10" rowspan="2">Thông tin cấu tạo cống tròn</th>
+                         <th colspan="29">Thông tin kích thước hình học cống hộp, rãnh</th>
+                         <th colspan="6" rowspan="2">Thông tin kích thước hình học ống nhựa</th>
+                         <th colspan="30">Thông tin rãnh thang</th>
+                         <th colspan="19">Thông tin tấm đan cống hộp, rãnh</th>
+                         <th colspan="39">Cao độ thượng lưu</th>
+                         <th colspan="39">Cao độ hạ lưu</th>
+                         <th colspan="7">Thông tin vật liệu đào cống, rãnh</th>
+                         <th colspan="24">Thông tin C.Cao C.Chỗ cống tròn</th>
+                         <th colspan="18">Thông tin C.Cao C.Chỗ cống hộp, rãnh</th>
+                         <th colspan="18">Thông tin C.Cao C.Chỗ ống nhựa</th>
+                         <th colspan="12"> Thông tin chiếm chỗ rãnh thang (m)</th>
+                         <th colspan="8">Thông tin mái đào</th>
+                         <th colspan="4">D.Tích đào thượng lưu cống, rãnh, ống nhựa, rãnh thang</th>
+                         <th colspan="4">D.Tích đào hạ lưu cống, rãnh, ống nhựa, rãnh thang</th>
+                         <th colspan="4">D.Tích đào chân khay, giằng đỉnh</th>
+                         <th colspan="38">Thông tin khối lượng đào</th>
+                         <th colspan="6"> D.Tích đắp cát</th>
+                         <th colspan="3" rowspan="2"> Thông tin KL đắp cát</th>
+                         <th colspan="4"> Tọa độ</th>
+                     </tr>
+                     <tr>
+                         <th colspan="2">Thông tin phủ bì hố ga (m)</th>
+                         <th colspan="3">Kích thước hình học bê tông lót móng hố ga (m)</th>
+                         <th colspan="3">Kích thước hình học bê tông móng hố ga (m)</th>
+                         <th colspan="3">KTHH đế hố ga</th>
+                         <th colspan="4">Kích thước hình học tường hố ga (m)</th>
+                         <th colspan="5">KTHH dầm giữa hố ga</th>
+                         <th colspan="3">Chất hố ga mặt trong</th>
+                         <th colspan="3">Chất hố ga mặt ngoài, cạnh 01 +02 (m)</th>
+                         <th colspan="4">Kích thước hình học tường mũ mố thép dưới (m)</th>
+                         <th colspan="4">Kích thước hình học tường mũ mố thép trên (m)</th>
+
+                         <th colspan="4">Hình thức đấu nối</th>
+                         <th colspan="4">Hình thức đấu nối</th>
+                         <th colspan="4">Hình thức đấu nối</th>
+                         <th colspan="4">Hình thức đấu nối</th>
+                         <th colspan="4">Hình thức đấu nối</th>
+                         <th colspan="4">Hình thức đấu nối</th>
+                         <th colspan="4">Hình thức đấu nối</th>
+                         <th colspan="4">Hình thức đấu nối</th>
+
+                         <th rowspan="2">Phân loại đậy hố ga</th>
+                         <th rowspan="2">Hình thức đậy hố ga</th>
+                         <th colspan="2">Loại tròn</th>
+                         <th colspan="4">Loại vuông hoặc chữ nhật</th>
+
+                         <th colspan="5">Diện tích đào hố ga</th>
+                         <th colspan="12">Thông tin KL đào hố ga</th>
+
+                         <th rowspan="2">Tên loại đế cống</th>
+                         <th rowspan="2">Cấu tạo đế cống</th>
+                         <th colspan="3">KTHH đế cống</th>
+                         <th colspan="4">Khối lượng đế cống</th>
+
+                         <th colspan="4">Thông tin chung</th>
+                         <th colspan="2">Lót móng</th>
+                         <th colspan="2">Móng</th>
+                         <th colspan="2">Đế</th>
+                         <th colspan="6">Thân</th>
+                         <th colspan="4">Mũ mố</th>
+                         <th colspan="6">Thanh chống</th>
+                         <th colspan="2">Chát</th>
+                         <th rowspan="2" class="text-danger">Tổng chiều cao (m)</th>
+
+                         <th rowspan="2">Hình thức mái</th>
+                         <th rowspan="2">Cấu tạo chân khay</th>
+                         <th rowspan="2">Cấu tạo giằng đỉnh</th>
+                         <th rowspan="2">Hình thức hành lang bảo vệ</th>
+
+                         <th colspan="11">Thông tin móng</th>
+                         <th colspan="4">Thông tin mái</th>
+                         <th colspan="7">Thông tin giằng đỉnh </th>
+                         <th colspan="4">Thông tin hành lang bảo vệ </th>
+
+                         <th colspan="6">Thông tin tấm đan tiêu chuẩn</th>
+                         <th colspan="6">Thông tin tấm đan loại 02</th>
+                         <th colspan="7">Thông tin tính tấm đan bổ sung</th>
+
+                         <th rowspan="2">Hiện trạng trước khi đào thượng lưu (m)</th>
+                         <th colspan="9">Đáy đào thượng lưu</th>
+                         <th colspan="8">Đỉnh lót thượng lưu</th>
+                         <th colspan="8">Đỉnh móng thượng lưu</th>
+                         <th colspan="4">Mũ tường, tường thượng lưu</th>
+                         <th colspan="9">Đỉnh hoàn thiện thượng lưu</th>
+
+                         <th rowspan="2">Hiện trạng trước khi đào thượng lưu (m)</th>
+                         <th colspan="9">Đáy đào hạ lưu</th>
+                         <th colspan="8">Đỉnh lót hạ lưu</th>
+                         <th colspan="8">Đỉnh móng hạ lưu</th>
+                         <th colspan="4">Mũ tường, tường hạ lưu</th>
+                         <th colspan="9">Đỉnh hoàn thiện hạ lưu</th>
+
+                         <th rowspan="2">Loại vật liệu đào</th>
+                         <th colspan="3">Thượng lưu</th>
+                         <th colspan="3">Hạ lưu</th>
+
+                         <th colspan="3">Lót C.Chỗ đất</th>
+                         <th colspan="3">Lót C.Chỗ đá</th>
+                         <th colspan="3">móng C.Chỗ đất</th>
+                         <th colspan="3">móng C.Chỗ đá</th>
+                         <th colspan="3">Đế C.Chỗ đất</th>
+                         <th colspan="3">Đế C.Chỗ đá</th>
+                         <th colspan="3">Đỉnh cống C.Chỗ đất</th>
+                         <th colspan="3">Đỉnh cống C.Chỗ đá</th>
+
+                         <th colspan="3">C.Cao lót C.Chỗ đất	</th>
+                         <th colspan="3">C.Cao lót C.Chỗ đá</th>
+                         <th colspan="3">C.Cao móng C.Chỗ đất</th>
+                         <th colspan="3">C.Cao móng C.Chỗ đá	</th>
+                         <th colspan="3">C.Cao tường C.Chỗ đất</th>
+                         <th colspan="3">C.Cao tường C.Chỗ đá</th>
+
+                         <th colspan="3">C.Cao đệm cát C.Chỗ đất	</th>
+                         <th colspan="3">C.Cao đệm cát C.Chỗ đá</th>
+                         <th colspan="3">C.Cao ống C.Chỗ đất</th>
+                         <th colspan="3">C.Cao ống C.Chỗ đá	</th>
+                         <th colspan="3">C.Cao đắp cát C.Chỗ đất</th>
+                         <th colspan="3">C.Cao đắp cát C.Chỗ đá</th>
+
+                         <th colspan="3">C.Cao C.Chỗ đất đắp trả</th>
+                         <th colspan="3">C.Cao C.Chỗ đá đắp trả</th>
+                         <th colspan="3">C.Cao C.Chỗ đất đắp trả</th>
+                         <th colspan="3">C.Cao C.Chỗ đá đắp trả</th>
+
+                         <th colspan="4"> Thông tin mái đào cống, rãnh, ống nhựa, rãnh thang</th>
+                         <th colspan="4">Thông tin mái đào chân khay, giằng đỉnh rãnh thang</th>
+
+
+                         <th colspan="2">Đào đất</th>
+                         <th colspan="2">Đào đá</th>
+                         <th colspan="2">Đào đất</th>
+                         <th colspan="2">Đào đá</th>
+                         <th colspan="2">Chân khay</th>
+                         <th colspan="2">C.Rộng đào đáy lớn (m)</th>
+
+
+                         <th colspan="3"> KL đào cống, rãnh, ống nhựa, rãnh thang</th>
+                         <th colspan="3">Kl đào đất chân khay + giằng đỉnh rãnh thang</th>
+                         <th colspan="3">Tổng KL đào</th>
+                         <th colspan="3">KL C.Chỗ C.Tròn</th>
+                         <th colspan="3">KL C.Chỗ C.hộp</th>
+                         <th colspan="3">KL C.Chỗ rãnh xây + bê tông</th>
+                         <th colspan="3">KL C.Chỗ ống nhựa</th>
+                         <th colspan="8">KL C.Chỗ rãnh thang</th>
+                         <th colspan="3">Tổng KL chiếm chỗ</th>
+                         <th colspan="3">Kl đắp trả	</th>
+                         <th colspan="3">KL thừa</th>
+
+                         <th colspan="3">Thượng lưu</th>
+                         <th colspan="3">Hạ lưu</th>
+
+                         <th colspan="2">Từ tọa độ</th>
+                         <th colspan="2">Đến tọa độ	</th>
+
+                     </tr>
+                     <tr>
+                         <th>Tuyến đường</th>
+                         <th>Lộ trình tại tim hố ga</th>
+
+                         <th>Tên hố ga sau phân loại</th>
+                         <th>Tên hố ga theo bản vẽ</th>
+                         <th>Hình thức hố ga</th>
+                         <th>Kết cấu mũ mố</th>
+                         <th>Kết cấu tường</th>
+                         <th>Hình thức móng hố ga</th>
+                         <th>Kết cấu móng</th>
+                         <th>Chất mặt trong</th>
+                         <th>Chất mặt ngoài</th>
+
+                         @* Thông tin kích thước hình học hố ga *@
+                         <th>C.D dài (m)</th>
+                         <th>C.rộng (m)</th>
+
+                         <th>D (m)</th>
+                         <th>R (m)</th>
+                         <th>C (m)</th>
+
+                         <th>D (m)</th>
+                         <th>R (m)</th>
+                         <th>C (m)</th>
+
+                         <th>D (m)</th>
+                         <th>R (m)</th>
+                         <th>C (m)</th>
+
+                         <th>D (m)</th>
+                         <th>R (m)</th>
+                         <th class="text-danger">C (m)</th>
+                         <th>CD tường (m)</th>
+
+                         <th>D (m)</th>
+                         <th>R (m)</th>
+                         <th>C (m)</th>
+                         <th>CD dầm (m)</th>
+                         <th>C.Cao dầm giữa tường so với đáy hố ga (m)</th>
+
+                         <th>D (m)</th>
+                         <th>R (m)</th>
+                         <th class="text-danger">C (m)</th>
+
+                         <th>D (m)</th>
+                         <th>R (m)</th>
+                         <th class="text-danger">C (m)</th>
+
+                         <th>D (m)</th>
+                         <th>R (m)</th>
+                         <th>C (m)</th>
+                         <th>CD tường (m)</th>
+
+                         <th>D (m)</th>
+                         <th>R (m)</th>
+                         <th>C (m)</th>
+                         <th>CD tường (m)</th>
+
+                         @* Hạng mục chiếm chỗ hố ga *@
+                         <th>Loại</th>
+                         <th>Cạnh dài</th>
+                         <th>Cạnh rộng</th>
+                         <th>Cạnh chéo</th>
+
+                         <th>Loại</th>
+                         <th>Cạnh dài</th>
+                         <th>Cạnh rộng</th>
+                         <th>Cạnh chéo</th>
+
+                         <th>Loại</th>
+                         <th>Cạnh dài</th>
+                         <th>Cạnh rộng</th>
+                         <th>Cạnh chéo</th>
+
+                         <th>Loại</th>
+                         <th>Cạnh dài</th>
+                         <th>Cạnh rộng</th>
+                         <th>Cạnh chéo</th>
+
+                         <th>Loại</th>
+                         <th>Cạnh dài</th>
+                         <th>Cạnh rộng</th>
+                         <th>Cạnh chéo</th>
+
+                         <th>Loại</th>
+                         <th>Cạnh dài</th>
+                         <th>Cạnh rộng</th>
+                         <th>Cạnh chéo</th>
+
+                         <th>Loại</th>
+                         <th>Cạnh dài</th>
+                         <th>Cạnh rộng</th>
+                         <th>Cạnh chéo</th>
+
+                         <th>Loại</th>
+                         <th>Cạnh dài</th>
+                         <th>Cạnh rộng</th>
+                         <th>Cạnh chéo</th>
+
+                         @* Thông tin tấm đan hố ga *@
+                         <th>Đường kính (m) </th>
+                         <th>Chiều dầy (m)</th>
+
+                         <th>D (m) </th>
+                         <th>R (m) </th>
+                         <th>C (m)</th>
+                         <th>Số lượng nắp đậy (C.Kiện)</th>
+
+                         @* Thông tin vật liệu đào hố ga *@
+
+                         <th> Loại vật liệu đào</th>
+                         <th>Chiều cao đào đá (m) </th>
+                         <th class="text-danger">Chiều cao đào đất (m)</th>
+                         <th class="text-danger">Tổng chiều cao đào</th>
+
+                         @*Thông tin cao độ hố ga *@
+                         <th>Cao độ tự nhiên (m)</th>
+                         <th>CĐ đỉnh vỉa hè hoàn thiện (m)</th>
+                         <th>Cao độ đỉnh K98 (m)</th>
+                         <th class="text-danger">Cao độ hiện trạng trước khi đào (m)</th>
+                         <th class="text-danger">Đáy đào (m)</th>
+                         <th class="text-danger">C.Sâu đào (m)</th>
+                         <th class="text-danger">Đỉnh lót móng (m)</th>
+                         <th class="text-danger">CĐ đỉnh móng</th>
+                         <th>CĐ đáy hố ga (m)</th>
+                         <th class="text-danger">C.Cao tường (m)</th>
+                         <th class="text-danger">Đỉnh tường dưới dầm giữa tường (m)</th>
+                         <th class="text-danger">Đỉnh dầm giữa tường (m)</th>
+                         <th class="text-danger">Đỉnh tường (m)</th>
+                         <th class="text-danger">Đỉnh mũ mố thớt dưới (m)</th>
+                         <th>CĐ đỉnh hố ga (m)</th>
+                         <th class="text-danger">Tổng chiều cao hố ga</th>
+                         <th class="text-danger">Chênh cao đỉnh hố ga và hiện trạng đào (m)</th>
+                         <th class="text-danger">Tổng chiều cao chiếm chỗ đắp trả</th>
+
+                         @* Thông tin chiều cao C.Chỗ đắp trả hố thu *@
+                         <th class="text-danger">Chiều cao lót C.Chỗ đất (m)</th>
+                         <th class="text-danger">Chiều cao móng C.Chỗ đất (m)</th>
+                         <th class="text-danger">Chiều cao tường C.Chỗ đất (m)</th>
+                         <th class="text-danger">Chiều cao lót C.Chỗ đá (m)</th>
+                         <th class="text-danger">Chiều cao móng C.Chỗ đá (m)</th>
+                         <th class="text-danger">Chiều cao tường C.Chỗ đá (m)</th>
+                         <th class="text-danger">Tổng C.Cao C.Chỗ đất</th>
+                         <th class="text-danger">Tổng C.Cao C.Chỗ đá</th>
+                         <th class="text-danger">Chênh đất so với thiết kế</th>
+                         <th class="text-danger">Chênh đá so với thiết kế</th>
+
+                         @* Thông tin mái đào *@
+                         <th>Chiều rộng đáy đào nhỏ (m)</th>
+                         <th>Tỷ lệ mở mái (m)</th>
+                         <th>Số cạnh mái trái</th>
+                         <th>Số cạnh mái phải</th>
+
+                         @* Thông tin khối lượng đào *@
+                         <th class="text-danger">C.Rộng đào đáy lớn đất (m)</th>
+                         <th class="text-danger">C.Rộng đào đáy lớn đá (m)</th>
+                         <th class="text-danger">Diện tích đào đất (m2)</th>
+                         <th class="text-danger">Diện tích đào đá (m2)</th>
+                         <th class="text-danger">Tổng DT đào (m2)</th>
+                         <th class="text-danger">KL đào đất (m3)</th>
+                         <th class="text-danger">KL đào đá (m3)</th>
+                         <th class="text-danger">Tổng KL đào (m3)</th>
+                         <th class="text-danger">KL chiếm chỗ đất (m3)</th>
+                         <th class="text-danger">KL chiếm chỗ đá (m3)</th>
+                         <th class="text-danger">Tổng chiếm chỗ (m3)</th>
+                         <th class="text-danger">KL đắp trả đất (m3)</th>
+                         <th class="text-danger">KL đắp trả đá (m3)</th>
+                         <th class="text-danger">Tổng đắp trả (m3)</th>
+                         <th class="text-danger">KL thừa đất (m3)</th>
+                         <th class="text-danger">KL thừa đá (m3)</th>
+                         <th class="text-danger">Tổng thừa (m3)</th>
+
+                         @* Tọa độ *@
+                         <th>X</th>
+                         <th>Y</th>
+
+                         @* Thông tin lý trình truyền dẫn *@
+                         <th>Từ lý trình</th>
+                         <th>Đến lý trình</th>
+                         <th>Từ hố ga</th>
+                         <th>Đến hố ga</th>
+                         @* Thông tin đường truyền dẫn *@
+                         <th>Hình thức truyền dẫn</th>
+                         <th>Loại truyền dẫn</th>
+                         <th>Tên loại truyền dẫn sau phân loại</th>
+                         @* Thông tin chiều dài và số lượng cấu kiện đường truyền dẫn *@
+                         <th>Chiều dài 01 cấu kiện (m)</th>
+                         <th>Chiều dài mối nối C.Kiện (m)</th>
+                         <th>Số lượng C.Kiện dùng để tính chiều dài bổ sung (C.Kiện)</th>
+                         <th>Tổng chiều dài (m)</th>
+                         <th class="text-danger">SL cấu kiện tính KL</th>
+                         <th class="text-danger">SL cấu kiện nguyên</th>
+                         <th class="text-danger">Chiều dài cần để lắp đặt được theo số cấu kiện nguyên (m)</th>
+                         <th class="text-danger">Tổng chiều dài lắp đặt theo số cấu kiện nguyên (m)</th>
+                         <th class="text-danger">Chiều dài thực tế còn thừa (+)/thiếu (-) so với C.Rộng lòng mũ mố hố ga (m)</th>
+                         <th class="text-danger">Xác định ống cống cần thêm</th>
+                         <th class="text-danger">Chiều dài còn thừa (+)/thiếu (-) sau tính theo cấu kiện tính KL (m)</th>
+                         @* Thông tin móng đường truyền dẫn *@
+                         <th>Phân loại móng cống tròn, cống hộp</th>
+                         <th>Loại móng</th>
+                         <th>Hình thức móng</th>
+
+                         @* Thông tin đế cống *@
+                         <th>D</th>
+                         <th>R</th>
+                         <th>C</th>
+                         <th>SL đế cống/01 cấu kiện truyền dẫn (C.Kiện)</th>
+                         <th>KL 01 đế cống</th>
+                         <th class="text-danger">Tổng số lượng đế cống</th>
+                         <th class="text-danger">Tổng KL đế cống</th>
+
+                         @* Thông tin cấu tạo cống tròn *@
+                         <th>C.Dầy phủ bì (m)</th>
+                         <th>Số cạnh</th>
+                         <th>Lòng sử dụng (m)</th>
+                         <th class="text-danger">C.Cao cấu kiện</th>
+                         <th>C.Cao lót móng (m)</th>
+                         <th>C.Rộng lót móng</th>
+                         <th>C.Cao móng (m)</th>
+                         <th>C.Rộng móng (m)</th>
+                         <th>C.Cao đế (tại vị trí đặt C.Kiện) (m)</th>
+                         <th class="text-danger">Tổng C.Cao cống (m)</th>
+
+                         @* Thông tin kích thước hình học cống hộp, rãnh *@
+                         <th>Cấu tạo tường</th>
+                         <th>Cấu tạo mũ mố</th>
+                         <th>Chát mặt trong</th>
+                         <th>Chát mặt ngoài</th>
+                         <th>C.Cao lót móng (m)</th>
+                         <th>C.Rộng lót móng (m)</th>
+                         <th>C.Cao móng (m)</th>
+                         <th>C.Rộng móng (m)</th>
+                         <th>C.Cao đế (m)</th>
+                         <th>C.Rộng đế (m)</th>
+                         <th>C.Dầy tường 01 bên (m)</th>
+                         <th>Số lượng tường (m)</th>
+                         <th>C.Rộng lòng sử dụng (m)</th>
+                         <th>C.Cao tường cống hộp (m)</th>
+                         <th class="text-danger">C.Cao tường rãnh</th>
+                         <th class="text-danger">C.Cao tường gộp</th>
+                         <th>C.Cao mũ mố thớt dưới (m)</th>
+                         <th>C.Rộng mũ mố dưới</th>
+                         <th>C.Cao mũ mố thớt trên (m)</th>
+                         <th>C.Rộng mũ mố trên</th>
+                         <th>Loại thanh chống</th>
+                         <th>Cấu tạo thanh chống</th>
+                         <th>C.Cao thanh chống (m)</th>
+                         <th>C.Rộng thanh chống (m)</th>
+                         <th>C.Dài (m)</th>
+                         <th>Số lượng thanh chống (cái)</th>
+                         <th class="text-danger">C.Cao chát mặt trong (m)</th>
+                         <th class="text-danger">C.Cao chát mặt ngoài (m)</th>
+
+                         @* Thông tin kích thước hình học ống nhựa *@
+                         <th>C.Dầy phủ bì (m)</th>
+                         <th>Số cạnh</th>
+                         <th>Lòng sử dụng (m)</th>
+                         <th class="text-danger">Tổng C.Cao ống (m)</th>
+                         <th>C.Cao đệm cát (m)</th>
+                         <th>C.Cao đắp cát (m)</th>
+
+                         @* Thông tin rãnh thang *@
+                         <th>Phân loại chân khay</th>
+                         <th>C.Cao lót chân khay (m)</th>
+                         <th>C.Rộng lót chân khay (m)</th>
+                         <th>Số lượng lót chân khay</th>
+                         <th>C.Cao móng chân khay (m)</th>
+                         <th>C.Rộng móng chân khay (m)</th>
+                         <th>Số lượng móng chân khay</th>
+                         <th>C.Cao lót (m)</th>
+                         <th>C.Rộng lót (m)</th>
+                         <th>C.Cao móng (m)</th>
+                         <th>C.Rộng móng (m)</th>
+                         <th>Phân loại mái</th>
+                         <th>C.Rộng mái (m)</th>
+                         <th>C.Dầy mái (m)</th>
+                         <th>Số lượng mái (m)</th>
+                         <th>Phân loại giằng đỉnh</th>
+                         <th>C.Cao lót giằng đỉnh (m)</th>
+                         <th>C.Rộng lót giằng đỉnh (m)</th>
+                         <th>Số lượng lót giằng đỉnh</th>
+                         <th>C.Cao móng giằng đỉnh (m)</th>
+                         <th>C.Rộng móng giằng đỉnh (m)</th>
+                         <th>Số lượng móng giằng đỉnh</th>
+                         <th>Phân loại hành lang bảo vệ</th>
+                         <th>C.Cao hàng lang bảo vệ</th>
+                         <th>C.Rộng hành lang bảo vệ</th>
+                         <th>Số lượng hàng lang bảo vệ</th>
+
+                         @* Thông tin tấm đan cống hộp, rãnh *@
+                         <th>Tên loại tấm đan tiêu chuẩn</th>
+                         <th>Cấu tạo tấm đan truyền dẫn tấm đan tiêu chuẩn</th>
+                         <th class="text-danger">Số lượng</th>
+                         <th>C.Dài</th>
+                         <th>C.Rộng</th>
+                         <th>C.Cao</th>
+                         <th>Tên loại tấm đan loại 02</th>
+                         <th>Cấu tạo tấm đan truyền dẫn</th>
+                         <th class="text-danger">Số lượng</th>
+                         <th class="text-danger">C.Dài</th>
+                         <th>C.Rộng</th>
+                         <th>C.Cao</th>
+                         <th>Chiều dài mối nối (m)</th>
+                         <th>Số lượng T.Đan dùng để tính chiều dài bổ sung (C.Kiện)</th>
+                         <th class="text-danger">SL cấu kiện nguyên</th>
+                         <th class="text-danger">Chiều dài cần để lắp đặt được theo số CK nguyên (m)</th>
+                         <th class="text-danger">Tổng chiều dài lắp đặt theo số CK nguyên (m)</th>
+                         <th class="text-danger">Chiều dài thực tế còn thừa (+)/thiếu (-) so với C.Rộng lòng mũ mố hố ga (m)</th>
+                         <th class="text-danger">Xác định ống cống cần thêm</th>
+
+                         @* Cao độ thượng lưu *@
+                         <th class="text-danger">Đáy đào gộp (C.Tròn, C.Hộp, Rãnh, Ô.Nhựa, rãnh thang)</th>
+                         <th class="text-danger">Chiều sâu đào</th>
+                         <th class="text-danger">Đáy đào cống tròn (m)</th>
+                         <th class="text-danger">Đáy đào cống hộp (m)</th>
+                         <th class="text-danger">Đáy đào rãnh (m)</th>
+                         <th class="text-danger">Đáy đào ống nhựa (m)</th>
+                         <th class="text-danger">Đáy đào giằng đỉnh rãnh thang (m)</th>
+                         <th class="text-danger">Đáy đào chân khay rãnh thang (m)</th>
+                         <th class="text-danger">Đáy đào rãnh thang (m)</th>
+                         <th class="text-danger">Đỉnh lót gộp (C.Tròn, C.Hộp, Rãnh, ống nhựa, rãnh thang)</th>
+                         <th class="text-danger">Đỉnh lót rãnh thang</th>
+                         <th class="text-danger">Đỉnh lót chân khay rãnh thang</th>
+                         <th class="text-danger">Đỉnh lót giằng đỉnh rãnh thang</th>
+                         <th class="text-danger">Đỉnh lót ống nhựa</th>
+                         <th class="text-danger">Đỉnh lót cống tròn (m)</th>
+                         <th class="text-danger">Đỉnh lót cống hộp (m)</th>
+                         <th class="text-danger">Đỉnh lót rãnh (m)</th>
+                         <th class="text-danger">Đỉnh móng gộp (C.Tròn, C.Hộp, Rãnh, rãnh thang)</th>
+                         <th class="text-danger">Đỉnh móng rãnh thang (m)</th>
+                         <th class="text-danger">Đỉnh móng chân khay (m)</th>
+                         <th class="text-danger">Đỉnh móng cống tròn (m)</th>
+                         <th class="text-danger">Đỉnh móng cống hộp (m)</th>
+                         <th class="text-danger">Đỉnh móng rãnh (m)</th>
+                         <th class="text-danger">Đỉnh đế cống (m)</th>
+                         <th>Đáy dòng chảy (m)</th>
+                         <th class="text-danger">C.Cao tường cống, rãnh (m)</th>
+                         <th class="text-danger">Đỉnh tường C.Hộp, rãnh (m)</th>
+                         <th class="text-danger">Đỉnh mũ mố thớt dưới cống hộp rãnh (m)</th>
+                         <th class="text-danger">Đỉnh giằng đỉnh rãnh thang (m)</th>
+                         <th class="text-danger">Đỉnh gộp (C.Tròn, C.Hộp, rãnh, Ô.Nhựa, Rãnh thang (m)</th>
+                         <th>Đỉnh trong lòng sử dụng (m)</th>
+                         <th class="text-danger">Đỉnh cống tròn (m)</th>
+                         <th class="text-danger">Đỉnh cống hộp (m)</th>
+                         <th class="text-danger">Đỉnh rãnh (m)</th>
+                         <th class="text-danger">Đỉnh ống nhựa (m)</th>
+                         <th class="text-danger">Đỉnh đắp cát (m)</th>
+                         <th>Chiều cao rãnh thang từ đáy dòng chảy đến đỉnh (m)</th>
+                         <th class="text-danger">Đỉnh rãnh thang (m)</th>
+
+                         @* Cao độ hạ lưu *@
+                         <th class="text-danger">Đáy đào gộp (C.Tròn, C.Hộp, Rãnh, Ô.Nhựa, rãnh thang)</th>
+                         <th class="text-danger">Chiều sâu đào</th>
+                         <th class="text-danger">Đáy đào cống tròn (m)</th>
+                         <th class="text-danger"> Đáy đào cống hộp (m)</th>
+                         <th class="text-danger">Đáy đào rãnh (m)</th>
+                         <th class="text-danger">Đáy đào ống nhựa (m)</th>
+                         <th class="text-danger">Đáy đào giằng đỉnh rãnh thang (m)</th>
+                         <th class="text-danger">Đáy đào chân khay rãnh thang (m)</th>
+                         <th class="text-danger">Đáy đào rãnh thang (m)</th>
+                         <th class="text-danger">Đỉnh lót gộp (C.Tròn, C.Hộp, Rãnh, ống nhựa, rãnh thang)</th>
+                         <th class="text-danger">Đỉnh lót rãnh thang</th>
+                         <th class="text-danger">Đỉnh lót chân khay rãnh thang</th>
+                         <th class="text-danger">Đỉnh lót giằng đỉnh rãnh thang</th>
+                         <th class="text-danger">Đỉnh lót ống nhựa</th>
+                         <th class="text-danger">Đỉnh lót cống tròn (m)</th>
+                         <th class="text-danger">Đỉnh lót cống hộp (m)</th>
+                         <th class="text-danger">Đỉnh lót rãnh (m)</th>
+                         <th class="text-danger">Đỉnh móng gộp (C.Tròn, C.Hộp, Rãnh, rãnh thang)</th>
+                         <th class="text-danger">Đỉnh móng rãnh thang (m)</th>
+                         <th class="text-danger">Đỉnh móng chân khay (m)</th>
+                         <th class="text-danger">Đỉnh móng cống tròn (m)</th>
+                         <th class="text-danger">Đỉnh móng cống hộp (m)</th>
+                         <th class="text-danger">Đỉnh móng rãnh (m)</th>
+                         <th class="text-danger">Đỉnh đế cống (m)</th>
+                         <th>Đáy dòng chảy (m)</th>
+                         <th class="text-danger">C.Cao tường cống, rãnh (m)</th>
+                         <th class="text-danger">Đỉnh tường C.Hộp, rãnh (m)</th>
+                         <th class="text-danger">Đỉnh mũ mố thớt dưới cống hộp rãnh (m)</th>
+                         <th class="text-danger">Đỉnh giằng đỉnh rãnh thang (m)</th>
+                         <th class="text-danger">Đỉnh gộp (C.Tròn, C.Hộp, rãnh, Ô.Nhựa, Rãnh thang (m)</th>
+                         <th>Đỉnh trong lòng sử dụng (m)</th>
+                         <th class="text-danger">Đỉnh cống tròn (m)</th>
+                         <th class="text-danger">Đỉnh cống hộp (m)</th>
+                         <th class="text-danger">Đỉnh rãnh (m)</th>
+                         <th class="text-danger">Đỉnh ống nhựa (m)</th>
+                         <th class="text-danger">Đỉnh đắp cát (m)</th>
+                         <th>Chiều cao rãnh thang từ đáy dòng chảy đến đỉnh (m)</th>
+                         <th class="text-danger">Đỉnh rãnh thang (m)</th>
+
+                         @* Thông tin vật liệu đào cống, rãnh *@
+                         <th>Chiều cao đào đá (m)</th>
+                         <th class="text-danger">Chiều cao đào đất (m)</th>
+                         <th class="text-danger">Tổng chiều sâu đào</th>
+                         <th>Chiều cao đào đá (m)</th>
+                         <th class="text-danger">Chiều cao đào đất (m)</th>
+                         <th class="text-danger">Tổng chiều sâu đào</th>
+
+                         @* Thông tin C.Cao C.Chỗ cống tròn *@
+                         <th class="text-danger">C.Cao lót T.Lưu</th>
+                         <th class="text-danger">C.Cao lót H.lưu</th>
+                         <th class="text-danger">C.Cao lót móng T.Bình</th>
+                         <th class="text-danger">C.Cao lót T.Lưu</th>
+                         <th class="text-danger">C.Cao lót H.lưu</th>
+                         <th class="text-danger">C.Cao lót móng T.Bình</th>
+                         <th class="text-danger">C.Cao móng T.Lưu</th>
+                         <th class="text-danger">C.Cao móng H.Lưu</th>
+                         <th class="text-danger">C.Cao móng T.Bình</th>
+                         <th class="text-danger">C.Cao móng T.Lưu</th>
+                         <th class="text-danger">C.Cao móng H.Lưu</th>
+                         <th class="text-danger">C.Cao móng T.Bình</th>
+                         <th class="text-danger">C.Cao đế T.Lưu</th>
+                         <th class="text-danger">C.Cao đế H.Lưu</th>
+                         <th class="text-danger">C.Cao đế T.Bình</th>
+                         <th class="text-danger">C.Cao đế T.Lưu</th>
+                         <th class="text-danger">C.Cao đế H.Lưu</th>
+                         <th class="text-danger">C.Cao đế T.Bình</th>
+                         <th class="text-danger">C.Cao cống T.Lưu</th>
+                         <th class="text-danger">C.Cao cống H.Lưu</th>
+                         <th class="text-danger">C.Cao cống T.Bình</th>
+                         <th class="text-danger">C.Cao cống T.Lưu</th>
+                         <th class="text-danger">C.Cao cống H.Lưu</th>
+                         <th class="text-danger">C.Cao cống T.Bình</th>
+
+                         @* Thông tin C.Cao C.Chỗ cống hộp, rãnh *@
+
+                         <th class="text-danger">C.Cao lót T.Lưu</th>
+                         <th class="text-danger">C.Cao lót H.Lưu</th>
+                         <th class="text-danger">C.Cao lót T.Bình</th>
+                         <th class="text-danger">C.Cao lót T.Lưu</th>
+                         <th class="text-danger">C.Cao lót H.Lưu</th>
+                         <th class="text-danger">C.Cao lót T.Bình</th>
+                         <th class="text-danger">C.Cao móng T.Lưu</th>
+                         <th class="text-danger">C.Cao móng H.Lưu</th>
+                         <th class="text-danger">C.Cao móng T.Bình</th>
+                         <th class="text-danger">C.Cao móng T.Lưu</th>
+                         <th class="text-danger">C.Cao móng H.Lưu</th>
+                         <th class="text-danger">C.Cao móng T.Bình</th>
+                         <th class="text-danger">C.Cao tường T.Lưu</th>
+                         <th class="text-danger">C.Cao tường H.Lưu</th>
+                         <th class="text-danger">C.Cao tường T.Bình</th>
+                         <th class="text-danger">C.Cao tường T.Lưu</th>
+                         <th class="text-danger">C.Cao tường H.Lưu</th>
+                         <th class="text-danger">C.Cao tường T.Bình</th>
+
+                         @* Thông tin C.Cao C.Chỗ ống nhựa *@
+                         <th class="text-danger">C.Cao đệm cát T.Lưu</th>
+                         <th class="text-danger">C.Cao đệm cát H.Lưu</th>
+                         <th class="text-danger">C.Cao đệm cát T.Bình</th>
+                         <th class="text-danger">C.Cao đệm cát T.Lưu</th>
+                         <th class="text-danger">C.Cao đệm cát H.Lưu</th>
+                         <th class="text-danger">C.Cao đệm cát T.Bình</th>
+                         <th class="text-danger">C.Cao ống T.Lưu</th>
+                         <th class="text-danger">C.Cao ống H.Lưu</th>
+                         <th class="text-danger">C.Cao T.Bình</th>
+                         <th class="text-danger">C.Cao ống T.Lưu</th>
+                         <th class="text-danger">C.Cao ống H.Lưu</th>
+                         <th class="text-danger">C.Cao T.Bình</th>
+                         <th class="text-danger">C.Cao đắp cát T.Lưu</th>
+                         <th class="text-danger">C.Cao Đắp cát H.Lưu</th>
+                         <th class="text-danger">C.Cao đắp cát T.Bình</th>
+                         <th class="text-danger">C.Cao đắp cát T.Lưu</th>
+                         <th class="text-danger">C.Cao Đắp cát H.Lưu</th>
+                         <th class="text-danger">C.Cao đắp cát T.Bình</th>
+
+                         @* Thông tin chiếm chỗ rãnh thang (m) *@
+                         <th class="text-danger">Lót thượng lưu</th>
+                         <th class="text-danger">Lót hạ lưu</th>
+                         <th class="text-danger">Lót trung bình</th>
+                         <th class="text-danger">Lót thượng lưu</th>
+                         <th class="text-danger">Lót hạ lưu</th>
+                         <th class="text-danger">Lót trung bình</th>
+                         <th class="text-danger">Móng thượng lưu</th>
+                         <th class="text-danger">Móng hạ lưu</th>
+                         <th class="text-danger">Móng trung bình</th>
+                         <th class="text-danger">Móng thượng lưu</th>
+                         <th class="text-danger">Móng hạ lưu</th>
+                         <th class="text-danger">Móng trung bình</th>
+
+                         @* Thông tin mái đào *@
+                         <th>Chiều rộng đáy đào nhỏ (m)</th>
+                         <th>Tỷ lệ mở mái</th>
+                         <th>Số cạnh mái trái</th>
+                         <th>Số cạnh mái phải</th>
+                         <th>Chiều rộng đáy đào nhỏ (m)</th>
+                         <th>Tỷ lệ mở mái</th>
+                         <th>Số cạnh mái trái</th>
+                         <th>Số cạnh mái phải</th>
+
+                         @* D.Tích đào thượng lưu cống, rãnh, ống nhựa, rãnh thang *@
+                         <th class="text-danger">C.Rộng đào đáy lớn (m)</th>
+                         <th class="text-danger">D.Tích đào (m2)</th>
+                         <th class="text-danger">C.Rộng đào đáy lớn (m)</th>
+                         <th class="text-danger">D.Tích đào (m2)</th>
+                         @* D.Tích đào hạ lưu cống, rãnh, ống nhựa, rãnh thang *@
+                         <th class="text-danger">C.Rộng đào đáy lớn (m)</th>
+                         <th class="text-danger">D.Tích đào (m2)</th>
+                         <th class="text-danger">C.Rộng đào đáy lớn (m)</th>
+                         <th class="text-danger">D.Tích đào (m2)</th>
+                         @* D.Tích đào chân khay, giằng đỉnh  *@
+                         <th class="text-danger">C.Rộng đào đáy lớn (m)</th>
+                         <th class="text-danger">D.Tích đào (m2)</th>
+                         <th class="text-danger">C.Rộng đào đáy lớn (m)</th>
+                         <th class="text-danger">D.Tích đào (m2)</th>
+                         @* Thông tin khối lượng đào *@
+                         <th class="text-danger">KL đào đất (m3)</th>
+                         <th class="text-danger">KL đào đá (m3)</th>
+                         <th class="text-danger">Tổng KL đào cống, rãnh, ống nhựa, rãnh thang (m3)</th>
+                         <th class="text-danger">Chân khay (m3)</th>
+                         <th class="text-danger">Giằng đỉnh (m3)</th>
+                         <th class="text-danger">Tổng KL đào đất chân khay + rảnh đỉnh (m3)</th>
+                         <th class="text-danger">Tổng KL đào đất (m3)</th>
+                         <th class="text-danger">Tổng KL đào đá (m3)</th>
+                         <th class="text-danger">Tổng KL đào (m3)</th>
+                         <th class="text-danger">KL C.Chỗ đất cống tròn (m3)</th>
+                         <th class="text-danger">KL C.Chỗ đá cống tròn (m3)</th>
+                         <th class="text-danger">Tổng KL chiếm chỗ C.Tròn (m3)</th>
+                         <th class="text-danger">KL C.chỗ đất cống hộp (m3)</th>
+                         <th class="text-danger">KL C.chỗ đá cống hộp (m3)</th>
+                         <th class="text-danger">Tổng KL C.chỗ cống hộp (m3)</th>
+                         <th class="text-danger">KL C.chỗ đất rãnh (m3)</th>
+                         <th class="text-danger">KL C.chỗ đá rãnh (m3)</th>
+                         <th class="text-danger">Tổng KL C.chỗ rãnh (m3)</th>
+                         <th class="text-danger">KL C.Chỗ đất ống nhựa (m)</th>
+                         <th class="text-danger">KL C.Chỗ đá ống nhựa (m3)</th>
+                         <th class="text-danger">Tổng KL C.Chỗ ống nhựa (m3)</th>
+                         <th class="text-danger">KL C.Chỗ đất rãnh thang (m3)</th>
+                         <th class="text-danger">KL C.Chỗ đá rãnh thang (m3)</th>
+                         <th class="text-danger">Tổng KL C.Chỗ rãnh thang (m3)</th>
+                         <th class="text-danger">KL C.Chố đất chân khay (m3)</th>
+                         <th class="text-danger">KL C.Chố đất chân giằng đỉnh (m3)</th>
+                         <th class="text-danger">Tổng KL C.Chỗ đất (m3)</th>
+                         <th class="text-danger">Tổng KL C.Chỗ đá (m3)</th>
+                         <th class="text-danger">Tổng KL C.Chỗ (m3)</th>
+                         <th class="text-danger">KL C.chỗ đất (m3)</th>
+                         <th class="text-danger">KL C.Chỗ đá (m3)</th>
+                         <th class="text-danger">Tổng chiếm chỗ (m3)</th>
+                         <th class="text-danger">KL đắp trả đất (m3)</th>
+                         <th class="text-danger">KL đắp trả đá (m3)</th>
+                         <th class="text-danger">Tổng KL đắp trả (m3)</th>
+                         <th class="text-danger">KL thừa đất (m3)</th>
+                         <th class="text-danger">KL thừa đá (m3)</th>
+                         <th class="text-danger">Tổng KL thừa (m3) </th>
+                         @*D.Tích đắp cát *@
+                         <th class="text-danger">C.Sâu đắp (m)</th>
+                         <th class="text-danger">C.Rộng đắp đáy lớn (m)</th>
+                         <th class="text-danger">D.Tích đắp (m2)</th>
+                         <th class="text-danger">C.Sâu đắp (m)</th>
+                         <th class="text-danger">C.Rộng đắp đáy lớn (m)</th>
+                         <th class="text-danger">D.Tích đắp (m2)</th>
+                         @*Thông tin KL đắp cát *@
+                         <th class="text-danger">KL đắp cát trước chiếm chỗ (m3)</th>
+                         <th class="text-danger">KL chiếm chỗ (m3)</th>
+                         <th class="text-danger">KL đắp cát sau chiếm chỗ (m3) </th>
+                         @* Tọa độ	 *@
+                         <th>X</th>
+                         <th>Y</th>
+                         <th>X</th>
+                         <th>Y</th>
+
+                     </tr>
+                 </thead>
                 @if (listHopRanhThang.Any())
                 {
 
@@ -3167,7 +3166,7 @@
         }else{ 
             await HopRanhThangRepository.Insert(Input);
             isModalVisible = false;
-             ToastService.ShowToast( "Thông báo","Thêm thành công.", cssClass: "toast-success",  iconClass: "bi bi-info-circle",progressBarClass: "bg-info", duration: 5000);
+            ToastService.ShowToast( "Thông báo","Thêm thành công.", cssClass: "toast-success",  iconClass: "bi bi-info-circle",progressBarClass: "bg-info", duration: 5000);
             await LoadData();
 
         }

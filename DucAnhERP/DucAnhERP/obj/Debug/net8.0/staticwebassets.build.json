@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "6dYgwbujJUatljviv92bHNycmUI/RIGXSKFP5SpFPKM=",
+  "Hash": "3WcC0PG59FOaR1P890XzJryHv6qtOvsAjGIMRtdGXqs=",
   "Source": "DucAnhERP",
   "BasePath": "_content/DucAnhERP",
   "Mode": "Default",
@@ -16,6 +16,25 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "C:\\Users\\qminh\\.nuget\\packages\\blazorinputfile\\0.2.0\\staticwebassets\\inputfile.js",
+      "SourceId": "BlazorInputFile",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\qminh\\.nuget\\packages\\blazorinputfile\\0.2.0\\staticwebassets\\",
+      "BasePath": "_content/BlazorInputFile",
+      "RelativePath": "inputfile.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\qminh\\.nuget\\packages\\blazorinputfile\\0.2.0\\staticwebassets\\inputfile.js"
+    },
     {
       "Identity": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\obj\\Debug\\net8.0\\scopedcss\\bundle\\DucAnhERP.styles.css",
       "SourceId": "DucAnhERP",
