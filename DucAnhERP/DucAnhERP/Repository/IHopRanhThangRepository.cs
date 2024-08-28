@@ -7,6 +7,6 @@ namespace DucAnhERP.Repository
     {
         //Task<bool> InsertHopRanhThang(MHopRanhThang hopRanhThang);
          Task<List<HopRanhThangModel>> GetData();
-
+        Task<int> MultiInsert(List<MHopRanhThang> entities);
     }
 }

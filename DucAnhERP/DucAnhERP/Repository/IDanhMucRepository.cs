@@ -9,6 +9,7 @@ namespace DucAnhERP.Repository
 
         Task<List<MDanhMuc>> GetDMByIdNhomDanhMuc(string idNhomDanhMuc);
 
+        Task<string> GetIdDMByTen(string Ten);
         Task<bool> GetDMByTenNhomDanhMuc(string ten);
     }
 }

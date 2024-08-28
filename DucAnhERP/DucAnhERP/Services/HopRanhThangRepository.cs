@@ -36,6 +36,7 @@ namespace DucAnhERP.Services
 
             using var context = _context.CreateDbContext();
             var query = from MHopRanhThang in context.DSHopRanhThang
+                        .OrderBy(m => m.CreateAt)
                         select new HopRanhThangModel
                         {
                             Id = MHopRanhThang.Id,
@@ -257,7 +258,7 @@ namespace DucAnhERP.Services
                             TuToaDoY = MHopRanhThang.TuToaDoY ?? 0,
                             DenToaDoX = MHopRanhThang.DenToaDoX ?? 0,
                             DenToaDoY = MHopRanhThang.DenToaDoY ?? 0,
-
+                            CreateAt = MHopRanhThang.CreateAt,
                         };
             var data = await query.ToListAsync();
             return data;
@@ -349,5 +350,30 @@ namespace DucAnhERP.Services
             }
         }
 
+        public async Task<int> MultiInsert(List<MHopRanhThang> entities)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                if (entities == null || entities.Count == 0)
+                {
+                    throw new Exception("Không có bản ghi nào để thêm!");
+                }
+
+                foreach (var entity in entities)
+                {
+                    context.DSHopRanhThang.Add(entity);
+                }
+
+                int rowsInserted = await context.SaveChangesAsync();
+                return rowsInserted;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return 0; // Trả về 0 nếu có lỗi xảy ra
+            }
+        }
     }
 }

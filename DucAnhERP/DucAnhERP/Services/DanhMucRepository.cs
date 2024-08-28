@@ -71,6 +71,18 @@ namespace DucAnhERP.Services
             return (isSuccess);
         }
 
+        public async Task<string> GetIdDMByTen(string Ten)
+        {
+            using var context = _context.CreateDbContext();
+
+            var id = await context.DSDanhMuc
+                        .Where(danhMuc => danhMuc.Ten.ToUpper().Trim() == Ten.ToUpper().Trim())
+                        .Select(danhMuc => danhMuc.Id)
+                        .FirstOrDefaultAsync();
+            return id ?? string.Empty;
+        }
+
+
         public async Task<List<MDanhMuc>> GetAll()
         {
             try
