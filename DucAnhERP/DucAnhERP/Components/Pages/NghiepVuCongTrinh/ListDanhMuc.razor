@@ -236,7 +236,7 @@
         confirmModal.Title = "Xác nhận xóa";
         confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
         confirmModal.openModal();
-       
+
     }
 
     private async Task HandleResponseClick(bool confirmed)
@@ -245,10 +245,22 @@
         {
             if (!string.IsNullOrEmpty(deleteId))
             {
-                // Thực hiện hành động xóa
-                await DanhMucRepository.DeleteById(deleteId);
-                ToastService.ShowToast("Thông báo", "Xóa danh mục thành công.", cssClass: "toast-danger", iconClass: "bi bi-info-circle", progressBarClass: "bg-info", duration: 5000);
-                await LoadDanhMuc();
+                
+                var result = await DanhMucRepository.CheckUsingId(deleteId);
+                if (result)
+
+                {
+                    // Thực hiện hành động xóa
+                    await DanhMucRepository.DeleteById(deleteId);
+                    ToastService.ShowToast("Thông báo", "Không thể xóa danh mục đang được sử dụng.", cssClass: "toast-danger", iconClass: "bi bi-info-circle", progressBarClass: "bg-info", duration: 5000);
+                }
+                else
+                {
+                    ToastService.ShowToast("Thông báo", "Xóa danh mục thành công.", cssClass: "toast-danger", iconClass: "bi bi-info-circle", progressBarClass: "bg-info", duration: 5000);
+                    await LoadDanhMuc();
+                }
+
+                deleteId = "";
             }
         }
     }

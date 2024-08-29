@@ -82,6 +82,39 @@ namespace DucAnhERP.Services
             return id ?? string.Empty;
         }
 
+         public async Task<bool> CheckUsingId(string id)
+        {
+            bool isSuccess = false;
+            using var context = _context.CreateDbContext();
+            var query = context.DSHopRanhThang
+                         .Where(hrt => (hrt.ThongTinChungHoGa_HinhThucHoGa == id || hrt.ThongTinChungHoGa_KetCauMuMo == id || hrt.ThongTinChungHoGa_KetCauTuong == id || hrt.ThongTinChungHoGa_HinhThucMongHoGa == id ||
+ hrt.ThongTinChungHoGa_KetCauMong == id || hrt.ThongTinChungHoGa_ChatMatTrong == id || hrt.ThongTinChungHoGa_ChatMatNgoai == id || hrt.ThongTinTamDanHoGa2_HinhThucDayHoGa == id ||
+ hrt.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao == id || hrt.ThongTinDuongTruyenDan_HinhThucTruyenDan == id || hrt.ThongTinDuongTruyenDan_LoaiTruyenDan == id || hrt.ThongTinMongDuongTruyenDan_LoaiMong == id ||
+ hrt.ThongTinDeCong_TenLoaiDeCong == id || hrt.ThongTinDeCong_CauTaoDeCong == id || hrt.TTKTHHCongHopRanh_CauTaoTuong == id || hrt.TTKTHHCongHopRanh_CauTaoMuMo == id || hrt.TTKTHHCongHopRanh_ChatMatTrong == id ||
+ hrt.TTKTHHCongHopRanh_ChatMatNgoai == id || hrt.TTKTHHCongHopRanh_CauTaoThanhChong == id || hrt.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan == id || hrt.TTTDCongHoRanh_CauTaoTamDanTruyenDan == id ||
+ hrt.TTVLDCongRanh_LoaiVatLieuDao == id));
+
+            var data = await query.ToListAsync();
+
+            // Kiểm tra nếu danh sách kết quả rỗng hoặc không có dữ liệu khớp
+            isSuccess = data.Any();
+            return (isSuccess);
+        }
+
+        public async Task<bool> CheckExistId(string id)
+        {
+            bool isSuccess = false;
+            using var context = _context.CreateDbContext();
+            var query = context.DSDanhMuc
+                         .Where(danhMuc => danhMuc.Id == id);
+
+            var data = await query.ToListAsync();
+
+            // Kiểm tra nếu danh sách kết quả rỗng hoặc không có dữ liệu khớp
+            isSuccess = data.Any();
+            return (isSuccess);
+        }
+        
 
         public async Task<List<MDanhMuc>> GetAll()
         {
