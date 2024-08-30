@@ -248,14 +248,13 @@
                 
                 var result = await DanhMucRepository.CheckUsingId(deleteId);
                 if (result)
-
                 {
-                    // Thực hiện hành động xóa
-                    await DanhMucRepository.DeleteById(deleteId);
                     ToastService.ShowToast("Thông báo", "Không thể xóa danh mục đang được sử dụng.", cssClass: "toast-danger", iconClass: "bi bi-info-circle", progressBarClass: "bg-info", duration: 5000);
                 }
                 else
                 {
+                    // Thực hiện hành động xóa
+                    await DanhMucRepository.DeleteById(deleteId);
                     ToastService.ShowToast("Thông báo", "Xóa danh mục thành công.", cssClass: "toast-danger", iconClass: "bi bi-info-circle", progressBarClass: "bg-info", duration: 5000);
                     await LoadDanhMuc();
                 }

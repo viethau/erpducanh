@@ -5,7 +5,8 @@
 @using DucAnhERP.Repository;
 @inject IDanhMucRepository DanhMucRepository ;
 @inject IHopRanhThangRepository HopRanhThangRepository ;
-@inject IExcelRepository ExcelRepository
+@inject IExcelRepository ExcelRepository;
+@inject DucAnhERP.Services.ToastService ToastService
 
 <div class="container-fluid p-3">
 
@@ -784,9 +785,19 @@
                     await file.OpenReadStream().CopyToAsync(stream);
                     stream.Position = 0;
                     excelDataList = await ExcelRepository.ReadExcelDataAsync(stream);
-                    listMHopRanhThang = await convertData(excelDataList);
-                    var count = await HopRanhThangRepository.MultiInsert(listMHopRanhThang);
-                    Console.WriteLine(count);
+                    if (excelDataList.Count > 0 && excelDataList[0].RowData.Count >= 492)
+                    {
+                        listMHopRanhThang = await convertData(excelDataList);
+                        var count = await HopRanhThangRepository.MultiInsert(listMHopRanhThang);
+                        Console.WriteLine(count);
+                        ToastService.ShowToast("Thông báo", "Đã thêm thành công :" + count + " dòng.", cssClass: "toast-danger", iconClass: "bi bi-info-circle", progressBarClass: "bg-info", duration: 5000);
+                    }
+                    else
+                    {
+                        excelDataList = new();
+                        ToastService.ShowToast("Thông báo", "Số cột dòng phải đủ như file mẫu. Vui lòng kiểm tra lại", cssClass: "toast-danger", iconClass: "bi bi-info-circle", progressBarClass: "bg-info", duration: 5000);
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -1000,7 +1011,7 @@
                 mHopRanhThang.TTTDCongHoRanh_CRong1 = ParseDoubleOrDefault(listData[i].RowData[256], 0);
                 mHopRanhThang.TTTDCongHoRanh_CCao1 = ParseDoubleOrDefault(listData[i].RowData[257], 0);
                 mHopRanhThang.TTTDCongHoRanh_ChieuDaiMoiNoi = ParseDoubleOrDefault(listData[i].RowData[258], 0);
-                mHopRanhThang.TTTDCongHoRanh_SoLuongTDanDungDeTinhChieuDaiBoSung = ParseIntOrDefault(listData[i].RowData[260], 0);
+                mHopRanhThang.TTTDCongHoRanh_SoLuongTDanDungDeTinhChieuDaiBoSung = ParseIntOrDefault(listData[i].RowData[259], 0);
                 mHopRanhThang.CDThuongLuu_HienTrangTruocKhiDaoThuongLuu = ParseDoubleOrDefault(listData[i].RowData[265], 0);
                 mHopRanhThang.CDThuongLuu_DayDongChay = ParseDoubleOrDefault(listData[i].RowData[290], 0);
                 mHopRanhThang.CDThuongLuu_DinhTrongLongSuDung = ParseDoubleOrDefault(listData[i].RowData[296], 0);
@@ -1014,7 +1025,7 @@
                 mHopRanhThang.TTVLDCongRanh_HLChieuCaoDaoDa = ParseDoubleOrDefault(listData[i].RowData[347], 0);
                 mHopRanhThang.TTMDRanhOngThang_ChieuRongDayDaoNho = ParseDoubleOrDefault(listData[i].RowData[422], 0);
                 mHopRanhThang.TTMDRanhOngThang_TyLeMoMai = ParseDoubleOrDefault(listData[i].RowData[423], 0);
-                mHopRanhThang.TTMDRanhOngThang_SoCanhMaiTrai = ParseIntOrDefault(listData[i].RowData[424], 0);
+                mHopRanhThang.TTMDRanhOngThang_SoCanhMaiTrai = ParseDoubleOrDefault(listData[i].RowData[424], 0);
                 mHopRanhThang.TTMDRanhOngThang_SoCanhMaiPhai = ParseDoubleOrDefault(listData[i].RowData[425], 0);
                 mHopRanhThang.TTMDRanhOngThang_ChieuRongDayDaoNho1 = ParseDoubleOrDefault(listData[i].RowData[426], 0);
                 mHopRanhThang.TTMDRanhOngThang_TyLeMoMai1 = ParseDoubleOrDefault(listData[i].RowData[427], 0);

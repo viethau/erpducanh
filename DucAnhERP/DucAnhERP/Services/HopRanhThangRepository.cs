@@ -248,11 +248,11 @@ namespace DucAnhERP.Services
 
                             TTMDRanhOngThang_ChieuRongDayDaoNho = MHopRanhThang.TTMDRanhOngThang_ChieuRongDayDaoNho ?? 0,
                             TTMDRanhOngThang_TyLeMoMai = MHopRanhThang.TTMDRanhOngThang_TyLeMoMai ?? 0,
-                            TTMDRanhOngThang_SoCanhMaiTrai = MHopRanhThang.TTMDRanhOngThang_SoCanhMaiTrai,
+                            TTMDRanhOngThang_SoCanhMaiTrai = MHopRanhThang.TTMDRanhOngThang_SoCanhMaiTrai ?? 0,
                             TTMDRanhOngThang_SoCanhMaiPhai = MHopRanhThang.TTMDRanhOngThang_SoCanhMaiPhai ?? 0,
                             TTMDRanhOngThang_ChieuRongDayDaoNho1 = MHopRanhThang.TTMDRanhOngThang_ChieuRongDayDaoNho1 ?? 0,
                             TTMDRanhOngThang_TyLeMoMai1 = MHopRanhThang.TTMDRanhOngThang_TyLeMoMai1 ?? 0,
-                            TTMDRanhOngThang_SoCanhMaiTrai1 = MHopRanhThang.TTMDRanhOngThang_SoCanhMaiTrai1,
+                            TTMDRanhOngThang_SoCanhMaiTrai1 = MHopRanhThang.TTMDRanhOngThang_SoCanhMaiTrai1 ?? 0,
                             TTMDRanhOngThang_SoCanhMaiPhai1 = MHopRanhThang.TTMDRanhOngThang_SoCanhMaiPhai1 ?? 0,
                             TuToaDoX = MHopRanhThang.TuToaDoX ?? 0,
                             TuToaDoY = MHopRanhThang.TuToaDoY ?? 0,
@@ -299,7 +299,7 @@ namespace DucAnhERP.Services
             {
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
             }
-
+            context.Set<MHopRanhThang>().Remove(entity);
             await context.SaveChangesAsync();
         }
 

@@ -7,6 +7,7 @@ namespace DucAnhERP.ViewModel
     {
         [Key]
         public string Id { get; set; }
+        public bool IsSelected { get; set; } = false;
         public string ThongTinLyTrinh_TuyenDuong { get; set; }
         public string ThongTinLyTrinh_LyTrinhTaiTimHoGa { get; set; }
         public string ThongTinChungHoGa_TenHoGaSauPhanLoai { get; set; }
@@ -462,11 +463,11 @@ namespace DucAnhERP.ViewModel
 
         public Double TTMDRanhOngThang_ChieuRongDayDaoNho { get; set; }
         public Double TTMDRanhOngThang_TyLeMoMai { get; set; }
-        public int TTMDRanhOngThang_SoCanhMaiTrai { get; set; }
+        public Double TTMDRanhOngThang_SoCanhMaiTrai { get; set; }
         public Double TTMDRanhOngThang_SoCanhMaiPhai { get; set; }
         public Double TTMDRanhOngThang_ChieuRongDayDaoNho1 { get; set; }
         public Double TTMDRanhOngThang_TyLeMoMai1 { get; set; }
-        public int TTMDRanhOngThang_SoCanhMaiTrai1 { get; set; }
+        public Double TTMDRanhOngThang_SoCanhMaiTrai1 { get; set; }
         public Double TTMDRanhOngThang_SoCanhMaiPhai1 { get; set; }
 
         public Double DTDTLCRONRT_CRongDaoDatDayLon { get; set; }

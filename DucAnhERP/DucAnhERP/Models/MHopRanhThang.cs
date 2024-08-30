@@ -942,7 +942,7 @@ namespace DucAnhERP.Models
         public double? TTMDRanhOngThang_TyLeMoMai { get; set; } = 0;
         [Required(ErrorMessage = "Bạn phải nhập Số cạnh mái trái!")]
         [Range(0, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
-        public int TTMDRanhOngThang_SoCanhMaiTrai { get; set; } = 0;
+        public double? TTMDRanhOngThang_SoCanhMaiTrai { get; set; } = 0;
         [Required(ErrorMessage = "Bạn phải nhập Số cạnh mái phải!")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
         [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
@@ -957,7 +957,7 @@ namespace DucAnhERP.Models
         public double? TTMDRanhOngThang_TyLeMoMai1 { get; set; } = 0;
         [Required(ErrorMessage = "Bạn phải nhập Số cạnh mái trái!")]
         [Range(0, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
-        public int TTMDRanhOngThang_SoCanhMaiTrai1 { get; set; } = 0;
+        public double? TTMDRanhOngThang_SoCanhMaiTrai1 { get; set; } = 0;
         [Required(ErrorMessage = "Bạn phải nhập Số cạnh mái phải!")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
         [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
