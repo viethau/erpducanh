@@ -1,7 +1,9 @@
 ﻿using DucAnhERP.Data;
 using DucAnhERP.Models;
 using DucAnhERP.Repository;
+using DucAnhERP.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace DucAnhERP.Services
 {
@@ -19,6 +21,22 @@ namespace DucAnhERP.Services
             var entity = await context.DSNhomDanhMuc.ToListAsync();
             return entity;
         }
+        public async Task<List<NhomDanhMucModel>> GetAllNDM()
+        {
+            using var context = _context.CreateDbContext();
+            var query = from ndm in context.DSNhomDanhMuc
+                        orderby ndm.Ten
+                        select new NhomDanhMucModel
+                        {
+                            Id = ndm.Id,
+                            Ten = ndm.Ten,
+                          
+                        };
+
+            var data = await query.ToListAsync();
+            return data;
+        }
+
 
         public async Task Update(MNhomDanhMuc NhomDanhMuc)
         {
@@ -58,6 +76,39 @@ namespace DucAnhERP.Services
 
             await context.SaveChangesAsync();
         }
+
+        public async Task<bool> DeleteByIdResult(string id)
+        {
+            
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var entity = await GetById(id);
+
+                if (entity == null)
+                {
+                    return false;
+                }
+
+                // Xóa bản ghi
+                context.DSNhomDanhMuc.Remove(entity);
+                int affectedRows = await context.SaveChangesAsync();
+                if (affectedRows > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+        }
+
 
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
         {

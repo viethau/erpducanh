@@ -3,19 +3,18 @@
 <div class="toast-container">
     @foreach (var toast in ToastService.Toasts)
     {
-        <div id="@toast.Id" class="toast bg-white fade show" >
+
+        <div id="@toast.Id" class="toast fade show @toast.CssClass">
             <div class="toast-header">
-                <i class="fa fa-bell" aria-hidden="true"></i>
+                <i class="@toast.IconClass" aria-hidden="true"></i>
                 <strong class="me-auto">@toast.Title</strong>
                 <small class="text-muted">@toast.Timestamp.ToString("M/d/yyyy h:mm:ss tt")</small>
                 <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close" @onclick="() => RemoveToast(toast.Id)">
                     <span aria-hidden="true">&times;</span>
                 </button>
-             
             </div>
             <div class="toast-body">
                 @toast.Message
-                
             </div>
         </div>
     }

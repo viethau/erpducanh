@@ -5,7 +5,8 @@ namespace DucAnhERP.Models
      public class MNhomDanhMuc
     {
         [Key]
-        public string Id { get; set; }
+        public string Id { get; set; } = Guid.NewGuid().ToString();
+        [Required(ErrorMessage = "Bạn phải nhập tên !")]
         public string Ten { get; set; } 
 
      }

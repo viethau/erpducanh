@@ -31,7 +31,9 @@ namespace DucAnhERP.Services
                             TenNhom = nhomDanhMuc != null ? nhomDanhMuc.Ten : "Không xác định" // Tên từ bảng NhomDanhMuc
                         };
 
-            var data = await query.ToListAsync();
+            var data = await query
+                .OrderBy(dm => dm.Ten)
+                .ToListAsync();
             return data;
         }
 

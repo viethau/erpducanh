@@ -9,7 +9,6 @@ namespace DucAnhERP.ViewModel
         public string Id { get; set; }
         public string IdNhomDanhMuc { get; set; }
         public string Ten { get; set; }
-
         public string TenNhom { get; set; }
     }
 }
