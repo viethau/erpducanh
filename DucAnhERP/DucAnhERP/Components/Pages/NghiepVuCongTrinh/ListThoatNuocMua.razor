@@ -29,8 +29,7 @@
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
         <BodyTemplate>
             <EditForm Model="Input" method="post" FormName="CreaThêm mớite" OnValidSubmit="HandleValidSubmit">
-                <DataAnnotationsValidator />
-                <ValidationSummary />
+               
                 <div>
                     <div>
                         <div class="row">
@@ -90,7 +89,7 @@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-4 col-lg-4">
                                         <label for="ThongTinChungHoGa_KetCauTuong"> Kết cấu tường <span class="text-danger">*</span></label>
-                                        <select id="ThongTinChungHoGa_KetCauTuong" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauTuong">
+                                        <select id="ThongTinChungHoGa_KetCauTuong" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauTuong" name="ThongTinChungHoGa_KetCauTuong">
                                             <option value="">Kết cấu tường ...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("HG_LTHoGa"))
                                             {
@@ -1263,23 +1262,51 @@
                                 <div class="row">
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinRanhThang_HinhThucMai">Hình thức mái<span class="text-danger"></span></label>
-                                        <InputText @bind-Value="Input.ThongTinRanhThang_HinhThucMai" class="form-control" id="ThongTinRanhThang_HinhThucMai" placeholder="Hình thức mái" />
+                                        @* <InputText @bind-Value="Input.ThongTinRanhThang_HinhThucMai" class="form-control" id="ThongTinRanhThang_HinhThucMai" placeholder="Hình thức mái" /> *@
+                                        <select id="ThongTinRanhThang_HinhThucMai" @bind="Input.ThongTinRanhThang_HinhThucMai" class="form-control">
+                                            <option value="">Hình thức mái...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("HinhThucMai"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
                                         <ValidationMessage For="() => Input.ThongTinRanhThang_HinhThucMai" class="text-danger" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinRanhThang_CauTaoChanKhay">Cấu tạo chân khay<span class="text-danger"></span></label>
-                                        <InputText @bind-Value="Input.ThongTinRanhThang_CauTaoChanKhay" class="form-control" id="ThongTinRanhThang_CauTaoChanKhay" placeholder="Cấu tạo chân khay" />
+                                      @*   <InputText @bind-Value="Input.ThongTinRanhThang_CauTaoChanKhay" class="form-control" id="ThongTinRanhThang_CauTaoChanKhay" placeholder="Cấu tạo chân khay" /> *@
+                                       <select id="ThongTinRanhThang_CauTaoChanKhay" @bind="Input.ThongTinRanhThang_CauTaoChanKhay" class="form-control">
+                                            <option value="">Cấu tạo chân khay...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("CauTaoChanKhay"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
                                         <ValidationMessage For="() => Input.ThongTinRanhThang_CauTaoChanKhay" class="text-danger" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinRanhThang_CauTaoGiangDinh">Cấu tạo giằng đỉnh<span class="text-danger"></span></label>
-                                        <InputText @bind-Value="Input.ThongTinRanhThang_CauTaoGiangDinh" class="form-control" id="ThongTinRanhThang_CauTaoGiangDinh" placeholder="Cấu tạo giằng đỉnh" />
+                                        @* <InputText @bind-Value="Input.ThongTinRanhThang_CauTaoGiangDinh" class="form-control" id="ThongTinRanhThang_CauTaoGiangDinh" placeholder="Cấu tạo giằng đỉnh" /> *@
+                                        <select id="ThongTinRanhThang_CauTaoGiangDinh" @bind="Input.ThongTinRanhThang_CauTaoGiangDinh" class="form-control">
+                                            <option value="">Cấu tạo giằng đỉnh...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("CauTaoGiangDinh"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
                                         <ValidationMessage For="() => Input.ThongTinRanhThang_CauTaoGiangDinh" class="text-danger" />
                                     </div>
 
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinRanhThang_HinhThucHanhLangBaoVe">Hình thức hành lang bảo vệ<span class="text-danger"></span></label>
-                                        <InputText @bind-Value="Input.ThongTinRanhThang_HinhThucHanhLangBaoVe" class="form-control" id="TTKTHHCongHopRanh_ChatMatTrong" placeholder="Hình thức hành lang bảo vệ" />
+                                        @* <InputText @bind-Value="Input.ThongTinRanhThang_HinhThucHanhLangBaoVe" class="form-control" id="TTKTHHCongHopRanh_ChatMatTrong" placeholder="Hình thức hành lang bảo vệ" /> *@
+                                        <select id="ThongTinRanhThang_HinhThucHanhLangBaoVe" @bind="Input.ThongTinRanhThang_HinhThucHanhLangBaoVe" class="form-control">
+                                            <option value="">Cấu tạo giằng đỉnh...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("HinhThucHanhLangBaoVe"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
                                         <ValidationMessage For="() => Input.ThongTinRanhThang_HinhThucHanhLangBaoVe" class="text-danger" />
                                     </div>
 
@@ -1736,6 +1763,8 @@
 
                         </div>
                     </div>
+                      <DataAnnotationsValidator />
+                       <ValidationSummary />
                     <div class="row my-5 d-flex justify-content-end">
                         <div>
                             <button type="submit" class="btn btn-primary btn-sm btn-block">@TitleModal</button>
@@ -3135,6 +3164,7 @@
     private void ShowModal()
     {
         isModalVisible = true;
+        Input = new MHopRanhThang();
     }
 
     private void HandleModalClose(bool isVisible)
@@ -3197,6 +3227,7 @@
                 // Thêm mới thông tin
                 await HopRanhThangRepository.Insert(Input);
                 isModalVisible = false;
+                Input = new MHopRanhThang();
                 ToastService.ShowToast(
                     "Thông báo",
                     "Thêm thành công.",
@@ -3250,10 +3281,10 @@
             // Kiểm tra các biến
             foreach (var check in checks)
             {
-                if (string.IsNullOrEmpty(check.Value) || !listDanhMuc.Any(d => d.Id == check.Value))
+                if (!string.IsNullOrEmpty(check.Value) && !listDanhMuc.Any(d => d.Id == check.Value))
                 {
                     result = false;
-                    message = $"Vui lòng chọn {check.Key}!";
+                    message = $"Vui lòng kiểm tra {check.Key}!";
                     break;
                 }
             }

@@ -73,15 +73,32 @@ namespace DucAnhERP.Services
             return (isSuccess);
         }
 
-        public async Task<string> GetIdDMByTen(string Ten)
+        public async Task<string> GetIdDMByTen(string Ten , string? IdNhomDanhMuc)
         {
             using var context = _context.CreateDbContext();
 
-            var id = await context.DSDanhMuc
-                        .Where(danhMuc => danhMuc.Ten.ToUpper().Trim() == Ten.ToUpper().Trim())
-                        .Select(danhMuc => danhMuc.Id)
-                        .FirstOrDefaultAsync();
-            return id ?? string.Empty;
+            if (string.IsNullOrEmpty(IdNhomDanhMuc))
+            {
+                var id = await context.DSDanhMuc
+                      .Where(danhMuc => danhMuc.Ten.ToUpper().Trim() == Ten.ToUpper().Trim())
+                      .Select(danhMuc => danhMuc.Id)
+                      .FirstOrDefaultAsync();
+                return id ?? string.Empty;
+            }
+            else
+            {
+                var id = await context.DSDanhMuc
+                 .Where(danhMuc =>
+                     EF.Functions.Like(danhMuc.Ten.ToLower().Trim(), Ten.ToLower().Trim()) &&
+                     EF.Functions.Like(danhMuc.IdNhomDanhMuc.ToLower().Trim(), IdNhomDanhMuc.ToLower().Trim())
+                 )
+                 .Select(danhMuc => danhMuc.Id)
+                 .FirstOrDefaultAsync();
+                return id ?? string.Empty;
+            }
+            
+          
+            
         }
 
          public async Task<bool> CheckUsingId(string id)

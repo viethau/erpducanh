@@ -24,8 +24,8 @@ namespace DucAnhERP.Models
         public string ThongTinChungHoGa_HinhThucHoGa { get; set; }
         [Required(ErrorMessage = "Bạn phải nhập  kết cấu mũ mố !")]
         public string ThongTinChungHoGa_KetCauMuMo { get; set; }
-        //[Required(ErrorMessage = "Bạn phải nhập hình thức đậy hố ga!")]
 
+        [Required(ErrorMessage = "Bạn phải nhập Kết cấu tường!")]
         public string ThongTinChungHoGa_KetCauTuong { get; set; }
         [Required(ErrorMessage = "Bạn phải nhập Hình thức móng hố ga !")]
         public string ThongTinChungHoGa_HinhThucMongHoGa { get; set; }
@@ -510,11 +510,11 @@ namespace DucAnhERP.Models
 
         //Thông tin lý trình truyền dẫn
         [Required(ErrorMessage = "Bạn phải nhập Từ lý trình!")]
-        [Range(0.00001, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
+        [Range(0.000, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
         [RegularExpression(@"^\d+(\.\d{1,5})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 5 chữ số thập phân.")]
         public double? ThongTinLyTrinhTruyenDan_TuLyTrinh { get; set; } = 0;
         [Required(ErrorMessage = "Bạn phải nhập Đến lý trình!")]
-        [Range(0.00001, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
+        [Range(0.000, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
         [RegularExpression(@"^\d+(\.\d{1,5})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 5 chữ số thập phân.")]
         public double? ThongTinLyTrinhTruyenDan_DenLyTrinh { get; set; } = 0;
         [Required(ErrorMessage = "Bạn phải nhập Từ hố ga !")]
@@ -625,8 +625,12 @@ namespace DucAnhERP.Models
         public string TTKTHHCongHopRanh_ChatMatTrong { get; set; }
         //[Required(ErrorMessage = "Bạn phải nhập Chát mặt ngoài!")]
         public string TTKTHHCongHopRanh_ChatMatNgoai { get; set; }
+
         [Required(ErrorMessage = "Bạn phải nhập C.Cao lót móng !")]
-        public double? TTKTHHCongHopRanh_CCaoLotMong { get; set; }
+        [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
+        [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
+        public double? TTKTHHCongHopRanh_CCaoLotMong { get; set; } = 0;
+
         [Required(ErrorMessage = "Bạn phải nhập C.Rộng lót móng!")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
         [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
