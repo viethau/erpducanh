@@ -25,7 +25,10 @@
 </style>
 <div class="container-fluid">
 
-    <button class="mx-2 my-3 btn btn-primary" @onclick="ShowModal">Thêm mới </button>
+    <div class="d-inline">
+        <button class="mx-2 my-3 btn btn-primary" @onclick="ShowModal">Thêm mới</button>
+        <a href="/files/file_mau.xlsx" download="file_mau.xlsx" class="btn btn-link  my-3">Tải về file mẫu</a>
+    </div>
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
         <BodyTemplate>
             <EditForm Model="Input" method="post" FormName="CreaThêm mớite" OnValidSubmit="HandleValidSubmit">
@@ -1176,7 +1179,7 @@
                                 <h5>Thanh chống</h5>
                                 <div class="row">
                                     <div class="form-floating col-sm-6 col-md-4">
-                                        <label for="TTKTHHCongHopRanh_LoaiThanhChong">Loại thanh chống (m)<span class="text-danger"></span></label>
+                                        <label for="TTKTHHCongHopRanh_LoaiThanhChong">Loại thanh chống<span class="text-danger"></span></label>
                                         <InputText @bind-Value="Input.TTKTHHCongHopRanh_LoaiThanhChong" class="form-control" id="TTKTHHCongHopRanh_LoaiThanhChong" placeholder="Loại thanh chống" />
                                         <ValidationMessage For="() => Input.TTKTHHCongHopRanh_LoaiThanhChong" class="text-danger" />
                                     </div>
@@ -1434,7 +1437,7 @@
                                 <h5>Thông tin hành lang bảo vệ</h5>
                                 <div class="row">
                                     <div class="form-floating col-sm-6 col-md-3">
-                                        <label for="ThongTinRanhThang_PhanLoaiHanhLangBaoVe">Phân loại hành lang bảo vệ(m)<span class="text-danger"></span></label>
+                                        <label for="ThongTinRanhThang_PhanLoaiHanhLangBaoVe">Phân loại hành lang bảo vệ<span class="text-danger"></span></label>
                                         <InputText @bind-Value="Input.ThongTinRanhThang_PhanLoaiHanhLangBaoVe" class="form-control" id="ThongTinRanhThang_PhanLoaiHanhLangBaoVe" placeholder="Phân loại hành lang bảo vệ" />
                                         <ValidationMessage For="() => Input.ThongTinRanhThang_PhanLoaiHanhLangBaoVe" class="text-danger" />
                                     </div>
