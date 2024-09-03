@@ -80,7 +80,7 @@ namespace DucAnhERP.Models
         [Required(ErrorMessage = "Bạn phải nhập chiều cao !")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
         [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
-        public double? TBeTongMongHoGa_C { get; set; } = 0;
+        public double? BeTongMongHoGa_C { get; set; } = 0;
         //4.KTHH đế hố ga		DeHoGa
 
         [Required(ErrorMessage = "Bạn phải nhập chiều dài  !")]

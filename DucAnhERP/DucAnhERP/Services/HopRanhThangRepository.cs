@@ -58,7 +58,7 @@ namespace DucAnhERP.Services
                             BeTongLotMong_C = MHopRanhThang.BeTongLotMong_C ?? 0,
                             BeTongMongHoGa_D = MHopRanhThang.BeTongMongHoGa_D ?? 0,
                             BeTongMongHoGa_R = MHopRanhThang.BeTongMongHoGa_R ?? 0,
-                            TBeTongMongHoGa_C = MHopRanhThang.TBeTongMongHoGa_C ?? 0,
+                            BeTongMongHoGa_C = MHopRanhThang.BeTongMongHoGa_C ?? 0,
                             DeHoGa_D = MHopRanhThang.DeHoGa_D ?? 0,
                             DeHoGa_R = MHopRanhThang.DeHoGa_R ?? 0,
                             DeHoGa_C = MHopRanhThang.DeHoGa_C ?? 0,

@@ -26,7 +26,7 @@ namespace DucAnhERP.ViewModel
         public Double BeTongLotMong_C { get; set; }
         public Double BeTongMongHoGa_D { get; set; }
         public Double BeTongMongHoGa_R { get; set; }
-        public Double TBeTongMongHoGa_C { get; set; }
+        public Double BeTongMongHoGa_C { get; set; }
         public Double DeHoGa_D { get; set; }
         public Double DeHoGa_R { get; set; }
         public Double DeHoGa_C { get; set; }

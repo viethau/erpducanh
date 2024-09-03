@@ -27,12 +27,11 @@
 
     <div class="d-inline">
         <button class="mx-2 my-3 btn btn-primary" @onclick="ShowModal">Thêm mới</button>
-        <a href="/files/file_mau.xlsx" download="file_mau.xlsx" class="btn btn-link  my-3">Tải về file mẫu</a>
+        @* <a href="/files/file_mau.xlsx" download="file_mau.xlsx" class="btn btn-link  my-3">Tải về file mẫu</a> *@
     </div>
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
         <BodyTemplate>
             <EditForm Model="Input" method="post" FormName="CreaThêm mớite" OnValidSubmit="HandleValidSubmit">
-               
                 <div>
                     <div>
                         <div class="row">
@@ -199,9 +198,9 @@
                                         <ValidationMessage For="() => Input.BeTongMongHoGa_R" class="text-danger" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-4">
-                                        <label for="TBeTongMongHoGa_C">Chiều cao (m)<span class="text-danger">*</span></label>
-                                        <InputNumber @bind-Value="Input.TBeTongMongHoGa_C" class="form-control" id="TBeTongMongHoGa_C" placeholder="Chiều cao" />
-                                        <ValidationMessage For="() => Input.TBeTongMongHoGa_C" class="text-danger" />
+                                        <label for="BeTongMongHoGa_C">Chiều cao (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.BeTongMongHoGa_C" class="form-control" id="BeTongMongHoGa_C" placeholder="Chiều cao" />
+                                        <ValidationMessage For="() => Input.BeTongMongHoGa_C" class="text-danger" />
                                     </div>
                                 </div>
                                 <h5 class="mt-2">4.KTHH đế hố ga(m)</h5>
@@ -2571,7 +2570,7 @@
                                 <td class="text-center">@item.BeTongLotMong_C</td>
                                 <td class="text-center">@item.BeTongMongHoGa_D  </td>
                                 <td class="text-center">@item.BeTongMongHoGa_R  </td>
-                                <td class="text-center">@item.TBeTongMongHoGa_C</td>
+                                <td class="text-center">@item.BeTongMongHoGa_C</td>
                                 <td class="text-center">@item.DeHoGa_D</td>
                                 <td class="text-center">@item.DeHoGa_R</td>
                                 <td class="text-center">@item.DeHoGa_C</td>
@@ -3190,7 +3189,7 @@
 
 
     //Thêm sửa
-    private bool isEdit = false;
+   private bool isEdit = false; 
     private async Task HandleEdit(string Id)
     {
         isEdit = true;
@@ -3318,6 +3317,8 @@
     {
         return listDanhMuc.Where(dm => dm.IdNhomDanhMuc == idNhomDanhMuc).ToList();
     }
+
+  
 
     //Xóa
     private string deleteId;

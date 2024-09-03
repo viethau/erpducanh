@@ -51,6 +51,7 @@ builder.Services.AddScoped<IDanhMucRepository, DanhMucRepository>();
 builder.Services.AddScoped<INhomDanhMucRepository, NhomNhomDanhMucRepository>();
 builder.Services.AddScoped <IHopRanhThangRepository, HopRanhThangRepository>();
 builder.Services.AddScoped<IExcelRepository, ExcelRepository>();
+builder.Services.AddScoped<IPhanLoaiHoGaRepository, PhanLoaiHoGaRepository>();
 
 builder.Services.AddAuthentication(options =>
     {

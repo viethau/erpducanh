@@ -29,7 +29,7 @@ namespace DucAnhERP.Helpers
                    
                     item.ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao = ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao(item.ThongTinCaoDoHoGa_CaoDoTuNhien, item.ThongTinCaoDoHoGa_CaoDoDinhK98, item.ThongTinCaoDoHoGa_CdDinhViaHeHoanThien);
                     item.ThongTinCaoDoHoGa_CdDinhMong = ThongTinCaoDoHoGa_CdDinhMong(item.ThongTinChungHoGa_HinhThucHoGa, item.ThongTinChungHoGa_HinhThucMongHoGa, item.ThongTinCaoDoHoGa_CdDayHoGa, item.DeHoGa_C);
-                    item.ThongTinCaoDoHoGa_DinhLotMong = ThongTinCaoDoHoGa_DinhLotMong(item.ThongTinChungHoGa_HinhThucMongHoGa, item.ThongTinCaoDoHoGa_CdDinhMong, item.TBeTongMongHoGa_C);
+                    item.ThongTinCaoDoHoGa_DinhLotMong = ThongTinCaoDoHoGa_DinhLotMong(item.ThongTinChungHoGa_HinhThucMongHoGa, item.ThongTinCaoDoHoGa_CdDinhMong, item.BeTongMongHoGa_C);
                     item.ThongTinCaoDoHoGa_DayDao = ThongTinCaoDoHoGa_DayDao(item.ThongTinChungHoGa_HinhThucHoGa, item.ThongTinChungHoGa_HinhThucMongHoGa, item.ThongTinCaoDoHoGa_DinhLotMong, item.BeTongLotMong_C, item.ThongTinCaoDoHoGa_CdDayHoGa, item.DeHoGa_C);
                     item.ThongTinCaoDoHoGa_CSauDao = ThongTinCaoDoHoGa_CSauDao(item.ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao, item.ThongTinCaoDoHoGa_DayDao);
                     item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat = ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat(item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, item.ThongTinCaoDoHoGa_CSauDao, item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa);
@@ -48,11 +48,11 @@ namespace DucAnhERP.Helpers
                     item.ChatMatTrong_C = ChatMatTrong_C(item.ThongTinChungHoGa_ChatMatTrong, item.ThongTinChungHoGa_KetCauTuong, item.ThongTinChungHoGa_KetCauMuMo, item.TuongHoGa_C, item.DamGiuaHoGa_C, item.MuMoThotDuoi_C, item.MuMoThotTren_C);
 
                     item.TTCCCCDTHT_ChieuCaoLotDat = TTCCCCDTHT_ChieuCaoLotDat(item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat, item.BeTongLotMong_C);
-                    item.TTCCCCDTHT_ChieuCaoMongDat = TTCCCCDTHT_ChieuCaoMongDat(item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat, item.BeTongLotMong_C, item.TBeTongMongHoGa_C);
-                    item.TTCCCCDTHT_ChieuCaoTuongDat = TTCCCCDTHT_ChieuCaoTuongDat(item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat, item.BeTongLotMong_C, item.TBeTongMongHoGa_C, item.TuongHoGa_C, item.DamGiuaHoGa_C, item.MuMoThotDuoi_C, item.MuMoThotTren_C);
+                    item.TTCCCCDTHT_ChieuCaoMongDat = TTCCCCDTHT_ChieuCaoMongDat(item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat, item.BeTongLotMong_C, item.BeTongMongHoGa_C);
+                    item.TTCCCCDTHT_ChieuCaoTuongDat = TTCCCCDTHT_ChieuCaoTuongDat(item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat, item.BeTongLotMong_C, item.BeTongMongHoGa_C, item.TuongHoGa_C, item.DamGiuaHoGa_C, item.MuMoThotDuoi_C, item.MuMoThotTren_C);
                     item.TTCCCCDTHT_ChieuCaoLotDa = TTCCCCDTHT_ChieuCaoLotDa(item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa, item.ThongTinVatLieuDaoHoGa_TongChieuCaoDao, item.TTCCCCDTHT_ChieuCaoLotDat, item.BeTongLotMong_C);
-                    item.TTCCCCDTHT_ChieuCaoMongDa = TTCCCCDTHT_ChieuCaoMongDa(item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa, item.ThongTinVatLieuDaoHoGa_TongChieuCaoDao, item.TTCCCCDTHT_ChieuCaoMongDat, item.TTCCCCDTHT_ChieuCaoLotDa, item.BeTongLotMong_C, item.TBeTongMongHoGa_C);
-                    item.TTCCCCDTHT_ChieuCaoTuongDa = TTCCCCDTHT_ChieuCaoTuongDa(item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa, item.ThongTinVatLieuDaoHoGa_TongChieuCaoDao, item.TTCCCCDTHT_ChieuCaoTuongDat, item.TTCCCCDTHT_ChieuCaoLotDa, item.TTCCCCDTHT_ChieuCaoMongDa, item.BeTongLotMong_C, item.TBeTongMongHoGa_C, item.TuongHoGa_C, item.DamGiuaHoGa_C, item.MuMoThotDuoi_C, item.MuMoThotTren_C);
+                    item.TTCCCCDTHT_ChieuCaoMongDa = TTCCCCDTHT_ChieuCaoMongDa(item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa, item.ThongTinVatLieuDaoHoGa_TongChieuCaoDao, item.TTCCCCDTHT_ChieuCaoMongDat, item.TTCCCCDTHT_ChieuCaoLotDa, item.BeTongLotMong_C, item.BeTongMongHoGa_C);
+                    item.TTCCCCDTHT_ChieuCaoTuongDa = TTCCCCDTHT_ChieuCaoTuongDa(item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa, item.ThongTinVatLieuDaoHoGa_TongChieuCaoDao, item.TTCCCCDTHT_ChieuCaoTuongDat, item.TTCCCCDTHT_ChieuCaoLotDa, item.TTCCCCDTHT_ChieuCaoMongDa, item.BeTongLotMong_C, item.BeTongMongHoGa_C, item.TuongHoGa_C, item.DamGiuaHoGa_C, item.MuMoThotDuoi_C, item.MuMoThotTren_C);
                     item.TTCCCCDTHT_TongCieuCaoDat = Math.Round((item.TTCCCCDTHT_ChieuCaoLotDat + item.TTCCCCDTHT_ChieuCaoMongDat + item.TTCCCCDTHT_ChieuCaoTuongDat), 2);
                     item.TTCCCCDTHT_TongChieuCaoDa = Math.Round((item.TTCCCCDTHT_ChieuCaoLotDa + item.TTCCCCDTHT_ChieuCaoMongDa + item.TTCCCCDTHT_ChieuCaoTuongDa), 2);
                     item.TTCCCCDTHT_ChenhDatSoVoiTK = Math.Round((item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat - item.TTCCCCDTHT_TongCieuCaoDat), 2);
@@ -370,7 +370,7 @@ namespace DucAnhERP.Helpers
             }
         }
 
-        public double ThongTinCaoDoHoGa_DinhLotMong(string ThongTinChungHoGa_HinhThucMongHoGa, double ThongTinCaoDoHoGa_CdDinhMong, double TBeTongMongHoGa_C)
+        public double ThongTinCaoDoHoGa_DinhLotMong(string ThongTinChungHoGa_HinhThucMongHoGa, double ThongTinCaoDoHoGa_CdDinhMong, double BeTongMongHoGa_C)
         {
             if (ThongTinChungHoGa_HinhThucMongHoGa == "Không có móng")
             {
@@ -378,7 +378,7 @@ namespace DucAnhERP.Helpers
             }
             else
             {
-                return Math.Round(ThongTinCaoDoHoGa_CdDinhMong - TBeTongMongHoGa_C, 2);
+                return Math.Round(ThongTinCaoDoHoGa_CdDinhMong - BeTongMongHoGa_C, 2);
             }
         }
 
@@ -547,7 +547,7 @@ namespace DucAnhERP.Helpers
             return Math.Round(ketQua, 2);
         }
 
-        public double TTCCCCDTHT_ChieuCaoMongDat(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat, double BeTongLotMong_C, double TBeTongMongHoGa_C)
+        public double TTCCCCDTHT_ChieuCaoMongDat(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat, double BeTongLotMong_C, double BeTongMongHoGa_C)
         {
             double ketQua = 0;
             ThongTinVatLieuDaoHoGa_LoaiVatLieuDao = GetTenDanhMucById(ThongTinVatLieuDaoHoGa_LoaiVatLieuDao).ToUpper().Trim();
@@ -558,9 +558,9 @@ namespace DucAnhERP.Helpers
                 {
                     ketQua = 0;
                 }
-                else if (ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat >= BeTongLotMong_C + TBeTongMongHoGa_C)
+                else if (ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat >= BeTongLotMong_C + BeTongMongHoGa_C)
                 {
-                    ketQua = TBeTongMongHoGa_C;
+                    ketQua = BeTongMongHoGa_C;
                 }
                 else
                 {
@@ -571,16 +571,16 @@ namespace DucAnhERP.Helpers
             return Math.Round(ketQua, 2);
         }
 
-        public double TTCCCCDTHT_ChieuCaoTuongDat(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat, double BeTongLotMong_C, double TBeTongMongHoGa_C, double TuongHoGa_C, double DamGiuaHoGa_C, double MuMoThotDuoi_C, double MuMoThotTren_C)
+        public double TTCCCCDTHT_ChieuCaoTuongDat(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat, double BeTongLotMong_C, double BeTongMongHoGa_C, double TuongHoGa_C, double DamGiuaHoGa_C, double MuMoThotDuoi_C, double MuMoThotTren_C)
         {
             double ketQua = 0;
             ThongTinVatLieuDaoHoGa_LoaiVatLieuDao = GetTenDanhMucById(ThongTinVatLieuDaoHoGa_LoaiVatLieuDao).ToUpper().Trim();
             double tongThem = TuongHoGa_C + DamGiuaHoGa_C + MuMoThotDuoi_C + MuMoThotTren_C;
-            double gioiHanTren = BeTongLotMong_C + TBeTongMongHoGa_C + TuongHoGa_C + DamGiuaHoGa_C + MuMoThotDuoi_C + MuMoThotTren_C;
+            double gioiHanTren = BeTongLotMong_C + BeTongMongHoGa_C + TuongHoGa_C + DamGiuaHoGa_C + MuMoThotDuoi_C + MuMoThotTren_C;
 
             if (ThongTinVatLieuDaoHoGa_LoaiVatLieuDao == "Đào đất".ToUpper() || ThongTinVatLieuDaoHoGa_LoaiVatLieuDao == "Đào đất + đào đá".ToUpper())
             {
-                if (ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat <= BeTongLotMong_C + TBeTongMongHoGa_C)
+                if (ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat <= BeTongLotMong_C + BeTongMongHoGa_C)
                 {
                     ketQua = 0;
                 }
@@ -590,7 +590,7 @@ namespace DucAnhERP.Helpers
                 }
                 else
                 {
-                    ketQua = ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat - (BeTongLotMong_C + TBeTongMongHoGa_C);
+                    ketQua = ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat - (BeTongLotMong_C + BeTongMongHoGa_C);
                 }
             }
 
@@ -622,7 +622,7 @@ namespace DucAnhERP.Helpers
             return Math.Round(ketQua, 2);
         }
 
-        public double TTCCCCDTHT_ChieuCaoMongDa(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa, double ThongTinVatLieuDaoHoGa_TongChieuCaoDao, double TTCCCCDTHT_ChieuCaoMongDat, double TTCCCCDTHT_ChieuCaoLotDa, double BeTongLotMong_C, double TBeTongMongHoGa_C)
+        public double TTCCCCDTHT_ChieuCaoMongDa(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa, double ThongTinVatLieuDaoHoGa_TongChieuCaoDao, double TTCCCCDTHT_ChieuCaoMongDat, double TTCCCCDTHT_ChieuCaoLotDa, double BeTongLotMong_C, double BeTongMongHoGa_C)
         {
             double ketQua = 0;
             ThongTinVatLieuDaoHoGa_LoaiVatLieuDao = GetTenDanhMucById(ThongTinVatLieuDaoHoGa_LoaiVatLieuDao).ToUpper().Trim();
@@ -632,9 +632,9 @@ namespace DucAnhERP.Helpers
                 {
                     ketQua = 0;
                 }
-                else if (ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa >= BeTongLotMong_C + TBeTongMongHoGa_C)
+                else if (ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa >= BeTongLotMong_C + BeTongMongHoGa_C)
                 {
-                    ketQua = TBeTongMongHoGa_C;
+                    ketQua = BeTongMongHoGa_C;
                 }
                 else
                 {
@@ -643,11 +643,11 @@ namespace DucAnhERP.Helpers
             }
             else if (ThongTinVatLieuDaoHoGa_LoaiVatLieuDao == "Đào đất + Đào đá".ToUpper())
             {
-                if (ThongTinVatLieuDaoHoGa_TongChieuCaoDao >= BeTongLotMong_C + TBeTongMongHoGa_C)
+                if (ThongTinVatLieuDaoHoGa_TongChieuCaoDao >= BeTongLotMong_C + BeTongMongHoGa_C)
                 {
-                    if (TTCCCCDTHT_ChieuCaoMongDat < TBeTongMongHoGa_C)
+                    if (TTCCCCDTHT_ChieuCaoMongDat < BeTongMongHoGa_C)
                     {
-                        ketQua = TBeTongMongHoGa_C - TTCCCCDTHT_ChieuCaoMongDat;
+                        ketQua = BeTongMongHoGa_C - TTCCCCDTHT_ChieuCaoMongDat;
                     }
                     else
                     {
@@ -663,28 +663,28 @@ namespace DucAnhERP.Helpers
             return Math.Round(ketQua, 2);
         }
 
-        public double TTCCCCDTHT_ChieuCaoTuongDa(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa, double ThongTinVatLieuDaoHoGa_TongChieuCaoDao, double TTCCCCDTHT_ChieuCaoTuongDat, double TTCCCCDTHT_ChieuCaoLotDa, double TTCCCCDTHT_ChieuCaoMongDa, double BeTongLotMong_C, double TBeTongMongHoGa_C, double TuongHoGa_C, double DamGiuaHoGa_C, double MuMoThotDuoi_C, double MuMoThotTren_C)
+        public double TTCCCCDTHT_ChieuCaoTuongDa(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa, double ThongTinVatLieuDaoHoGa_TongChieuCaoDao, double TTCCCCDTHT_ChieuCaoTuongDat, double TTCCCCDTHT_ChieuCaoLotDa, double TTCCCCDTHT_ChieuCaoMongDa, double BeTongLotMong_C, double BeTongMongHoGa_C, double TuongHoGa_C, double DamGiuaHoGa_C, double MuMoThotDuoi_C, double MuMoThotTren_C)
         {
             double ketQua = 0;
             ThongTinVatLieuDaoHoGa_LoaiVatLieuDao = GetTenDanhMucById(ThongTinVatLieuDaoHoGa_LoaiVatLieuDao).ToUpper().Trim();
             if (ThongTinVatLieuDaoHoGa_LoaiVatLieuDao == "Đào đá".ToUpper())
             {
-                if (ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa <= BeTongLotMong_C + TBeTongMongHoGa_C)
+                if (ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa <= BeTongLotMong_C + BeTongMongHoGa_C)
                 {
                     ketQua = 0;
                 }
-                else if (ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa >= BeTongLotMong_C + TBeTongMongHoGa_C + TuongHoGa_C + DamGiuaHoGa_C + MuMoThotDuoi_C + MuMoThotTren_C)
+                else if (ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa >= BeTongLotMong_C + BeTongMongHoGa_C + TuongHoGa_C + DamGiuaHoGa_C + MuMoThotDuoi_C + MuMoThotTren_C)
                 {
                     ketQua = TuongHoGa_C + DamGiuaHoGa_C + MuMoThotDuoi_C + MuMoThotTren_C;
                 }
                 else
                 {
-                    ketQua = ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa - (BeTongLotMong_C + TBeTongMongHoGa_C);
+                    ketQua = ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa - (BeTongLotMong_C + BeTongMongHoGa_C);
                 }
             }
             else if (ThongTinVatLieuDaoHoGa_LoaiVatLieuDao == "Đào đất + Đào đá".ToUpper())
             {
-                if (ThongTinVatLieuDaoHoGa_TongChieuCaoDao >= BeTongLotMong_C + TBeTongMongHoGa_C + TuongHoGa_C + DamGiuaHoGa_C + MuMoThotDuoi_C + MuMoThotTren_C)
+                if (ThongTinVatLieuDaoHoGa_TongChieuCaoDao >= BeTongLotMong_C + BeTongMongHoGa_C + TuongHoGa_C + DamGiuaHoGa_C + MuMoThotDuoi_C + MuMoThotTren_C)
                 {
                     if (TTCCCCDTHT_ChieuCaoTuongDat < TuongHoGa_C + DamGiuaHoGa_C + MuMoThotDuoi_C + MuMoThotTren_C)
                     {

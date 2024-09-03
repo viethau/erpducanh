@@ -41,6 +41,7 @@ namespace DucAnhERP.Data
         public DbSet<MNhomDanhMuc> DSNhomDanhMuc { get; set; }
         public DbSet<MDanhMuc> DSDanhMuc { get; set; }
         public DbSet<MHopRanhThang> DSHopRanhThang { get; set; }
+        public DbSet<MPhanLoaiHoGa> DSPhanLoaiHoGa { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
