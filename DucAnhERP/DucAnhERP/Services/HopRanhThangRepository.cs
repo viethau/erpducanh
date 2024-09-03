@@ -319,15 +319,26 @@ namespace DucAnhERP.Services
 
         public async Task<MHopRanhThang> GetById(string id)
         {
-            using var context = _context.CreateDbContext();
-            var entity = await context.DSHopRanhThang.Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
-
-            if (entity == null)
+            try
             {
-                throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
-            }
+                using var context = _context.CreateDbContext();
+                // Tìm kiếm bản ghi theo ID
+                var entity = await context.DSHopRanhThang
+                    .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
-            return entity;
+                if (entity == null)
+                {
+                    throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
+                }
+
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+           
         }
 
         public async Task Insert(MHopRanhThang entity)

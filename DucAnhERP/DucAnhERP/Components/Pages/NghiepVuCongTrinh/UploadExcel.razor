@@ -9,7 +9,12 @@
 @inject DucAnhERP.Services.ToastService ToastService
 
 <div class="container-fluid p-3">
-    <InputFile class="my-2" OnChange="HandleFileSelected" title="Upload file excel"> Upload </InputFile>
+
+    <div class="d-inline">
+        <InputFile class="my-2" OnChange="HandleFileSelected" title="Upload file excel"> Upload </InputFile>
+        <a href="/files/file_mau.xlsx" download="file_mau.xlsx" class="btn btn-link  my-3">Tải về file mẫu</a>
+    </div>
+   
     @if (excelDataList != null && excelDataList.Count > 0)
     {
         <table class="table table-bordered ">

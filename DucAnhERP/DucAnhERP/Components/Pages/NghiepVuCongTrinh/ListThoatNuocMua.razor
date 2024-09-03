@@ -3339,6 +3339,7 @@
                 await HopRanhThangRepository.DeleteById(deleteId);
                 await LoadData();
                 ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-bell", progressBarClass: "bg-info", duration: 5000);
+                deleteId = null;
             }
         }
     }

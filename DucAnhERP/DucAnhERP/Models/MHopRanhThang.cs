@@ -11,30 +11,30 @@ namespace DucAnhERP.Models
         public string Id { get; set; } = Guid.NewGuid().ToString();
         //Thông tin lý trình
         [Required(ErrorMessage = "Bạn phải nhập Tuyến đường!")]
-        public string ThongTinLyTrinh_TuyenDuong { get; set; }
+        public string ThongTinLyTrinh_TuyenDuong { get; set; } = "";
 
         [Required(ErrorMessage = "Bạn phải nhập Lý trình tại tim hố ga!")]
-        public string ThongTinLyTrinh_LyTrinhTaiTimHoGa { get; set; }
+        public string ThongTinLyTrinh_LyTrinhTaiTimHoGa { get; set; } = "";
         //Thông tin chung hố ga
         //[Required(ErrorMessage = "Bạn phải nhập Tên hố ga sau phân loại !")]
-        public string ThongTinChungHoGa_TenHoGaSauPhanLoai { get; set; }
+        public string ThongTinChungHoGa_TenHoGaSauPhanLoai { get; set; } = "";
         [Required(ErrorMessage = "Bạn phải nhập Tên hố ga theo bản vẽ!")]
-        public string ThongTinChungHoGa_TenHoGaTheoBanVe { get; set; }
+        public string ThongTinChungHoGa_TenHoGaTheoBanVe { get; set; } = "";
         [Required(ErrorMessage = "Bạn phải nhập Hình thức hố ga !")]
-        public string ThongTinChungHoGa_HinhThucHoGa { get; set; }
+        public string ThongTinChungHoGa_HinhThucHoGa { get; set; } = "";
         [Required(ErrorMessage = "Bạn phải nhập  kết cấu mũ mố !")]
-        public string ThongTinChungHoGa_KetCauMuMo { get; set; }
+        public string ThongTinChungHoGa_KetCauMuMo { get; set; } = "";
 
         [Required(ErrorMessage = "Bạn phải nhập Kết cấu tường!")]
-        public string ThongTinChungHoGa_KetCauTuong { get; set; }
+        public string ThongTinChungHoGa_KetCauTuong { get; set; } = "";
         [Required(ErrorMessage = "Bạn phải nhập Hình thức móng hố ga !")]
-        public string ThongTinChungHoGa_HinhThucMongHoGa { get; set; }
+        public string ThongTinChungHoGa_HinhThucMongHoGa { get; set; } = "";
         [Required(ErrorMessage = "Bạn phải nhập  Kết cấu móng !")]
-        public string ThongTinChungHoGa_KetCauMong { get; set; }
+        public string ThongTinChungHoGa_KetCauMong { get; set; } = "";
         [Required(ErrorMessage = "Bạn phải nhập Chát mặt trong !")]
-        public string ThongTinChungHoGa_ChatMatTrong { get; set; }
+        public string ThongTinChungHoGa_ChatMatTrong { get; set; } = "";
         [Required(ErrorMessage = "Bạn phải nhập Chát mặt ngoài  !")]
-        public string ThongTinChungHoGa_ChatMatNgoai { get; set; }
+        public string ThongTinChungHoGa_ChatMatNgoai { get; set; } = "";
         //Thông tin kích thước hình học hố ga
         //1.Thông tin phủ bì hố ga (m) 1.PhuBiHoGa
 
@@ -378,9 +378,9 @@ namespace DucAnhERP.Models
         //Thông tin tấm đan hố ga ThongTinTamDanHoGa2
 
         //[Required(ErrorMessage = "Bạn phải nhập Phân loại đậy hố ga !")]
-        public string ThongTinTamDanHoGa2_PhanLoaiDayHoGa { get; set; }
+        public string ThongTinTamDanHoGa2_PhanLoaiDayHoGa { get; set; } = "";
         [Required(ErrorMessage = "Bạn phải nhập Hình thức đậy hố ga !")]
-        public string ThongTinTamDanHoGa2_HinhThucDayHoGa { get; set; }
+        public string ThongTinTamDanHoGa2_HinhThucDayHoGa { get; set; } = "";
 
         [Required(ErrorMessage = "Bạn phải nhập Đường kính (m) !")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
@@ -410,7 +410,7 @@ namespace DucAnhERP.Models
 
         //Thông tin vật liệu đào hố ga
         [Required(ErrorMessage = "Bạn phải nhập loại vật liệu đào!")]
-        public string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao { get; set; }
+        public string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao { get; set; } = "";
 
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
         [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
@@ -518,15 +518,15 @@ namespace DucAnhERP.Models
         [RegularExpression(@"^\d+(\.\d{1,5})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 5 chữ số thập phân.")]
         public double? ThongTinLyTrinhTruyenDan_DenLyTrinh { get; set; } = 0;
         [Required(ErrorMessage = "Bạn phải nhập Từ hố ga !")]
-        public string ThongTinLyTrinhTruyenDan_TuHoGa { get; set; }
+        public string ThongTinLyTrinhTruyenDan_TuHoGa { get; set; } = "";
         [Required(ErrorMessage = "Bạn phải nhập Đến hố ga !")]
-        public string ThongTinLyTrinhTruyenDan_DenHoGa { get; set; }
+        public string ThongTinLyTrinhTruyenDan_DenHoGa { get; set; } = "";
 
         //Thông tin đường truyền dẫn
         [Required(ErrorMessage = "Bạn phải nhập Hình thức truyền dẫn!")]
-        public string ThongTinDuongTruyenDan_HinhThucTruyenDan { get; set; }
+        public string ThongTinDuongTruyenDan_HinhThucTruyenDan { get; set; } = "";
         [Required(ErrorMessage = "Bạn phải nhập Loại truyền dẫn !")]
-        public string ThongTinDuongTruyenDan_LoaiTruyenDan { get; set; }
+        public string ThongTinDuongTruyenDan_LoaiTruyenDan { get; set; } = "";
         //[Required(ErrorMessage = "Bạn phải nhập Tên loại truyền dẫn sau phân loại!")]
         public string ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai { get; set; } = "";
 
@@ -551,9 +551,9 @@ namespace DucAnhERP.Models
         //[Required(ErrorMessage = "Bạn phải nhập Phân loại móng cống tròn, cống hộp!")]
         public string ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop { get; set; } = "";
         [Required(ErrorMessage = "Bạn phải nhập loại móng!")]
-        public string ThongTinMongDuongTruyenDan_LoaiMong { get; set; }
+        public string ThongTinMongDuongTruyenDan_LoaiMong { get; set; } = "";
         [Required(ErrorMessage = "Bạn phải nhập hình thức móng!")]
-        public string ThongTinMongDuongTruyenDan_HinhThucMong { get; set; } 
+        public string ThongTinMongDuongTruyenDan_HinhThucMong { get; set; } = "";
 
         //Thông tin đế cống
         //[Required(ErrorMessage = "Bạn phải nhập tên loại đế cống!")]
@@ -921,7 +921,7 @@ namespace DucAnhERP.Models
 
         ////Thông tin vật liệu đào cống, rãnh
         [Required(ErrorMessage = "Bạn phải nhập Loại vật liệu đào!")]
-        public string TTVLDCongRanh_LoaiVatLieuDao { get; set; }
+        public string TTVLDCongRanh_LoaiVatLieuDao { get; set; } = "";
 
         [Required(ErrorMessage = "Bạn phải nhập Chiều cao đào đá thượng lưu!")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
