@@ -553,13 +553,13 @@ namespace DucAnhERP.Models
         [Required(ErrorMessage = "Bạn phải nhập loại móng!")]
         public string ThongTinMongDuongTruyenDan_LoaiMong { get; set; }
         [Required(ErrorMessage = "Bạn phải nhập hình thức móng!")]
-        public string ThongTinMongDuongTruyenDan_HinhThucMong { get; set; }
+        public string ThongTinMongDuongTruyenDan_HinhThucMong { get; set; } 
 
         //Thông tin đế cống
         //[Required(ErrorMessage = "Bạn phải nhập tên loại đế cống!")]
         public string ThongTinDeCong_TenLoaiDeCong { get; set; }
         //[Required(ErrorMessage = "Bạn phải nhập cấu tạo đế cống!")]
-        public string ThongTinDeCong_CauTaoDeCong { get; set; }
+        public string ThongTinDeCong_CauTaoDeCong { get; set; } = "";
 
         [Required(ErrorMessage = "Bạn phải nhập chiều dài!")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
@@ -618,9 +618,9 @@ namespace DucAnhERP.Models
 
         //Thông tin kích thước hình học cống hộp, rãnh
         //[Required(ErrorMessage = "Bạn phải nhập cấu tạo tường!")]
-        public string TTKTHHCongHopRanh_CauTaoTuong { get; set; }
+        public string TTKTHHCongHopRanh_CauTaoTuong { get; set; } = "";
         //[Required(ErrorMessage = "Bạn phải nhập cấu tạo mũ mố!")]
-        public string TTKTHHCongHopRanh_CauTaoMuMo { get; set; }
+        public string TTKTHHCongHopRanh_CauTaoMuMo { get; set; } = "";
         //[Required(ErrorMessage = "Bạn phải nhập Chát mặt trong !")]
         public string TTKTHHCongHopRanh_ChatMatTrong { get; set; }
         //[Required(ErrorMessage = "Bạn phải nhập Chát mặt ngoài!")]
@@ -691,7 +691,7 @@ namespace DucAnhERP.Models
         //[Required(ErrorMessage = "Bạn phải nhập Loại thanh chống !")]
         public string TTKTHHCongHopRanh_LoaiThanhChong { get; set; }
         //[Required(ErrorMessage = "Bạn phải nhập Cấu tạo thanh chống!")]
-        public string TTKTHHCongHopRanh_CauTaoThanhChong { get; set; }
+        public string TTKTHHCongHopRanh_CauTaoThanhChong { get; set; } = "";
 
         [Required(ErrorMessage = "Bạn phải nhập C.Cao thanh chống!")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
@@ -737,13 +737,13 @@ namespace DucAnhERP.Models
 
         //Thông tin rãnh thang
         //[Required(ErrorMessage = "Bạn phải nhập Hình thức mái !")]
-        public string ThongTinRanhThang_HinhThucMai { get; set; }
+        public string ThongTinRanhThang_HinhThucMai { get; set; } = "";
         //[Required(ErrorMessage = "Bạn phải nhập Cấu tạo chân khay !")]
-        public string ThongTinRanhThang_CauTaoChanKhay { get; set; }
+        public string ThongTinRanhThang_CauTaoChanKhay { get; set; } = "";
         //[Required(ErrorMessage = "Bạn phải nhập Cấu tạo giằng đỉnh!")]
-        public string ThongTinRanhThang_CauTaoGiangDinh { get; set; }
+        public string ThongTinRanhThang_CauTaoGiangDinh { get; set; } = "";
         //[Required(ErrorMessage = "Bạn phải nhập Hình thức hành lang bảo vệ !")]
-        public string ThongTinRanhThang_HinhThucHanhLangBaoVe { get; set; }
+        public string ThongTinRanhThang_HinhThucHanhLangBaoVe { get; set; } = "";
         //[Required(ErrorMessage = "Bạn phải nhập Phân loại chân khay!")]
         public string ThongTinRanhThang_PhanLoaiChanKhay { get; set; }
         [Required(ErrorMessage = "Bạn phải nhập C.Cao lót chân khay !")]
@@ -799,7 +799,7 @@ namespace DucAnhERP.Models
         [Range(0, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
         public int ThongTinRanhThang_SoLuongMai { get; set; } = 0;
         //[Required(ErrorMessage = "Bạn phải nhập Phân loại giằng đỉnh!")]
-        public string ThongTinRanhThang_PhanLoaiGiangDinh { get; set; }
+        public string ThongTinRanhThang_PhanLoaiGiangDinh { get; set; } 
 
         [Required(ErrorMessage = "Bạn phải nhập C.Cao lót giằng đỉnh!")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
@@ -837,7 +837,7 @@ namespace DucAnhERP.Models
         //[Required(ErrorMessage = "Bạn phải nhập Tên loại tấm đan tiêu chuẩn!")]
         public string TTTDCongHoRanh_TenLoaiTamDanTieuChuan { get; set; }
         //[Required(ErrorMessage = "Bạn phải nhập Cấu tạo tấm đan truyền dẫn tấm đan tiêu chuẩn!")]
-        public string TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan { get; set; }
+        public string TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan { get; set; } = "";
         //[Required(ErrorMessage = "Bạn phải nhập Số lượng !")]
         //public string TTTDCongHoRanh_SoLuong { get; set; }
         [Required(ErrorMessage = "Bạn phải nhập C.Dài  !")]
@@ -857,7 +857,7 @@ namespace DucAnhERP.Models
         //[Required(ErrorMessage = "Bạn phải nhập Tên loại tấm đan loại 02!")]
         public string TTTDCongHoRanh_TenLoaiTamDanLoai02 { get; set; }
         //[Required(ErrorMessage = "Bạn phải nhập Cấu tạo tấm đan truyền dẫn !")]
-        public string TTTDCongHoRanh_CauTaoTamDanTruyenDan { get; set; }
+        public string TTTDCongHoRanh_CauTaoTamDanTruyenDan { get; set; } = "";
         //[Required(ErrorMessage = "Bạn phải nhập sô lượng !")]
         //public string TTTDCongHoRanh_SoLuong1 { get; set; } ;
         //[Required(ErrorMessage = "Bạn phải nhập chiều dài!")]

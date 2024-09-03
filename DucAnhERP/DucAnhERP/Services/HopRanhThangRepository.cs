@@ -339,10 +339,9 @@ namespace DucAnhERP.Services
                 {
                     throw new Exception("Không có bản ghi nào để thêm!");
                 }
-
-                entity.Id = Guid.NewGuid().ToString();
                 context.DSHopRanhThang.Add(entity);
-                await context.SaveChangesAsync();
+               var row =  await context.SaveChangesAsync();
+                Console.WriteLine(row);
             }
             catch (Exception ex)
             {
