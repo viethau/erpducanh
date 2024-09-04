@@ -9,14 +9,14 @@ namespace DucAnhERP.Services
     public class PhanLoaiHoGaRepository : IPhanLoaiHoGaRepository
     {
       
-            private readonly IDbContextFactory<ApplicationDbContext> _context;
+        private readonly IDbContextFactory<ApplicationDbContext> _context;
 
-            public PhanLoaiHoGaRepository(IDbContextFactory<ApplicationDbContext> context)
+        public PhanLoaiHoGaRepository(IDbContextFactory<ApplicationDbContext> context)
             {
                 _context = context;
             }
 
-            public async Task<List<MPhanLoaiHoGa>> GetAll()
+        public async Task<List<MPhanLoaiHoGa>> GetAll()
             {
                 try
                 {
@@ -31,8 +31,6 @@ namespace DucAnhERP.Services
                     throw; // Optionally rethrow the exception
                 }
             }
-
-           
 
         public async Task<List<PhanLoaiHoGaModel>> GetAllByVM()
         {
@@ -133,6 +131,56 @@ namespace DucAnhERP.Services
             }
             
         }
+        public async Task<bool> CheckUsingId(string id)
+        {
+            bool isSuccess = false;
+            using var context = _context.CreateDbContext();
+            var query = context.DSHopRanhThang
+                         .Where(hrt => (hrt.ThongTinChungHoGa_TenHoGaSauPhanLoai == id));
+
+            var data = await query.ToListAsync();
+
+            // Kiểm tra nếu danh sách kết quả rỗng hoặc không có dữ liệu khớp
+            isSuccess = data.Any();
+            return (isSuccess);
+        }
+
+        public async Task<MPhanLoaiHoGa> GetByFieldValues(Dictionary<string, string> fieldValues)
+        {
+            using var context = _context.CreateDbContext();
+
+            // Khởi tạo câu truy vấn ban đầu
+            var query = context.DSPhanLoaiHoGa.AsQueryable();
+
+            // Kiểm tra từng cặp field và value trong từ điển
+            foreach (var fieldValue in fieldValues)
+            {
+                string fieldName = fieldValue.Key;
+                string value = fieldValue.Value;
+
+                query = query.Where(x =>
+                    (fieldName == nameof(x.ThongTinChungHoGa_HinhThucHoGa) && x.ThongTinChungHoGa_HinhThucHoGa.Contains(value)) ||
+                    (fieldName == nameof(x.ThongTinChungHoGa_KetCauMuMo) && x.ThongTinChungHoGa_KetCauMuMo.Contains(value)) ||
+                    (fieldName == nameof(x.ThongTinChungHoGa_KetCauTuong) && x.ThongTinChungHoGa_KetCauTuong.Contains(value)) ||
+                    (fieldName == nameof(x.ThongTinChungHoGa_HinhThucMongHoGa) && x.ThongTinChungHoGa_HinhThucMongHoGa.Contains(value)) ||
+                    (fieldName == nameof(x.ThongTinChungHoGa_KetCauMong) && x.ThongTinChungHoGa_KetCauMong.Contains(value)) ||
+                    (fieldName == nameof(x.ThongTinChungHoGa_ChatMatTrong) && x.ThongTinChungHoGa_ChatMatTrong.Contains(value)) ||
+                    (fieldName == nameof(x.ThongTinChungHoGa_ChatMatNgoai) && x.ThongTinChungHoGa_ChatMatNgoai.Contains(value))
+                );
+            }
+
+            // Lấy ra kết quả đầu tiên (hoặc null nếu không có)
+            var mPhanLoaiHoGa = await query.FirstOrDefaultAsync();
+
+            // Nếu không tìm thấy kết quả, có thể trả về null hoặc ném ra ngoại lệ
+            if (mPhanLoaiHoGa == null)
+            {
+                throw new Exception("Không tìm thấy bản ghi phù hợp với các cặp field và value đã chỉ định.");
+            }
+
+            return mPhanLoaiHoGa;
+        }
+
 
         public async Task Update(MPhanLoaiHoGa phanloaihoga)
             {
@@ -148,7 +196,7 @@ namespace DucAnhERP.Services
                 await context.SaveChangesAsync();
             }
 
-            public async Task UpdateMulti(MPhanLoaiHoGa[] phanloaihoga)
+        public async Task UpdateMulti(MPhanLoaiHoGa[] phanloaihoga)
             {
                 using var context = _context.CreateDbContext();
                 string[] ids = phanloaihoga.Select(x => x.Id).ToArray();
@@ -160,7 +208,7 @@ namespace DucAnhERP.Services
                 await context.SaveChangesAsync();
             }
 
-            public async Task DeleteById(string id)
+       public async Task DeleteById(string id)
             {
                 using var context = _context.CreateDbContext();
                 var entity = await GetById(id);
@@ -200,24 +248,33 @@ namespace DucAnhERP.Services
                 return entity;
             }
 
-            public async Task Insert(MPhanLoaiHoGa entity)
+        public async Task Insert(MPhanLoaiHoGa entity)
+        {
+            try
             {
-                try
+                using var context = _context.CreateDbContext();
+                if (entity == null)
                 {
-                    using var context = _context.CreateDbContext();
-                    if (entity == null)
-                    {
-                        throw new Exception("Không có bản ghi nào để thêm!");
-                    }
+                    throw new Exception("Không có bản ghi nào để thêm!");
+                }
 
-                    context.DSPhanLoaiHoGa.Add(entity);
-                    await context.SaveChangesAsync();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
+                // Kiểm tra xem bảng có bản ghi nào không
+                var maxFlag = await context.DSPhanLoaiHoGa.AnyAsync()
+                              ? await context.DSPhanLoaiHoGa.MaxAsync(x => x.Flag)
+                              : 0;
+
+                // Tăng giá trị Flag lên 1
+                entity.Flag = maxFlag + 1;
+
+                // Chèn bản ghi mới vào bảng
+                context.DSPhanLoaiHoGa.Add(entity);
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
         }
+    }
     
 }

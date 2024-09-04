@@ -1276,8 +1276,8 @@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinRanhThang_CauTaoChanKhay">Cấu tạo chân khay<span class="text-danger"></span></label>
-                                      @*   <InputText @bind-Value="Input.ThongTinRanhThang_CauTaoChanKhay" class="form-control" id="ThongTinRanhThang_CauTaoChanKhay" placeholder="Cấu tạo chân khay" /> *@
-                                       <select id="ThongTinRanhThang_CauTaoChanKhay" @bind="Input.ThongTinRanhThang_CauTaoChanKhay" class="form-control">
+                                        @*   <InputText @bind-Value="Input.ThongTinRanhThang_CauTaoChanKhay" class="form-control" id="ThongTinRanhThang_CauTaoChanKhay" placeholder="Cấu tạo chân khay" /> *@
+                                        <select id="ThongTinRanhThang_CauTaoChanKhay" @bind="Input.ThongTinRanhThang_CauTaoChanKhay" class="form-control">
                                             <option value="">Cấu tạo chân khay...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("CauTaoChanKhay"))
                                             {
@@ -1765,8 +1765,8 @@
 
                         </div>
                     </div>
-                      <DataAnnotationsValidator />
-                       <ValidationSummary />
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
                     <div class="row my-5 d-flex justify-content-end">
                         <div>
                             <button type="submit" class="btn btn-primary btn-sm btn-block">@TitleModal</button>
@@ -3143,7 +3143,6 @@
     private async Task LoadData()
     {
         var helper = new DataConversionHelper();
-
         listDanhMuc = await DanhMucRepository.GetAll();
         var hopranhthangs = await HopRanhThangRepository.GetData();
         var convertDatas = await helper.ConvertDataHopRanhThang(hopranhthangs, listDanhMuc);
@@ -3189,7 +3188,7 @@
 
 
     //Thêm sửa
-   private bool isEdit = false; 
+    private bool isEdit = false;
     private async Task HandleEdit(string Id)
     {
         isEdit = true;
@@ -3197,6 +3196,247 @@
         TitleModal = "Cập nhật thông tin";
         isModalVisible = true;
     }
+
+    //Thêm tên theo bảng phân loại
+    public async Task ThemTenTheoPL(MHopRanhThang mHopRanhThang)
+    {
+        HopRanhThangModel hopRanhThangModel = new HopRanhThangModel();
+        var helper = new DataConversionHelper();
+        List<HopRanhThangModel> listHopRanhThangModel = new List<HopRanhThangModel>
+                {
+                    new HopRanhThangModel
+                    {
+                        Id = Input.Id,
+                        ThongTinLyTrinh_TuyenDuong = Input.ThongTinLyTrinh_TuyenDuong ??"",
+                        ThongTinLyTrinh_LyTrinhTaiTimHoGa = Input.ThongTinLyTrinh_LyTrinhTaiTimHoGa ?? "",
+                        ThongTinChungHoGa_TenHoGaSauPhanLoai = Input.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
+                        ThongTinChungHoGa_TenHoGaTheoBanVe = Input.ThongTinChungHoGa_TenHoGaTheoBanVe ?? "",
+                        ThongTinChungHoGa_HinhThucHoGa = Input.ThongTinChungHoGa_HinhThucHoGa ?? "",
+                        ThongTinChungHoGa_KetCauMuMo = Input.ThongTinChungHoGa_KetCauMuMo ?? "",
+                        ThongTinChungHoGa_KetCauTuong = Input.ThongTinChungHoGa_KetCauTuong ?? "",
+                        ThongTinChungHoGa_HinhThucMongHoGa = Input.ThongTinChungHoGa_HinhThucMongHoGa ?? "",
+                        ThongTinChungHoGa_KetCauMong = Input.ThongTinChungHoGa_KetCauMong ?? "",
+                        ThongTinChungHoGa_ChatMatTrong = Input.ThongTinChungHoGa_ChatMatTrong ?? "",
+                        ThongTinChungHoGa_ChatMatNgoai = Input.ThongTinChungHoGa_ChatMatNgoai ?? "",
+                        PhuBiHoGa_CDai = Input.PhuBiHoGa_CDai??0,
+                        PhuBiHoGa_CRong = Input.PhuBiHoGa_CRong ?? 0,
+                        BeTongLotMong_D = Input.BeTongLotMong_D ?? 0,
+                        BeTongLotMong_R = Input.BeTongLotMong_R ?? 0,
+                        BeTongLotMong_C = Input.BeTongLotMong_C ?? 0,
+                        BeTongMongHoGa_D = Input.BeTongMongHoGa_D ?? 0,
+                        BeTongMongHoGa_R = Input.BeTongMongHoGa_R ?? 0,
+                        BeTongMongHoGa_C = Input.BeTongMongHoGa_C ?? 0,
+                        DeHoGa_D = Input.DeHoGa_D ?? 0,
+                        DeHoGa_R = Input.DeHoGa_R ?? 0,
+                        DeHoGa_C = Input.DeHoGa_C ?? 0,
+                        TuongHoGa_D = Input.TuongHoGa_D ?? 0,
+                        TuongHoGa_R = Input.TuongHoGa_R ?? 0,
+                        TuongHoGa_CdTuong = Input.TuongHoGa_CdTuong ?? 0,
+                        DamGiuaHoGa_D = Input.DamGiuaHoGa_D ?? 0,
+                        DamGiuaHoGa_R = Input.DamGiuaHoGa_R ?? 0,
+                        DamGiuaHoGa_C = Input.DamGiuaHoGa_C ?? 0,
+                        DamGiuaHoGa_CdDam = Input.DamGiuaHoGa_CdDam ?? 0,
+                        DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa = Input.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa ?? 0,
+                        ChatMatTrong_D = Input.ChatMatTrong_D ?? 0,
+                        ChatMatTrong_R = Input.ChatMatTrong_R ?? 0,
+                        ChatMatNgoaiCanh_D = Input.ChatMatNgoaiCanh_D ?? 0,
+                        ChatMatNgoaiCanh_R = Input.ChatMatNgoaiCanh_R ?? 0,
+                        MuMoThotDuoi_D = Input.MuMoThotDuoi_D ?? 0,
+                        MuMoThotDuoi_R = Input.MuMoThotDuoi_R ?? 0,
+                        MuMoThotDuoi_C = Input.MuMoThotDuoi_C ?? 0,
+                        MuMoThotDuoi_CdTuong = Input.MuMoThotDuoi_CdTuong ?? 0,
+                        MuMoThotTren_D = Input.MuMoThotTren_D ?? 0,
+                        MuMoThotTren_R = Input.MuMoThotTren_R ?? 0,
+                        MuMoThotTren_C = Input.MuMoThotTren_C ?? 0,
+                        MuMoThotTren_CdTuong = Input.MuMoThotTren_CdTuong ?? 0,
+                        HinhThucDauNoi1_Loai = Input.HinhThucDauNoi1_Loai ?? 0,
+                        HinhThucDauNoi1_CanhDai = Input.HinhThucDauNoi1_CanhDai ?? 0,
+                        HinhThucDauNoi1_CanhRong = Input.HinhThucDauNoi1_CanhRong ?? 0,
+                        HinhThucDauNoi1_CanhCheo = Input.HinhThucDauNoi1_CanhCheo ?? 0,
+                        HinhThucDauNoi2_Loai = Input.HinhThucDauNoi2_Loai ?? 0,
+                        HinhThucDauNoi2_CanhDai = Input.HinhThucDauNoi2_CanhDai ?? 0,
+                        HinhThucDauNoi2_CanhRong = Input.HinhThucDauNoi2_CanhRong ?? 0,
+                        HinhThucDauNoi2_CanhCheo = Input.HinhThucDauNoi2_CanhCheo ?? 0,
+                        HinhThucDauNoi3_Loai = Input.HinhThucDauNoi3_Loai ?? 0,
+                        HinhThucDauNoi3_CanhDai = Input.HinhThucDauNoi3_CanhDai ?? 0,
+                        HinhThucDauNoi3_CanhRong = Input.HinhThucDauNoi3_CanhRong ?? 0,
+                        HinhThucDauNoi3_CanhCheo = Input.HinhThucDauNoi3_CanhCheo ?? 0,
+                        HinhThucDauNoi4_Loai = Input.HinhThucDauNoi4_Loai ?? 0,
+                        HinhThucDauNoi4_CanhDai = Input.HinhThucDauNoi4_CanhDai ?? 0,
+                        HinhThucDauNoi4_CanhRong = Input.HinhThucDauNoi4_CanhRong ?? 0,
+                        HinhThucDauNoi4_CanhCheo = Input.HinhThucDauNoi4_CanhCheo ?? 0,
+                        HinhThucDauNoi5_Loai = Input.HinhThucDauNoi5_Loai ?? 0,
+                        HinhThucDauNoi5_CanhDai = Input.HinhThucDauNoi5_CanhDai ?? 0,
+                        HinhThucDauNoi5_CanhRong = Input.HinhThucDauNoi5_CanhRong ?? 0,
+                        HinhThucDauNoi5_CanhCheo = Input.HinhThucDauNoi5_CanhCheo ?? 0,
+                        HinhThucDauNoi6_Loai = Input.HinhThucDauNoi6_Loai ?? 0,
+                        HinhThucDauNoi6_CanhDai = Input.HinhThucDauNoi6_CanhDai ?? 0,
+                        HinhThucDauNoi6_CanhRong = Input.HinhThucDauNoi6_CanhRong ?? 0,
+                        HinhThucDauNoi6_CanhCheo = Input.HinhThucDauNoi6_CanhCheo ?? 0,
+                        HinhThucDauNoi7_Loai = Input.HinhThucDauNoi7_Loai ?? 0,
+                        HinhThucDauNoi7_CanhDai = Input.HinhThucDauNoi7_CanhDai ?? 0,
+                        HinhThucDauNoi7_CanhRong = Input.HinhThucDauNoi7_CanhRong ?? 0,
+                        HinhThucDauNoi7_CanhCheo = Input.HinhThucDauNoi7_CanhCheo ?? 0,
+                        HinhThucDauNoi8_Loai = Input.HinhThucDauNoi8_Loai ?? 0,
+                        HinhThucDauNoi8_CanhDai = Input.HinhThucDauNoi8_CanhDai ?? 0,
+                        HinhThucDauNoi8_CanhRong = Input.HinhThucDauNoi8_CanhRong ?? 0,
+                        HinhThucDauNoi8_CanhCheo = Input.HinhThucDauNoi8_CanhCheo ?? 0,
+                        ThongTinTamDanHoGa2_PhanLoaiDayHoGa = Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
+                        ThongTinTamDanHoGa2_HinhThucDayHoGa = Input.ThongTinTamDanHoGa2_HinhThucDayHoGa ?? "",
+                        ThongTinTamDanHoGa2_DuongKinh = Input.ThongTinTamDanHoGa2_DuongKinh ?? 0,
+                        ThongTinTamDanHoGa2_ChieuDay = Input.ThongTinTamDanHoGa2_ChieuDay ?? 0,
+                        ThongTinTamDanHoGa2_D = Input.ThongTinTamDanHoGa2_D ?? 0,
+                        ThongTinTamDanHoGa2_R = Input.ThongTinTamDanHoGa2_R ?? 0,
+                        ThongTinTamDanHoGa2_C = Input.ThongTinTamDanHoGa2_C ?? 0,
+                        ThongTinTamDanHoGa2_SoLuongNapDay = Input.ThongTinTamDanHoGa2_SoLuongNapDay ,
+                        ThongTinVatLieuDaoHoGa_LoaiVatLieuDao = Input.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao ?? "",
+                        ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa = Input.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa ?? 0,
+                        ThongTinCaoDoHoGa_CaoDoTuNhien = Input.ThongTinCaoDoHoGa_CaoDoTuNhien ?? 0,
+                        ThongTinCaoDoHoGa_CdDinhViaHeHoanThien = Input.ThongTinCaoDoHoGa_CdDinhViaHeHoanThien ?? 0,
+                        ThongTinCaoDoHoGa_CaoDoDinhK98 = Input.ThongTinCaoDoHoGa_CaoDoDinhK98 ?? 0,
+                        ThongTinCaoDoHoGa_CdDayHoGa = Input.ThongTinCaoDoHoGa_CdDayHoGa ?? 0,
+                        ThongTinCaoDoHoGa_CdDinhHoGa = Input.ThongTinCaoDoHoGa_CdDinhHoGa ?? 0,
+                        ThongTinMaiDao_ChieuRongDayDaoNho = Input.ThongTinMaiDao_ChieuRongDayDaoNho ?? 0,
+                        ThongTinMaiDao_TyLeMoMai = Input.ThongTinMaiDao_TyLeMoMai ?? 0,
+                        ThongTinMaiDao_SoCanhMaiTrai = Input.ThongTinMaiDao_SoCanhMaiTrai,
+                        ThongTinMaiDao_SoCanhMaiPhai = Input.ThongTinMaiDao_SoCanhMaiPhai,
+                        ToaDoX = Input.ToaDoX ?? 0,
+                        ToaDoY = Input.ToaDoY ?? 0,
+                        ThongTinLyTrinhTruyenDan_TuLyTrinh = Input.ThongTinLyTrinhTruyenDan_TuLyTrinh ?? 0,
+                        ThongTinLyTrinhTruyenDan_DenLyTrinh = Input.ThongTinLyTrinhTruyenDan_DenLyTrinh ?? 0,
+                        ThongTinLyTrinhTruyenDan_TuHoGa = Input.ThongTinLyTrinhTruyenDan_TuHoGa ?? "",
+                        ThongTinLyTrinhTruyenDan_DenHoGa = Input.ThongTinLyTrinhTruyenDan_DenHoGa ?? "",
+                        ThongTinDuongTruyenDan_HinhThucTruyenDan = Input.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "",
+                        ThongTinDuongTruyenDan_LoaiTruyenDan = Input.ThongTinDuongTruyenDan_LoaiTruyenDan ?? "",
+                        ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "",
+                        TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien = Input.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien ?? 0,
+                        TTCDSLCauKienDuongTruyenDan_ChieuDaiMoiNoiCKien = Input.TTCDSLCauKienDuongTruyenDan_ChieuDaiMoiNoiCKien ?? 0,
+                        TTCDSLCauKienDuongTruyenDan_SoLuongCKienDungDeTinhChieuDaiBoSung = Input.TTCDSLCauKienDuongTruyenDan_SoLuongCKienDungDeTinhChieuDaiBoSung,
+                        TTCDSLCauKienDuongTruyenDan_TongChieuDai = Input.TTCDSLCauKienDuongTruyenDan_TongChieuDai ?? 0,
+                        ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ?? "",
+                        ThongTinMongDuongTruyenDan_LoaiMong = Input.ThongTinMongDuongTruyenDan_LoaiMong ?? "",
+                        ThongTinMongDuongTruyenDan_HinhThucMong = Input.ThongTinMongDuongTruyenDan_HinhThucMong ?? "",
+                        ThongTinDeCong_TenLoaiDeCong = Input.ThongTinDeCong_TenLoaiDeCong ?? "",
+                        ThongTinDeCong_CauTaoDeCong = Input.ThongTinDeCong_CauTaoDeCong ?? "",
+                        ThongTinDeCong_D = Input.ThongTinDeCong_D ?? 0,
+                        ThongTinDeCong_R = Input.ThongTinDeCong_R ?? 0,
+                        ThongTinDeCong_C = Input.ThongTinDeCong_C ?? 0,
+                        ThongTinDeCong_SlDeCong01CauKienTruyenDan = Input.ThongTinDeCong_SlDeCong01CauKienTruyenDan ?? 0,
+                        ThongTinDeCong_Kl01DeCong = Input.ThongTinDeCong_Kl01DeCong ?? 0,
+                        ThongTinCauTaoCongTron_CDayPhuBi = Input.ThongTinCauTaoCongTron_CDayPhuBi ?? 0,
+                        ThongTinCauTaoCongTron_SoCanh = Input.ThongTinCauTaoCongTron_SoCanh ?? 0,
+                        ThongTinCauTaoCongTron_LongSuDung = Input.ThongTinCauTaoCongTron_LongSuDung ?? 0,
+                        ThongTinCauTaoCongTron_CCaoLotMong = Input.ThongTinCauTaoCongTron_CCaoLotMong ?? 0,
+                        ThongTinCauTaoCongTron_CRongLotMong = Input.ThongTinCauTaoCongTron_CRongLotMong ?? 0,
+                        ThongTinCauTaoCongTron_CCaoMong = Input.ThongTinCauTaoCongTron_CCaoMong ?? 0,
+                        ThongTinCauTaoCongTron_CRongMong = Input.ThongTinCauTaoCongTron_CRongMong ?? 0,
+                        ThongTinCauTaoCongTron_CCaoDe = Input.ThongTinCauTaoCongTron_CCaoDe ?? 0,
+                        TTKTHHCongHopRanh_CauTaoTuong = Input.TTKTHHCongHopRanh_CauTaoTuong,
+                        TTKTHHCongHopRanh_CauTaoMuMo = Input.TTKTHHCongHopRanh_CauTaoMuMo,
+                        TTKTHHCongHopRanh_ChatMatTrong = Input.TTKTHHCongHopRanh_ChatMatTrong,
+                        TTKTHHCongHopRanh_ChatMatNgoai = Input.TTKTHHCongHopRanh_ChatMatNgoai,
+                        TTKTHHCongHopRanh_CCaoLotMong = Input.TTKTHHCongHopRanh_CCaoLotMong ?? 0,
+                        TTKTHHCongHopRanh_CRongLotMong = Input.TTKTHHCongHopRanh_CRongLotMong ?? 0,
+                        TTKTHHCongHopRanh_CCaoMong = Input.TTKTHHCongHopRanh_CCaoMong ?? 0,
+                        TTKTHHCongHopRanh_CRongMong = Input.TTKTHHCongHopRanh_CRongMong ?? 0,
+                        TTKTHHCongHopRanh_CCaoDe = Input.TTKTHHCongHopRanh_CCaoDe ?? 0,
+                        TTKTHHCongHopRanh_CRongDe = Input.TTKTHHCongHopRanh_CRongDe ?? 0,
+                        TTKTHHCongHopRanh_CDayTuong01Ben = Input.TTKTHHCongHopRanh_CDayTuong01Ben ?? 0,
+                        TTKTHHCongHopRanh_SoLuongTuong = Input.TTKTHHCongHopRanh_SoLuongTuong ?? 0,
+                        TTKTHHCongHopRanh_CRongLongSuDung = Input.TTKTHHCongHopRanh_CRongLongSuDung ?? 0,
+                        TTKTHHCongHopRanh_CCaoTuongCongHop = Input.TTKTHHCongHopRanh_CCaoTuongCongHop ?? 0,
+                        TTKTHHCongHopRanh_CCaoMuMoThotDuoi = Input.TTKTHHCongHopRanh_CCaoMuMoThotDuoi ?? 0,
+                        TTKTHHCongHopRanh_CRongMuMoDuoi = Input.TTKTHHCongHopRanh_CRongMuMoDuoi ?? 0,
+                        TTKTHHCongHopRanh_CCaoMuMoThotTren = Input.TTKTHHCongHopRanh_CCaoMuMoThotTren ?? 0,
+                        TTKTHHCongHopRanh_CRongMuMoTren = Input.TTKTHHCongHopRanh_CRongMuMoTren ?? 0,
+                        TTKTHHCongHopRanh_LoaiThanhChong = Input.TTKTHHCongHopRanh_LoaiThanhChong,
+                        TTKTHHCongHopRanh_CauTaoThanhChong = Input.TTKTHHCongHopRanh_CauTaoThanhChong,
+                        TTKTHHCongHopRanh_CCaoThanhChong = Input.TTKTHHCongHopRanh_CCaoThanhChong ?? 0,
+                        TTKTHHCongHopRanh_CRongThanhChong = Input.TTKTHHCongHopRanh_CRongThanhChong ?? 0,
+                        TTKTHHCongHopRanh_CDai = Input.TTKTHHCongHopRanh_CDai ?? 0,
+                        TTKTHHCongHopRanh_SoLuongThanhChong = Input.TTKTHHCongHopRanh_SoLuongThanhChong ?? 0,
+                        ThongTinKichThuocHinhHocOngNhua_CDayPhuBi = Input.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi ?? 0,
+                        ThongTinKichThuocHinhHocOngNhua_SoCanh = Input.ThongTinKichThuocHinhHocOngNhua_SoCanh,
+                        ThongTinKichThuocHinhHocOngNhua_LongSuDung = Input.ThongTinKichThuocHinhHocOngNhua_LongSuDung ?? 0,
+                        ThongTinKichThuocHinhHocOngNhua_CCaoDemCat = Input.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat ?? 0,
+                        ThongTinKichThuocHinhHocOngNhua_CCaoDapCat = Input.ThongTinKichThuocHinhHocOngNhua_CCaoDapCat ?? 0,
+                        ThongTinRanhThang_HinhThucMai = Input.ThongTinRanhThang_HinhThucMai ?? "",
+                        ThongTinRanhThang_CauTaoChanKhay = Input.ThongTinRanhThang_CauTaoChanKhay ?? "",
+                        ThongTinRanhThang_CauTaoGiangDinh = Input.ThongTinRanhThang_CauTaoGiangDinh ?? "",
+                        ThongTinRanhThang_HinhThucHanhLangBaoVe = Input.ThongTinRanhThang_HinhThucHanhLangBaoVe ?? "",
+                        ThongTinRanhThang_PhanLoaiChanKhay = Input.ThongTinRanhThang_PhanLoaiChanKhay ?? "",
+                        ThongTinRanhThang_CCaoLotChanKhay = Input.ThongTinRanhThang_CCaoLotChanKhay ?? 0,
+                        ThongTinRanhThang_CRongLotChanKhay = Input.ThongTinRanhThang_CRongLotChanKhay ?? 0,
+                        ThongTinRanhThang_SoLuongLotChanKhay = Input.ThongTinRanhThang_SoLuongLotChanKhay ?? 0,
+                        ThongTinRanhThang_CCaoMongChanKhay = Input.ThongTinRanhThang_CCaoMongChanKhay ?? 0,
+                        ThongTinRanhThang_CRongMongChanKhay = Input.ThongTinRanhThang_CRongMongChanKhay ?? 0,
+                        ThongTinRanhThang_SoLuongMongChanKhay = Input.ThongTinRanhThang_SoLuongMongChanKhay,
+                        ThongTinRanhThang_CCaoLot = Input.ThongTinRanhThang_CCaoLot ?? 0,
+                        ThongTinRanhThang_CRongLot = Input.ThongTinRanhThang_CRongLot ?? 0,
+                        ThongTinRanhThang_CCaoMong = Input.ThongTinRanhThang_CCaoMong ?? 0,
+                        ThongTinRanhThang_CRongMong = Input.ThongTinRanhThang_CRongMong ?? 0,
+                        ThongTinRanhThang_PhanLoaiMai = Input.ThongTinRanhThang_PhanLoaiMai,
+                        ThongTinRanhThang_CRongMai = Input.ThongTinRanhThang_CRongMai ?? 0,
+                        ThongTinRanhThang_CDayMai = Input.ThongTinRanhThang_CDayMai ?? 0,
+                        ThongTinRanhThang_SoLuongMai = Input.ThongTinRanhThang_SoLuongMai,
+                        ThongTinRanhThang_PhanLoaiGiangDinh = Input.ThongTinRanhThang_PhanLoaiGiangDinh ?? "",
+                        ThongTinRanhThang_CCaoLotGiangDinh = Input.ThongTinRanhThang_CCaoLotGiangDinh ?? 0,
+                        ThongTinRanhThang_CRongLotGiangDinh = Input.ThongTinRanhThang_CRongLotGiangDinh ?? 0,
+                        ThongTinRanhThang_SoLuongLotGiangDinh = Input.ThongTinRanhThang_SoLuongLotGiangDinh,
+                        ThongTinRanhThang_CCaoMongGiangDinh = Input.ThongTinRanhThang_CCaoMongGiangDinh ?? 0,
+                        ThongTinRanhThang_CRongMongGiangDinh = Input.ThongTinRanhThang_CRongMongGiangDinh ?? 0,
+                        ThongTinRanhThang_SoLuongMongGiangDinh = Input.ThongTinRanhThang_SoLuongMongGiangDinh ?? 0,
+                        ThongTinRanhThang_PhanLoaiHanhLangBaoVe = Input.ThongTinRanhThang_PhanLoaiHanhLangBaoVe,
+                        ThongTinRanhThang_CCaoHanhLangBaoVe = Input.ThongTinRanhThang_CCaoHanhLangBaoVe ?? 0,
+                        ThongTinRanhThang_CRongHanhLangBaoVe = Input.ThongTinRanhThang_CRongHanhLangBaoVe ?? 0,
+                        ThongTinRanhThang_SoLuongHangLangBaoVe = Input.ThongTinRanhThang_SoLuongHangLangBaoVe,
+                        TTTDCongHoRanh_TenLoaiTamDanTieuChuan = Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
+                        TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = Input.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan ?? "",
+                        TTTDCongHoRanh_CDai = Input.TTTDCongHoRanh_CDai ?? 0,
+                        TTTDCongHoRanh_CRong = Input.TTTDCongHoRanh_CRong ?? 0,
+                        TTTDCongHoRanh_CCao = Input.TTTDCongHoRanh_CCao ?? 0,
+                        TTTDCongHoRanh_TenLoaiTamDanLoai02 = Input.TTTDCongHoRanh_TenLoaiTamDanLoai02 ?? "",
+                        TTTDCongHoRanh_CauTaoTamDanTruyenDan = Input.TTTDCongHoRanh_CauTaoTamDanTruyenDan ?? "",
+                        TTTDCongHoRanh_CRong1 = Input.TTTDCongHoRanh_CRong1 ?? 0,
+                        TTTDCongHoRanh_CCao1 = Input.TTTDCongHoRanh_CCao1 ?? 0,
+                        TTTDCongHoRanh_ChieuDaiMoiNoi = Input.TTTDCongHoRanh_ChieuDaiMoiNoi ?? 0,
+                        TTTDCongHoRanh_SoLuongTDanDungDeTinhChieuDaiBoSung = Input.TTTDCongHoRanh_SoLuongTDanDungDeTinhChieuDaiBoSung,
+                        CDThuongLuu_HienTrangTruocKhiDaoThuongLuu = Input.CDThuongLuu_HienTrangTruocKhiDaoThuongLuu ?? 0,
+                        CDThuongLuu_DayDongChay = Input.CDThuongLuu_DayDongChay ?? 0,
+                        CDThuongLuu_DinhTrongLongSuDung = Input.CDThuongLuu_DinhTrongLongSuDung ?? 0,
+                        CDThuongLuu_ChieuCaoRanhThangTuDayDongChayDenDinh = Input.CDThuongLuu_ChieuCaoRanhThangTuDayDongChayDenDinh ?? 0,
+                        CDHaLu_HienTrangTruocKhiDaoHaLuu = Input.CDHaLu_HienTrangTruocKhiDaoHaLuu ?? 0,
+                        CDHaLu_DayDongChay = Input.CDHaLu_DayDongChay ?? 0,
+                        CDHaLu_DinhTrongLongSuDung = Input.CDHaLu_DinhTrongLongSuDung ?? 0,
+                        CDHaLu_ChieuCaoRanhThangTuDayDongChayDenDinh = Input.CDHaLu_ChieuCaoRanhThangTuDayDongChayDenDinh ?? 0,
+                        TTVLDCongRanh_LoaiVatLieuDao = Input.TTVLDCongRanh_LoaiVatLieuDao,
+                        TTVLDCongRanh_TLChieuCaoDaoDa = Input.TTVLDCongRanh_TLChieuCaoDaoDa ?? 0,
+                        TTVLDCongRanh_HLChieuCaoDaoDa = Input.TTVLDCongRanh_HLChieuCaoDaoDa ?? 0,
+
+                        TTMDRanhOngThang_ChieuRongDayDaoNho = Input.TTMDRanhOngThang_ChieuRongDayDaoNho ?? 0,
+                        TTMDRanhOngThang_TyLeMoMai = Input.TTMDRanhOngThang_TyLeMoMai ?? 0,
+                        TTMDRanhOngThang_SoCanhMaiTrai = Input.TTMDRanhOngThang_SoCanhMaiTrai ?? 0,
+                        TTMDRanhOngThang_SoCanhMaiPhai = Input.TTMDRanhOngThang_SoCanhMaiPhai ?? 0,
+                        TTMDRanhOngThang_ChieuRongDayDaoNho1 = Input.TTMDRanhOngThang_ChieuRongDayDaoNho1 ?? 0,
+                        TTMDRanhOngThang_TyLeMoMai1 = Input.TTMDRanhOngThang_TyLeMoMai1 ?? 0,
+                        TTMDRanhOngThang_SoCanhMaiTrai1 = Input.TTMDRanhOngThang_SoCanhMaiTrai1 ?? 0,
+                        TTMDRanhOngThang_SoCanhMaiPhai1 = Input.TTMDRanhOngThang_SoCanhMaiPhai1 ?? 0,
+                        TuToaDoX = Input.TuToaDoX ?? 0,
+                        TuToaDoY = Input.TuToaDoY ?? 0,
+                        DenToaDoX = Input.DenToaDoX ?? 0,
+                        DenToaDoY = Input.DenToaDoY ?? 0
+                    }
+                };
+
+        var convertDatas = await helper.ConvertDataHopRanhThang(listHopRanhThangModel, listDanhMuc);
+        if (convertDatas.Count >0)
+        {
+            hopRanhThangModel = convertDatas[0];
+
+
+        }
+         Console.WriteLine("abc",hopRanhThangModel);
+    } 
 
     private async Task HandleValidSubmit()
     {
@@ -3213,6 +3453,7 @@
                 await HopRanhThangRepository.Update(Input);
                 isModalVisible = false;
                 isEdit = false;
+                await ThemTenTheoPL(Input);
                 Input = new MHopRanhThang();
                 ToastService.ShowToast(
                     "Thông báo",
@@ -3226,6 +3467,7 @@
             }
             else
             {
+               
                 // Thêm mới thông tin
                 await HopRanhThangRepository.Insert(Input);
                 isModalVisible = false;
@@ -3318,7 +3560,7 @@
         return listDanhMuc.Where(dm => dm.IdNhomDanhMuc == idNhomDanhMuc).ToList();
     }
 
-  
+
 
     //Xóa
     private string deleteId;

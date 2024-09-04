@@ -264,6 +264,7 @@ namespace DucAnhERP.Services
             return data;
         }
 
+
         public async Task Update(MHopRanhThang hopRanhThang)
         {
             using var context = _context.CreateDbContext();

@@ -460,6 +460,7 @@ namespace DucAnhERP.Migrations
              columns: table => new
              {
                  Id = table.Column<string>(type: "nvarchar(450)", nullable: false, defaultValueSql: "NEWID()"),
+               
                  ThongTinLyTrinh_TuyenDuong = table.Column<string>(type: "nvarchar(max)", nullable: true),
                  ThongTinLyTrinh_LyTrinhTaiTimHoGa = table.Column<string>(type: "nvarchar(max)", nullable: true),
                  ThongTinChungHoGa_TenHoGaSauPhanLoai = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -847,7 +848,8 @@ namespace DucAnhERP.Migrations
             columns: table => new
             {
                Id = table.Column<string>(type: "nvarchar(36)", nullable: false),
-               ThongTinChungHoGa_TenHoGaSauPhanLoai = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                Flag = table.Column<string>(type: "int", nullable: true),
+                ThongTinChungHoGa_TenHoGaSauPhanLoai = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                ThongTinChungHoGa_HinhThucHoGa = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                ThongTinChungHoGa_KetCauMuMo = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                ThongTinChungHoGa_KetCauTuong = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),

@@ -5,24 +5,26 @@ namespace DucAnhERP.Models
     public class MPhanLoaiHoGa
     {
         public string Id { get; set; }  = Guid.NewGuid().ToString();
-        //[Required(ErrorMessage = "Bạn phải nhập Tên hố ga sau phân loại !")]
-        public string ThongTinChungHoGa_TenHoGaSauPhanLoai { get; set; } = "";
-        [Required(ErrorMessage = "Bạn phải nhập Tên hố ga theo bản vẽ!")]
-      
-        public string ThongTinChungHoGa_HinhThucHoGa { get; set; } = "";
+        public int Flag { get; set; }  = 0;
+
+        [Required(ErrorMessage = "Bạn phải nhập Tên hố ga sau phân loại !")]
+        public string ThongTinChungHoGa_TenHoGaSauPhanLoai { get; set; }
+
+        [Required(ErrorMessage = "Bạn phải nhập hình thức hố ga!")]
+        public string ThongTinChungHoGa_HinhThucHoGa { get; set; } 
         [Required(ErrorMessage = "Bạn phải nhập  kết cấu mũ mố !")]
-        public string ThongTinChungHoGa_KetCauMuMo { get; set; } = "";
+        public string ThongTinChungHoGa_KetCauMuMo { get; set; } 
 
         [Required(ErrorMessage = "Bạn phải nhập Kết cấu tường!")]
-        public string ThongTinChungHoGa_KetCauTuong { get; set; } = "";
+        public string ThongTinChungHoGa_KetCauTuong { get; set; }
         [Required(ErrorMessage = "Bạn phải nhập Hình thức móng hố ga !")]
-        public string ThongTinChungHoGa_HinhThucMongHoGa { get; set; } = "";
+        public string ThongTinChungHoGa_HinhThucMongHoGa { get; set; }
         [Required(ErrorMessage = "Bạn phải nhập  Kết cấu móng !")]
-        public string ThongTinChungHoGa_KetCauMong { get; set; } = "";
+        public string ThongTinChungHoGa_KetCauMong { get; set; } 
         [Required(ErrorMessage = "Bạn phải nhập Chát mặt trong !")]
-        public string ThongTinChungHoGa_ChatMatTrong { get; set; } = "";
+        public string ThongTinChungHoGa_ChatMatTrong { get; set; } 
         [Required(ErrorMessage = "Bạn phải nhập Chát mặt ngoài  !")]
-        public string ThongTinChungHoGa_ChatMatNgoai { get; set; } = "";
+        public string ThongTinChungHoGa_ChatMatNgoai { get; set; } 
         //Thông tin kích thước hình học hố ga
         //1.Thông tin phủ bì hố ga (m) 1.PhuBiHoGa
 
@@ -98,7 +100,7 @@ namespace DucAnhERP.Models
         public double? TuongHoGa_R { get; set; } = 0;
 
         //[Required(ErrorMessage = "Bạn phải nhập chiều cao !")]
-        //public string TuongHoGa_C { get; set; }
+        public double? TuongHoGa_C { get; set; } = 0;
         [Required(ErrorMessage = "Bạn phải nhập chiều dài tường !")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
         [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
@@ -143,7 +145,7 @@ namespace DucAnhERP.Models
         public double? ChatMatTrong_R { get; set; } = 0;
 
         //[Required(ErrorMessage = "Bạn phải nhập chiều cao !")]
-        //public string ChatMatTrong_C { get; set; }
+        public double? ChatMatTrong_C { get; set; } = 0;
         //8.Chát hố ga mặt ngoài, cạnh 01 +02 (m) ChatMatNgoaiCanh
         [Required(ErrorMessage = "Bạn phải nhập chiều dài  !")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
@@ -156,7 +158,7 @@ namespace DucAnhERP.Models
         public double? ChatMatNgoaiCanh_R { get; set; } = 0;
 
         //[Required(ErrorMessage = "Bạn phải nhập chiều cao !")]
-        //public string ChatMatNgoaiCanh_C { get; set; } ;
+        public double? ChatMatNgoaiCanh_C { get; set; } = 0 ;
         //9.Kích thước hình học tường mũ mố thớt dưới (m) MuMoThotDuoi
         [Required(ErrorMessage = "Bạn phải nhập chiều dài  !")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
