@@ -145,40 +145,91 @@ namespace DucAnhERP.Services
             return (isSuccess);
         }
 
-        public async Task<MPhanLoaiHoGa> GetByFieldValues(Dictionary<string, string> fieldValues)
+        public async Task GetMPhanLoaiHoGaByDetail(PhanLoaiHoGaModel searchData)
         {
             using var context = _context.CreateDbContext();
-
-            // Khởi tạo câu truy vấn ban đầu
             var query = context.DSPhanLoaiHoGa.AsQueryable();
 
-            // Kiểm tra từng cặp field và value trong từ điển
-            foreach (var fieldValue in fieldValues)
-            {
-                string fieldName = fieldValue.Key;
-                string value = fieldValue.Value;
+            // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
+            query = query.Where(x =>
+                (searchData.ThongTinChungHoGa_TenHoGaSauPhanLoai == null || x.ThongTinChungHoGa_TenHoGaSauPhanLoai.Contains(searchData.ThongTinChungHoGa_TenHoGaSauPhanLoai)) &&
+                (searchData.ThongTinChungHoGa_HinhThucHoGa == null || x.ThongTinChungHoGa_HinhThucHoGa.Contains(searchData.ThongTinChungHoGa_HinhThucHoGa)) &&
+                (searchData.ThongTinChungHoGa_KetCauMuMo == null || x.ThongTinChungHoGa_KetCauMuMo.Contains(searchData.ThongTinChungHoGa_KetCauMuMo)) &&
+                (searchData.ThongTinChungHoGa_KetCauTuong == null || x.ThongTinChungHoGa_KetCauTuong.Contains(searchData.ThongTinChungHoGa_KetCauTuong)) &&
+                (searchData.ThongTinChungHoGa_HinhThucMongHoGa == null || x.ThongTinChungHoGa_HinhThucMongHoGa.Contains(searchData.ThongTinChungHoGa_HinhThucMongHoGa)) &&
+                (searchData.ThongTinChungHoGa_KetCauMong == null || x.ThongTinChungHoGa_KetCauMong.Contains(searchData.ThongTinChungHoGa_KetCauMong)) &&
+                (searchData.ThongTinChungHoGa_ChatMatTrong == null || x.ThongTinChungHoGa_ChatMatTrong.Contains(searchData.ThongTinChungHoGa_ChatMatTrong)) &&
+                (searchData.ThongTinChungHoGa_ChatMatNgoai == null || x.ThongTinChungHoGa_ChatMatNgoai.Contains(searchData.ThongTinChungHoGa_ChatMatNgoai)) &&
+                (searchData.PhuBiHoGa_CDai == null || x.PhuBiHoGa_CDai == searchData.PhuBiHoGa_CDai) &&
+                (searchData.PhuBiHoGa_CRong == null || x.PhuBiHoGa_CRong == searchData.PhuBiHoGa_CRong) &&
+                (searchData.BeTongLotMong_D == null || x.BeTongLotMong_D == searchData.BeTongLotMong_D) &&
+                (searchData.BeTongLotMong_R == null || x.BeTongLotMong_R == searchData.BeTongLotMong_R) &&
+                (searchData.BeTongLotMong_C == null || x.BeTongLotMong_C == searchData.BeTongLotMong_C) &&
+                (searchData.BeTongMongHoGa_D == null || x.BeTongMongHoGa_D == searchData.BeTongMongHoGa_D) &&
+                (searchData.BeTongMongHoGa_R == null || x.BeTongMongHoGa_R == searchData.BeTongMongHoGa_R) &&
+                (searchData.BeTongMongHoGa_C == null || x.BeTongMongHoGa_C == searchData.BeTongMongHoGa_C) &&
+                (searchData.DeHoGa_D == null || x.DeHoGa_D == searchData.DeHoGa_D) &&
+                (searchData.DeHoGa_R == null || x.DeHoGa_R == searchData.DeHoGa_R) &&
+                (searchData.DeHoGa_C == null || x.DeHoGa_C == searchData.DeHoGa_C) &&
+                (searchData.TuongHoGa_D == null || x.TuongHoGa_D == searchData.TuongHoGa_D) &&
+                (searchData.TuongHoGa_R == null || x.TuongHoGa_R == searchData.TuongHoGa_R) &&
+                (searchData.TuongHoGa_C == null || x.TuongHoGa_C == searchData.TuongHoGa_C) &&
+                (searchData.TuongHoGa_CdTuong == null || x.TuongHoGa_CdTuong == searchData.TuongHoGa_CdTuong) &&
+                (searchData.DamGiuaHoGa_D == null || x.DamGiuaHoGa_D == searchData.DamGiuaHoGa_D) &&
+                (searchData.DamGiuaHoGa_R == null || x.DamGiuaHoGa_R == searchData.DamGiuaHoGa_R) &&
+                (searchData.DamGiuaHoGa_C == null || x.DamGiuaHoGa_C == searchData.DamGiuaHoGa_C) &&
+                (searchData.DamGiuaHoGa_CdDam == null || x.DamGiuaHoGa_CdDam == searchData.DamGiuaHoGa_CdDam) &&
+                (searchData.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa == null || x.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa == searchData.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa) &&
+                (searchData.ChatMatTrong_D == null || x.ChatMatTrong_D == searchData.ChatMatTrong_D) &&
+                (searchData.ChatMatTrong_R == null || x.ChatMatTrong_R == searchData.ChatMatTrong_R) &&
+                (searchData.ChatMatTrong_C == null || x.ChatMatTrong_C == searchData.ChatMatTrong_C) &&
+                (searchData.ChatMatNgoaiCanh_D == null || x.ChatMatNgoaiCanh_D == searchData.ChatMatNgoaiCanh_D) &&
+                (searchData.ChatMatNgoaiCanh_R == null || x.ChatMatNgoaiCanh_R == searchData.ChatMatNgoaiCanh_R) &&
+                (searchData.ChatMatNgoaiCanh_C == null || x.ChatMatNgoaiCanh_C == searchData.ChatMatNgoaiCanh_C) &&
+                (searchData.MuMoThotDuoi_D == null || x.MuMoThotDuoi_D == searchData.MuMoThotDuoi_D) &&
+                (searchData.MuMoThotDuoi_R == null || x.MuMoThotDuoi_R == searchData.MuMoThotDuoi_R) &&
+                (searchData.MuMoThotDuoi_C == null || x.MuMoThotDuoi_C == searchData.MuMoThotDuoi_C) &&
+                (searchData.MuMoThotDuoi_CdTuong == null || x.MuMoThotDuoi_CdTuong == searchData.MuMoThotDuoi_CdTuong) &&
+                (searchData.MuMoThotTren_D == null || x.MuMoThotTren_D == searchData.MuMoThotTren_D) &&
+                (searchData.MuMoThotTren_R == null || x.MuMoThotTren_R == searchData.MuMoThotTren_R) &&
+                (searchData.MuMoThotTren_C == null || x.MuMoThotTren_C == searchData.MuMoThotTren_C) &&
+                (searchData.MuMoThotTren_CdTuong == null || x.MuMoThotTren_CdTuong == searchData.MuMoThotTren_CdTuong) &&
+                (searchData.HinhThucDauNoi1_Loai == null || x.HinhThucDauNoi1_Loai == searchData.HinhThucDauNoi1_Loai) &&
+                (searchData.HinhThucDauNoi1_CanhDai == null || x.HinhThucDauNoi1_CanhDai == searchData.HinhThucDauNoi1_CanhDai) &&
+                (searchData.HinhThucDauNoi1_CanhRong == null || x.HinhThucDauNoi1_CanhRong == searchData.HinhThucDauNoi1_CanhRong) &&
+                (searchData.HinhThucDauNoi1_CanhCheo == null || x.HinhThucDauNoi1_CanhCheo == searchData.HinhThucDauNoi1_CanhCheo) &&
+                (searchData.HinhThucDauNoi2_Loai == null || x.HinhThucDauNoi2_Loai == searchData.HinhThucDauNoi2_Loai) &&
+                (searchData.HinhThucDauNoi2_CanhDai == null || x.HinhThucDauNoi2_CanhDai == searchData.HinhThucDauNoi2_CanhDai) &&
+                (searchData.HinhThucDauNoi2_CanhRong == null || x.HinhThucDauNoi2_CanhRong == searchData.HinhThucDauNoi2_CanhRong) &&
+                (searchData.HinhThucDauNoi2_CanhCheo == null || x.HinhThucDauNoi2_CanhCheo == searchData.HinhThucDauNoi2_CanhCheo) &&
+                (searchData.HinhThucDauNoi3_Loai == null || x.HinhThucDauNoi3_Loai == searchData.HinhThucDauNoi3_Loai) &&
+                (searchData.HinhThucDauNoi3_CanhDai == null || x.HinhThucDauNoi3_CanhDai == searchData.HinhThucDauNoi3_CanhDai) &&
+                (searchData.HinhThucDauNoi3_CanhRong == null || x.HinhThucDauNoi3_CanhRong == searchData.HinhThucDauNoi3_CanhRong) &&
+                (searchData.HinhThucDauNoi3_CanhCheo == null || x.HinhThucDauNoi3_CanhCheo == searchData.HinhThucDauNoi3_CanhCheo) &&
+                (searchData.HinhThucDauNoi4_Loai == null || x.HinhThucDauNoi4_Loai == searchData.HinhThucDauNoi4_Loai) &&
+                (searchData.HinhThucDauNoi4_CanhDai == null || x.HinhThucDauNoi4_CanhDai == searchData.HinhThucDauNoi4_CanhDai) &&
+                (searchData.HinhThucDauNoi4_CanhRong == null || x.HinhThucDauNoi4_CanhRong == searchData.HinhThucDauNoi4_CanhRong) &&
+                (searchData.HinhThucDauNoi4_CanhCheo == null || x.HinhThucDauNoi4_CanhCheo == searchData.HinhThucDauNoi4_CanhCheo) &&
+                (searchData.HinhThucDauNoi5_Loai == null || x.HinhThucDauNoi5_Loai == searchData.HinhThucDauNoi5_Loai) &&
+                (searchData.HinhThucDauNoi5_CanhDai == null || x.HinhThucDauNoi5_CanhDai == searchData.HinhThucDauNoi5_CanhDai) &&
+                (searchData.HinhThucDauNoi5_CanhRong == null || x.HinhThucDauNoi5_CanhRong == searchData.HinhThucDauNoi5_CanhRong) &&
+                (searchData.HinhThucDauNoi5_CanhCheo == null || x.HinhThucDauNoi5_CanhCheo == searchData.HinhThucDauNoi5_CanhCheo) &&
+                (searchData.HinhThucDauNoi6_Loai == null || x.HinhThucDauNoi6_Loai == searchData.HinhThucDauNoi6_Loai) &&
+                (searchData.HinhThucDauNoi6_CanhDai == null || x.HinhThucDauNoi6_CanhDai == searchData.HinhThucDauNoi6_CanhDai) &&
+                (searchData.HinhThucDauNoi6_CanhRong == null || x.HinhThucDauNoi6_CanhRong == searchData.HinhThucDauNoi6_CanhRong) &&
+                (searchData.HinhThucDauNoi6_CanhCheo == null || x.HinhThucDauNoi6_CanhCheo == searchData.HinhThucDauNoi6_CanhCheo) &&
+                (searchData.HinhThucDauNoi7_Loai == null || x.HinhThucDauNoi7_Loai == searchData.HinhThucDauNoi7_Loai) &&
+                (searchData.HinhThucDauNoi7_CanhDai == null || x.HinhThucDauNoi7_CanhDai == searchData.HinhThucDauNoi7_CanhDai) &&
+                (searchData.HinhThucDauNoi7_CanhRong == null || x.HinhThucDauNoi7_CanhRong == searchData.HinhThucDauNoi7_CanhRong) &&
+                (searchData.HinhThucDauNoi7_CanhCheo == null || x.HinhThucDauNoi7_CanhCheo == searchData.HinhThucDauNoi7_CanhCheo) &&
+                (searchData.HinhThucDauNoi8_Loai == null || x.HinhThucDauNoi8_Loai == searchData.HinhThucDauNoi8_Loai) &&
+                (searchData.HinhThucDauNoi8_CanhDai == null || x.HinhThucDauNoi8_CanhDai == searchData.HinhThucDauNoi8_CanhDai) &&
+                (searchData.HinhThucDauNoi8_CanhRong == null || x.HinhThucDauNoi8_CanhRong == searchData.HinhThucDauNoi8_CanhRong) &&
+                (searchData.HinhThucDauNoi8_CanhCheo == null || x.HinhThucDauNoi8_CanhCheo == searchData.HinhThucDauNoi8_CanhCheo)
+            );
 
-                query = query.Where(x =>
-                    (fieldName == nameof(x.ThongTinChungHoGa_HinhThucHoGa) && x.ThongTinChungHoGa_HinhThucHoGa.Contains(value)) ||
-                    (fieldName == nameof(x.ThongTinChungHoGa_KetCauMuMo) && x.ThongTinChungHoGa_KetCauMuMo.Contains(value)) ||
-                    (fieldName == nameof(x.ThongTinChungHoGa_KetCauTuong) && x.ThongTinChungHoGa_KetCauTuong.Contains(value)) ||
-                    (fieldName == nameof(x.ThongTinChungHoGa_HinhThucMongHoGa) && x.ThongTinChungHoGa_HinhThucMongHoGa.Contains(value)) ||
-                    (fieldName == nameof(x.ThongTinChungHoGa_KetCauMong) && x.ThongTinChungHoGa_KetCauMong.Contains(value)) ||
-                    (fieldName == nameof(x.ThongTinChungHoGa_ChatMatTrong) && x.ThongTinChungHoGa_ChatMatTrong.Contains(value)) ||
-                    (fieldName == nameof(x.ThongTinChungHoGa_ChatMatNgoai) && x.ThongTinChungHoGa_ChatMatNgoai.Contains(value))
-                );
-            }
-
-            // Lấy ra kết quả đầu tiên (hoặc null nếu không có)
-            var mPhanLoaiHoGa = await query.FirstOrDefaultAsync();
-
-            // Nếu không tìm thấy kết quả, có thể trả về null hoặc ném ra ngoại lệ
-            if (mPhanLoaiHoGa == null)
-            {
-                throw new Exception("Không tìm thấy bản ghi phù hợp với các cặp field và value đã chỉ định.");
-            }
-
-            return mPhanLoaiHoGa;
+            var result = await query.SingleOrDefaultAsync();
+           
         }
 
 
