@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using DucAnhERP.Models;
 using OfficeOpenXml;
+using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,11 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddSingleton<DucAnhERP.Services.ToastService>();
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // 10MB (Thay đổi giá trị nếu cần)
+});
+
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
@@ -52,6 +58,7 @@ builder.Services.AddScoped<INhomDanhMucRepository, NhomNhomDanhMucRepository>();
 builder.Services.AddScoped <IHopRanhThangRepository, HopRanhThangRepository>();
 builder.Services.AddScoped<IExcelRepository, ExcelRepository>();
 builder.Services.AddScoped<IPhanLoaiHoGaRepository, PhanLoaiHoGaRepository>();
+builder.Services.AddScoped<INuocMuaRepository, NuocMuaRepository>();
 
 builder.Services.AddAuthentication(options =>
     {
