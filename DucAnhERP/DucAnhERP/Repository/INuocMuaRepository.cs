@@ -3,9 +3,9 @@ using DucAnhERP.ViewModel;
 
 namespace DucAnhERP.Repository
 {
-    public interface INuocMuaRepository : IBaseRepository<MNuocMua>
+    public interface INuocMuaRepository : IBaseRepository<NuocMua>
     {
         Task<List<NuocMuaModel>> GetData();
-        Task<int> MultiInsert(List<MNuocMua> entities);
+        Task<int> MultiInsert(List<NuocMua> entities);
     }
 }

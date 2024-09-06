@@ -37,12 +37,12 @@ namespace DucAnhERP.Services
             return data;
         }
 
-        public async Task<List<MDanhMuc>> GetDMByIdNhomDanhMuc(string idNhomDanhMuc)
+        public async Task<List<DanhMuc>> GetDMByIdNhomDanhMuc(string idNhomDanhMuc)
         {
             using var context = _context.CreateDbContext();
             var query = context.DSDanhMuc
                          .Where(danhMuc => danhMuc.IdNhomDanhMuc == idNhomDanhMuc)
-                         .Select(danhMuc => new MDanhMuc
+                         .Select(danhMuc => new DanhMuc
                          {
                              Id = danhMuc.Id,
                              IdNhomDanhMuc = danhMuc.IdNhomDanhMuc,
@@ -59,7 +59,7 @@ namespace DucAnhERP.Services
             using var context = _context.CreateDbContext();
             var query = context.DSDanhMuc
                          .Where(danhMuc => danhMuc.Ten.ToUpper() == Ten.ToUpper())
-                         .Select(danhMuc => new MDanhMuc
+                         .Select(danhMuc => new DanhMuc
                          {
                              Id = danhMuc.Id,
                              IdNhomDanhMuc = danhMuc.IdNhomDanhMuc,
@@ -135,7 +135,7 @@ namespace DucAnhERP.Services
         }
         
 
-        public async Task<List<MDanhMuc>> GetAll()
+        public async Task<List<DanhMuc>> GetAll()
         {
             try
             {
@@ -151,7 +151,7 @@ namespace DucAnhERP.Services
             }
         }
 
-        public async Task Update(MDanhMuc danhmuc)
+        public async Task Update(DanhMuc danhmuc)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(danhmuc.Id);
@@ -165,7 +165,7 @@ namespace DucAnhERP.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task UpdateMulti(MDanhMuc[] danhmuc)
+        public async Task UpdateMulti(DanhMuc[] danhmuc)
         {
             using var context = _context.CreateDbContext();
             string[] ids = danhmuc.Select(x => x.Id).ToArray();
@@ -187,7 +187,7 @@ namespace DucAnhERP.Services
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
             }
 
-            context.Set<MDanhMuc>().Remove(entity);
+            context.Set<DanhMuc>().Remove(entity);
             await context.SaveChangesAsync();
         }
 
@@ -204,7 +204,7 @@ namespace DucAnhERP.Services
             return true;
         }
 
-        public async Task<MDanhMuc> GetById(string id)
+        public async Task<DanhMuc> GetById(string id)
         {
             using var context = _context.CreateDbContext();
             var entity = await context.DSDanhMuc.Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
@@ -217,7 +217,7 @@ namespace DucAnhERP.Services
             return entity;
         }
 
-        public async Task Insert(MDanhMuc entity)
+        public async Task Insert(DanhMuc entity)
         {
             try
             {

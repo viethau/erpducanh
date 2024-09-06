@@ -3,11 +3,11 @@ using DucAnhERP.ViewModel;
 
 namespace DucAnhERP.Repository
 {
-    public interface IDanhMucRepository : IBaseRepository<MDanhMuc>
+    public interface IDanhMucRepository : IBaseRepository<DanhMuc>
     {
         Task<List<DanhMucModel>> GetAllDM();
 
-        Task<List<MDanhMuc>> GetDMByIdNhomDanhMuc(string idNhomDanhMuc);
+        Task<List<DanhMuc>> GetDMByIdNhomDanhMuc(string idNhomDanhMuc);
         Task<string> GetIdDMByTen(string Ten ,string ?IdNhomDanhMuc=null);
 
         Task<bool> GetDMByTenNhomDanhMuc(string ten);

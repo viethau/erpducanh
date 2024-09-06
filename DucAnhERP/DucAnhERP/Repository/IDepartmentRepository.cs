@@ -2,8 +2,8 @@
 
 namespace DucAnhERP.Repository
 {
-    public interface IDepartmentRepository : IBaseRepository<MDepartment>
+    public interface IDepartmentRepository : IBaseRepository<Department>
     {
-        Task<List<MDepartment>> GetDepartmentsByCompany(string companyId);
+        Task<List<Department>> GetDepartmentsByCompany(string companyId);
     }
 }

@@ -16,7 +16,7 @@ namespace DucAnhERP.Services
                 _context = context;
             }
 
-        public async Task<List<MPhanLoaiHoGa>> GetAll()
+        public async Task<List<PhanLoaiHoGa>> GetAll()
             {
                 try
                 {
@@ -233,7 +233,7 @@ namespace DucAnhERP.Services
         }
 
 
-        public async Task Update(MPhanLoaiHoGa phanloaihoga)
+        public async Task Update(PhanLoaiHoGa phanloaihoga)
             {
                 using var context = _context.CreateDbContext();
                 var entity = GetById(phanloaihoga.Id);
@@ -247,7 +247,7 @@ namespace DucAnhERP.Services
                 await context.SaveChangesAsync();
             }
 
-        public async Task UpdateMulti(MPhanLoaiHoGa[] phanloaihoga)
+        public async Task UpdateMulti(PhanLoaiHoGa[] phanloaihoga)
             {
                 using var context = _context.CreateDbContext();
                 string[] ids = phanloaihoga.Select(x => x.Id).ToArray();
@@ -269,7 +269,7 @@ namespace DucAnhERP.Services
                     throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
                 }
 
-                context.Set<MPhanLoaiHoGa>().Remove(entity);
+                context.Set<PhanLoaiHoGa>().Remove(entity);
                 await context.SaveChangesAsync();
             }
 
@@ -286,7 +286,7 @@ namespace DucAnhERP.Services
                 return true;
             }
 
-            public async Task<MPhanLoaiHoGa> GetById(string id)
+            public async Task<PhanLoaiHoGa> GetById(string id)
             {
                 using var context = _context.CreateDbContext();
                 var entity = await context.DSPhanLoaiHoGa.Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
@@ -299,7 +299,7 @@ namespace DucAnhERP.Services
                 return entity;
             }
 
-        public async Task Insert(MPhanLoaiHoGa entity)
+        public async Task Insert(PhanLoaiHoGa entity)
         {
             try
             {

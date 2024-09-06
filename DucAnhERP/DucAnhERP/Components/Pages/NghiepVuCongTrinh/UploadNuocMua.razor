@@ -3,9 +3,11 @@
 @using Microsoft.AspNetCore.Components.Forms
 @using DucAnhERP.Models
 @using DucAnhERP.Repository;
+@using DucAnhERP.Helpers
 @inject IDanhMucRepository DanhMucRepository ;
 @inject INuocMuaRepository NuocMuaRepository ;
 @inject IExcelRepository ExcelRepository;
+@inject IDanhMucRepository DanhMucRepository
 @inject DucAnhERP.Services.ToastService ToastService
 
 <div class="container-fluid p-3">
@@ -683,7 +685,13 @@
 </div>
 @code {
     private List<ExcelData> excelDataList;
-    private List<MNuocMua> listNuocMua ;
+    private List<NuocMua> listNuocMua ;
+    public List<DanhMuc> listDanhMuc = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        listDanhMuc = await DanhMucRepository.GetAll();
+    }
 
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
     {
@@ -707,6 +715,9 @@
                         if (excelDataList.Count > 0 && excelDataList[0].RowData.Count >= 409)
                         {
                             listNuocMua = await convertData(excelDataList);
+                            List<NuocMua> listConvertNuocMua = new();
+                            DSNuocMuaConversionHelper helper = new();
+                            listConvertNuocMua = await helper.ConvertDSNuocMua(listNuocMua,listDanhMuc);
                             var count = await NuocMuaRepository.MultiInsert(listNuocMua);
                             Console.WriteLine(listNuocMua);
                             ToastService.ShowToast("Thông báo", "Đã thêm thành công :" + count + " dòng.", cssClass: "toast-success");
@@ -729,14 +740,14 @@
         }
     }
 
-    public async Task<List<MNuocMua>> convertData(List<ExcelData> listData)
+    public async Task<List<NuocMua>> convertData(List<ExcelData> listData)
     {
         try
         {
-            List<MNuocMua> listNM = new();
+            List<NuocMua> listNM = new();
             for (int i = 0; i < listData.Count; i++)
             {
-                MNuocMua mNuocMua = new();
+                NuocMua mNuocMua = new();
 
                 mNuocMua.Id = Guid.NewGuid().ToString();
                 mNuocMua.ThongTinLyTrinh_TuyenDuong = listData[i].RowData[1].ToString() ?? "";
@@ -845,11 +856,11 @@
                 mNuocMua.ThongTinLyTrinhTruyenDan_TuHoGa = listData[i].RowData[141].ToString() ?? "";
                 mNuocMua.ThongTinLyTrinhTruyenDan_DenHoGa = listData[i].RowData[142].ToString() ?? "";
                 mNuocMua.ThongTinDuongTruyenDan_HinhThucTruyenDan = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[143].ToString() ?? "", "TD_HTTruyenDan");
-                mNuocMua.ThongTinDuongTruyenDan_LoaiTruyenDan = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[144].ToString() ?? "", "TD_HTTruyenDan");
+                mNuocMua.ThongTinDuongTruyenDan_LoaiTruyenDan = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[144].ToString() ?? "", "TD_LTruyenDan");
                 mNuocMua.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = listData[i].RowData[145].ToString() ?? "";
                 mNuocMua.TTCDSLCauKienDuongTruyenDan_TongChieuDai = ParseDoubleOrDefault(listData[i].RowData[146], 0);
                 mNuocMua.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien = ParseDoubleOrDefault(listData[i].RowData[147], 0);
-                mNuocMua.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl = ParseDoubleOrDefault(listData[i].RowData[148], 0);
+                
                 mNuocMua.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = listData[i].RowData[149].ToString() ?? "";
                 mNuocMua.ThongTinMongDuongTruyenDan_LoaiMong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[150].ToString() ?? "", "TD_LMTruyenDan");
                 mNuocMua.ThongTinMongDuongTruyenDan_HinhThucMong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[151].ToString() ?? "", "TD_HTMTruyenDan");
@@ -914,6 +925,7 @@
                 mNuocMua.TTTDCongHoRanh_CRong1 = ParseDoubleOrDefault(listData[i].RowData[218], 0);
                 mNuocMua.TTTDCongHoRanh_CCao1 = ParseDoubleOrDefault(listData[i].RowData[219], 0);
                 mNuocMua.TTTDCongHoRanh_ChieuDaiMoiNoi = ParseDoubleOrDefault(listData[i].RowData[220], 0);
+                mNuocMua.TTTDCongHoRanh_SoLuongTDanDungDeTinhChieuDaiBoSung = ParseDoubleOrDefault(listData[i].RowData[221], 0);
 
                 mNuocMua.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi = ParseDoubleOrDefault(listData[i].RowData[227], 0);
                 mNuocMua.ThongTinKichThuocHinhHocOngNhua_SoCanh = ParseDoubleOrDefault(listData[i].RowData[228], 0);

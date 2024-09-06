@@ -237,7 +237,7 @@ namespace DucAnhERP.ViewModel
         public Double TTTDCongHoRanh_ChieuDaiTheoSoCKNguyen { get; set; }
         public Double TTTDCongHoRanh_TongChieuDaiTheoCKNguyen { get; set; }
         public Double TTTDCongHoRanh_ChieuDaiThucTe { get; set; }
-        public Double TTTDCongHoRanh_XacDinhOngCongCanThem { get; set; }
+        public string TTTDCongHoRanh_XacDinhOngCongCanThem { get; set; }
         public Double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi { get; set; }
         public Double ThongTinKichThuocHinhHocOngNhua_SoCanh { get; set; }
         public Double ThongTinKichThuocHinhHocOngNhua_LongSuDung { get; set; }

@@ -772,9 +772,9 @@
 </div>
 
 @code {
-    private List<MPhanLoaiHoGa> listPhanLoaiHoGa = new List<MPhanLoaiHoGa>();
-    private MPhanLoaiHoGa Input = new();
-    public List<MDanhMuc> listDanhMuc = new();
+    private List<PhanLoaiHoGa> listPhanLoaiHoGa = new List<PhanLoaiHoGa>();
+    private PhanLoaiHoGa Input = new();
+    public List<DanhMuc> listDanhMuc = new();
 
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới nhóm danh mục";
@@ -801,7 +801,7 @@
     {
         // Logic for canceling
         isModalVisible = false;
-        Input = new MPhanLoaiHoGa();
+        Input = new PhanLoaiHoGa();
     }
 
     [Parameter]
@@ -833,7 +833,7 @@
 
 
 
-    public List<MDanhMuc> FindByIdNhomDanhMuc(string idNhomDanhMuc)
+    public List<DanhMuc> FindByIdNhomDanhMuc(string idNhomDanhMuc)
     {
         return listDanhMuc.Where(dm => dm.IdNhomDanhMuc == idNhomDanhMuc).ToList();
     }
@@ -868,7 +868,7 @@
             // Thêm mới thông tin
             await PhanLoaiHoGaRepository.Update(Input);
             isModalVisible = false;
-            Input = new MPhanLoaiHoGa();
+            Input = new PhanLoaiHoGa();
             isEdit = false;
             ToastService.ShowToast(
                 "Thông báo",
@@ -885,7 +885,7 @@
             // Thêm mới thông tin
             await PhanLoaiHoGaRepository.Insert(Input);
             isModalVisible = false;
-            Input = new MPhanLoaiHoGa();
+            Input = new PhanLoaiHoGa();
             ToastService.ShowToast(
                 "Thông báo",
                 "Thêm thành công.",

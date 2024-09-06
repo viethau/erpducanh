@@ -28,7 +28,7 @@ namespace DucAnhERP.Data
 
         public DbSet<MCompany> MCompanies { get; set; }
 
-        public DbSet<MDepartment> MDepartments { get; set; }
+        public DbSet<Department> MDepartments { get; set; }
 
         public DbSet<EmailHistory> EmailHistories { get; set; }
 
@@ -38,11 +38,11 @@ namespace DucAnhERP.Data
         public DbSet<ApprovalDeptSetting> ApprovalDeptSettings { get; set; }
         public DbSet<ApprovalStepSetting> ApprovalStepSettings { get; set; }
         public DbSet<ApprovalStaffSetting> ApprovalStaffSettings { get; set; }
-        public DbSet<MNhomDanhMuc> DSNhomDanhMuc { get; set; }
-        public DbSet<MDanhMuc> DSDanhMuc { get; set; }
+        public DbSet<NhomDanhMuc> DSNhomDanhMuc { get; set; }
+        public DbSet<DanhMuc> DSDanhMuc { get; set; }
         public DbSet<MHopRanhThang> DSHopRanhThang { get; set; }
-        public DbSet<MNuocMua> DSNuocMua { get; set; }
-        public DbSet<MPhanLoaiHoGa> DSPhanLoaiHoGa { get; set; }
+        public DbSet<NuocMua> DSNuocMua { get; set; }
+        public DbSet<PhanLoaiHoGa> DSPhanLoaiHoGa { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

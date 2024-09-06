@@ -618,7 +618,7 @@
                                 <hr />
                                 <div class="row">
                                     <div class="form-floating col-sm-6 col-md-6">
-                                        <label for="ThongTinTamDanHoGa2_DuongKinh">Loại vật liệu đào<span class="text-danger">*</span></label>
+                                        <label for="ThongTinVatLieuDaoHoGa_LoaiVatLieuDao">Loại vật liệu đào<span class="text-danger">*</span></label>
                                         <select id="ThongTinVatLieuDaoHoGa_LoaiVatLieuDao" class="form-control" @bind="Input.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao">
                                             <option value="">Loại vật liệu đào ...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("HG_LVLDHoGa"))
@@ -629,7 +629,7 @@
                                         <ValidationMessage For="() => Input.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao" class="text-danger" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-6">
-                                        <label for="ThongTinTamDanHoGa2_DuongKinh">Chiều cao đào đá (m)<span class="text-danger">*</span></label>
+                                        <label for="ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa">Chiều cao đào đá (m)<span class="text-danger">*</span></label>
                                         <InputNumber @bind-Value="Input.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa" class="form-control" id="ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa" placeholder="Chiều cao đào đá" />
                                         <ValidationMessage For="() => Input.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa" class="text-danger" />
                                     </div>
@@ -776,6 +776,34 @@
                                         <ValidationMessage For="() => Input.ThongTinMaiDao_SoCanhMaiPhai" class="text-danger" />
                                     </div>
 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2"> Thông tin lý trình truyền dẫn</h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinLyTrinhTruyenDan_TuLyTrinh">Từ lý trình<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinLyTrinhTruyenDan_TuLyTrinh" class="form-control" id="ThongTinLyTrinhTruyenDan_TuLyTrinh" placeholder="Từ lý trình" />
+                                        <ValidationMessage For="() => Input.ThongTinLyTrinhTruyenDan_TuLyTrinh" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinLyTrinhTruyenDan_DenLyTrinh">Đến lý trình<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.ThongTinLyTrinhTruyenDan_DenLyTrinh" class="form-control" id="ThongTinLyTrinhTruyenDan_DenLyTrinh" placeholder="Đến lý trình" />
+                                        <ValidationMessage For="() => Input.ThongTinLyTrinhTruyenDan_DenLyTrinh" class="text-danger" />
+                                    </div>
+                                     <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinLyTrinhTruyenDan_TuHoGa">Từ hố ga<span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinLyTrinhTruyenDan_TuHoGa" class="form-control" id="ThongTinLyTrinhTruyenDan_TuHoGa" placeholder="Từ hố ga" />
+                                        <ValidationMessage For="() => Input.ThongTinLyTrinhTruyenDan_TuHoGa" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinLyTrinhTruyenDan_DenHoGa">Đến hố ga<span class="text-danger">*</span></label>
+                                        <InputText @bind-Value="Input.ThongTinLyTrinhTruyenDan_DenHoGa" class="form-control" id="ThongTinLyTrinhTruyenDan_DenHoGa" placeholder="Đến hố ga" />
+                                        <ValidationMessage For="() => Input.ThongTinLyTrinhTruyenDan_DenHoGa" class="text-danger" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1352,7 +1380,7 @@
                                 </div>
                             </div>
                         </div>
-                           <div class="row">
+                        <div class="row">
                             <div class="col">
                                 <h4 class="mt-2"> Cao độ hạ lưu</h4>
                                 <hr />
@@ -1379,6 +1407,42 @@
                                         <ValidationMessage For="() => Input.CDHaLu_DinhTrongLongSuDung" class="text-danger" />
                                     </div>
                                    
+                                </div>
+                            </div>
+                        </div>
+                           <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2"> Thông tin vật liệu đào cống, rãnh</h4>
+                                <hr />
+                                <div class="row">
+                                     <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="TTVLDCongRanh_LoaiVatLieuDao">Loại vật liệu đào<span class="text-danger">*</span></label>
+                                        <select id="TTVLDCongRanh_LoaiVatLieuDao" class="form-control" @bind="Input.TTVLDCongRanh_LoaiVatLieuDao">
+                                            <option value="">Loại vật liệu đào...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("TD_LVLDCongRanh"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.ThongTinMaiDao_ChieuRongDayDaoNho" class="text-danger" />
+                                    </div>
+                                </div>
+                                 <h5>Thượng lưu</h5>
+                                 <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="TTVLDCongRanh_TLChieuCaoDaoDa">Chiều cao đào đá (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTVLDCongRanh_TLChieuCaoDaoDa" class="form-control" id="TTVLDCongRanh_TLChieuCaoDaoDa" placeholder="Chiều cao đào đá (m)" />
+                                        <ValidationMessage For="() => Input.TTVLDCongRanh_TLChieuCaoDaoDa" class="text-danger" />
+                                    </div>
+                                </div>
+                                 <h5>Hạ lưu</h5>
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="TTVLDCongRanh_HLChieuCaoDaoDa">Chiều cao đào đá (m)<span class="text-danger">*</span></label>
+                                        <InputNumber @bind-Value="Input.TTVLDCongRanh_HLChieuCaoDaoDa" class="form-control" id="TTVLDCongRanh_HLChieuCaoDaoDa" placeholder="Chiều cao đào đá (m)" />
+                                        <ValidationMessage For="() => Input.TTVLDCongRanh_HLChieuCaoDaoDa" class="text-danger" />
+                                    </div>
+                                  
                                 </div>
                             </div>
                         </div>
@@ -1967,7 +2031,7 @@
 
                         @* Thông tin vật liệu đào cống, rãnh *@
                         <th>Chiều cao đào đá (m)</th>
-                        <th class="text-danger">Chiều cao đào đất (m)</th>
+                        <th>Chiều cao đào đất (m)</th>
                         <th class="text-danger">Tổng chiều sâu đào</th>
                         <th>Chiều cao đào đá (m)</th>
                         <th class="text-danger">Chiều cao đào đất (m)</th>
@@ -2208,14 +2272,14 @@
                                 <td class="text-center">@item.HinhThucDauNoi8_CanhRong</td>
                                 <td class="text-center">@item.HinhThucDauNoi8_CanhCheo</td>
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa</td>
-                                <td class="text-center">@item.ThongTinTamDanHoGa2_HinhThucDayHoGa</td>
+                                <td class="text-center">@GetTenDanhMucById(item.ThongTinTamDanHoGa2_HinhThucDayHoGa)</td>
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_DuongKinh</td>
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_ChieuDay</td>
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_D</td>
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_R</td>
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_C</td>
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_SoLuongNapDay</td>
-                                <td class="text-center">@item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao</td>
+                                <td class="text-center">@GetTenDanhMucById(item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao)</td>
                                 <td class="text-center">@item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa</td>
                                 <td class="text-center">@item.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat</td>
                                 <td class="text-center">@item.ThongTinVatLieuDaoHoGa_TongChieuCaoDao</td>
@@ -2272,17 +2336,17 @@
                                 <td class="text-center">@item.ThongTinLyTrinhTruyenDan_DenLyTrinh</td>
                                 <td class="text-center">@item.ThongTinLyTrinhTruyenDan_TuHoGa</td>
                                 <td class="text-center">@item.ThongTinLyTrinhTruyenDan_DenHoGa</td>
-                                <td class="text-center">@item.ThongTinDuongTruyenDan_HinhThucTruyenDan</td>
-                                <td class="text-center">@item.ThongTinDuongTruyenDan_LoaiTruyenDan</td>
+                                <td class="text-center">@GetTenDanhMucById(@item.ThongTinDuongTruyenDan_HinhThucTruyenDan)</td>
+                                <td class="text-center">@GetTenDanhMucById(@item.ThongTinDuongTruyenDan_LoaiTruyenDan)</td>
                                 <td class="text-center">@item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai</td>
                                 <td class="text-center">@item.TTCDSLCauKienDuongTruyenDan_TongChieuDai</td>
                                 <td class="text-center">@item.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien</td>
                                 <td class="text-center">@item.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl</td>
                                 <td class="text-center">@item.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop</td>
-                                <td class="text-center">@item.ThongTinMongDuongTruyenDan_LoaiMong</td>
-                                <td class="text-center">@item.ThongTinMongDuongTruyenDan_HinhThucMong</td>
+                                <td class="text-center">@GetTenDanhMucById(item.ThongTinMongDuongTruyenDan_LoaiMong)</td>
+                                <td class="text-center">@GetTenDanhMucById(item.ThongTinMongDuongTruyenDan_HinhThucMong)</td>
                                 <td class="text-center">@item.ThongTinDeCong_TenLoaiDeCong</td>
-                                <td class="text-center">@item.ThongTinDeCong_CauTaoDeCong</td>
+                                <td class="text-center">@GetTenDanhMucById(item.ThongTinDeCong_CauTaoDeCong)</td>
                                 <td class="text-center">@item.ThongTinDeCong_D</td>
                                 <td class="text-center">@item.ThongTinDeCong_R</td>
                                 <td class="text-center">@item.ThongTinDeCong_C</td>
@@ -2308,10 +2372,10 @@
                                 <td class="text-center">@item.TTTKLCKCTCH_CDThucTeThuaThieu</td>
                                 <td class="text-center">@item.TTTKLCKCTCH_XDOngCongCanThem</td>
                                 <td class="text-center">@item.TTTKLCKCTCH_CDThuaThieuSauTinhKL</td>
-                                <td class="text-center">@item.TTKTHHCongHopRanh_CauTaoTuong</td>
-                                <td class="text-center">@item.TTKTHHCongHopRanh_CauTaoMuMo</td>
-                                <td class="text-center">@item.TTKTHHCongHopRanh_ChatMatTrong</td>
-                                <td class="text-center">@item.TTKTHHCongHopRanh_ChatMatNgoai</td>
+                                <td class="text-center">@GetTenDanhMucById(item.TTKTHHCongHopRanh_CauTaoTuong)</td>
+                                <td class="text-center">@GetTenDanhMucById(item.TTKTHHCongHopRanh_CauTaoMuMo)</td>
+                                <td class="text-center">@GetTenDanhMucById(item.TTKTHHCongHopRanh_ChatMatTrong)</td>
+                                <td class="text-center">@GetTenDanhMucById(item.TTKTHHCongHopRanh_ChatMatNgoai)</td>
                                 <td class="text-center">@item.TTKTHHCongHopRanh_CCaoLotMong</td>
                                 <td class="text-center">@item.TTKTHHCongHopRanh_CRongLotMong</td>
                                 <td class="text-center">@item.TTKTHHCongHopRanh_CCaoMong</td>
@@ -2329,7 +2393,7 @@
                                 <td class="text-center">@item.TTKTHHCongHopRanh_CCaoMuMoThotTren</td>
                                 <td class="text-center">@item.TTKTHHCongHopRanh_CRongMuMoTren</td>
                                 <td class="text-center">@item.TTKTHHCongHopRanh_LoaiThanhChong</td>
-                                <td class="text-center">@item.TTKTHHCongHopRanh_CauTaoThanhChong</td>
+                                <td class="text-center">@GetTenDanhMucById(item.TTKTHHCongHopRanh_CauTaoThanhChong)</td>
                                 <td class="text-center">@item.TTKTHHCongHopRanh_CCaoThanhChong</td>
                                 <td class="text-center">@item.TTKTHHCongHopRanh_CRongThanhChong</td>
                                 <td class="text-center">@item.TTKTHHCongHopRanh_CDai</td>
@@ -2338,13 +2402,13 @@
                                 <td class="text-center">@item.TTKTHHCongHopRanh_CCaoChatmatNgoai</td>
                                 <td class="text-center">@item.TTKTHHCongHopRanh_TongChieuCao</td>
                                 <td class="text-center">@item.TTTDCongHoRanh_TenLoaiTamDanTieuChuan</td>
-                                <td class="text-center">@item.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan</td>
+                                <td class="text-center">@GetTenDanhMucById(item.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan)</td>
                                 <td class="text-center">@item.TTTDCongHoRanh_SoLuong</td>
                                 <td class="text-center">@item.TTTDCongHoRanh_CDai</td>
                                 <td class="text-center">@item.TTTDCongHoRanh_CRong</td>
                                 <td class="text-center">@item.TTTDCongHoRanh_CCao</td>
                                 <td class="text-center">@item.TTTDCongHoRanh_TenLoaiTamDanLoai02</td>
-                                <td class="text-center">@item.TTTDCongHoRanh_CauTaoTamDanTruyenDan</td>
+                                <td class="text-center">@GetTenDanhMucById(item.TTTDCongHoRanh_CauTaoTamDanTruyenDan)</td>
                                 <td class="text-center">@item.TTTDCongHoRanh_SoLuong1</td>
                                 <td class="text-center">@item.TTTDCongHoRanh_CDai1</td>
                                 <td class="text-center">@item.TTTDCongHoRanh_CRong1</td>
@@ -2418,7 +2482,7 @@
                                 <td class="text-center">@item.CDHaLu_DinhRanh</td>
                                 <td class="text-center">@item.CDHaLu_DinhOngNhua</td>
                                 <td class="text-center">@item.CDHaLu_DinhDapCat</td>
-                                <td class="text-center">@item.TTVLDCongRanh_LoaiVatLieuDao</td>
+                                <td class="text-center">@GetTenDanhMucById(@item.TTVLDCongRanh_LoaiVatLieuDao)</td>
                                 <td class="text-center">@item.TTVLDCongRanh_TLChieuCaoDaoDa</td>
                                 <td class="text-center">@item.TTVLDCongRanh_TLChieuCaoDaoDat</td>
                                 <td class="text-center">@item.TTVLDCongRanh_TLTongChieuSauDao</td>
@@ -2557,8 +2621,8 @@
 
 @code {
     [SupplyParameterFromForm]
-    private MNuocMua Input { get; set; } = new();
-    public List<MDanhMuc> listDanhMuc = new();
+    private NuocMua Input { get; set; } = new();
+    public List<DanhMuc> listDanhMuc = new();
 
     public List<NuocMuaModel> listNuocMuaModel
     {
@@ -2621,7 +2685,7 @@
     private void ShowModal()
     {
         isModalVisible = true;
-        Input = new MNuocMua();
+        Input = new NuocMua();
     }
 
     private void HandleModalClose(bool isVisible)
@@ -2648,7 +2712,7 @@
     private async Task HandleEdit(string Id)
     {
         isEdit = true;
-        // Input = await HopRanhThangRepository.GetById(Id);
+        Input = await NuocMuaRepository.GetById(Id);
         TitleModal = "Cập nhật thông tin";
         isModalVisible = true;
     }
@@ -2906,11 +2970,11 @@
             if (isEdit)
             {
                 // Cập nhật thông tin
-                // await HopRanhThangRepository.Update(Input);
-                // isModalVisible = false;
-                // isEdit = false;
-                // await ThemTenTheoPL(Input);
-                // Input = new MHopRanhThang();
+                await NuocMuaRepository.Update(Input);
+                isModalVisible = false;
+                isEdit = false;
+                
+                Input = new NuocMua();
                 ToastService.ShowToast(
                     "Thông báo",
                     "Cập nhật thành công.",
@@ -2925,9 +2989,9 @@
             {
 
                 // Thêm mới thông tin
-                // await HopRanhThangRepository.Insert(Input);
-                // isModalVisible = false;
-                // Input = new MHopRanhThang();
+                await NuocMuaRepository.Insert(Input);
+                isModalVisible = false;
+                Input = new NuocMua();
                 ToastService.ShowToast(
                     "Thông báo",
                     "Thêm thành công.",
@@ -3011,7 +3075,7 @@
         }
     }
 
-    public List<MDanhMuc> FindByIdNhomDanhMuc(string idNhomDanhMuc)
+    public List<DanhMuc> FindByIdNhomDanhMuc(string idNhomDanhMuc)
     {
         return listDanhMuc.Where(dm => dm.IdNhomDanhMuc == idNhomDanhMuc).ToList();
     }
@@ -3035,7 +3099,7 @@
         {
             if (!string.IsNullOrEmpty(deleteId))
             {
-                // await HopRanhThangRepository.DeleteById(deleteId);
+                await NuocMuaRepository.DeleteById(deleteId);
                 await LoadData();
                 ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-bell", progressBarClass: "bg-info", duration: 5000);
                 deleteId = null;

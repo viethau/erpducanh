@@ -104,8 +104,8 @@
 </div>
 
 @code {
-    private List<MNhomDanhMuc> nhomDanhMucs = new List<MNhomDanhMuc>();
-    private MNhomDanhMuc mNhomDanhMuc = new();
+    private List<NhomDanhMuc> nhomDanhMucs = new List<NhomDanhMuc>();
+    private NhomDanhMuc mNhomDanhMuc = new();
 
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới danh mục";
@@ -190,7 +190,7 @@
             ToastService.ShowToast("Thông báo", "Cập nhật danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-bell", progressBarClass: "bg-info", duration: 5000);
             await LoadNhomDanhMuc();
             isModalVisible = false;
-            mNhomDanhMuc = new MNhomDanhMuc();
+            mNhomDanhMuc = new NhomDanhMuc();
         }
         else
         {
@@ -198,7 +198,7 @@
             ToastService.ShowToast("Thông báo", "Thêm danh mục thành công.", cssClass: "toast-danger", iconClass: "fa fa-bell", progressBarClass: "bg-info", duration: 5000);
             await LoadNhomDanhMuc();
             isModalVisible = false;
-            mNhomDanhMuc = new MNhomDanhMuc();
+            mNhomDanhMuc = new NhomDanhMuc();
         }
 
     }
