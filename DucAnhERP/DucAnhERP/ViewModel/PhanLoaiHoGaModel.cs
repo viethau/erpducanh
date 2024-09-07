@@ -80,6 +80,8 @@ namespace DucAnhERP.ViewModel
         public Double? HinhThucDauNoi8_CanhDai { get; set; } = 0;
         public Double? HinhThucDauNoi8_CanhRong { get; set; } = 0;
         public Double? HinhThucDauNoi8_CanhCheo { get; set; } = 0;
-        public DateTime CreatAt { get; set; } = DateTime.Now;
+        public DateTime? CreateAt { get; set; }
+        public string? CreateBy { get; set; }
+        public int? IsActive { get; set; }
     }
 }

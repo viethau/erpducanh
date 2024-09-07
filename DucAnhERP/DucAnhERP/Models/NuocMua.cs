@@ -344,7 +344,7 @@ namespace DucAnhERP.Models
 
         //[Required(ErrorMessage = "Bạn phải nhập Phân loại đậy hố ga !")]
         public string? ThongTinTamDanHoGa2_PhanLoaiDayHoGa { get; set; } = "";
-        [Required(ErrorMessage = "Bạn phải nhập Hình thức đậy hố ga !")]
+        //[Required(ErrorMessage = "Bạn phải nhập Hình thức đậy hố ga !")]
         public string? ThongTinTamDanHoGa2_HinhThucDayHoGa { get; set; } = "";
 
         [Required(ErrorMessage = "Bạn phải nhập Đường kính (m) !")]
@@ -584,9 +584,9 @@ namespace DucAnhERP.Models
         public Double? TTTKLCKCTCH_SLCKNguyen { get; set; } = 0;
         public Double? TTTKLCKCTCH_CDCanLapDat { get; set; } = 0;
         public Double? TTTKLCKCTCH_TongCD { get; set; } = 0;
-        public string? TTTKLCKCTCH_CDThucTeThuaThieu { get; set; } = "";
+        public Double? TTTKLCKCTCH_CDThucTeThuaThieu { get; set; } = 0;
         public string? TTTKLCKCTCH_XDOngCongCanThem { get; set; } = "";
-        public string? TTTKLCKCTCH_CDThuaThieuSauTinhKL { get; set; } = "";
+        public Double? TTTKLCKCTCH_CDThuaThieuSauTinhKL { get; set; } = 0;
 
         //Thông tin kích thước hình học cống hộp, rãnh
         //[Required(ErrorMessage = "Bạn phải nhập cấu tạo tường!")]
@@ -989,7 +989,9 @@ namespace DucAnhERP.Models
         [RegularExpression(@"^-?\d+(\.\d{1,6})?$", ErrorMessage = "Tọa độ X phải là số hợp lệ với tối đa 6 chữ số thập phân.")]
         public Double? ToaDoY { get; set; } = 0;
 
-        public DateTime CreateAt { get; set; } = DateTime.Now;
+        public DateTime? CreateAt { get; set; } = DateTime.Now;
+        public string? CreateBy { get; set; } = "";
+        public int? IsActive { get; set; } = 1;
 
     }
 

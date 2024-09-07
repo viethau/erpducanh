@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using System.ComponentModel.DataAnnotations;
 
 namespace DucAnhERP.Models
 {
@@ -9,9 +10,6 @@ namespace DucAnhERP.Models
 
         [Required(ErrorMessage = "Bạn phải nhập Tên loại truyền dẫn sau phân loại!")]
         public string? ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai { get; set; } = "";
-
-        [Required(ErrorMessage = "Bạn phải nhập Tên hố ga theo bản vẽ!")]
-        public string ThongTinChungHoGa_TenHoGaTheoBanVe { get; set; } = "";
 
         [Required(ErrorMessage = "Bạn phải nhập Hình thức truyền dẫn!")]
         public string? ThongTinDuongTruyenDan_HinhThucTruyenDan { get; set; } = "";
@@ -91,6 +89,10 @@ namespace DucAnhERP.Models
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
         [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
         public Double? ThongTinKichThuocHinhHocOngNhua_CDayPhuBi { get; set; } = 0;
+
+        public DateTime? CreateAt { get; set; } = DateTime.Now;
+        public string? CreateBy { get; set; } = "";
+        public int? IsActive { get; set; } = 1;
 
     }
 }

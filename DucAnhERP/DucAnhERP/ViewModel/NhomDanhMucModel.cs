@@ -9,6 +9,9 @@ namespace DucAnhERP.ViewModel
         public string Id { get; set; }
 
         public string Ten { get; set; }
+        public DateTime? CreateAt { get; set; }
+        public string? CreateBy { get; set; }
+        public int? IsActive { get; set; }
 
     }
 }

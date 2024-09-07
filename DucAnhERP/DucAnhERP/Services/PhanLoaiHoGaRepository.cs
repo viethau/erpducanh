@@ -2,6 +2,7 @@
 using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace DucAnhERP.Services
@@ -38,7 +39,7 @@ namespace DucAnhERP.Services
             {
                 using var context = _context.CreateDbContext();
                 var query = from plhg in context.DSPhanLoaiHoGa
-                            orderby plhg.CreatAt
+                            orderby plhg.CreateAt
                             select new PhanLoaiHoGaModel
                             {
                                 Id = plhg.Id,
@@ -116,7 +117,9 @@ namespace DucAnhERP.Services
                                 HinhThucDauNoi8_CanhDai = plhg.HinhThucDauNoi8_CanhDai ?? 0,
                                 HinhThucDauNoi8_CanhRong = plhg.HinhThucDauNoi8_CanhRong ?? 0,
                                 HinhThucDauNoi8_CanhCheo = plhg.HinhThucDauNoi8_CanhCheo ?? 0,
-                                CreatAt = plhg.CreatAt,
+                                CreateAt=plhg.CreateAt ,
+                                CreateBy=plhg.CreateBy,
+                                IsActive = plhg.IsActive,
 
                             };
 

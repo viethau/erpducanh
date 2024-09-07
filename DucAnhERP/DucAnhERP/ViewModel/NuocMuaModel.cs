@@ -184,9 +184,9 @@ namespace DucAnhERP.ViewModel
         public Double TTTKLCKCTCH_SLCKNguyen { get; set; }
         public Double TTTKLCKCTCH_CDCanLapDat { get; set; }
         public Double TTTKLCKCTCH_TongCD { get; set; }
-        public string TTTKLCKCTCH_CDThucTeThuaThieu { get; set; }
+        public Double TTTKLCKCTCH_CDThucTeThuaThieu { get; set; }
         public string TTTKLCKCTCH_XDOngCongCanThem { get; set; }
-        public string TTTKLCKCTCH_CDThuaThieuSauTinhKL { get; set; }
+        public Double TTTKLCKCTCH_CDThuaThieuSauTinhKL { get; set; }
 
         public string TTKTHHCongHopRanh_CauTaoTuong { get; set; }
         public string TTKTHHCongHopRanh_CauTaoMuMo { get; set; }
@@ -421,6 +421,8 @@ namespace DucAnhERP.ViewModel
         public Double TTKLDC_KlDapCatSauChiemCho { get; set; }
         public Double ToaDoX { get; set; }
         public Double ToaDoY { get; set; }
-        public DateTime CreateAt { get; set; } = DateTime.Now;
+        public DateTime? CreateAt { get; set; }
+        public string? CreateBy { get; set; }
+        public int? IsActive { get; set; }
     }
 }
