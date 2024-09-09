@@ -155,7 +155,6 @@ namespace DucAnhERP.Services
 
             // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
             query = query.Where(x =>
-                (searchData.ThongTinChungHoGa_TenHoGaSauPhanLoai == null || x.ThongTinChungHoGa_TenHoGaSauPhanLoai.Contains(searchData.ThongTinChungHoGa_TenHoGaSauPhanLoai)) &&
                 (searchData.ThongTinChungHoGa_HinhThucHoGa == null || x.ThongTinChungHoGa_HinhThucHoGa.Contains(searchData.ThongTinChungHoGa_HinhThucHoGa)) &&
                 (searchData.ThongTinChungHoGa_KetCauMuMo == null || x.ThongTinChungHoGa_KetCauMuMo.Contains(searchData.ThongTinChungHoGa_KetCauMuMo)) &&
                 (searchData.ThongTinChungHoGa_KetCauTuong == null || x.ThongTinChungHoGa_KetCauTuong.Contains(searchData.ThongTinChungHoGa_KetCauTuong)) &&

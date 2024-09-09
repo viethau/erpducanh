@@ -14,7 +14,7 @@ namespace DucAnhERP.Models
         public string? ThongTinLyTrinh_TuyenDuong { get; set; }
         [Required(ErrorMessage = "Bạn phải nhập Lý trình tại tim hố ga!")]
         public string? ThongTinLyTrinh_LyTrinhTaiTimHoGa { get; set; }
-        [Required(ErrorMessage = "Bạn phải nhập Tên hố ga theo bản vẽ!")]
+        
         //Thông tin chung hố ga
         //[Required(ErrorMessage = "Bạn phải nhập Tên hố ga sau phân loại !")]
         public string ThongTinChungHoGa_TenHoGaSauPhanLoai { get; set; } = "";
