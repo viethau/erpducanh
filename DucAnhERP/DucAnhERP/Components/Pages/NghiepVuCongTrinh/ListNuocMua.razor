@@ -10,6 +10,8 @@
 @inject INuocMuaRepository NuocMuaRepository
 @inject IDanhMucRepository DanhMucRepository
 @inject IPhanLoaiHoGaRepository PhanLoaiHoGaRepository
+@inject IPhanLoaiTDHoGaRepository PhanLoaiTDHoGaRepository
+@inject IPhanLoaiCTronHopNhuaRepository PhanLoaiCTronHopNhuaRepository
 @inject DucAnhERP.Services.ToastService ToastService
 @attribute [Authorize]
 
@@ -555,8 +557,7 @@
                                 <div class="row">
                                     <div class="form-floating col-6">
                                         <label for="ThongTinTamDanHoGa_PhanLoaiDayHoGa">Phân loại đậy hố ga <span class="text-danger"></span></label>
-                                        <InputText  @oninput="OnInputChange" @bind-Value="Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa" class="form-control" id="ThongTinTamDanHoGa2_PhanLoaiDayHoGa" placeholder="Phân loại đậy hố ga" />
-                                        <ValidationMessage For="() => Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa" class="text-danger" />
+                                        <InputText readonly  @bind-Value="nuocMuaVM.PhanLoaiTDHoGa_PhanLoaiDayHoGa" class="form-control" id="PhanLoaiTDHoGa_PhanLoaiDayHoGa" placeholder="Phân loại đậy hố ga" />
                                     </div>
                                     <div class="form-floating col-6">
                                         <label for="ThongTinTamDanHoGa2_HinhThucDayHoGa"> Hình thức đậy hố ga <span class="text-danger"></span></label>
@@ -674,14 +675,11 @@
 
                                      </div>
                                      <div class="form-floating col-sm-6 col-md-3">
-                                     <label for="ThongTinCaoDoHoGa_CSauDao">C.Sâu đào (m)</label>
-                                    <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_CSauDao" class="form-control" id="ThongTinCaoDoHoGa_CSauDao" placeholder="C.Sâu đào" />
+                                         <label for="ThongTinCaoDoHoGa_CSauDao">C.Sâu đào (m)</label>
+                                        <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_CSauDao" class="form-control" id="ThongTinCaoDoHoGa_CSauDao" placeholder="C.Sâu đào" />
 
                                      </div
-                                     <div class="form-floating col-sm-6 col-md-3">
-                                     <label for="ThongTinCaoDoHoGa_CSauDao">C.Sâu đào (m)</label>
-                                    <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_CSauDao" class="form-control" id="ThongTinCaoDoHoGa_CSauDao" placeholder="C.Sâu đào" />
-
+                                   
                                      </div>
                                      <div class="form-floating col-sm-6 col-md-3">
                                      <label for="ThongTinCaoDoHoGa_DinhLotMong">Đỉnh lót móng (m)</label>
@@ -3315,7 +3313,7 @@
                                 <td class="text-center">@item.HinhThucDauNoi8_CanhDai</td>
                                 <td class="text-center">@item.HinhThucDauNoi8_CanhRong</td>
                                 <td class="text-center">@item.HinhThucDauNoi8_CanhCheo</td>
-                                <td class="text-center">@item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa</td>
+                                <td class="text-center">@item.PhanLoaiTDHoGa_PhanLoaiDayHoGa</td>
                                 <td class="text-center">@GetTenDanhMucById(item.ThongTinTamDanHoGa2_HinhThucDayHoGa)</td>
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_DuongKinh</td>
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_ChieuDay</td>
@@ -3729,7 +3727,7 @@
         nuocMuaConvert = await helpers.ConvertNuocMua(Input,listDanhMuc);
         Input = nuocMuaConvert;
         LoadTenHoGaSauPhanLoai();
-
+        LoadTenHoGaSauPhanLoaiTDHoGa();
     }
 
     // Truy vấn data theo điều kiện tìm kiếm
@@ -3803,7 +3801,7 @@
         nuocMuaVM = nuocmuavm;
     }
 
-    //Thêm tên theo bảng phân loại
+    //Thêm tên theo bảng phân loại hố ga
     public async Task ThemTenTheoPL()
     {
         PhanLoaiHoGa searchData = new PhanLoaiHoGa
@@ -3885,7 +3883,8 @@
         var id = await PhanLoaiHoGaRepository.InsertId(searchData);
         Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
     }
-    //Load tên theo phân loại
+
+    //Load tên theo phân loại hố ga
     public async Task LoadTenHoGaSauPhanLoai()
     {   
         PhanLoaiHoGa searchData = new PhanLoaiHoGa
@@ -3974,10 +3973,123 @@
                  nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai;
                Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = plHoGa.Id;
            }
-        
-        
-        
+
     }
+
+    //Thêm tên theo bảng phân loại tấm đan hố ga
+    public async Task ThemTenTheoPLTDHoGa()
+    {
+        PhanLoaiTDHoGa searchData = new PhanLoaiTDHoGa
+        {   
+            ThongTinTamDanHoGa2_HinhThucDayHoGa = Input.ThongTinTamDanHoGa2_HinhThucDayHoGa , 
+            ThongTinTamDanHoGa2_DuongKinh = Input.ThongTinTamDanHoGa2_DuongKinh , 
+            ThongTinTamDanHoGa2_ChieuDay = Input.ThongTinTamDanHoGa2_ChieuDay , 
+            ThongTinTamDanHoGa2_D = Input.ThongTinTamDanHoGa2_D , 
+            ThongTinTamDanHoGa2_R = Input.ThongTinTamDanHoGa2_R , 
+            ThongTinTamDanHoGa2_C = Input.ThongTinTamDanHoGa2_C 
+
+         };
+        
+        var id = await PhanLoaiTDHoGaRepository.InsertId(searchData ,GetTenDanhMucById(searchData.ThongTinTamDanHoGa2_HinhThucDayHoGa));
+        Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = id;
+    }
+
+    //Load tên theo phân loại tấm đan hố ga
+    public async Task LoadTenHoGaSauPhanLoaiTDHoGa()
+    {   
+        PhanLoaiTDHoGa searchData = new PhanLoaiTDHoGa
+        {
+            
+            ThongTinTamDanHoGa2_HinhThucDayHoGa = Input.ThongTinTamDanHoGa2_HinhThucDayHoGa , 
+            ThongTinTamDanHoGa2_DuongKinh = Input.ThongTinTamDanHoGa2_DuongKinh , 
+            ThongTinTamDanHoGa2_ChieuDay = Input.ThongTinTamDanHoGa2_ChieuDay , 
+            ThongTinTamDanHoGa2_D = Input.ThongTinTamDanHoGa2_D , 
+            ThongTinTamDanHoGa2_R = Input.ThongTinTamDanHoGa2_R , 
+            ThongTinTamDanHoGa2_C = Input.ThongTinTamDanHoGa2_C 
+             };
+
+            PhanLoaiTDHoGa plTDHoGa = new ();
+            plTDHoGa = await PhanLoaiTDHoGaRepository.GetMPhanLoaiTDHoGaByDetail(searchData);
+           if(plTDHoGa ==null){
+               nuocMuaVM.PhanLoaiTDHoGa_PhanLoaiDayHoGa = "";
+               Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ="";
+           }else{
+                 nuocMuaVM.PhanLoaiTDHoGa_PhanLoaiDayHoGa = plTDHoGa.ThongTinTamDanHoGa2_PhanLoaiDayHoGa;
+               Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = plTDHoGa.Id;
+           }
+
+    }
+
+    //Thêm tên theo bảng phân loại cống hộp cống tròn nhựa
+    public async Task ThemTenTheoPLCTronHopNhua()
+    {
+        PhanLoaiCTronHopNhua searchData = new PhanLoaiCTronHopNhua
+        {   
+            ThongTinDuongTruyenDan_HinhThucTruyenDan = Input.ThongTinDuongTruyenDan_HinhThucTruyenDan ,
+            ThongTinDuongTruyenDan_LoaiTruyenDan = Input.ThongTinDuongTruyenDan_LoaiTruyenDan ,
+            TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien = Input.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien ,
+            ThongTinCauTaoCongTron_CDayPhuBi = Input.ThongTinCauTaoCongTron_CDayPhuBi ,
+            TTKTHHCongHopRanh_CauTaoTuong = Input.TTKTHHCongHopRanh_CauTaoTuong ,
+            TTKTHHCongHopRanh_ChatMatTrong = Input.TTKTHHCongHopRanh_ChatMatTrong ,
+            TTKTHHCongHopRanh_ChatMatNgoai = Input.TTKTHHCongHopRanh_ChatMatNgoai ,
+            TTKTHHCongHopRanh_CCaoDe = Input.TTKTHHCongHopRanh_CCaoDe ,
+            TTKTHHCongHopRanh_CRongDe = Input.TTKTHHCongHopRanh_CRongDe ,
+            TTKTHHCongHopRanh_CDayTuong01Ben = Input.TTKTHHCongHopRanh_CDayTuong01Ben ,
+            TTKTHHCongHopRanh_SoLuongTuong = Input.TTKTHHCongHopRanh_SoLuongTuong ,
+            TTKTHHCongHopRanh_CRongLongSuDung = Input.TTKTHHCongHopRanh_CRongLongSuDung ,
+            TTKTHHCongHopRanh_CCaoTuongGop = Input.TTKTHHCongHopRanh_CCaoTuongGop ,
+            TTKTHHCongHopRanh_CCaoMuMoThotDuoi = Input.TTKTHHCongHopRanh_CCaoMuMoThotDuoi ,
+            TTKTHHCongHopRanh_CRongMuMoDuoi = Input.TTKTHHCongHopRanh_CRongMuMoDuoi ,
+            TTKTHHCongHopRanh_CCaoMuMoThotTren = Input.TTKTHHCongHopRanh_CCaoMuMoThotTren ,
+            TTKTHHCongHopRanh_CRongMuMoTren = Input.TTKTHHCongHopRanh_CRongMuMoTren ,
+            TTKTHHCongHopRanh_CCaoChatMatTrong = Input.TTKTHHCongHopRanh_CCaoChatMatTrong ,
+            ThongTinKichThuocHinhHocOngNhua_CDayPhuBi = Input.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi,
+
+         };
+        
+        var id = await PhanLoaiCTronHopNhuaRepository.InsertId(searchData ,GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan),GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan));
+        Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = id;
+    }
+
+    //Load tên theo phân loại cống hộp cống tròn nhựa
+    public async Task LoadTenPLCTronHopNhua()
+    {   
+       PhanLoaiCTronHopNhua searchData = new PhanLoaiCTronHopNhua
+        {   
+            ThongTinDuongTruyenDan_HinhThucTruyenDan = Input.ThongTinDuongTruyenDan_HinhThucTruyenDan ,
+            ThongTinDuongTruyenDan_LoaiTruyenDan = Input.ThongTinDuongTruyenDan_LoaiTruyenDan ,
+            TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien = Input.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien ,
+            ThongTinCauTaoCongTron_CDayPhuBi = Input.ThongTinCauTaoCongTron_CDayPhuBi ,
+            TTKTHHCongHopRanh_CauTaoTuong = Input.TTKTHHCongHopRanh_CauTaoTuong ,
+            TTKTHHCongHopRanh_ChatMatTrong = Input.TTKTHHCongHopRanh_ChatMatTrong ,
+            TTKTHHCongHopRanh_ChatMatNgoai = Input.TTKTHHCongHopRanh_ChatMatNgoai ,
+            TTKTHHCongHopRanh_CCaoDe = Input.TTKTHHCongHopRanh_CCaoDe ,
+            TTKTHHCongHopRanh_CRongDe = Input.TTKTHHCongHopRanh_CRongDe ,
+            TTKTHHCongHopRanh_CDayTuong01Ben = Input.TTKTHHCongHopRanh_CDayTuong01Ben ,
+            TTKTHHCongHopRanh_SoLuongTuong = Input.TTKTHHCongHopRanh_SoLuongTuong ,
+            TTKTHHCongHopRanh_CRongLongSuDung = Input.TTKTHHCongHopRanh_CRongLongSuDung ,
+            TTKTHHCongHopRanh_CCaoTuongGop = Input.TTKTHHCongHopRanh_CCaoTuongGop ,
+            TTKTHHCongHopRanh_CCaoMuMoThotDuoi = Input.TTKTHHCongHopRanh_CCaoMuMoThotDuoi ,
+            TTKTHHCongHopRanh_CRongMuMoDuoi = Input.TTKTHHCongHopRanh_CRongMuMoDuoi ,
+            TTKTHHCongHopRanh_CCaoMuMoThotTren = Input.TTKTHHCongHopRanh_CCaoMuMoThotTren ,
+            TTKTHHCongHopRanh_CRongMuMoTren = Input.TTKTHHCongHopRanh_CRongMuMoTren ,
+            TTKTHHCongHopRanh_CCaoChatMatTrong = Input.TTKTHHCongHopRanh_CCaoChatMatTrong ,
+            ThongTinKichThuocHinhHocOngNhua_CDayPhuBi = Input.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi,
+
+         };
+
+            PhanLoaiCTronHopNhua plCTHNHoGa = new ();
+            plCTHNHoGa = await PhanLoaiCTronHopNhuaRepository.GetMPhanLoaiCTronHopNhuaByDetail(searchData);
+           if(plCTHNHoGa ==null){
+               nuocMuaVM.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = "";
+               Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ="";
+           }else{
+                 nuocMuaVM.PhanLoaiTDHoGa_PhanLoaiDayHoGa = plCTHNHoGa.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai;
+               Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = plCTHNHoGa.Id;
+           }
+
+    }
+
 
     private async Task HandleValidSubmit()
     {
@@ -3985,9 +4097,19 @@
 
         // Kiểm tra xem danh mục có tồn tại hay không
         bool check = await CheckIsExitsIdDanhMuc();
-        await  ThemTenTheoPL();
+        //thêm phân loại
+       
+
         if (check)
         {
+            
+            if(string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai)){
+                 await  ThemTenTheoPL();
+            }
+            if(string.IsNullOrEmpty(Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa)){
+                await ThemTenTheoPLTDHoGa();
+            }
+
             if (isEdit)
             {
                 // Cập nhật thông tin

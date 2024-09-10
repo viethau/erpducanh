@@ -86,6 +86,7 @@ namespace DucAnhERP.ViewModel
         public Double HinhThucDauNoi8_CanhRong { get; set; }
         public Double HinhThucDauNoi8_CanhCheo { get; set; }
         public string ThongTinTamDanHoGa2_PhanLoaiDayHoGa { get; set; }
+        public string PhanLoaiTDHoGa_PhanLoaiDayHoGa { get; set; }
         public string ThongTinTamDanHoGa2_HinhThucDayHoGa { get; set; }
         public Double ThongTinTamDanHoGa2_DuongKinh { get; set; }
         public Double ThongTinTamDanHoGa2_ChieuDay { get; set; }
@@ -153,6 +154,8 @@ namespace DucAnhERP.ViewModel
         public string ThongTinDuongTruyenDan_HinhThucTruyenDan { get; set; }
         public string ThongTinDuongTruyenDan_LoaiTruyenDan { get; set; }
         public string ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai { get; set; }
+        public string PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai { get; set; }
+
         public Double TTCDSLCauKienDuongTruyenDan_TongChieuDai { get; set; }
         public Double TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien { get; set; }
         public Double TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl { get; set; }

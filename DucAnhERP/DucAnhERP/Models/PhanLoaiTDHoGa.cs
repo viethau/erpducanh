@@ -2,7 +2,7 @@
 
 namespace DucAnhERP.Models
 {
-    public class MPhanLoaiTDHoGa
+    public class PhanLoaiTDHoGa
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public int Flag { get; set; } = 0;

@@ -39,9 +39,17 @@ namespace DucAnhERP.Services
             {
                 using var context = _context.CreateDbContext();
                 var query = from nuocMua in context.DSNuocMua
+                                // Left join với bảng PhanLoaiHoGas
                             join phanLoaiHoGa in context.PhanLoaiHoGas
-                            on nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai equals phanLoaiHoGa.Id into joined
-                            from phanLoaiHoGa in joined.DefaultIfEmpty()  
+                            on nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai equals phanLoaiHoGa.Id into phanLoaiHoGaJoin
+                            from phanLoaiHoGa in phanLoaiHoGaJoin.DefaultIfEmpty()
+
+                                // Left join với bảng PhanLoaiTDHoGas
+                            join phanLoaiTDHoGa in context.PhanLoaiTDHoGas
+                            on nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa equals phanLoaiTDHoGa.Id into phanLoaiTDHoGaJoin
+                            from phanLoaiTDHoGa in phanLoaiTDHoGaJoin.DefaultIfEmpty()
+
+                                // Sắp xếp theo CreateAt của DSNuocMua
                             orderby nuocMua.CreateAt
                             select new NuocMuaModel
                             {
@@ -125,6 +133,7 @@ namespace DucAnhERP.Services
                                 HinhThucDauNoi8_CanhRong = nuocMua.HinhThucDauNoi8_CanhRong ?? 0,
                                 HinhThucDauNoi8_CanhCheo = nuocMua.HinhThucDauNoi8_CanhCheo ?? 0,
                                 ThongTinTamDanHoGa2_PhanLoaiDayHoGa = nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
+                                PhanLoaiTDHoGa_PhanLoaiDayHoGa = phanLoaiTDHoGa.ThongTinTamDanHoGa2_PhanLoaiDayHoGa??"",
                                 ThongTinTamDanHoGa2_HinhThucDayHoGa = nuocMua.ThongTinTamDanHoGa2_HinhThucDayHoGa ?? "",
                                 ThongTinTamDanHoGa2_DuongKinh = nuocMua.ThongTinTamDanHoGa2_DuongKinh ?? 0,
                                 ThongTinTamDanHoGa2_ChieuDay = nuocMua.ThongTinTamDanHoGa2_ChieuDay ?? 0,
@@ -192,6 +201,8 @@ namespace DucAnhERP.Services
                                 ThongTinDuongTruyenDan_HinhThucTruyenDan = nuocMua.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "",
                                 ThongTinDuongTruyenDan_LoaiTruyenDan = nuocMua.ThongTinDuongTruyenDan_LoaiTruyenDan ?? "",
                                 ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = nuocMua.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "",
+                                PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = nuocMua.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "",
+
                                 TTCDSLCauKienDuongTruyenDan_TongChieuDai = nuocMua.TTCDSLCauKienDuongTruyenDan_TongChieuDai ?? 0,
                                 TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien = nuocMua.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien ?? 0,
                                 TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl = nuocMua.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl ?? 0,

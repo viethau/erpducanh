@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DucAnhERP")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+01f62dd67c943fc98979950378fd5154296050e3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+65ed8fe53a8adf1255babddec6a9553bda8c2640")]
 [assembly: System.Reflection.AssemblyProductAttribute("DucAnhERP")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DucAnhERP")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
