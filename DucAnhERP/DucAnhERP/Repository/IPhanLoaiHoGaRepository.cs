@@ -7,5 +7,8 @@ namespace DucAnhERP.Repository
     {
         Task<List<PhanLoaiHoGaModel>> GetAllByVM();
         Task<bool> CheckUsingId(string id);
+        Task<PhanLoaiHoGa> GetMPhanLoaiHoGaByDetail(PhanLoaiHoGa plhg);
+
+        Task<string> InsertId(PhanLoaiHoGa entity);
     }
 }

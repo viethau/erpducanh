@@ -42,7 +42,7 @@ namespace DucAnhERP.Data
         public DbSet<DanhMuc> DSDanhMuc { get; set; }
         public DbSet<MHopRanhThang> DSHopRanhThang { get; set; }
         public DbSet<NuocMua> DSNuocMua { get; set; }
-        public DbSet<PhanLoaiHoGa> DSPhanLoaiHoGa { get; set; }
+        public DbSet<PhanLoaiHoGa> PhanLoaiHoGas { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

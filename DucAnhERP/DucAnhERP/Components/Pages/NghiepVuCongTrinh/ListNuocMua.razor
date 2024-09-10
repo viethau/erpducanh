@@ -9,6 +9,7 @@
 @inject NavigationManager navigation
 @inject INuocMuaRepository NuocMuaRepository
 @inject IDanhMucRepository DanhMucRepository
+@inject IPhanLoaiHoGaRepository PhanLoaiHoGaRepository
 @inject DucAnhERP.Services.ToastService ToastService
 @attribute [Authorize]
 
@@ -58,8 +59,9 @@
                                 <div class="row">
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-4 ">
                                         <label for="ThongTinChungHoGa_TenHoGaSauPhanLoai">Tên hố ga sau phân loại <span class="text-danger"></span></label>
-                                        <InputText  @oninput="OnInputChange" @bind-Value="Input.ThongTinChungHoGa_TenHoGaSauPhanLoai" class="form-control" id="ThongTinChungHoGa_TenHoGaSauPhanLoai" placeholder="Tên hố ga sau phân loại" readonly />
-                                        <ValidationMessage For="() => Input.ThongTinChungHoGa_TenHoGaSauPhanLoai" class="text-danger" />
+                                        <InputText readonly  @bind-Value="nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai" class="form-control" id="PhanLoaiHoGas_TenHoGaSauPhanLoai" placeholder="Tên hố ga sau phân loại"  />
+                                        @* <InputText  @oninput="OnInputChange" @bind-Value="Input.ThongTinChungHoGa_TenHoGaSauPhanLoai" class="form-control" id="ThongTinChungHoGa_TenHoGaSauPhanLoai" placeholder="Tên hố ga sau phân loại" readonly />
+                                        <ValidationMessage For="() => Input.ThongTinChungHoGa_TenHoGaSauPhanLoai" class="text-danger" /> *@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                         <label for="ThongTinChungHoGa_TenHoGaTheoBanVe">Tên hố ga theo bản vẽ <span class="text-danger">*</span></label>
@@ -273,7 +275,7 @@
                                 <h5 class="mt-2">7.Chát hố ga mặt trong </h5>
                                 <div class="row">
                                     <div class="form-floating col-sm-6 col-md-3">
-                                        <label for="ChatMatTrong_D">Chiểu dài (m) <span class="text-danger">*</span></label>
+                                        <label for="ChatMatTrong_D">Chiều dài (m) <span class="text-danger">*</span></label>
                                        <InputNumber  @oninput="OnInputChange" @bind-Value="Input.ChatMatTrong_D" class="form-control" id="ChatMatTrong_D" placeholder="Chiểu dài" />
                                         <ValidationMessage For="() => Input.ChatMatTrong_D" class="text-danger" />
                                     </div>
@@ -540,7 +542,7 @@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                         <label for="HinhThucDauNoi8_CanhCheo">Cạnh chéo </label>
-                                       <InputNumber  @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi8_CanhCheo" class="form-control" id="HinhThucDauNoi8_CanhCheo" placeholder="Cạnh chéo" />
+                                       <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi8_CanhCheo" class="form-control" id="HinhThucDauNoi8_CanhCheo" placeholder="Cạnh chéo" />
                                         <ValidationMessage For="() => Input.HinhThucDauNoi8_CanhCheo" class="text-danger" />
                                     </div>
                                 </div>
@@ -3228,7 +3230,7 @@
                             stt++;
                             <tr>
                                 <td>
-                                    <button class="btn btn-primary" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                    <button class="btn btn-primary" title="Chỉnh sửa" @onclick="()=>HandleEdit( item,item.Id)">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button class="btn btn-danger" title="Xóa" @onclick="()=>ConfirmDelete(item.Id)">
@@ -3238,7 +3240,7 @@
                                 <td class="text-center">@stt</td>
                                 <td class="text-center">@item.ThongTinLyTrinh_TuyenDuong</td>
                                 <td class="text-center">@item.ThongTinLyTrinh_LyTrinhTaiTimHoGa</td>
-                                <td class="text-center">@item.ThongTinChungHoGa_TenHoGaSauPhanLoai</td>
+                                <td class="text-center">@item.PhanLoaiHoGas_TenHoGaSauPhanLoai</td>
                                 <td class="text-center">@item.ThongTinChungHoGa_TenHoGaTheoBanVe</td>
                                 <td class="text-center">@GetTenDanhMucById(item.ThongTinChungHoGa_HinhThucHoGa) </td>
                                 <td class="text-center">@GetTenDanhMucById(item.ThongTinChungHoGa_KetCauMuMo)  </td>
@@ -3726,6 +3728,8 @@
         nuocMuaConvert = Input;
         nuocMuaConvert = await helpers.ConvertNuocMua(Input,listDanhMuc);
         Input = nuocMuaConvert;
+        LoadTenHoGaSauPhanLoai();
+
     }
 
     // Truy vấn data theo điều kiện tìm kiếm
@@ -3746,6 +3750,16 @@
         return danhMuc != null ? danhMuc.Ten : null;
     }
 
+    public async Task<string> GetTenPhanLoaiHoGaById(string id)
+    {
+        // Lấy bản ghi từ repository
+        var plhg = await PhanLoaiHoGaRepository.GetById(id);
+
+        // Kiểm tra xem bản ghi có tồn tại không
+        var ThongTinChungHoGa_TenHoGaSauPhanLoai =  plhg != null ? plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai : "";
+        return ThongTinChungHoGa_TenHoGaSauPhanLoai;
+    }
+
 
 
     //modal
@@ -3755,6 +3769,7 @@
     {
         isModalVisible = true;
         Input = new NuocMua();
+         nuocMuaVM = new();
     }
 
     private void HandleModalClose(bool isVisible)
@@ -3778,22 +3793,189 @@
 
     //Thêm sửa
     private bool isEdit = false;
-    private async Task HandleEdit(string Id)
+    private NuocMuaModel nuocMuaVM ;
+    private async Task HandleEdit(NuocMuaModel nuocmuavm,string Id)
     {
         isEdit = true;
         Input = await NuocMuaRepository.GetById(Id);
         TitleModal = "Cập nhật thông tin";
         isModalVisible = true;
+        nuocMuaVM = nuocmuavm;
     }
 
     //Thêm tên theo bảng phân loại
-    public async Task ThemTenTheoPL(NuocMua nuocMua)
+    public async Task ThemTenTheoPL()
     {
-        //kiểm tra xem có tồn tại trong
+        PhanLoaiHoGa searchData = new PhanLoaiHoGa
+        {
+            ThongTinChungHoGa_TenHoGaSauPhanLoai= Input.ThongTinChungHoGa_TenHoGaSauPhanLoai, 
+            ThongTinChungHoGa_HinhThucHoGa= Input.ThongTinChungHoGa_HinhThucHoGa, 
+            ThongTinChungHoGa_KetCauMuMo= Input.ThongTinChungHoGa_KetCauMuMo, 
+            ThongTinChungHoGa_KetCauTuong= Input.ThongTinChungHoGa_KetCauTuong, 
+            ThongTinChungHoGa_HinhThucMongHoGa= Input.ThongTinChungHoGa_HinhThucMongHoGa, 
+            ThongTinChungHoGa_KetCauMong= Input.ThongTinChungHoGa_KetCauMong, 
+            ThongTinChungHoGa_ChatMatTrong= Input.ThongTinChungHoGa_ChatMatTrong, 
+            ThongTinChungHoGa_ChatMatNgoai= Input.ThongTinChungHoGa_ChatMatNgoai, 
+            PhuBiHoGa_CDai= Input.PhuBiHoGa_CDai, 
+            PhuBiHoGa_CRong= Input.PhuBiHoGa_CRong, 
+            BeTongLotMong_D= Input.BeTongLotMong_D, 
+            BeTongLotMong_R= Input.BeTongLotMong_R, 
+            BeTongLotMong_C= Input.BeTongLotMong_C, 
+            BeTongMongHoGa_D= Input.BeTongMongHoGa_D, 
+            BeTongMongHoGa_R= Input.BeTongMongHoGa_R, 
+            BeTongMongHoGa_C= Input.BeTongMongHoGa_C, 
+            DeHoGa_D= Input.DeHoGa_D, 
+            DeHoGa_R= Input.DeHoGa_R, 
+            DeHoGa_C= Input.DeHoGa_C, 
+            TuongHoGa_D= Input.TuongHoGa_D, 
+            TuongHoGa_R= Input.TuongHoGa_R, 
+            TuongHoGa_C= Input.TuongHoGa_C, 
+            TuongHoGa_CdTuong= Input.TuongHoGa_CdTuong, 
+            DamGiuaHoGa_D= Input.DamGiuaHoGa_D, 
+            DamGiuaHoGa_R= Input.DamGiuaHoGa_R, 
+            DamGiuaHoGa_C= Input.DamGiuaHoGa_C, 
+            DamGiuaHoGa_CdDam= Input.DamGiuaHoGa_CdDam, 
+            DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa= Input.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa, 
+            ChatMatTrong_D= Input.ChatMatTrong_D, 
+            ChatMatTrong_R= Input.ChatMatTrong_R, 
+            ChatMatTrong_C= Input.ChatMatTrong_C, 
+            ChatMatNgoaiCanh_D= Input.ChatMatNgoaiCanh_D, 
+            ChatMatNgoaiCanh_R= Input.ChatMatNgoaiCanh_R, 
+            ChatMatNgoaiCanh_C= Input.ChatMatNgoaiCanh_C, 
+            MuMoThotDuoi_D= Input.MuMoThotDuoi_D, 
+            MuMoThotDuoi_R= Input.MuMoThotDuoi_R, 
+            MuMoThotDuoi_C= Input.MuMoThotDuoi_C, 
+            MuMoThotDuoi_CdTuong= Input.MuMoThotDuoi_CdTuong, 
+            MuMoThotTren_D= Input.MuMoThotTren_D, 
+            MuMoThotTren_R= Input.MuMoThotTren_R, 
+            MuMoThotTren_C= Input.MuMoThotTren_C, 
+            MuMoThotTren_CdTuong= Input.MuMoThotTren_CdTuong, 
+            HinhThucDauNoi1_Loai= Input.HinhThucDauNoi1_Loai, 
+            HinhThucDauNoi1_CanhDai= Input.HinhThucDauNoi1_CanhDai, 
+            HinhThucDauNoi1_CanhRong= Input.HinhThucDauNoi1_CanhRong, 
+            HinhThucDauNoi1_CanhCheo= Input.HinhThucDauNoi1_CanhCheo, 
+            HinhThucDauNoi2_Loai= Input.HinhThucDauNoi2_Loai, 
+            HinhThucDauNoi2_CanhDai= Input.HinhThucDauNoi2_CanhDai, 
+            HinhThucDauNoi2_CanhRong= Input.HinhThucDauNoi2_CanhRong, 
+            HinhThucDauNoi2_CanhCheo= Input.HinhThucDauNoi2_CanhCheo, 
+            HinhThucDauNoi3_Loai= Input.HinhThucDauNoi3_Loai, 
+            HinhThucDauNoi3_CanhDai= Input.HinhThucDauNoi3_CanhDai, 
+            HinhThucDauNoi3_CanhRong= Input.HinhThucDauNoi3_CanhRong, 
+            HinhThucDauNoi3_CanhCheo= Input.HinhThucDauNoi3_CanhCheo, 
+            HinhThucDauNoi4_Loai= Input.HinhThucDauNoi4_Loai, 
+            HinhThucDauNoi4_CanhDai= Input.HinhThucDauNoi4_CanhDai, 
+            HinhThucDauNoi4_CanhRong= Input.HinhThucDauNoi4_CanhRong, 
+            HinhThucDauNoi4_CanhCheo= Input.HinhThucDauNoi4_CanhCheo, 
+            HinhThucDauNoi5_Loai= Input.HinhThucDauNoi5_Loai, 
+            HinhThucDauNoi5_CanhDai= Input.HinhThucDauNoi5_CanhDai, 
+            HinhThucDauNoi5_CanhRong= Input.HinhThucDauNoi5_CanhRong, 
+            HinhThucDauNoi5_CanhCheo= Input.HinhThucDauNoi5_CanhCheo, 
+            HinhThucDauNoi6_Loai= Input.HinhThucDauNoi6_Loai, 
+            HinhThucDauNoi6_CanhDai= Input.HinhThucDauNoi6_CanhDai, 
+            HinhThucDauNoi6_CanhRong= Input.HinhThucDauNoi6_CanhRong, 
+            HinhThucDauNoi6_CanhCheo= Input.HinhThucDauNoi6_CanhCheo, 
+            HinhThucDauNoi7_Loai= Input.HinhThucDauNoi7_Loai, 
+            HinhThucDauNoi7_CanhDai= Input.HinhThucDauNoi7_CanhDai, 
+            HinhThucDauNoi7_CanhRong= Input.HinhThucDauNoi7_CanhRong, 
+            HinhThucDauNoi7_CanhCheo= Input.HinhThucDauNoi7_CanhCheo, 
+            HinhThucDauNoi8_Loai= Input.HinhThucDauNoi8_Loai, 
+            HinhThucDauNoi8_CanhDai= Input.HinhThucDauNoi8_CanhDai, 
+            HinhThucDauNoi8_CanhRong= Input.HinhThucDauNoi8_CanhRong, 
+            HinhThucDauNoi8_CanhCheo= Input.HinhThucDauNoi8_CanhCheo };
+        var id = await PhanLoaiHoGaRepository.InsertId(searchData);
+        Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
     }
     //Load tên theo phân loại
     public async Task LoadTenHoGaSauPhanLoai()
-    {
+    {   
+        PhanLoaiHoGa searchData = new PhanLoaiHoGa
+        {
+            ThongTinChungHoGa_TenHoGaSauPhanLoai= Input.ThongTinChungHoGa_TenHoGaSauPhanLoai, 
+            ThongTinChungHoGa_HinhThucHoGa= Input.ThongTinChungHoGa_HinhThucHoGa, 
+            ThongTinChungHoGa_KetCauMuMo= Input.ThongTinChungHoGa_KetCauMuMo, 
+            ThongTinChungHoGa_KetCauTuong= Input.ThongTinChungHoGa_KetCauTuong, 
+            ThongTinChungHoGa_HinhThucMongHoGa= Input.ThongTinChungHoGa_HinhThucMongHoGa, 
+            ThongTinChungHoGa_KetCauMong= Input.ThongTinChungHoGa_KetCauMong, 
+            ThongTinChungHoGa_ChatMatTrong= Input.ThongTinChungHoGa_ChatMatTrong, 
+            ThongTinChungHoGa_ChatMatNgoai= Input.ThongTinChungHoGa_ChatMatNgoai, 
+            PhuBiHoGa_CDai= Input.PhuBiHoGa_CDai, 
+            PhuBiHoGa_CRong= Input.PhuBiHoGa_CRong, 
+            BeTongLotMong_D= Input.BeTongLotMong_D, 
+            BeTongLotMong_R= Input.BeTongLotMong_R, 
+            BeTongLotMong_C= Input.BeTongLotMong_C, 
+            BeTongMongHoGa_D= Input.BeTongMongHoGa_D, 
+            BeTongMongHoGa_R= Input.BeTongMongHoGa_R, 
+            BeTongMongHoGa_C= Input.BeTongMongHoGa_C, 
+            DeHoGa_D= Input.DeHoGa_D, 
+            DeHoGa_R= Input.DeHoGa_R, 
+            DeHoGa_C= Input.DeHoGa_C, 
+            TuongHoGa_D= Input.TuongHoGa_D, 
+            TuongHoGa_R= Input.TuongHoGa_R, 
+            TuongHoGa_C= Input.TuongHoGa_C, 
+            TuongHoGa_CdTuong= Input.TuongHoGa_CdTuong, 
+            DamGiuaHoGa_D= Input.DamGiuaHoGa_D, 
+            DamGiuaHoGa_R= Input.DamGiuaHoGa_R, 
+            DamGiuaHoGa_C= Input.DamGiuaHoGa_C, 
+            DamGiuaHoGa_CdDam= Input.DamGiuaHoGa_CdDam, 
+            DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa= Input.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa, 
+            ChatMatTrong_D= Input.ChatMatTrong_D, 
+            ChatMatTrong_R= Input.ChatMatTrong_R, 
+            ChatMatTrong_C= Input.ChatMatTrong_C, 
+            ChatMatNgoaiCanh_D= Input.ChatMatNgoaiCanh_D, 
+            ChatMatNgoaiCanh_R= Input.ChatMatNgoaiCanh_R, 
+            ChatMatNgoaiCanh_C= Input.ChatMatNgoaiCanh_C, 
+            MuMoThotDuoi_D= Input.MuMoThotDuoi_D, 
+            MuMoThotDuoi_R= Input.MuMoThotDuoi_R, 
+            MuMoThotDuoi_C= Input.MuMoThotDuoi_C, 
+            MuMoThotDuoi_CdTuong= Input.MuMoThotDuoi_CdTuong, 
+            MuMoThotTren_D= Input.MuMoThotTren_D, 
+            MuMoThotTren_R= Input.MuMoThotTren_R, 
+            MuMoThotTren_C= Input.MuMoThotTren_C, 
+            MuMoThotTren_CdTuong= Input.MuMoThotTren_CdTuong, 
+            HinhThucDauNoi1_Loai= Input.HinhThucDauNoi1_Loai, 
+            HinhThucDauNoi1_CanhDai= Input.HinhThucDauNoi1_CanhDai, 
+            HinhThucDauNoi1_CanhRong= Input.HinhThucDauNoi1_CanhRong, 
+            HinhThucDauNoi1_CanhCheo= Input.HinhThucDauNoi1_CanhCheo, 
+            HinhThucDauNoi2_Loai= Input.HinhThucDauNoi2_Loai, 
+            HinhThucDauNoi2_CanhDai= Input.HinhThucDauNoi2_CanhDai, 
+            HinhThucDauNoi2_CanhRong= Input.HinhThucDauNoi2_CanhRong, 
+            HinhThucDauNoi2_CanhCheo= Input.HinhThucDauNoi2_CanhCheo, 
+            HinhThucDauNoi3_Loai= Input.HinhThucDauNoi3_Loai, 
+            HinhThucDauNoi3_CanhDai= Input.HinhThucDauNoi3_CanhDai, 
+            HinhThucDauNoi3_CanhRong= Input.HinhThucDauNoi3_CanhRong, 
+            HinhThucDauNoi3_CanhCheo= Input.HinhThucDauNoi3_CanhCheo, 
+            HinhThucDauNoi4_Loai= Input.HinhThucDauNoi4_Loai, 
+            HinhThucDauNoi4_CanhDai= Input.HinhThucDauNoi4_CanhDai, 
+            HinhThucDauNoi4_CanhRong= Input.HinhThucDauNoi4_CanhRong, 
+            HinhThucDauNoi4_CanhCheo= Input.HinhThucDauNoi4_CanhCheo, 
+            HinhThucDauNoi5_Loai= Input.HinhThucDauNoi5_Loai, 
+            HinhThucDauNoi5_CanhDai= Input.HinhThucDauNoi5_CanhDai, 
+            HinhThucDauNoi5_CanhRong= Input.HinhThucDauNoi5_CanhRong, 
+            HinhThucDauNoi5_CanhCheo= Input.HinhThucDauNoi5_CanhCheo, 
+            HinhThucDauNoi6_Loai= Input.HinhThucDauNoi6_Loai, 
+            HinhThucDauNoi6_CanhDai= Input.HinhThucDauNoi6_CanhDai, 
+            HinhThucDauNoi6_CanhRong= Input.HinhThucDauNoi6_CanhRong, 
+            HinhThucDauNoi6_CanhCheo= Input.HinhThucDauNoi6_CanhCheo, 
+            HinhThucDauNoi7_Loai= Input.HinhThucDauNoi7_Loai, 
+            HinhThucDauNoi7_CanhDai= Input.HinhThucDauNoi7_CanhDai, 
+            HinhThucDauNoi7_CanhRong= Input.HinhThucDauNoi7_CanhRong, 
+            HinhThucDauNoi7_CanhCheo= Input.HinhThucDauNoi7_CanhCheo, 
+            HinhThucDauNoi8_Loai= Input.HinhThucDauNoi8_Loai, 
+            HinhThucDauNoi8_CanhDai= Input.HinhThucDauNoi8_CanhDai, 
+            HinhThucDauNoi8_CanhRong= Input.HinhThucDauNoi8_CanhRong, 
+            HinhThucDauNoi8_CanhCheo= Input.HinhThucDauNoi8_CanhCheo };
+
+            PhanLoaiHoGa plHoGa = new ();
+            plHoGa = await PhanLoaiHoGaRepository.GetMPhanLoaiHoGaByDetail(searchData);
+           if(plHoGa ==null){
+               nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = "";
+               Input.ThongTinChungHoGa_TenHoGaSauPhanLoai ="";
+           }else{
+                 nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai;
+               Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = plHoGa.Id;
+           }
+        
+        
         
     }
 
@@ -3803,7 +3985,7 @@
 
         // Kiểm tra xem danh mục có tồn tại hay không
         bool check = await CheckIsExitsIdDanhMuc();
-
+        await  ThemTenTheoPL();
         if (check)
         {
             if (isEdit)
@@ -3813,7 +3995,7 @@
                 await NuocMuaRepository.Update(Input);
                 isModalVisible = false;
                 isEdit = false;
-                
+
                 Input = new NuocMua();
                 ToastService.ShowToast(
                     "Thông báo",
@@ -3824,6 +4006,7 @@
                     duration: 5000
                 );
                 await LoadData();
+                nuocMuaVM = new();
             }
             else
             {
@@ -3841,6 +4024,7 @@
                     duration: 5000
                 );
                 await LoadData();
+                nuocMuaVM = new();
             }
         }
 

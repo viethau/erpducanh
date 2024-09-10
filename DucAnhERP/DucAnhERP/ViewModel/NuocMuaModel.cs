@@ -10,6 +10,7 @@ namespace DucAnhERP.ViewModel
         public string ThongTinLyTrinh_TuyenDuong { get; set; }
         public string ThongTinLyTrinh_LyTrinhTaiTimHoGa { get; set; }
         public string ThongTinChungHoGa_TenHoGaSauPhanLoai { get; set; }
+        public string PhanLoaiHoGas_TenHoGaSauPhanLoai { get; set; } 
         public string ThongTinChungHoGa_TenHoGaTheoBanVe { get; set; }
         public string ThongTinChungHoGa_HinhThucHoGa { get; set; }
         public string ThongTinChungHoGa_KetCauMuMo { get; set; }
