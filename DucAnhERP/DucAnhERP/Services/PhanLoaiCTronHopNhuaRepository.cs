@@ -246,7 +246,7 @@ namespace DucAnhERP.Services
 
                 // Tăng giá trị Flag lên 1
                 entity.Flag = maxFlag + 1;
-                entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = HinhThucTD + LoaiTD + " loại " + entity.Flag;
+                entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = HinhThucTD +" "+ LoaiTD + " loại " + entity.Flag;
 
                 // Chèn bản ghi mới vào bảng
                 context.PhanLoaiCTronHopNhuas.Add(entity);

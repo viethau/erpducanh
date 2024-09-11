@@ -161,10 +161,12 @@ namespace DucAnhERP.ViewModel
         public Double TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl { get; set; }
 
         public string ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop { get; set; }
+        public string PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop { get; set; }
         public string ThongTinMongDuongTruyenDan_LoaiMong { get; set; }
         public string ThongTinMongDuongTruyenDan_HinhThucMong { get; set; }
 
         public string ThongTinDeCong_TenLoaiDeCong { get; set; }
+        public string PhanLoaiDeCong_TenLoaiDeCong { get; set; }
         public string ThongTinDeCong_CauTaoDeCong { get; set; }
         public Double ThongTinDeCong_D { get; set; }
         public Double ThongTinDeCong_R { get; set; }
@@ -214,7 +216,7 @@ namespace DucAnhERP.ViewModel
         public Double TTKTHHCongHopRanh_CCaoMuMoThotTren { get; set; }
         public Double TTKTHHCongHopRanh_CRongMuMoTren { get; set; }
         public string TTKTHHCongHopRanh_LoaiThanhChong { get; set; }
-
+        public string PhanLoaiThanhChong_LoaiThanhChong { get; set; }
         public string TTKTHHCongHopRanh_CauTaoThanhChong { get; set; }
         public Double TTKTHHCongHopRanh_CCaoThanhChong { get; set; }
         public Double TTKTHHCongHopRanh_CRongThanhChong { get; set; }
@@ -224,12 +226,14 @@ namespace DucAnhERP.ViewModel
         public Double TTKTHHCongHopRanh_CCaoChatmatNgoai { get; set; }
         public Double TTKTHHCongHopRanh_TongChieuCao { get; set; }
         public string TTTDCongHoRanh_TenLoaiTamDanTieuChuan { get; set; }
+        public string PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan { get; set; }
         public string TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan { get; set; }
         public Double TTTDCongHoRanh_SoLuong { get; set; }
         public Double TTTDCongHoRanh_CDai { get; set; }
         public Double TTTDCongHoRanh_CRong { get; set; }
         public Double TTTDCongHoRanh_CCao { get; set; }
         public string TTTDCongHoRanh_TenLoaiTamDanLoai02 { get; set; }
+        public string PhanLoaiTDanTDan_TenLoaiTamDanLoai02 { get; set; }
         public string TTTDCongHoRanh_CauTaoTamDanTruyenDan { get; set; }
         public Double TTTDCongHoRanh_SoLuong1 { get; set; }
         public Double TTTDCongHoRanh_CDai1 { get; set; }

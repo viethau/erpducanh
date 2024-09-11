@@ -1,5 +1,4 @@
-﻿
-using DucAnhERP.Data;
+﻿using DucAnhERP.Data;
 using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
@@ -48,6 +47,31 @@ namespace DucAnhERP.Services
                             join phanLoaiTDHoGa in context.PhanLoaiTDHoGas
                             on nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa equals phanLoaiTDHoGa.Id into phanLoaiTDHoGaJoin
                             from phanLoaiTDHoGa in phanLoaiTDHoGaJoin.DefaultIfEmpty()
+
+                                // Left join với bảng PhanLoaiTDHoGas
+                            join PhanLoaiCTronHopNhua in context.PhanLoaiCTronHopNhuas
+                            on nuocMua.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals PhanLoaiCTronHopNhua.Id into PhanLoaiCTronHopNhuaJoin
+                            from PhanLoaiCTronHopNhua in PhanLoaiCTronHopNhuaJoin.DefaultIfEmpty()
+
+                                // Left join với bảng PhanLoaiMongCTrons
+                            join PhanLoaiMongCTron in context.PhanLoaiMongCTrons
+                            on nuocMua.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop equals PhanLoaiMongCTron.Id into PhanLoaiMongCTronJoin
+                            from PhanLoaiMongCTron in PhanLoaiMongCTronJoin.DefaultIfEmpty()
+
+                                // Left join với bảng PhanLoaiDeCongs
+                            join PhanLoaiDeCong in context.PhanLoaiDeCongs
+                            on nuocMua.ThongTinDeCong_TenLoaiDeCong equals PhanLoaiDeCong.Id into PhanLoaiDeCongJoin
+                            from PhanLoaiDeCong in PhanLoaiDeCongJoin.DefaultIfEmpty()
+
+                                // Left join với bảng PhanLoaiThanhChongs
+                            join PhanLoaiThanhChong in context.PhanLoaiThanhChongs
+                            on nuocMua.TTKTHHCongHopRanh_LoaiThanhChong equals PhanLoaiThanhChong.Id into PhanLoaiThanhChongJoin
+                            from PhanLoaiThanhChong in PhanLoaiThanhChongJoin.DefaultIfEmpty()
+
+                                // Left join với bảng PhanLoaiTDanTDans
+                            join PhanLoaiTDanTDan in context.PhanLoaiTDanTDans
+                            on nuocMua.TTTDCongHoRanh_TenLoaiTamDanTieuChuan equals PhanLoaiTDanTDan.Id into PhanLoaiTDanTDanJoin
+                            from PhanLoaiTDanTDan in PhanLoaiTDanTDanJoin.DefaultIfEmpty()
 
                                 // Sắp xếp theo CreateAt của DSNuocMua
                             orderby nuocMua.CreateAt
@@ -201,15 +225,16 @@ namespace DucAnhERP.Services
                                 ThongTinDuongTruyenDan_HinhThucTruyenDan = nuocMua.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "",
                                 ThongTinDuongTruyenDan_LoaiTruyenDan = nuocMua.ThongTinDuongTruyenDan_LoaiTruyenDan ?? "",
                                 ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = nuocMua.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "",
-                                PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = nuocMua.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "",
+                                PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = PhanLoaiCTronHopNhua.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "",
 
                                 TTCDSLCauKienDuongTruyenDan_TongChieuDai = nuocMua.TTCDSLCauKienDuongTruyenDan_TongChieuDai ?? 0,
                                 TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien = nuocMua.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien ?? 0,
                                 TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl = nuocMua.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl ?? 0,
-                                ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = nuocMua.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ?? "",
+
+                                ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = PhanLoaiMongCTron.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ?? "",
                                 ThongTinMongDuongTruyenDan_LoaiMong = nuocMua.ThongTinMongDuongTruyenDan_LoaiMong ?? "",
                                 ThongTinMongDuongTruyenDan_HinhThucMong = nuocMua.ThongTinMongDuongTruyenDan_HinhThucMong ?? "",
-                                ThongTinDeCong_TenLoaiDeCong = nuocMua.ThongTinDeCong_TenLoaiDeCong ?? "",
+                                ThongTinDeCong_TenLoaiDeCong = PhanLoaiDeCong.ThongTinDeCong_TenLoaiDeCong ?? "",
                                 ThongTinDeCong_CauTaoDeCong = nuocMua.ThongTinDeCong_CauTaoDeCong ?? "",
                                 ThongTinDeCong_D = nuocMua.ThongTinDeCong_D ?? 0,
                                 ThongTinDeCong_R = nuocMua.ThongTinDeCong_R ?? 0,
@@ -256,7 +281,7 @@ namespace DucAnhERP.Services
                                 TTKTHHCongHopRanh_CRongMuMoDuoi = nuocMua.TTKTHHCongHopRanh_CRongMuMoDuoi ?? 0,
                                 TTKTHHCongHopRanh_CCaoMuMoThotTren = nuocMua.TTKTHHCongHopRanh_CCaoMuMoThotTren ?? 0,
                                 TTKTHHCongHopRanh_CRongMuMoTren = nuocMua.TTKTHHCongHopRanh_CRongMuMoTren ?? 0,
-                                TTKTHHCongHopRanh_LoaiThanhChong = nuocMua.TTKTHHCongHopRanh_LoaiThanhChong ?? "",
+                                TTKTHHCongHopRanh_LoaiThanhChong = PhanLoaiThanhChong.TTKTHHCongHopRanh_LoaiThanhChong ?? "",
                                 TTKTHHCongHopRanh_CauTaoThanhChong = nuocMua.TTKTHHCongHopRanh_CauTaoThanhChong ?? "",
                                 TTKTHHCongHopRanh_CCaoThanhChong = nuocMua.TTKTHHCongHopRanh_CCaoThanhChong ?? 0,
                                 TTKTHHCongHopRanh_CRongThanhChong = nuocMua.TTKTHHCongHopRanh_CRongThanhChong ?? 0,
@@ -265,7 +290,7 @@ namespace DucAnhERP.Services
                                 TTKTHHCongHopRanh_CCaoChatMatTrong = nuocMua.TTKTHHCongHopRanh_CCaoChatMatTrong ?? 0,
                                 TTKTHHCongHopRanh_CCaoChatmatNgoai = nuocMua.TTKTHHCongHopRanh_CCaoChatmatNgoai ?? 0,
                                 TTKTHHCongHopRanh_TongChieuCao = nuocMua.TTKTHHCongHopRanh_TongChieuCao ?? 0,
-                                TTTDCongHoRanh_TenLoaiTamDanTieuChuan = nuocMua.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ?? "",
+                                TTTDCongHoRanh_TenLoaiTamDanTieuChuan = PhanLoaiTDanTDan.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ?? "",
                                 TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = nuocMua.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan ?? "",
                                 TTTDCongHoRanh_SoLuong = nuocMua.TTTDCongHoRanh_SoLuong ?? 0,
                                 TTTDCongHoRanh_CDai = nuocMua.TTTDCongHoRanh_CDai ?? 0,

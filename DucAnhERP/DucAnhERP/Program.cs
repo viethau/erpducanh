@@ -61,6 +61,10 @@ builder.Services.AddScoped<INuocMuaRepository, NuocMuaRepository>();
 builder.Services.AddScoped<IPhanLoaiHoGaRepository, PhanLoaiHoGaRepository>();
 builder.Services.AddScoped<IPhanLoaiTDHoGaRepository, PhanLoaiTDHoGaRepository>();
 builder.Services.AddScoped<IPhanLoaiCTronHopNhuaRepository, PhanLoaiCTronHopNhuaRepository>();
+builder.Services.AddScoped<IPhanLoaiMongCTronRepository, PhanLoaiMongCTronRepository>();
+builder.Services.AddScoped<IPhanLoaiDeCongRepository, PhanLoaiDeCongRepository>();
+builder.Services.AddScoped<IPhanLoaiThanhChongRepository, PhanLoaiThanhChongRepository>();
+builder.Services.AddScoped<IPhanLoaiTDanTDanRepository, PhanLoaiTDanTDanRepository>();
 
 
 builder.Services.AddAuthentication(options =>

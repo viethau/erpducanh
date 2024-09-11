@@ -12,6 +12,10 @@
 @inject IPhanLoaiHoGaRepository PhanLoaiHoGaRepository
 @inject IPhanLoaiTDHoGaRepository PhanLoaiTDHoGaRepository
 @inject IPhanLoaiCTronHopNhuaRepository PhanLoaiCTronHopNhuaRepository
+@inject IPhanLoaiMongCTronRepository PhanLoaiMongCTronRepository
+@inject IPhanLoaiDeCongRepository PhanLoaiDeCongRepository
+@inject IPhanLoaiThanhChongRepository PhanLoaiThanhChongRepository
+@inject IPhanLoaiTDanTDanRepository PhanLoaiTDanTDanRepository
 @inject DucAnhERP.Services.ToastService ToastService
 @attribute [Authorize]
 
@@ -651,93 +655,84 @@
                                 <div class="row">
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinCaoDoHoGa_CaoDoTuNhien">Cao độ tự nhiên (m)<span class="text-danger">*</span></label>
-                                       <InputNumber  @oninput="OnInputChange" @bind-Value="Input.ThongTinCaoDoHoGa_CaoDoTuNhien" class="form-control" id="ThongTinCaoDoHoGa_CaoDoTuNhien" placeholder="Cao độ tự nhiên (m)" />
+                                        <InputNumber @oninput="OnInputChange" @bind-Value="Input.ThongTinCaoDoHoGa_CaoDoTuNhien" class="form-control" id="ThongTinCaoDoHoGa_CaoDoTuNhien" placeholder="Cao độ tự nhiên (m)" />
                                         <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_CaoDoTuNhien" class="text-danger" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinCaoDoHoGa_CdDinhViaHeHoanThien">CĐ đỉnh vỉa hè hoàn thiện (m)<span class="text-danger">*</span></label>
-                                       <InputNumber  @oninput="OnInputChange" @bind-Value="Input.ThongTinCaoDoHoGa_CdDinhViaHeHoanThien" class="form-control" id="ThongTinCaoDoHoGa_CdDinhViaHeHoanThien" placeholder="CĐ đỉnh vỉa hè hoàn thiện (m)" />
+                                        <InputNumber @oninput="OnInputChange" @bind-Value="Input.ThongTinCaoDoHoGa_CdDinhViaHeHoanThien" class="form-control" id="ThongTinCaoDoHoGa_CdDinhViaHeHoanThien" placeholder="CĐ đỉnh vỉa hè hoàn thiện (m)" />
                                         <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_CdDinhViaHeHoanThien" class="text-danger" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinCaoDoHoGa_CaoDoDinhK98">Cao độ đỉnh K98 (m)<span class="text-danger">*</span></label>
-                                       <InputNumber  @oninput="OnInputChange" @bind-Value="Input.ThongTinCaoDoHoGa_CaoDoDinhK98" class="form-control" id="ThongTinCaoDoHoGa_CaoDoDinhK98" placeholder="Cao độ đỉnh K98" />
+                                        <InputNumber @oninput="OnInputChange" @bind-Value="Input.ThongTinCaoDoHoGa_CaoDoDinhK98" class="form-control" id="ThongTinCaoDoHoGa_CaoDoDinhK98" placeholder="Cao độ đỉnh K98" />
                                         <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_CaoDoDinhK98" class="text-danger" />
                                     </div>
-                                   <div class="form-floating col-sm-6 col-md-3">
-                                     <label for="ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao">Cao độ hiện trạng trước khi đào (m)</label>
-                                    <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao" class="form-control" id="ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao" placeholder="Cao độ hiện trạng trước khi đào" />
-
-                                     </div>
-                                     <div class="form-floating col-sm-6 col-md-3">
-                                     <label for="ThongTinCaoDoHoGa_DayDao">Đáy đào (m)</label>
-                                    <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_DayDao" class="form-control" id="ThongTinCaoDoHoGa_DayDao" placeholder="Đáy đào" />
-
-                                     </div>
-                                     <div class="form-floating col-sm-6 col-md-3">
-                                         <label for="ThongTinCaoDoHoGa_CSauDao">C.Sâu đào (m)</label>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao">Cao độ hiện trạng trước khi đào (m)</label>
+                                        <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao" class="form-control" id="ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao" placeholder="Cao độ hiện trạng trước khi đào" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinCaoDoHoGa_DayDao">Đáy đào (m)</label>
+                                        <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_DayDao" class="form-control" id="ThongTinCaoDoHoGa_DayDao" placeholder="Đáy đào" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinCaoDoHoGa_CSauDao">C.Sâu đào (m)</label>
                                         <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_CSauDao" class="form-control" id="ThongTinCaoDoHoGa_CSauDao" placeholder="C.Sâu đào" />
-
-                                     </div
-                                   
-                                     </div>
-                                     <div class="form-floating col-sm-6 col-md-3">
-                                     <label for="ThongTinCaoDoHoGa_DinhLotMong">Đỉnh lót móng (m)</label>
-                                    <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_DinhLotMong" class="form-control" id="ThongTinCaoDoHoGa_DinhLotMong" placeholder="Đỉnh lót móng" />
-
-                                     </div>
-                                     <div class="form-floating col-sm-6 col-md-3">
-                                     <label for="ThongTinCaoDoHoGa_CdDinhMong">CĐ đỉnh móng  (m)</label>
-                                    <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_CdDinhMong" class="form-control" id="ThongTinCaoDoHoGa_CdDinhMong" placeholder="CĐ đỉnh móng " />
-
-                                     </div> 
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinCaoDoHoGa_DinhLotMong">Đỉnh lót móng (m)</label>
+                                        <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_DinhLotMong" class="form-control" id="ThongTinCaoDoHoGa_DinhLotMong" placeholder="Đỉnh lót móng" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinCaoDoHoGa_CdDinhMong">CĐ đỉnh móng  (m)</label>
+                                        <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_CdDinhMong" class="form-control" id="ThongTinCaoDoHoGa_CdDinhMong" placeholder="CĐ đỉnh móng " />
+                                    </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinCaoDoHoGa_CdDayHoGa">CĐ đáy hố ga  (m)<span class="text-danger">*</span></label>
-                                       <InputNumber  @oninput="OnInputChange" @bind-Value="Input.ThongTinCaoDoHoGa_CdDayHoGa" class="form-control" id="ThongTinCaoDoHoGa_CdDayHoGa" placeholder="CĐ đáy hố ga " />
+                                        <InputNumber @oninput="OnInputChange" @bind-Value="Input.ThongTinCaoDoHoGa_CdDayHoGa" class="form-control" id="ThongTinCaoDoHoGa_CdDayHoGa" placeholder="CĐ đáy hố ga " />
                                         <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_CdDayHoGa" class="text-danger" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinCaoDoHoGa_CCaoTuong">C.Cao tường (m)</label>
-                                       <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_CCaoTuong" class="form-control" id="ThongTinCaoDoHoGa_CCaoTuong" placeholder="C.Cao tường" />
-
+                                        <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_CCaoTuong" class="form-control" id="ThongTinCaoDoHoGa_CCaoTuong" placeholder="C.Cao tường" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinCaoDoHoGa_DinhTuongDuoiDamGiuaTuong">Đỉnh tường dưới dầm giữa tường (m)</label>
-                                       <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_DinhTuongDuoiDamGiuaTuong" class="form-control" id="ThongTinCaoDoHoGa_DinhTuongDuoiDamGiuaTuong" placeholder="Đỉnh tường dưới dầm giữa tường" />
-
+                                        <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_DinhTuongDuoiDamGiuaTuong" class="form-control" id="ThongTinCaoDoHoGa_DinhTuongDuoiDamGiuaTuong" placeholder="Đỉnh tường dưới dầm giữa tường" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinCaoDoHoGa_DinhDamGiuaTuong">Đỉnh dầm giữa tường</label>
-                                       <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_DinhDamGiuaTuong" class="form-control" id="ThongTinCaoDoHoGa_DinhDamGiuaTuong" placeholder="Đỉnh dầm giữa tường" />
+                                        <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_DinhDamGiuaTuong" class="form-control" id="ThongTinCaoDoHoGa_DinhDamGiuaTuong" placeholder="Đỉnh dầm giữa tường" />
 
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinCaoDoHoGa_DinhTuong">Đỉnh tường(m)</label>
-                                       <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_DinhTuong" class="form-control" id="ThongTinCaoDoHoGa_DinhTuong" placeholder="Đỉnh tường" />
+                                        <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_DinhTuong" class="form-control" id="ThongTinCaoDoHoGa_DinhTuong" placeholder="Đỉnh tường" />
 
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinCaoDoHoGa_DinhMuMoThotDuoi">Đỉnh mũ mố thớt dưới (m)</label>
-                                       <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_DinhMuMoThotDuoi" class="form-control" id="ThongTinCaoDoHoGa_DinhDamGiuaTuong" placeholder="Đỉnh mũ mố thớt dưới" />
+                                        <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_DinhMuMoThotDuoi" class="form-control" id="ThongTinCaoDoHoGa_DinhDamGiuaTuong" placeholder="Đỉnh mũ mố thớt dưới" />
 
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinCaoDoHoGa_CdDinhHoGa">CĐ đỉnh hố ga (m)<span class="text-danger">*</span></label>
-                                       <InputNumber  @oninput="OnInputChange" @bind-Value="Input.ThongTinCaoDoHoGa_CdDinhHoGa" class="form-control" id="ThongTinCaoDoHoGa_CdDinhHoGa" placeholder="CĐ đỉnh hố ga" />
+                                        <InputNumber @oninput="OnInputChange" @bind-Value="Input.ThongTinCaoDoHoGa_CdDinhHoGa" class="form-control" id="ThongTinCaoDoHoGa_CdDinhHoGa" placeholder="CĐ đỉnh hố ga" />
                                         <ValidationMessage For="() => Input.ThongTinCaoDoHoGa_CdDinhHoGa" class="text-danger" />
                                     </div>
-                                      <div class="form-floating col-sm-6 col-md-3">
-                                          <label for="ThongTinCaoDoHoGa_TongChieuCaoHoGa">Tổng chiều cao hố ga(m)</label>
-                                         <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_TongChieuCaoHoGa" class="form-control" id="ThongTinCaoDoHoGa_TongChieuCaoHoGa" placeholder="Tổng chiều cao hố ga" />
-                                       </div>
-                                       <div class="form-floating col-sm-6 col-md-3">
-                                          <label for="ThongTinCaoDoHoGa_ChenhCaoDinhHoGaVaHienTrangDao">Chênh cao đỉnh hố ga và hiện trạng đào (m)</label>
-                                         <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_ChenhCaoDinhHoGaVaHienTrangDao" class="form-control" id="ThongTinCaoDoHoGa_ChenhCaoDinhHoGaVaHienTrangDao" placeholder="Chênh cao đỉnh hố ga và hiện trạng đào" />
-                                        </div>
-                                        <div class="form-floating col-sm-6 col-md-3">
-                                          <label for="ThongTinCaoDoHoGa_TongChieuCaoChiemChoDapTra">Tổng chiều cao chiếm chỗ đắp trả (m)</label>
-                                         <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_TongChieuCaoChiemChoDapTra" class="form-control" id="ThongTinCaoDoHoGa_TongChieuCaoChiemChoDapTra" placeholder="Tổng chiều cao chiếm chỗ đắp trả" />
-                                        </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinCaoDoHoGa_TongChieuCaoHoGa">Tổng chiều cao hố ga(m)</label>
+                                        <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_TongChieuCaoHoGa" class="form-control" id="ThongTinCaoDoHoGa_TongChieuCaoHoGa" placeholder="Tổng chiều cao hố ga" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinCaoDoHoGa_ChenhCaoDinhHoGaVaHienTrangDao">Chênh cao đỉnh hố ga và hiện trạng đào (m)</label>
+                                        <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_ChenhCaoDinhHoGaVaHienTrangDao" class="form-control" id="ThongTinCaoDoHoGa_ChenhCaoDinhHoGaVaHienTrangDao" placeholder="Chênh cao đỉnh hố ga và hiện trạng đào" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinCaoDoHoGa_TongChieuCaoChiemChoDapTra">Tổng chiều cao chiếm chỗ đắp trả (m)</label>
+                                        <InputNumber readonly @bind-Value="Input.ThongTinCaoDoHoGa_TongChieuCaoChiemChoDapTra" class="form-control" id="ThongTinCaoDoHoGa_TongChieuCaoChiemChoDapTra" placeholder="Tổng chiều cao chiếm chỗ đắp trả" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -905,7 +900,6 @@
                             </div>
                         </div>
 
-
                         <div class="row">
                             <div class="col">
                                 <h4 class="mt-2"> Thông tin lý trình truyền dẫn</h4>
@@ -961,18 +955,21 @@
                                         </select>
                                         <ValidationMessage For="() => Input.ThongTinDuongTruyenDan_HinhThucTruyenDan" class="text-danger" />
                                     </div>
-                                    <div class="form-floating col-sm-6 col-md-3">
+                                   @*  <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai">Tên loại truyền dẫn sau phân loại<span class="text-danger"></span></label>
                                         <InputText  @oninput="OnInputChange" @bind-Value="Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai" class="form-control" id="ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai" placeholder="Tên loại truyền dẫn sau phân loại" />
                                         <ValidationMessage For="() => Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai" class="text-danger" />
+                                    </div> *@
+                                     <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai">Tên loại truyền dẫn sau phân loại<span class="text-danger"></span></label>
+                                        <InputText readonly @oninput="OnInputChange" @bind-Value="nuocMuaVM.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai" class="form-control" id="PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai" placeholder="Tên loại truyền dẫn sau phân loại" />
                                     </div>
-
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <h4 class="mt-2 "> Thông tin chiều dài và số lượng cấu kiện đường truyền dẫn</h4>
+                                <h4 class="mt-2 "> Thông tin chiều dài </h4>
                                 <hr />
                                 <div class="row">
                                      <div class="form-floating col-sm-6 col-md-3">
@@ -989,10 +986,6 @@
                                         <label for="TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl">SL cấu kiện tính KL<span class="text-danger">*</span></label>
                                        <InputNumber readonly @bind-Value="Input.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl" class="form-control" id="TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl" placeholder="SL cấu kiện tính KL" />
                                     </div>
-                                     <div class="form-floating col-sm-6 col-md-3">
-                                         <label for="TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl">SL cấu kiện tính KL</label>
-                                        <InputNumber readonly @bind-Value="Input.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl" class="form-control" id="TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl" placeholder="SL cấu kiện tính KL" />
-                                     </div>
                                 </div>
                             </div>
                         </div>
@@ -1001,10 +994,14 @@
                                 <h4 class="mt-2 "> Thông tin móng đường truyền dẫn</h4>
                                 <hr />
                                 <div class="row">
-                                    <div class="form-floating col-sm-6 col-md-3">
+                                   @*  <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop">Phân loại móng cống tròn, cống hộp <span class="text-danger"></span></label>
                                         <InputText  @oninput="OnInputChange" @bind-Value="Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop" class="form-control" id="ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop" placeholder="Tên loại truyền dẫn sau phân loại" />
                                         <ValidationMessage For="() => Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop" class="text-danger" />
+                                    </div>  *@
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop">Phân loại móng cống tròn, cống hộp <span class="text-danger"></span></label>
+                                        <InputText readonly  @oninput="OnInputChange" @bind-Value="nuocMuaVM.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop" class="form-control" id="PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop" placeholder="Tên loại truyền dẫn sau phân loại" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinMongDuongTruyenDan_LoaiMong">Loại móng <span class="text-danger">*</span></label>
@@ -1036,10 +1033,14 @@
                                 <h4 class="mt-2 "> Thông tin đế cống</h4>
                                 <hr />
                                 <div class="row">
-                                    <div class="form-floating col-6">
+                                    @* <div class="form-floating col-6">
                                         <label for="ThongTinDeCong_TenLoaiDeCong">Tên loại đế cống<span class="text-danger"></span></label>
                                         <InputText  @oninput="OnInputChange" @bind-Value="Input.ThongTinDeCong_TenLoaiDeCong" class="form-control" id="ThongTinDeCong_TenLoaiDeCong" placeholder="Tên loại truyền dẫn sau phân loại" />
                                         <ValidationMessage For="() => Input.ThongTinDeCong_TenLoaiDeCong" class="text-danger" />
+                                    </div> *@
+                                    <div class="form-floating col-6">
+                                        <label for="PhanLoaiDeCong_TenLoaiDeCong">Tên loại đế cống<span class="text-danger"></span></label>
+                                        <InputText readonly  @oninput="OnInputChange" @bind-Value="nuocMuaVM.PhanLoaiDeCong_TenLoaiDeCong" class="form-control" id="PhanLoaiDeCong_TenLoaiDeCong" placeholder="Tên loại truyền dẫn sau phân loại" />
                                     </div>
                                     <div class="form-floating col-6">
                                         <label for="ThongTinDeCong_CauTaoDeCong">Cấu tạo đế cống<span class="text-danger"></span></label>
@@ -1340,10 +1341,14 @@
                                 </div>
                                 <h5>Thanh chống</h5>
                                 <div class="row">
-                                    <div class="form-floating col-sm-6 col-md-3">
+                                   @*<div class="form-floating col-sm-6 col-md-3">
                                         <label for="TTKTHHCongHopRanh_LoaiThanhChong">Loại thanh chống<span class="text-danger"></span></label>
                                         <InputText  @oninput="OnInputChange" @bind-Value="Input.TTKTHHCongHopRanh_LoaiThanhChong" class="form-control" id="TTKTHHCongHopRanh_LoaiThanhChong" placeholder="Loại thanh chống" />
                                         <ValidationMessage For="() => Input.TTKTHHCongHopRanh_LoaiThanhChong" class="text-danger" />
+                                    </div> *@
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="PhanLoaiTDanTDan_LoaiThanhChong">Loại thanh chống<span class="text-danger"></span></label>
+                                        <InputText readonly @oninput="OnInputChange" @bind-Value="nuocMuaVM.PhanLoaiThanhChong_LoaiThanhChong" class="form-control" id="PhanLoaiThanhChong_LoaiThanhChong" placeholder="Loại thanh chống" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="TTKTHHCongHopRanh_CauTaoThanhChong">Cấu tạo thanh chống<span class="text-danger">*</span></label>
@@ -1395,18 +1400,21 @@
                             </div>
                         </div>
 
-
                         <div class="row">
                             <div class="col">
                                 <h4 class="mt-2 "> Thông tin tấm đan cống hộp, rãnh</h4>
                                 <hr />
                                 <h5> Thông tin tấm đan tiêu chuẩn</h5>
                                 <div class="row">
-                                    <div class="form-floating col-sm-6 col-md-3">
+                                   @*  <div class="form-floating col-sm-6 col-md-3">
                                         <label for="TTTDCongHoRanh_TenLoaiTamDanTieuChuan">Tên loại tấm đan tiêu chuẩn<span class="text-danger"></span></label>
                                         <InputText  @oninput="OnInputChange" @bind-Value="Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan" class="form-control" id="TTTDCongHoRanh_TenLoaiTamDanTieuChuan" placeholder="Tên loại tấm đan tiêu chuẩn" />
                                         <ValidationMessage For="() => Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan" class="text-danger" />
-                                    </div>
+                                    </div> *@
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan">Tên loại tấm đan tiêu chuẩn<span class="text-danger"></span></label>
+                                        <InputText readonly @oninput="OnInputChange" @bind-Value="nuocMuaVM.PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan" class="form-control" id="PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan" placeholder="Tên loại tấm đan tiêu chuẩn" />
+                                    </div> 
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan">Cấu tạo tấm đan truyền dẫn tấm đan tiêu chuẩn<span class="text-danger"></span></label>
 
@@ -1443,10 +1451,14 @@
                                 </div>
                                 <h5> Thông tin tấm đan loại 02</h5>
                                 <div class="row">
-                                    <div class="form-floating col-sm-6 col-md-3">
+                                    @* <div class="form-floating col-sm-6 col-md-3">
                                         <label for="TTTDCongHoRanh_TenLoaiTamDanLoai02">Tên loại tấm đan loại 02<span class="text-danger"></span></label>
                                         <InputText  @oninput="OnInputChange" @bind-Value="Input.TTTDCongHoRanh_TenLoaiTamDanLoai02" class="form-control" id="TTTDCongHoRanh_TenLoaiTamDanLoai02" placeholder="Tên loại tấm đan loại 02" />
                                         <ValidationMessage For="() => Input.TTTDCongHoRanh_TenLoaiTamDanLoai02" class="text-danger" />
+                                    </div> *@
+                                     <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="PhanLoaiTDanTDan_TenLoaiTamDanLoai02">Tên loại tấm đan loại 02<span class="text-danger"></span></label>
+                                        <InputText readonly @oninput="OnInputChange" @bind-Value="nuocMuaVM.PhanLoaiTDanTDan_TenLoaiTamDanLoai02" class="form-control" id="PhanLoaiTDanTDan_TenLoaiTamDanLoai02" placeholder="Tên loại tấm đan loại 02" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="TTTDCongHoRanh_CauTaoTamDanTruyenDan">Cấu tạo tấm đan truyền dẫn<span class="text-danger"></span></label>
@@ -1517,8 +1529,6 @@
                             </div>
                         </div>
  
-
-
                         <div class="row">
                             <div class="col">
                                 <h4 class="mt-2 "> Thông tin kích thước hình học ống nhựa</h4>
@@ -1526,36 +1536,37 @@
                                 <div class="row">
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinKichThuocHinhHocOngNhua_CDayPhuBi">C.Dầy phủ bì (m) <span class="text-danger">*</span></label>
-                                       <InputNumber  @oninput="OnInputChange" @bind-Value="Input.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi" class="form-control" id="ThongTinKichThuocHinhHocOngNhua_CDayPhuBi" placeholder="C.Dầy phủ bì" />
+                                        <InputNumber @oninput="OnInputChange" @bind-Value="Input.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi" class="form-control" id="ThongTinKichThuocHinhHocOngNhua_CDayPhuBi" placeholder="C.Dầy phủ bì" />
                                         <ValidationMessage For="() => Input.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi" class="text-danger" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinKichThuocHinhHocOngNhua_SoCanh">Số cạnh <span class="text-danger">*</span></label>
-                                       <InputNumber  @oninput="OnInputChange" @bind-Value="Input.ThongTinKichThuocHinhHocOngNhua_SoCanh" class="form-control" id="ThongTinKichThuocHinhHocOngNhua_SoCanh" placeholder="Số cạnh" />
+                                        <InputNumber @oninput="OnInputChange" @bind-Value="Input.ThongTinKichThuocHinhHocOngNhua_SoCanh" class="form-control" id="ThongTinKichThuocHinhHocOngNhua_SoCanh" placeholder="Số cạnh" />
                                         <ValidationMessage For="() => Input.ThongTinKichThuocHinhHocOngNhua_SoCanh" class="text-danger" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinKichThuocHinhHocOngNhua_LongSuDung">Lòng sử dụng (m) <span class="text-danger">*</span></label>
-                                       <InputNumber  @oninput="OnInputChange" @bind-Value="Input.ThongTinKichThuocHinhHocOngNhua_LongSuDung" class="form-control" id="ThongTinKichThuocHinhHocOngNhua_LongSuDung" placeholder="Lòng sử dụng" />
+                                        <InputNumber @oninput="OnInputChange" @bind-Value="Input.ThongTinKichThuocHinhHocOngNhua_LongSuDung" class="form-control" id="ThongTinKichThuocHinhHocOngNhua_LongSuDung" placeholder="Lòng sử dụng" />
                                         <ValidationMessage For="() => Input.ThongTinKichThuocHinhHocOngNhua_LongSuDung" class="text-danger" />
                                     </div>
-                                     <div class="form-floating col-sm-6 col-md-3">
-                                         <label for="ThongTinKichThuocHinhHocOngNhua_TongCCaoOng">Tổng C.Cao ống (m)</label>
+                                    <div class="form-floating col-sm-6 col-md-3">
+                                        <label for="ThongTinKichThuocHinhHocOngNhua_TongCCaoOng">Tổng C.Cao ống (m)</label>
                                         <InputNumber readonly @bind-Value="Input.ThongTinKichThuocHinhHocOngNhua_TongCCaoOng" class="form-control" id="ThongTinKichThuocHinhHocOngNhua_TongCCaoOng" placeholder="Tổng C.Cao ống (m)" />
-                                     </div>
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinKichThuocHinhHocOngNhua_CCaoDemCat">C.Cao đệm cát (m) <span class="text-danger">*</span></label>
-                                       <InputNumber  @oninput="OnInputChange" @bind-Value="Input.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat" class="form-control" id="ThongTinKichThuocHinhHocOngNhua_CCaoDemCat" placeholder="C.Cao đệm cát" />
+                                        <InputNumber @oninput="OnInputChange" @bind-Value="Input.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat" class="form-control" id="ThongTinKichThuocHinhHocOngNhua_CCaoDemCat" placeholder="C.Cao đệm cát" />
                                         <ValidationMessage For="() => Input.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat" class="text-danger" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinKichThuocHinhHocOngNhua_CCaoDapCat">C.Cao đắp cát (m) <span class="text-danger">*</span></label>
-                                       <InputNumber  @oninput="OnInputChange" @bind-Value="Input.ThongTinKichThuocHinhHocOngNhua_CCaoDapCat" class="form-control" id="ThongTinKichThuocHinhHocOngNhua_CCaoDapCat" placeholder="C.Cao đắp cát" />
+                                        <InputNumber @oninput="OnInputChange" @bind-Value="Input.ThongTinKichThuocHinhHocOngNhua_CCaoDapCat" class="form-control" id="ThongTinKichThuocHinhHocOngNhua_CCaoDapCat" placeholder="C.Cao đắp cát" />
                                         <ValidationMessage For="() => Input.ThongTinKichThuocHinhHocOngNhua_CCaoDapCat" class="text-danger" />
                                     </div>
 
                                 </div>
+
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col">
@@ -1622,6 +1633,10 @@
                                      <div class="form-floating col-sm-6 col-md-3">
                                      <label for="CDThuongLuu_DinhMongGop">Đỉnh móng gộp (C.Tròn, C.Hộp, Rãnh, rãnh thang)</label>
                                     <InputNumber readonly @bind-Value="Input.CDThuongLuu_DinhMongGop" class="form-control" id="CDThuongLuu_DinhMongGop" placeholder="Đỉnh móng gộp (C.Tròn, C.Hộp, Rãnh, rãnh thang)" />
+                                 </div>
+                                  <div class="form-floating col-sm-6 col-md-3">
+                                     <label for="CDThuongLuu_DinhMongCongHop">Đỉnh móng cống tròn (m)</label>
+                                    <InputNumber readonly @bind-Value="Input.CDThuongLuu_DinhMongCongTron" class="form-control" id="CDThuongLuu_DinhMongCongTron" placeholder="Đỉnh móng cống tròn (m)" />
                                  </div>
                                   <div class="form-floating col-sm-6 col-md-3">
                                      <label for="CDThuongLuu_DinhMongCongHop">Đỉnh móng cống hộp (m)</label>
@@ -2398,8 +2413,8 @@
                                  <h5>Tổng KL chiếm chỗ</h5>
                                 <div class="row">
                                     <div class="form-floating col-sm-6 col-md-3">
-                                         <label for="TKLD_KlCChoDa">KL C.chỗ đất (m3)</label>
-                                        <InputNumber readonly @bind-Value="Input.TKLD_KlCChoDa" class="form-control" id="TKLD_KlCChoDa" placeholder="KL C.chỗ đất (m3)" />
+                                         <label for="TKLD_KlCChoDat">KL C.chỗ đất (m3)</label>
+                                        <InputNumber readonly @bind-Value="Input.TKLD_KlCChoDat" class="form-control" id="TKLD_KlCChoDat" placeholder="KL C.chỗ đất (m3)" />
                                      </div>
 									 <div class="form-floating col-sm-6 col-md-3">
                                          <label for="TKLD_KlCChoDa">KL C.Chỗ đá (m3)</label>
@@ -3380,14 +3395,14 @@
                                 <td class="text-center">@item.ThongTinLyTrinhTruyenDan_DenHoGa</td>
                                 <td class="text-center">@GetTenDanhMucById(@item.ThongTinDuongTruyenDan_HinhThucTruyenDan)</td>
                                 <td class="text-center">@GetTenDanhMucById(@item.ThongTinDuongTruyenDan_LoaiTruyenDan)</td>
-                                <td class="text-center">@item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai</td>
+                                <td class="text-center">@item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
                                 <td class="text-center">@item.TTCDSLCauKienDuongTruyenDan_TongChieuDai</td>
                                 <td class="text-center">@item.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien</td>
                                 <td class="text-center">@item.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl</td>
-                                <td class="text-center">@item.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop</td>
+                                <td class="text-center">@item.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop</td>
                                 <td class="text-center">@GetTenDanhMucById(item.ThongTinMongDuongTruyenDan_LoaiMong)</td>
                                 <td class="text-center">@GetTenDanhMucById(item.ThongTinMongDuongTruyenDan_HinhThucMong)</td>
-                                <td class="text-center">@item.ThongTinDeCong_TenLoaiDeCong</td>
+                                <td class="text-center">@item.PhanLoaiDeCong_TenLoaiDeCong</td>
                                 <td class="text-center">@GetTenDanhMucById(item.ThongTinDeCong_CauTaoDeCong)</td>
                                 <td class="text-center">@item.ThongTinDeCong_D</td>
                                 <td class="text-center">@item.ThongTinDeCong_R</td>
@@ -3666,6 +3681,8 @@
     [SupplyParameterFromForm]
     private NuocMua Input { get; set; } = new();
     public List<DanhMuc> listDanhMuc = new();
+    private bool isEdit = false;
+    private NuocMuaModel nuocMuaVM ;
 
     public List<NuocMuaModel> listNuocMuaModel
     {
@@ -3726,8 +3743,13 @@
         nuocMuaConvert = Input;
         nuocMuaConvert = await helpers.ConvertNuocMua(Input,listDanhMuc);
         Input = nuocMuaConvert;
-        LoadTenHoGaSauPhanLoai();
-        LoadTenHoGaSauPhanLoaiTDHoGa();
+        await LoadTenHoGaSauPhanLoai();
+        await LoadTenHoGaSauPhanLoaiTDHoGa();
+        await LoadTenPLCTronHopNhua();
+        await LoadTenPhanLoaiMongCTron();
+        await LoadTenPhanLoaiDeCong();
+        await LoadTenPhanLoaiThanhChong();
+        await LoadTenPhanLoaiTDanTDan();
     }
 
     // Truy vấn data theo điều kiện tìm kiếm
@@ -3758,8 +3780,6 @@
         return ThongTinChungHoGa_TenHoGaSauPhanLoai;
     }
 
-
-
     //modal
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới thông tin";
@@ -3767,12 +3787,19 @@
     {
         isModalVisible = true;
         Input = new NuocMua();
-         nuocMuaVM = new();
+        nuocMuaVM = new();
+        if(isEdit ==true){
+            TitleModal = "Cập nhật thông tin";
+        }else{
+            TitleModal = "Thêm mới thông tin" ;
+        }
     }
 
     private void HandleModalClose(bool isVisible)
     {
         isModalVisible = isVisible;
+        Input = new();
+        isEdit = false;
     }
 
     private void HandleSave()
@@ -3786,12 +3813,10 @@
         // Logic for canceling
         isModalVisible = false;
         Input = new();
+        isEdit = false;
     }
 
-
     //Thêm sửa
-    private bool isEdit = false;
-    private NuocMuaModel nuocMuaVM ;
     private async Task HandleEdit(NuocMuaModel nuocmuavm,string Id)
     {
         isEdit = true;
@@ -3880,8 +3905,13 @@
             HinhThucDauNoi8_CanhDai= Input.HinhThucDauNoi8_CanhDai, 
             HinhThucDauNoi8_CanhRong= Input.HinhThucDauNoi8_CanhRong, 
             HinhThucDauNoi8_CanhCheo= Input.HinhThucDauNoi8_CanhCheo };
-        var id = await PhanLoaiHoGaRepository.InsertId(searchData);
-        Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
+
+        CheckObjHelper checkObjhelper =new() ;
+        if(checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData)){
+            var id = await PhanLoaiHoGaRepository.InsertId(searchData);
+            Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
+        }
+
     }
 
     //Load tên theo phân loại hố ga
@@ -3964,15 +3994,15 @@
             HinhThucDauNoi8_CanhRong= Input.HinhThucDauNoi8_CanhRong, 
             HinhThucDauNoi8_CanhCheo= Input.HinhThucDauNoi8_CanhCheo };
 
-            PhanLoaiHoGa plHoGa = new ();
-            plHoGa = await PhanLoaiHoGaRepository.GetMPhanLoaiHoGaByDetail(searchData);
-           if(plHoGa ==null){
-               nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = "";
-               Input.ThongTinChungHoGa_TenHoGaSauPhanLoai ="";
-           }else{
-                 nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai;
-               Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = plHoGa.Id;
-           }
+        PhanLoaiHoGa plHoGa = new ();
+        plHoGa = await PhanLoaiHoGaRepository.GetMPhanLoaiHoGaByDetail(searchData);
+        if(plHoGa ==null){
+            nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = "";
+            Input.ThongTinChungHoGa_TenHoGaSauPhanLoai ="";
+        }else{
+            nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai;
+            Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = plHoGa.Id;
+        }
 
     }
 
@@ -3989,9 +4019,12 @@
             ThongTinTamDanHoGa2_C = Input.ThongTinTamDanHoGa2_C 
 
          };
-        
-        var id = await PhanLoaiTDHoGaRepository.InsertId(searchData ,GetTenDanhMucById(searchData.ThongTinTamDanHoGa2_HinhThucDayHoGa));
-        Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = id;
+        CheckObjHelper checkObjhelper = new();
+        if(checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData)){
+            var id = await PhanLoaiTDHoGaRepository.InsertId(searchData ,GetTenDanhMucById(searchData.ThongTinTamDanHoGa2_HinhThucDayHoGa));
+            Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = id;
+        }
+
     }
 
     //Load tên theo phân loại tấm đan hố ga
@@ -3999,7 +4032,7 @@
     {   
         PhanLoaiTDHoGa searchData = new PhanLoaiTDHoGa
         {
-            
+
             ThongTinTamDanHoGa2_HinhThucDayHoGa = Input.ThongTinTamDanHoGa2_HinhThucDayHoGa , 
             ThongTinTamDanHoGa2_DuongKinh = Input.ThongTinTamDanHoGa2_DuongKinh , 
             ThongTinTamDanHoGa2_ChieuDay = Input.ThongTinTamDanHoGa2_ChieuDay , 
@@ -4008,15 +4041,15 @@
             ThongTinTamDanHoGa2_C = Input.ThongTinTamDanHoGa2_C 
              };
 
-            PhanLoaiTDHoGa plTDHoGa = new ();
-            plTDHoGa = await PhanLoaiTDHoGaRepository.GetMPhanLoaiTDHoGaByDetail(searchData);
-           if(plTDHoGa ==null){
-               nuocMuaVM.PhanLoaiTDHoGa_PhanLoaiDayHoGa = "";
-               Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ="";
-           }else{
-                 nuocMuaVM.PhanLoaiTDHoGa_PhanLoaiDayHoGa = plTDHoGa.ThongTinTamDanHoGa2_PhanLoaiDayHoGa;
-               Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = plTDHoGa.Id;
-           }
+        PhanLoaiTDHoGa plTDHoGa = new ();
+        plTDHoGa = await PhanLoaiTDHoGaRepository.GetMPhanLoaiTDHoGaByDetail(searchData);
+        if(plTDHoGa ==null){
+            nuocMuaVM.PhanLoaiTDHoGa_PhanLoaiDayHoGa = "";
+            Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ="";
+        }else{
+            nuocMuaVM.PhanLoaiTDHoGa_PhanLoaiDayHoGa = plTDHoGa.ThongTinTamDanHoGa2_PhanLoaiDayHoGa;
+            Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = plTDHoGa.Id;
+        }
 
     }
 
@@ -4046,15 +4079,17 @@
             ThongTinKichThuocHinhHocOngNhua_CDayPhuBi = Input.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi,
 
          };
-        
-        var id = await PhanLoaiCTronHopNhuaRepository.InsertId(searchData ,GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan),GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan));
-        Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = id;
+        CheckObjHelper checkObjhelper =new() ;
+        if(checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData)){
+            var id = await PhanLoaiCTronHopNhuaRepository.InsertId(searchData ,GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan),GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan));
+            Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = id;
+        }
     }
 
-    //Load tên theo phân loại cống hộp cống tròn nhựa
+    //Load tên theo phân loại móng cống tròn
     public async Task LoadTenPLCTronHopNhua()
     {   
-       PhanLoaiCTronHopNhua searchData = new PhanLoaiCTronHopNhua
+        PhanLoaiCTronHopNhua searchData = new PhanLoaiCTronHopNhua
         {   
             ThongTinDuongTruyenDan_HinhThucTruyenDan = Input.ThongTinDuongTruyenDan_HinhThucTruyenDan ,
             ThongTinDuongTruyenDan_LoaiTruyenDan = Input.ThongTinDuongTruyenDan_LoaiTruyenDan ,
@@ -4078,17 +4113,259 @@
 
          };
 
-            PhanLoaiCTronHopNhua plCTHNHoGa = new ();
-            plCTHNHoGa = await PhanLoaiCTronHopNhuaRepository.GetMPhanLoaiCTronHopNhuaByDetail(searchData);
-           if(plCTHNHoGa ==null){
-               nuocMuaVM.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = "";
-               Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ="";
-           }else{
-                 nuocMuaVM.PhanLoaiTDHoGa_PhanLoaiDayHoGa = plCTHNHoGa.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai;
-               Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = plCTHNHoGa.Id;
-           }
+        PhanLoaiCTronHopNhua plCTHNHoGa = new ();
+        plCTHNHoGa = await PhanLoaiCTronHopNhuaRepository.GetMPhanLoaiCTronHopNhuaByDetail(searchData);
+        if(plCTHNHoGa == null){
+            nuocMuaVM.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = "";
+            Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ="";
+        }else{
+            nuocMuaVM.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = plCTHNHoGa.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai;
+            Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = plCTHNHoGa.Id;
+        }
 
     }
+
+    //Thêm tên theo bảng phân loại cống hộp cống tròn nhựa
+    public async Task ThemTenTheoPLMongCTron()
+    {
+        PhanLoaiMongCTron searchData = new PhanLoaiMongCTron
+            {
+                ThongTinDuongTruyenDan_HinhThucTruyenDan = Input.ThongTinDuongTruyenDan_HinhThucTruyenDan,
+                ThongTinDuongTruyenDan_LoaiTruyenDan = Input.ThongTinDuongTruyenDan_LoaiTruyenDan,
+                ThongTinMongDuongTruyenDan_LoaiMong = Input.ThongTinMongDuongTruyenDan_LoaiMong,
+                ThongTinMongDuongTruyenDan_HinhThucMong = Input.ThongTinMongDuongTruyenDan_HinhThucMong,
+                ThongTinCauTaoCongTron_CCaoLotMong = Input.ThongTinCauTaoCongTron_CCaoLotMong,
+                ThongTinCauTaoCongTron_CRongLotMong = Input.ThongTinCauTaoCongTron_CRongLotMong,
+                ThongTinCauTaoCongTron_CCaoMong = Input.ThongTinCauTaoCongTron_CCaoMong,
+                ThongTinCauTaoCongTron_CRongMong = Input.ThongTinCauTaoCongTron_CRongMong,
+
+            };
+        CheckObjHelper checkObjhelper = new() ;
+        if(checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData)){
+            var id = await PhanLoaiMongCTronRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinMongDuongTruyenDan_LoaiMong), GetTenDanhMucById(searchData.ThongTinMongDuongTruyenDan_HinhThucMong), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan));
+            Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = id;
+        }
+    }
+
+    //Load tên theo phân loại móng cống tròn 
+    public async Task LoadTenPhanLoaiMongCTron()
+    {
+        PhanLoaiMongCTron searchData = new PhanLoaiMongCTron
+            {
+                ThongTinDuongTruyenDan_HinhThucTruyenDan= Input.ThongTinDuongTruyenDan_HinhThucTruyenDan,
+                ThongTinDuongTruyenDan_LoaiTruyenDan= Input.ThongTinDuongTruyenDan_LoaiTruyenDan,
+                ThongTinMongDuongTruyenDan_LoaiMong = Input.ThongTinMongDuongTruyenDan_LoaiMong, 
+                ThongTinMongDuongTruyenDan_HinhThucMong = Input.ThongTinMongDuongTruyenDan_HinhThucMong ,
+                ThongTinCauTaoCongTron_CCaoLotMong = Input.ThongTinCauTaoCongTron_CCaoLotMong ,
+                ThongTinCauTaoCongTron_CRongLotMong = Input.ThongTinCauTaoCongTron_CRongLotMong ,
+                ThongTinCauTaoCongTron_CCaoMong = Input.ThongTinCauTaoCongTron_CCaoMong ,
+                ThongTinCauTaoCongTron_CRongMong = Input.ThongTinCauTaoCongTron_CRongMong ,
+            };
+
+        PhanLoaiMongCTron plMCT = new();
+        plMCT = await PhanLoaiMongCTronRepository.GetMPhanLoaiMongCTronByDetail(searchData);
+        if (plMCT == null)
+        {
+            nuocMuaVM.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = "";
+            Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = "";
+        }
+        else
+        {
+            nuocMuaVM.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = plMCT.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop;
+            Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = plMCT.Id;
+        }
+
+    }
+
+    //Thêm tên theo bảng phân loại đế cống
+    public async Task ThemTenTheoPLDeCong()
+    {
+        PhanLoaiDeCong searchData = new PhanLoaiDeCong
+           {
+             ThongTinDuongTruyenDan_LoaiTruyenDan= Input.ThongTinDuongTruyenDan_LoaiTruyenDan,
+             ThongTinDeCong_CauTaoDeCong= Input.ThongTinDeCong_CauTaoDeCong,
+             ThongTinDeCong_D = Input.ThongTinDeCong_D ,
+             ThongTinDeCong_R = Input.ThongTinDeCong_R ,
+             ThongTinDeCong_C = Input.ThongTinDeCong_C,
+            };
+        CheckObjHelper checkObjhelper = new() ;
+        if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
+        {
+            var id = await PhanLoaiDeCongRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinDeCong_CauTaoDeCong), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan));
+            Input.ThongTinDeCong_TenLoaiDeCong = id;
+        }
+    }
+
+    //Load tên theo phân loại đế cống
+    public async Task LoadTenPhanLoaiDeCong()
+    {
+        PhanLoaiDeCong searchData = new PhanLoaiDeCong
+            {
+             ThongTinDuongTruyenDan_LoaiTruyenDan= Input.ThongTinDuongTruyenDan_LoaiTruyenDan,
+             ThongTinDeCong_CauTaoDeCong= Input.ThongTinDeCong_CauTaoDeCong,
+             ThongTinDeCong_D = Input.ThongTinDeCong_D ,
+             ThongTinDeCong_R = Input.ThongTinDeCong_R ,
+             ThongTinDeCong_C = Input.ThongTinDeCong_C,
+            };
+
+        PhanLoaiDeCong plDC = new();
+        plDC = await PhanLoaiDeCongRepository.GetMPhanLoaiDeCongByDetail(searchData);
+        if (plDC == null)
+        {
+            nuocMuaVM.PhanLoaiDeCong_TenLoaiDeCong = "";
+            Input.ThongTinDeCong_TenLoaiDeCong = "";
+        }
+        else
+        {
+            nuocMuaVM.PhanLoaiDeCong_TenLoaiDeCong = plDC.ThongTinDeCong_TenLoaiDeCong;
+            Input.ThongTinDeCong_TenLoaiDeCong = plDC.Id;
+        }
+
+    }
+    //Thêm tên theo bảng phân loại thanh chống
+    public async Task ThemTenTheoPLThanhChong()
+    {
+        PhanLoaiThanhChong searchData = new PhanLoaiThanhChong
+            {
+                TTKTHHCongHopRanh_CauTaoThanhChong = Input.TTKTHHCongHopRanh_CauTaoThanhChong,
+                TTKTHHCongHopRanh_CCaoThanhChong = Input.TTKTHHCongHopRanh_CCaoThanhChong,
+                TTKTHHCongHopRanh_CRongThanhChong = Input.TTKTHHCongHopRanh_CRongThanhChong,
+                TTKTHHCongHopRanh_CDai = Input.TTKTHHCongHopRanh_CDai,
+            };
+        CheckObjHelper checkObjhelper = new();
+        if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
+        {
+            var id = await PhanLoaiThanhChongRepository.InsertId(searchData, GetTenDanhMucById(searchData.TTKTHHCongHopRanh_CauTaoThanhChong));
+            Input.ThongTinDeCong_TenLoaiDeCong = id;
+        }
+    }
+
+    //Load tên theo phân loại thanh chống
+    public async Task LoadTenPhanLoaiThanhChong()
+    {
+        PhanLoaiThanhChong searchData = new PhanLoaiThanhChong
+            {
+                TTKTHHCongHopRanh_CauTaoThanhChong = Input.TTKTHHCongHopRanh_CauTaoThanhChong,
+                TTKTHHCongHopRanh_CCaoThanhChong = Input.TTKTHHCongHopRanh_CCaoThanhChong,
+                TTKTHHCongHopRanh_CRongThanhChong = Input.TTKTHHCongHopRanh_CRongThanhChong,
+                TTKTHHCongHopRanh_CDai = Input.TTKTHHCongHopRanh_CDai,
+            };
+
+        PhanLoaiThanhChong plTC = new();
+        plTC = await PhanLoaiThanhChongRepository.GetMPhanLoaiThanhChongByDetail(searchData);
+        if (plTC == null)
+        {
+            nuocMuaVM.PhanLoaiThanhChong_LoaiThanhChong = "";
+            Input.TTKTHHCongHopRanh_LoaiThanhChong = "";
+        }
+        else
+        {
+            nuocMuaVM.PhanLoaiThanhChong_LoaiThanhChong = plTC.TTKTHHCongHopRanh_LoaiThanhChong;
+            Input.TTKTHHCongHopRanh_LoaiThanhChong = plTC.Id;
+        }
+
+    }
+    
+    //Thêm tên theo bảng phân loại tấm đan tryền dẫn
+    public async Task ThemTenTheoPLTDanTDan()
+    {
+        PhanLoaiTDanTDan searchData = new PhanLoaiTDanTDan
+           {
+            ThongTinLyTrinhTruyenDan_TuLyTrinh= Input.ThongTinLyTrinhTruyenDan_TuLyTrinh,
+            ThongTinLyTrinhTruyenDan_DenLyTrinh= Input.ThongTinLyTrinhTruyenDan_DenLyTrinh,
+            ThongTinDuongTruyenDan_HinhThucTruyenDan= Input.ThongTinDuongTruyenDan_HinhThucTruyenDan,
+            ThongTinDuongTruyenDan_LoaiTruyenDan= Input.ThongTinDuongTruyenDan_LoaiTruyenDan,
+            TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan= Input.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan,
+            TTTDCongHoRanh_CDai= Input.TTTDCongHoRanh_CDai,
+            TTTDCongHoRanh_CRong= Input.TTTDCongHoRanh_CRong,
+            TTTDCongHoRanh_CCao= Input.TTTDCongHoRanh_CCao ,
+            };
+        CheckObjHelper checkObjhelper = new() ;
+        if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
+        {
+            var id = await PhanLoaiTDanTDanRepository.InsertId(searchData,GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan));
+            Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = id;
+        }
+    }
+
+      public async Task ThemTenTheoPLTDanTDan02()
+    {
+        PhanLoaiTDanTDan searchData = new PhanLoaiTDanTDan
+           {
+            ThongTinLyTrinhTruyenDan_TuLyTrinh= Input.ThongTinLyTrinhTruyenDan_TuLyTrinh,
+            ThongTinLyTrinhTruyenDan_DenLyTrinh= Input.ThongTinLyTrinhTruyenDan_DenLyTrinh,
+            ThongTinDuongTruyenDan_HinhThucTruyenDan= Input.ThongTinDuongTruyenDan_HinhThucTruyenDan,
+            ThongTinDuongTruyenDan_LoaiTruyenDan= Input.ThongTinDuongTruyenDan_LoaiTruyenDan,
+            TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan= Input.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan,
+            TTTDCongHoRanh_CDai= Input.TTTDCongHoRanh_CDai1,
+            TTTDCongHoRanh_CRong= Input.TTTDCongHoRanh_CRong1,
+            TTTDCongHoRanh_CCao= Input.TTTDCongHoRanh_CCao1 ,
+            };
+        CheckObjHelper checkObjhelper = new() ;
+        if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
+        {
+            var id = await PhanLoaiTDanTDanRepository.InsertId(searchData,GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan));
+            Input.TTTDCongHoRanh_TenLoaiTamDanLoai02 = id;
+        }
+    }
+
+    //Load tên theo phân loại tấm đan truyền dẫn
+    public async Task LoadTenPhanLoaiTDanTDan()
+    {
+        PhanLoaiTDanTDan searchData = new PhanLoaiTDanTDan
+            {
+            ThongTinLyTrinhTruyenDan_TuLyTrinh= Input.ThongTinLyTrinhTruyenDan_TuLyTrinh,
+            ThongTinLyTrinhTruyenDan_DenLyTrinh= Input.ThongTinLyTrinhTruyenDan_DenLyTrinh,
+            ThongTinDuongTruyenDan_HinhThucTruyenDan= Input.ThongTinDuongTruyenDan_HinhThucTruyenDan,
+            ThongTinDuongTruyenDan_LoaiTruyenDan= Input.ThongTinDuongTruyenDan_LoaiTruyenDan,
+            TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan= Input.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan,
+            TTTDCongHoRanh_CDai= Input.TTTDCongHoRanh_CDai,
+            TTTDCongHoRanh_CRong= Input.TTTDCongHoRanh_CRong,
+            TTTDCongHoRanh_CCao= Input.TTTDCongHoRanh_CCao ,
+          };
+
+        
+        PhanLoaiTDanTDan plTDTD = new();
+        plTDTD = await PhanLoaiTDanTDanRepository.GetPhanLoaiTDanTDanByDetail(searchData);
+        if (plTDTD == null)
+        {
+            nuocMuaVM.PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = "";
+            Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = "";
+        }
+        else
+        {
+            nuocMuaVM.PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = plTDTD.TTTDCongHoRanh_TenLoaiTamDanTieuChuan;
+            Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = plTDTD.Id;
+        }
+
+         PhanLoaiTDanTDan searchData1 = new PhanLoaiTDanTDan
+            {
+            ThongTinLyTrinhTruyenDan_TuLyTrinh= Input.ThongTinLyTrinhTruyenDan_TuLyTrinh,
+            ThongTinLyTrinhTruyenDan_DenLyTrinh= Input.ThongTinLyTrinhTruyenDan_DenLyTrinh,
+            ThongTinDuongTruyenDan_HinhThucTruyenDan= Input.ThongTinDuongTruyenDan_HinhThucTruyenDan,
+            ThongTinDuongTruyenDan_LoaiTruyenDan= Input.ThongTinDuongTruyenDan_LoaiTruyenDan,
+            TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan= Input.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan,
+            TTTDCongHoRanh_CDai= Input.TTTDCongHoRanh_CDai1,
+            TTTDCongHoRanh_CRong= Input.TTTDCongHoRanh_CRong1,
+            TTTDCongHoRanh_CCao= Input.TTTDCongHoRanh_CCao1 ,
+          };
+
+        
+        PhanLoaiTDanTDan plTDTD1 = new();
+        plTDTD1 = await PhanLoaiTDanTDanRepository.GetPhanLoaiTDanTDanByDetail(searchData1);
+        if (plTDTD1 == null)
+        {
+            nuocMuaVM.PhanLoaiTDanTDan_TenLoaiTamDanLoai02 = "";
+            Input.TTTDCongHoRanh_TenLoaiTamDanLoai02 = "";
+        }
+        else
+        {
+            nuocMuaVM.PhanLoaiTDanTDan_TenLoaiTamDanLoai02 = plTDTD1.TTTDCongHoRanh_TenLoaiTamDanTieuChuan;
+            Input.TTTDCongHoRanh_TenLoaiTamDanLoai02 = plTDTD1.Id;
+        }
+
+    }
+
 
 
     private async Task HandleValidSubmit()
@@ -4108,6 +4385,30 @@
             }
             if(string.IsNullOrEmpty(Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa)){
                 await ThemTenTheoPLTDHoGa();
+            }
+            if (string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
+            {
+                await ThemTenTheoPLCTronHopNhua();
+            }
+            if (string.IsNullOrEmpty(Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop))
+            {
+                await ThemTenTheoPLMongCTron();
+            }
+            if (string.IsNullOrEmpty(Input.ThongTinDeCong_TenLoaiDeCong))
+            {
+                await ThemTenTheoPLDeCong();
+            }
+            if (string.IsNullOrEmpty(Input.TTKTHHCongHopRanh_LoaiThanhChong))
+            {
+                await ThemTenTheoPLThanhChong();
+            }
+            if (string.IsNullOrEmpty(Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan))
+            {
+                await ThemTenTheoPLTDanTDan();
+            }
+            if (string.IsNullOrEmpty(Input.TTTDCongHoRanh_TenLoaiTamDanLoai02))
+            {
+                await ThemTenTheoPLTDanTDan02();
             }
 
             if (isEdit)
@@ -4251,7 +4552,6 @@
         }
     }
 
-
     // Sắp xếp data
     private void SortTable(string columnName)
     {
@@ -4276,11 +4576,11 @@
     // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
     private void ChangePageSize(int pageSize)
     {
-
         nuocMuaModel.PageNumber = 1;
         nuocMuaModel.pageSize = pageSize;
         Paging(listModel);
     }
+
     // Xử lý paging
     private List<NuocMuaModel> Paging(List<NuocMuaModel> hopRanhThangs)
     {
