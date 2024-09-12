@@ -7,7 +7,14 @@
 @inject IDanhMucRepository DanhMucRepository ;
 @inject INuocMuaRepository NuocMuaRepository ;
 @inject IExcelRepository ExcelRepository;
-@inject IDanhMucRepository DanhMucRepository
+@inject IDanhMucRepository DanhMucRepository;
+@inject IPhanLoaiHoGaRepository PhanLoaiHoGaRepository
+@inject IPhanLoaiTDHoGaRepository PhanLoaiTDHoGaRepository
+@inject IPhanLoaiCTronHopNhuaRepository PhanLoaiCTronHopNhuaRepository
+@inject IPhanLoaiMongCTronRepository PhanLoaiMongCTronRepository
+@inject IPhanLoaiDeCongRepository PhanLoaiDeCongRepository
+@inject IPhanLoaiThanhChongRepository PhanLoaiThanhChongRepository
+@inject IPhanLoaiTDanTDanRepository PhanLoaiTDanTDanRepository
 @inject DucAnhERP.Services.ToastService ToastService
 
 <div class="container-fluid p-3">
@@ -747,221 +754,321 @@
             List<NuocMua> listNM = new();
             for (int i = 0; i < listData.Count; i++)
             {
-                NuocMua mNuocMua = new();
+                NuocMua nuocMua = new();
 
-                mNuocMua.Id = Guid.NewGuid().ToString();
-                mNuocMua.ThongTinLyTrinh_TuyenDuong = listData[i].RowData[1].ToString() ?? "";
-                mNuocMua.ThongTinLyTrinh_LyTrinhTaiTimHoGa = listData[i].RowData[2].ToString() ?? "";
-                mNuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = listData[i].RowData[3].ToString() ?? "";
-                mNuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe = listData[i].RowData[4].ToString() ?? "";
-                mNuocMua.ThongTinChungHoGa_HinhThucHoGa = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[5].ToString() ?? "", "HG_HTHGa");
-                mNuocMua.ThongTinChungHoGa_KetCauMuMo = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[6].ToString() ?? "", "HG_LMMHoGa");
-                mNuocMua.ThongTinChungHoGa_KetCauTuong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[7].ToString() ?? "", "HG_LTHoGa");
-                mNuocMua.ThongTinChungHoGa_HinhThucMongHoGa = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[8].ToString() ?? "", "HG_HTMHoGa");
-                mNuocMua.ThongTinChungHoGa_KetCauMong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[9].ToString() ?? "", "HG_LMHoGa");
-                mNuocMua.ThongTinChungHoGa_ChatMatTrong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[10].ToString() ?? "");
-                mNuocMua.ThongTinChungHoGa_ChatMatNgoai = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[11].ToString() ?? "");
-                mNuocMua.PhuBiHoGa_CDai = ParseDoubleOrDefault(listData[i].RowData[12], 0);
-                mNuocMua.PhuBiHoGa_CRong = ParseDoubleOrDefault(listData[i].RowData[13], 0);
-                mNuocMua.BeTongLotMong_D = ParseDoubleOrDefault(listData[i].RowData[14], 0);
-                mNuocMua.BeTongLotMong_R = ParseDoubleOrDefault(listData[i].RowData[15], 0);
-                mNuocMua.BeTongLotMong_C = ParseDoubleOrDefault(listData[i].RowData[16], 0);
-                mNuocMua.BeTongMongHoGa_D = ParseDoubleOrDefault(listData[i].RowData[17], 0);
-                mNuocMua.BeTongMongHoGa_R = ParseDoubleOrDefault(listData[i].RowData[18], 0);
-                mNuocMua.BeTongMongHoGa_C = ParseDoubleOrDefault(listData[i].RowData[19], 0);
-                mNuocMua.DeHoGa_D = ParseDoubleOrDefault(listData[i].RowData[20], 0);
-                mNuocMua.DeHoGa_R = ParseDoubleOrDefault(listData[i].RowData[21], 0);
-                mNuocMua.DeHoGa_C = ParseDoubleOrDefault(listData[i].RowData[22], 0);
-                mNuocMua.TuongHoGa_D = ParseDoubleOrDefault(listData[i].RowData[23], 0);
-                mNuocMua.TuongHoGa_R = ParseDoubleOrDefault(listData[i].RowData[24], 0);
+                nuocMua.Id = Guid.NewGuid().ToString();
+                nuocMua.ThongTinLyTrinh_TuyenDuong = listData[i].RowData[1].ToString() ?? "";
+                nuocMua.ThongTinLyTrinh_LyTrinhTaiTimHoGa = listData[i].RowData[2].ToString() ?? "";
+                nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = listData[i].RowData[3].ToString() ?? "";
+                nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe = listData[i].RowData[4].ToString() ?? "";
+                nuocMua.ThongTinChungHoGa_HinhThucHoGa = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[5].ToString() ?? "", "HG_HTHGa");
+                nuocMua.ThongTinChungHoGa_KetCauMuMo = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[6].ToString() ?? "", "HG_LMMHoGa");
+                nuocMua.ThongTinChungHoGa_KetCauTuong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[7].ToString() ?? "", "HG_LTHoGa");
+                nuocMua.ThongTinChungHoGa_HinhThucMongHoGa = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[8].ToString() ?? "", "HG_HTMHoGa");
+                nuocMua.ThongTinChungHoGa_KetCauMong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[9].ToString() ?? "", "HG_LMHoGa");
+                nuocMua.ThongTinChungHoGa_ChatMatTrong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[10].ToString() ?? "");
+                nuocMua.ThongTinChungHoGa_ChatMatNgoai = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[11].ToString() ?? "");
+                nuocMua.PhuBiHoGa_CDai = ParseDoubleOrDefault(listData[i].RowData[12], 0);
+                nuocMua.PhuBiHoGa_CRong = ParseDoubleOrDefault(listData[i].RowData[13], 0);
+                nuocMua.BeTongLotMong_D = ParseDoubleOrDefault(listData[i].RowData[14], 0);
+                nuocMua.BeTongLotMong_R = ParseDoubleOrDefault(listData[i].RowData[15], 0);
+                nuocMua.BeTongLotMong_C = ParseDoubleOrDefault(listData[i].RowData[16], 0);
+                nuocMua.BeTongMongHoGa_D = ParseDoubleOrDefault(listData[i].RowData[17], 0);
+                nuocMua.BeTongMongHoGa_R = ParseDoubleOrDefault(listData[i].RowData[18], 0);
+                nuocMua.BeTongMongHoGa_C = ParseDoubleOrDefault(listData[i].RowData[19], 0);
+                nuocMua.DeHoGa_D = ParseDoubleOrDefault(listData[i].RowData[20], 0);
+                nuocMua.DeHoGa_R = ParseDoubleOrDefault(listData[i].RowData[21], 0);
+                nuocMua.DeHoGa_C = ParseDoubleOrDefault(listData[i].RowData[22], 0);
+                nuocMua.TuongHoGa_D = ParseDoubleOrDefault(listData[i].RowData[23], 0);
+                nuocMua.TuongHoGa_R = ParseDoubleOrDefault(listData[i].RowData[24], 0);
 
-                mNuocMua.TuongHoGa_CdTuong = ParseDoubleOrDefault(listData[i].RowData[26], 0);
-                mNuocMua.DamGiuaHoGa_D = ParseDoubleOrDefault(listData[i].RowData[27], 0);
-                mNuocMua.DamGiuaHoGa_R = ParseDoubleOrDefault(listData[i].RowData[28], 0);
-                mNuocMua.DamGiuaHoGa_C = ParseDoubleOrDefault(listData[i].RowData[29], 0);
-                mNuocMua.DamGiuaHoGa_CdDam = ParseDoubleOrDefault(listData[i].RowData[30], 0);
-                mNuocMua.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa = ParseDoubleOrDefault(listData[i].RowData[31], 0);
-                mNuocMua.ChatMatTrong_D = ParseDoubleOrDefault(listData[i].RowData[32], 0);
-                mNuocMua.ChatMatTrong_R = ParseDoubleOrDefault(listData[i].RowData[33], 0);
+                nuocMua.TuongHoGa_CdTuong = ParseDoubleOrDefault(listData[i].RowData[26], 0);
+                nuocMua.DamGiuaHoGa_D = ParseDoubleOrDefault(listData[i].RowData[27], 0);
+                nuocMua.DamGiuaHoGa_R = ParseDoubleOrDefault(listData[i].RowData[28], 0);
+                nuocMua.DamGiuaHoGa_C = ParseDoubleOrDefault(listData[i].RowData[29], 0);
+                nuocMua.DamGiuaHoGa_CdDam = ParseDoubleOrDefault(listData[i].RowData[30], 0);
+                nuocMua.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa = ParseDoubleOrDefault(listData[i].RowData[31], 0);
+                nuocMua.ChatMatTrong_D = ParseDoubleOrDefault(listData[i].RowData[32], 0);
+                nuocMua.ChatMatTrong_R = ParseDoubleOrDefault(listData[i].RowData[33], 0);
 
-                mNuocMua.ChatMatNgoaiCanh_D = ParseDoubleOrDefault(listData[i].RowData[35], 0);
-                mNuocMua.ChatMatNgoaiCanh_R = ParseDoubleOrDefault(listData[i].RowData[36], 0);
+                nuocMua.ChatMatNgoaiCanh_D = ParseDoubleOrDefault(listData[i].RowData[35], 0);
+                nuocMua.ChatMatNgoaiCanh_R = ParseDoubleOrDefault(listData[i].RowData[36], 0);
 
-                mNuocMua.MuMoThotDuoi_D = ParseDoubleOrDefault(listData[i].RowData[38], 0);
-                mNuocMua.MuMoThotDuoi_R = ParseDoubleOrDefault(listData[i].RowData[39], 0);
-                mNuocMua.MuMoThotDuoi_C = ParseDoubleOrDefault(listData[i].RowData[40], 0);
-                mNuocMua.MuMoThotDuoi_CdTuong = ParseDoubleOrDefault(listData[i].RowData[41], 0);
-                mNuocMua.MuMoThotTren_D = ParseDoubleOrDefault(listData[i].RowData[42], 0);
-                mNuocMua.MuMoThotTren_R = ParseDoubleOrDefault(listData[i].RowData[43], 0);
-                mNuocMua.MuMoThotTren_C = ParseDoubleOrDefault(listData[i].RowData[44], 0);
-                mNuocMua.MuMoThotTren_CdTuong = ParseDoubleOrDefault(listData[i].RowData[45], 0);
-                mNuocMua.HinhThucDauNoi1_Loai = ParseDoubleOrDefault(listData[i].RowData[46], 0);
-                mNuocMua.HinhThucDauNoi1_CanhDai = ParseDoubleOrDefault(listData[i].RowData[47], 0);
-                mNuocMua.HinhThucDauNoi1_CanhRong = ParseDoubleOrDefault(listData[i].RowData[48], 0);
-                mNuocMua.HinhThucDauNoi1_CanhCheo = ParseDoubleOrDefault(listData[i].RowData[49], 0);
-                mNuocMua.HinhThucDauNoi2_Loai = ParseDoubleOrDefault(listData[i].RowData[50], 0);
-                mNuocMua.HinhThucDauNoi2_CanhDai = ParseDoubleOrDefault(listData[i].RowData[51], 0);
-                mNuocMua.HinhThucDauNoi2_CanhRong = ParseDoubleOrDefault(listData[i].RowData[52], 0);
-                mNuocMua.HinhThucDauNoi2_CanhCheo = ParseDoubleOrDefault(listData[i].RowData[53], 0);
-                mNuocMua.HinhThucDauNoi3_Loai = ParseDoubleOrDefault(listData[i].RowData[54], 0);
-                mNuocMua.HinhThucDauNoi3_CanhDai = ParseDoubleOrDefault(listData[i].RowData[55], 0);
-                mNuocMua.HinhThucDauNoi3_CanhRong = ParseDoubleOrDefault(listData[i].RowData[56], 0);
-                mNuocMua.HinhThucDauNoi3_CanhCheo = ParseDoubleOrDefault(listData[i].RowData[57], 0);
-                mNuocMua.HinhThucDauNoi4_Loai = ParseDoubleOrDefault(listData[i].RowData[58], 0);
-                mNuocMua.HinhThucDauNoi4_CanhDai = ParseDoubleOrDefault(listData[i].RowData[59], 0);
-                mNuocMua.HinhThucDauNoi4_CanhRong = ParseDoubleOrDefault(listData[i].RowData[60], 0);
-                mNuocMua.HinhThucDauNoi4_CanhCheo = ParseDoubleOrDefault(listData[i].RowData[61], 0);
-                mNuocMua.HinhThucDauNoi5_Loai = ParseDoubleOrDefault(listData[i].RowData[62], 0);
-                mNuocMua.HinhThucDauNoi5_CanhDai = ParseDoubleOrDefault(listData[i].RowData[63], 0);
-                mNuocMua.HinhThucDauNoi5_CanhRong = ParseDoubleOrDefault(listData[i].RowData[64], 0);
-                mNuocMua.HinhThucDauNoi5_CanhCheo = ParseDoubleOrDefault(listData[i].RowData[65], 0);
-                mNuocMua.HinhThucDauNoi6_Loai = ParseDoubleOrDefault(listData[i].RowData[66], 0);
-                mNuocMua.HinhThucDauNoi6_CanhDai = ParseDoubleOrDefault(listData[i].RowData[67], 0);
-                mNuocMua.HinhThucDauNoi6_CanhRong = ParseDoubleOrDefault(listData[i].RowData[68], 0);
-                mNuocMua.HinhThucDauNoi6_CanhCheo = ParseDoubleOrDefault(listData[i].RowData[69], 0);
-                mNuocMua.HinhThucDauNoi7_Loai = ParseDoubleOrDefault(listData[i].RowData[70], 0);
-                mNuocMua.HinhThucDauNoi7_CanhDai = ParseDoubleOrDefault(listData[i].RowData[71], 0);
-                mNuocMua.HinhThucDauNoi7_CanhRong = ParseDoubleOrDefault(listData[i].RowData[72], 0);
-                mNuocMua.HinhThucDauNoi7_CanhCheo = ParseDoubleOrDefault(listData[i].RowData[73], 0);
-                mNuocMua.HinhThucDauNoi8_Loai = ParseDoubleOrDefault(listData[i].RowData[74], 0);
-                mNuocMua.HinhThucDauNoi8_CanhDai = ParseDoubleOrDefault(listData[i].RowData[75], 0);
-                mNuocMua.HinhThucDauNoi8_CanhRong = ParseDoubleOrDefault(listData[i].RowData[76], 0);
-                mNuocMua.HinhThucDauNoi8_CanhCheo = ParseDoubleOrDefault(listData[i].RowData[77], 0);
-                mNuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = listData[i].RowData[78].ToString() ?? "";
-                mNuocMua.ThongTinTamDanHoGa2_HinhThucDayHoGa = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[79].ToString() ?? "", "HG_HTDHoGa");  
-                mNuocMua.ThongTinTamDanHoGa2_DuongKinh = ParseDoubleOrDefault(listData[i].RowData[80], 0);
-                mNuocMua.ThongTinTamDanHoGa2_ChieuDay = ParseDoubleOrDefault(listData[i].RowData[81], 0);
-                mNuocMua.ThongTinTamDanHoGa2_D = ParseDoubleOrDefault(listData[i].RowData[82], 0);
-                mNuocMua.ThongTinTamDanHoGa2_R = ParseDoubleOrDefault(listData[i].RowData[83], 0);
-                mNuocMua.ThongTinTamDanHoGa2_C = ParseDoubleOrDefault(listData[i].RowData[84], 0);
-                mNuocMua.ThongTinTamDanHoGa2_SoLuongNapDay = ParseDoubleOrDefault(listData[i].RowData[85], 0);
-                mNuocMua.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[86].ToString() ?? "", "HG_LVLDHoGa");
-                mNuocMua.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa = ParseDoubleOrDefault(listData[i].RowData[87], 0);
+                nuocMua.MuMoThotDuoi_D = ParseDoubleOrDefault(listData[i].RowData[38], 0);
+                nuocMua.MuMoThotDuoi_R = ParseDoubleOrDefault(listData[i].RowData[39], 0);
+                nuocMua.MuMoThotDuoi_C = ParseDoubleOrDefault(listData[i].RowData[40], 0);
+                nuocMua.MuMoThotDuoi_CdTuong = ParseDoubleOrDefault(listData[i].RowData[41], 0);
+                nuocMua.MuMoThotTren_D = ParseDoubleOrDefault(listData[i].RowData[42], 0);
+                nuocMua.MuMoThotTren_R = ParseDoubleOrDefault(listData[i].RowData[43], 0);
+                nuocMua.MuMoThotTren_C = ParseDoubleOrDefault(listData[i].RowData[44], 0);
+                nuocMua.MuMoThotTren_CdTuong = ParseDoubleOrDefault(listData[i].RowData[45], 0);
+                nuocMua.HinhThucDauNoi1_Loai = ParseDoubleOrDefault(listData[i].RowData[46], 0);
+                nuocMua.HinhThucDauNoi1_CanhDai = ParseDoubleOrDefault(listData[i].RowData[47], 0);
+                nuocMua.HinhThucDauNoi1_CanhRong = ParseDoubleOrDefault(listData[i].RowData[48], 0);
+                nuocMua.HinhThucDauNoi1_CanhCheo = ParseDoubleOrDefault(listData[i].RowData[49], 0);
+                nuocMua.HinhThucDauNoi2_Loai = ParseDoubleOrDefault(listData[i].RowData[50], 0);
+                nuocMua.HinhThucDauNoi2_CanhDai = ParseDoubleOrDefault(listData[i].RowData[51], 0);
+                nuocMua.HinhThucDauNoi2_CanhRong = ParseDoubleOrDefault(listData[i].RowData[52], 0);
+                nuocMua.HinhThucDauNoi2_CanhCheo = ParseDoubleOrDefault(listData[i].RowData[53], 0);
+                nuocMua.HinhThucDauNoi3_Loai = ParseDoubleOrDefault(listData[i].RowData[54], 0);
+                nuocMua.HinhThucDauNoi3_CanhDai = ParseDoubleOrDefault(listData[i].RowData[55], 0);
+                nuocMua.HinhThucDauNoi3_CanhRong = ParseDoubleOrDefault(listData[i].RowData[56], 0);
+                nuocMua.HinhThucDauNoi3_CanhCheo = ParseDoubleOrDefault(listData[i].RowData[57], 0);
+                nuocMua.HinhThucDauNoi4_Loai = ParseDoubleOrDefault(listData[i].RowData[58], 0);
+                nuocMua.HinhThucDauNoi4_CanhDai = ParseDoubleOrDefault(listData[i].RowData[59], 0);
+                nuocMua.HinhThucDauNoi4_CanhRong = ParseDoubleOrDefault(listData[i].RowData[60], 0);
+                nuocMua.HinhThucDauNoi4_CanhCheo = ParseDoubleOrDefault(listData[i].RowData[61], 0);
+                nuocMua.HinhThucDauNoi5_Loai = ParseDoubleOrDefault(listData[i].RowData[62], 0);
+                nuocMua.HinhThucDauNoi5_CanhDai = ParseDoubleOrDefault(listData[i].RowData[63], 0);
+                nuocMua.HinhThucDauNoi5_CanhRong = ParseDoubleOrDefault(listData[i].RowData[64], 0);
+                nuocMua.HinhThucDauNoi5_CanhCheo = ParseDoubleOrDefault(listData[i].RowData[65], 0);
+                nuocMua.HinhThucDauNoi6_Loai = ParseDoubleOrDefault(listData[i].RowData[66], 0);
+                nuocMua.HinhThucDauNoi6_CanhDai = ParseDoubleOrDefault(listData[i].RowData[67], 0);
+                nuocMua.HinhThucDauNoi6_CanhRong = ParseDoubleOrDefault(listData[i].RowData[68], 0);
+                nuocMua.HinhThucDauNoi6_CanhCheo = ParseDoubleOrDefault(listData[i].RowData[69], 0);
+                nuocMua.HinhThucDauNoi7_Loai = ParseDoubleOrDefault(listData[i].RowData[70], 0);
+                nuocMua.HinhThucDauNoi7_CanhDai = ParseDoubleOrDefault(listData[i].RowData[71], 0);
+                nuocMua.HinhThucDauNoi7_CanhRong = ParseDoubleOrDefault(listData[i].RowData[72], 0);
+                nuocMua.HinhThucDauNoi7_CanhCheo = ParseDoubleOrDefault(listData[i].RowData[73], 0);
+                nuocMua.HinhThucDauNoi8_Loai = ParseDoubleOrDefault(listData[i].RowData[74], 0);
+                nuocMua.HinhThucDauNoi8_CanhDai = ParseDoubleOrDefault(listData[i].RowData[75], 0);
+                nuocMua.HinhThucDauNoi8_CanhRong = ParseDoubleOrDefault(listData[i].RowData[76], 0);
+                nuocMua.HinhThucDauNoi8_CanhCheo = ParseDoubleOrDefault(listData[i].RowData[77], 0);
+                nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = listData[i].RowData[78].ToString() ?? "";
+                nuocMua.ThongTinTamDanHoGa2_HinhThucDayHoGa = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[79].ToString() ?? "", "HG_HTDHoGa");  
+                nuocMua.ThongTinTamDanHoGa2_DuongKinh = ParseDoubleOrDefault(listData[i].RowData[80], 0);
+                nuocMua.ThongTinTamDanHoGa2_ChieuDay = ParseDoubleOrDefault(listData[i].RowData[81], 0);
+                nuocMua.ThongTinTamDanHoGa2_D = ParseDoubleOrDefault(listData[i].RowData[82], 0);
+                nuocMua.ThongTinTamDanHoGa2_R = ParseDoubleOrDefault(listData[i].RowData[83], 0);
+                nuocMua.ThongTinTamDanHoGa2_C = ParseDoubleOrDefault(listData[i].RowData[84], 0);
+                nuocMua.ThongTinTamDanHoGa2_SoLuongNapDay = ParseDoubleOrDefault(listData[i].RowData[85], 0);
+                nuocMua.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[86].ToString() ?? "", "HG_LVLDHoGa");
+                nuocMua.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa = ParseDoubleOrDefault(listData[i].RowData[87], 0);
 
-                mNuocMua.ThongTinCaoDoHoGa_CaoDoTuNhien = ParseDoubleOrDefault(listData[i].RowData[90], 0);
-                mNuocMua.ThongTinCaoDoHoGa_CdDinhViaHeHoanThien = ParseDoubleOrDefault(listData[i].RowData[91], 0);
-                mNuocMua.ThongTinCaoDoHoGa_CaoDoDinhK98 = ParseDoubleOrDefault(listData[i].RowData[92], 0);
+                nuocMua.ThongTinCaoDoHoGa_CaoDoTuNhien = ParseDoubleOrDefault(listData[i].RowData[90], 0);
+                nuocMua.ThongTinCaoDoHoGa_CdDinhViaHeHoanThien = ParseDoubleOrDefault(listData[i].RowData[91], 0);
+                nuocMua.ThongTinCaoDoHoGa_CaoDoDinhK98 = ParseDoubleOrDefault(listData[i].RowData[92], 0);
 
-                mNuocMua.ThongTinCaoDoHoGa_CdDayHoGa = ParseDoubleOrDefault(listData[i].RowData[98], 0);
+                nuocMua.ThongTinCaoDoHoGa_CdDayHoGa = ParseDoubleOrDefault(listData[i].RowData[98], 0);
 
-                mNuocMua.ThongTinCaoDoHoGa_CdDinhHoGa = ParseDoubleOrDefault(listData[i].RowData[104], 0);
+                nuocMua.ThongTinCaoDoHoGa_CdDinhHoGa = ParseDoubleOrDefault(listData[i].RowData[104], 0);
 
-                mNuocMua.ThongTinMaiDao_ChieuRongDayDaoNho = ParseDoubleOrDefault(listData[i].RowData[118], 0);
-                mNuocMua.ThongTinMaiDao_TyLeMoMai = ParseDoubleOrDefault(listData[i].RowData[119], 0);
-                mNuocMua.ThongTinMaiDao_SoCanhMaiTrai = ParseDoubleOrDefault(listData[i].RowData[120], 0);
-                mNuocMua.ThongTinMaiDao_SoCanhMaiPhai = ParseDoubleOrDefault(listData[i].RowData[121], 0);
+                nuocMua.ThongTinMaiDao_ChieuRongDayDaoNho = ParseDoubleOrDefault(listData[i].RowData[118], 0);
+                nuocMua.ThongTinMaiDao_TyLeMoMai = ParseDoubleOrDefault(listData[i].RowData[119], 0);
+                nuocMua.ThongTinMaiDao_SoCanhMaiTrai = ParseDoubleOrDefault(listData[i].RowData[120], 0);
+                nuocMua.ThongTinMaiDao_SoCanhMaiPhai = ParseDoubleOrDefault(listData[i].RowData[121], 0);
 
-                mNuocMua.ThongTinLyTrinhTruyenDan_TuLyTrinh = ParseDoubleOrDefault(listData[i].RowData[139], 0);
-                mNuocMua.ThongTinLyTrinhTruyenDan_DenLyTrinh = ParseDoubleOrDefault(listData[i].RowData[140], 0);
-                mNuocMua.ThongTinLyTrinhTruyenDan_TuHoGa = listData[i].RowData[141].ToString() ?? "";
-                mNuocMua.ThongTinLyTrinhTruyenDan_DenHoGa = listData[i].RowData[142].ToString() ?? "";
-                mNuocMua.ThongTinDuongTruyenDan_HinhThucTruyenDan = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[143].ToString() ?? "", "TD_HTTruyenDan");
-                mNuocMua.ThongTinDuongTruyenDan_LoaiTruyenDan = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[144].ToString() ?? "", "TD_LTruyenDan");
-                mNuocMua.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = listData[i].RowData[145].ToString() ?? "";
-                mNuocMua.TTCDSLCauKienDuongTruyenDan_TongChieuDai = ParseDoubleOrDefault(listData[i].RowData[146], 0);
-                mNuocMua.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien = ParseDoubleOrDefault(listData[i].RowData[147], 0);
-                
-                mNuocMua.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = listData[i].RowData[149].ToString() ?? "";
-                mNuocMua.ThongTinMongDuongTruyenDan_LoaiMong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[150].ToString() ?? "", "TD_LMTruyenDan");
-                mNuocMua.ThongTinMongDuongTruyenDan_HinhThucMong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[151].ToString() ?? "", "TD_HTMTruyenDan");
-                mNuocMua.ThongTinDeCong_TenLoaiDeCong = listData[i].RowData[152].ToString() ?? "";
-                mNuocMua.ThongTinDeCong_CauTaoDeCong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[153].ToString() ?? "", "TD_CTDCTron");
-                mNuocMua.ThongTinDeCong_D = ParseDoubleOrDefault(listData[i].RowData[154], 0);
-                mNuocMua.ThongTinDeCong_R = ParseDoubleOrDefault(listData[i].RowData[155], 0);
-                mNuocMua.ThongTinDeCong_C = ParseDoubleOrDefault(listData[i].RowData[156], 0);
-                mNuocMua.ThongTinDeCong_SlDeCong01CauKienTruyenDan = ParseDoubleOrDefault(listData[i].RowData[157], 0);
-                mNuocMua.ThongTinDeCong_Kl01DeCong = ParseDoubleOrDefault(listData[i].RowData[158], 0);
+                nuocMua.ThongTinLyTrinhTruyenDan_TuLyTrinh = ParseDoubleOrDefault(listData[i].RowData[139], 0);
+                nuocMua.ThongTinLyTrinhTruyenDan_DenLyTrinh = ParseDoubleOrDefault(listData[i].RowData[140], 0);
+                nuocMua.ThongTinLyTrinhTruyenDan_TuHoGa = listData[i].RowData[141].ToString() ?? "";
+                nuocMua.ThongTinLyTrinhTruyenDan_DenHoGa = listData[i].RowData[142].ToString() ?? "";
+                nuocMua.ThongTinDuongTruyenDan_HinhThucTruyenDan = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[143].ToString() ?? "", "TD_HTTruyenDan");
+                nuocMua.ThongTinDuongTruyenDan_LoaiTruyenDan = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[144].ToString() ?? "", "TD_LTruyenDan");
+                nuocMua.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = listData[i].RowData[145].ToString() ?? "";
+                nuocMua.TTCDSLCauKienDuongTruyenDan_TongChieuDai = ParseDoubleOrDefault(listData[i].RowData[146], 0);
+                nuocMua.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien = ParseDoubleOrDefault(listData[i].RowData[147], 0);
 
-                mNuocMua.ThongTinCauTaoCongTron_CDayPhuBi = ParseDoubleOrDefault(listData[i].RowData[161], 0);
-                mNuocMua.ThongTinCauTaoCongTron_SoCanh = ParseDoubleOrDefault(listData[i].RowData[162], 0);
-                mNuocMua.ThongTinCauTaoCongTron_LongSuDung = ParseDoubleOrDefault(listData[i].RowData[163], 0);
+                nuocMua.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = listData[i].RowData[149].ToString() ?? "";
+                nuocMua.ThongTinMongDuongTruyenDan_LoaiMong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[150].ToString() ?? "", "TD_LMTruyenDan");
+                nuocMua.ThongTinMongDuongTruyenDan_HinhThucMong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[151].ToString() ?? "", "TD_HTMTruyenDan");
+                nuocMua.ThongTinDeCong_TenLoaiDeCong = listData[i].RowData[152].ToString() ?? "";
+                nuocMua.ThongTinDeCong_CauTaoDeCong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[153].ToString() ?? "", "TD_CTDCTron");
+                nuocMua.ThongTinDeCong_D = ParseDoubleOrDefault(listData[i].RowData[154], 0);
+                nuocMua.ThongTinDeCong_R = ParseDoubleOrDefault(listData[i].RowData[155], 0);
+                nuocMua.ThongTinDeCong_C = ParseDoubleOrDefault(listData[i].RowData[156], 0);
+                nuocMua.ThongTinDeCong_SlDeCong01CauKienTruyenDan = ParseDoubleOrDefault(listData[i].RowData[157], 0);
+                nuocMua.ThongTinDeCong_Kl01DeCong = ParseDoubleOrDefault(listData[i].RowData[158], 0);
 
-                mNuocMua.ThongTinCauTaoCongTron_CCaoLotMong = ParseDoubleOrDefault(listData[i].RowData[165], 0);
-                mNuocMua.ThongTinCauTaoCongTron_CRongLotMong = ParseDoubleOrDefault(listData[i].RowData[166], 0);
-                mNuocMua.ThongTinCauTaoCongTron_CCaoMong = ParseDoubleOrDefault(listData[i].RowData[167], 0);
-                mNuocMua.ThongTinCauTaoCongTron_CRongMong = ParseDoubleOrDefault(listData[i].RowData[168], 0);
-                mNuocMua.ThongTinCauTaoCongTron_CCaoDe = ParseDoubleOrDefault(listData[i].RowData[169], 0);
+                nuocMua.ThongTinCauTaoCongTron_CDayPhuBi = ParseDoubleOrDefault(listData[i].RowData[161], 0);
+                nuocMua.ThongTinCauTaoCongTron_SoCanh = ParseDoubleOrDefault(listData[i].RowData[162], 0);
+                nuocMua.ThongTinCauTaoCongTron_LongSuDung = ParseDoubleOrDefault(listData[i].RowData[163], 0);
 
-                mNuocMua.TTTKLCKCTCH_CDMoiNoiCKien = ParseDoubleOrDefault(listData[i].RowData[171], 0);
-                mNuocMua.TTTKLCKCTCH_SLCKDungDeTinhCD = ParseDoubleOrDefault(listData[i].RowData[172], 0);
-                mNuocMua.TTTKLCKCTCH_SLCKNguyen = ParseDoubleOrDefault(listData[i].RowData[173], 0);
+                nuocMua.ThongTinCauTaoCongTron_CCaoLotMong = ParseDoubleOrDefault(listData[i].RowData[165], 0);
+                nuocMua.ThongTinCauTaoCongTron_CRongLotMong = ParseDoubleOrDefault(listData[i].RowData[166], 0);
+                nuocMua.ThongTinCauTaoCongTron_CCaoMong = ParseDoubleOrDefault(listData[i].RowData[167], 0);
+                nuocMua.ThongTinCauTaoCongTron_CRongMong = ParseDoubleOrDefault(listData[i].RowData[168], 0);
+                nuocMua.ThongTinCauTaoCongTron_CCaoDe = ParseDoubleOrDefault(listData[i].RowData[169], 0);
 
-                mNuocMua.TTKTHHCongHopRanh_CauTaoTuong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[179].ToString() ?? "", "TD_LDanhTuong");
-                mNuocMua.TTKTHHCongHopRanh_CauTaoMuMo = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[180].ToString() ?? "", "TD_LMMCongRanh");
-                mNuocMua.TTKTHHCongHopRanh_ChatMatTrong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[181].ToString() ?? "");
-                mNuocMua.TTKTHHCongHopRanh_ChatMatNgoai = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[182].ToString() ?? "");
-                mNuocMua.TTKTHHCongHopRanh_CCaoLotMong = ParseDoubleOrDefault(listData[i].RowData[183], 0);
-                mNuocMua.TTKTHHCongHopRanh_CRongLotMong = ParseDoubleOrDefault(listData[i].RowData[184], 0);
-                mNuocMua.TTKTHHCongHopRanh_CCaoMong = ParseDoubleOrDefault(listData[i].RowData[185], 0);
-                mNuocMua.TTKTHHCongHopRanh_CRongMong = ParseDoubleOrDefault(listData[i].RowData[186], 0);
-                mNuocMua.TTKTHHCongHopRanh_CCaoDe = ParseDoubleOrDefault(listData[i].RowData[187], 0);
-                mNuocMua.TTKTHHCongHopRanh_CRongDe = ParseDoubleOrDefault(listData[i].RowData[188], 0);
-                mNuocMua.TTKTHHCongHopRanh_CDayTuong01Ben = ParseDoubleOrDefault(listData[i].RowData[189], 0);
-                mNuocMua.TTKTHHCongHopRanh_SoLuongTuong = ParseDoubleOrDefault(listData[i].RowData[190], 0);
-                mNuocMua.TTKTHHCongHopRanh_CRongLongSuDung = ParseDoubleOrDefault(listData[i].RowData[191], 0);
-                mNuocMua.TTKTHHCongHopRanh_CCaoTuongCongHop = ParseDoubleOrDefault(listData[i].RowData[192], 0);
+                nuocMua.TTTKLCKCTCH_CDMoiNoiCKien = ParseDoubleOrDefault(listData[i].RowData[171], 0);
+                nuocMua.TTTKLCKCTCH_SLCKDungDeTinhCD = ParseDoubleOrDefault(listData[i].RowData[172], 0);
+                nuocMua.TTTKLCKCTCH_SLCKNguyen = ParseDoubleOrDefault(listData[i].RowData[173], 0);
 
-                mNuocMua.TTKTHHCongHopRanh_CCaoMuMoThotDuoi = ParseDoubleOrDefault(listData[i].RowData[195], 0);
-                mNuocMua.TTKTHHCongHopRanh_CRongMuMoDuoi = ParseDoubleOrDefault(listData[i].RowData[196], 0);
-                mNuocMua.TTKTHHCongHopRanh_CCaoMuMoThotTren = ParseDoubleOrDefault(listData[i].RowData[197], 0);
-                mNuocMua.TTKTHHCongHopRanh_CRongMuMoTren = ParseDoubleOrDefault(listData[i].RowData[198], 0);
-                mNuocMua.TTKTHHCongHopRanh_LoaiThanhChong = listData[i].RowData[199].ToString() ??"";
-                mNuocMua.TTKTHHCongHopRanh_CauTaoThanhChong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[200].ToString() ?? "", "TD_CTTChongRanh");;
-                mNuocMua.TTKTHHCongHopRanh_CCaoThanhChong = ParseDoubleOrDefault(listData[i].RowData[201], 0);
-                mNuocMua.TTKTHHCongHopRanh_CRongThanhChong = ParseDoubleOrDefault(listData[i].RowData[202], 0);
-                mNuocMua.TTKTHHCongHopRanh_CDai = ParseDoubleOrDefault(listData[i].RowData[203], 0);
-                mNuocMua.TTKTHHCongHopRanh_SoLuongThanhChong = ParseDoubleOrDefault(listData[i].RowData[204], 0);
+                nuocMua.TTKTHHCongHopRanh_CauTaoTuong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[179].ToString() ?? "", "TD_LDanhTuong");
+                nuocMua.TTKTHHCongHopRanh_CauTaoMuMo = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[180].ToString() ?? "", "TD_LMMCongRanh");
+                nuocMua.TTKTHHCongHopRanh_ChatMatTrong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[181].ToString() ?? "");
+                nuocMua.TTKTHHCongHopRanh_ChatMatNgoai = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[182].ToString() ?? "");
+                nuocMua.TTKTHHCongHopRanh_CCaoLotMong = ParseDoubleOrDefault(listData[i].RowData[183], 0);
+                nuocMua.TTKTHHCongHopRanh_CRongLotMong = ParseDoubleOrDefault(listData[i].RowData[184], 0);
+                nuocMua.TTKTHHCongHopRanh_CCaoMong = ParseDoubleOrDefault(listData[i].RowData[185], 0);
+                nuocMua.TTKTHHCongHopRanh_CRongMong = ParseDoubleOrDefault(listData[i].RowData[186], 0);
+                nuocMua.TTKTHHCongHopRanh_CCaoDe = ParseDoubleOrDefault(listData[i].RowData[187], 0);
+                nuocMua.TTKTHHCongHopRanh_CRongDe = ParseDoubleOrDefault(listData[i].RowData[188], 0);
+                nuocMua.TTKTHHCongHopRanh_CDayTuong01Ben = ParseDoubleOrDefault(listData[i].RowData[189], 0);
+                nuocMua.TTKTHHCongHopRanh_SoLuongTuong = ParseDoubleOrDefault(listData[i].RowData[190], 0);
+                nuocMua.TTKTHHCongHopRanh_CRongLongSuDung = ParseDoubleOrDefault(listData[i].RowData[191], 0);
+                nuocMua.TTKTHHCongHopRanh_CCaoTuongCongHop = ParseDoubleOrDefault(listData[i].RowData[192], 0);
 
-                mNuocMua.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = listData[i].RowData[208].ToString() ?? "";
-                mNuocMua.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[209].ToString() ?? "", "TD_CTTDTruyenDan");
+                nuocMua.TTKTHHCongHopRanh_CCaoMuMoThotDuoi = ParseDoubleOrDefault(listData[i].RowData[195], 0);
+                nuocMua.TTKTHHCongHopRanh_CRongMuMoDuoi = ParseDoubleOrDefault(listData[i].RowData[196], 0);
+                nuocMua.TTKTHHCongHopRanh_CCaoMuMoThotTren = ParseDoubleOrDefault(listData[i].RowData[197], 0);
+                nuocMua.TTKTHHCongHopRanh_CRongMuMoTren = ParseDoubleOrDefault(listData[i].RowData[198], 0);
+                nuocMua.TTKTHHCongHopRanh_LoaiThanhChong = listData[i].RowData[199].ToString() ??"";
+                nuocMua.TTKTHHCongHopRanh_CauTaoThanhChong = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[200].ToString() ?? "", "TD_CTTChongRanh");;
+                nuocMua.TTKTHHCongHopRanh_CCaoThanhChong = ParseDoubleOrDefault(listData[i].RowData[201], 0);
+                nuocMua.TTKTHHCongHopRanh_CRongThanhChong = ParseDoubleOrDefault(listData[i].RowData[202], 0);
+                nuocMua.TTKTHHCongHopRanh_CDai = ParseDoubleOrDefault(listData[i].RowData[203], 0);
+                nuocMua.TTKTHHCongHopRanh_SoLuongThanhChong = ParseDoubleOrDefault(listData[i].RowData[204], 0);
+
+                nuocMua.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = listData[i].RowData[208].ToString() ?? "";
+                nuocMua.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[209].ToString() ?? "", "TD_CTTDTruyenDan");
 
 
-                mNuocMua.TTTDCongHoRanh_CDai = ParseDoubleOrDefault(listData[i].RowData[211], 0);
-                mNuocMua.TTTDCongHoRanh_CRong = ParseDoubleOrDefault(listData[i].RowData[212], 0);
-                mNuocMua.TTTDCongHoRanh_CCao = ParseDoubleOrDefault(listData[i].RowData[213], 0);
-                mNuocMua.TTTDCongHoRanh_TenLoaiTamDanLoai02 = listData[i].RowData[214].ToString() ?? "";
-                mNuocMua.TTTDCongHoRanh_CauTaoTamDanTruyenDan = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[215].ToString() ?? "", "TD_CTTDTruyenDan");
+                nuocMua.TTTDCongHoRanh_CDai = ParseDoubleOrDefault(listData[i].RowData[211], 0);
+                nuocMua.TTTDCongHoRanh_CRong = ParseDoubleOrDefault(listData[i].RowData[212], 0);
+                nuocMua.TTTDCongHoRanh_CCao = ParseDoubleOrDefault(listData[i].RowData[213], 0);
+                nuocMua.TTTDCongHoRanh_TenLoaiTamDanLoai02 = listData[i].RowData[214].ToString() ?? "";
+                nuocMua.TTTDCongHoRanh_CauTaoTamDanTruyenDan = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[215].ToString() ?? "", "TD_CTTDTruyenDan");
 
-                mNuocMua.TTTDCongHoRanh_CRong1 = ParseDoubleOrDefault(listData[i].RowData[218], 0);
-                mNuocMua.TTTDCongHoRanh_CCao1 = ParseDoubleOrDefault(listData[i].RowData[219], 0);
-                mNuocMua.TTTDCongHoRanh_ChieuDaiMoiNoi = ParseDoubleOrDefault(listData[i].RowData[220], 0);
-                mNuocMua.TTTDCongHoRanh_SoLuongTDanDungDeTinhChieuDaiBoSung = ParseDoubleOrDefault(listData[i].RowData[221], 0);
+                nuocMua.TTTDCongHoRanh_CRong1 = ParseDoubleOrDefault(listData[i].RowData[218], 0);
+                nuocMua.TTTDCongHoRanh_CCao1 = ParseDoubleOrDefault(listData[i].RowData[219], 0);
+                nuocMua.TTTDCongHoRanh_ChieuDaiMoiNoi = ParseDoubleOrDefault(listData[i].RowData[220], 0);
+                nuocMua.TTTDCongHoRanh_SoLuongTDanDungDeTinhChieuDaiBoSung = ParseDoubleOrDefault(listData[i].RowData[221], 0);
 
-                mNuocMua.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi = ParseDoubleOrDefault(listData[i].RowData[227], 0);
-                mNuocMua.ThongTinKichThuocHinhHocOngNhua_SoCanh = ParseDoubleOrDefault(listData[i].RowData[228], 0);
-                mNuocMua.ThongTinKichThuocHinhHocOngNhua_LongSuDung = ParseDoubleOrDefault(listData[i].RowData[229], 0);
+                nuocMua.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi = ParseDoubleOrDefault(listData[i].RowData[227], 0);
+                nuocMua.ThongTinKichThuocHinhHocOngNhua_SoCanh = ParseDoubleOrDefault(listData[i].RowData[228], 0);
+                nuocMua.ThongTinKichThuocHinhHocOngNhua_LongSuDung = ParseDoubleOrDefault(listData[i].RowData[229], 0);
 
-                mNuocMua.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat = ParseDoubleOrDefault(listData[i].RowData[231], 0);
-                mNuocMua.ThongTinKichThuocHinhHocOngNhua_CCaoDapCat = ParseDoubleOrDefault(listData[i].RowData[232], 0);
-                mNuocMua.CDThuongLuu_HienTrangTruocKhiDaoThuongLuu = ParseDoubleOrDefault(listData[i].RowData[233], 0);
+                nuocMua.ThongTinKichThuocHinhHocOngNhua_CCaoDemCat = ParseDoubleOrDefault(listData[i].RowData[231], 0);
+                nuocMua.ThongTinKichThuocHinhHocOngNhua_CCaoDapCat = ParseDoubleOrDefault(listData[i].RowData[232], 0);
+                nuocMua.CDThuongLuu_HienTrangTruocKhiDaoThuongLuu = ParseDoubleOrDefault(listData[i].RowData[233], 0);
 
-                mNuocMua.CDThuongLuu_DayDongChay = ParseDoubleOrDefault(listData[i].RowData[250], 0);
+                nuocMua.CDThuongLuu_DayDongChay = ParseDoubleOrDefault(listData[i].RowData[250], 0);
 
-                mNuocMua.CDThuongLuu_DinhTrongLongSuDung = ParseDoubleOrDefault(listData[i].RowData[255], 0);
+                nuocMua.CDThuongLuu_DinhTrongLongSuDung = ParseDoubleOrDefault(listData[i].RowData[255], 0);
 
-                mNuocMua.CDHaLu_HienTrangTruocKhiDaoHaLuu = ParseDoubleOrDefault(listData[i].RowData[261], 0);
+                nuocMua.CDHaLu_HienTrangTruocKhiDaoHaLuu = ParseDoubleOrDefault(listData[i].RowData[261], 0);
 
-                mNuocMua.CDHaLu_DayDaoOngNhua = ParseDoubleOrDefault(listData[i].RowData[267], 0);
+                nuocMua.CDHaLu_DayDaoOngNhua = ParseDoubleOrDefault(listData[i].RowData[267], 0);
 
-                mNuocMua.CDHaLu_DayDongChay = ParseDoubleOrDefault(listData[i].RowData[278], 0);
+                nuocMua.CDHaLu_DayDongChay = ParseDoubleOrDefault(listData[i].RowData[278], 0);
 
-                mNuocMua.CDHaLu_DinhTrongLongSuDung = ParseDoubleOrDefault(listData[i].RowData[283], 0);
+                nuocMua.CDHaLu_DinhTrongLongSuDung = ParseDoubleOrDefault(listData[i].RowData[283], 0);
 
-                mNuocMua.TTVLDCongRanh_LoaiVatLieuDao = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[289].ToString() ?? ""); ;
-                mNuocMua.TTVLDCongRanh_TLChieuCaoDaoDa = ParseDoubleOrDefault(listData[i].RowData[290], 0);
+                nuocMua.TTVLDCongRanh_LoaiVatLieuDao = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[289].ToString() ?? ""); ;
+                nuocMua.TTVLDCongRanh_TLChieuCaoDaoDa = ParseDoubleOrDefault(listData[i].RowData[290], 0);
 
-                mNuocMua.TTVLDCongRanh_HLChieuCaoDaoDa = ParseDoubleOrDefault(listData[i].RowData[293], 0);
-                mNuocMua.TTVLDCongRanh_HLChieuCaoDaoDat = ParseDoubleOrDefault(listData[i].RowData[294], 0);
-                
-                mNuocMua.TTMDRanhOngThang_ChieuRongDayDaoNho = ParseDoubleOrDefault(listData[i].RowData[356], 0);
-                mNuocMua.TTMDRanhOngThang_TyLeMoMai = ParseDoubleOrDefault(listData[i].RowData[357], 0);
-                mNuocMua.TTMDRanhOngThang_SoCanhMaiTrai = ParseDoubleOrDefault(listData[i].RowData[358], 0);
-                mNuocMua.TTMDRanhOngThang_SoCanhMaiPhai = ParseDoubleOrDefault(listData[i].RowData[359], 0);
+                nuocMua.TTVLDCongRanh_HLChieuCaoDaoDa = ParseDoubleOrDefault(listData[i].RowData[293], 0);
+                nuocMua.TTVLDCongRanh_HLChieuCaoDaoDat = ParseDoubleOrDefault(listData[i].RowData[294], 0);
 
-                mNuocMua.ToaDoX = ParseDoubleOrDefault(listData[i].RowData[408], 0);
-                mNuocMua.ToaDoY = ParseDoubleOrDefault(listData[i].RowData[409], 0);
+                nuocMua.TTMDRanhOngThang_ChieuRongDayDaoNho = ParseDoubleOrDefault(listData[i].RowData[356], 0);
+                nuocMua.TTMDRanhOngThang_TyLeMoMai = ParseDoubleOrDefault(listData[i].RowData[357], 0);
+                nuocMua.TTMDRanhOngThang_SoCanhMaiTrai = ParseDoubleOrDefault(listData[i].RowData[358], 0);
+                nuocMua.TTMDRanhOngThang_SoCanhMaiPhai = ParseDoubleOrDefault(listData[i].RowData[359], 0);
 
-                listNM.Add(mNuocMua);
+                nuocMua.ToaDoX = ParseDoubleOrDefault(listData[i].RowData[408], 0);
+                nuocMua.ToaDoY = ParseDoubleOrDefault(listData[i].RowData[409], 0);
+
+
+                //load phân loại 
+
+                var loadTenHoGaSauPhanLoai = await LoadTenHoGaSauPhanLoai(nuocMua);
+                if (string.IsNullOrEmpty(loadTenHoGaSauPhanLoai.Id))
+                {
+                    var id = await ThemTenTheoPL(nuocMua);
+                    nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
+                }
+                else
+                {
+                    nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = loadTenHoGaSauPhanLoai.Id;
+                }
+                //load phân loại LoadTenHoGaSauPhanLoaiTDHoGa
+
+                var loadTenHoGaSauPhanLoaiTDHoGa = await LoadTenHoGaSauPhanLoaiTDHoGa(nuocMua);
+                if (string.IsNullOrEmpty(loadTenHoGaSauPhanLoaiTDHoGa.Id))
+                {
+                    var id = await ThemTenTheoPLTDHoGa(nuocMua, listDanhMuc);
+                    nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = id;
+                }
+                else
+                {
+                    nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = loadTenHoGaSauPhanLoaiTDHoGa.Id;
+                }
+                //load phân loại  LoadTenPLCTronHopNhua
+
+                var loadTenPLCTronHopNhua = await LoadTenPLCTronHopNhua(nuocMua);
+                if (string.IsNullOrEmpty(loadTenPLCTronHopNhua.Id))
+                {
+                    var id = await ThemTenTheoPLCTronHopNhua(nuocMua,listDanhMuc);
+                    nuocMua.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = id;
+                }
+                else
+                {
+                    nuocMua.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = loadTenPLCTronHopNhua.Id;
+                }
+                //load phân loại LoadTenPhanLoaiMongCTron
+
+                var loadTenPhanLoaiMongCTron = await LoadTenPhanLoaiMongCTron(nuocMua);
+                if (string.IsNullOrEmpty(loadTenPhanLoaiMongCTron.Id))
+                {
+                    var id = await ThemTenTheoPLMongCTron(nuocMua,listDanhMuc);
+                    nuocMua.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = id;
+                }
+                else
+                {
+                    nuocMua.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = loadTenPhanLoaiMongCTron.Id;
+                }
+                //load phân loại loadTenPhanLoaiDeCong
+
+                var loadTenPhanLoaiDeCong = await LoadTenPhanLoaiDeCong(nuocMua);
+                if (string.IsNullOrEmpty(loadTenPhanLoaiDeCong.Id))
+                {
+                    var id = await ThemTenTheoPLDeCong(nuocMua,listDanhMuc);
+                    nuocMua.ThongTinDeCong_TenLoaiDeCong = id;
+                }
+                else
+                {
+                    nuocMua.ThongTinDeCong_TenLoaiDeCong = loadTenPhanLoaiDeCong.Id;
+                }
+                //load phân loại  LoadTenPhanLoaiThanhChong
+
+                var loadTenPhanLoaiThanhChong = await LoadTenPhanLoaiThanhChong(nuocMua);
+                if (string.IsNullOrEmpty(loadTenPhanLoaiThanhChong.Id))
+                {
+                    var id = await ThemTenTheoPLThanhChong(nuocMua,listDanhMuc);
+                    nuocMua.TTKTHHCongHopRanh_LoaiThanhChong = id;
+                }
+                else
+                {
+                    nuocMua.TTKTHHCongHopRanh_LoaiThanhChong = loadTenPhanLoaiThanhChong.Id;
+                }
+                //load phân loại LoadTenPhanLoaiTDanTDan
+
+                var loadTenPhanLoaiTDanTDan = await LoadTenPhanLoaiTDanTDan(nuocMua);
+                if (string.IsNullOrEmpty(loadTenPhanLoaiTDanTDan.Id))
+                {
+                    var id = await ThemTenTheoPLTDanTDan(nuocMua,listDanhMuc);
+                    nuocMua.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = id;
+                }
+                else
+                {
+                    nuocMua.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = loadTenPhanLoaiTDanTDan.Id;
+                }
+
+                //load phân loại TTTDCongHoRanh_TenLoaiTamDanLoai02 loadTenPhanLoaiTDanTDan02
+
+                var loadTenPhanLoaiTDanTDan02 = await LoadTenPhanLoaiTDanTDan02(nuocMua);
+                if (string.IsNullOrEmpty(loadTenPhanLoaiTDanTDan02.Id))
+                {
+                    var id = await ThemTenTheoPLTDanTDan02(nuocMua, listDanhMuc);
+                    nuocMua.TTTDCongHoRanh_TenLoaiTamDanLoai02 = id;
+                }
+                else
+                {
+                    nuocMua.TTTDCongHoRanh_TenLoaiTamDanLoai02 = loadTenPhanLoaiTDanTDan02.Id;
+                }
+
+
+                listNM.Add(nuocMua);
             }
 
 
@@ -1005,5 +1112,565 @@
         return defaultValue;
     }
 
+    public string GetTenDanhMucById(string id)
+    {
+        var danhMuc = listDanhMuc.FirstOrDefault(dm => dm.Id == id);
+        return danhMuc != null ? danhMuc.Ten : null;
+    }
 
+
+    PhanLoai phanloai=new();
+
+    //Thêm tên theo bảng phân loại hố ga
+    public async Task<string> ThemTenTheoPL(NuocMua Input)
+    {
+        var id = "";
+        PhanLoaiHoGa searchData = new PhanLoaiHoGa
+            {
+                ThongTinChungHoGa_TenHoGaSauPhanLoai = Input.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                ThongTinChungHoGa_HinhThucHoGa = Input.ThongTinChungHoGa_HinhThucHoGa,
+                ThongTinChungHoGa_KetCauMuMo = Input.ThongTinChungHoGa_KetCauMuMo,
+                ThongTinChungHoGa_KetCauTuong = Input.ThongTinChungHoGa_KetCauTuong,
+                ThongTinChungHoGa_HinhThucMongHoGa = Input.ThongTinChungHoGa_HinhThucMongHoGa,
+                ThongTinChungHoGa_KetCauMong = Input.ThongTinChungHoGa_KetCauMong,
+                ThongTinChungHoGa_ChatMatTrong = Input.ThongTinChungHoGa_ChatMatTrong,
+                ThongTinChungHoGa_ChatMatNgoai = Input.ThongTinChungHoGa_ChatMatNgoai,
+                PhuBiHoGa_CDai = Input.PhuBiHoGa_CDai,
+                PhuBiHoGa_CRong = Input.PhuBiHoGa_CRong,
+                BeTongLotMong_D = Input.BeTongLotMong_D,
+                BeTongLotMong_R = Input.BeTongLotMong_R,
+                BeTongLotMong_C = Input.BeTongLotMong_C,
+                BeTongMongHoGa_D = Input.BeTongMongHoGa_D,
+                BeTongMongHoGa_R = Input.BeTongMongHoGa_R,
+                BeTongMongHoGa_C = Input.BeTongMongHoGa_C,
+                DeHoGa_D = Input.DeHoGa_D,
+                DeHoGa_R = Input.DeHoGa_R,
+                DeHoGa_C = Input.DeHoGa_C,
+                TuongHoGa_D = Input.TuongHoGa_D,
+                TuongHoGa_R = Input.TuongHoGa_R,
+                TuongHoGa_C = Input.TuongHoGa_C,
+                TuongHoGa_CdTuong = Input.TuongHoGa_CdTuong,
+                DamGiuaHoGa_D = Input.DamGiuaHoGa_D,
+                DamGiuaHoGa_R = Input.DamGiuaHoGa_R,
+                DamGiuaHoGa_C = Input.DamGiuaHoGa_C,
+                DamGiuaHoGa_CdDam = Input.DamGiuaHoGa_CdDam,
+                DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa = Input.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa,
+                ChatMatTrong_D = Input.ChatMatTrong_D,
+                ChatMatTrong_R = Input.ChatMatTrong_R,
+                ChatMatTrong_C = Input.ChatMatTrong_C,
+                ChatMatNgoaiCanh_D = Input.ChatMatNgoaiCanh_D,
+                ChatMatNgoaiCanh_R = Input.ChatMatNgoaiCanh_R,
+                ChatMatNgoaiCanh_C = Input.ChatMatNgoaiCanh_C,
+                MuMoThotDuoi_D = Input.MuMoThotDuoi_D,
+                MuMoThotDuoi_R = Input.MuMoThotDuoi_R,
+                MuMoThotDuoi_C = Input.MuMoThotDuoi_C,
+                MuMoThotDuoi_CdTuong = Input.MuMoThotDuoi_CdTuong,
+                MuMoThotTren_D = Input.MuMoThotTren_D,
+                MuMoThotTren_R = Input.MuMoThotTren_R,
+                MuMoThotTren_C = Input.MuMoThotTren_C,
+                MuMoThotTren_CdTuong = Input.MuMoThotTren_CdTuong,
+                HinhThucDauNoi1_Loai = Input.HinhThucDauNoi1_Loai,
+                HinhThucDauNoi1_CanhDai = Input.HinhThucDauNoi1_CanhDai,
+                HinhThucDauNoi1_CanhRong = Input.HinhThucDauNoi1_CanhRong,
+                HinhThucDauNoi1_CanhCheo = Input.HinhThucDauNoi1_CanhCheo,
+                HinhThucDauNoi2_Loai = Input.HinhThucDauNoi2_Loai,
+                HinhThucDauNoi2_CanhDai = Input.HinhThucDauNoi2_CanhDai,
+                HinhThucDauNoi2_CanhRong = Input.HinhThucDauNoi2_CanhRong,
+                HinhThucDauNoi2_CanhCheo = Input.HinhThucDauNoi2_CanhCheo,
+                HinhThucDauNoi3_Loai = Input.HinhThucDauNoi3_Loai,
+                HinhThucDauNoi3_CanhDai = Input.HinhThucDauNoi3_CanhDai,
+                HinhThucDauNoi3_CanhRong = Input.HinhThucDauNoi3_CanhRong,
+                HinhThucDauNoi3_CanhCheo = Input.HinhThucDauNoi3_CanhCheo,
+                HinhThucDauNoi4_Loai = Input.HinhThucDauNoi4_Loai,
+                HinhThucDauNoi4_CanhDai = Input.HinhThucDauNoi4_CanhDai,
+                HinhThucDauNoi4_CanhRong = Input.HinhThucDauNoi4_CanhRong,
+                HinhThucDauNoi4_CanhCheo = Input.HinhThucDauNoi4_CanhCheo,
+                HinhThucDauNoi5_Loai = Input.HinhThucDauNoi5_Loai,
+                HinhThucDauNoi5_CanhDai = Input.HinhThucDauNoi5_CanhDai,
+                HinhThucDauNoi5_CanhRong = Input.HinhThucDauNoi5_CanhRong,
+                HinhThucDauNoi5_CanhCheo = Input.HinhThucDauNoi5_CanhCheo,
+                HinhThucDauNoi6_Loai = Input.HinhThucDauNoi6_Loai,
+                HinhThucDauNoi6_CanhDai = Input.HinhThucDauNoi6_CanhDai,
+                HinhThucDauNoi6_CanhRong = Input.HinhThucDauNoi6_CanhRong,
+                HinhThucDauNoi6_CanhCheo = Input.HinhThucDauNoi6_CanhCheo,
+                HinhThucDauNoi7_Loai = Input.HinhThucDauNoi7_Loai,
+                HinhThucDauNoi7_CanhDai = Input.HinhThucDauNoi7_CanhDai,
+                HinhThucDauNoi7_CanhRong = Input.HinhThucDauNoi7_CanhRong,
+                HinhThucDauNoi7_CanhCheo = Input.HinhThucDauNoi7_CanhCheo,
+                HinhThucDauNoi8_Loai = Input.HinhThucDauNoi8_Loai,
+                HinhThucDauNoi8_CanhDai = Input.HinhThucDauNoi8_CanhDai,
+                HinhThucDauNoi8_CanhRong = Input.HinhThucDauNoi8_CanhRong,
+                HinhThucDauNoi8_CanhCheo = Input.HinhThucDauNoi8_CanhCheo
+            };
+
+        CheckObjHelper checkObjhelper = new();
+        if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
+        {
+            id = await PhanLoaiHoGaRepository.InsertId(searchData, Input.ThongTinChungHoGa_TenHoGaTheoBanVe);
+            Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
+        }
+        return id;
+    }
+
+    //Load tên theo phân loại hố ga
+    public async Task<PhanLoai> LoadTenHoGaSauPhanLoai(NuocMua Input)
+    {
+        PhanLoaiHoGa searchData = new PhanLoaiHoGa
+            {
+                ThongTinChungHoGa_TenHoGaSauPhanLoai = Input.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+
+                ThongTinChungHoGa_HinhThucHoGa = Input.ThongTinChungHoGa_HinhThucHoGa,
+                ThongTinChungHoGa_KetCauMuMo = Input.ThongTinChungHoGa_KetCauMuMo,
+                ThongTinChungHoGa_KetCauTuong = Input.ThongTinChungHoGa_KetCauTuong,
+                ThongTinChungHoGa_HinhThucMongHoGa = Input.ThongTinChungHoGa_HinhThucMongHoGa,
+                ThongTinChungHoGa_KetCauMong = Input.ThongTinChungHoGa_KetCauMong,
+                ThongTinChungHoGa_ChatMatTrong = Input.ThongTinChungHoGa_ChatMatTrong,
+                ThongTinChungHoGa_ChatMatNgoai = Input.ThongTinChungHoGa_ChatMatNgoai,
+                PhuBiHoGa_CDai = Input.PhuBiHoGa_CDai,
+                PhuBiHoGa_CRong = Input.PhuBiHoGa_CRong,
+                BeTongLotMong_D = Input.BeTongLotMong_D,
+                BeTongLotMong_R = Input.BeTongLotMong_R,
+                BeTongLotMong_C = Input.BeTongLotMong_C,
+                BeTongMongHoGa_D = Input.BeTongMongHoGa_D,
+                BeTongMongHoGa_R = Input.BeTongMongHoGa_R,
+                BeTongMongHoGa_C = Input.BeTongMongHoGa_C,
+                DeHoGa_D = Input.DeHoGa_D,
+                DeHoGa_R = Input.DeHoGa_R,
+                DeHoGa_C = Input.DeHoGa_C,
+                TuongHoGa_D = Input.TuongHoGa_D,
+                TuongHoGa_R = Input.TuongHoGa_R,
+                TuongHoGa_C = Input.TuongHoGa_C,
+                TuongHoGa_CdTuong = Input.TuongHoGa_CdTuong,
+                DamGiuaHoGa_D = Input.DamGiuaHoGa_D,
+                DamGiuaHoGa_R = Input.DamGiuaHoGa_R,
+                DamGiuaHoGa_C = Input.DamGiuaHoGa_C,
+                DamGiuaHoGa_CdDam = Input.DamGiuaHoGa_CdDam,
+                DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa = Input.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa,
+                ChatMatTrong_D = Input.ChatMatTrong_D,
+                ChatMatTrong_R = Input.ChatMatTrong_R,
+                ChatMatTrong_C = Input.ChatMatTrong_C,
+                ChatMatNgoaiCanh_D = Input.ChatMatNgoaiCanh_D,
+                ChatMatNgoaiCanh_R = Input.ChatMatNgoaiCanh_R,
+                ChatMatNgoaiCanh_C = Input.ChatMatNgoaiCanh_C,
+                MuMoThotDuoi_D = Input.MuMoThotDuoi_D,
+                MuMoThotDuoi_R = Input.MuMoThotDuoi_R,
+                MuMoThotDuoi_C = Input.MuMoThotDuoi_C,
+                MuMoThotDuoi_CdTuong = Input.MuMoThotDuoi_CdTuong,
+                MuMoThotTren_D = Input.MuMoThotTren_D,
+                MuMoThotTren_R = Input.MuMoThotTren_R,
+                MuMoThotTren_C = Input.MuMoThotTren_C,
+                MuMoThotTren_CdTuong = Input.MuMoThotTren_CdTuong,
+                HinhThucDauNoi1_Loai = Input.HinhThucDauNoi1_Loai,
+                HinhThucDauNoi1_CanhDai = Input.HinhThucDauNoi1_CanhDai,
+                HinhThucDauNoi1_CanhRong = Input.HinhThucDauNoi1_CanhRong,
+                HinhThucDauNoi1_CanhCheo = Input.HinhThucDauNoi1_CanhCheo,
+                HinhThucDauNoi2_Loai = Input.HinhThucDauNoi2_Loai,
+                HinhThucDauNoi2_CanhDai = Input.HinhThucDauNoi2_CanhDai,
+                HinhThucDauNoi2_CanhRong = Input.HinhThucDauNoi2_CanhRong,
+                HinhThucDauNoi2_CanhCheo = Input.HinhThucDauNoi2_CanhCheo,
+                HinhThucDauNoi3_Loai = Input.HinhThucDauNoi3_Loai,
+                HinhThucDauNoi3_CanhDai = Input.HinhThucDauNoi3_CanhDai,
+                HinhThucDauNoi3_CanhRong = Input.HinhThucDauNoi3_CanhRong,
+                HinhThucDauNoi3_CanhCheo = Input.HinhThucDauNoi3_CanhCheo,
+                HinhThucDauNoi4_Loai = Input.HinhThucDauNoi4_Loai,
+                HinhThucDauNoi4_CanhDai = Input.HinhThucDauNoi4_CanhDai,
+                HinhThucDauNoi4_CanhRong = Input.HinhThucDauNoi4_CanhRong,
+                HinhThucDauNoi4_CanhCheo = Input.HinhThucDauNoi4_CanhCheo,
+                HinhThucDauNoi5_Loai = Input.HinhThucDauNoi5_Loai,
+                HinhThucDauNoi5_CanhDai = Input.HinhThucDauNoi5_CanhDai,
+                HinhThucDauNoi5_CanhRong = Input.HinhThucDauNoi5_CanhRong,
+                HinhThucDauNoi5_CanhCheo = Input.HinhThucDauNoi5_CanhCheo,
+                HinhThucDauNoi6_Loai = Input.HinhThucDauNoi6_Loai,
+                HinhThucDauNoi6_CanhDai = Input.HinhThucDauNoi6_CanhDai,
+                HinhThucDauNoi6_CanhRong = Input.HinhThucDauNoi6_CanhRong,
+                HinhThucDauNoi6_CanhCheo = Input.HinhThucDauNoi6_CanhCheo,
+                HinhThucDauNoi7_Loai = Input.HinhThucDauNoi7_Loai,
+                HinhThucDauNoi7_CanhDai = Input.HinhThucDauNoi7_CanhDai,
+                HinhThucDauNoi7_CanhRong = Input.HinhThucDauNoi7_CanhRong,
+                HinhThucDauNoi7_CanhCheo = Input.HinhThucDauNoi7_CanhCheo,
+                HinhThucDauNoi8_Loai = Input.HinhThucDauNoi8_Loai,
+                HinhThucDauNoi8_CanhDai = Input.HinhThucDauNoi8_CanhDai,
+                HinhThucDauNoi8_CanhRong = Input.HinhThucDauNoi8_CanhRong,
+                HinhThucDauNoi8_CanhCheo = Input.HinhThucDauNoi8_CanhCheo
+            };
+
+        PhanLoaiHoGa plHoGa = new();
+        phanloai = new();
+        plHoGa = await PhanLoaiHoGaRepository.GetMPhanLoaiHoGaByDetail(searchData);
+        if (plHoGa != null)
+        {
+            phanloai.Name = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai;
+            phanloai.Id = plHoGa.Id;
+        }
+
+
+        return phanloai;
+    }
+
+    //Thêm tên theo bảng phân loại tấm đan hố ga
+    public async Task<string> ThemTenTheoPLTDHoGa(NuocMua Input, List<DanhMuc> listDanhMuc)
+    {
+        var id = "";
+        PhanLoaiTDHoGa searchData = new PhanLoaiTDHoGa
+            {
+                ThongTinTamDanHoGa2_HinhThucDayHoGa = Input.ThongTinTamDanHoGa2_HinhThucDayHoGa,
+                ThongTinTamDanHoGa2_DuongKinh = Input.ThongTinTamDanHoGa2_DuongKinh,
+                ThongTinTamDanHoGa2_ChieuDay = Input.ThongTinTamDanHoGa2_ChieuDay,
+                ThongTinTamDanHoGa2_D = Input.ThongTinTamDanHoGa2_D,
+                ThongTinTamDanHoGa2_R = Input.ThongTinTamDanHoGa2_R,
+                ThongTinTamDanHoGa2_C = Input.ThongTinTamDanHoGa2_C
+
+            };
+        CheckObjHelper checkObjhelper = new();
+        if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
+        {
+            id = await PhanLoaiTDHoGaRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinTamDanHoGa2_HinhThucDayHoGa));
+
+        }
+        return id;
+
+    }
+
+    //Load tên theo phân loại tấm đan hố ga
+    public async Task<PhanLoai> LoadTenHoGaSauPhanLoaiTDHoGa(NuocMua Input)
+    {
+        PhanLoaiTDHoGa searchData = new PhanLoaiTDHoGa
+            {
+
+                ThongTinTamDanHoGa2_HinhThucDayHoGa = Input.ThongTinTamDanHoGa2_HinhThucDayHoGa,
+                ThongTinTamDanHoGa2_DuongKinh = Input.ThongTinTamDanHoGa2_DuongKinh,
+                ThongTinTamDanHoGa2_ChieuDay = Input.ThongTinTamDanHoGa2_ChieuDay,
+                ThongTinTamDanHoGa2_D = Input.ThongTinTamDanHoGa2_D,
+                ThongTinTamDanHoGa2_R = Input.ThongTinTamDanHoGa2_R,
+                ThongTinTamDanHoGa2_C = Input.ThongTinTamDanHoGa2_C
+            };
+
+        PhanLoaiTDHoGa plTDHoGa = new();
+        phanloai = new();
+        plTDHoGa = await PhanLoaiTDHoGaRepository.GetMPhanLoaiTDHoGaByDetail(searchData);
+        if (plTDHoGa != null)
+        {
+            phanloai.Id = plTDHoGa.Id;
+            phanloai.Name = plTDHoGa.ThongTinTamDanHoGa2_PhanLoaiDayHoGa;
+        }
+        return phanloai;
+
+    }
+
+    //Thêm tên theo bảng phân loại cống hộp cống tròn nhựa
+    public async Task<string> ThemTenTheoPLCTronHopNhua(NuocMua Input, List<DanhMuc> listDanhMuc)
+    {
+        PhanLoaiCTronHopNhua searchData = new PhanLoaiCTronHopNhua
+            {
+                ThongTinDuongTruyenDan_HinhThucTruyenDan = Input.ThongTinDuongTruyenDan_HinhThucTruyenDan,
+                ThongTinDuongTruyenDan_LoaiTruyenDan = Input.ThongTinDuongTruyenDan_LoaiTruyenDan,
+                TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien = Input.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien,
+                ThongTinCauTaoCongTron_CDayPhuBi = Input.ThongTinCauTaoCongTron_CDayPhuBi,
+                TTKTHHCongHopRanh_CauTaoTuong = Input.TTKTHHCongHopRanh_CauTaoTuong,
+                TTKTHHCongHopRanh_ChatMatTrong = Input.TTKTHHCongHopRanh_ChatMatTrong,
+                TTKTHHCongHopRanh_ChatMatNgoai = Input.TTKTHHCongHopRanh_ChatMatNgoai,
+                TTKTHHCongHopRanh_CCaoDe = Input.TTKTHHCongHopRanh_CCaoDe,
+                TTKTHHCongHopRanh_CRongDe = Input.TTKTHHCongHopRanh_CRongDe,
+                TTKTHHCongHopRanh_CDayTuong01Ben = Input.TTKTHHCongHopRanh_CDayTuong01Ben,
+                TTKTHHCongHopRanh_SoLuongTuong = Input.TTKTHHCongHopRanh_SoLuongTuong,
+                TTKTHHCongHopRanh_CRongLongSuDung = Input.TTKTHHCongHopRanh_CRongLongSuDung,
+                TTKTHHCongHopRanh_CCaoTuongGop = Input.TTKTHHCongHopRanh_CCaoTuongGop,
+                TTKTHHCongHopRanh_CCaoMuMoThotDuoi = Input.TTKTHHCongHopRanh_CCaoMuMoThotDuoi,
+                TTKTHHCongHopRanh_CRongMuMoDuoi = Input.TTKTHHCongHopRanh_CRongMuMoDuoi,
+                TTKTHHCongHopRanh_CCaoMuMoThotTren = Input.TTKTHHCongHopRanh_CCaoMuMoThotTren,
+                TTKTHHCongHopRanh_CRongMuMoTren = Input.TTKTHHCongHopRanh_CRongMuMoTren,
+                TTKTHHCongHopRanh_CCaoChatMatTrong = Input.TTKTHHCongHopRanh_CCaoChatMatTrong,
+                ThongTinKichThuocHinhHocOngNhua_CDayPhuBi = Input.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi,
+
+            };
+        var id = "";
+        CheckObjHelper checkObjhelper = new();
+        if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
+        {
+            id = await PhanLoaiCTronHopNhuaRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan));
+
+        }
+        return id;
+    }
+
+    //Load tên theo phân loại móng cống tròn
+    public async Task<PhanLoai> LoadTenPLCTronHopNhua(NuocMua Input)
+    {
+        PhanLoaiCTronHopNhua searchData = new PhanLoaiCTronHopNhua
+            {
+                ThongTinDuongTruyenDan_HinhThucTruyenDan = Input.ThongTinDuongTruyenDan_HinhThucTruyenDan,
+                ThongTinDuongTruyenDan_LoaiTruyenDan = Input.ThongTinDuongTruyenDan_LoaiTruyenDan,
+                TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien = Input.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien,
+                ThongTinCauTaoCongTron_CDayPhuBi = Input.ThongTinCauTaoCongTron_CDayPhuBi,
+                TTKTHHCongHopRanh_CauTaoTuong = Input.TTKTHHCongHopRanh_CauTaoTuong,
+                TTKTHHCongHopRanh_ChatMatTrong = Input.TTKTHHCongHopRanh_ChatMatTrong,
+                TTKTHHCongHopRanh_ChatMatNgoai = Input.TTKTHHCongHopRanh_ChatMatNgoai,
+                TTKTHHCongHopRanh_CCaoDe = Input.TTKTHHCongHopRanh_CCaoDe,
+                TTKTHHCongHopRanh_CRongDe = Input.TTKTHHCongHopRanh_CRongDe,
+                TTKTHHCongHopRanh_CDayTuong01Ben = Input.TTKTHHCongHopRanh_CDayTuong01Ben,
+                TTKTHHCongHopRanh_SoLuongTuong = Input.TTKTHHCongHopRanh_SoLuongTuong,
+                TTKTHHCongHopRanh_CRongLongSuDung = Input.TTKTHHCongHopRanh_CRongLongSuDung,
+                TTKTHHCongHopRanh_CCaoTuongGop = Input.TTKTHHCongHopRanh_CCaoTuongGop,
+                TTKTHHCongHopRanh_CCaoMuMoThotDuoi = Input.TTKTHHCongHopRanh_CCaoMuMoThotDuoi,
+                TTKTHHCongHopRanh_CRongMuMoDuoi = Input.TTKTHHCongHopRanh_CRongMuMoDuoi,
+                TTKTHHCongHopRanh_CCaoMuMoThotTren = Input.TTKTHHCongHopRanh_CCaoMuMoThotTren,
+                TTKTHHCongHopRanh_CRongMuMoTren = Input.TTKTHHCongHopRanh_CRongMuMoTren,
+                TTKTHHCongHopRanh_CCaoChatMatTrong = Input.TTKTHHCongHopRanh_CCaoChatMatTrong,
+                ThongTinKichThuocHinhHocOngNhua_CDayPhuBi = Input.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi,
+
+            };
+
+        PhanLoaiCTronHopNhua plCTHNHoGa = new();
+        phanloai = new();
+        plCTHNHoGa = await PhanLoaiCTronHopNhuaRepository.GetMPhanLoaiCTronHopNhuaByDetail(searchData);
+        if (plCTHNHoGa != null)
+        {
+            phanloai.Name = plCTHNHoGa.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai;
+            phanloai.Id = plCTHNHoGa.Id;
+        }
+
+        return phanloai;
+    }
+
+    //Thêm tên theo bảng phân loại cống hộp cống tròn nhựa
+    public async Task<string> ThemTenTheoPLMongCTron(NuocMua Input, List<DanhMuc> listDanhMuc)
+    {
+        PhanLoaiMongCTron searchData = new PhanLoaiMongCTron
+            {
+                ThongTinDuongTruyenDan_HinhThucTruyenDan = Input.ThongTinDuongTruyenDan_HinhThucTruyenDan,
+                ThongTinDuongTruyenDan_LoaiTruyenDan = Input.ThongTinDuongTruyenDan_LoaiTruyenDan,
+                ThongTinMongDuongTruyenDan_LoaiMong = Input.ThongTinMongDuongTruyenDan_LoaiMong,
+                ThongTinMongDuongTruyenDan_HinhThucMong = Input.ThongTinMongDuongTruyenDan_HinhThucMong,
+                ThongTinCauTaoCongTron_CCaoLotMong = Input.ThongTinCauTaoCongTron_CCaoLotMong,
+                ThongTinCauTaoCongTron_CRongLotMong = Input.ThongTinCauTaoCongTron_CRongLotMong,
+                ThongTinCauTaoCongTron_CCaoMong = Input.ThongTinCauTaoCongTron_CCaoMong,
+                ThongTinCauTaoCongTron_CRongMong = Input.ThongTinCauTaoCongTron_CRongMong,
+
+            };
+        var id = "";
+        CheckObjHelper checkObjhelper = new();
+        if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
+        {
+            id = await PhanLoaiMongCTronRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinMongDuongTruyenDan_LoaiMong), GetTenDanhMucById(searchData.ThongTinMongDuongTruyenDan_HinhThucMong), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan));
+
+        }
+        return id;
+    }
+
+    //Load tên theo phân loại móng cống tròn
+    public async Task<PhanLoai> LoadTenPhanLoaiMongCTron(NuocMua Input)
+    {
+        PhanLoaiMongCTron searchData = new PhanLoaiMongCTron
+            {
+                ThongTinDuongTruyenDan_HinhThucTruyenDan = Input.ThongTinDuongTruyenDan_HinhThucTruyenDan,
+                ThongTinDuongTruyenDan_LoaiTruyenDan = Input.ThongTinDuongTruyenDan_LoaiTruyenDan,
+                ThongTinMongDuongTruyenDan_LoaiMong = Input.ThongTinMongDuongTruyenDan_LoaiMong,
+                ThongTinMongDuongTruyenDan_HinhThucMong = Input.ThongTinMongDuongTruyenDan_HinhThucMong,
+                ThongTinCauTaoCongTron_CCaoLotMong = Input.ThongTinCauTaoCongTron_CCaoLotMong,
+                ThongTinCauTaoCongTron_CRongLotMong = Input.ThongTinCauTaoCongTron_CRongLotMong,
+                ThongTinCauTaoCongTron_CCaoMong = Input.ThongTinCauTaoCongTron_CCaoMong,
+                ThongTinCauTaoCongTron_CRongMong = Input.ThongTinCauTaoCongTron_CRongMong,
+            };
+
+        PhanLoaiMongCTron plMCT = new();
+        phanloai = new();
+        plMCT = await PhanLoaiMongCTronRepository.GetMPhanLoaiMongCTronByDetail(searchData);
+        if (plMCT != null)
+        {
+            phanloai.Name = plMCT.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop;
+            phanloai.Id = plMCT.Id;
+        }
+        return phanloai;
+
+    }
+
+    //Thêm tên theo bảng phân loại đế cống
+    public async Task<string> ThemTenTheoPLDeCong(NuocMua Input, List<DanhMuc> listDanhMuc)
+    {
+        PhanLoaiDeCong searchData = new PhanLoaiDeCong
+            {
+                ThongTinDuongTruyenDan_LoaiTruyenDan = Input.ThongTinDuongTruyenDan_LoaiTruyenDan,
+                ThongTinDeCong_CauTaoDeCong = Input.ThongTinDeCong_CauTaoDeCong,
+                ThongTinDeCong_D = Input.ThongTinDeCong_D,
+                ThongTinDeCong_R = Input.ThongTinDeCong_R,
+                ThongTinDeCong_C = Input.ThongTinDeCong_C,
+            };
+        CheckObjHelper checkObjhelper = new();
+        var id = "";
+        if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
+        {
+            id = await PhanLoaiDeCongRepository.InsertId(searchData, searchData.ThongTinDeCong_CauTaoDeCong, searchData.ThongTinDuongTruyenDan_LoaiTruyenDan);
+
+        }
+        return id;
+    }
+
+    //Load tên theo phân loại đế cống
+    public async Task<PhanLoai> LoadTenPhanLoaiDeCong(NuocMua Input)
+    {
+        PhanLoaiDeCong searchData = new PhanLoaiDeCong
+            {
+                ThongTinDuongTruyenDan_LoaiTruyenDan = Input.ThongTinDuongTruyenDan_LoaiTruyenDan,
+                ThongTinDeCong_CauTaoDeCong = Input.ThongTinDeCong_CauTaoDeCong,
+                ThongTinDeCong_D = Input.ThongTinDeCong_D,
+                ThongTinDeCong_R = Input.ThongTinDeCong_R,
+                ThongTinDeCong_C = Input.ThongTinDeCong_C,
+            };
+
+        PhanLoaiDeCong plDC = new();
+        phanloai = new();
+        plDC = await PhanLoaiDeCongRepository.GetMPhanLoaiDeCongByDetail(searchData);
+        if (plDC != null)
+        {
+            phanloai.Name = plDC.ThongTinDeCong_TenLoaiDeCong;
+            phanloai.Id = plDC.Id;
+        }
+        return phanloai;
+    }
+
+    //Thêm tên theo bảng phân loại thanh chống
+    public async Task<string> ThemTenTheoPLThanhChong(NuocMua Input, List<DanhMuc> listDanhMuc)
+    {
+        PhanLoaiThanhChong searchData = new PhanLoaiThanhChong
+            {
+                TTKTHHCongHopRanh_CauTaoThanhChong = Input.TTKTHHCongHopRanh_CauTaoThanhChong,
+                TTKTHHCongHopRanh_CCaoThanhChong = Input.TTKTHHCongHopRanh_CCaoThanhChong,
+                TTKTHHCongHopRanh_CRongThanhChong = Input.TTKTHHCongHopRanh_CRongThanhChong,
+                TTKTHHCongHopRanh_CDai = Input.TTKTHHCongHopRanh_CDai,
+            };
+        var id = "";
+        CheckObjHelper checkObjhelper = new();
+        if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
+        {
+            id = await PhanLoaiThanhChongRepository.InsertId(searchData, GetTenDanhMucById(searchData.TTKTHHCongHopRanh_CauTaoThanhChong));
+
+        }
+        return id;
+    }
+
+    //Load tên theo phân loại thanh chống
+    public async Task<PhanLoai> LoadTenPhanLoaiThanhChong(NuocMua Input)
+    {
+        PhanLoaiThanhChong searchData = new PhanLoaiThanhChong
+            {
+                TTKTHHCongHopRanh_CauTaoThanhChong = Input.TTKTHHCongHopRanh_CauTaoThanhChong,
+                TTKTHHCongHopRanh_CCaoThanhChong = Input.TTKTHHCongHopRanh_CCaoThanhChong,
+                TTKTHHCongHopRanh_CRongThanhChong = Input.TTKTHHCongHopRanh_CRongThanhChong,
+                TTKTHHCongHopRanh_CDai = Input.TTKTHHCongHopRanh_CDai,
+            };
+
+        PhanLoaiThanhChong plTC = new();
+        phanloai = new();
+        plTC = await PhanLoaiThanhChongRepository.GetMPhanLoaiThanhChongByDetail(searchData);
+        if (plTC != null)
+        {
+
+            phanloai.Name = plTC.TTKTHHCongHopRanh_LoaiThanhChong;
+            phanloai.Id = plTC.Id;
+
+        }
+        return phanloai;
+    }
+
+    //Thêm tên theo bảng phân loại tấm đan tryền dẫn
+    public async Task<string> ThemTenTheoPLTDanTDan(NuocMua Input, List<DanhMuc> listDanhMuc)
+    {
+        PhanLoaiTDanTDan searchData = new PhanLoaiTDanTDan
+            {
+                ThongTinLyTrinhTruyenDan_TuLyTrinh = Input.ThongTinLyTrinhTruyenDan_TuLyTrinh,
+                ThongTinLyTrinhTruyenDan_DenLyTrinh = Input.ThongTinLyTrinhTruyenDan_DenLyTrinh,
+                ThongTinDuongTruyenDan_HinhThucTruyenDan = Input.ThongTinDuongTruyenDan_HinhThucTruyenDan,
+                ThongTinDuongTruyenDan_LoaiTruyenDan = Input.ThongTinDuongTruyenDan_LoaiTruyenDan,
+                TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = Input.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan,
+                TTTDCongHoRanh_CDai = Input.TTTDCongHoRanh_CDai,
+                TTTDCongHoRanh_CRong = Input.TTTDCongHoRanh_CRong,
+                TTTDCongHoRanh_CCao = Input.TTTDCongHoRanh_CCao,
+            };
+        CheckObjHelper checkObjhelper = new();
+        var id = "";
+        if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
+        {
+            id = await PhanLoaiTDanTDanRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan));
+
+        }
+        return id;
+    }
+
+    public async Task<string> ThemTenTheoPLTDanTDan02(NuocMua Input, List<DanhMuc> listDanhMuc)
+    {
+        PhanLoaiTDanTDan searchData = new PhanLoaiTDanTDan
+            {
+                ThongTinLyTrinhTruyenDan_TuLyTrinh = Input.ThongTinLyTrinhTruyenDan_TuLyTrinh,
+                ThongTinLyTrinhTruyenDan_DenLyTrinh = Input.ThongTinLyTrinhTruyenDan_DenLyTrinh,
+                ThongTinDuongTruyenDan_HinhThucTruyenDan = Input.ThongTinDuongTruyenDan_HinhThucTruyenDan,
+                ThongTinDuongTruyenDan_LoaiTruyenDan = Input.ThongTinDuongTruyenDan_LoaiTruyenDan,
+                TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = Input.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan,
+                TTTDCongHoRanh_CDai = Input.TTTDCongHoRanh_CDai1,
+                TTTDCongHoRanh_CRong = Input.TTTDCongHoRanh_CRong1,
+                TTTDCongHoRanh_CCao = Input.TTTDCongHoRanh_CCao1,
+            };
+        CheckObjHelper checkObjhelper = new();
+        var id = "";
+        if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
+        {
+            id = await PhanLoaiTDanTDanRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan));
+
+        }
+        return id;
+    }
+
+    //Load tên theo phân loại tấm đan truyền dẫn
+    public async Task<PhanLoai> LoadTenPhanLoaiTDanTDan(NuocMua Input)
+    {
+        PhanLoaiTDanTDan searchData = new PhanLoaiTDanTDan
+            {
+                ThongTinLyTrinhTruyenDan_TuLyTrinh = Input.ThongTinLyTrinhTruyenDan_TuLyTrinh,
+                ThongTinLyTrinhTruyenDan_DenLyTrinh = Input.ThongTinLyTrinhTruyenDan_DenLyTrinh,
+                ThongTinDuongTruyenDan_HinhThucTruyenDan = Input.ThongTinDuongTruyenDan_HinhThucTruyenDan,
+                ThongTinDuongTruyenDan_LoaiTruyenDan = Input.ThongTinDuongTruyenDan_LoaiTruyenDan,
+                TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = Input.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan,
+                TTTDCongHoRanh_CDai = Input.TTTDCongHoRanh_CDai,
+                TTTDCongHoRanh_CRong = Input.TTTDCongHoRanh_CRong,
+                TTTDCongHoRanh_CCao = Input.TTTDCongHoRanh_CCao,
+            };
+
+
+        PhanLoaiTDanTDan plTDTD = new();
+        phanloai = new();
+        plTDTD = await PhanLoaiTDanTDanRepository.GetPhanLoaiTDanTDanByDetail(searchData);
+        if (plTDTD != null)
+        {
+            phanloai.Name = plTDTD.TTTDCongHoRanh_TenLoaiTamDanTieuChuan;
+            phanloai.Id = plTDTD.Id;
+        }
+        return phanloai;
+
+    }
+    //Load tên theo phân loại tấm đan truyền dẫn 02
+    public async Task<PhanLoai> LoadTenPhanLoaiTDanTDan02(NuocMua Input)
+    {
+        PhanLoaiTDanTDan searchData = new PhanLoaiTDanTDan
+            {
+                ThongTinLyTrinhTruyenDan_TuLyTrinh = Input.ThongTinLyTrinhTruyenDan_TuLyTrinh,
+                ThongTinLyTrinhTruyenDan_DenLyTrinh = Input.ThongTinLyTrinhTruyenDan_DenLyTrinh,
+                ThongTinDuongTruyenDan_HinhThucTruyenDan = Input.ThongTinDuongTruyenDan_HinhThucTruyenDan,
+                ThongTinDuongTruyenDan_LoaiTruyenDan = Input.ThongTinDuongTruyenDan_LoaiTruyenDan,
+                TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = Input.TTTDCongHoRanh_CauTaoTamDanTruyenDan,
+                TTTDCongHoRanh_CDai = Input.TTTDCongHoRanh_CDai1,
+                TTTDCongHoRanh_CRong = Input.TTTDCongHoRanh_CRong1,
+                TTTDCongHoRanh_CCao = Input.TTTDCongHoRanh_CCao1,
+            };
+
+
+        PhanLoaiTDanTDan plTDTD = new();
+        phanloai = new();
+        plTDTD = await PhanLoaiTDanTDanRepository.GetPhanLoaiTDanTDanByDetail(searchData);
+        if (plTDTD != null)
+        {
+            phanloai.Name = plTDTD.TTTDCongHoRanh_TenLoaiTamDanTieuChuan;
+            phanloai.Id = plTDTD.Id;
+        }
+        return phanloai;
+
+    }
 }

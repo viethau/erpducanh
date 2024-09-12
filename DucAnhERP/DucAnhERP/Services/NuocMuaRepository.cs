@@ -73,6 +73,10 @@ namespace DucAnhERP.Services
                             on nuocMua.TTTDCongHoRanh_TenLoaiTamDanTieuChuan equals PhanLoaiTDanTDan.Id into PhanLoaiTDanTDanJoin
                             from PhanLoaiTDanTDan in PhanLoaiTDanTDanJoin.DefaultIfEmpty()
 
+                                // Left join với bảng PhanLoaiTDanTDans
+                            join PhanLoaiTDanTDan02 in context.PhanLoaiTDanTDans
+                            on nuocMua.TTTDCongHoRanh_TenLoaiTamDanLoai02 equals PhanLoaiTDanTDan02.Id into PhanLoaiTDanTDan02Join
+                            from PhanLoaiTDanTDan02 in PhanLoaiTDanTDan02Join.DefaultIfEmpty()
                                 // Sắp xếp theo CreateAt của DSNuocMua
                             orderby nuocMua.CreateAt
                             select new NuocMuaModel
@@ -231,10 +235,12 @@ namespace DucAnhERP.Services
                                 TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien = nuocMua.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien ?? 0,
                                 TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl = nuocMua.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl ?? 0,
 
-                                ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = PhanLoaiMongCTron.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ?? "",
+                                ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = nuocMua.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ?? "",
+                                PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = PhanLoaiMongCTron.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ?? "",
                                 ThongTinMongDuongTruyenDan_LoaiMong = nuocMua.ThongTinMongDuongTruyenDan_LoaiMong ?? "",
                                 ThongTinMongDuongTruyenDan_HinhThucMong = nuocMua.ThongTinMongDuongTruyenDan_HinhThucMong ?? "",
-                                ThongTinDeCong_TenLoaiDeCong = PhanLoaiDeCong.ThongTinDeCong_TenLoaiDeCong ?? "",
+                                ThongTinDeCong_TenLoaiDeCong = nuocMua.ThongTinDeCong_TenLoaiDeCong ?? "",
+                                PhanLoaiDeCong_TenLoaiDeCong = PhanLoaiDeCong.ThongTinDeCong_TenLoaiDeCong ?? "",
                                 ThongTinDeCong_CauTaoDeCong = nuocMua.ThongTinDeCong_CauTaoDeCong ?? "",
                                 ThongTinDeCong_D = nuocMua.ThongTinDeCong_D ?? 0,
                                 ThongTinDeCong_R = nuocMua.ThongTinDeCong_R ?? 0,
@@ -281,7 +287,8 @@ namespace DucAnhERP.Services
                                 TTKTHHCongHopRanh_CRongMuMoDuoi = nuocMua.TTKTHHCongHopRanh_CRongMuMoDuoi ?? 0,
                                 TTKTHHCongHopRanh_CCaoMuMoThotTren = nuocMua.TTKTHHCongHopRanh_CCaoMuMoThotTren ?? 0,
                                 TTKTHHCongHopRanh_CRongMuMoTren = nuocMua.TTKTHHCongHopRanh_CRongMuMoTren ?? 0,
-                                TTKTHHCongHopRanh_LoaiThanhChong = PhanLoaiThanhChong.TTKTHHCongHopRanh_LoaiThanhChong ?? "",
+                                TTKTHHCongHopRanh_LoaiThanhChong = nuocMua.TTKTHHCongHopRanh_LoaiThanhChong ?? "",
+                                PhanLoaiThanhChong_LoaiThanhChong = PhanLoaiThanhChong.TTKTHHCongHopRanh_LoaiThanhChong ?? "",
                                 TTKTHHCongHopRanh_CauTaoThanhChong = nuocMua.TTKTHHCongHopRanh_CauTaoThanhChong ?? "",
                                 TTKTHHCongHopRanh_CCaoThanhChong = nuocMua.TTKTHHCongHopRanh_CCaoThanhChong ?? 0,
                                 TTKTHHCongHopRanh_CRongThanhChong = nuocMua.TTKTHHCongHopRanh_CRongThanhChong ?? 0,
@@ -290,13 +297,15 @@ namespace DucAnhERP.Services
                                 TTKTHHCongHopRanh_CCaoChatMatTrong = nuocMua.TTKTHHCongHopRanh_CCaoChatMatTrong ?? 0,
                                 TTKTHHCongHopRanh_CCaoChatmatNgoai = nuocMua.TTKTHHCongHopRanh_CCaoChatmatNgoai ?? 0,
                                 TTKTHHCongHopRanh_TongChieuCao = nuocMua.TTKTHHCongHopRanh_TongChieuCao ?? 0,
-                                TTTDCongHoRanh_TenLoaiTamDanTieuChuan = PhanLoaiTDanTDan.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ?? "",
+                                TTTDCongHoRanh_TenLoaiTamDanTieuChuan = nuocMua.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ?? "",
+                                PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = PhanLoaiTDanTDan.TTTDCongHoRanh_TenLoaiTamDanTieuChuan??"",
                                 TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = nuocMua.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan ?? "",
                                 TTTDCongHoRanh_SoLuong = nuocMua.TTTDCongHoRanh_SoLuong ?? 0,
                                 TTTDCongHoRanh_CDai = nuocMua.TTTDCongHoRanh_CDai ?? 0,
                                 TTTDCongHoRanh_CRong = nuocMua.TTTDCongHoRanh_CRong ?? 0,
                                 TTTDCongHoRanh_CCao = nuocMua.TTTDCongHoRanh_CCao ?? 0,
                                 TTTDCongHoRanh_TenLoaiTamDanLoai02 = nuocMua.TTTDCongHoRanh_TenLoaiTamDanLoai02 ?? "",
+                                PhanLoaiTDanTDan_TenLoaiTamDanLoai02 = PhanLoaiTDanTDan02.TTTDCongHoRanh_TenLoaiTamDanTieuChuan??"",
                                 TTTDCongHoRanh_CauTaoTamDanTruyenDan = nuocMua.TTTDCongHoRanh_CauTaoTamDanTruyenDan ?? "",
                                 TTTDCongHoRanh_SoLuong1 = nuocMua.TTTDCongHoRanh_SoLuong1 ?? 0,
                                 TTTDCongHoRanh_CDai1 = nuocMua.TTTDCongHoRanh_CDai1 ?? 0,
@@ -504,7 +513,6 @@ namespace DucAnhERP.Services
             }
         }
 
-
         public async Task Update(NuocMua nuocMua)
         {
             using var context = _context.CreateDbContext();
@@ -518,7 +526,6 @@ namespace DucAnhERP.Services
             context.DSNuocMua.Update(nuocMua);
             await context.SaveChangesAsync();
         }
-
         public async Task UpdateMulti(NuocMua[] nuocMua)
         {
             using var context = _context.CreateDbContext();
@@ -530,7 +537,6 @@ namespace DucAnhERP.Services
             }
             await context.SaveChangesAsync();
         }
-
         public async Task DeleteById(string id)
         {
             using var context = _context.CreateDbContext();

@@ -32,7 +32,6 @@ namespace DucAnhERP.Services
                     throw; // Optionally rethrow the exception
                 }
             }
-
         public async Task<List<PhanLoaiHoGaModel>> GetAllByVM()
         {
             try
@@ -147,7 +146,6 @@ namespace DucAnhERP.Services
             isSuccess = data.Any();
             return (isSuccess);
         }
-
         public async Task<PhanLoaiHoGa> GetMPhanLoaiHoGaByDetail(PhanLoaiHoGa searchData)
         {
             try
@@ -164,7 +162,7 @@ namespace DucAnhERP.Services
                                         plhg.ThongTinChungHoGa_KetCauMong == searchData.ThongTinChungHoGa_KetCauMong &&
                                         plhg.ThongTinChungHoGa_ChatMatTrong == searchData.ThongTinChungHoGa_ChatMatTrong &&
                                         plhg.ThongTinChungHoGa_ChatMatNgoai == searchData.ThongTinChungHoGa_ChatMatNgoai &&
-                                        plhg.PhuBiHoGa_CDai == searchData.PhuBiHoGa_CDai &&
+                                        plhg.PhuBiHoGa_CDai == Math.Round(searchData.PhuBiHoGa_CDai??0, 2) &&
                                         plhg.PhuBiHoGa_CRong == searchData.PhuBiHoGa_CRong &&
                                         plhg.BeTongLotMong_D == searchData.BeTongLotMong_D &&
                                         plhg.BeTongLotMong_R == searchData.BeTongLotMong_R &&
@@ -230,8 +228,9 @@ namespace DucAnhERP.Services
                                         plhg.HinhThucDauNoi8_CanhDai == searchData.HinhThucDauNoi8_CanhDai &&
                                         plhg.HinhThucDauNoi8_CanhRong == searchData.HinhThucDauNoi8_CanhRong &&
                                         plhg.HinhThucDauNoi8_CanhCheo == searchData.HinhThucDauNoi8_CanhCheo
-                                          ));
 
+                                          ));
+                var sqlQuery = query.ToQueryString();
                 var result = await query.FirstOrDefaultAsync();
                 return result;
             }
@@ -242,7 +241,6 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-
         public async Task Update(PhanLoaiHoGa phanloaihoga)
             {
                 using var context = _context.CreateDbContext();
@@ -256,7 +254,6 @@ namespace DucAnhERP.Services
                 context.PhanLoaiHoGas.Update(phanloaihoga);
                 await context.SaveChangesAsync();
             }
-
         public async Task UpdateMulti(PhanLoaiHoGa[] phanloaihoga)
             {
                 using var context = _context.CreateDbContext();
@@ -268,7 +265,6 @@ namespace DucAnhERP.Services
                 }
                 await context.SaveChangesAsync();
             }
-
        public async Task DeleteById(string id)
             {
                 using var context = _context.CreateDbContext();
@@ -282,7 +278,6 @@ namespace DucAnhERP.Services
                 context.Set<PhanLoaiHoGa>().Remove(entity);
                 await context.SaveChangesAsync();
             }
-
        public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
             {
                 foreach (var id in ids)
@@ -295,7 +290,6 @@ namespace DucAnhERP.Services
                 }
                 return true;
             }
-
        public async Task<PhanLoaiHoGa> GetById(string id)
             {
                 using var context = _context.CreateDbContext();
@@ -308,7 +302,6 @@ namespace DucAnhERP.Services
 
                 return entity;
             }
-
         public async Task Insert(PhanLoaiHoGa entity)
         {
             try
@@ -338,7 +331,7 @@ namespace DucAnhERP.Services
             }
         }
 
-        public async Task<string> InsertId(PhanLoaiHoGa entity)
+        public async Task<string> InsertId(PhanLoaiHoGa entity , string ThongTinChungHoGa_TenHoGaTheoBanVe)
         {
             try
             {
@@ -356,7 +349,30 @@ namespace DucAnhERP.Services
 
                 // Tăng giá trị Flag lên 1
                 entity.Flag = maxFlag + 1;
-                entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag;
+                if (ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G"))
+                {
+                    if(entity.ThongTinChungHoGa_KetCauTuong.ToUpper().Trim() == "Tường bê tông".ToUpper().Trim())
+                    {
+                        entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag + "=G" + "(BT)";
+                    }
+                    else
+                    {
+                        entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag + "=G";
+                    }
+                }
+                else
+                {
+                    if (entity.ThongTinChungHoGa_KetCauTuong.ToUpper().Trim() == "Tường bê tông".ToUpper().Trim())
+                    {
+                        entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag + "(BT)";
+                    }
+                    else
+                    {
+                        entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag;
+                    }
+                    
+                }
+                
 
                 // Chèn bản ghi mới vào bảng
                 context.PhanLoaiHoGas.Add(entity);

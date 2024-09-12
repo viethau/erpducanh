@@ -1000,7 +1000,7 @@ namespace DucAnhERP.Helpers
 
         public double TTTKLCKCTCH_CDCanLapDat(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double TTTKLCKCTCH_SLCKNguyen, double TTTKLCKCTCH_SLCKDungDeTinhCD, double TTTKLCKCTCH_CDMoiNoiCKien)
         {
-            double result;
+            double result =0 ;
             ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
             if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống tròn".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
             {

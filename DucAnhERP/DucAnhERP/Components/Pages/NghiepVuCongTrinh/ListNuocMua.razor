@@ -560,7 +560,7 @@
                                 <hr />
                                 <div class="row">
                                     <div class="form-floating col-6">
-                                        <label for="ThongTinTamDanHoGa_PhanLoaiDayHoGa">Phân loại đậy hố ga <span class="text-danger"></span></label>
+                                        <label for="PhanLoaiTDHoGa_PhanLoaiDayHoGa">Phân loại đậy hố ga <span class="text-danger"></span></label>
                                         <InputText readonly  @bind-Value="nuocMuaVM.PhanLoaiTDHoGa_PhanLoaiDayHoGa" class="form-control" id="PhanLoaiTDHoGa_PhanLoaiDayHoGa" placeholder="Phân loại đậy hố ga" />
                                     </div>
                                     <div class="form-floating col-6">
@@ -996,12 +996,12 @@
                                 <div class="row">
                                    @*  <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop">Phân loại móng cống tròn, cống hộp <span class="text-danger"></span></label>
-                                        <InputText  @oninput="OnInputChange" @bind-Value="Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop" class="form-control" id="ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop" placeholder="Tên loại truyền dẫn sau phân loại" />
+                                        <InputText  @oninput="OnInputChange" @bind-Value="Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop" class="form-control" id="ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop" placeholder="Phân loại móng cống tròn, cống hộp" />
                                         <ValidationMessage For="() => Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop" class="text-danger" />
                                     </div>  *@
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop">Phân loại móng cống tròn, cống hộp <span class="text-danger"></span></label>
-                                        <InputText readonly  @oninput="OnInputChange" @bind-Value="nuocMuaVM.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop" class="form-control" id="PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop" placeholder="Tên loại truyền dẫn sau phân loại" />
+                                        <InputText readonly  @oninput="OnInputChange" @bind-Value="nuocMuaVM.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop" class="form-control" id="PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop" placeholder="Phân loại móng cống tròn, cống hộp" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinMongDuongTruyenDan_LoaiMong">Loại móng <span class="text-danger">*</span></label>
@@ -1035,12 +1035,12 @@
                                 <div class="row">
                                     @* <div class="form-floating col-6">
                                         <label for="ThongTinDeCong_TenLoaiDeCong">Tên loại đế cống<span class="text-danger"></span></label>
-                                        <InputText  @oninput="OnInputChange" @bind-Value="Input.ThongTinDeCong_TenLoaiDeCong" class="form-control" id="ThongTinDeCong_TenLoaiDeCong" placeholder="Tên loại truyền dẫn sau phân loại" />
+                                        <InputText  @oninput="OnInputChange" @bind-Value="Input.ThongTinDeCong_TenLoaiDeCong" class="form-control" id="ThongTinDeCong_TenLoaiDeCong" placeholder="Tên loại đế cống" />
                                         <ValidationMessage For="() => Input.ThongTinDeCong_TenLoaiDeCong" class="text-danger" />
                                     </div> *@
                                     <div class="form-floating col-6">
                                         <label for="PhanLoaiDeCong_TenLoaiDeCong">Tên loại đế cống<span class="text-danger"></span></label>
-                                        <InputText readonly  @oninput="OnInputChange" @bind-Value="nuocMuaVM.PhanLoaiDeCong_TenLoaiDeCong" class="form-control" id="PhanLoaiDeCong_TenLoaiDeCong" placeholder="Tên loại truyền dẫn sau phân loại" />
+                                        <InputText readonly @oninput="OnInputChange" @bind-Value="nuocMuaVM.PhanLoaiDeCong_TenLoaiDeCong" class="form-control" id="PhanLoaiDeCong_TenLoaiDeCong" placeholder="Tên loại đế cống" />
                                     </div>
                                     <div class="form-floating col-6">
                                         <label for="ThongTinDeCong_CauTaoDeCong">Cấu tạo đế cống<span class="text-danger"></span></label>
@@ -1417,7 +1417,6 @@
                                     </div> 
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan">Cấu tạo tấm đan truyền dẫn tấm đan tiêu chuẩn<span class="text-danger"></span></label>
-
                                         <select id="TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan" class="form-control" @bind="Input.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan">
                                             <option value="">Cấu tạo tấm đan...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("TD_CTTDTruyenDan"))
@@ -2644,7 +2643,7 @@
                         <th class="text-center" colspan="4">Hình thức đấu nối</th>
                         <th class="text-center" colspan="4">Hình thức đấu nối</th>
 
-                        <th class="text-center" rowspan="2">Phân loại đậy hố ga</th>
+                        <th class="text-center text-info" rowspan="2">Phân loại đậy hố ga</th>
                         <th class="text-center" rowspan="2">Hình thức đậy hố ga</th>
                         <th class="text-center" colspan="2">Loại tròn</th>
                         <th class="text-center" colspan="4">Loại vuông hoặc chữ nhật</th>
@@ -2742,9 +2741,8 @@
                     </tr>
                     <tr>
                         <th>Tuyến đường</th>
-                        <th>Lộ trình tại tim hố ga</th>
-
-                        <th>Tên hố ga sau phân loại</th>
+                        <th>Lý trình tại tim hố ga</th>
+                        <th class="text-info">Tên hố ga sau phân loại</th>
                         <th>Tên hố ga theo bản vẽ</th>
                         <th>Hình thức hố ga</th>
                         <th>Kết cấu mũ mố</th>
@@ -2921,7 +2919,7 @@
                         @* Thông tin đường truyền dẫn *@
                         <th>Hình thức truyền dẫn</th>
                         <th>Loại truyền dẫn</th>
-                        <th>Tên loại truyền dẫn sau phân loại</th>
+                        <th class="text-info">Tên loại truyền dẫn sau phân loại</th>
 
                         @* Thông tin chiều dài *@
                         <th>Tổng chiều dài (m)          </th>
@@ -2929,7 +2927,7 @@
                         <th class="text-danger">SL cấu kiện tính KL         </th>
 
                        @* Thông tin móng đường truyền dẫn *@
-                        <th>Phân loại móng cống tròn, cống hộp</th>
+                        <th class="text-info">Phân loại móng cống tròn, cống hộp</th>
                         <th>Loại móng</th>
                         <th>Hình thức móng</th>
 
@@ -2986,7 +2984,7 @@
                         <th>C.Rộng mũ mố dưới</th>
                         <th>C.Cao mũ mố thớt trên (m)</th>
                         <th>C.Rộng mũ mố trên</th>
-                        <th>Loại thanh chống</th>
+                        <th class="text-info">Loại thanh chống</th>
                         <th>Cấu tạo thanh chống</th>
                         <th>C.Cao thanh chống (m)</th>
                         <th>C.Rộng thanh chống (m)</th>
@@ -2997,13 +2995,13 @@
                         <th class="text-danger">Tổng chiều cao (m)</th>
 
                          @* Thông tin tấm đan cống hộp, rãnh *@
-                        <th>Tên loại tấm đan tiêu chuẩn</th>
+                        <th class="text-info">Tên loại tấm đan tiêu chuẩn</th>
                         <th>Cấu tạo tấm đan truyền dẫn tấm đan tiêu chuẩn</th>
                         <th class="text-danger">Số lượng</th>
                         <th>C.Dài</th>
                         <th>C.Rộng</th>
                         <th>C.Cao</th>
-                        <th>Tên loại tấm đan loại 02</th>
+                        <th class="text-info">Tên loại tấm đan loại 02</th>
                         <th>Cấu tạo tấm đan truyền dẫn</th>
                         <th class="text-danger">Số lượng</th>
                         <th class="text-danger">C.Dài</th>
@@ -3328,7 +3326,7 @@
                                 <td class="text-center">@item.HinhThucDauNoi8_CanhDai</td>
                                 <td class="text-center">@item.HinhThucDauNoi8_CanhRong</td>
                                 <td class="text-center">@item.HinhThucDauNoi8_CanhCheo</td>
-                                <td class="text-center">@item.PhanLoaiTDHoGa_PhanLoaiDayHoGa</td>
+                                <td class="text-center text-info">@item.PhanLoaiTDHoGa_PhanLoaiDayHoGa</td>
                                 <td class="text-center">@GetTenDanhMucById(item.ThongTinTamDanHoGa2_HinhThucDayHoGa)</td>
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_DuongKinh</td>
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_ChieuDay</td>
@@ -3449,7 +3447,7 @@
                                 <td class="text-center">@item.TTKTHHCongHopRanh_CRongMuMoDuoi</td>
                                 <td class="text-center">@item.TTKTHHCongHopRanh_CCaoMuMoThotTren</td>
                                 <td class="text-center">@item.TTKTHHCongHopRanh_CRongMuMoTren</td>
-                                <td class="text-center">@item.TTKTHHCongHopRanh_LoaiThanhChong</td>
+                                <td class="text-center">@item.PhanLoaiThanhChong_LoaiThanhChong</td>
                                 <td class="text-center">@GetTenDanhMucById(item.TTKTHHCongHopRanh_CauTaoThanhChong)</td>
                                 <td class="text-center">@item.TTKTHHCongHopRanh_CCaoThanhChong</td>
                                 <td class="text-center">@item.TTKTHHCongHopRanh_CRongThanhChong</td>
@@ -3458,13 +3456,13 @@
                                 <td class="text-center">@item.TTKTHHCongHopRanh_CCaoChatMatTrong</td>
                                 <td class="text-center">@item.TTKTHHCongHopRanh_CCaoChatmatNgoai</td>
                                 <td class="text-center">@item.TTKTHHCongHopRanh_TongChieuCao</td>
-                                <td class="text-center">@item.TTTDCongHoRanh_TenLoaiTamDanTieuChuan</td>
+                                <td class="text-center">@item.PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan</td>
                                 <td class="text-center">@GetTenDanhMucById(item.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan)</td>
                                 <td class="text-center">@item.TTTDCongHoRanh_SoLuong</td>
                                 <td class="text-center">@item.TTTDCongHoRanh_CDai</td>
                                 <td class="text-center">@item.TTTDCongHoRanh_CRong</td>
                                 <td class="text-center">@item.TTTDCongHoRanh_CCao</td>
-                                <td class="text-center">@item.TTTDCongHoRanh_TenLoaiTamDanLoai02</td>
+                                <td class="text-center">@item.PhanLoaiTDanTDan_TenLoaiTamDanLoai02</td>
                                 <td class="text-center">@GetTenDanhMucById(item.TTTDCongHoRanh_CauTaoTamDanTruyenDan)</td>
                                 <td class="text-center">@item.TTTDCongHoRanh_SoLuong1</td>
                                 <td class="text-center">@item.TTTDCongHoRanh_CDai1</td>
@@ -3757,10 +3755,10 @@
     {
         var helper = new DataConversionHelper();
         listDanhMuc = await DanhMucRepository.GetAll();
-        var hopranhthangs = await NuocMuaRepository.GetData();
-        // var convertDatas = await helper.ConvertDataHopRanhThang(hopranhthangs, listDanhMuc);
-        listModel = hopranhthangs;
-        listNuocMuaModel = Paging(hopranhthangs);
+        var nuocmuas = await NuocMuaRepository.GetData();
+       
+        listModel = nuocmuas;
+        listNuocMuaModel = Paging(nuocmuas);
 
     }
 
@@ -3820,10 +3818,11 @@
     private async Task HandleEdit(NuocMuaModel nuocmuavm,string Id)
     {
         isEdit = true;
+        nuocMuaVM = nuocmuavm;
         Input = await NuocMuaRepository.GetById(Id);
         TitleModal = "Cập nhật thông tin";
         isModalVisible = true;
-        nuocMuaVM = nuocmuavm;
+        
     }
 
     //Thêm tên theo bảng phân loại hố ga
@@ -3908,7 +3907,7 @@
 
         CheckObjHelper checkObjhelper =new() ;
         if(checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData)){
-            var id = await PhanLoaiHoGaRepository.InsertId(searchData);
+            var id = await PhanLoaiHoGaRepository.InsertId(searchData ,Input.ThongTinChungHoGa_TenHoGaTheoBanVe);
             Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
         }
 
@@ -3995,7 +3994,7 @@
             HinhThucDauNoi8_CanhCheo= Input.HinhThucDauNoi8_CanhCheo };
 
         PhanLoaiHoGa plHoGa = new ();
-        plHoGa = await PhanLoaiHoGaRepository.GetMPhanLoaiHoGaByDetail(searchData);
+       plHoGa = await PhanLoaiHoGaRepository.GetMPhanLoaiHoGaByDetail(searchData);
         if(plHoGa ==null){
             nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = "";
             Input.ThongTinChungHoGa_TenHoGaSauPhanLoai ="";
