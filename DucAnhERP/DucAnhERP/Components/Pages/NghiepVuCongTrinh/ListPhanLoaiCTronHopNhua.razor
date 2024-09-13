@@ -9,7 +9,7 @@
 @inject IPhanLoaiHoGaRepository PhanLoaiHoGaRepository
 @inject DucAnhERP.Services.ToastService ToastService
 
-@code{
+@code {
     private bool isEdit { get; set; } = false;
 }
 <div class="m-5">
@@ -19,12 +19,12 @@
             <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
                 <div class="row">
                     <div class="col">
-                        <h4 class="mt-2">Thông tin chung hố ga</h4>
+                        <h4 class="mt-2">Phân loai</h4>
                         <hr />
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-4 col-lg-4 ">
                                 <label for="ThongTinChungHoGa_TenHoGaSauPhanLoai">Tên hố ga sau phân loại <span class="text-danger"></span></label>
-                                <InputText  @bind-Value="Input.ThongTinChungHoGa_TenHoGaSauPhanLoai" class="form-control" id="ThongTinChungHoGa_TenHoGaSauPhanLoai" placeholder="Tên hố ga sau phân loại" />
+                                <InputText @bind-Value="Input.ThongTinChungHoGa_TenHoGaSauPhanLoai" class="form-control" id="ThongTinChungHoGa_TenHoGaSauPhanLoai" placeholder="Tên hố ga sau phân loại" />
                                 <ValidationMessage For="() => Input.ThongTinChungHoGa_TenHoGaSauPhanLoai" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-4 col-lg-4">
@@ -671,14 +671,14 @@
 
                         <tr>
                             <td class="d-flex nowrap">
-                               <div class="d-inline-block">
+                                <div class="d-inline-block">
                                     <button class="btn btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button class="btn btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.ThongTinChungHoGa_TenHoGaSauPhanLoai)">
                                         <i class="fas fa-trash"></i>
                                     </button>
-                               </div>
+                                </div>
                             </td>
                             <td class="text-center">@stt</td>
                             <td class="text-center">@item.ThongTinChungHoGa_TenHoGaSauPhanLoai </td>
@@ -782,7 +782,7 @@
 
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới nhóm danh mục";
-   
+
 
     private void ShowModal()
     {
@@ -904,7 +904,7 @@
             );
             await LoadData();
         }
-        
+
     }
 
     private string deleteId;

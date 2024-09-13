@@ -2,6 +2,7 @@
 using DucAnhERP.Models;
 using DucAnhERP.ViewModel;
 using System.Collections.Generic;
+using static OfficeOpenXml.ExcelErrorValue;
 
 namespace DucAnhERP.Helpers
 {
@@ -26,10 +27,50 @@ namespace DucAnhERP.Helpers
                 return listNuocMua; // Trả về danh sách trống khi danh sách đầu vào rỗng
             }
 
+
+            //TTTDCongHoRanh_CDai1(
+            //double[] TTTDCongHoRanh_ChieuDaiThucTes,
+            //string[] ThongTinDuongTruyenDan_HinhThucTruyenDans,
+            //string[] TTTDCongHoRanh_XacDinhOngCongCanThems,
+            //string ThongTinDuongTruyenDan_HinhThucTruyenDan,
+            //string TTTDCongHoRanh_XacDinhOngCongCanThem)
+            //nuocmua.TTTDCongHoRanh_CDai1 = TTTDCongHoRanh_CDai1(ChieuDaiThucTes, HinhThucTruyenDans, XacDinhOngCongCanThems,
+            //nuocmua.ThongTinDuongTruyenDan_HinhThucTruyenDan, nuocmua.TTTDCongHoRanh_XacDinhOngCongCanThem);
+
+
+            double[] ChieuDaiThucTes = {};
+            string[] HinhThucTruyenDans = {};
+            string[] XacDinhOngCongCanThems = {};
+
             foreach (var item in list)
             {
                 NuocMua nuocmua = await ConvertNuocMua(item, listDM);
                 listNuocMua.Add(nuocmua);
+            }
+
+            if(listNuocMua.Count > 0)
+            {
+
+               ChieuDaiThucTes = listNuocMua
+                  .Select(item => item.TTTDCongHoRanh_ChieuDaiThucTe.GetValueOrDefault(0)) // Thay thế giá trị null bằng 0
+                  .ToArray();
+
+                HinhThucTruyenDans = listNuocMua
+                    .Select(item => !string.IsNullOrEmpty(item.ThongTinDuongTruyenDan_HinhThucTruyenDan)
+                                    ? item.ThongTinDuongTruyenDan_HinhThucTruyenDan
+                                    : "") 
+                    .ToArray();
+
+                XacDinhOngCongCanThems = listNuocMua
+                   .Select(item => !string.IsNullOrEmpty(item.TTTDCongHoRanh_XacDinhOngCongCanThem)
+                                   ? item.TTTDCongHoRanh_XacDinhOngCongCanThem
+                                   : "") 
+                   .ToArray();
+
+                foreach (var item in listNuocMua)
+                {
+                    item.TTTDCongHoRanh_CDai1 = TTTDCongHoRanh_CDai1(ChieuDaiThucTes, HinhThucTruyenDans, XacDinhOngCongCanThems,item.ThongTinDuongTruyenDan_HinhThucTruyenDan, item.TTTDCongHoRanh_XacDinhOngCongCanThem);
+                }
             }
 
             return listNuocMua;
@@ -127,11 +168,6 @@ namespace DucAnhERP.Helpers
             item.TTTDCongHoRanh_ChieuDaiThucTe = TTTDCongHoRanh_ChieuDaiThucTe(item.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "", item.TTTDCongHoRanh_TongChieuDaiTheoCKNguyen ?? 0, item.TTCDSLCauKienDuongTruyenDan_TongChieuDai ??0);
             item.TTTDCongHoRanh_XacDinhOngCongCanThem = TTTDCongHoRanh_XacDinhOngCongCanThem(item.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "", item.TTTDCongHoRanh_ChieuDaiThucTe??0);
             item.TTTDCongHoRanh_SoLuong1 = TTTDCongHoRanh_SoLuong1(item.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "", item.TTTDCongHoRanh_XacDinhOngCongCanThem ?? "");
-
-            //Chua tinh
-            item.TTTDCongHoRanh_CDai1 = TTTDCongHoRanh_CDai1(item.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "", new List<string> { "Cống hộp", "Rãnh xây", "Rãnh bê tông", "Cống hộp", "Rãnh xây" },
-            new List<double> { 100, 200, 150, 250, 300 },
-            new List<string> { "Thêm 01", "Thêm 01", "Thêm 01", "Thêm 01", "Không thêm" });
 
             item.CDThuongLuu_DinhDeCong = CDThuongLuu_DinhDeCong(item.ThongTinMongDuongTruyenDan_LoaiMong ?? "", item.CDThuongLuu_DayDongChay ?? 0, item.ThongTinCauTaoCongTron_CDayPhuBi??0);
             item.CDThuongLuu_DinhMongRanh = CDThuongLuu_DinhMongRanh(item.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "", item.ThongTinMongDuongTruyenDan_LoaiMong ?? "", item.CDThuongLuu_DayDongChay ??0);
@@ -1119,25 +1155,31 @@ namespace DucAnhERP.Helpers
         public double TTTDCongHoRanh_ChieuDaiTheoSoCKNguyen(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double TTTDCongHoRanh_SLCauKienNguyen, double TTTDCongHoRanh_ChieuDaiMoiNoi)
         {
             ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
-            return (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
+            double result = (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃ£nh XÂY".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃ£nh BÊ TÔNG".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "CỐNG HỘP".ToUpper())
                 ? TTTDCongHoRanh_SLCauKienNguyen * TTTDCongHoRanh_ChieuDaiMoiNoi
                 : 0;
+            return Math.Round(result, 2);
         }
+
         public double TTTDCongHoRanh_TongChieuDaiTheoCKNguyen(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double TTTDCongHoRanh_SLCauKienNguyen, double TTTDCongHoRanh_Cdai, double TTTDCongHoRanh_ChieuDaiTheoSoCKNguyen)
         {
             ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
-            return (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
+            double result = (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃ£nh XÂY".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃ£nh BÊ TÔNG".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "CỐNG HỘP".ToUpper())
                 ? (TTTDCongHoRanh_SLCauKienNguyen * TTTDCongHoRanh_Cdai) + TTTDCongHoRanh_ChieuDaiTheoSoCKNguyen
                 : 0;
+            return Math.Round(result, 2);
         }
+
         public double TTTDCongHoRanh_ChieuDaiThucTe(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double TTTDCongHoRanh_TongChieuDaiTheoCKNguyen, double TTCDSLCauKienDuongTruyenDan_TongChieuDai)
         {
             ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
-            return (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh xây".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
-                ? Math.Round(TTTDCongHoRanh_TongChieuDaiTheoCKNguyen - TTCDSLCauKienDuongTruyenDan_TongChieuDai, 2)
+            double result = (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃ£nh XÂY".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃ£nh BÊ TÔNG".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "CỐNG HỘP".ToUpper())
+                ? TTTDCongHoRanh_TongChieuDaiTheoCKNguyen - TTCDSLCauKienDuongTruyenDan_TongChieuDai
                 : 0;
+            return Math.Round(result, 2);
         }
-    
+
+
         public string TTTDCongHoRanh_XacDinhOngCongCanThem(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double TTTDCongHoRanh_ChieuDaiThucTe)
         {
             string result;
@@ -1184,45 +1226,64 @@ namespace DucAnhERP.Helpers
         }
 
 
-        public double TTTDCongHoRanh_CDai1(string ThongTinDuongTruyenDan_HinhThucTruyenDan, IEnumerable<string> EPRange, IEnumerable<double> JDRange, IEnumerable<string> JERange)
+        public double TTTDCongHoRanh_CDai1(double[] TTTDCongHoRanh_ChieuDaiThucTes, string[] ThongTinDuongTruyenDan_HinhThucTruyenDans, string[] TTTDCongHoRanh_XacDinhOngCongCanThems, string ThongTinDuongTruyenDan_HinhThucTruyenDan, string TTTDCongHoRanh_XacDinhOngCongCanThem)
         {
-            // Chuyển đổi EP16 thành dạng chữ hoa và loại bỏ khoảng trắng đầu cuối
-            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
-
-            // Lọc các giá trị cần tính trung bình dựa trên điều kiện
-            var filteredValues = new List<double>();
-
-            for (int i = 0; i < EPRange.Count(); i++)
+            try
             {
-                bool condition = false;
+                ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+                // Kiểm tra điều kiện TTTDCongHoRanh_XacDinhOngCongCanThem có phải là "Thêm 01" không
+                if (TTTDCongHoRanh_XacDinhOngCongCanThem == "Thêm 01")
+                {
+                    // Lọc các giá trị TTTDCongHoRanh_ChieuDaiThucTes thoả mãn điều kiện từ ThongTinDuongTruyenDan_HinhThucTruyenDans và hsValues
+                    //var filteredValues = TTTDCongHoRanh_ChieuDaiThucTes
+                    //    .Where((hrValue, index) =>
+                    //        GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDans[index].ToUpper().Trim()) == ThongTinDuongTruyenDan_HinhThucTruyenDan.ToUpper().Trim()
+                    //        && TTTDCongHoRanh_XacDinhOngCongCanThems[index] == "Thêm 01")
+                    //    .ToArray();
 
-                if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "CỐNG HỘP" && EPRange.ElementAt(i) == "Cống hộp" && JERange.ElementAt(i) == "Thêm 01")
-                {
-                    condition = true;
-                }
-                else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH XÂY" && EPRange.ElementAt(i) == "Rãnh xây" && JERange.ElementAt(i) == "Thêm 01")
-                {
-                    condition = true;
-                }
-                else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH BÊ TÔNG" && EPRange.ElementAt(i) == "Rãnh bê tông" && JERange.ElementAt(i) == "Thêm 01")
-                {
-                    condition = true;
+                    List<double> filteredValues = new List<double>();
+
+                    // Duyệt qua các phần tử của mảng hrValues
+                    for (int index = 0; index < TTTDCongHoRanh_ChieuDaiThucTes.Length; index++)
+                    {
+                        double hrValue = TTTDCongHoRanh_ChieuDaiThucTes[index];
+                        string enValue = ThongTinDuongTruyenDan_HinhThucTruyenDans[index];
+                        string hsValue = TTTDCongHoRanh_XacDinhOngCongCanThems[index];
+
+                        // Kiểm tra điều kiện enValues[index] == en100
+                        bool isEnMatch = GetTenDanhMucById(enValue).ToUpper().Trim() == ThongTinDuongTruyenDan_HinhThucTruyenDan.ToUpper().Trim();
+
+                        // Kiểm tra điều kiện hsValues[index] == "Thêm 01"
+                        bool isHsMatch = hsValue == "Thêm 01";
+
+                        // Nếu cả hai điều kiện đều đúng, thêm hrValue vào danh sách
+                        if (isEnMatch && isHsMatch)
+                        {
+                            filteredValues.Add(hrValue);
+                        }
+                    }
+
+                    // Chuyển danh sách về mảng
+                    double[] filteredArray = filteredValues.ToArray();
+
+                    // Nếu có các giá trị thoả mãn, tính trung bình
+                    if (filteredValues.Any())
+                    {
+                        double average = filteredValues.Average();
+                        // Lấy giá trị tuyệt đối và làm tròn đến 2 chữ số thập phân
+                        return Math.Round(Math.Abs(average), 2);
+                    }
                 }
 
-                if (condition)
-                {
-                    filteredValues.Add(JDRange.ElementAt(i));
-                }
+                // Nếu không thoả mãn điều kiện, trả về 0
+                return 0;
             }
-
-            // Tính trung bình các giá trị đã lọc
-            double average = filteredValues.Count > 0 ? filteredValues.Average() : 0;
-
-            // Làm tròn và trả về giá trị tuyệt đối
-            return Math.Round(Math.Abs(average), 2);
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
         }
-
-
 
         public double CDThuongLuu_DinhDeCong(string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi)
         {

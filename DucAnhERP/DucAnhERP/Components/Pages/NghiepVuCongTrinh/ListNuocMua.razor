@@ -76,7 +76,7 @@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                         <label for="ThongTinChungHoGa_HinhThucHoGa"> Hình thức hố ga <span class="text-danger">*</span></label>
-                                        <select id="ThongTinChungHoGa_HinhThucHoGa" class="form-control" @bind="Input.ThongTinChungHoGa_HinhThucHoGa">
+                                        <select @oninput="OnInputChange" id="ThongTinChungHoGa_HinhThucHoGa" class="form-control" @bind="Input.ThongTinChungHoGa_HinhThucHoGa">
                                             <option value="">Hình thức hố ga ...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("HG_HTHGa"))
                                             {
@@ -87,7 +87,7 @@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                         <label for="ThongTinChungHoGa_KetCauMuMo"> Kết cấu mũ mố <span class="text-danger">*</span></label>
-                                        <select id="ThongTinChungHoGa_KetCauMuMo" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauMuMo">
+                                        <select @oninput="OnInputChange" id="ThongTinChungHoGa_KetCauMuMo" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauMuMo">
                                             <option value="">Kết cấu mũ mố ...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("HG_LMMHoGa"))
                                             {
@@ -98,7 +98,7 @@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                         <label for="ThongTinChungHoGa_KetCauTuong"> Kết cấu tường <span class="text-danger">*</span></label>
-                                        <select id="ThongTinChungHoGa_KetCauTuong" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauTuong" name="ThongTinChungHoGa_KetCauTuong">
+                                        <select @oninput="OnInputChange" id="ThongTinChungHoGa_KetCauTuong" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauTuong" name="ThongTinChungHoGa_KetCauTuong">
                                             <option value="">Kết cấu tường ...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("HG_LTHoGa"))
                                             {
@@ -109,7 +109,7 @@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                         <label for="ThongTinChungHoGa_HinhThucMongHoGa"> Hình thức móng hố ga <span class="text-danger">*</span></label>
-                                        <select id="ThongTinChungHoGa_HinhThucMongHoGa" class="form-control" @bind="Input.ThongTinChungHoGa_HinhThucMongHoGa">
+                                        <select @oninput="OnInputChange" id="ThongTinChungHoGa_HinhThucMongHoGa" class="form-control" @bind="Input.ThongTinChungHoGa_HinhThucMongHoGa">
                                             <option value="">Hình thức móng hố ga  ...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("HG_HTMHoGa"))
                                             {
@@ -120,7 +120,7 @@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                         <label for="ThongTinChungHoGa_KetCauMong"> Kết cấu móng <span class="text-danger">*</span></label>
-                                        <select id="ThongTinChungHoGa_KetCauMong" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauMong">
+                                        <select @oninput="OnInputChange" id="ThongTinChungHoGa_KetCauMong" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauMong">
                                             <option value="">Kết cấu móng ...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("HG_LMHoGa"))
                                             {
@@ -132,7 +132,7 @@
 
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                         <label for="ThongTinChungHoGa_ChatMatTrong"> Chát mặt trong <span class="text-danger">*</span></label>
-                                        <select id="ThongTinChungHoGa_ChatMatTrong" class="form-control" @bind="Input.ThongTinChungHoGa_ChatMatTrong">
+                                        <select @oninput="OnInputChange" id="ThongTinChungHoGa_ChatMatTrong" class="form-control" @bind="Input.ThongTinChungHoGa_ChatMatTrong">
                                             <option value="">Chát mặt trong ...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("DM_CoKhong"))
                                             {
@@ -144,7 +144,7 @@
 
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                         <label for="ThongTinChungHoGa_ChatMatNgoai"> Chát mặt ngoài <span class="text-danger">*</span></label>
-                                        <select id="ThongTinChungHoGa_ChatMatNgoai" class="form-control" @bind="Input.ThongTinChungHoGa_ChatMatNgoai">
+                                        <select @oninput="OnInputChange" id="ThongTinChungHoGa_ChatMatNgoai" class="form-control" @bind="Input.ThongTinChungHoGa_ChatMatNgoai">
                                             <option value="">Chát mặt ngoài ...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("DM_CoKhong"))
                                             {
@@ -565,7 +565,7 @@
                                     </div>
                                     <div class="form-floating col-6">
                                         <label for="ThongTinTamDanHoGa2_HinhThucDayHoGa"> Hình thức đậy hố ga <span class="text-danger"></span></label>
-                                        <select id="gender" class="form-control" @bind="Input.ThongTinTamDanHoGa2_HinhThucDayHoGa">
+                                        <select @oninput="OnInputChange" id="gender" class="form-control" @bind="Input.ThongTinTamDanHoGa2_HinhThucDayHoGa">
                                             <option value="">Hình thức đậy hố ga ...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("HG_HTDHoGa"))
                                             {
@@ -622,7 +622,7 @@
                                 <div class="row">
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinVatLieuDaoHoGa_LoaiVatLieuDao">Loại vật liệu đào<span class="text-danger">*</span></label>
-                                        <select id="ThongTinVatLieuDaoHoGa_LoaiVatLieuDao" class="form-control" @bind="Input.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao">
+                                        <select @oninput="OnInputChange" id="ThongTinVatLieuDaoHoGa_LoaiVatLieuDao" class="form-control" @bind="Input.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao">
                                             <option value="">Loại vật liệu đào ...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("HG_LVLDHoGa"))
                                             {
@@ -935,7 +935,7 @@
                                 <div class="row">
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinDuongTruyenDan_HinhThucTruyenDan">Hình thức truyền dẫn <span class="text-danger">*</span></label>
-                                        <select id="ThongTinDuongTruyenDan_HinhThucTruyenDan" class="form-control" @bind="Input.ThongTinDuongTruyenDan_HinhThucTruyenDan">
+                                        <select @oninput="OnInputChange" id="ThongTinDuongTruyenDan_HinhThucTruyenDan" class="form-control" @bind="Input.ThongTinDuongTruyenDan_HinhThucTruyenDan">
                                             <option value="">Hình thức truyền dẫn ...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("TD_HTTruyenDan"))
                                             {
@@ -946,7 +946,7 @@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinDuongTruyenDan_LoaiTruyenDan">Loại truyền dẫn <span class="text-danger">*</span></label>
-                                        <select id="ThongTinDuongTruyenDan_LoaiTruyenDan" class="form-control" @bind="Input.ThongTinDuongTruyenDan_LoaiTruyenDan">
+                                        <select @oninput="OnInputChange" id="ThongTinDuongTruyenDan_LoaiTruyenDan" class="form-control" @bind="Input.ThongTinDuongTruyenDan_LoaiTruyenDan">
                                             <option value="">Loại truyền dẫn...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("TD_LTruyenDan"))
                                             {
@@ -1005,7 +1005,7 @@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinMongDuongTruyenDan_LoaiMong">Loại móng <span class="text-danger">*</span></label>
-                                        <select id="ThongTinMongDuongTruyenDan_LoaiMong" class="form-control" @bind="Input.ThongTinMongDuongTruyenDan_LoaiMong">
+                                        <select @oninput="OnInputChange" id="ThongTinMongDuongTruyenDan_LoaiMong" class="form-control" @bind="Input.ThongTinMongDuongTruyenDan_LoaiMong">
                                             <option value="">Loại móng...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("TD_LMTruyenDan"))
                                             {
@@ -1016,7 +1016,7 @@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinMongDuongTruyenDan_HinhThucMong">Hình thức móng <span class="text-danger">*</span></label>
-                                        <select id="ThongTinMongDuongTruyenDan_HinhThucMong" class="form-control" @bind="Input.ThongTinMongDuongTruyenDan_HinhThucMong">
+                                        <select @oninput="OnInputChange" id="ThongTinMongDuongTruyenDan_HinhThucMong" class="form-control" @bind="Input.ThongTinMongDuongTruyenDan_HinhThucMong">
                                             <option value="">Hình thức móng...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("TD_HTMTruyenDan"))
                                             {
@@ -1044,7 +1044,7 @@
                                     </div>
                                     <div class="form-floating col-6">
                                         <label for="ThongTinDeCong_CauTaoDeCong">Cấu tạo đế cống<span class="text-danger"></span></label>
-                                        <select id="ThongTinDeCong_CauTaoDeCong" class="form-control" @bind="Input.ThongTinDeCong_CauTaoDeCong">
+                                        <select @oninput="OnInputChange" id="ThongTinDeCong_CauTaoDeCong" class="form-control" @bind="Input.ThongTinDeCong_CauTaoDeCong">
                                             <option value="">Hình thức móng...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("TD_HTMTruyenDan"))
                                             {
@@ -1201,7 +1201,7 @@
                                 <div class="row">
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="TTKTHHCongHopRanh_CauTaoTuong">Cấu tạo tường<span class="text-danger"></span></label>
-                                        <select id="TTKTHHCongHopRanh_CauTaoTuong" class="form-control" @bind="Input.TTKTHHCongHopRanh_CauTaoTuong">
+                                        <select @oninput="OnInputChange" id="TTKTHHCongHopRanh_CauTaoTuong" class="form-control" @bind="Input.TTKTHHCongHopRanh_CauTaoTuong">
                                             <option value="">Cấu tạo tường...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("TD_LDanhTuong"))
                                             {
@@ -1212,7 +1212,7 @@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="TTKTHHCongHopRanh_CauTaoMuMo">Cấu tạo mũ mố<span class="text-danger"></span></label>
-                                        <select id="TTKTHHCongHopRanh_CauTaoMuMo" class="form-control" @bind="Input.TTKTHHCongHopRanh_CauTaoMuMo">
+                                        <select @oninput="OnInputChange" id="TTKTHHCongHopRanh_CauTaoMuMo" class="form-control" @bind="Input.TTKTHHCongHopRanh_CauTaoMuMo">
                                             <option value="">Cấu tạo mũ mố...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("TD_LMMCongRanh"))
                                             {
@@ -1223,7 +1223,7 @@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="TTKTHHCongHopRanh_ChatMatTrong">Chát mặt trong<span class="text-danger"></span></label>
-                                        <select id="TTKTHHCongHopRanh_ChatMatTrong" class="form-control" @bind="Input.TTKTHHCongHopRanh_ChatMatTrong">
+                                        <select @oninput="OnInputChange" id="TTKTHHCongHopRanh_ChatMatTrong" class="form-control" @bind="Input.TTKTHHCongHopRanh_ChatMatTrong">
                                             <option value="">Chát mặt trong...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("DM_CoKhong"))
                                             {
@@ -1234,7 +1234,7 @@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="TTKTHHCongHopRanh_ChatMatNgoai">Chát mặt ngoài<span class="text-danger"></span></label>
-                                        <select id="TTKTHHCongHopRanh_ChatMatNgoai" class="form-control" @bind="Input.TTKTHHCongHopRanh_ChatMatNgoai">
+                                        <select @oninput="OnInputChange" id="TTKTHHCongHopRanh_ChatMatNgoai" class="form-control" @bind="Input.TTKTHHCongHopRanh_ChatMatNgoai">
                                             <option value="">Chát mặt ngoài...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("DM_CoKhong"))
                                             {
@@ -1352,7 +1352,7 @@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="TTKTHHCongHopRanh_CauTaoThanhChong">Cấu tạo thanh chống<span class="text-danger">*</span></label>
-                                        <select id="TTKTHHCongHopRanh_CauTaoThanhChong" @bind="Input.TTKTHHCongHopRanh_CauTaoThanhChong" class="form-control">
+                                        <select @oninput="OnInputChange" id="TTKTHHCongHopRanh_CauTaoThanhChong" @bind="Input.TTKTHHCongHopRanh_CauTaoThanhChong" class="form-control">
                                             <option value="">Cấu tạo thanh chống...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("TD_CTTChongRanh"))
                                             {
@@ -1417,7 +1417,7 @@
                                     </div> 
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan">Cấu tạo tấm đan truyền dẫn tấm đan tiêu chuẩn<span class="text-danger"></span></label>
-                                        <select id="TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan" class="form-control" @bind="Input.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan">
+                                        <select @oninput="OnInputChange" id="TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan" class="form-control" @bind="Input.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan">
                                             <option value="">Cấu tạo tấm đan...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("TD_CTTDTruyenDan"))
                                             {
@@ -1461,7 +1461,7 @@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="TTTDCongHoRanh_CauTaoTamDanTruyenDan">Cấu tạo tấm đan truyền dẫn<span class="text-danger"></span></label>
-                                        <select id="TTTDCongHoRanh_CauTaoTamDanTruyenDan" class="form-control" @bind="Input.TTTDCongHoRanh_CauTaoTamDanTruyenDan">
+                                        <select @oninput="OnInputChange" id="TTTDCongHoRanh_CauTaoTamDanTruyenDan" class="form-control" @bind="Input.TTTDCongHoRanh_CauTaoTamDanTruyenDan">
                                             <option value="">Cấu tạo tấm đan...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("TD_CTTDTruyenDan"))
                                             {
@@ -1849,7 +1849,7 @@
                                 <div class="row">
                                      <div class="form-floating col-sm-6 col-md-3">
                                         <label for="TTVLDCongRanh_LoaiVatLieuDao">Loại vật liệu đào<span class="text-danger">*</span></label>
-                                        <select id="TTVLDCongRanh_LoaiVatLieuDao" class="form-control" @bind="Input.TTVLDCongRanh_LoaiVatLieuDao">
+                                        <select @oninput="OnInputChange" id="TTVLDCongRanh_LoaiVatLieuDao" class="form-control" @bind="Input.TTVLDCongRanh_LoaiVatLieuDao">
                                             <option value="">Loại vật liệu đào...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("TD_LVLDCongRanh"))
                                             {
@@ -3732,6 +3732,7 @@
         _typingTimer.Start();
     }
 
+
     private async void OnTypingStopped(object sender, System.Timers.ElapsedEventArgs e)
     {
         // Xử lý khi người dùng ngừng nhập
@@ -3996,11 +3997,19 @@
         PhanLoaiHoGa plHoGa = new ();
        plHoGa = await PhanLoaiHoGaRepository.GetMPhanLoaiHoGaByDetail(searchData);
         if(plHoGa ==null){
-            nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = "";
-            Input.ThongTinChungHoGa_TenHoGaSauPhanLoai ="";
+           await InvokeAsync(() =>
+           {
+              nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = "";
+              Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = "";
+              StateHasChanged();
+           });
         }else{
-            nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai;
-            Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = plHoGa.Id;
+            await InvokeAsync(() =>
+            {
+               nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai;
+               Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai;
+               StateHasChanged();
+            });
         }
 
     }
@@ -4043,11 +4052,19 @@
         PhanLoaiTDHoGa plTDHoGa = new ();
         plTDHoGa = await PhanLoaiTDHoGaRepository.GetMPhanLoaiTDHoGaByDetail(searchData);
         if(plTDHoGa ==null){
-            nuocMuaVM.PhanLoaiTDHoGa_PhanLoaiDayHoGa = "";
-            Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ="";
+            await InvokeAsync(() =>
+            {
+                nuocMuaVM.PhanLoaiTDHoGa_PhanLoaiDayHoGa = "";
+                Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ="";
+                StateHasChanged();
+            });
         }else{
-            nuocMuaVM.PhanLoaiTDHoGa_PhanLoaiDayHoGa = plTDHoGa.ThongTinTamDanHoGa2_PhanLoaiDayHoGa;
-            Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = plTDHoGa.Id;
+            await InvokeAsync(() =>
+            {
+                nuocMuaVM.PhanLoaiTDHoGa_PhanLoaiDayHoGa = plTDHoGa.ThongTinTamDanHoGa2_PhanLoaiDayHoGa;
+                Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = plTDHoGa.Id;
+                StateHasChanged();
+            });
         }
 
     }
@@ -4115,11 +4132,19 @@
         PhanLoaiCTronHopNhua plCTHNHoGa = new ();
         plCTHNHoGa = await PhanLoaiCTronHopNhuaRepository.GetMPhanLoaiCTronHopNhuaByDetail(searchData);
         if(plCTHNHoGa == null){
-            nuocMuaVM.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = "";
-            Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ="";
+            await InvokeAsync(() =>
+            {
+                nuocMuaVM.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = "";
+                Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ="";
+                StateHasChanged();
+            });
         }else{
-            nuocMuaVM.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = plCTHNHoGa.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai;
-            Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = plCTHNHoGa.Id;
+            await InvokeAsync(() =>
+            {
+                nuocMuaVM.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = plCTHNHoGa.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai;
+                Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = plCTHNHoGa.Id;
+                StateHasChanged();
+            });
         }
 
     }
@@ -4165,13 +4190,21 @@
         plMCT = await PhanLoaiMongCTronRepository.GetMPhanLoaiMongCTronByDetail(searchData);
         if (plMCT == null)
         {
-            nuocMuaVM.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = "";
-            Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = "";
+            await InvokeAsync(() =>
+            {
+                nuocMuaVM.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = "";
+                Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = "";
+                StateHasChanged();
+            });
         }
         else
         {
-            nuocMuaVM.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = plMCT.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop;
-            Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = plMCT.Id;
+            await InvokeAsync(() =>
+            {
+                nuocMuaVM.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = plMCT.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop;
+                Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = plMCT.Id;
+                StateHasChanged();
+            });
         }
 
     }
@@ -4210,14 +4243,21 @@
         PhanLoaiDeCong plDC = new();
         plDC = await PhanLoaiDeCongRepository.GetMPhanLoaiDeCongByDetail(searchData);
         if (plDC == null)
-        {
+        {            await InvokeAsync(() =>
+            {
             nuocMuaVM.PhanLoaiDeCong_TenLoaiDeCong = "";
             Input.ThongTinDeCong_TenLoaiDeCong = "";
+             StateHasChanged();
+            });
         }
         else
         {
-            nuocMuaVM.PhanLoaiDeCong_TenLoaiDeCong = plDC.ThongTinDeCong_TenLoaiDeCong;
-            Input.ThongTinDeCong_TenLoaiDeCong = plDC.Id;
+            await InvokeAsync(() =>
+            {
+                nuocMuaVM.PhanLoaiDeCong_TenLoaiDeCong = plDC.ThongTinDeCong_TenLoaiDeCong;
+                Input.ThongTinDeCong_TenLoaiDeCong = plDC.Id;
+                StateHasChanged();
+            });
         }
 
     }
@@ -4254,13 +4294,21 @@
         plTC = await PhanLoaiThanhChongRepository.GetMPhanLoaiThanhChongByDetail(searchData);
         if (plTC == null)
         {
+            await InvokeAsync(() =>
+            {
             nuocMuaVM.PhanLoaiThanhChong_LoaiThanhChong = "";
             Input.TTKTHHCongHopRanh_LoaiThanhChong = "";
+                StateHasChanged();
+            });
         }
         else
         {
-            nuocMuaVM.PhanLoaiThanhChong_LoaiThanhChong = plTC.TTKTHHCongHopRanh_LoaiThanhChong;
-            Input.TTKTHHCongHopRanh_LoaiThanhChong = plTC.Id;
+            await InvokeAsync(() =>
+            {
+                nuocMuaVM.PhanLoaiThanhChong_LoaiThanhChong = plTC.TTKTHHCongHopRanh_LoaiThanhChong;
+                Input.TTKTHHCongHopRanh_LoaiThanhChong = plTC.Id;
+                StateHasChanged();
+            });
         }
 
     }
@@ -4282,8 +4330,10 @@
         CheckObjHelper checkObjhelper = new() ;
         if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
         {
-            var id = await PhanLoaiTDanTDanRepository.InsertId(searchData,GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan));
-            Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = id;
+             if(searchData.TTTDCongHoRanh_CDai>0 || searchData.TTTDCongHoRanh_CRong>0 || searchData.TTTDCongHoRanh_CCao>0 ){
+                var id = await PhanLoaiTDanTDanRepository.InsertId(searchData,GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan));
+                Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = id;
+             }
         }
     }
 
@@ -4303,8 +4353,11 @@
         CheckObjHelper checkObjhelper = new() ;
         if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
         {
-            var id = await PhanLoaiTDanTDanRepository.InsertId(searchData,GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan));
-            Input.TTTDCongHoRanh_TenLoaiTamDanLoai02 = id;
+            if(searchData.TTTDCongHoRanh_CDai>0 || searchData.TTTDCongHoRanh_CRong>0 || searchData.TTTDCongHoRanh_CCao>0 ){
+                 var id = await PhanLoaiTDanTDanRepository.InsertId(searchData,GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan));
+                Input.TTTDCongHoRanh_TenLoaiTamDanLoai02 = id;
+            }
+
         }
     }
 
@@ -4328,13 +4381,21 @@
         plTDTD = await PhanLoaiTDanTDanRepository.GetPhanLoaiTDanTDanByDetail(searchData);
         if (plTDTD == null)
         {
-            nuocMuaVM.PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = "";
-            Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = "";
+            await InvokeAsync(() =>
+            {
+                nuocMuaVM.PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = "";
+                Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = "";
+                   StateHasChanged();
+            });
         }
         else
         {
-            nuocMuaVM.PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = plTDTD.TTTDCongHoRanh_TenLoaiTamDanTieuChuan;
-            Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = plTDTD.Id;
+            await InvokeAsync(() =>
+            {
+                nuocMuaVM.PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = plTDTD.TTTDCongHoRanh_TenLoaiTamDanTieuChuan;
+                Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = plTDTD.Id;
+                   StateHasChanged();
+            });
         }
 
          PhanLoaiTDanTDan searchData1 = new PhanLoaiTDanTDan
@@ -4354,13 +4415,21 @@
         plTDTD1 = await PhanLoaiTDanTDanRepository.GetPhanLoaiTDanTDanByDetail(searchData1);
         if (plTDTD1 == null)
         {
-            nuocMuaVM.PhanLoaiTDanTDan_TenLoaiTamDanLoai02 = "";
-            Input.TTTDCongHoRanh_TenLoaiTamDanLoai02 = "";
+            await InvokeAsync(() =>
+            {
+                nuocMuaVM.PhanLoaiTDanTDan_TenLoaiTamDanLoai02 = "";
+                Input.TTTDCongHoRanh_TenLoaiTamDanLoai02 = "";
+                   StateHasChanged();
+            });
         }
         else
         {
-            nuocMuaVM.PhanLoaiTDanTDan_TenLoaiTamDanLoai02 = plTDTD1.TTTDCongHoRanh_TenLoaiTamDanTieuChuan;
-            Input.TTTDCongHoRanh_TenLoaiTamDanLoai02 = plTDTD1.Id;
+            await InvokeAsync(() =>
+            {
+                nuocMuaVM.PhanLoaiTDanTDan_TenLoaiTamDanLoai02 = plTDTD1.TTTDCongHoRanh_TenLoaiTamDanTieuChuan;
+                Input.TTTDCongHoRanh_TenLoaiTamDanLoai02 = plTDTD1.Id;
+                StateHasChanged();
+            });
         }
 
     }

@@ -38,7 +38,7 @@ namespace DucAnhERP.Services
             {
                 using var context = _context.CreateDbContext();
                 var query = from plhg in context.PhanLoaiHoGas
-                            orderby plhg.CreateAt
+                            orderby plhg.Flag
                             select new PhanLoaiHoGaModel
                             {
                                 Id = plhg.Id,

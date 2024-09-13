@@ -725,6 +725,7 @@
                             List<NuocMua> listConvertNuocMua = new();
                             DSNuocMuaConversionHelper helper = new();
                             listConvertNuocMua = await helper.ConvertDSNuocMua(listNuocMua,listDanhMuc);
+                            listNuocMua = await loadPhanLoai(listConvertNuocMua);
                             var count = await NuocMuaRepository.MultiInsert(listNuocMua);
                             Console.WriteLine(listNuocMua);
                             ToastService.ShowToast("Thông báo", "Đã thêm thành công :" + count + " dòng.", cssClass: "toast-success");
@@ -744,6 +745,128 @@
                 // Ghi lại chi tiết lỗi hoặc xử lý lỗi tại đây
                 Console.WriteLine($"Error: {ex.Message}");
             }
+        }
+    }
+
+    //load phan loai
+    public async Task<List<NuocMua>> loadPhanLoai(List<NuocMua> listData)
+    {
+        try
+        {
+            List<NuocMua> listNM = new();
+            for (int i = 0; i < listData.Count; i++)
+            {
+                NuocMua nuocMua = listData[i];
+
+                //load phân loại
+
+                var loadTenHoGaSauPhanLoai = await LoadTenHoGaSauPhanLoai(nuocMua);
+                if (string.IsNullOrEmpty(loadTenHoGaSauPhanLoai.Id))
+                {
+                    var id = await ThemTenTheoPL(nuocMua);
+                    nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
+                }
+                else
+                {
+                    nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = loadTenHoGaSauPhanLoai.Id;
+                }
+                //load phân loại LoadTenHoGaSauPhanLoaiTDHoGa
+
+                var loadTenHoGaSauPhanLoaiTDHoGa = await LoadTenHoGaSauPhanLoaiTDHoGa(nuocMua);
+                if (string.IsNullOrEmpty(loadTenHoGaSauPhanLoaiTDHoGa.Id))
+                {
+                    var id = await ThemTenTheoPLTDHoGa(nuocMua, listDanhMuc);
+                    nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = id;
+                }
+                else
+                {
+                    nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = loadTenHoGaSauPhanLoaiTDHoGa.Id;
+                }
+                //load phân loại  LoadTenPLCTronHopNhua
+
+                var loadTenPLCTronHopNhua = await LoadTenPLCTronHopNhua(nuocMua);
+                if (string.IsNullOrEmpty(loadTenPLCTronHopNhua.Id))
+                {
+                    var id = await ThemTenTheoPLCTronHopNhua(nuocMua, listDanhMuc);
+                    nuocMua.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = id;
+                }
+                else
+                {
+                    nuocMua.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = loadTenPLCTronHopNhua.Id;
+                }
+                //load phân loại LoadTenPhanLoaiMongCTron
+
+                var loadTenPhanLoaiMongCTron = await LoadTenPhanLoaiMongCTron(nuocMua);
+                if (string.IsNullOrEmpty(loadTenPhanLoaiMongCTron.Id))
+                {
+                    var id = await ThemTenTheoPLMongCTron(nuocMua, listDanhMuc);
+                    nuocMua.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = id;
+                }
+                else
+                {
+                    nuocMua.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = loadTenPhanLoaiMongCTron.Id;
+                }
+                //load phân loại loadTenPhanLoaiDeCong
+
+                var loadTenPhanLoaiDeCong = await LoadTenPhanLoaiDeCong(nuocMua);
+                if (string.IsNullOrEmpty(loadTenPhanLoaiDeCong.Id))
+                {
+                    var id = await ThemTenTheoPLDeCong(nuocMua, listDanhMuc);
+                    nuocMua.ThongTinDeCong_TenLoaiDeCong = id;
+                }
+                else
+                {
+                    nuocMua.ThongTinDeCong_TenLoaiDeCong = loadTenPhanLoaiDeCong.Id;
+                }
+                //load phân loại  LoadTenPhanLoaiThanhChong
+
+                var loadTenPhanLoaiThanhChong = await LoadTenPhanLoaiThanhChong(nuocMua);
+                if (string.IsNullOrEmpty(loadTenPhanLoaiThanhChong.Id))
+                {
+                    var id = await ThemTenTheoPLThanhChong(nuocMua, listDanhMuc);
+                    nuocMua.TTKTHHCongHopRanh_LoaiThanhChong = id;
+                }
+                else
+                {
+                    nuocMua.TTKTHHCongHopRanh_LoaiThanhChong = loadTenPhanLoaiThanhChong.Id;
+                }
+                //load phân loại LoadTenPhanLoaiTDanTDan
+
+                var loadTenPhanLoaiTDanTDan = await LoadTenPhanLoaiTDanTDan(nuocMua);
+                if (string.IsNullOrEmpty(loadTenPhanLoaiTDanTDan.Id))
+                {
+                    var id = await ThemTenTheoPLTDanTDan(nuocMua, listDanhMuc);
+                    nuocMua.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = id;
+                }
+                else
+                {
+                    nuocMua.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = loadTenPhanLoaiTDanTDan.Id;
+                }
+
+                //load phân loại TTTDCongHoRanh_TenLoaiTamDanLoai02 loadTenPhanLoaiTDanTDan02
+
+                var loadTenPhanLoaiTDanTDan02 = await LoadTenPhanLoaiTDanTDan02(nuocMua);
+                if (string.IsNullOrEmpty(loadTenPhanLoaiTDanTDan02.Id))
+                {
+                    var id = await ThemTenTheoPLTDanTDan02(nuocMua, listDanhMuc);
+                    nuocMua.TTTDCongHoRanh_TenLoaiTamDanLoai02 = id;
+                }
+                else
+                {
+                    nuocMua.TTTDCongHoRanh_TenLoaiTamDanLoai02 = loadTenPhanLoaiTDanTDan02.Id;
+                }
+
+
+                listNM.Add(nuocMua);
+            }
+
+
+            return listNM;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
         }
     }
 
@@ -968,106 +1091,6 @@
                 nuocMua.ToaDoX = ParseDoubleOrDefault(listData[i].RowData[408], 0);
                 nuocMua.ToaDoY = ParseDoubleOrDefault(listData[i].RowData[409], 0);
 
-
-                //load phân loại 
-
-                var loadTenHoGaSauPhanLoai = await LoadTenHoGaSauPhanLoai(nuocMua);
-                if (string.IsNullOrEmpty(loadTenHoGaSauPhanLoai.Id))
-                {
-                    var id = await ThemTenTheoPL(nuocMua);
-                    nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
-                }
-                else
-                {
-                    nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = loadTenHoGaSauPhanLoai.Id;
-                }
-                //load phân loại LoadTenHoGaSauPhanLoaiTDHoGa
-
-                var loadTenHoGaSauPhanLoaiTDHoGa = await LoadTenHoGaSauPhanLoaiTDHoGa(nuocMua);
-                if (string.IsNullOrEmpty(loadTenHoGaSauPhanLoaiTDHoGa.Id))
-                {
-                    var id = await ThemTenTheoPLTDHoGa(nuocMua, listDanhMuc);
-                    nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = id;
-                }
-                else
-                {
-                    nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = loadTenHoGaSauPhanLoaiTDHoGa.Id;
-                }
-                //load phân loại  LoadTenPLCTronHopNhua
-
-                var loadTenPLCTronHopNhua = await LoadTenPLCTronHopNhua(nuocMua);
-                if (string.IsNullOrEmpty(loadTenPLCTronHopNhua.Id))
-                {
-                    var id = await ThemTenTheoPLCTronHopNhua(nuocMua,listDanhMuc);
-                    nuocMua.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = id;
-                }
-                else
-                {
-                    nuocMua.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = loadTenPLCTronHopNhua.Id;
-                }
-                //load phân loại LoadTenPhanLoaiMongCTron
-
-                var loadTenPhanLoaiMongCTron = await LoadTenPhanLoaiMongCTron(nuocMua);
-                if (string.IsNullOrEmpty(loadTenPhanLoaiMongCTron.Id))
-                {
-                    var id = await ThemTenTheoPLMongCTron(nuocMua,listDanhMuc);
-                    nuocMua.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = id;
-                }
-                else
-                {
-                    nuocMua.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = loadTenPhanLoaiMongCTron.Id;
-                }
-                //load phân loại loadTenPhanLoaiDeCong
-
-                var loadTenPhanLoaiDeCong = await LoadTenPhanLoaiDeCong(nuocMua);
-                if (string.IsNullOrEmpty(loadTenPhanLoaiDeCong.Id))
-                {
-                    var id = await ThemTenTheoPLDeCong(nuocMua,listDanhMuc);
-                    nuocMua.ThongTinDeCong_TenLoaiDeCong = id;
-                }
-                else
-                {
-                    nuocMua.ThongTinDeCong_TenLoaiDeCong = loadTenPhanLoaiDeCong.Id;
-                }
-                //load phân loại  LoadTenPhanLoaiThanhChong
-
-                var loadTenPhanLoaiThanhChong = await LoadTenPhanLoaiThanhChong(nuocMua);
-                if (string.IsNullOrEmpty(loadTenPhanLoaiThanhChong.Id))
-                {
-                    var id = await ThemTenTheoPLThanhChong(nuocMua,listDanhMuc);
-                    nuocMua.TTKTHHCongHopRanh_LoaiThanhChong = id;
-                }
-                else
-                {
-                    nuocMua.TTKTHHCongHopRanh_LoaiThanhChong = loadTenPhanLoaiThanhChong.Id;
-                }
-                //load phân loại LoadTenPhanLoaiTDanTDan
-
-                var loadTenPhanLoaiTDanTDan = await LoadTenPhanLoaiTDanTDan(nuocMua);
-                if (string.IsNullOrEmpty(loadTenPhanLoaiTDanTDan.Id))
-                {
-                    var id = await ThemTenTheoPLTDanTDan(nuocMua,listDanhMuc);
-                    nuocMua.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = id;
-                }
-                else
-                {
-                    nuocMua.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = loadTenPhanLoaiTDanTDan.Id;
-                }
-
-                //load phân loại TTTDCongHoRanh_TenLoaiTamDanLoai02 loadTenPhanLoaiTDanTDan02
-
-                var loadTenPhanLoaiTDanTDan02 = await LoadTenPhanLoaiTDanTDan02(nuocMua);
-                if (string.IsNullOrEmpty(loadTenPhanLoaiTDanTDan02.Id))
-                {
-                    var id = await ThemTenTheoPLTDanTDan02(nuocMua, listDanhMuc);
-                    nuocMua.TTTDCongHoRanh_TenLoaiTamDanLoai02 = id;
-                }
-                else
-                {
-                    nuocMua.TTTDCongHoRanh_TenLoaiTamDanLoai02 = loadTenPhanLoaiTDanTDan02.Id;
-                }
-
-
                 listNM.Add(nuocMua);
             }
 
@@ -1080,7 +1103,6 @@
             throw;
         }
     }
-
 
     public static double ParseDoubleOrDefault(object input, double defaultValue = 0)
     {
@@ -1117,7 +1139,6 @@
         var danhMuc = listDanhMuc.FirstOrDefault(dm => dm.Id == id);
         return danhMuc != null ? danhMuc.Ten : null;
     }
-
 
     PhanLoai phanloai=new();
 
@@ -1590,8 +1611,10 @@
         var id = "";
         if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
         {
-            id = await PhanLoaiTDanTDanRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan));
-
+            if (searchData.TTTDCongHoRanh_CDai > 0 || searchData.TTTDCongHoRanh_CRong > 0 || searchData.TTTDCongHoRanh_CCao > 0)
+            {
+                id = await PhanLoaiTDanTDanRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan));
+            }
         }
         return id;
     }
@@ -1613,8 +1636,10 @@
         var id = "";
         if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
         {
-            id = await PhanLoaiTDanTDanRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan));
-
+            if (searchData.TTTDCongHoRanh_CDai > 0 || searchData.TTTDCongHoRanh_CRong > 0 || searchData.TTTDCongHoRanh_CCao > 0)
+            {
+                id = await PhanLoaiTDanTDanRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan));
+            }
         }
         return id;
     }

@@ -89,16 +89,16 @@ namespace DucAnhERP.Services
                 // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
                 var query = context.PhanLoaiTDanTDans
                              .Where(pltdtd => (
-                                    pltdtd.ThongTinLyTrinhTruyenDan_TuLyTrinh == pltdtd.ThongTinLyTrinhTruyenDan_TuLyTrinh &&
-                                    pltdtd.ThongTinLyTrinhTruyenDan_DenLyTrinh == pltdtd.ThongTinLyTrinhTruyenDan_DenLyTrinh &&
-                                    pltdtd.ThongTinDuongTruyenDan_HinhThucTruyenDan == pltdtd.ThongTinDuongTruyenDan_HinhThucTruyenDan &&
-                                    pltdtd.ThongTinDuongTruyenDan_LoaiTruyenDan == pltdtd.ThongTinDuongTruyenDan_LoaiTruyenDan &&
-                                    pltdtd.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan == pltdtd.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan &&
-                                    pltdtd.TTTDCongHoRanh_CDai == pltdtd.TTTDCongHoRanh_CDai &&
-                                    pltdtd.TTTDCongHoRanh_CRong == pltdtd.TTTDCongHoRanh_CRong &&
-                                    pltdtd.TTTDCongHoRanh_CCao == pltdtd.TTTDCongHoRanh_CCao
+                                    //pltdtd.ThongTinLyTrinhTruyenDan_TuLyTrinh == searchData.ThongTinLyTrinhTruyenDan_TuLyTrinh &&
+                                    //pltdtd.ThongTinLyTrinhTruyenDan_DenLyTrinh == searchData.ThongTinLyTrinhTruyenDan_DenLyTrinh &&
+                                    pltdtd.ThongTinDuongTruyenDan_HinhThucTruyenDan == searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan &&
+                                    pltdtd.ThongTinDuongTruyenDan_LoaiTruyenDan == searchData.ThongTinDuongTruyenDan_LoaiTruyenDan &&
+                                    pltdtd.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan == searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan &&
+                                    pltdtd.TTTDCongHoRanh_CDai == searchData.TTTDCongHoRanh_CDai &&
+                                    pltdtd.TTTDCongHoRanh_CRong == searchData.TTTDCongHoRanh_CRong &&
+                                    pltdtd.TTTDCongHoRanh_CCao == searchData.TTTDCongHoRanh_CCao
                                           ));
-
+                var abc = query.ToQueryString(); 
                 var result = await query.FirstOrDefaultAsync();
                 return result;
             }
