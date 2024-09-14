@@ -1,0 +1,379 @@
+﻿@page "/NghiepVuCongTrinh/PhanLoaiDeCong"
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using System.Linq
+@using DucAnhERP.SeedWork
+@using Microsoft.AspNetCore.Authorization
+@inject IDanhMucRepository DanhMucRepository
+@inject IPhanLoaiDeCongRepository PhanLoaiDeCongRepository
+@inject DucAnhERP.Services.ToastService ToastService
+
+@code {
+    private bool isEdit { get; set; } = false;
+}
+<div class="m-5">
+
+    <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
+        <BodyTemplate>
+            <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
+                <div class="row">
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="ThongTinDeCong_TenLoaiDeCong">Tên loại đế cống <span class="text-danger">*</span></label>
+                        <InputText @bind-Value="Input.ThongTinDeCong_TenLoaiDeCong" class="form-control" id="ThongTinDeCong_TenLoaiDeCong" placeholder="Tên loại đế cống" />
+                        <ValidationMessage For="() => Input.ThongTinDeCong_TenLoaiDeCong" class="text-danger" />
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="ThongTinDuongTruyenDan_LoaiTruyenDan">Loại truyền dẫn <span class="text-danger">*</span></label>
+                        <select disabled="@isEdit" id="ThongTinDuongTruyenDan_LoaiTruyenDan" class="form-control" @bind="Input.ThongTinDuongTruyenDan_LoaiTruyenDan">
+                            <option value="">Loại truyền dẫn...</option>
+                            @foreach (var dm in FindByIdNhomDanhMuc("TD_LTruyenDan"))
+                            {
+                                <option value="@dm.Id">@dm.Ten</option>
+                            }
+                        </select>
+                        <ValidationMessage For="() => Input.ThongTinDuongTruyenDan_LoaiTruyenDan" class="text-danger" />
+                    </div>
+                    <div class="form-floating col-6">
+                        <label for="ThongTinDeCong_CauTaoDeCong">Cấu tạo đế cống<span class="text-danger"></span></label>
+                        <select disabled="@isEdit" id="ThongTinDeCong_CauTaoDeCong" class="form-control" @bind="Input.ThongTinDeCong_CauTaoDeCong">
+                            <option value="">Cấu tạo đế cống...</option>
+                            @foreach (var dm in FindByIdNhomDanhMuc("TD_CTDCTron"))
+                            {
+                                <option value="@dm.Id">@dm.Ten</option>
+                            }
+                        </select>
+                        <ValidationMessage For="() => Input.ThongTinDeCong_CauTaoDeCong" class="text-danger" />
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="ThongTinDeCong_D">Chiều dài<span class="text-danger">*</span></label>
+                        <InputNumber disabled="@isEdit" @bind-Value="Input.ThongTinDeCong_D" class="form-control" id="ThongTinDeCong_D" placeholder="Chiều dài" />
+                        <ValidationMessage For="() => Input.ThongTinDeCong_D" class="text-danger" />
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="ThongTinDeCong_R">Chiều rộng<span class="text-danger">*</span></label>
+                        <InputNumber disabled="@isEdit" @bind-Value="Input.ThongTinDeCong_R" class="form-control" id="ThongTinDeCong_R" placeholder="Chiều rộng" />
+                        <ValidationMessage For="() => Input.ThongTinDeCong_R" class="text-danger" />
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="ThongTinDeCong_C">Chiều Cao<span class="text-danger">*</span></label>
+                        <InputNumber disabled="@isEdit" @bind-Value="Input.ThongTinDeCong_C" class="form-control" id="ThongTinDeCong_C" placeholder="Chiều cao" />
+                        <ValidationMessage For="() => Input.ThongTinDeCong_C" class="text-danger" />
+                    </div>
+                </div>
+               
+
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="row mt-5 justify-content-end">
+                    <button class="btn btn-primary mr-2" type="submit">Save</button>
+                    <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+                </div>
+            </EditForm>
+        </BodyTemplate>
+    </CustomModal>
+
+    <button class="btn btn-primary" @onclick="ShowModal">Thêm phân loại đế cống</button>
+
+    <h3 class="mt-2">Danh sách phân loại đế cống </h3>
+    @if (!listPLCTronHopNhuaModel.Any())
+    {
+        <div class="pt-3 pl-4">
+            <div class="callout callout-warning">
+                <h5>Không có dữ liệu tương ứng!</h5>
+            </div>
+        </div>
+    }
+    <div class="row mt-3 our-table">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th> </th>
+                    <th> STT</th>
+                    <th> Tên loại đế cống</th>
+                    <th> Loại truyền dẫn</th>
+                    <th> Cấu tạo đế cống</th>
+                    <th> Dài </th>
+                    <th> Rộng </th>
+                    <th> Cao </th>
+                </tr>
+            </thead>
+            @if (listPLCTronHopNhuaModel.Any())
+            {
+
+                <tbody>
+                    @{
+                        int stt = 1;
+                    }
+                    @foreach (var item in listPLCTronHopNhuaModel)
+                    {
+
+                        <tr>
+                            <td class="d-flex nowrap">
+                                <div class="d-inline-block">
+                                    <button class="btn btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.ThongTinDeCong_TenLoaiDeCong)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="text-center">@stt</td>
+                            <td>@item.ThongTinDeCong_TenLoaiDeCong </td>
+                            <td>@GetTenDanhMucById(item.ThongTinDuongTruyenDan_LoaiTruyenDan ?? "") </td>
+                            <td>@GetTenDanhMucById(item.ThongTinDeCong_CauTaoDeCong ?? "")</td>
+                            <td>@item.ThongTinDeCong_D </td>
+                            <td>@item.ThongTinDeCong_R </td>
+                            <td>@item.ThongTinDeCong_C</td>
+                        </tr>
+                        stt++;
+                    }
+
+                </tbody>
+            }
+
+        </table>
+
+    </div>
+
+    @if (listPLCTronHopNhuaModel.Any())
+    {
+        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+    }
+    <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+</div>
+
+@code {
+    private List<PhanLoaiDeCong> listPhanLoaiDeCong = new List<PhanLoaiDeCong>();
+    private PhanLoaiDeCong Input = new();
+    public List<DanhMuc> listDanhMuc = new();
+
+    private bool isModalVisible = false;
+    private string TitleModal = "Thêm mới loại đế cống";
+
+
+    private void ShowModal()
+    {
+        isModalVisible = true;
+        Input = new();
+    }
+
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+        Input = new();
+        isEdit = false;
+    }
+
+    private void HandleSave()
+    {
+        // Logic for saving
+        isModalVisible = false;
+
+    }
+
+    private void HandleCancel()
+    {
+        // Logic for canceling
+        isModalVisible = false;
+        Input = new();
+        isEdit = false;
+    }
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+
+    public List<PhanLoaiDeCongModel> listPLCTronHopNhuaModel
+    {
+        get;
+        set;
+    } = new();
+
+    public List<PhanLoaiDeCongModel> listModel
+    {
+        get;
+        set;
+    } = new();
+
+    public MetaData MetaData
+    {
+        get;
+        set;
+    }
+
+    public PhanLoaiDeCongModel dmModel
+    {
+        get;
+        set;
+    }
+
+
+
+    public List<DanhMuc> FindByIdNhomDanhMuc(string idNhomDanhMuc)
+    {
+        return listDanhMuc.Where(dm => dm.IdNhomDanhMuc == idNhomDanhMuc).ToList();
+    }
+
+    public string GetTenDanhMucById(string id)
+    {
+        var danhMuc = listDanhMuc.FirstOrDefault(dm => dm.Id == id);
+        return danhMuc != null ? danhMuc.Ten : null;
+    }
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+
+    // Truy vấn data theo điều kiện tìm kiếm
+    private async Task LoadData()
+    {
+        dmModel = new();
+        listDanhMuc = await DanhMucRepository.GetAll();
+        var plhg = await PhanLoaiDeCongRepository.GetAllByVM();
+        listModel = plhg;
+        listPLCTronHopNhuaModel = Paging(plhg);
+
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        if (isEdit)
+        {
+            // Thêm mới thông tin
+            await PhanLoaiDeCongRepository.Update(Input);
+            isModalVisible = false;
+            Input = new PhanLoaiDeCong();
+            isEdit = false;
+            ToastService.ShowToast(
+                "Thông báo",
+                "Cập nhật thành công.",
+                cssClass: "toast-success",
+                iconClass: "fa fa-bell",
+                progressBarClass: "bg-info",
+                duration: 5000
+            );
+            await LoadData();
+        }
+        else
+        {
+            // Thêm mới thông tin
+            await PhanLoaiDeCongRepository.Insert(Input);
+            isModalVisible = false;
+            Input = new PhanLoaiDeCong();
+            ToastService.ShowToast(
+                "Thông báo",
+                "Thêm thành công.",
+                cssClass: "toast-success",
+                iconClass: "fa fa-bell",
+                progressBarClass: "bg-info",
+                duration: 5000
+            );
+            await LoadData();
+        }
+
+    }
+
+    private string deleteId;
+
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        deleteId = id;
+        confirmModal.Title = "Xác nhận xóa";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.openModal();
+
+    }
+
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        if (confirmed)
+        {
+            if (!string.IsNullOrEmpty(deleteId))
+            {
+
+                var result = await PhanLoaiDeCongRepository.CheckUsingId(deleteId);
+                if (result)
+                {
+                    ToastService.ShowToast("Thông báo", "Không thể xóa danh mục đang được sử dụng.", cssClass: "toast-danger", iconClass: "fa fa-bell", progressBarClass: "bg-info", duration: 5000);
+                }
+                else
+                {
+                    // Thực hiện hành động xóa
+                    await PhanLoaiDeCongRepository.DeleteById(deleteId);
+                    ToastService.ShowToast("Thông báo", "Xóa danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-bell", progressBarClass: "bg-info", duration: 5000);
+                    await LoadData();
+                }
+
+                deleteId = "";
+            }
+        }
+    }
+
+
+    private async Task HandleEdit(string id)
+    {
+        TitleModal = "Cập nhật loại đế cống !";
+        Input = await PhanLoaiDeCongRepository.GetById(id);
+        isEdit = true;
+        isModalVisible = true;
+    }
+
+
+
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        dmModel.PageNumber = 1;
+        Paging(listModel);
+    }
+
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        dmModel.PageNumber = page;
+        Paging(listModel);
+    }
+
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+
+        dmModel.PageNumber = 1;
+        dmModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+    // Xử lý paging
+    private List<PhanLoaiDeCongModel> Paging(List<PhanLoaiDeCongModel> plhgs)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = plhgs.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        plhgs = plhgs.Skip((dmModel.PageNumber - 1) * dmModel.PageSize).Take(dmModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listPLCTronHopNhuaModel.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var item in plhgs)
+        {
+            listPLCTronHopNhuaModel.Add(item);
+        }
+
+        // Tạo pagelist mới
+        var pagelist = new PageList<PhanLoaiDeCongModel>(listPLCTronHopNhuaModel, count, dmModel.PageNumber, dmModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return plhgs;
+    }
+
+}

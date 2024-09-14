@@ -78,7 +78,7 @@ namespace DucAnhERP.Services
                             on nuocMua.TTTDCongHoRanh_TenLoaiTamDanLoai02 equals PhanLoaiTDanTDan02.Id into PhanLoaiTDanTDan02Join
                             from PhanLoaiTDanTDan02 in PhanLoaiTDanTDan02Join.DefaultIfEmpty()
                                 // Sắp xếp theo CreateAt của DSNuocMua
-                            orderby nuocMua.CreateAt
+                            orderby nuocMua.Flag
                             select new NuocMuaModel
                             {
                                 Id = nuocMua.Id,
@@ -501,7 +501,7 @@ namespace DucAnhERP.Services
                                 TTKLDC_KlDapCatSauChiemCho = nuocMua.TTKLDC_KlDapCatSauChiemCho ?? 0,
                                 ToaDoX = nuocMua.ToaDoX ?? 0,
                                 ToaDoY = nuocMua.ToaDoY ?? 0,
-
+                                Flag = nuocMua.Flag,
                             };
                 var data = await query.ToListAsync();
                 return data;
@@ -597,6 +597,13 @@ namespace DucAnhERP.Services
                 {
                     throw new Exception("Không có bản ghi nào để thêm!");
                 }
+                // Kiểm tra xem bảng có bản ghi nào không
+                var maxFlag = await context.DSNuocMua.AnyAsync()
+                              ? await context.DSNuocMua.MaxAsync(x => x.Flag)
+                              : 0;
+
+                // Tăng giá trị Flag lên 1
+                entity.Flag = maxFlag + 1;
                 context.DSNuocMua.Add(entity);
                 var row = await context.SaveChangesAsync();
                 Console.WriteLine(row);
@@ -607,6 +614,53 @@ namespace DucAnhERP.Services
             }
         }
 
+        public async Task<string> InsertLaterFlag(NuocMua entity, int FlagLast)
+        {
+            string id = "";
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                if (entity == null)
+                {
+                    throw new Exception("Không có bản ghi nào để thêm!");
+                }
+                var recordsToUpdate = await context.DSNuocMua
+                    .Where(x => x.Flag > FlagLast)
+                    .ToListAsync();
+
+                foreach (var record in recordsToUpdate)
+                {
+                    record.Flag += 1;
+                }
+                await context.SaveChangesAsync();
+
+                if (recordsToUpdate.Count() == 0)
+                {
+                    // Kiểm tra xem bảng có bản ghi nào không
+                    var maxFlag = await context.DSNuocMua.AnyAsync()
+                                  ? await context.DSNuocMua.MaxAsync(x => x.Flag)
+                                  : 0;
+
+                    // Tăng giá trị Flag lên 1
+                    entity.Flag = maxFlag + 1;
+                }
+                else
+                {
+                    entity.Flag = FlagLast + 1;
+                }
+                context.DSNuocMua.Add(entity);
+                await context.SaveChangesAsync();
+           
+                id = entity.Id ?? "";
+                return id;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return id;
+            }
+        }
         public async Task<int> MultiInsert(List<NuocMua> entities)
         {
             try
@@ -618,8 +672,16 @@ namespace DucAnhERP.Services
                     throw new Exception("Không có bản ghi nào để thêm!");
                 }
 
+                // Kiểm tra xem bảng có bản ghi nào không
+                var maxFlag = await context.DSNuocMua.AnyAsync()
+                              ? await context.DSNuocMua.MaxAsync(x => x.Flag)
+                              : 0;
+
                 foreach (var entity in entities)
                 {
+                    // Tăng giá trị Flag lên 1
+                    maxFlag += 1; 
+                    entity.Flag = maxFlag ;
                     context.DSNuocMua.Add(entity);
                 }
 

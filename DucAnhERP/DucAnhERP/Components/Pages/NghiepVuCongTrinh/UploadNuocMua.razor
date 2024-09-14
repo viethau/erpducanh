@@ -1520,7 +1520,7 @@
         var id = "";
         if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
         {
-            id = await PhanLoaiDeCongRepository.InsertId(searchData, searchData.ThongTinDeCong_CauTaoDeCong, searchData.ThongTinDuongTruyenDan_LoaiTruyenDan);
+            id = await PhanLoaiDeCongRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinDeCong_CauTaoDeCong ?? ""), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan??""));
 
         }
         return id;

@@ -37,7 +37,7 @@ namespace DucAnhERP.Services
             {
                 using var context = _context.CreateDbContext();
                 var query = from pltdhg in context.PhanLoaiCTronHopNhuas
-                            orderby pltdhg.CreateAt
+                            orderby pltdhg.Flag
                             select new PhanLoaiCTronHopNhuaModel
                             {
                                 Id = pltdhg.Id,
@@ -216,7 +216,11 @@ namespace DucAnhERP.Services
 
                 // Tăng giá trị Flag lên 1
                 entity.Flag = maxFlag + 1;
-                entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = " loại " + entity.Flag;
+                if (string.IsNullOrEmpty(entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
+                {
+                    entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = " loại " + entity.Flag;
+                }
+                
 
                 // Chèn bản ghi mới vào bảng
                 context.PhanLoaiCTronHopNhuas.Add(entity);

@@ -781,7 +781,7 @@
     public List<DanhMuc> listDanhMuc = new();
 
     private bool isModalVisible = false;
-    private string TitleModal = "Thêm mới nhóm danh mục";
+    private string TitleModal = "Thêm phân loại hố ga";
    
 
     private void ShowModal()
@@ -946,7 +946,7 @@
 
     private async Task HandleEdit(string id)
     {
-        TitleModal = "Cập nhật nhóm danh mục !";
+        TitleModal = "Cập nhật phân loại hố ga !";
         Input = await PhanLoaiHoGaRepository.GetById(id);
         isEdit = true;
         isModalVisible = true;

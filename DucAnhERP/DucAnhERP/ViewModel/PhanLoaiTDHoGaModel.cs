@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DucAnhERP.SeedWork;
+using System.ComponentModel.DataAnnotations;
 
 namespace DucAnhERP.ViewModel
 {
-    public class PhanLoaiTDHoGaModel
+    public class PhanLoaiTDHoGaModel : PagingParameters
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public int Flag { get; set; } = 0;

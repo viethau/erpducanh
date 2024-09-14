@@ -9,7 +9,7 @@ namespace DucAnhERP.Models
         public int Flag { get; set; } = 0;
 
         [Required(ErrorMessage = "Bạn phải nhập Tên loại truyền dẫn sau phân loại!")]
-        public string? ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai { get; set; } = "";
+        public string ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai { get; set; }
 
         [Required(ErrorMessage = "Bạn phải nhập Hình thức truyền dẫn!")]
         public string? ThongTinDuongTruyenDan_HinhThucTruyenDan { get; set; } = "";

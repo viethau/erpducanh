@@ -39,7 +39,7 @@ namespace DucAnhERP.Services
             {
                 using var context = _context.CreateDbContext();
                 var query = from pltdhg in context.PhanLoaiTDHoGas
-                            orderby pltdhg.CreateAt
+                            orderby pltdhg.Flag
                             select new PhanLoaiTDHoGaModel
                             {
                                 Id = pltdhg.Id,
@@ -192,7 +192,12 @@ namespace DucAnhERP.Services
 
                 // Tăng giá trị Flag lên 1
                 entity.Flag = maxFlag + 1;
-                entity.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = " loại " + entity.Flag;
+                if (string.IsNullOrEmpty(entity.ThongTinTamDanHoGa2_PhanLoaiDayHoGa))
+                {
+                    entity.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = " loại " + entity.Flag;
+                }
+               
+              
 
                 // Chèn bản ghi mới vào bảng
                 context.PhanLoaiTDHoGas.Add(entity);

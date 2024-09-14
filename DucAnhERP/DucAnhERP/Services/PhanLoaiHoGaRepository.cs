@@ -319,7 +319,11 @@ namespace DucAnhERP.Services
 
                 // Tăng giá trị Flag lên 1
                 entity.Flag = maxFlag + 1;
-                entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag;
+                if (string.IsNullOrEmpty(entity.ThongTinChungHoGa_TenHoGaSauPhanLoai))
+                {
+                    entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag;
+                }
+                
 
                 // Chèn bản ghi mới vào bảng
                 context.PhanLoaiHoGas.Add(entity);

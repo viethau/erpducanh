@@ -953,7 +953,7 @@
                                                 <option value="@dm.Id">@dm.Ten</option>
                                             }
                                         </select>
-                                        <ValidationMessage For="() => Input.ThongTinDuongTruyenDan_HinhThucTruyenDan" class="text-danger" />
+                                        <ValidationMessage For="() => Input.ThongTinDuongTruyenDan_LoaiTruyenDan" class="text-danger" />
                                     </div>
                                    @*  <div class="form-floating col-sm-6 col-md-3">
                                         <label for="ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai">Tên loại truyền dẫn sau phân loại<span class="text-danger"></span></label>
@@ -1045,8 +1045,8 @@
                                     <div class="form-floating col-6">
                                         <label for="ThongTinDeCong_CauTaoDeCong">Cấu tạo đế cống<span class="text-danger"></span></label>
                                         <select @oninput="OnInputChange" id="ThongTinDeCong_CauTaoDeCong" class="form-control" @bind="Input.ThongTinDeCong_CauTaoDeCong">
-                                            <option value="">Hình thức móng...</option>
-                                            @foreach (var dm in FindByIdNhomDanhMuc("TD_HTMTruyenDan"))
+                                            <option value="">Cấu tạo đế cống...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("TD_CTDCTron"))
                                             {
                                                 <option value="@dm.Id">@dm.Ten</option>
                                             }
@@ -3241,10 +3241,13 @@
                             stt++;
                             <tr>
                                 <td>
-                                    <button class="btn btn-primary" title="Chỉnh sửa" @onclick="()=>HandleEdit( item,item.Id)">
+                                    <button class="btn btn-sm  btn-primary" title="Chỉnh sửa" @onclick="()=>HandleEdit( item,item.Id)">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-danger" title="Xóa" @onclick="()=>ConfirmDelete(item.Id)">
+                                     <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                    <button class="btn btn-sm  btn-danger" title="Xóa" @onclick="()=>ConfirmDelete(item.Id)">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </td>
@@ -3741,6 +3744,33 @@
         Helpers.DSNuocMuaConversionHelper helpers = new() ;
         nuocMuaConvert = Input;
         nuocMuaConvert = await helpers.ConvertNuocMua(Input,listDanhMuc);
+         if(listNuocMuaModel.Count > 0)
+            {
+            double[] ChieuDaiThucTes = { };
+            string[] HinhThucTruyenDans = { };
+            string[] XacDinhOngCongCanThems = { };
+
+
+               ChieuDaiThucTes = listNuocMuaModel
+                    .Select(item => item.TTTDCongHoRanh_ChieuDaiThucTe).ToArray();
+
+                HinhThucTruyenDans = listNuocMuaModel
+                    .Select(item => !string.IsNullOrEmpty(item.ThongTinDuongTruyenDan_HinhThucTruyenDan)
+                                    ? item.ThongTinDuongTruyenDan_HinhThucTruyenDan
+                                    : "") 
+                    .ToArray();
+
+                XacDinhOngCongCanThems = listNuocMuaModel
+                   .Select(item => !string.IsNullOrEmpty(item.TTTDCongHoRanh_XacDinhOngCongCanThem)
+                                   ? item.TTTDCongHoRanh_XacDinhOngCongCanThem
+                                   : "") 
+                   .ToArray();
+
+                
+            nuocMuaConvert.TTTDCongHoRanh_CDai1 = TTTDCongHoRanh_CDai1(ChieuDaiThucTes, HinhThucTruyenDans, XacDinhOngCongCanThems, nuocMuaConvert.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "", nuocMuaConvert.TTTDCongHoRanh_XacDinhOngCongCanThem ?? "");
+                
+            }
+
         Input = nuocMuaConvert;
         await LoadTenHoGaSauPhanLoai();
         await LoadTenHoGaSauPhanLoaiTDHoGa();
@@ -3799,6 +3829,7 @@
         isModalVisible = isVisible;
         Input = new();
         isEdit = false;
+         Flag = 0;
     }
 
     private void HandleSave()
@@ -3813,6 +3844,16 @@
         isModalVisible = false;
         Input = new();
         isEdit = false;
+        Flag = 0;
+    }
+     int Flag = 0;
+    //thêm vào sau 
+    private void InsertLaterFlag(int flag)
+    {
+        Flag = flag;
+        nuocMuaVM = new();
+        TitleModal = "Chèn thông tin !";
+        isModalVisible = true;
     }
 
     //Thêm sửa
@@ -4499,9 +4540,24 @@
                 await LoadData();
                 nuocMuaVM = new();
             }
-            else
+            else if (Flag > 0)
             {
-
+                // Thêm mới thông tin
+                var id = await NuocMuaRepository.InsertLaterFlag(Input, Flag);
+                isModalVisible = false;
+                Input = new NuocMua();
+                ToastService.ShowToast(
+                    "Thông báo",
+                    "Chèn thành công.",
+                    cssClass: "toast-success",
+                    iconClass: "fa fa-bell",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                );
+                await LoadData();
+                Flag = 0;
+            } else
+            {
                 // Thêm mới thông tin
                 await NuocMuaRepository.Insert(Input);
                 isModalVisible = false;
@@ -4673,4 +4729,64 @@
         MetaData = pagelist.MetaData;
         return hopRanhThangs;
     }
+
+    public double TTTDCongHoRanh_CDai1(double[] TTTDCongHoRanh_ChieuDaiThucTes, string[] ThongTinDuongTruyenDan_HinhThucTruyenDans, string[] TTTDCongHoRanh_XacDinhOngCongCanThems, string ThongTinDuongTruyenDan_HinhThucTruyenDan, string TTTDCongHoRanh_XacDinhOngCongCanThem)
+    {
+        try
+        {
+            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+            // Kiểm tra điều kiện TTTDCongHoRanh_XacDinhOngCongCanThem có phải là "Thêm 01" không
+            if (TTTDCongHoRanh_XacDinhOngCongCanThem == "Thêm 01")
+            {
+                // Lọc các giá trị TTTDCongHoRanh_ChieuDaiThucTes thoả mãn điều kiện từ ThongTinDuongTruyenDan_HinhThucTruyenDans và hsValues
+                //var filteredValues = TTTDCongHoRanh_ChieuDaiThucTes
+                //    .Where((hrValue, index) =>
+                //        GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDans[index].ToUpper().Trim()) == ThongTinDuongTruyenDan_HinhThucTruyenDan.ToUpper().Trim()
+                //        && TTTDCongHoRanh_XacDinhOngCongCanThems[index] == "Thêm 01")
+                //    .ToArray();
+
+                List<double> filteredValues = new List<double>();
+
+                // Duyệt qua các phần tử của mảng hrValues
+                for (int index = 0; index < TTTDCongHoRanh_ChieuDaiThucTes.Length; index++)
+                {
+                    double hrValue = TTTDCongHoRanh_ChieuDaiThucTes[index];
+                    string enValue = ThongTinDuongTruyenDan_HinhThucTruyenDans[index];
+                    string hsValue = TTTDCongHoRanh_XacDinhOngCongCanThems[index];
+
+                    // Kiểm tra điều kiện enValues[index] == en100
+                    bool isEnMatch = GetTenDanhMucById(enValue).ToUpper().Trim() == ThongTinDuongTruyenDan_HinhThucTruyenDan.ToUpper().Trim();
+
+                    // Kiểm tra điều kiện hsValues[index] == "Thêm 01"
+                    bool isHsMatch = hsValue == "Thêm 01";
+
+                    // Nếu cả hai điều kiện đều đúng, thêm hrValue vào danh sách
+                    if (isEnMatch && isHsMatch)
+                    {
+                        filteredValues.Add(hrValue);
+                    }
+                }
+
+                // Chuyển danh sách về mảng
+                double[] filteredArray = filteredValues.ToArray();
+
+                // Nếu có các giá trị thoả mãn, tính trung bình
+                if (filteredValues.Any())
+                {
+                    double average = filteredValues.Average();
+                    // Lấy giá trị tuyệt đối và làm tròn đến 2 chữ số thập phân
+                    return Math.Round(Math.Abs(average), 2);
+                }
+            }
+
+            // Nếu không thoả mãn điều kiện, trả về 0
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
+        }
+    }
+
 }

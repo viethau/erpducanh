@@ -193,7 +193,11 @@ namespace DucAnhERP.Services
 
                 // Tăng giá trị Flag lên 1
                 entity.Flag = maxFlag + 1;
-                entity.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = "Tấm đan tiêu chuẩn loại  " + entity.Flag;
+                if (string.IsNullOrEmpty(entity.TTTDCongHoRanh_TenLoaiTamDanTieuChuan))
+                {
+                    entity.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = "Tấm đan tiêu chuẩn loại  " + entity.Flag;
+                }
+              
 
                 // Chèn bản ghi mới vào bảng
                 context.PhanLoaiTDanTDans.Add(entity);

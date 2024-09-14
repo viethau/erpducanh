@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 namespace DucAnhERP.Services
 {
    
-
     public class PhanLoaiDeCongRepository : IPhanLoaiDeCongRepository
     {
         private readonly IDbContextFactory<ApplicationDbContext> _context;
@@ -190,7 +189,11 @@ namespace DucAnhERP.Services
 
                 // Tăng giá trị Flag lên 1
                 entity.Flag = maxFlag + 1;
-                entity.ThongTinDeCong_TenLoaiDeCong = "Đế cống loại " + entity.Flag;
+                if (string.IsNullOrEmpty(entity.ThongTinDeCong_TenLoaiDeCong))
+                {
+                    entity.ThongTinDeCong_TenLoaiDeCong = "Đế cống loại " + entity.Flag;
+                }
+               
 
                 // Chèn bản ghi mới vào bảng
                 context.PhanLoaiDeCongs.Add(entity);

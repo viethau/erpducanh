@@ -989,6 +989,7 @@ namespace DucAnhERP.Models
         [RegularExpression(@"^-?\d+(\.\d{1,6})?$", ErrorMessage = "Tọa độ X phải là số hợp lệ với tối đa 6 chữ số thập phân.")]
         public Double? ToaDoY { get; set; } = 0;
 
+        public int Flag { get; set; } = 0;
         public DateTime? CreateAt { get; set; } = DateTime.Now;
         public string? CreateBy { get; set; } = "";
         public int? IsActive { get; set; } = 1;

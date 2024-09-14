@@ -429,6 +429,8 @@ namespace DucAnhERP.ViewModel
         public Double TTKLDC_KlDapCatSauChiemCho { get; set; }
         public Double ToaDoX { get; set; }
         public Double ToaDoY { get; set; }
+
+        public int Flag { get; set; } = 0;
         public DateTime? CreateAt { get; set; }
         public string? CreateBy { get; set; }
         public int? IsActive { get; set; }

@@ -1,6 +1,8 @@
-﻿namespace DucAnhERP.ViewModel
+﻿using DucAnhERP.SeedWork;
+
+namespace DucAnhERP.ViewModel
 {
-    public class PhanLoaiCTronHopNhuaModel
+    public class PhanLoaiCTronHopNhuaModel : PagingParameters
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public int Flag { get; set; } = 0;
