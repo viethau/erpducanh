@@ -131,16 +131,24 @@ namespace DucAnhERP.Services
 
         public async Task DeleteById(string id)
         {
-            using var context = _context.CreateDbContext();
-            var entity = await GetById(id);
-
-            if (entity == null)
+            try
             {
-                throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
-            }
+                using var context = _context.CreateDbContext();
+                var entity = await GetById(id);
 
-            context.Set<PhanLoaiThanhChong>().Remove(entity);
-            await context.SaveChangesAsync();
+                if (entity == null)
+                {
+                    throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
+                }
+
+                context.Set<PhanLoaiThanhChong>().Remove(entity);
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
         }
 
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
@@ -186,7 +194,11 @@ namespace DucAnhERP.Services
 
                 // Tăng giá trị Flag lên 1
                 entity.Flag = maxFlag + 1;
-                entity.TTKTHHCongHopRanh_LoaiThanhChong = "Đế cống loại " + entity.Flag;
+                if (string.IsNullOrEmpty(entity.TTKTHHCongHopRanh_LoaiThanhChong))
+                {
+                    entity.TTKTHHCongHopRanh_LoaiThanhChong = "Đế cống loại " + entity.Flag;
+                }
+
 
                 // Chèn bản ghi mới vào bảng
                 context.PhanLoaiThanhChongs.Add(entity);
@@ -216,8 +228,11 @@ namespace DucAnhERP.Services
 
                 // Tăng giá trị Flag lên 1
                 entity.Flag = maxFlag + 1;
-                entity.TTKTHHCongHopRanh_LoaiThanhChong = "Thanh chống loại " + entity.Flag+ CTTC;
-
+                if (string.IsNullOrEmpty(entity.TTKTHHCongHopRanh_LoaiThanhChong))
+                {
+                    entity.TTKTHHCongHopRanh_LoaiThanhChong = "Thanh chống loại " + entity.Flag + CTTC;
+                }
+                
                 // Chèn bản ghi mới vào bảng
                 context.PhanLoaiThanhChongs.Add(entity);
                 await context.SaveChangesAsync();

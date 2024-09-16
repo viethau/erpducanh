@@ -1571,6 +1571,7 @@
                             <div class="col">
                                 <h4 class="mt-2"> Cao độ thượng lưu</h4>
                                 <hr />
+                                <h5>Đáy đào thượng lưu</h5>
                                 <div class="row">
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="CDThuongLuu_HienTrangTruocKhiDaoThuongLuu">Hiện trạng trước khi đào thượng lưu(m)<span class="text-danger">*</span></label>
@@ -1602,7 +1603,7 @@
                                         <InputNumber readonly @bind-Value="Input.CDThuongLuu_DayDaoOngNhua" class="form-control" id="CDThuongLuu_DayDaoOngNhua" placeholder="Đáy đào ống nhựa (m)" />
                                      </div>
                                 </div>
-                                  <h5>Đỉnh lót thượng lưu</h5>
+                                <h5>Đỉnh lót thượng lưu</h5>
                                 <div class="row">
                                      <div class="form-floating col-sm-6 col-md-3">
                                          <label for="CDThuongLuu_DinhLotGop">Đỉnh lót gộp (C.Tròn, C.Hộp, Rãnh, ống nhựa, rãnh thang)</label>
@@ -1710,6 +1711,7 @@
                             <div class="col">
                                 <h4 class="mt-2"> Cao độ hạ lưu</h4>
                                 <hr />
+                                <h5> Đáy đào hạ lưu</h5>
                                 <div class="row">
                                     <div class="form-floating col-sm-6 col-md-3">
                                         <label for="CDHaLu_HienTrangTruocKhiDaoHaLuu">Hiện trạng trước khi đào hạ lưu (m)<span class="text-danger">*</span></label>
@@ -1741,7 +1743,7 @@
                                         <InputNumber readonly @bind-Value="Input.CDHaLu_DayDaoOngNhua" class="form-control" id="CDHaLu_DayDaoOngNhua" placeholder="Đáy đào ống nhựa (m)" />
                                      </div>                                     
                                 </div>
-                                  <h5>Đỉnh lót hạ lưu</h5>
+                                 <h5>Đỉnh lót hạ lưu</h5>
                                 <div class="row">
                                    <div class="form-floating col-sm-6 col-md-3">
                                          <label for="CDHaLu_DinhLotGop">Đỉnh lót gộp (C.Tròn, C.Hộp, Rãnh, ống nhựa, rãnh thang)</label>
@@ -1884,7 +1886,7 @@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3">
                                          <label for="TTVLDCongRanh_HLChieuCaoDaoDat">Chiều cao đào đất (m)</label>
-                                        <InputNumber readonly @bind-Value="Input.TTVLDCongRanh_TLChieuCaoDaoDat" class="form-control" id="TTVLDCongRanh_TLChieuCaoDaoDat" placeholder="Chiều cao đào đất (m)" />
+                                        <InputNumber readonly @bind-Value="Input.TTVLDCongRanh_HLChieuCaoDaoDat" class="form-control" id="TTVLDCongRanh_HLChieuCaoDaoDat" placeholder="Chiều cao đào đất (m)" />
                                      </div>
 									 <div class="form-floating col-sm-6 col-md-3">
                                          <label for="TTVLDCongRanh_HLTongChieuSauDao">Tổng chiều sâu đào</label>
@@ -1901,6 +1903,7 @@
                                  <div class="row">
                                      <div class="form-floating col-sm-6 col-md-3">
                                          <label for="TTCCCCT_CCaoLotDatTLuu">C.Cao lót T.Lưu</label>
+                                                                              
                                         <InputNumber readonly @bind-Value="Input.TTCCCCT_CCaoLotDatTLuu" class="form-control" id="TTCCCCT_CCaoLotDatTLuu" placeholder="C.Cao lót T.Lưu" />
                                      </div>
 									 <div class="form-floating col-sm-6 col-md-3">
@@ -3745,31 +3748,31 @@
         nuocMuaConvert = Input;
         nuocMuaConvert = await helpers.ConvertNuocMua(Input,listDanhMuc);
         if (listNuocMuaModel.Count > 0 && string.IsNullOrEmpty(nuocMuaConvert.TTTDCongHoRanh_XacDinhOngCongCanThem) && string.IsNullOrEmpty(nuocMuaConvert.ThongTinDuongTruyenDan_HinhThucTruyenDan))
-            {
+        {
             double[] ChieuDaiThucTes = { };
             string[] HinhThucTruyenDans = { };
             string[] XacDinhOngCongCanThems = { };
 
 
-               ChieuDaiThucTes = listNuocMuaModel
-                    .Select(item => item.TTTDCongHoRanh_ChieuDaiThucTe).ToArray();
+            ChieuDaiThucTes = listNuocMuaModel
+                 .Select(item => item.TTTDCongHoRanh_ChieuDaiThucTe).ToArray();
 
-                HinhThucTruyenDans = listNuocMuaModel
-                    .Select(item => !string.IsNullOrEmpty(item.ThongTinDuongTruyenDan_HinhThucTruyenDan)
-                                    ? item.ThongTinDuongTruyenDan_HinhThucTruyenDan
-                                    : "") 
-                    .ToArray();
+            HinhThucTruyenDans = listNuocMuaModel
+                .Select(item => !string.IsNullOrEmpty(item.ThongTinDuongTruyenDan_HinhThucTruyenDan)
+                                ? item.ThongTinDuongTruyenDan_HinhThucTruyenDan
+                                : "") 
+                .ToArray();
 
-                XacDinhOngCongCanThems = listNuocMuaModel
-                   .Select(item => !string.IsNullOrEmpty(item.TTTDCongHoRanh_XacDinhOngCongCanThem)
-                                   ? item.TTTDCongHoRanh_XacDinhOngCongCanThem
-                                   : "") 
-                   .ToArray();
+            XacDinhOngCongCanThems = listNuocMuaModel
+               .Select(item => !string.IsNullOrEmpty(item.TTTDCongHoRanh_XacDinhOngCongCanThem)
+                               ? item.TTTDCongHoRanh_XacDinhOngCongCanThem
+                               : "") 
+               .ToArray();
 
-                
+
             nuocMuaConvert.TTTDCongHoRanh_CDai1 = TTTDCongHoRanh_CDai1(ChieuDaiThucTes, HinhThucTruyenDans, XacDinhOngCongCanThems, nuocMuaConvert.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "", nuocMuaConvert.TTTDCongHoRanh_XacDinhOngCongCanThem ?? "");
-                
-            }
+
+        }
 
         Input = nuocMuaConvert;
         await LoadTenHoGaSauPhanLoai();
@@ -3787,7 +3790,7 @@
         var helper = new DataConversionHelper();
         listDanhMuc = await DanhMucRepository.GetAll();
         var nuocmuas = await NuocMuaRepository.GetData();
-       
+
         listModel = nuocmuas;
         listNuocMuaModel = Paging(nuocmuas);
 
@@ -3829,7 +3832,7 @@
         isModalVisible = isVisible;
         Input = new();
         isEdit = false;
-         Flag = 0;
+        Flag = 0;
     }
 
     private void HandleSave()
@@ -3846,7 +3849,7 @@
         isEdit = false;
         Flag = 0;
     }
-     int Flag = 0;
+    int Flag = 0;
     //thêm vào sau 
     private void InsertLaterFlag(int flag)
     {
@@ -3864,7 +3867,7 @@
         Input = await NuocMuaRepository.GetById(Id);
         TitleModal = "Cập nhật thông tin";
         isModalVisible = true;
-        
+
     }
 
     //Thêm tên theo bảng phân loại hố ga
@@ -4036,20 +4039,20 @@
             HinhThucDauNoi8_CanhCheo= Input.HinhThucDauNoi8_CanhCheo };
 
         PhanLoaiHoGa plHoGa = new ();
-       plHoGa = await PhanLoaiHoGaRepository.GetMPhanLoaiHoGaByDetail(searchData);
+        plHoGa = await PhanLoaiHoGaRepository.GetMPhanLoaiHoGaByDetail(searchData);
         if(plHoGa ==null){
-           await InvokeAsync(() =>
-           {
-              nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = "";
-              Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = "";
-              StateHasChanged();
-           });
+            await InvokeAsync(() =>
+            {
+                nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = "";
+                Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = "";
+                StateHasChanged();
+            });
         }else{
             await InvokeAsync(() =>
             {
-               nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai;
-               Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai;
-               StateHasChanged();
+                nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai;
+                Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = plHoGa.Id;
+                StateHasChanged();
             });
         }
 
@@ -4286,9 +4289,9 @@
         if (plDC == null)
         {            await InvokeAsync(() =>
             {
-            nuocMuaVM.PhanLoaiDeCong_TenLoaiDeCong = "";
-            Input.ThongTinDeCong_TenLoaiDeCong = "";
-             StateHasChanged();
+                nuocMuaVM.PhanLoaiDeCong_TenLoaiDeCong = "";
+                Input.ThongTinDeCong_TenLoaiDeCong = "";
+                StateHasChanged();
             });
         }
         else
@@ -4337,8 +4340,8 @@
         {
             await InvokeAsync(() =>
             {
-            nuocMuaVM.PhanLoaiThanhChong_LoaiThanhChong = "";
-            Input.TTKTHHCongHopRanh_LoaiThanhChong = "";
+                nuocMuaVM.PhanLoaiThanhChong_LoaiThanhChong = "";
+                Input.TTKTHHCongHopRanh_LoaiThanhChong = "";
                 StateHasChanged();
             });
         }
@@ -4353,7 +4356,7 @@
         }
 
     }
-    
+
     //Thêm tên theo bảng phân loại tấm đan tryền dẫn
     public async Task ThemTenTheoPLTDanTDan()
     {
@@ -4371,14 +4374,14 @@
         CheckObjHelper checkObjhelper = new() ;
         if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
         {
-             if(searchData.TTTDCongHoRanh_CDai>0 || searchData.TTTDCongHoRanh_CRong>0 || searchData.TTTDCongHoRanh_CCao>0 ){
+            if(searchData.TTTDCongHoRanh_CDai>0 || searchData.TTTDCongHoRanh_CRong>0 || searchData.TTTDCongHoRanh_CCao>0 ){
                 var id = await PhanLoaiTDanTDanRepository.InsertId(searchData,GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan));
                 Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = id;
-             }
+            }
         }
     }
 
-      public async Task ThemTenTheoPLTDanTDan02()
+    public async Task ThemTenTheoPLTDanTDan02()
     {
         PhanLoaiTDanTDan searchData = new PhanLoaiTDanTDan
            {
@@ -4395,7 +4398,7 @@
         if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
         {
             if(searchData.TTTDCongHoRanh_CDai>0 || searchData.TTTDCongHoRanh_CRong>0 || searchData.TTTDCongHoRanh_CCao>0 ){
-                 var id = await PhanLoaiTDanTDanRepository.InsertId(searchData,GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan));
+                var id = await PhanLoaiTDanTDanRepository.InsertId(searchData,GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan));
                 Input.TTTDCongHoRanh_TenLoaiTamDanLoai02 = id;
             }
 
@@ -4417,7 +4420,7 @@
             TTTDCongHoRanh_CCao= Input.TTTDCongHoRanh_CCao ,
           };
 
-        
+
         PhanLoaiTDanTDan plTDTD = new();
         plTDTD = await PhanLoaiTDanTDanRepository.GetPhanLoaiTDanTDanByDetail(searchData);
         if (plTDTD == null)
@@ -4426,7 +4429,7 @@
             {
                 nuocMuaVM.PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = "";
                 Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = "";
-                   StateHasChanged();
+                StateHasChanged();
             });
         }
         else
@@ -4435,11 +4438,11 @@
             {
                 nuocMuaVM.PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = plTDTD.TTTDCongHoRanh_TenLoaiTamDanTieuChuan;
                 Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = plTDTD.Id;
-                   StateHasChanged();
+                StateHasChanged();
             });
         }
 
-         PhanLoaiTDanTDan searchData1 = new PhanLoaiTDanTDan
+        PhanLoaiTDanTDan searchData1 = new PhanLoaiTDanTDan
             {
             ThongTinLyTrinhTruyenDan_TuLyTrinh= Input.ThongTinLyTrinhTruyenDan_TuLyTrinh,
             ThongTinLyTrinhTruyenDan_DenLyTrinh= Input.ThongTinLyTrinhTruyenDan_DenLyTrinh,
@@ -4451,7 +4454,7 @@
             TTTDCongHoRanh_CCao= Input.TTTDCongHoRanh_CCao1 ,
           };
 
-        
+
         PhanLoaiTDanTDan plTDTD1 = new();
         plTDTD1 = await PhanLoaiTDanTDanRepository.GetPhanLoaiTDanTDanByDetail(searchData1);
         if (plTDTD1 == null)
@@ -4460,7 +4463,7 @@
             {
                 nuocMuaVM.PhanLoaiTDanTDan_TenLoaiTamDanLoai02 = "";
                 Input.TTTDCongHoRanh_TenLoaiTamDanLoai02 = "";
-                   StateHasChanged();
+                StateHasChanged();
             });
         }
         else
@@ -4479,101 +4482,109 @@
 
     private async Task HandleValidSubmit()
     {
-        Console.WriteLine(Input);
-
-        // Kiểm tra xem danh mục có tồn tại hay không
-        bool check = await CheckIsExitsIdDanhMuc();
-        //thêm phân loại
-       
-
-        if (check)
+        try
         {
-            
-            if(string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai)){
-                 await  ThemTenTheoPL();
-            }
-            if(string.IsNullOrEmpty(Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa)){
-                await ThemTenTheoPLTDHoGa();
-            }
-            if (string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
-            {
-                await ThemTenTheoPLCTronHopNhua();
-            }
-            if (string.IsNullOrEmpty(Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop))
-            {
-                await ThemTenTheoPLMongCTron();
-            }
-            if (string.IsNullOrEmpty(Input.ThongTinDeCong_TenLoaiDeCong))
-            {
-                await ThemTenTheoPLDeCong();
-            }
-            if (string.IsNullOrEmpty(Input.TTKTHHCongHopRanh_LoaiThanhChong))
-            {
-                await ThemTenTheoPLThanhChong();
-            }
-            if (string.IsNullOrEmpty(Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan))
-            {
-                await ThemTenTheoPLTDanTDan();
-            }
-            if (string.IsNullOrEmpty(Input.TTTDCongHoRanh_TenLoaiTamDanLoai02))
-            {
-                await ThemTenTheoPLTDanTDan02();
-            }
+            Console.WriteLine(Input);
 
-            if (isEdit)
-            {
-                // Cập nhật thông tin
-                DSNuocMuaConversionHelper helper = new();
-                await NuocMuaRepository.Update(Input);
-                isModalVisible = false;
-                isEdit = false;
+            // Kiểm tra xem danh mục có tồn tại hay không
+            bool check = await CheckIsExitsIdDanhMuc();
+            //thêm phân loại
 
-                Input = new NuocMua();
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "Cập nhật thành công.",
-                    cssClass: "toast-success",
-                    iconClass: "fa fa-bell",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                await LoadData();
-                nuocMuaVM = new();
-            }
-            else if (Flag > 0)
+
+            if (check)
             {
-                // Thêm mới thông tin
-                var id = await NuocMuaRepository.InsertLaterFlag(Input, Flag);
-                isModalVisible = false;
-                Input = new NuocMua();
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "Chèn thành công.",
-                    cssClass: "toast-success",
-                    iconClass: "fa fa-bell",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                await LoadData();
-                Flag = 0;
-            } else
-            {
-                // Thêm mới thông tin
-                await NuocMuaRepository.Insert(Input);
-                isModalVisible = false;
-                Input = new NuocMua();
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "Thêm thành công.",
-                    cssClass: "toast-success",
-                    iconClass: "fa fa-bell",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                await LoadData();
-                nuocMuaVM = new();
+
+                if(string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai)){
+                    await  ThemTenTheoPL();
+                }
+                if(string.IsNullOrEmpty(Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa)){
+                    await ThemTenTheoPLTDHoGa();
+                }
+                if (string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
+                {
+                    await ThemTenTheoPLCTronHopNhua();
+                }
+                if (string.IsNullOrEmpty(Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop))
+                {
+                    await ThemTenTheoPLMongCTron();
+                }
+                if (string.IsNullOrEmpty(Input.ThongTinDeCong_TenLoaiDeCong))
+                {
+                    await ThemTenTheoPLDeCong();
+                }
+                if (string.IsNullOrEmpty(Input.TTKTHHCongHopRanh_LoaiThanhChong))
+                {
+                    await ThemTenTheoPLThanhChong();
+                }
+                if (string.IsNullOrEmpty(Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan))
+                {
+                    await ThemTenTheoPLTDanTDan();
+                }
+                if (string.IsNullOrEmpty(Input.TTTDCongHoRanh_TenLoaiTamDanLoai02))
+                {
+                    await ThemTenTheoPLTDanTDan02();
+                }
+
+                if (isEdit)
+                {
+                    // Cập nhật thông tin
+                    DSNuocMuaConversionHelper helper = new();
+                    await NuocMuaRepository.Update(Input);
+                    isModalVisible = false;
+                    isEdit = false;
+
+                    Input = new NuocMua();
+                    ToastService.ShowToast(
+                        "Thông báo",
+                        "Cập nhật thành công.",
+                        cssClass: "toast-success",
+                        iconClass: "fa fa-bell",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
+                    await LoadData();
+                    nuocMuaVM = new();
+                }
+                else if (Flag > 0)
+                {
+                    // Thêm mới thông tin
+                    var id = await NuocMuaRepository.InsertLaterFlag(Input, Flag);
+                    isModalVisible = false;
+                    Input = new NuocMua();
+                    ToastService.ShowToast(
+                        "Thông báo",
+                        "Chèn thành công.",
+                        cssClass: "toast-success",
+                        iconClass: "fa fa-bell",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
+                    await LoadData();
+                    Flag = 0;
+                } else
+                {
+                    // Thêm mới thông tin
+                    await NuocMuaRepository.Insert(Input);
+                    isModalVisible = false;
+                    Input = new NuocMua();
+                    ToastService.ShowToast(
+                        "Thông báo",
+                        "Thêm thành công.",
+                        cssClass: "toast-success",
+                        iconClass: "fa fa-bell",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
+                    await LoadData();
+                    nuocMuaVM = new();
+                }
             }
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
+        }  
 
     }
 

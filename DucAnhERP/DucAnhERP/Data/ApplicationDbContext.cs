@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace DucAnhERP.Data
 {
@@ -77,6 +78,12 @@ namespace DucAnhERP.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
                 entity.Property(e => e.Subject).IsRequired();
+
+                modelBuilder.Entity<NuocMua>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+
+                modelBuilder.Entity<PhanLoaiThanhChong>()
+              .ToTable(tb => tb.UseSqlOutputClause(false));
             });
 
             OnModelCreatingPartial(modelBuilder);
@@ -102,5 +109,7 @@ namespace DucAnhERP.Data
 
             return result;
         }
+
+     
     }
 }
