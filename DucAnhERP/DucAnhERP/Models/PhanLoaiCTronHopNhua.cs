@@ -25,14 +25,14 @@ namespace DucAnhERP.Models
         [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
         public Double? ThongTinCauTaoCongTron_CDayPhuBi { get; set; } = 0;
 
-        [Required(ErrorMessage = "Bạn phải nhập cấu tạo tường!")]
+        //[Required(ErrorMessage = "Bạn phải nhập cấu tạo tường!")]
         public string? TTKTHHCongHopRanh_CauTaoTuong { get; set; } = "";
 
-        [Required(ErrorMessage = "Bạn phải nhập cấu tạo mũ mố!")]
+        //[Required(ErrorMessage = "Bạn phải nhập cấu tạo mũ mố!")]
         public string? TTKTHHCongHopRanh_CauTaoMuMo { get; set; } = "";
-        [Required(ErrorMessage = "Bạn phải nhập Chát mặt trong !")]
+        //[Required(ErrorMessage = "Bạn phải nhập Chát mặt trong !")]
         public string? TTKTHHCongHopRanh_ChatMatTrong { get; set; } = "";
-        [Required(ErrorMessage = "Bạn phải nhập Chát mặt ngoài!")]
+        //[Required(ErrorMessage = "Bạn phải nhập Chát mặt ngoài!")]
         public string? TTKTHHCongHopRanh_ChatMatNgoai { get; set; } = "";
 
         [Required(ErrorMessage = "Bạn phải nhập C.Cao đế !")]

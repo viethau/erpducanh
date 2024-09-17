@@ -38,6 +38,15 @@ namespace DucAnhERP.Services
             {
                 using var context = _context.CreateDbContext();
                 var query = from plmc in context.PhanLoaiMongCTrons
+                            join hinhThucTruyenDan in context.DSDanhMuc
+                               on plmc.ThongTinDuongTruyenDan_HinhThucTruyenDan equals hinhThucTruyenDan.Id
+                            join loaiTruyenDan in context.DSDanhMuc
+                                on plmc.ThongTinDuongTruyenDan_LoaiTruyenDan equals loaiTruyenDan.Id
+                            join loaiMong in context.DSDanhMuc
+                                on plmc.ThongTinMongDuongTruyenDan_LoaiMong equals loaiMong.Id
+                            join hinhThucMong in context.DSDanhMuc
+                               on plmc.ThongTinMongDuongTruyenDan_HinhThucMong equals hinhThucMong.Id
+
                             orderby plmc.Flag
                             select new PhanLoaiMongCongModel
                             {
@@ -45,9 +54,13 @@ namespace DucAnhERP.Services
                                 Flag = plmc.Flag,
                                 ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = plmc.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
                                 ThongTinDuongTruyenDan_HinhThucTruyenDan = plmc.ThongTinDuongTruyenDan_HinhThucTruyenDan,
+                                ThongTinDuongTruyenDan_HinhThucTruyenDan_Name = hinhThucTruyenDan.Ten,
                                 ThongTinDuongTruyenDan_LoaiTruyenDan = plmc.ThongTinDuongTruyenDan_LoaiTruyenDan,
+                                ThongTinDuongTruyenDan_LoaiTruyenDan_Name = loaiTruyenDan.Ten,
                                 ThongTinMongDuongTruyenDan_LoaiMong = plmc.ThongTinMongDuongTruyenDan_LoaiMong,
+                                ThongTinMongDuongTruyenDan_LoaiMong_Name = loaiMong.Ten,
                                 ThongTinMongDuongTruyenDan_HinhThucMong = plmc.ThongTinMongDuongTruyenDan_HinhThucMong,
+                                ThongTinMongDuongTruyenDan_HinhThucMong_Name = hinhThucMong.Ten,
                                 ThongTinCauTaoCongTron_CCaoLotMong = plmc.ThongTinCauTaoCongTron_CCaoLotMong,
                                 ThongTinCauTaoCongTron_CRongLotMong = plmc.ThongTinCauTaoCongTron_CRongLotMong,
                                 ThongTinCauTaoCongTron_CCaoMong = plmc.ThongTinCauTaoCongTron_CCaoMong,
@@ -82,7 +95,7 @@ namespace DucAnhERP.Services
             return (isSuccess);
         }
 
-        public async Task<PhanLoaiMongCTron> GetMPhanLoaiMongCTronByDetail(PhanLoaiMongCTron searchData)
+        public async Task<PhanLoaiMongCTron> GetPhanLoaiMongCTronByDetail(PhanLoaiMongCTron searchData)
         {
             try
             {
@@ -91,6 +104,36 @@ namespace DucAnhERP.Services
                 // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
                 var query = context.PhanLoaiMongCTrons
                              .Where(plmct => (
+                                    plmct.ThongTinDuongTruyenDan_HinhThucTruyenDan == searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan &&
+                                    plmct.ThongTinDuongTruyenDan_LoaiTruyenDan == searchData.ThongTinDuongTruyenDan_LoaiTruyenDan &&
+                                    plmct.ThongTinMongDuongTruyenDan_LoaiMong == searchData.ThongTinMongDuongTruyenDan_LoaiMong &&
+                                    plmct.ThongTinMongDuongTruyenDan_HinhThucMong == searchData.ThongTinMongDuongTruyenDan_HinhThucMong &&
+                                    plmct.ThongTinCauTaoCongTron_CCaoLotMong == searchData.ThongTinCauTaoCongTron_CCaoLotMong &&
+                                    plmct.ThongTinCauTaoCongTron_CRongLotMong == searchData.ThongTinCauTaoCongTron_CRongLotMong &&
+                                    plmct.ThongTinCauTaoCongTron_CCaoMong == searchData.ThongTinCauTaoCongTron_CCaoMong &&
+                                    plmct.ThongTinCauTaoCongTron_CRongMong == searchData.ThongTinCauTaoCongTron_CRongMong
+                                          ));
+
+                var result = await query.FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
+        }
+        public async Task<PhanLoaiMongCTron> GetPhanLoaiMongCTronExist(PhanLoaiMongCTron searchData)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
+                var query = context.PhanLoaiMongCTrons
+                             .Where(plmct => (
+                                    plmct.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop == searchData.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ||
                                     plmct.ThongTinDuongTruyenDan_HinhThucTruyenDan == searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan &&
                                     plmct.ThongTinDuongTruyenDan_LoaiTruyenDan == searchData.ThongTinDuongTruyenDan_LoaiTruyenDan &&
                                     plmct.ThongTinMongDuongTruyenDan_LoaiMong == searchData.ThongTinMongDuongTruyenDan_LoaiMong &&
@@ -275,7 +318,6 @@ namespace DucAnhERP.Services
                 return id;
             }
         }
-
 
         public async Task<string> InsertId(PhanLoaiMongCTron entity, string LoaiTD , string LoaiM ,string HTM)
         {

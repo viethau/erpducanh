@@ -199,7 +199,7 @@ namespace DucAnhERP.Helpers
                 };
 
                 PhanLoaiHoGa plHoGa = new();
-                plHoGa = await PhanLoaiHoGaRepository.GetMPhanLoaiHoGaByDetail(searchData);
+                plHoGa = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaByDetail(searchData);
                 if (plHoGa != null)
                 {
                     phanloai.Name = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai;
@@ -328,7 +328,7 @@ namespace DucAnhERP.Helpers
             };
 
             PhanLoaiCTronHopNhua plCTHNHoGa = new();
-            plCTHNHoGa = await PhanLoaiCTronHopNhuaRepository.GetMPhanLoaiCTronHopNhuaByDetail(searchData);
+            plCTHNHoGa = await PhanLoaiCTronHopNhuaRepository.GetPhanLoaiCTronHopNhuaByDetail(searchData);
             if (plCTHNHoGa != null)
             {
                 phanloai.Name = plCTHNHoGa.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai;
@@ -379,7 +379,7 @@ namespace DucAnhERP.Helpers
             };
 
             PhanLoaiMongCTron plMCT = new();
-            plMCT = await PhanLoaiMongCTronRepository.GetMPhanLoaiMongCTronByDetail(searchData);
+            plMCT = await PhanLoaiMongCTronRepository.GetPhanLoaiMongCTronByDetail(searchData);
             if (plMCT != null)
             {
                 phanloai.Name = plMCT.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop;
@@ -423,7 +423,7 @@ namespace DucAnhERP.Helpers
             };
 
             PhanLoaiDeCong plDC = new();
-            plDC = await PhanLoaiDeCongRepository.GetMPhanLoaiDeCongByDetail(searchData);
+            plDC = await PhanLoaiDeCongRepository.GetPhanLoaiDeCongByDetail(searchData);
             if (plDC != null)
             {
                 phanloai.Name = plDC.ThongTinDeCong_TenLoaiDeCong;

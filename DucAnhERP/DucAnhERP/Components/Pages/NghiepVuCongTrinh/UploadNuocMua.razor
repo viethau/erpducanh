@@ -1317,7 +1317,7 @@
 
         PhanLoaiHoGa plHoGa = new();
         phanloai = new();
-        plHoGa = await PhanLoaiHoGaRepository.GetMPhanLoaiHoGaByDetail(searchData);
+        plHoGa = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaByDetail(searchData);
         if (plHoGa != null)
         {
             phanloai.Name = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai;
@@ -1443,7 +1443,7 @@
 
         PhanLoaiCTronHopNhua plCTHNHoGa = new();
         phanloai = new();
-        plCTHNHoGa = await PhanLoaiCTronHopNhuaRepository.GetMPhanLoaiCTronHopNhuaByDetail(searchData);
+        plCTHNHoGa = await PhanLoaiCTronHopNhuaRepository.GetPhanLoaiCTronHopNhuaByDetail(searchData);
         if (plCTHNHoGa != null)
         {
             phanloai.Name = plCTHNHoGa.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai;
@@ -1495,7 +1495,7 @@
 
         PhanLoaiMongCTron plMCT = new();
         phanloai = new();
-        plMCT = await PhanLoaiMongCTronRepository.GetMPhanLoaiMongCTronByDetail(searchData);
+        plMCT = await PhanLoaiMongCTronRepository.GetPhanLoaiMongCTronByDetail(searchData);
         if (plMCT != null)
         {
             phanloai.Name = plMCT.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop;
@@ -1540,7 +1540,7 @@
 
         PhanLoaiDeCong plDC = new();
         phanloai = new();
-        plDC = await PhanLoaiDeCongRepository.GetMPhanLoaiDeCongByDetail(searchData);
+        plDC = await PhanLoaiDeCongRepository.GetPhanLoaiDeCongByDetail(searchData);
         if (plDC != null)
         {
             phanloai.Name = plDC.ThongTinDeCong_TenLoaiDeCong;

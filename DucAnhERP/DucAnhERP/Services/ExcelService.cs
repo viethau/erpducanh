@@ -39,12 +39,21 @@ namespace DucAnhERP.Services
                     for (int row = 4; row <= rowCount; row++)
                     {
                         var data = new ExcelData();
+                        bool hasData = false;
                         for (int col = 1; col <= colCount; col++)
                         {
                             var cellValue = worksheet.Cells[row, col].Text;
+                            if (!string.IsNullOrEmpty(cellValue))
+                            {
+                                hasData = true;
+                            }
                             data.RowData.Add(cellValue);
                         }
-                        result.Add(data);
+                        if (hasData)
+                        {
+                            result.Add(data);
+                        }
+                      
                     }
                 }
 

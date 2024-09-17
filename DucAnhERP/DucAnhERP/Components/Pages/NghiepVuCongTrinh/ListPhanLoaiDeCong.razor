@@ -86,13 +86,28 @@
     }
     <div class="row mt-3 our-table">
         <table class="table table-hover table-bordered">
-            <thead>
+            <thead class="bg-info ">
                 <tr>
                     <th> </th>
                     <th> STT</th>
-                    <th> Tên loại đế cống</th>
-                    <th> Loại truyền dẫn</th>
-                    <th> Cấu tạo đế cống</th>
+                    <th onclick="@(() => SortTable("ThongTinDeCong_TenLoaiDeCong"))" class="text-center sortable align-middle">
+                        <div class="mr-3">
+                            Tên loại đế cống
+                            <span class="arrow @(GetSortStyle("ThongTinDeCong_TenLoaiDeCong"))"></span>
+                        </div>
+                    </th>
+                    <th onclick="@(() => SortTable("ThongTinDuongTruyenDan_LoaiTruyenDan_Name"))" class="text-center sortable align-middle">
+                        <div class="mr-3">
+                            Loại truyền dẫn
+                            <span class="arrow @(GetSortStyle("ThongTinDuongTruyenDan_LoaiTruyenDan_Name"))"></span>
+                        </div>
+                    </th>
+                    <th onclick="@(() => SortTable("ThongTinDeCong_CauTaoDeCong_Name"))" class="text-center sortable align-middle">
+                        <div class="mr-3">
+                            Cấu tạo đế cống
+                            <span class="arrow @(GetSortStyle("ThongTinDeCong_CauTaoDeCong_Name"))"></span>
+                        </div>
+                    </th>
                     <th> Dài </th>
                     <th> Rộng </th>
                     <th> Cao </th>
@@ -111,18 +126,21 @@
                         <tr>
                             <td class="d-flex nowrap">
                                 <div class="d-inline-block">
-                                    <button class="btn btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                    <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.ThongTinDeCong_TenLoaiDeCong)">
+                                    <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.ThongTinDeCong_TenLoaiDeCong)">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
                             </td>
                             <td class="text-center">@stt</td>
                             <td>@item.ThongTinDeCong_TenLoaiDeCong </td>
-                            <td>@GetTenDanhMucById(item.ThongTinDuongTruyenDan_LoaiTruyenDan ?? "") </td>
-                            <td>@GetTenDanhMucById(item.ThongTinDeCong_CauTaoDeCong ?? "")</td>
+                            <td>@item.ThongTinDuongTruyenDan_LoaiTruyenDan_Name </td>
+                            <td>@item.ThongTinDeCong_CauTaoDeCong_Name</td>
                             <td>@item.ThongTinDeCong_D </td>
                             <td>@item.ThongTinDeCong_R </td>
                             <td>@item.ThongTinDeCong_C</td>
@@ -240,16 +258,67 @@
 
     private async Task HandleValidSubmit()
     {
+        PhanLoaiDeCong phanLoaiDeCongExist = new();
+        phanLoaiDeCongExist = await PhanLoaiDeCongRepository.GetPhanLoaiDeCongExist(Input);
         if (isEdit)
         {
+            if (phanLoaiDeCongExist == null)
+            {
+                // cập nhật
+                await PhanLoaiDeCongRepository.Update(Input);
+                isModalVisible = false;
+                Input = new PhanLoaiDeCong();
+                isEdit = false;
+                ToastService.ShowToast(
+                    "Thông báo",
+                    "Cập nhật thành công.",
+                    cssClass: "toast-success",
+                    iconClass: "fa fa-bell",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                );
+                await LoadData();
+            }
+            else
+            if (phanLoaiDeCongExist.ThongTinDeCong_TenLoaiDeCong.ToUpper().Trim() != Input.ThongTinDeCong_TenLoaiDeCong.ToUpper().Trim())
+            {
+                // cập nhật
+                await PhanLoaiDeCongRepository.Update(Input);
+                isModalVisible = false;
+                Input = new PhanLoaiDeCong();
+                isEdit = false;
+                ToastService.ShowToast(
+                    "Thông báo",
+                    "Cập nhật thành công.",
+                    cssClass: "toast-success",
+                    iconClass: "fa fa-bell",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                );
+                await LoadData();
+            }
+            else
+            {
+                ToastService.ShowToast(
+                       "Thông báo",
+                       "Tên phân móng đã tồn tại. Vui lòng kiểm tra lại !",
+                       cssClass: "toast-danger",
+                       iconClass: "fa fa-bell",
+                       progressBarClass: "bg-info",
+                       duration: 5000
+                   );
+            }
+           
+        }
+        else if (Flag > 0)
+        {
             // Thêm mới thông tin
-            await PhanLoaiDeCongRepository.Update(Input);
+            await PhanLoaiDeCongRepository.InsertLaterFlag(Input,Flag);
             isModalVisible = false;
             Input = new PhanLoaiDeCong();
-            isEdit = false;
             ToastService.ShowToast(
                 "Thông báo",
-                "Cập nhật thành công.",
+                "Thêm thành công.",
                 cssClass: "toast-success",
                 iconClass: "fa fa-bell",
                 progressBarClass: "bg-info",
@@ -273,6 +342,7 @@
             );
             await LoadData();
         }
+        
 
     }
 
@@ -321,7 +391,14 @@
         isModalVisible = true;
     }
 
-
+    int Flag = 0;
+    //thêm vào sau
+    private void InsertLaterFlag(int flag)
+    {
+        Flag = flag;
+        TitleModal = "Chèn loại cống !";
+        isModalVisible = true;
+    }
 
     // Sắp xếp data
     private void SortTable(string columnName)

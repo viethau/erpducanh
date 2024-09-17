@@ -533,7 +533,7 @@
     }
     <div class="row mt-3 our-table">
         <table class="table table-hover table-bordered">
-            <thead>
+            <thead class="bg-info">
                 <tr class="nowrap">
                     <th class="text-center" rowspan="3"></th>
                     <th class="text-center" rowspan="3">STT</th>
@@ -563,14 +563,54 @@
                     <th class="text-center" colspan="4">Hình thức đấu nối</th>
                 </tr>
                 <tr>
-                    <th>Tên hố ga sau phân loại</th>
-                    <th>Hình thức hố ga</th>
-                    <th>Kết cấu mũ mố</th>
-                    <th>Kết cấu tường</th>
-                    <th>Hình thức móng hố ga</th>
-                    <th>Kết cấu móng</th>
-                    <th>Chất mặt trong</th>
-                    <th>Chất mặt ngoài</th>
+                    <th onclick="@(() => SortTable("ThongTinChungHoGa_TenHoGaSauPhanLoai"))" class="text-center sortable" rowspan="2">
+                        <div class="mr-3">
+                            Tên hố ga sau phân loại
+                            <span class="arrow @(GetSortStyle("ThongTinChungHoGa_TenHoGaSauPhanLoai"))"></span>
+                        </div>
+                    </th>
+                    <th onclick="@(() => SortTable("ThongTinChungHoGa_HinhThucHoGa_Name"))" class="text-center sortable" rowspan="2">
+                        <div class="mr-3">
+                            Hình thức hố ga
+                            <span class="arrow @(GetSortStyle("ThongTinChungHoGa_HinhThucHoGa_Name"))"></span>
+                        </div>
+                    </th>
+                    <th onclick="@(() => SortTable("ThongTinChungHoGa_KetCauMuMo_Name"))" class="text-center sortable" rowspan="2">
+                        <div class="mr-3">
+                            Kết cấu mũ mố
+                            <span class="arrow @(GetSortStyle("ThongTinChungHoGa_KetCauMuMo_Name"))"></span>
+                        </div>
+                    </th>
+                    <th onclick="@(() => SortTable("ThongTinChungHoGa_KetCauTuong_Name"))" class="text-center sortable" rowspan="2">
+                        <div class="mr-3">
+                            Kết cấu tường
+                            <span class="arrow @(GetSortStyle("ThongTinChungHoGa_KetCauTuong_Name"))"></span>
+                        </div>
+                    </th>
+                    <th onclick="@(() => SortTable("ThongTinChungHoGa_HinhThucMongHoGa_Name"))" class="text-center sortable" rowspan="2">
+                        <div class="mr-3">
+                            Hình thức móng hố ga
+                            <span class="arrow @(GetSortStyle("ThongTinChungHoGa_HinhThucMongHoGa_Name"))"></span>
+                        </div>
+                    </th>
+                    <th onclick="@(() => SortTable("ThongTinChungHoGa_KetCauMong_Name"))" class="text-center sortable" rowspan="2">
+                        <div class="mr-3">
+                            Kết cấu móng
+                            <span class="arrow @(GetSortStyle("ThongTinChungHoGa_KetCauMong_Name"))"></span>
+                        </div>
+                    </th>
+                    <th onclick="@(() => SortTable("ThongTinChungHoGa_ChatMatTrong_Name"))" class="text-center sortable" rowspan="2">
+                        <div class="mr-3">
+                            Chát mặt trong
+                            <span class="arrow @(GetSortStyle("ThongTinChungHoGa_ChatMatTrong_Name"))"></span>
+                        </div>
+                    </th>
+                    <th onclick="@(() => SortTable("ThongTinChungHoGa_ChatMatNgoai_Name"))" class="text-center sortable" rowspan="2">
+                        <div class="mr-3">
+                            Chát mặt ngoài
+                            <span class="arrow @(GetSortStyle("ThongTinChungHoGa_ChatMatNgoai_Name"))"></span>
+                        </div>
+                    </th>
 
                     @* Thông tin kích thước hình học hố ga *@
                     <th>C.D dài (m)</th>
@@ -672,23 +712,26 @@
                         <tr>
                             <td class="d-flex nowrap">
                                <div class="d-inline-block">
-                                    <button class="btn btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                    <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.ThongTinChungHoGa_TenHoGaSauPhanLoai)">
+                                    <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.ThongTinChungHoGa_TenHoGaSauPhanLoai)">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                </div>
                             </td>
                             <td class="text-center">@stt</td>
                             <td class="text-center">@item.ThongTinChungHoGa_TenHoGaSauPhanLoai </td>
-                            <td class="text-center">@GetTenDanhMucById(item.ThongTinChungHoGa_HinhThucHoGa) </td>
-                            <td class="text-center">@GetTenDanhMucById(item.ThongTinChungHoGa_KetCauMuMo)  </td>
-                            <td class="text-center">@GetTenDanhMucById(item.ThongTinChungHoGa_KetCauTuong) </td>
-                            <td class="text-center">@GetTenDanhMucById(item.ThongTinChungHoGa_HinhThucMongHoGa) </td>
-                            <td class="text-center">@GetTenDanhMucById(item.ThongTinChungHoGa_KetCauMong) </td>
-                            <td class="text-center">@GetTenDanhMucById(item.ThongTinChungHoGa_ChatMatTrong) </td>
-                            <td class="text-center">@GetTenDanhMucById(item.ThongTinChungHoGa_ChatMatNgoai)  </td>
+                            <td class="text-center">@item.ThongTinChungHoGa_HinhThucHoGa_Name </td>
+                            <td class="text-center">@item.ThongTinChungHoGa_KetCauMuMo_Name </td>
+                            <td class="text-center">@item.ThongTinChungHoGa_KetCauTuong_Name </td>
+                            <td class="text-center">@item.ThongTinChungHoGa_HinhThucMongHoGa_Name </td>
+                            <td class="text-center">@item.ThongTinChungHoGa_KetCauMong_Name </td>
+                            <td class="text-center">@item.ThongTinChungHoGa_ChatMatTrong_Name </td>
+                            <td class="text-center">@item.ThongTinChungHoGa_ChatMatNgoai_Name  </td>
 
                             <td class="text-center">@item.PhuBiHoGa_CDai  </td>
                             <td class="text-center">@item.PhuBiHoGa_CRong</td>
@@ -782,7 +825,7 @@
 
     private bool isModalVisible = false;
     private string TitleModal = "Thêm phân loại hố ga";
-   
+
 
     private void ShowModal()
     {
@@ -871,38 +914,105 @@
 
     private async Task HandleValidSubmit()
     {
+        PhanLoaiHoGa phanLoaiHoGaExist = new();
+        phanLoaiHoGaExist = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaExist(Input);
         if (isEdit)
         {
-            // Thêm mới thông tin
-            await PhanLoaiHoGaRepository.Update(Input);
-            isModalVisible = false;
-            Input = new PhanLoaiHoGa();
-            isEdit = false;
-            ToastService.ShowToast(
-                "Thông báo",
-                "Cập nhật thành công.",
-                cssClass: "toast-success",
-                iconClass: "fa fa-bell",
-                progressBarClass: "bg-info",
-                duration: 5000
-            );
-            await LoadData();
+            if (phanLoaiHoGaExist == null)
+            {
+                // cập nhật 
+                await PhanLoaiHoGaRepository.Update(Input);
+                isModalVisible = false;
+                Input = new PhanLoaiHoGa();
+                isEdit = false;
+                ToastService.ShowToast(
+                    "Thông báo",
+                    "Cập nhật thành công.",
+                    cssClass: "toast-success",
+                    iconClass: "fa fa-bell",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                );
+                await LoadData();
+            }
+            else
+            if (phanLoaiHoGaExist.ThongTinChungHoGa_TenHoGaSauPhanLoai.ToUpper().Trim() != Input.ThongTinChungHoGa_TenHoGaSauPhanLoai.ToUpper().Trim())
+            {
+                await PhanLoaiHoGaRepository.Update(Input);
+                isModalVisible = false;
+                Input = new PhanLoaiHoGa();
+                isEdit = false;
+                ToastService.ShowToast(
+                    "Thông báo",
+                    "Cập nhật thành công.",
+                    cssClass: "toast-success",
+                    iconClass: "fa fa-bell",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                );
+                await LoadData();
+            }
+            else
+            {
+                ToastService.ShowToast(
+                        "Thông báo",
+                        "Tên phân loại đã tồn tại. Vui lòng kiểm tra lại !",
+                        cssClass: "toast-danger",
+                        iconClass: "fa fa-bell",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
+            }
         }
         else
         {
-            // Thêm mới thông tin
-            await PhanLoaiHoGaRepository.Insert(Input);
-            isModalVisible = false;
-            Input = new PhanLoaiHoGa();
-            ToastService.ShowToast(
-                "Thông báo",
-                "Thêm thành công.",
-                cssClass: "toast-success",
-                iconClass: "fa fa-bell",
-                progressBarClass: "bg-info",
-                duration: 5000
-            );
-            await LoadData();
+            if (phanLoaiHoGaExist == null)
+            {
+                if (Flag > 0)
+                {
+                    // Thêm mới thông tin
+                    var id = await PhanLoaiHoGaRepository.InsertLaterFlag(Input, Flag);
+                    isModalVisible = false;
+                    Input = new PhanLoaiHoGa();
+                    ToastService.ShowToast(
+                        "Thông báo",
+                        "Chèn thành công.",
+                        cssClass: "toast-success",
+                        iconClass: "fa fa-bell",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
+                    await LoadData();
+                    Flag = 0;
+                }
+                else
+                {
+                    // Thêm mới thông tin
+                    await PhanLoaiHoGaRepository.Insert(Input);
+                    isModalVisible = false;
+                    Input = new PhanLoaiHoGa();
+                    ToastService.ShowToast(
+                        "Thông báo",
+                        "Thêm thành công.",
+                        cssClass: "toast-success",
+                        iconClass: "fa fa-bell",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
+                    await LoadData();
+                }
+            }
+            else
+            {
+                ToastService.ShowToast(
+                       "Thông báo",
+                       "Phân loại hố ga đã tồn tại , Vui lòng kiểm tra lại !",
+                       cssClass: "toast-danger",
+                       iconClass: "fa fa-bell",
+                       progressBarClass: "bg-info",
+                       duration: 5000
+                   );
+            }
         }
         
     }
@@ -952,7 +1062,14 @@
         isModalVisible = true;
     }
 
-
+    int Flag = 0;
+    //thêm vào sau
+    private void InsertLaterFlag(int flag)
+    {
+        Flag = flag;
+        TitleModal = "Chèn loại cống !";
+        isModalVisible = true;
+    }
 
     // Sắp xếp data
     private void SortTable(string columnName)

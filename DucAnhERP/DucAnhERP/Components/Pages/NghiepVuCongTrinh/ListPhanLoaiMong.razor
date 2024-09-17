@@ -113,13 +113,41 @@
     }
     <div class="row mt-3 our-table">
         <table class="table table-hover table-bordered">
-            <thead>
+            <thead class="bg-info">
                 <tr>
-                    <th>Phân loại móng</th>
-                    <th> Hình thức truyền dẫn</th>
-                    <th> Loại truyền dẫn</th>
-                    <th> Loại móng</th>
-                    <th> Hình thức móng</th>
+                    <th></th>
+                    <th>STT</th>
+                    <th onclick="@(() => SortTable("ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop"))" class="text-center sortable align-middle">
+                        <div class="mr-3">
+                            Phân loại móng
+                            <span class="arrow @(GetSortStyle("ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop"))"></span>
+                        </div>
+                    </th>
+                    <th onclick="@(() => SortTable("ThongTinDuongTruyenDan_HinhThucTruyenDan_Name"))" class="text-center sortable align-middle" >
+                        <div class="mr-3">
+                            Hình thức truyền dẫn
+                            <span class="arrow @(GetSortStyle("ThongTinDuongTruyenDan_HinhThucTruyenDan_Name"))"></span>
+                        </div>
+                    </th>
+                    <th onclick="@(() => SortTable("ThongTinDuongTruyenDan_LoaiTruyenDan_Name"))" class="text-center sortable align-middle">
+                        <div class="mr-3">
+                            Loại truyền dẫn
+                            <span class="arrow @(GetSortStyle("ThongTinDuongTruyenDan_LoaiTruyenDan_Name"))"></span>
+                        </div>
+                    </th>
+                    <th onclick="@(() => SortTable("ThongTinMongDuongTruyenDan_LoaiMong_Name"))" class="text-center sortable align-middle" >
+                        <div class="mr-3">
+                            Loại móng
+                            <span class="arrow @(GetSortStyle("ThongTinMongDuongTruyenDan_LoaiMong_Name"))"></span>
+                        </div>
+                    </th>
+                    <th onclick="@(() => SortTable("ThongTinMongDuongTruyenDan_HinhThucMong_Name"))" class="text-center sortable align-middle" >
+                        <div class="mr-3">
+                            Hình thức móng
+                            <span class="arrow @(GetSortStyle("ThongTinMongDuongTruyenDan_HinhThucMong_Name"))"></span>
+                        </div>
+                    </th>
+               
                     <th> C.Cao lót móng (m)</th>
                     <th> C.Rộng lót móng</th>
                     <th> C.Cao móng (m)</th>
@@ -152,10 +180,10 @@
                             </td>
                             <td class="text-center">@stt</td>
                             <td>@item.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop </td>
-                            <td>@GetTenDanhMucById(item.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "") </td>
-                            <td>@GetTenDanhMucById(item.ThongTinDuongTruyenDan_LoaiTruyenDan ?? "")</td>
-                            <td>@GetTenDanhMucById(item.ThongTinMongDuongTruyenDan_LoaiMong ?? "")</td>
-                            <td>@GetTenDanhMucById(item.ThongTinMongDuongTruyenDan_HinhThucMong ?? "") </td>
+                            <td>@item.ThongTinDuongTruyenDan_HinhThucTruyenDan_Name </td>
+                            <td>@item.ThongTinDuongTruyenDan_LoaiTruyenDan_Name</td>
+                            <td>@item.ThongTinMongDuongTruyenDan_LoaiMong_Name</td>
+                            <td>@item.ThongTinMongDuongTruyenDan_HinhThucMong_Name </td>
                             <td>@item.ThongTinCauTaoCongTron_CCaoLotMong </td>
                             <td>@item.ThongTinCauTaoCongTron_CRongLotMong </td>
                             <td>@item.ThongTinCauTaoCongTron_CCaoMong</td>
@@ -277,22 +305,56 @@
 
     private async Task HandleValidSubmit()
     {
+        PhanLoaiMongCTron phanLoaiMongCTronExist = new();
+        phanLoaiMongCTronExist = await PhanLoaiMongCTronRepository.GetPhanLoaiMongCTronExist(Input);
         if (isEdit)
         {
-            // Thêm mới thông tin
-            await PhanLoaiMongCTronRepository.Update(Input);
-            isModalVisible = false;
-            Input = new PhanLoaiMongCTron();
-            isEdit = false;
-            ToastService.ShowToast(
-                "Thông báo",
-                "Cập nhật thành công.",
-                cssClass: "toast-success",
-                iconClass: "fa fa-bell",
-                progressBarClass: "bg-info",
-                duration: 5000
-            );
-            await LoadData();
+            if (phanLoaiMongCTronExist == null)
+            {
+                // cập nhật 
+                await PhanLoaiMongCTronRepository.Update(Input);
+                isModalVisible = false;
+                Input = new PhanLoaiMongCTron();
+                isEdit = false;
+                ToastService.ShowToast(
+                    "Thông báo",
+                    "Cập nhật thành công.",
+                    cssClass: "toast-success",
+                    iconClass: "fa fa-bell",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                );
+                await LoadData();
+            }
+            else
+            if (phanLoaiMongCTronExist.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop.ToUpper().Trim() != Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop.ToUpper().Trim())
+            {
+                // cập nhật
+                await PhanLoaiMongCTronRepository.Update(Input);
+                isModalVisible = false;
+                Input = new PhanLoaiMongCTron();
+                isEdit = false;
+                ToastService.ShowToast(
+                    "Thông báo",
+                    "Cập nhật thành công.",
+                    cssClass: "toast-success",
+                    iconClass: "fa fa-bell",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                );
+                await LoadData();
+            }
+            else
+            {
+                ToastService.ShowToast(
+                       "Thông báo",
+                       "Tên phân móng đã tồn tại. Vui lòng kiểm tra lại !",
+                       cssClass: "toast-danger",
+                       iconClass: "fa fa-bell",
+                       progressBarClass: "bg-info",
+                       duration: 5000
+                   );
+            }
         }
         else if (Flag > 0)
         {

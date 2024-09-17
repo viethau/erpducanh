@@ -5,15 +5,22 @@ namespace DucAnhERP.ViewModel
     public class PhanLoaiHoGaModel : PagingParameters
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
-        public int flag { get; set; } = 0;
+        public int Flag { get; set; } = 0;
         public string? ThongTinChungHoGa_TenHoGaSauPhanLoai { get; set; } = "";
         public string? ThongTinChungHoGa_HinhThucHoGa { get; set; } = "";
+        public string? ThongTinChungHoGa_HinhThucHoGa_Name { get; set; } = "";
         public string? ThongTinChungHoGa_KetCauMuMo { get; set; } = "";
+        public string? ThongTinChungHoGa_KetCauMuMo_Name { get; set; } = "";
         public string? ThongTinChungHoGa_KetCauTuong { get; set; } = "";
+        public string? ThongTinChungHoGa_KetCauTuong_Name { get; set; } = "";
         public string? ThongTinChungHoGa_HinhThucMongHoGa { get; set; } = "";
+        public string? ThongTinChungHoGa_HinhThucMongHoGa_Name { get; set; } = "";
         public string? ThongTinChungHoGa_KetCauMong { get; set; } = "";
+        public string? ThongTinChungHoGa_KetCauMong_Name { get; set; } = "";
         public string? ThongTinChungHoGa_ChatMatTrong { get; set; } = "";
+        public string? ThongTinChungHoGa_ChatMatTrong_Name { get; set; } = "";
         public string? ThongTinChungHoGa_ChatMatNgoai { get; set; } = "";
+        public string? ThongTinChungHoGa_ChatMatNgoai_Name { get; set; } = "";
         public Double? PhuBiHoGa_CDai { get; set; } = 0;
         public Double? PhuBiHoGa_CRong { get; set; } = 0;
         public Double? BeTongLotMong_D { get; set; } = 0;

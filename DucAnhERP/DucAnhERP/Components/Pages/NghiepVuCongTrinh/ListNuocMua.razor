@@ -4039,7 +4039,7 @@
             HinhThucDauNoi8_CanhCheo= Input.HinhThucDauNoi8_CanhCheo };
 
         PhanLoaiHoGa plHoGa = new ();
-        plHoGa = await PhanLoaiHoGaRepository.GetMPhanLoaiHoGaByDetail(searchData);
+        plHoGa = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaByDetail(searchData);
         if(plHoGa ==null){
             await InvokeAsync(() =>
             {
@@ -4174,7 +4174,7 @@
          };
 
         PhanLoaiCTronHopNhua plCTHNHoGa = new ();
-        plCTHNHoGa = await PhanLoaiCTronHopNhuaRepository.GetMPhanLoaiCTronHopNhuaByDetail(searchData);
+        plCTHNHoGa = await PhanLoaiCTronHopNhuaRepository.GetPhanLoaiCTronHopNhuaByDetail(searchData);
         if(plCTHNHoGa == null){
             await InvokeAsync(() =>
             {
@@ -4231,7 +4231,7 @@
             };
 
         PhanLoaiMongCTron plMCT = new();
-        plMCT = await PhanLoaiMongCTronRepository.GetMPhanLoaiMongCTronByDetail(searchData);
+        plMCT = await PhanLoaiMongCTronRepository.GetPhanLoaiMongCTronByDetail(searchData);
         if (plMCT == null)
         {
             await InvokeAsync(() =>
@@ -4285,7 +4285,7 @@
             };
 
         PhanLoaiDeCong plDC = new();
-        plDC = await PhanLoaiDeCongRepository.GetMPhanLoaiDeCongByDetail(searchData);
+        plDC = await PhanLoaiDeCongRepository.GetPhanLoaiDeCongByDetail(searchData);
         if (plDC == null)
         {            await InvokeAsync(() =>
             {
