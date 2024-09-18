@@ -160,6 +160,7 @@
         <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
     }
     <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+    <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
 </div>
 
 @code {
@@ -168,6 +169,7 @@
     public List<DanhMuc> listDanhMuc = new();
 
     private bool isModalVisible = false;
+    private bool isLoading = false;
     private string TitleModal = "Thêm mới loại đế cống";
 
 
@@ -248,11 +250,13 @@
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
     {
+        isLoading = true;
         dmModel = new();
         listDanhMuc = await DanhMucRepository.GetAll();
         var plhg = await PhanLoaiDeCongRepository.GetAllByVM();
         listModel = plhg;
         listPLCTronHopNhuaModel = Paging(plhg);
+        isLoading = false;
 
     }
 
@@ -308,41 +312,54 @@
                        duration: 5000
                    );
             }
-           
+
         }
-        else if (Flag > 0)
+        else if (phanLoaiDeCongExist == null)
         {
-            // Thêm mới thông tin
-            await PhanLoaiDeCongRepository.InsertLaterFlag(Input,Flag);
-            isModalVisible = false;
-            Input = new PhanLoaiDeCong();
-            ToastService.ShowToast(
-                "Thông báo",
-                "Thêm thành công.",
-                cssClass: "toast-success",
-                iconClass: "fa fa-bell",
-                progressBarClass: "bg-info",
-                duration: 5000
-            );
-            await LoadData();
+            if (Flag > 0)
+            {
+                // Thêm mới thông tin
+                await PhanLoaiDeCongRepository.InsertLaterFlag(Input, Flag);
+                isModalVisible = false;
+                Input = new PhanLoaiDeCong();
+                ToastService.ShowToast(
+                    "Thông báo",
+                    "Thêm thành công.",
+                    cssClass: "toast-success",
+                    iconClass: "fa fa-bell",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                );
+                await LoadData();
+            }
+            else
+            {
+                // Thêm mới thông tin
+                await PhanLoaiDeCongRepository.Insert(Input);
+                isModalVisible = false;
+                Input = new PhanLoaiDeCong();
+                ToastService.ShowToast(
+                    "Thông báo",
+                    "Thêm thành công.",
+                    cssClass: "toast-success",
+                    iconClass: "fa fa-bell",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                );
+                await LoadData();
+            }
         }
         else
         {
-            // Thêm mới thông tin
-            await PhanLoaiDeCongRepository.Insert(Input);
-            isModalVisible = false;
-            Input = new PhanLoaiDeCong();
             ToastService.ShowToast(
-                "Thông báo",
-                "Thêm thành công.",
-                cssClass: "toast-success",
-                iconClass: "fa fa-bell",
-                progressBarClass: "bg-info",
-                duration: 5000
-            );
-            await LoadData();
+                  "Thông báo",
+                  "Phân loại đế cống đã tồn tại , Vui lòng kiểm tra lại !",
+                  cssClass: "toast-danger",
+                  iconClass: "fa fa-bell",
+                  progressBarClass: "bg-info",
+                  duration: 5000
+              );
         }
-        
 
     }
 

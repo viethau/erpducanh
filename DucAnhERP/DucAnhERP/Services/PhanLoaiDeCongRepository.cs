@@ -42,7 +42,7 @@ namespace DucAnhERP.Services
                             on pldc.ThongTinDuongTruyenDan_LoaiTruyenDan equals loaiTruyenDan.Id
                             join cauTaoDeCong in context.DSDanhMuc
                             on pldc.ThongTinDeCong_CauTaoDeCong equals cauTaoDeCong.Id
-                            orderby pldc.CreateAt
+                            orderby pldc.Flag
                             select new PhanLoaiDeCongModel
                             {
                                 Id = pldc.Id,

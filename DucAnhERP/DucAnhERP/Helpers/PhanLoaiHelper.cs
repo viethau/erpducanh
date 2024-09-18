@@ -254,7 +254,7 @@ namespace DucAnhERP.Helpers
             };
 
             PhanLoaiTDHoGa plTDHoGa = new();
-            plTDHoGa = await PhanLoaiTDHoGaRepository.GetMPhanLoaiTDHoGaByDetail(searchData);
+            plTDHoGa = await PhanLoaiTDHoGaRepository.GetPhanLoaiTDHoGaByDetail(searchData);
             if (plTDHoGa != null)
             {
                 phanloai.Id = plTDHoGa.Id;
@@ -464,7 +464,7 @@ namespace DucAnhERP.Helpers
             };
 
             PhanLoaiThanhChong plTC = new();
-            plTC = await PhanLoaiThanhChongRepository.GetMPhanLoaiThanhChongByDetail(searchData);
+            plTC = await PhanLoaiThanhChongRepository.GetPhanLoaiThanhChongByDetail(searchData);
             if (plTC != null)
             {
 

@@ -8,6 +8,8 @@ namespace DucAnhERP.Repository
         Task<List<PhanLoaiTDanTDanModel>> GetAllByVM();
         Task<bool> CheckUsingId(string id);
         Task<PhanLoaiTDanTDan> GetPhanLoaiTDanTDanByDetail(PhanLoaiTDanTDan pltdtd);
+        Task<PhanLoaiTDanTDan> GetPhanLoaiTDanTDanExist(PhanLoaiTDanTDan searchData);
         Task<string> InsertId(PhanLoaiTDanTDan entity, string HTTD, string LTD, string CTTDTC);
+        Task<string> InsertLaterFlag(PhanLoaiTDanTDan entity, int FlagLast);
     }
 }

@@ -94,9 +94,9 @@
         </BodyTemplate>
     </CustomModal>
 
-    <button class="btn btn-primary" @onclick="ShowModal">Thêm phân loại đế cống</button>
+    <button class="btn btn-primary" @onclick="ShowModal">Thêm phân loại TĐan TDẫn</button>
 
-    <h3 class="mt-2">Danh sách phân loại đế cống </h3>
+    <h3 class="mt-2">Danh sách phân loại TĐan TDẫn </h3>
     @if (!listPLTDTDModel.Any())
     {
         <div class="pt-3 pl-4">
@@ -107,11 +107,16 @@
     }
     <div class="row mt-3 our-table">
         <table class="table table-hover table-bordered">
-            <thead>
+            <thead class="bg-info">
                 <tr>
                     <th rowspan="2"> </th>
                     <th rowspan="2"> STT</th>
-                    <th rowspan="2"> Tên loại tấm đan truyền dẫn</th>
+                    <th onclick="@(() => SortTable("TTTDCongHoRanh_TenLoaiTamDanTieuChuan"))" class="text-center sortable align-middle" rowspan="2">
+                        <div class="mr-3">
+                            Tên loại tấm đan truyền dẫn
+                            <span class="arrow @(GetSortStyle("TTTDCongHoRanh_TenLoaiTamDanTieuChuan"))"></span>
+                        </div>
+                    </th>
                     <th colspan="2"> Thông tin lý trình</th>
                     <th colspan="6"> Cấu tạo đế cống</th>
                 </tr>
@@ -139,10 +144,13 @@
                         <tr>
                             <td class="d-flex nowrap">
                                 <div class="d-inline-block">
-                                    <button class="btn btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                    <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TTTDCongHoRanh_TenLoaiTamDanTieuChuan)">
+                                    <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TTTDCongHoRanh_TenLoaiTamDanTieuChuan)">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -173,6 +181,7 @@
         <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
     }
     <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+    <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
 </div>
 
 @code {
@@ -181,6 +190,7 @@
     public List<DanhMuc> listDanhMuc = new();
 
     private bool isModalVisible = false;
+    private bool isLoading = false;
     private string TitleModal = "Thêm mới loại đế cống";
 
 
@@ -261,48 +271,117 @@
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
     {
+        isLoading = true;
         dmModel = new();
         listDanhMuc = await DanhMucRepository.GetAll();
         var plhg = await PhanLoaiTDanTDanRepository.GetAllByVM();
         listModel = plhg;
         listPLTDTDModel = Paging(plhg);
-
+        isLoading = false;
     }
 
     private async Task HandleValidSubmit()
     {
+        PhanLoaiTDanTDan phanLoaiTDanTDanExist = new();
+        phanLoaiTDanTDanExist = await PhanLoaiTDanTDanRepository.GetPhanLoaiTDanTDanExist(Input);
         if (isEdit)
         {
-            // Thêm mới thông tin
-            await PhanLoaiTDanTDanRepository.Update(Input);
-            isModalVisible = false;
-            Input = new PhanLoaiTDanTDan();
-            isEdit = false;
-            ToastService.ShowToast(
-                "Thông báo",
-                "Cập nhật thành công.",
-                cssClass: "toast-success",
-                iconClass: "fa fa-bell",
-                progressBarClass: "bg-info",
-                duration: 5000
-            );
-            await LoadData();
+            if (phanLoaiTDanTDanExist == null)
+            {
+                // cập nhật
+                await PhanLoaiTDanTDanRepository.Update(Input);
+                isModalVisible = false;
+                Input = new PhanLoaiTDanTDan();
+                isEdit = false;
+                ToastService.ShowToast(
+                    "Thông báo",
+                    "Cập nhật thành công.",
+                    cssClass: "toast-success",
+                    iconClass: "fa fa-bell",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                );
+                await LoadData();
+            }
+            else
+            if (phanLoaiTDanTDanExist.TTTDCongHoRanh_TenLoaiTamDanTieuChuan.ToUpper().Trim() != Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan.ToUpper().Trim())
+            {
+                // cập nhật
+                await PhanLoaiTDanTDanRepository.Update(Input);
+                isModalVisible = false;
+                Input = new PhanLoaiTDanTDan();
+                isEdit = false;
+                ToastService.ShowToast(
+                    "Thông báo",
+                    "Cập nhật thành công.",
+                    cssClass: "toast-success",
+                    iconClass: "fa fa-bell",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                );
+                await LoadData();
+            }
+            else
+            {
+                ToastService.ShowToast(
+                       "Thông báo",
+                       "Tên phân loại TĐan TDẫn đã tồn tại. Vui lòng kiểm tra lại !",
+                       cssClass: "toast-danger",
+                       iconClass: "fa fa-bell",
+                       progressBarClass: "bg-info",
+                       duration: 5000
+                   );
+            }
+        }
+        else
+        if (phanLoaiTDanTDanExist == null)
+        {
+
+            if (Flag > 0)
+            {
+                // Thêm mới thông tin
+                await PhanLoaiTDanTDanRepository.InsertLaterFlag(Input, Flag);
+                isModalVisible = false;
+                Input = new PhanLoaiTDanTDan();
+                ToastService.ShowToast(
+                    "Thông báo",
+                    "Thêm thành công.",
+                    cssClass: "toast-success",
+                    iconClass: "fa fa-bell",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                );
+                await LoadData();
+            }
+            else
+            {
+
+                // Thêm mới thông tin
+                await PhanLoaiTDanTDanRepository.Insert(Input);
+                isModalVisible = false;
+                Input = new PhanLoaiTDanTDan();
+                ToastService.ShowToast(
+                    "Thông báo",
+                    "Thêm thành công.",
+                    cssClass: "toast-success",
+                    iconClass: "fa fa-bell",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                );
+                await LoadData();
+            }
+        
         }
         else
         {
-            // Thêm mới thông tin
-            await PhanLoaiTDanTDanRepository.Insert(Input);
-            isModalVisible = false;
-            Input = new PhanLoaiTDanTDan();
             ToastService.ShowToast(
-                "Thông báo",
-                "Thêm thành công.",
-                cssClass: "toast-success",
-                iconClass: "fa fa-bell",
-                progressBarClass: "bg-info",
-                duration: 5000
-            );
-            await LoadData();
+                    "Thông báo",
+                    "Phân loại TĐan TDẫn đã tồn tại , Vui lòng kiểm tra lại !",
+                    cssClass: "toast-danger",
+                    iconClass: "fa fa-bell",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                );
         }
 
     }
@@ -346,13 +425,20 @@
 
     private async Task HandleEdit(string id)
     {
-        TitleModal = "Cập nhật loại đế cống !";
+        TitleModal = "Cập nhật loại TĐan TDẫn !";
         Input = await PhanLoaiTDanTDanRepository.GetById(id);
         isEdit = true;
         isModalVisible = true;
     }
 
-
+    int Flag = 0;
+    //thêm vào sau
+    private void InsertLaterFlag(int flag)
+    {
+        Flag = flag;
+        TitleModal = "Chèn loại TĐan TDẫn !";
+        isModalVisible = true;
+    }
 
     // Sắp xếp data
     private void SortTable(string columnName)

@@ -37,13 +37,16 @@ namespace DucAnhERP.Services
             {
                 using var context = _context.CreateDbContext();
                 var query = from pltc in context.PhanLoaiThanhChongs
-                            orderby pltc.CreateAt
+                            join cauTaoThanhChong in context.DSDanhMuc 
+                            on pltc.TTKTHHCongHopRanh_CauTaoThanhChong equals cauTaoThanhChong.Id
+                            orderby pltc.Flag
                             select new PhanLoaiThanhChongModel
                             {
                                 Id = pltc.Id,
                                 Flag = pltc.Flag,
                                 TTKTHHCongHopRanh_LoaiThanhChong = pltc.TTKTHHCongHopRanh_LoaiThanhChong,
                                 TTKTHHCongHopRanh_CauTaoThanhChong = pltc.TTKTHHCongHopRanh_CauTaoThanhChong,
+                                TTKTHHCongHopRanh_CauTaoThanhChong_Name = cauTaoThanhChong.Ten,
                                 TTKTHHCongHopRanh_CCaoThanhChong = pltc.TTKTHHCongHopRanh_CCaoThanhChong,
                                 TTKTHHCongHopRanh_CRongThanhChong = pltc.TTKTHHCongHopRanh_CRongThanhChong,
                                 TTKTHHCongHopRanh_CDai = pltc.TTKTHHCongHopRanh_CDai,
@@ -77,7 +80,7 @@ namespace DucAnhERP.Services
             return (isSuccess);
         }
 
-        public async Task<PhanLoaiThanhChong> GetMPhanLoaiThanhChongByDetail(PhanLoaiThanhChong searchData)
+        public async Task<PhanLoaiThanhChong> GetPhanLoaiThanhChongByDetail(PhanLoaiThanhChong searchData)
         {
             try
             {
@@ -103,6 +106,32 @@ namespace DucAnhERP.Services
             }
         }
 
+        public async Task<PhanLoaiThanhChong> GetPhanLoaiThanhChongExist(PhanLoaiThanhChong searchData)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
+                var query = context.PhanLoaiThanhChongs
+                             .Where(pltc => (
+                                    pltc.TTKTHHCongHopRanh_LoaiThanhChong == searchData.TTKTHHCongHopRanh_LoaiThanhChong ||
+                                    pltc.TTKTHHCongHopRanh_CauTaoThanhChong == searchData.TTKTHHCongHopRanh_CauTaoThanhChong &&
+                                    pltc.TTKTHHCongHopRanh_CCaoThanhChong == searchData.TTKTHHCongHopRanh_CCaoThanhChong &&
+                                    pltc.TTKTHHCongHopRanh_CRongThanhChong == searchData.TTKTHHCongHopRanh_CRongThanhChong &&
+                                    pltc.TTKTHHCongHopRanh_CDai == searchData.TTKTHHCongHopRanh_CDai
+                                          ));
+
+                var result = await query.FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
+        }
         public async Task Update(PhanLoaiThanhChong PhanLoaiThanhChong)
         {
             using var context = _context.CreateDbContext();
@@ -209,7 +238,70 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
             }
         }
+        public async Task<string> InsertLaterFlag(PhanLoaiThanhChong entity, int FlagLast)
+        {
+            string id = "";
+            try
+            {
+                using var context = _context.CreateDbContext();
 
+                if (entity == null)
+                {
+                    throw new Exception("Không có bản ghi nào để thêm!");
+                }
+
+                // Bước 1: Lấy danh sách các bản ghi có flag > FlagLast
+                var recordsToUpdate = await context.PhanLoaiThanhChongs
+                    .Where(x => x.Flag > FlagLast)
+                    .ToListAsync();
+
+                // Bước 2: Tăng giá trị flag của các bản ghi đó thêm 1
+                foreach (var record in recordsToUpdate)
+                {
+                    record.Flag += 1;
+                }
+
+                // Lưu các thay đổi cập nhật flag
+                await context.SaveChangesAsync();
+
+                // Bước 3: Đặt flag cho bản ghi mới bằng 3
+                if (recordsToUpdate.Count() == 0)
+                {
+                    // Kiểm tra xem bảng có bản ghi nào không
+                    var maxFlag = await context.PhanLoaiThanhChongs.AnyAsync()
+                                  ? await context.PhanLoaiThanhChongs.MaxAsync(x => x.Flag)
+                                  : 0;
+
+                    // Tăng giá trị Flag lên 1
+                    entity.Flag = maxFlag + 1;
+                }
+                else
+                {
+                    entity.Flag = FlagLast + 1;
+                }
+
+
+                // Kiểm tra và gán giá trị nếu trường ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop rỗng
+                if (string.IsNullOrEmpty(entity.TTKTHHCongHopRanh_LoaiThanhChong))
+                {
+                    entity.TTKTHHCongHopRanh_LoaiThanhChong = "loại " + entity.Flag;
+                }
+
+                // Bước 4: Chèn bản ghi mới vào bảng
+                context.PhanLoaiThanhChongs.Add(entity);
+
+                // Lưu bản ghi mới vào cơ sở dữ liệu
+                await context.SaveChangesAsync();
+                // Trả về Id của bản ghi mới được thêm
+                id = entity.Id ?? "";
+                return id;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return id;
+            }
+        }
         public async Task<string> InsertId(PhanLoaiThanhChong entity, string CTTC)
         {
             try
@@ -230,7 +322,7 @@ namespace DucAnhERP.Services
                 entity.Flag = maxFlag + 1;
                 if (string.IsNullOrEmpty(entity.TTKTHHCongHopRanh_LoaiThanhChong))
                 {
-                    entity.TTKTHHCongHopRanh_LoaiThanhChong = "Thanh chống loại " + entity.Flag + CTTC;
+                    entity.TTKTHHCongHopRanh_LoaiThanhChong = "Thanh chống loại " + entity.Flag + " "+CTTC;
                 }
                 
                 // Chèn bản ghi mới vào bảng

@@ -10,8 +10,11 @@ namespace DucAnhERP.ViewModel
         public Double? ThongTinLyTrinhTruyenDan_TuLyTrinh { get; set; } = 0;
         public Double? ThongTinLyTrinhTruyenDan_DenLyTrinh { get; set; } = 0;
         public string? ThongTinDuongTruyenDan_HinhThucTruyenDan { get; set; } = "";
+        public string? ThongTinDuongTruyenDan_HinhThucTruyenDan_Name { get; set; } = "";
         public string? ThongTinDuongTruyenDan_LoaiTruyenDan { get; set; } = "";
+        public string? ThongTinDuongTruyenDan_LoaiTruyenDan_Name { get; set; } = "";
         public string TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan { get; set; } = "";
+        public string TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name { get; set; } = "";
         public Double? TTTDCongHoRanh_CDai { get; set; } = 0;
         public Double? TTTDCongHoRanh_CRong { get; set; } = 0;
         public Double? TTTDCongHoRanh_CCao { get; set; } = 0;

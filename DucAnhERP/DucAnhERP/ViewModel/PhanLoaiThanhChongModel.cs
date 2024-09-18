@@ -8,6 +8,7 @@ namespace DucAnhERP.ViewModel
         public int Flag { get; set; } = 0;
         public string? TTKTHHCongHopRanh_LoaiThanhChong { get; set; } = "";
         public string? TTKTHHCongHopRanh_CauTaoThanhChong { get; set; } = "";
+        public string? TTKTHHCongHopRanh_CauTaoThanhChong_Name { get; set; } = "";
         public Double? TTKTHHCongHopRanh_CCaoThanhChong { get; set; } = 0;
         public Double? TTKTHHCongHopRanh_CRongThanhChong { get; set; } = 0;
         public Double? TTKTHHCongHopRanh_CDai { get; set; } = 0;

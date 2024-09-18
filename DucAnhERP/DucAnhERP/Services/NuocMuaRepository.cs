@@ -77,7 +77,96 @@ namespace DucAnhERP.Services
                             join PhanLoaiTDanTDan02 in context.PhanLoaiTDanTDans
                             on nuocMua.TTTDCongHoRanh_TenLoaiTamDanLoai02 equals PhanLoaiTDanTDan02.Id into PhanLoaiTDanTDan02Join
                             from PhanLoaiTDanTDan02 in PhanLoaiTDanTDan02Join.DefaultIfEmpty()
-                                // Sắp xếp theo CreateAt của DSNuocMua
+
+                                // Join với các bảng phân loại
+                            join hinhThucHoGa in context.DSDanhMuc
+                                on nuocMua.ThongTinChungHoGa_HinhThucHoGa equals hinhThucHoGa.Id into gj4
+                            from hinhThucHoGa in gj4.DefaultIfEmpty() // Left join for HinhThucHoGa
+
+                            join ketCauMuMo in context.DSDanhMuc
+                                on nuocMua.ThongTinChungHoGa_KetCauMuMo equals ketCauMuMo.Id into gj5
+                            from ketCauMuMo in gj5.DefaultIfEmpty() // Left join for KetCauMuMo
+
+                            join ketCauTuong in context.DSDanhMuc
+                                on nuocMua.ThongTinChungHoGa_KetCauTuong equals ketCauTuong.Id into gj6
+                            from ketCauTuong in gj6.DefaultIfEmpty() // Left join for KetCauTuong
+
+                            join hinhThucMongHoGa in context.DSDanhMuc
+                                on nuocMua.ThongTinChungHoGa_HinhThucMongHoGa equals hinhThucMongHoGa.Id into gj7
+                            from hinhThucMongHoGa in gj7.DefaultIfEmpty() // Left join for HinhThucMongHoGa
+
+                            join ketCauMong in context.DSDanhMuc
+                                on nuocMua.ThongTinChungHoGa_KetCauMong equals ketCauMong.Id into gj8
+                            from ketCauMong in gj8.DefaultIfEmpty() // Left join for KetCauMong
+
+                            join chatMatTrong in context.DSDanhMuc
+                                on nuocMua.ThongTinChungHoGa_ChatMatTrong equals chatMatTrong.Id into gj9
+                            from chatMatTrong in gj9.DefaultIfEmpty() // Left join for ChatMatTrong
+
+                            join chatMatNgoai in context.DSDanhMuc
+                                on nuocMua.ThongTinChungHoGa_ChatMatNgoai equals chatMatNgoai.Id into gj10
+                            from chatMatNgoai in gj10.DefaultIfEmpty() // Left join for ChatMatNgoai
+
+                            join hinhThucDayHoGa2 in context.DSDanhMuc
+                                on nuocMua.ThongTinTamDanHoGa2_HinhThucDayHoGa equals hinhThucDayHoGa2.Id into gj11
+                            from hinhThucDayHoGa2 in gj11.DefaultIfEmpty() // Left join for 
+
+                            join loaiVatLieuDao in context.DSDanhMuc
+                                on nuocMua.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao equals loaiVatLieuDao.Id into gj12
+                            from loaiVatLieuDao in gj12.DefaultIfEmpty() // Left join for 
+
+                            join hinhThucTruyenDan in context.DSDanhMuc
+                               on nuocMua.ThongTinDuongTruyenDan_HinhThucTruyenDan equals hinhThucTruyenDan.Id into gj13
+                            from hinhThucTruyenDan in gj13.DefaultIfEmpty() // Left join for 
+
+                            join loaiTruyenDan in context.DSDanhMuc
+                               on nuocMua.ThongTinDuongTruyenDan_LoaiTruyenDan equals loaiTruyenDan.Id into gj14
+                            from loaiTruyenDan in gj14.DefaultIfEmpty() // Left join for 
+
+                            join loaiMong in context.DSDanhMuc
+                                on nuocMua.ThongTinMongDuongTruyenDan_LoaiMong equals loaiMong.Id into gj15
+                            from loaiMong in gj15.DefaultIfEmpty() // Left join for 
+
+                            join hinhThucMong in context.DSDanhMuc
+                                on nuocMua.ThongTinMongDuongTruyenDan_HinhThucMong equals hinhThucMong.Id into gj16
+                            from hinhThucMong in gj16.DefaultIfEmpty() // Left join for 
+
+                            join cauTaoDeCong in context.DSDanhMuc
+                                on nuocMua.ThongTinDeCong_CauTaoDeCong equals cauTaoDeCong.Id into gj17
+                            from cauTaoDeCong in gj17.DefaultIfEmpty() // Left join for
+
+                             join cauTaoTuong in context.DSDanhMuc
+                                on nuocMua.TTKTHHCongHopRanh_CauTaoTuong equals cauTaoTuong.Id into gj18
+                            from cauTaoTuong in gj18.DefaultIfEmpty()
+
+                            join cauTaoMuMo in context.DSDanhMuc
+                                on nuocMua.TTKTHHCongHopRanh_CauTaoMuMo equals cauTaoMuMo.Id into gj19
+                            from cauTaoMuMo in gj19.DefaultIfEmpty()
+
+                            join chatMatTrong_TTKTHH in context.DSDanhMuc
+                                on nuocMua.TTKTHHCongHopRanh_ChatMatTrong equals chatMatTrong_TTKTHH.Id into gj20
+                            from chatMatTrong_TTKTHH in gj20.DefaultIfEmpty()
+
+                            join chatMatNgoai_TTKTHH in context.DSDanhMuc
+                                on nuocMua.TTKTHHCongHopRanh_ChatMatNgoai equals chatMatNgoai_TTKTHH.Id into gj21
+                            from chatMatNgoai_TTKTHH in gj21.DefaultIfEmpty()
+
+                            join cauTaoThanhChong in context.DSDanhMuc
+                                 on nuocMua.TTKTHHCongHopRanh_CauTaoThanhChong equals cauTaoThanhChong.Id into gj22
+                            from cauTaoThanhChong in gj22.DefaultIfEmpty()
+
+                            join cauTaoTamDanTruyenDanTamDanTieuChuan in context.DSDanhMuc
+                                 on nuocMua.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan equals cauTaoTamDanTruyenDanTamDanTieuChuan.Id into gj23
+                            from cauTaoTamDanTruyenDanTamDanTieuChuan in gj23.DefaultIfEmpty()
+
+                            join cauTaoTamDanTruyenDan in context.DSDanhMuc
+                                 on nuocMua.TTTDCongHoRanh_CauTaoTamDanTruyenDan equals cauTaoTamDanTruyenDan.Id into gj24
+                            from cauTaoTamDanTruyenDan in gj24.DefaultIfEmpty()
+
+                            join loaiVatLieuDao_TTVLD in context.DSDanhMuc
+                                 on nuocMua.TTVLDCongRanh_LoaiVatLieuDao equals loaiVatLieuDao_TTVLD.Id into gj25
+                            from loaiVatLieuDao_TTVLD in gj25.DefaultIfEmpty()
+                                // Sắp xếp theo Flag của DSNuocMua
                             orderby nuocMua.Flag
                             select new NuocMuaModel
                             {
@@ -88,12 +177,19 @@ namespace DucAnhERP.Services
                                 PhanLoaiHoGas_TenHoGaSauPhanLoai = phanLoaiHoGa != null ? phanLoaiHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai : "",
                                 ThongTinChungHoGa_TenHoGaTheoBanVe = nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe ?? "",
                                 ThongTinChungHoGa_HinhThucHoGa = nuocMua.ThongTinChungHoGa_HinhThucHoGa ?? "",
+                                ThongTinChungHoGa_HinhThucHoGa_Name = hinhThucHoGa.Ten,
                                 ThongTinChungHoGa_KetCauMuMo = nuocMua.ThongTinChungHoGa_KetCauMuMo ?? "",
+                                ThongTinChungHoGa_KetCauMuMo_Name = ketCauMuMo.Ten,
                                 ThongTinChungHoGa_KetCauTuong = nuocMua.ThongTinChungHoGa_KetCauTuong ?? "",
+                                ThongTinChungHoGa_KetCauTuong_Name = ketCauTuong.Ten,
                                 ThongTinChungHoGa_HinhThucMongHoGa = nuocMua.ThongTinChungHoGa_HinhThucMongHoGa ?? "",
+                                ThongTinChungHoGa_HinhThucMongHoGa_Name = hinhThucMongHoGa.Ten,
                                 ThongTinChungHoGa_KetCauMong = nuocMua.ThongTinChungHoGa_KetCauMong ?? "",
+                                ThongTinChungHoGa_KetCauMong_Name = ketCauMong.Ten,
                                 ThongTinChungHoGa_ChatMatTrong = nuocMua.ThongTinChungHoGa_ChatMatTrong ?? "",
+                                ThongTinChungHoGa_ChatMatTrong_Name = chatMatTrong.Ten,
                                 ThongTinChungHoGa_ChatMatNgoai = nuocMua.ThongTinChungHoGa_ChatMatNgoai ?? "",
+                                ThongTinChungHoGa_ChatMatNgoai_Name = chatMatNgoai.Ten,
                                 PhuBiHoGa_CDai = nuocMua.PhuBiHoGa_CDai ?? 0,
                                 PhuBiHoGa_CRong = nuocMua.PhuBiHoGa_CRong ?? 0,
                                 BeTongLotMong_D = nuocMua.BeTongLotMong_D ?? 0,
@@ -163,6 +259,7 @@ namespace DucAnhERP.Services
                                 ThongTinTamDanHoGa2_PhanLoaiDayHoGa = nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
                                 PhanLoaiTDHoGa_PhanLoaiDayHoGa = phanLoaiTDHoGa.ThongTinTamDanHoGa2_PhanLoaiDayHoGa??"",
                                 ThongTinTamDanHoGa2_HinhThucDayHoGa = nuocMua.ThongTinTamDanHoGa2_HinhThucDayHoGa ?? "",
+                                ThongTinTamDanHoGa2_HinhThucDayHoGa_Name = hinhThucDayHoGa2.Ten,
                                 ThongTinTamDanHoGa2_DuongKinh = nuocMua.ThongTinTamDanHoGa2_DuongKinh ?? 0,
                                 ThongTinTamDanHoGa2_ChieuDay = nuocMua.ThongTinTamDanHoGa2_ChieuDay ?? 0,
                                 ThongTinTamDanHoGa2_D = nuocMua.ThongTinTamDanHoGa2_D ?? 0,
@@ -170,6 +267,7 @@ namespace DucAnhERP.Services
                                 ThongTinTamDanHoGa2_C = nuocMua.ThongTinTamDanHoGa2_C ?? 0,
                                 ThongTinTamDanHoGa2_SoLuongNapDay = nuocMua.ThongTinTamDanHoGa2_SoLuongNapDay ?? 0,
                                 ThongTinVatLieuDaoHoGa_LoaiVatLieuDao = nuocMua.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao ?? "",
+                                ThongTinVatLieuDaoHoGa_LoaiVatLieuDao_Name = loaiVatLieuDao.Ten,
                                 ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa = nuocMua.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa ?? 0,
                                 ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat = nuocMua.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat ?? 0,
                                 ThongTinVatLieuDaoHoGa_TongChieuCaoDao = nuocMua.ThongTinVatLieuDaoHoGa_TongChieuCaoDao ?? 0,
@@ -227,7 +325,9 @@ namespace DucAnhERP.Services
                                 ThongTinLyTrinhTruyenDan_TuHoGa = nuocMua.ThongTinLyTrinhTruyenDan_TuHoGa ?? "",
                                 ThongTinLyTrinhTruyenDan_DenHoGa = nuocMua.ThongTinLyTrinhTruyenDan_DenHoGa ?? "",
                                 ThongTinDuongTruyenDan_HinhThucTruyenDan = nuocMua.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "",
+                                ThongTinDuongTruyenDan_HinhThucTruyenDan_Name = hinhThucTruyenDan.Ten,
                                 ThongTinDuongTruyenDan_LoaiTruyenDan = nuocMua.ThongTinDuongTruyenDan_LoaiTruyenDan ?? "",
+                                ThongTinDuongTruyenDan_LoaiTruyenDan_Name = loaiTruyenDan.Ten,
                                 ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = nuocMua.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "",
                                 PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = PhanLoaiCTronHopNhua.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "",
 
@@ -238,7 +338,9 @@ namespace DucAnhERP.Services
                                 ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = nuocMua.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ?? "",
                                 PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = PhanLoaiMongCTron.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ?? "",
                                 ThongTinMongDuongTruyenDan_LoaiMong = nuocMua.ThongTinMongDuongTruyenDan_LoaiMong ?? "",
+                                ThongTinMongDuongTruyenDan_LoaiMong_Name = loaiMong.Ten,
                                 ThongTinMongDuongTruyenDan_HinhThucMong = nuocMua.ThongTinMongDuongTruyenDan_HinhThucMong ?? "",
+                                ThongTinMongDuongTruyenDan_HinhThucMong_Name = hinhThucMong.Ten,
                                 ThongTinDeCong_TenLoaiDeCong = nuocMua.ThongTinDeCong_TenLoaiDeCong ?? "",
                                 PhanLoaiDeCong_TenLoaiDeCong = PhanLoaiDeCong.ThongTinDeCong_TenLoaiDeCong ?? "",
                                 ThongTinDeCong_CauTaoDeCong = nuocMua.ThongTinDeCong_CauTaoDeCong ?? "",
@@ -268,9 +370,13 @@ namespace DucAnhERP.Services
                                 TTTKLCKCTCH_XDOngCongCanThem = nuocMua.TTTKLCKCTCH_XDOngCongCanThem ?? "",
                                 TTTKLCKCTCH_CDThuaThieuSauTinhKL = nuocMua.TTTKLCKCTCH_CDThuaThieuSauTinhKL ?? 0,
                                 TTKTHHCongHopRanh_CauTaoTuong = nuocMua.TTKTHHCongHopRanh_CauTaoTuong ?? "",
+                                TTKTHHCongHopRanh_CauTaoTuong_Name = cauTaoTuong.Ten,
                                 TTKTHHCongHopRanh_CauTaoMuMo = nuocMua.TTKTHHCongHopRanh_CauTaoMuMo ?? "",
+                                TTKTHHCongHopRanh_CauTaoMuMo_Name = cauTaoMuMo.Ten,
                                 TTKTHHCongHopRanh_ChatMatTrong = nuocMua.TTKTHHCongHopRanh_ChatMatTrong ?? "",
+                                TTKTHHCongHopRanh_ChatMatTrong_Name = chatMatTrong_TTKTHH.Ten,
                                 TTKTHHCongHopRanh_ChatMatNgoai = nuocMua.TTKTHHCongHopRanh_ChatMatNgoai ?? "",
+                                TTKTHHCongHopRanh_ChatMatNgoai_Name = chatMatNgoai_TTKTHH.Ten,
                                 TTKTHHCongHopRanh_CCaoLotMong = nuocMua.TTKTHHCongHopRanh_CCaoLotMong ?? 0,
                                 TTKTHHCongHopRanh_CRongLotMong = nuocMua.TTKTHHCongHopRanh_CRongLotMong ?? 0,
                                 TTKTHHCongHopRanh_CCaoMong = nuocMua.TTKTHHCongHopRanh_CCaoMong ?? 0,
@@ -290,6 +396,7 @@ namespace DucAnhERP.Services
                                 TTKTHHCongHopRanh_LoaiThanhChong = nuocMua.TTKTHHCongHopRanh_LoaiThanhChong ?? "",
                                 PhanLoaiThanhChong_LoaiThanhChong = PhanLoaiThanhChong.TTKTHHCongHopRanh_LoaiThanhChong ?? "",
                                 TTKTHHCongHopRanh_CauTaoThanhChong = nuocMua.TTKTHHCongHopRanh_CauTaoThanhChong ?? "",
+                                TTKTHHCongHopRanh_CauTaoThanhChong_Name = cauTaoThanhChong.Ten,
                                 TTKTHHCongHopRanh_CCaoThanhChong = nuocMua.TTKTHHCongHopRanh_CCaoThanhChong ?? 0,
                                 TTKTHHCongHopRanh_CRongThanhChong = nuocMua.TTKTHHCongHopRanh_CRongThanhChong ?? 0,
                                 TTKTHHCongHopRanh_CDai = nuocMua.TTKTHHCongHopRanh_CDai ?? 0,
@@ -300,6 +407,7 @@ namespace DucAnhERP.Services
                                 TTTDCongHoRanh_TenLoaiTamDanTieuChuan = nuocMua.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ?? "",
                                 PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = PhanLoaiTDanTDan.TTTDCongHoRanh_TenLoaiTamDanTieuChuan??"",
                                 TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = nuocMua.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan ?? "",
+                                TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name = cauTaoTamDanTruyenDanTamDanTieuChuan.Ten,
                                 TTTDCongHoRanh_SoLuong = nuocMua.TTTDCongHoRanh_SoLuong ?? 0,
                                 TTTDCongHoRanh_CDai = nuocMua.TTTDCongHoRanh_CDai ?? 0,
                                 TTTDCongHoRanh_CRong = nuocMua.TTTDCongHoRanh_CRong ?? 0,
@@ -307,6 +415,7 @@ namespace DucAnhERP.Services
                                 TTTDCongHoRanh_TenLoaiTamDanLoai02 = nuocMua.TTTDCongHoRanh_TenLoaiTamDanLoai02 ?? "",
                                 PhanLoaiTDanTDan_TenLoaiTamDanLoai02 = PhanLoaiTDanTDan02.TTTDCongHoRanh_TenLoaiTamDanTieuChuan??"",
                                 TTTDCongHoRanh_CauTaoTamDanTruyenDan = nuocMua.TTTDCongHoRanh_CauTaoTamDanTruyenDan ?? "",
+                                TTTDCongHoRanh_CauTaoTamDanTruyenDan_Name = cauTaoTamDanTruyenDan.Ten,
                                 TTTDCongHoRanh_SoLuong1 = nuocMua.TTTDCongHoRanh_SoLuong1 ?? 0,
                                 TTTDCongHoRanh_CDai1 = nuocMua.TTTDCongHoRanh_CDai1 ?? 0,
                                 TTTDCongHoRanh_CRong1 = nuocMua.TTTDCongHoRanh_CRong1 ?? 0,
@@ -381,6 +490,7 @@ namespace DucAnhERP.Services
                                 CDHaLu_DinhOngNhua = nuocMua.CDHaLu_DinhOngNhua ?? 0,
                                 CDHaLu_DinhDapCat = nuocMua.CDHaLu_DinhDapCat ?? 0,
                                 TTVLDCongRanh_LoaiVatLieuDao = nuocMua.TTVLDCongRanh_LoaiVatLieuDao ?? "",
+                                TTVLDCongRanh_LoaiVatLieuDao_Name = loaiVatLieuDao_TTVLD.Ten,
                                 TTVLDCongRanh_TLChieuCaoDaoDa = nuocMua.TTVLDCongRanh_TLChieuCaoDaoDa ?? 0,
                                 TTVLDCongRanh_TLChieuCaoDaoDat = nuocMua.TTVLDCongRanh_TLChieuCaoDaoDat ?? 0,
                                 TTVLDCongRanh_TLTongChieuSauDao = nuocMua.TTVLDCongRanh_TLTongChieuSauDao ?? 0,

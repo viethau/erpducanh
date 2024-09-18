@@ -7,7 +7,9 @@ namespace DucAnhERP.Repository
     {
         Task<List<PhanLoaiThanhChongModel>> GetAllByVM();
         Task<bool> CheckUsingId(string id);
-        Task<PhanLoaiThanhChong> GetMPhanLoaiThanhChongByDetail(PhanLoaiThanhChong plmc);
+        Task<PhanLoaiThanhChong> GetPhanLoaiThanhChongByDetail(PhanLoaiThanhChong plmc);
+        Task<PhanLoaiThanhChong> GetPhanLoaiThanhChongExist(PhanLoaiThanhChong plmc);
         Task<string> InsertId(PhanLoaiThanhChong entity, string CTTC);
+        Task<string> InsertLaterFlag(PhanLoaiThanhChong entity, int FlagLast);
     }
 }

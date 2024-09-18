@@ -1368,7 +1368,7 @@
 
         PhanLoaiTDHoGa plTDHoGa = new();
         phanloai = new();
-        plTDHoGa = await PhanLoaiTDHoGaRepository.GetMPhanLoaiTDHoGaByDetail(searchData);
+        plTDHoGa = await PhanLoaiTDHoGaRepository.GetPhanLoaiTDHoGaByDetail(searchData);
         if (plTDHoGa != null)
         {
             phanloai.Id = plTDHoGa.Id;
@@ -1582,7 +1582,7 @@
 
         PhanLoaiThanhChong plTC = new();
         phanloai = new();
-        plTC = await PhanLoaiThanhChongRepository.GetMPhanLoaiThanhChongByDetail(searchData);
+        plTC = await PhanLoaiThanhChongRepository.GetPhanLoaiThanhChongByDetail(searchData);
         if (plTC != null)
         {
 

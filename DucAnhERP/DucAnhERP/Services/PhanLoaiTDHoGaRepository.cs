@@ -39,12 +39,15 @@ namespace DucAnhERP.Services
             {
                 using var context = _context.CreateDbContext();
                 var query = from pltdhg in context.PhanLoaiTDHoGas
+                            join hinhThucDayHoGa in context.DSDanhMuc
+                            on pltdhg.ThongTinTamDanHoGa2_HinhThucDayHoGa equals hinhThucDayHoGa.Id
                             orderby pltdhg.Flag
                             select new PhanLoaiTDHoGaModel
                             {
                                 Id = pltdhg.Id,
                                 ThongTinTamDanHoGa2_PhanLoaiDayHoGa = pltdhg.ThongTinTamDanHoGa2_PhanLoaiDayHoGa,
                                 ThongTinTamDanHoGa2_HinhThucDayHoGa = pltdhg.ThongTinTamDanHoGa2_HinhThucDayHoGa,
+                                ThongTinTamDanHoGa2_HinhThucDayHoGa_Name = hinhThucDayHoGa.Ten,
                                 ThongTinTamDanHoGa2_DuongKinh = pltdhg.ThongTinTamDanHoGa2_DuongKinh,
                                 ThongTinTamDanHoGa2_ChieuDay = pltdhg.ThongTinTamDanHoGa2_ChieuDay,
                                 ThongTinTamDanHoGa2_D = pltdhg.ThongTinTamDanHoGa2_D,
@@ -53,7 +56,7 @@ namespace DucAnhERP.Services
                                 CreateAt = pltdhg.CreateAt,
                                 CreateBy = pltdhg.CreateBy,
                                 IsActive = pltdhg.IsActive,
-
+                                Flag=pltdhg.Flag,
                             };
 
                 var data = await query
@@ -81,7 +84,7 @@ namespace DucAnhERP.Services
             return (isSuccess);
         }
 
-        public async Task<PhanLoaiTDHoGa> GetMPhanLoaiTDHoGaByDetail(PhanLoaiTDHoGa searchData)
+        public async Task<PhanLoaiTDHoGa> GetPhanLoaiTDHoGaByDetail(PhanLoaiTDHoGa searchData)
         {
             try
             {
@@ -90,6 +93,35 @@ namespace DucAnhERP.Services
                 // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
                 var query = context.PhanLoaiTDHoGas
                              .Where(pltdhg => (
+                                    pltdhg.ThongTinTamDanHoGa2_HinhThucDayHoGa == searchData.ThongTinTamDanHoGa2_HinhThucDayHoGa &&
+                                    pltdhg.ThongTinTamDanHoGa2_DuongKinh == searchData.ThongTinTamDanHoGa2_DuongKinh &&
+                                    pltdhg.ThongTinTamDanHoGa2_ChieuDay == searchData.ThongTinTamDanHoGa2_ChieuDay &&
+                                    pltdhg.ThongTinTamDanHoGa2_D == searchData.ThongTinTamDanHoGa2_D &&
+                                    pltdhg.ThongTinTamDanHoGa2_R == searchData.ThongTinTamDanHoGa2_R &&
+                                    pltdhg.ThongTinTamDanHoGa2_C == searchData.ThongTinTamDanHoGa2_C
+                                          ));
+
+                var result = await query.FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
+        }
+
+        public async Task<PhanLoaiTDHoGa> GetPhanLoaiTDHoGaExist(PhanLoaiTDHoGa searchData)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
+                var query = context.PhanLoaiTDHoGas
+                             .Where(pltdhg => (
+                                    pltdhg.ThongTinTamDanHoGa2_PhanLoaiDayHoGa == searchData.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ||
                                     pltdhg.ThongTinTamDanHoGa2_HinhThucDayHoGa == searchData.ThongTinTamDanHoGa2_HinhThucDayHoGa &&
                                     pltdhg.ThongTinTamDanHoGa2_DuongKinh == searchData.ThongTinTamDanHoGa2_DuongKinh &&
                                     pltdhg.ThongTinTamDanHoGa2_ChieuDay == searchData.ThongTinTamDanHoGa2_ChieuDay &&
@@ -243,6 +275,70 @@ namespace DucAnhERP.Services
             }
         }
 
+        public async Task<string> InsertLaterFlag(PhanLoaiTDHoGa entity, int FlagLast)
+        {
+            string id = "";
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                if (entity == null)
+                {
+                    throw new Exception("Không có bản ghi nào để thêm!");
+                }
+
+                // Bước 1: Lấy danh sách các bản ghi có flag > FlagLast
+                var recordsToUpdate = await context.PhanLoaiTDHoGas
+                    .Where(x => x.Flag > FlagLast)
+                    .ToListAsync();
+
+                // Bước 2: Tăng giá trị flag của các bản ghi đó thêm 1
+                foreach (var record in recordsToUpdate)
+                {
+                    record.Flag += 1;
+                }
+
+                // Lưu các thay đổi cập nhật flag
+                await context.SaveChangesAsync();
+
+                // Bước 3: Đặt flag cho bản ghi mới bằng 3
+                if (recordsToUpdate.Count() == 0)
+                {
+                    // Kiểm tra xem bảng có bản ghi nào không
+                    var maxFlag = await context.PhanLoaiTDHoGas.AnyAsync()
+                                  ? await context.PhanLoaiTDHoGas.MaxAsync(x => x.Flag)
+                                  : 0;
+
+                    // Tăng giá trị Flag lên 1
+                    entity.Flag = maxFlag + 1;
+                }
+                else
+                {
+                    entity.Flag = FlagLast + 1;
+                }
+
+
+                // Kiểm tra và gán giá trị nếu trường ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop rỗng
+                if (string.IsNullOrEmpty(entity.ThongTinTamDanHoGa2_PhanLoaiDayHoGa))
+                {
+                    entity.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = "loại " + entity.Flag;
+                }
+
+                // Bước 4: Chèn bản ghi mới vào bảng
+                context.PhanLoaiTDHoGas.Add(entity);
+
+                // Lưu bản ghi mới vào cơ sở dữ liệu
+                await context.SaveChangesAsync();
+                // Trả về Id của bản ghi mới được thêm
+                id = entity.Id ?? "";
+                return id;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return id;
+            }
+        }
     }
 
 }

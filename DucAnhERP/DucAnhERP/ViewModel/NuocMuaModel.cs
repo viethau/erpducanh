@@ -13,12 +13,19 @@ namespace DucAnhERP.ViewModel
         public string PhanLoaiHoGas_TenHoGaSauPhanLoai { get; set; } 
         public string ThongTinChungHoGa_TenHoGaTheoBanVe { get; set; }
         public string ThongTinChungHoGa_HinhThucHoGa { get; set; }
+        public string ThongTinChungHoGa_HinhThucHoGa_Name { get; set; }
         public string ThongTinChungHoGa_KetCauMuMo { get; set; }
+        public string ThongTinChungHoGa_KetCauMuMo_Name { get; set; }
         public string ThongTinChungHoGa_KetCauTuong { get; set; }
+        public string ThongTinChungHoGa_KetCauTuong_Name { get; set; }
         public string ThongTinChungHoGa_HinhThucMongHoGa { get; set; }
+        public string ThongTinChungHoGa_HinhThucMongHoGa_Name { get; set; }
         public string ThongTinChungHoGa_KetCauMong { get; set; }
+        public string ThongTinChungHoGa_KetCauMong_Name { get; set; }
         public string ThongTinChungHoGa_ChatMatTrong { get; set; }
+        public string ThongTinChungHoGa_ChatMatTrong_Name { get; set; }
         public string ThongTinChungHoGa_ChatMatNgoai { get; set; }
+        public string ThongTinChungHoGa_ChatMatNgoai_Name { get; set; }
         public Double PhuBiHoGa_CDai { get; set; }
         public Double PhuBiHoGa_CRong { get; set; }
         public Double BeTongLotMong_D { get; set; }
@@ -88,6 +95,7 @@ namespace DucAnhERP.ViewModel
         public string ThongTinTamDanHoGa2_PhanLoaiDayHoGa { get; set; }
         public string PhanLoaiTDHoGa_PhanLoaiDayHoGa { get; set; }
         public string ThongTinTamDanHoGa2_HinhThucDayHoGa { get; set; }
+        public string ThongTinTamDanHoGa2_HinhThucDayHoGa_Name { get; set; }
         public Double ThongTinTamDanHoGa2_DuongKinh { get; set; }
         public Double ThongTinTamDanHoGa2_ChieuDay { get; set; }
         public Double ThongTinTamDanHoGa2_D { get; set; }
@@ -95,6 +103,7 @@ namespace DucAnhERP.ViewModel
         public Double ThongTinTamDanHoGa2_C { get; set; }
         public Double ThongTinTamDanHoGa2_SoLuongNapDay { get; set; }
         public string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao { get; set; }
+        public string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao_Name { get; set; }
         public Double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa { get; set; }
         public Double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat { get; set; }
         public Double ThongTinVatLieuDaoHoGa_TongChieuCaoDao { get; set; }
@@ -152,7 +161,9 @@ namespace DucAnhERP.ViewModel
         public string ThongTinLyTrinhTruyenDan_TuHoGa { get; set; }
         public string ThongTinLyTrinhTruyenDan_DenHoGa { get; set; }
         public string ThongTinDuongTruyenDan_HinhThucTruyenDan { get; set; }
+        public string ThongTinDuongTruyenDan_HinhThucTruyenDan_Name { get; set; }
         public string ThongTinDuongTruyenDan_LoaiTruyenDan { get; set; }
+        public string ThongTinDuongTruyenDan_LoaiTruyenDan_Name { get; set; }
         public string ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai { get; set; }
         public string PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai { get; set; }
 
@@ -163,11 +174,14 @@ namespace DucAnhERP.ViewModel
         public string ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop { get; set; }
         public string PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop { get; set; }
         public string ThongTinMongDuongTruyenDan_LoaiMong { get; set; }
+        public string ThongTinMongDuongTruyenDan_LoaiMong_Name { get; set; }
         public string ThongTinMongDuongTruyenDan_HinhThucMong { get; set; }
+        public string ThongTinMongDuongTruyenDan_HinhThucMong_Name { get; set; }
 
         public string ThongTinDeCong_TenLoaiDeCong { get; set; }
         public string PhanLoaiDeCong_TenLoaiDeCong { get; set; }
         public string ThongTinDeCong_CauTaoDeCong { get; set; }
+        public string ThongTinDeCong_CauTaoDeCong_Name { get; set; }
         public Double ThongTinDeCong_D { get; set; }
         public Double ThongTinDeCong_R { get; set; }
         public Double ThongTinDeCong_C { get; set; }
@@ -195,9 +209,13 @@ namespace DucAnhERP.ViewModel
         public Double TTTKLCKCTCH_CDThuaThieuSauTinhKL { get; set; }
 
         public string TTKTHHCongHopRanh_CauTaoTuong { get; set; }
+        public string TTKTHHCongHopRanh_CauTaoTuong_Name { get; set; }
         public string TTKTHHCongHopRanh_CauTaoMuMo { get; set; }
+        public string TTKTHHCongHopRanh_CauTaoMuMo_Name { get; set; }
         public string TTKTHHCongHopRanh_ChatMatTrong { get; set; }
+        public string TTKTHHCongHopRanh_ChatMatTrong_Name { get; set; }
         public string TTKTHHCongHopRanh_ChatMatNgoai { get; set; }
+        public string TTKTHHCongHopRanh_ChatMatNgoai_Name { get; set; }
 
         public Double TTKTHHCongHopRanh_CCaoLotMong { get; set; }
         public Double TTKTHHCongHopRanh_CRongLotMong { get; set; }
@@ -218,6 +236,7 @@ namespace DucAnhERP.ViewModel
         public string TTKTHHCongHopRanh_LoaiThanhChong { get; set; }
         public string PhanLoaiThanhChong_LoaiThanhChong { get; set; }
         public string TTKTHHCongHopRanh_CauTaoThanhChong { get; set; }
+        public string TTKTHHCongHopRanh_CauTaoThanhChong_Name { get; set; }
         public Double TTKTHHCongHopRanh_CCaoThanhChong { get; set; }
         public Double TTKTHHCongHopRanh_CRongThanhChong { get; set; }
         public Double TTKTHHCongHopRanh_CDai { get; set; }
@@ -228,6 +247,7 @@ namespace DucAnhERP.ViewModel
         public string TTTDCongHoRanh_TenLoaiTamDanTieuChuan { get; set; }
         public string PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan { get; set; }
         public string TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan { get; set; }
+        public string TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name { get; set; }
         public Double TTTDCongHoRanh_SoLuong { get; set; }
         public Double TTTDCongHoRanh_CDai { get; set; }
         public Double TTTDCongHoRanh_CRong { get; set; }
@@ -235,6 +255,7 @@ namespace DucAnhERP.ViewModel
         public string TTTDCongHoRanh_TenLoaiTamDanLoai02 { get; set; }
         public string PhanLoaiTDanTDan_TenLoaiTamDanLoai02 { get; set; }
         public string TTTDCongHoRanh_CauTaoTamDanTruyenDan { get; set; }
+        public string TTTDCongHoRanh_CauTaoTamDanTruyenDan_Name { get; set; }
         public Double TTTDCongHoRanh_SoLuong1 { get; set; }
         public Double TTTDCongHoRanh_CDai1 { get; set; }
         public Double TTTDCongHoRanh_CRong1 { get; set; }
@@ -309,6 +330,7 @@ namespace DucAnhERP.ViewModel
         public Double CDHaLu_DinhOngNhua { get; set; }
         public Double CDHaLu_DinhDapCat { get; set; }
         public string TTVLDCongRanh_LoaiVatLieuDao { get; set; }
+        public string TTVLDCongRanh_LoaiVatLieuDao_Name { get; set; }
         public Double TTVLDCongRanh_TLChieuCaoDaoDa { get; set; }
         public Double TTVLDCongRanh_TLChieuCaoDaoDat { get; set; }
         public Double TTVLDCongRanh_TLTongChieuSauDao { get; set; }

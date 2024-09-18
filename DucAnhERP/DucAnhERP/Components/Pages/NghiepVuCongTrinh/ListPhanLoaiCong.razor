@@ -326,6 +326,7 @@
         <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
     }
     <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+    <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
 </div>
 
 @code {
@@ -334,6 +335,7 @@
     public List<DanhMuc> listDanhMuc = new();
 
     private bool isModalVisible = false;
+    private bool isLoading = false;
     private string TitleModal = "Thêm loại cống";
 
 
@@ -416,11 +418,13 @@
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
     {
+        isLoading = true;
         dmModel = new();
         listDanhMuc = await DanhMucRepository.GetAll();
         var plhg = await PhanLoaiCTronHopNhuaRepository.GetAllByVM();
         listModel = plhg;
         listPLCTronHopNhuaModel = Paging(plhg);
+        isLoading = false;
 
     }
 
@@ -478,7 +482,7 @@
 
         }
         else
-            if (phanLoaiCTronHopNhuaExist == null)
+        if (phanLoaiCTronHopNhuaExist == null)
         {
             if (Flag > 0)
             {
