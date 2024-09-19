@@ -264,6 +264,8 @@
     {
         PhanLoaiDeCong phanLoaiDeCongExist = new();
         phanLoaiDeCongExist = await PhanLoaiDeCongRepository.GetPhanLoaiDeCongExist(Input);
+        var existName = false;
+        existName = await PhanLoaiDeCongRepository.CheckUsingName(Input.ThongTinDeCong_TenLoaiDeCong);
         if (isEdit)
         {
             if (phanLoaiDeCongExist == null)
@@ -284,7 +286,7 @@
                 await LoadData();
             }
             else
-            if (phanLoaiDeCongExist.ThongTinDeCong_TenLoaiDeCong.ToUpper().Trim() != Input.ThongTinDeCong_TenLoaiDeCong.ToUpper().Trim())
+            if (phanLoaiDeCongExist.ThongTinDeCong_TenLoaiDeCong.ToUpper().Trim() != Input.ThongTinDeCong_TenLoaiDeCong.ToUpper().Trim() && !existName)
             {
                 // cập nhật
                 await PhanLoaiDeCongRepository.Update(Input);

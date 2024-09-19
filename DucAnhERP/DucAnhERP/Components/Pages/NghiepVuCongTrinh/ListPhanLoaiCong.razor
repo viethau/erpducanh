@@ -432,7 +432,8 @@
     {
         PhanLoaiCTronHopNhua phanLoaiCTronHopNhuaExist = new();
         phanLoaiCTronHopNhuaExist = await PhanLoaiCTronHopNhuaRepository.GetPhanLoaiCTronHopNhuaExist(Input);
-
+        var existName = false;
+        existName = await PhanLoaiCTronHopNhuaRepository.CheckUsingName(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
         if (isEdit)
         {
             if (phanLoaiCTronHopNhuaExist == null)
@@ -452,7 +453,7 @@
                 );
                 await LoadData();
             } else
-            if (phanLoaiCTronHopNhuaExist.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai.ToUpper().Trim() != Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai.ToUpper().Trim())
+            if (phanLoaiCTronHopNhuaExist.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai.ToUpper().Trim() != Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai.ToUpper().Trim() && !existName)
             {
                 // cập nhật
                 await PhanLoaiCTronHopNhuaRepository.Update(Input);
@@ -467,6 +468,7 @@
                     progressBarClass: "bg-info",
                     duration: 5000
                 );
+                await LoadData();
             }
             else
             {

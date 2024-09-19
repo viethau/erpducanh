@@ -94,7 +94,19 @@ namespace DucAnhERP.Services
             isSuccess = data.Any();
             return (isSuccess);
         }
+        public async Task<bool> CheckUsingName(string name)
+        {
+            bool isSuccess = false;
+            using var context = _context.CreateDbContext();
+            var query = context.PhanLoaiMongCTrons
+                         .Where(item => (item.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop.ToUpper().Trim() == name.ToUpper().Trim()));
 
+            var data = await query.ToListAsync();
+
+            // Kiểm tra nếu danh sách kết quả rỗng hoặc không có dữ liệu khớp
+            isSuccess = data.Any();
+            return (isSuccess);
+        }
         public async Task<PhanLoaiMongCTron> GetPhanLoaiMongCTronByDetail(PhanLoaiMongCTron searchData)
         {
             try
@@ -104,6 +116,7 @@ namespace DucAnhERP.Services
                 // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
                 var query = context.PhanLoaiMongCTrons
                              .Where(plmct => (
+                                    plmct.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop == searchData.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ||
                                     plmct.ThongTinDuongTruyenDan_HinhThucTruyenDan == searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan &&
                                     plmct.ThongTinDuongTruyenDan_LoaiTruyenDan == searchData.ThongTinDuongTruyenDan_LoaiTruyenDan &&
                                     plmct.ThongTinMongDuongTruyenDan_LoaiMong == searchData.ThongTinMongDuongTruyenDan_LoaiMong &&

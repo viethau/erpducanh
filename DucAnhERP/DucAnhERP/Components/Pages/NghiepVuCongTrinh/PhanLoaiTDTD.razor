@@ -34,7 +34,7 @@
                         <ValidationMessage For="() => Input.ThongTinLyTrinhTruyenDan_DenLyTrinh" class="text-danger" />
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
-                        <label for="ThongTinDuongTruyenDan_HinhThucTruyenDan">Hình thức truyền dẫn <span class="text-danger">*</span></label>
+                        <label for="ThongTinDuongTruyenDan_HinhThucTruyenDan">Hình thức truyền dẫn <span class="text-danger"></span></label>
                         <select disabled="@isEdit" id="ThongTinDuongTruyenDan_HinhThucTruyenDan" class="form-control" @bind="Input.ThongTinDuongTruyenDan_HinhThucTruyenDan">
                             <option value="">Hình thức truyền dẫn ...</option>
                             @foreach (var dm in FindByIdNhomDanhMuc("TD_HTTruyenDan"))
@@ -45,7 +45,7 @@
                         <ValidationMessage For="() => Input.ThongTinDuongTruyenDan_HinhThucTruyenDan" class="text-danger" />
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
-                        <label for="ThongTinDuongTruyenDan_LoaiTruyenDan">Loại truyền dẫn <span class="text-danger">*</span></label>
+                        <label for="ThongTinDuongTruyenDan_LoaiTruyenDan">Loại truyền dẫn <span class="text-danger"></span></label>
                         <select disabled="@isEdit" id="ThongTinDuongTruyenDan_LoaiTruyenDan" class="form-control" @bind="Input.ThongTinDuongTruyenDan_LoaiTruyenDan">
                             <option value="">Loại truyền dẫn...</option>
                             @foreach (var dm in FindByIdNhomDanhMuc("TD_LTruyenDan"))
@@ -284,6 +284,8 @@
     {
         PhanLoaiTDanTDan phanLoaiTDanTDanExist = new();
         phanLoaiTDanTDanExist = await PhanLoaiTDanTDanRepository.GetPhanLoaiTDanTDanExist(Input);
+        var existName = false;
+        existName = await PhanLoaiTDanTDanRepository.CheckUsingName(Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan);
         if (isEdit)
         {
             if (phanLoaiTDanTDanExist == null)
@@ -304,7 +306,7 @@
                 await LoadData();
             }
             else
-            if (phanLoaiTDanTDanExist.TTTDCongHoRanh_TenLoaiTamDanTieuChuan.ToUpper().Trim() != Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan.ToUpper().Trim())
+            if (phanLoaiTDanTDanExist.TTTDCongHoRanh_TenLoaiTamDanTieuChuan.ToUpper().Trim() != Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan.ToUpper().Trim() && !existName)
             {
                 // cập nhật
                 await PhanLoaiTDanTDanRepository.Update(Input);

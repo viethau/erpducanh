@@ -919,6 +919,8 @@
     {
         PhanLoaiHoGa phanLoaiHoGaExist = new();
         phanLoaiHoGaExist = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaExist(Input);
+        var existName =false;
+        existName = await PhanLoaiHoGaRepository.CheckUsingName(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
         if (isEdit)
         {
             if (phanLoaiHoGaExist == null)
@@ -939,7 +941,7 @@
                 await LoadData();
             }
             else
-            if (phanLoaiHoGaExist.ThongTinChungHoGa_TenHoGaSauPhanLoai.ToUpper().Trim() != Input.ThongTinChungHoGa_TenHoGaSauPhanLoai.ToUpper().Trim())
+            if (phanLoaiHoGaExist.ThongTinChungHoGa_TenHoGaSauPhanLoai.ToUpper().Trim() != Input.ThongTinChungHoGa_TenHoGaSauPhanLoai.ToUpper().Trim() && !existName)
             {
                 await PhanLoaiHoGaRepository.Update(Input);
                 isModalVisible = false;

@@ -81,9 +81,20 @@ namespace DucAnhERP.Data
 
                 modelBuilder.Entity<NuocMua>()
                 .ToTable(tb => tb.UseSqlOutputClause(false));
-
+                modelBuilder.Entity<PhanLoaiHoGa>()
+               .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<PhanLoaiCTronHopNhua>()
+               .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<PhanLoaiMongCTron>()
+               .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<PhanLoaiDeCong>()
+               .ToTable(tb => tb.UseSqlOutputClause(false));
                 modelBuilder.Entity<PhanLoaiThanhChong>()
               .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<PhanLoaiTDHoGa>()
+             .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<PhanLoaiTDanTDan>()
+             .ToTable(tb => tb.UseSqlOutputClause(false));
             });
 
             OnModelCreatingPartial(modelBuilder);

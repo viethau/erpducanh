@@ -262,6 +262,8 @@
     {
         PhanLoaiTDHoGa PhanLoaiTDHoGaExist = new();
         PhanLoaiTDHoGaExist = await PhanLoaiTDHoGaRepository.GetPhanLoaiTDHoGaExist(Input);
+        var existName = false;
+        existName = await PhanLoaiTDHoGaRepository.CheckUsingName(Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa);
         if (isEdit)
         {
             if (PhanLoaiTDHoGaExist == null)
@@ -282,7 +284,7 @@
                 await LoadData();
             }
             else
-            if (PhanLoaiTDHoGaExist.ThongTinTamDanHoGa2_PhanLoaiDayHoGa.ToUpper().Trim() != Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa.ToUpper().Trim())
+            if (PhanLoaiTDHoGaExist.ThongTinTamDanHoGa2_PhanLoaiDayHoGa.ToUpper().Trim() != Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa.ToUpper().Trim() && !existName)
             {
                 // cập nhật
                 await PhanLoaiTDHoGaRepository.Update(Input);

@@ -19,12 +19,12 @@ namespace DucAnhERP.Models
         [RegularExpression(@"^\d+(\.\d{1,5})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 5 chữ số thập phân.")]
         public Double? ThongTinLyTrinhTruyenDan_DenLyTrinh { get; set; } = 0;
 
-        [Required(ErrorMessage = "Bạn phải nhập Hình thức truyền dẫn!")]
+        //[Required(ErrorMessage = "Bạn phải nhập Hình thức truyền dẫn!")]
         public string? ThongTinDuongTruyenDan_HinhThucTruyenDan { get; set; } = "";
-        [Required(ErrorMessage = "Bạn phải nhập Loại truyền dẫn !")]
+        //[Required(ErrorMessage = "Bạn phải nhập Loại truyền dẫn !")]
         public string? ThongTinDuongTruyenDan_LoaiTruyenDan { get; set; } = "";
 
-        [Required(ErrorMessage = "Bạn phải nhập Cấu tạo tấm đan truyền dẫn tấm đan tiêu chuẩn!")]
+        //[Required(ErrorMessage = "Bạn phải nhập Cấu tạo tấm đan truyền dẫn tấm đan tiêu chuẩn!")]
         public string TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan { get; set; } = "";
         
         public Double? TTTDCongHoRanh_CDai { get; set; } = 0;

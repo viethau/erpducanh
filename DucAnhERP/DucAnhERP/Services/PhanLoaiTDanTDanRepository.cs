@@ -92,7 +92,19 @@ namespace DucAnhERP.Services
             isSuccess = data.Any();
             return (isSuccess);
         }
+        public async Task<bool> CheckUsingName(string name)
+        {
+            bool isSuccess = false;
+            using var context = _context.CreateDbContext();
+            var query = context.PhanLoaiTDanTDans
+                         .Where(item => (item.TTTDCongHoRanh_TenLoaiTamDanTieuChuan.ToUpper().Trim() == name.ToUpper().Trim()));
 
+            var data = await query.ToListAsync();
+
+            // Kiểm tra nếu danh sách kết quả rỗng hoặc không có dữ liệu khớp
+            isSuccess = data.Any();
+            return (isSuccess);
+        }
         public async Task<PhanLoaiTDanTDan> GetPhanLoaiTDanTDanByDetail(PhanLoaiTDanTDan searchData)
         {
             try
@@ -104,6 +116,7 @@ namespace DucAnhERP.Services
                              .Where(pltdtd => (
                                     //pltdtd.ThongTinLyTrinhTruyenDan_TuLyTrinh == searchData.ThongTinLyTrinhTruyenDan_TuLyTrinh &&
                                     //pltdtd.ThongTinLyTrinhTruyenDan_DenLyTrinh == searchData.ThongTinLyTrinhTruyenDan_DenLyTrinh &&
+                                    pltdtd.TTTDCongHoRanh_TenLoaiTamDanTieuChuan == searchData.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ||
                                     pltdtd.ThongTinDuongTruyenDan_HinhThucTruyenDan == searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan &&
                                     pltdtd.ThongTinDuongTruyenDan_LoaiTruyenDan == searchData.ThongTinDuongTruyenDan_LoaiTruyenDan &&
                                     pltdtd.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan == searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan &&

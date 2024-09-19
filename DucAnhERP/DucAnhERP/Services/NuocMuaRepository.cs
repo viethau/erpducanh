@@ -715,11 +715,12 @@ namespace DucAnhERP.Services
                 // Tăng giá trị Flag lên 1
                 entity.Flag = maxFlag + 1;
                 context.DSNuocMua.Add(entity);
-                var row = await context.SaveChangesAsync();
-                Console.WriteLine(row);
+                await context.SaveChangesAsync();
+               
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.InnerException?.Message ?? ex.Message);
                 Console.WriteLine(ex.Message);
             }
         }

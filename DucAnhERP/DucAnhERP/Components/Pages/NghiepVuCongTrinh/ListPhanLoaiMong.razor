@@ -310,6 +310,8 @@
     {
         PhanLoaiMongCTron phanLoaiMongCTronExist = new();
         phanLoaiMongCTronExist = await PhanLoaiMongCTronRepository.GetPhanLoaiMongCTronExist(Input);
+        var existName = false;
+        existName = await PhanLoaiMongCTronRepository.CheckUsingName(Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop);
         if (isEdit)
         {
             if (phanLoaiMongCTronExist == null)
@@ -330,7 +332,7 @@
                 await LoadData();
             }
             else
-            if (phanLoaiMongCTronExist.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop.ToUpper().Trim() != Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop.ToUpper().Trim())
+            if (phanLoaiMongCTronExist.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop.ToUpper().Trim() != Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop.ToUpper().Trim() && !existName)
             {
                 // cập nhật
                 await PhanLoaiMongCTronRepository.Update(Input);

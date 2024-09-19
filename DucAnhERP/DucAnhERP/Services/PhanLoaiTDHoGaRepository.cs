@@ -83,7 +83,19 @@ namespace DucAnhERP.Services
             isSuccess = data.Any();
             return (isSuccess);
         }
+        public async Task<bool> CheckUsingName(string name)
+        {
+            bool isSuccess = false;
+            using var context = _context.CreateDbContext();
+            var query = context.PhanLoaiTDHoGas
+                         .Where(item => (item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa.ToUpper().Trim() == name.ToUpper().Trim()));
 
+            var data = await query.ToListAsync();
+
+            // Kiểm tra nếu danh sách kết quả rỗng hoặc không có dữ liệu khớp
+            isSuccess = data.Any();
+            return (isSuccess);
+        }
         public async Task<PhanLoaiTDHoGa> GetPhanLoaiTDHoGaByDetail(PhanLoaiTDHoGa searchData)
         {
             try
@@ -93,6 +105,7 @@ namespace DucAnhERP.Services
                 // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
                 var query = context.PhanLoaiTDHoGas
                              .Where(pltdhg => (
+                             pltdhg.ThongTinTamDanHoGa2_PhanLoaiDayHoGa == searchData.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ||
                                     pltdhg.ThongTinTamDanHoGa2_HinhThucDayHoGa == searchData.ThongTinTamDanHoGa2_HinhThucDayHoGa &&
                                     pltdhg.ThongTinTamDanHoGa2_DuongKinh == searchData.ThongTinTamDanHoGa2_DuongKinh &&
                                     pltdhg.ThongTinTamDanHoGa2_ChieuDay == searchData.ThongTinTamDanHoGa2_ChieuDay &&

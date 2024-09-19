@@ -85,6 +85,19 @@ namespace DucAnhERP.Services
             return (isSuccess);
         }
 
+        public async Task<bool> CheckUsingName(string name)
+        {
+            bool isSuccess = false;
+            using var context = _context.CreateDbContext();
+            var query = context.PhanLoaiDeCongs
+                         .Where(item => (item.ThongTinDeCong_TenLoaiDeCong.ToUpper().Trim() == name.ToUpper().Trim()));
+
+            var data = await query.ToListAsync();
+
+            // Kiểm tra nếu danh sách kết quả rỗng hoặc không có dữ liệu khớp
+            isSuccess = data.Any();
+            return (isSuccess);
+        }
         public async Task<PhanLoaiDeCong> GetPhanLoaiDeCongByDetail(PhanLoaiDeCong searchData)
         {
             try
@@ -94,6 +107,7 @@ namespace DucAnhERP.Services
                 // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
                 var query = context.PhanLoaiDeCongs
                              .Where(pldc => (
+                                     pldc.ThongTinDeCong_TenLoaiDeCong ==searchData.ThongTinDeCong_TenLoaiDeCong ||
                                      pldc.ThongTinDuongTruyenDan_LoaiTruyenDan == searchData.ThongTinDuongTruyenDan_LoaiTruyenDan &&
                                      pldc.ThongTinDeCong_CauTaoDeCong == searchData.ThongTinDeCong_CauTaoDeCong &&
                                      pldc.ThongTinDeCong_D == searchData.ThongTinDeCong_D &&

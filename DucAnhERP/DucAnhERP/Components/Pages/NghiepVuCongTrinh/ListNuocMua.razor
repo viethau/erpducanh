@@ -2575,19 +2575,12 @@
             <h5>BẢNG TỔNG HỢP THÔNG TIN HỆ THỐNG THOÁT NƯỚC MƯA DỌC PHÍA TRÁI TUYẾN</h5>
         </div>
         <div class="our-table">
-            @if (!listNuocMuaModel.Any())
-            {
-                <div class="pt-3 pl-4">
-                    <div class="callout callout-warning">
-                        <h5>Không có dữ liệu tương ứng!</h5>
-                    </div>
-                </div>
-            }
+           
             <table id="tb-listthoatnuoc" class="table table-bordered table-hover" cellpadding="1" cellspacing="2">
                 <thead>
                     <tr>
                         <th class="text-center" rowspan="3"></th>
-                        <th class="text-center" rowspan="3">STT</th>
+                        <th class="text-center" rowspan="3">No.</th>
                         <th class="text-center" colspan="2" rowspan="2">Thông tin lý trình</th>
                         <th class="text-center" colspan="9" rowspan="2">Thông tin chung hố ga</th>
                         <th class="text-center" colspan="34">Thông tin kích thước hình học hố ga</th>
@@ -2774,7 +2767,7 @@
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinChungHoGa_TenHoGaTheoBanVe"))" class="text-center sortable align-middle">
-                            <div class="mr-3 text-info">
+                            <div class="mr-3 ">
                                 Tên hố ga theo bản vẽ
                                 <span class="arrow @(GetSortStyle("ThongTinChungHoGa_TenHoGaTheoBanVe"))"></span>
                             </div>
@@ -4958,7 +4951,7 @@
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </td>
-                                <td class="text-center">@stt</td>
+                                <td class="text-center">@item.Flag</td>
                                 <td class="text-center">@item.ThongTinLyTrinh_TuyenDuong</td>
                                 <td class="text-center">@item.ThongTinLyTrinh_LyTrinhTaiTimHoGa</td>
                                 <td class="text-center">@item.PhanLoaiHoGas_TenHoGaSauPhanLoai</td>
@@ -5370,6 +5363,12 @@
                                 <td class="text-center">@item.ToaDoY</td>
                             </tr>
                         }
+                    </tbody>
+                }else{
+                    <tbody>
+                        <tr>
+                            <td colspan="395"> Không có dữ liệu</td>
+                        </tr>
                     </tbody>
                 }
             </table>

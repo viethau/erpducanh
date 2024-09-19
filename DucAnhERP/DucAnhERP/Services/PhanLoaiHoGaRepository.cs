@@ -172,6 +172,19 @@ namespace DucAnhERP.Services
             isSuccess = data.Any();
             return (isSuccess);
         }
+        public async Task<bool> CheckUsingName(string name)
+        {
+            bool isSuccess = false;
+            using var context = _context.CreateDbContext();
+            var query = context.PhanLoaiHoGas
+                         .Where(item => (item.ThongTinChungHoGa_TenHoGaSauPhanLoai.ToUpper().Trim() == name.ToUpper().Trim()));
+
+            var data = await query.ToListAsync();
+
+            // Kiểm tra nếu danh sách kết quả rỗng hoặc không có dữ liệu khớp
+            isSuccess = data.Any();
+            return (isSuccess);
+        }
         public async Task<PhanLoaiHoGa> GetPhanLoaiHoGaByDetail(PhanLoaiHoGa searchData)
         {
             try
@@ -181,6 +194,7 @@ namespace DucAnhERP.Services
                 // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
                 var query = context.PhanLoaiHoGas
                              .Where(plhg => (
+                                        plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai == searchData.ThongTinChungHoGa_TenHoGaSauPhanLoai ||
                                         plhg.ThongTinChungHoGa_HinhThucHoGa == searchData.ThongTinChungHoGa_HinhThucHoGa &&
                                         plhg.ThongTinChungHoGa_KetCauMuMo == searchData.ThongTinChungHoGa_KetCauMuMo &&
                                         plhg.ThongTinChungHoGa_KetCauTuong == searchData.ThongTinChungHoGa_KetCauTuong &&
@@ -364,7 +378,8 @@ namespace DucAnhERP.Services
             }
         }
         public async Task Update(PhanLoaiHoGa phanloaihoga)
-            {
+         {
+            try { 
                 using var context = _context.CreateDbContext();
                 var entity = GetById(phanloaihoga.Id);
 
@@ -376,6 +391,11 @@ namespace DucAnhERP.Services
                 context.PhanLoaiHoGas.Update(phanloaihoga);
                 await context.SaveChangesAsync();
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
         public async Task UpdateMulti(PhanLoaiHoGa[] phanloaihoga)
             {
                 using var context = _context.CreateDbContext();
