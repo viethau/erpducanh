@@ -480,15 +480,15 @@ namespace DucAnhERP.Models
         [Range(0.000, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
         [RegularExpression(@"^\d+(\.\d{1,5})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 5 chữ số thập phân.")]
         public Double? ThongTinLyTrinhTruyenDan_DenLyTrinh { get; set; } = 0;
-        [Required(ErrorMessage = "Bạn phải nhập Từ hố ga !")]
+        //[Required(ErrorMessage = "Bạn phải nhập Từ hố ga !")]
         public string? ThongTinLyTrinhTruyenDan_TuHoGa { get; set; } = "";
-        [Required(ErrorMessage = "Bạn phải nhập Đến hố ga !")]
+        //[Required(ErrorMessage = "Bạn phải nhập Đến hố ga !")]
         public string? ThongTinLyTrinhTruyenDan_DenHoGa { get; set; } = "";
 
         //Thông tin đường truyền dẫn
-        [Required(ErrorMessage = "Bạn phải nhập Hình thức truyền dẫn!")]
+        //[Required(ErrorMessage = "Bạn phải nhập Hình thức truyền dẫn!")]
         public string? ThongTinDuongTruyenDan_HinhThucTruyenDan { get; set; } = "";
-        [Required(ErrorMessage = "Bạn phải nhập Loại truyền dẫn !")]
+        //[Required(ErrorMessage = "Bạn phải nhập Loại truyền dẫn !")]
         public string? ThongTinDuongTruyenDan_LoaiTruyenDan { get; set; } = "";
         //[Required(ErrorMessage = "Bạn phải nhập Tên loại truyền dẫn sau phân loại!")]
         public string? ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai { get; set; } = "";
@@ -507,9 +507,9 @@ namespace DucAnhERP.Models
         //Thông tin móng đường truyền dẫn
         //[Required(ErrorMessage = "Bạn phải nhập Phân loại móng cống tròn, cống hộp!")]
         public string? ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop { get; set; } = "";
-        [Required(ErrorMessage = "Bạn phải nhập loại móng!")]
+        //[Required(ErrorMessage = "Bạn phải nhập loại móng!")]
         public string? ThongTinMongDuongTruyenDan_LoaiMong { get; set; } = "";
-        [Required(ErrorMessage = "Bạn phải nhập hình thức móng!")]
+        //[Required(ErrorMessage = "Bạn phải nhập hình thức móng!")]
         public string? ThongTinMongDuongTruyenDan_HinhThucMong { get; set; } = "";
 
         public string? ThongTinDeCong_TenLoaiDeCong { get; set; } = "";
