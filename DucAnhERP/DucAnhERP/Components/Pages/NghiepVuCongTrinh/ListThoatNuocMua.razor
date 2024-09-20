@@ -3459,7 +3459,7 @@
                     "Thông báo",
                     "Cập nhật thành công.",
                     cssClass: "toast-success",
-                    iconClass: "fa fa-bell",
+                    iconClass: "fa fa-check-circle",
                     progressBarClass: "bg-info",
                     duration: 5000
                 );
@@ -3476,7 +3476,7 @@
                     "Thông báo",
                     "Thêm thành công.",
                     cssClass: "toast-success",
-                    iconClass: "fa fa-bell",
+                    iconClass: "fa fa-check-circle",
                     progressBarClass: "bg-info",
                     duration: 5000
                 );
@@ -3581,7 +3581,7 @@
             {
                 await HopRanhThangRepository.DeleteById(deleteId);
                 await LoadData();
-                ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-bell", progressBarClass: "bg-info", duration: 5000);
+                ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                 deleteId = null;
             }
         }

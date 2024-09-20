@@ -49,7 +49,6 @@ a, .btn-link {
 .modal-content {
     background-color: #fff;
     border: 1px solid #888;
-    padding: 20px;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -63,13 +62,20 @@ a, .btn-link {
     border-bottom: 1px solid #ddd;
 }
 
+.modal-title {
+    margin-bottom: 0;
+    line-height: 1.5;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
 .modal-body {
     overflow-y: auto;
     flex-grow: 1;
 }
 
 /*toast*/
-
+/*
 .toast-container {
     position: fixed;
     top: 1rem;
@@ -136,7 +142,7 @@ a, .btn-link {
 
 .progress-bar {
     transition: width 0.6s ease;
-}
+}*/
 
 .bg-info {
     background-color: #17a2b8 !important;

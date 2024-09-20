@@ -74,8 +74,8 @@ namespace DucAnhERP.Services
         {
             bool isSuccess = false;
             using var context = _context.CreateDbContext();
-            var query = context.DSHopRanhThang
-                         .Where(hrt => (hrt.ThongTinChungHoGa_TenHoGaSauPhanLoai == id));
+            var query = context.DSNuocMua
+                         .Where(hrt => (hrt.ThongTinTamDanHoGa2_PhanLoaiDayHoGa == id));
 
             var data = await query.ToListAsync();
 
@@ -105,7 +105,7 @@ namespace DucAnhERP.Services
                 // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
                 var query = context.PhanLoaiTDHoGas
                              .Where(pltdhg => (
-                             pltdhg.ThongTinTamDanHoGa2_PhanLoaiDayHoGa == searchData.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ||
+                             
                                     pltdhg.ThongTinTamDanHoGa2_HinhThucDayHoGa == searchData.ThongTinTamDanHoGa2_HinhThucDayHoGa &&
                                     pltdhg.ThongTinTamDanHoGa2_DuongKinh == searchData.ThongTinTamDanHoGa2_DuongKinh &&
                                     pltdhg.ThongTinTamDanHoGa2_ChieuDay == searchData.ThongTinTamDanHoGa2_ChieuDay &&

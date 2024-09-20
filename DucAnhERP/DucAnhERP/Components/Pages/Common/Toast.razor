@@ -1,20 +1,121 @@
 ﻿@inject DucAnhERP.Services.ToastService ToastService
 
-<div class="toast-container">
+<style>
+    .fade {
+        transition: opacity .15s linear;
+    }
+
+    .toast-container-c {
+        --bs-toast-zindex: 1090;
+        position: absolute;
+        z-index: var(--bs-toast-zindex);
+        width: -webkit-max-content;
+        width: -moz-max-content;
+        width: max-content;
+        max-width: 100%;
+        pointer-events: none;
+        right: 0;
+        top: 0;
+    }
+    .toast-c {
+        --bs-toast-zindex: 1090;
+        --bs-toast-padding-x: 0.75rem;
+        --bs-toast-padding-y: 0.5rem;
+        --bs-toast-spacing: 1.5rem;
+        --bs-toast-max-width: 350px;
+        --bs-toast-font-size: 0.875rem;
+        --bs-toast-color: #212529;
+        --bs-toast-bg: rgba(var(--bs-body-bg-rgb), 0.85);
+        --bs-toast-border-width: var(--bs-border-width);
+        --bs-toast-border-color: var(--bs-border-color-translucent);
+        --bs-toast-border-radius: var(--bs-border-radius);
+        --bs-toast-box-shadow: var(--bs-box-shadow);
+        --bs-toast-header-color: var(--bs-secondary-color);
+        --bs-toast-header-bg: rgba(var(--bs-body-bg-rgb), 0.85);
+        --bs-toast-header-border-color: var(--bs-border-color-translucent);
+        width: var(--bs-toast-max-width);
+        max-width: 100%;
+        font-size: var(--bs-toast-font-size);
+        color: var(--bs-toast-color);
+        pointer-events: auto;
+        background-clip: padding-box;
+        border: #587f5838 1px solid;
+        background: white;
+        border-radius: 5px;
+        box-shadow: -1px 0rem 1rem rgba(0, 0, 0, 0.15);
+       
+    }
+    .toast-header {
+        display: flex;
+        align-items: center;
+        padding: 10px 12px;
+        color: rgb(34 38 42 / 75%);
+        background-color: #f6f4f4;
+        background-clip: padding-box;
+        border-bottom: #efd4d4 1px solid;
+       border-top-left-radius:5px;
+       border-top-right-radius:5px;
+    }
+
+    .toast-success .toast-header {
+        color:green!important;
+    }
+
+    .toast-danger .toast-header {
+        color: red !important;
+    }
+    .toast-body {
+        word-wrap: break-word;
+        padding: 10px 12px;
+        min-height: 60px;
+    }
+    .me-auto{
+        margin-right: auto !important;
+    }
+
+
+    .btn-close {
+        box-sizing: content-box;
+        width: 1em;
+        height: 1em;
+        padding: 0.25em;
+        background-color: transparent;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 1em;
+        border: none;
+        border-radius: 0.375rem;
+        opacity: var(--bs-btn-close-opacity, 0.5);
+        color: var(--bs-btn-close-color, #000);
+        transition: opacity 0.15s ease-in-out;
+    }
+
+        .btn-close:hover {
+            opacity: var(--bs-btn-close-hover-opacity, 0.75);
+        }
+
+        .btn-close:focus {
+            opacity: var(--bs-btn-close-focus-opacity, 1);
+            outline: none;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+
+</style>
+
+<div >
     @foreach (var toast in ToastService.Toasts)
     {
-
-        <div id="@toast.Id" class="toast fade show @toast.CssClass">
-            <div class="toast-header">
-                <i class="@toast.IconClass" aria-hidden="true"></i>
-                <strong class="me-auto">@toast.Title</strong>
-                <small class="text-muted">@toast.Timestamp.ToString("M/d/yyyy h:mm:ss tt")</small>
-                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close" @onclick="() => RemoveToast(toast.Id)">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="toast-body">
-                @toast.Message
+        <div id="@toast.Id" class="toast-container-c position-fixed top-0 end-0 p-3">
+            <div class="toast-c bg-white fade show @toast.CssClass">
+                <div class="toast-header">
+                    <i class="@toast.IconClass  mr-1" aria-hidden="true"></i>
+                    <strong class="me-auto">@toast.Title</strong>
+                    <small class="text-muted">@toast.Timestamp.ToString("M/d/yyyy h:mm:ss tt")</small>
+                    <button type="button" class="btn-close" aria-label="Close" @onclick="() => RemoveToast(toast.Id)"> </button>
+                </div>
+                <div class="toast-body"> @toast.Message</div>
             </div>
         </div>
     }

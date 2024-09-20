@@ -187,7 +187,7 @@
         if (isEdit)
         {
             await NhomDanhMucRepository.Update(mNhomDanhMuc);
-            ToastService.ShowToast("Thông báo", "Cập nhật danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-bell", progressBarClass: "bg-info", duration: 5000);
+            ToastService.ShowToast("Thông báo", "Cập nhật danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
             await LoadNhomDanhMuc();
             isModalVisible = false;
             mNhomDanhMuc = new NhomDanhMuc();
@@ -195,7 +195,7 @@
         else
         {
             await NhomDanhMucRepository.Insert(mNhomDanhMuc);
-            ToastService.ShowToast("Thông báo", "Thêm danh mục thành công.", cssClass: "toast-danger", iconClass: "fa fa-bell", progressBarClass: "bg-info", duration: 5000);
+            ToastService.ShowToast("Thông báo", "Thêm danh mục thành công.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
             await LoadNhomDanhMuc();
             isModalVisible = false;
             mNhomDanhMuc = new NhomDanhMuc();
@@ -224,11 +224,11 @@
                 bool isSuccess = await NhomDanhMucRepository.DeleteByIdResult(deleteId);
                 if (isSuccess)
                 {
-                    ToastService.ShowToast("Thông báo", "Xóa nhóm danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-bell", progressBarClass: "bg-info", duration: 5000);
+                    ToastService.ShowToast("Thông báo", "Xóa nhóm danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                 }
                 else
                 {
-                    ToastService.ShowToast("Thông báo", "Xóa nhóm danh mục không thành công.", cssClass: "toast-danger", iconClass: "fa fa-bell", progressBarClass: "bg-info", duration: 5000);
+                    ToastService.ShowToast("Thông báo", "Xóa nhóm danh mục không thành công.", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
                 }
 
                 await LoadNhomDanhMuc();

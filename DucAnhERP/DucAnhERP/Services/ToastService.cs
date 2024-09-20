@@ -14,7 +14,7 @@ namespace DucAnhERP.Services
 
         public IReadOnlyList<ToastMessage> Toasts => _toasts.AsReadOnly();
 
-        public void ShowToast(string title, string message, string cssClass = "toast-info", string iconClass = "fa fa-bell", string progressBarClass = "bg-info", int duration = 5000)
+        public void ShowToast(string title, string message, string cssClass = "toast-info", string iconClass = "fa fa-check-circle", string progressBarClass = "bg-info", int duration = 5000)
         {
             var toast = new ToastMessage(title, message, cssClass, iconClass, progressBarClass, duration);
             _toasts.Add(toast);

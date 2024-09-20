@@ -83,8 +83,8 @@ namespace DucAnhERP.Services
         {
             bool isSuccess = false;
             using var context = _context.CreateDbContext();
-            var query = context.DSHopRanhThang
-                         .Where(hrt => (hrt.ThongTinChungHoGa_TenHoGaSauPhanLoai == id));
+            var query = context.DSNuocMua
+                         .Where(hrt => (hrt.TTTDCongHoRanh_TenLoaiTamDanTieuChuan == id || hrt.TTTDCongHoRanh_TenLoaiTamDanLoai02 == id));
 
             var data = await query.ToListAsync();
 
@@ -116,7 +116,7 @@ namespace DucAnhERP.Services
                              .Where(pltdtd => (
                                     //pltdtd.ThongTinLyTrinhTruyenDan_TuLyTrinh == searchData.ThongTinLyTrinhTruyenDan_TuLyTrinh &&
                                     //pltdtd.ThongTinLyTrinhTruyenDan_DenLyTrinh == searchData.ThongTinLyTrinhTruyenDan_DenLyTrinh &&
-                                    pltdtd.TTTDCongHoRanh_TenLoaiTamDanTieuChuan == searchData.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ||
+                                   
                                     pltdtd.ThongTinDuongTruyenDan_HinhThucTruyenDan == searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan &&
                                     pltdtd.ThongTinDuongTruyenDan_LoaiTruyenDan == searchData.ThongTinDuongTruyenDan_LoaiTruyenDan &&
                                     pltdtd.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan == searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan &&

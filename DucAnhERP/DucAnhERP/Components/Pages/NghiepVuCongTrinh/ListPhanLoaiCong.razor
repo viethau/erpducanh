@@ -447,7 +447,7 @@
                     "Thông báo",
                     "Cập nhật thành công.",
                     cssClass: "toast-success",
-                    iconClass: "fa fa-bell",
+                    iconClass: "fa fa-check-circle",
                     progressBarClass: "bg-info",
                     duration: 5000
                 );
@@ -463,8 +463,7 @@
                 ToastService.ShowToast(
                     "Thông báo",
                     "Cập nhật thành công.",
-                    cssClass: "toast-success",
-                    iconClass: "fa fa-bell",
+                    iconClass: "fa fa-check-circle",
                     progressBarClass: "bg-info",
                     duration: 5000
                 );
@@ -476,7 +475,7 @@
                         "Thông báo",
                         "Tên phân loại đã tồn tại. Vui lòng kiểm tra lại !",
                         cssClass: "toast-danger",
-                        iconClass: "fa fa-bell",
+                       iconClass: "fa fa-exclamation-circle",
                         progressBarClass: "bg-info",
                         duration: 5000
                     );
@@ -496,7 +495,7 @@
                     "Thông báo",
                     "Chèn thành công.",
                     cssClass: "toast-success",
-                    iconClass: "fa fa-bell",
+                    iconClass: "fa fa-check-circle",
                     progressBarClass: "bg-info",
                     duration: 5000
                 );
@@ -513,7 +512,7 @@
                     "Thông báo",
                     "Thêm thành công.",
                     cssClass: "toast-success",
-                    iconClass: "fa fa-bell",
+                   iconClass: "fa fa-check-circle",
                     progressBarClass: "bg-info",
                     duration: 5000
                 );
@@ -527,7 +526,7 @@
                     "Thông báo",
                     "Phân loại cống đã tồn tại , Vui lòng kiểm tra lại !",
                     cssClass: "toast-danger",
-                    iconClass: "fa fa-bell",
+                    iconClass: "fa fa-exclamation-circle",
                     progressBarClass: "bg-info",
                     duration: 5000
                 );
@@ -556,13 +555,13 @@
                 var result = await PhanLoaiCTronHopNhuaRepository.CheckUsingId(deleteId);
                 if (result)
                 {
-                    ToastService.ShowToast("Thông báo", "Không thể xóa danh mục đang được sử dụng.", cssClass: "toast-danger", iconClass: "fa fa-bell", progressBarClass: "bg-info", duration: 5000);
+                    ToastService.ShowToast("Thông báo", "Không thể xóa phân loại đang được sử dụng.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
                 }
                 else
                 {
                     // Thực hiện hành động xóa
                     await PhanLoaiCTronHopNhuaRepository.DeleteById(deleteId);
-                    ToastService.ShowToast("Thông báo", "Xóa danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-bell", progressBarClass: "bg-info", duration: 5000);
+                    ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                     await LoadData();
                 }
 

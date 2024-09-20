@@ -792,12 +792,12 @@
                         listMHopRanhThang = await convertData(excelDataList);
                         var count = await HopRanhThangRepository.MultiInsert(listMHopRanhThang);
                         Console.WriteLine(count);
-                        ToastService.ShowToast("Thông báo", "Đã thêm thành công :" + count + " dòng.", cssClass: "toast-success");
+                        ToastService.ShowToast("Thông báo", "Đã thêm thành công :" + count + " dòng.", cssClass: "toast-success", iconClass: "fa fa-check-circle");
                     }
                     else
                     {
                         excelDataList = new();
-                        ToastService.ShowToast("Thông báo", "Số cột dòng phải đủ như file mẫu. Vui lòng kiểm tra lại", cssClass: "toast-danger");
+                        ToastService.ShowToast("Thông báo", "Số cột dòng phải đủ như file mẫu. Vui lòng kiểm tra lại", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle");
                     }
 
                 }

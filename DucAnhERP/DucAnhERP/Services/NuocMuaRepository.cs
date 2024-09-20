@@ -674,6 +674,23 @@ namespace DucAnhERP.Services
             return true;
         }
 
+        public async Task<bool> CheckExistId(string field, string value)
+        {
+            // Thực hiện truy vấn kiểm tra bản ghi dựa trên tên field và giá trị value
+            using var context = _context.CreateDbContext();
+            var model = await context.DSNuocMua.FirstOrDefaultAsync(m => EF.Property<string>(m, field) == value);
+
+            // Nếu tìm thấy bản ghi, trả về true
+            if (model != null)
+            {
+                return true;
+            }
+
+            // Trả về false nếu không tìm thấy bản ghi
+            return false;
+        }
+
+
         public async Task<NuocMua> GetById(string id)
         {
             try

@@ -4584,25 +4584,25 @@
 
 
                         @* Thông tin mái đào *@
-                        <th onclick="@(() => SortTable("TTMDRanhOngThang_ChieuRongDayDaoNho"))">
+                        <th class="text-center sortable align-middle" onclick="@(() => SortTable("TTMDRanhOngThang_ChieuRongDayDaoNho"))">
                             <div class="mr-3">
                                 Chiều rộng đáy đào nhỏ (m)
                                 <span class="arrow @(GetSortStyle("TTMDRanhOngThang_ChieuRongDayDaoNho"))"></span>
                             </div>
                         </th>
-                        <th onclick="@(() => SortTable("TTMDRanhOngThang_TyLeMoMai"))">
+                        <th class="text-center sortable align-middle" onclick="@(() => SortTable("TTMDRanhOngThang_TyLeMoMai"))">
                             <div class="mr-3">
                                 Tỷ lệ mở mái
                                 <span class="arrow @(GetSortStyle("TTMDRanhOngThang_TyLeMoMai"))"></span>
                             </div>
                         </th>
-                        <th onclick="@(() => SortTable("TTMDRanhOngThang_SoCanhMaiTrai"))">
+                        <th class="text-center sortable align-middle" onclick="@(() => SortTable("TTMDRanhOngThang_SoCanhMaiTrai"))">
                             <div class="mr-3">
                                 Số cạnh mái trái
                                 <span class="arrow @(GetSortStyle("TTMDRanhOngThang_SoCanhMaiTrai"))"></span>
                             </div>
                         </th>
-                        <th onclick="@(() => SortTable("TTMDRanhOngThang_SoCanhMaiPhai"))">
+                        <th class="text-center sortable align-middle" onclick="@(() => SortTable("TTMDRanhOngThang_SoCanhMaiPhai"))">
                             <div class="mr-3">
                                 Số cạnh mái phải
                                 <span class="arrow @(GetSortStyle("TTMDRanhOngThang_SoCanhMaiPhai"))"></span>
@@ -6268,7 +6268,7 @@
                         "Thông báo",
                         "Cập nhật thành công.",
                         cssClass: "toast-success",
-                        iconClass: "fa fa-bell",
+                       iconClass: "fa fa-check-circle",
                         progressBarClass: "bg-info",
                         duration: 5000
                     );
@@ -6285,7 +6285,7 @@
                         "Thông báo",
                         "Chèn thành công.",
                         cssClass: "toast-success",
-                        iconClass: "fa fa-bell",
+                        iconClass: "fa fa-check-circle",
                         progressBarClass: "bg-info",
                         duration: 5000
                     );
@@ -6302,7 +6302,7 @@
                         "Thông báo",
                         "Thêm thành công.",
                         cssClass: "toast-success",
-                        iconClass: "fa fa-bell",
+                        iconClass: "fa fa-check-circle",
                         progressBarClass: "bg-info",
                         duration: 5000
                     );
@@ -6372,8 +6372,8 @@
                 ToastService.ShowToast(
                     "Thông báo",
                     message,
-                    cssClass: "toast-success",
-                    iconClass: "bi bi-info-circle",
+                    cssClass: "toast-danger",
+                    iconClass: "fa fa-exclamation-circle",
                     progressBarClass: "bg-info",
                     duration: 5000
                 );
