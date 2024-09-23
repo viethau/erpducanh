@@ -45,6 +45,12 @@
                         </select>
                         <ValidationMessage For="() => Input.ThongTinDuongTruyenDan_HinhThucTruyenDan" class="text-danger" />
                     </div>
+                    
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien">C.Dài C.Kiện (C.Tròn, C.Hộp) <span class="text-danger">*</span></label>
+                        <InputNumber disabled="@isEdit" @bind-Value="Input.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien" class="form-control" id="TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien" placeholder="C.Dài C.Kiện (C.Tròn, C.Hộp)" />
+                        <ValidationMessage For="() => Input.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien" class="text-danger" />
+                    </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinCauTaoCongTron_CDayPhuBi">C.Dầy phủ bì (m) <span class="text-danger">*</span></label>
                         <InputNumber disabled="@isEdit" @bind-Value="Input.ThongTinCauTaoCongTron_CDayPhuBi" class="form-control" id="ThongTinCauTaoCongTron_CDayPhuBi" placeholder="C.Dầy phủ bì (m)" />
@@ -170,8 +176,8 @@
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CCaoChatMatTrong" class="form-control" id="TTKTHHCongHopRanh_CCaoChatMatTrong" placeholder="C.Cao chát mặt trong (m)" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
-                                <label for="TTKTHHCongHopRanh_CCaoChatmatNgoai">C.Cao chát mặt ngoài (m</label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CCaoChatmatNgoai" class="form-control" id="TTKTHHCongHopRanh_CCaoChatmatNgoai" placeholder="C.Cao chát mặt ngoài (m" />
+                                <label for="TTKTHHCongHopRanh_CCaoChatMatNgoai">C.Cao chát mặt ngoài (m</label>
+                                <InputNumber disabled="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CCaoChatMatNgoai" class="form-control" id="TTKTHHCongHopRanh_CCaoChatMatNgoai" placeholder="C.Cao chát mặt ngoài (m" />
                             </div>
 
                         </div>
@@ -243,6 +249,7 @@
                     <th class="text-center" colspan="4">Thân</th>
                     <th class="text-center" colspan="4">Mũ mố</th>
                     <th class="text-center" colspan="2">Chát</th>
+                    <th class="text-center  align-middle" rowspan="2">C.Dầy phủ bì ống nhựa (m) </th>
                 </tr>
                 <tr>
                     <th> Cấu tạo tường</th>
@@ -261,6 +268,7 @@
                     <th> C.Rộng mũ mố trên</th>
                     <th> C.Cao chát mặt trong (m)</th>
                     <th> C.Cao chát mặt ngoài (m) </th>
+                   
                 </tr>
             </thead>
             @if (listPLCTronHopNhuaModel.Any())
@@ -308,6 +316,7 @@
                             <td>@item.TTKTHHCongHopRanh_CCaoMuMoThotTren</td>
                             <td>@item.TTKTHHCongHopRanh_CRongMuMoTren </td>
                             <td>@item.TTKTHHCongHopRanh_CCaoChatMatTrong </td>
+                            <td>@item.TTKTHHCongHopRanh_CCaoChatMatNgoai </td>
                             <td>@item.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi</td>
 
                         </tr>

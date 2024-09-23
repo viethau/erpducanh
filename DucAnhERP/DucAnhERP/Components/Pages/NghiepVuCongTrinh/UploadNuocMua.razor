@@ -925,6 +925,7 @@
                 nuocMua.MuMoThotTren_R = ParseDoubleOrDefault(listData[i].RowData[43], 0);
                 nuocMua.MuMoThotTren_C = ParseDoubleOrDefault(listData[i].RowData[44], 0);
                 nuocMua.MuMoThotTren_CdTuong = ParseDoubleOrDefault(listData[i].RowData[45], 0);
+
                 nuocMua.HinhThucDauNoi1_Loai = ParseDoubleOrDefault(listData[i].RowData[46], 0);
                 nuocMua.HinhThucDauNoi1_CanhDai = ParseDoubleOrDefault(listData[i].RowData[47], 0);
                 nuocMua.HinhThucDauNoi1_CanhRong = ParseDoubleOrDefault(listData[i].RowData[48], 0);
@@ -957,6 +958,7 @@
                 nuocMua.HinhThucDauNoi8_CanhDai = ParseDoubleOrDefault(listData[i].RowData[75], 0);
                 nuocMua.HinhThucDauNoi8_CanhRong = ParseDoubleOrDefault(listData[i].RowData[76], 0);
                 nuocMua.HinhThucDauNoi8_CanhCheo = ParseDoubleOrDefault(listData[i].RowData[77], 0);
+
                 nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = listData[i].RowData[78].ToString() ?? "";
                 nuocMua.ThongTinTamDanHoGa2_HinhThucDayHoGa = await DanhMucRepository.GetIdDMByTen(listData[i].RowData[79].ToString() ?? "", "HG_HTDHoGa");  
                 nuocMua.ThongTinTamDanHoGa2_DuongKinh = ParseDoubleOrDefault(listData[i].RowData[80], 0);

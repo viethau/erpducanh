@@ -32,6 +32,7 @@ namespace DucAnhERP.ViewModel
         public Double? TTKTHHCongHopRanh_CCaoMuMoThotTren { get; set; } = 0;
         public Double? TTKTHHCongHopRanh_CRongMuMoTren { get; set; } = 0;
         public Double? TTKTHHCongHopRanh_CCaoChatMatTrong { get; set; } = 0;
+        public Double? TTKTHHCongHopRanh_CCaoChatMatNgoai { get; set; } = 0;
         public Double? ThongTinKichThuocHinhHocOngNhua_CDayPhuBi { get; set; } = 0;
         public DateTime? CreateAt { get; set; } = DateTime.Now;
         public string? CreateBy { get; set; } = "";

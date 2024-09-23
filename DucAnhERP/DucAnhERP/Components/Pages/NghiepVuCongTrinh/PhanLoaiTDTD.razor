@@ -23,7 +23,7 @@
                         <InputText @bind-Value="Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan" class="form-control" id="TTTDCongHoRanh_TenLoaiTamDanTieuChuan" placeholder="Tên loại tấm đan " />
                         <ValidationMessage For="() => Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan" class="text-danger" />
                     </div>
-                    <div class="form-floating col-sm-6 col-md-3">
+                   @*  <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinLyTrinhTruyenDan_TuLyTrinh">Từ lý trình<span class="text-danger">*</span></label>
                         <InputNumber disabled="@isEdit" @bind-Value="Input.ThongTinLyTrinhTruyenDan_TuLyTrinh" class="form-control" id="ThongTinLyTrinhTruyenDan_TuLyTrinh" placeholder="Từ lý trình" />
                         <ValidationMessage For="() => Input.ThongTinLyTrinhTruyenDan_TuLyTrinh" class="text-danger" />
@@ -32,7 +32,7 @@
                         <label for="ThongTinLyTrinhTruyenDan_DenLyTrinh">Đến lý trình<span class="text-danger">*</span></label>
                         <InputNumber disabled="@isEdit" @bind-Value="Input.ThongTinLyTrinhTruyenDan_DenLyTrinh" class="form-control" id="ThongTinLyTrinhTruyenDan_DenLyTrinh" placeholder="Đến lý trình" />
                         <ValidationMessage For="() => Input.ThongTinLyTrinhTruyenDan_DenLyTrinh" class="text-danger" />
-                    </div>
+                    </div> *@
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinDuongTruyenDan_HinhThucTruyenDan">Hình thức truyền dẫn <span class="text-danger"></span></label>
                         <select disabled="@isEdit" id="ThongTinDuongTruyenDan_HinhThucTruyenDan" class="form-control" @bind="Input.ThongTinDuongTruyenDan_HinhThucTruyenDan">
@@ -117,8 +117,8 @@
                             <span class="arrow @(GetSortStyle("TTTDCongHoRanh_TenLoaiTamDanTieuChuan"))"></span>
                         </div>
                     </th>
-                    <th colspan="2"> Thông tin lý trình</th>
-                    <th colspan="6"> Cấu tạo đế cống</th>
+                    <th colspan="2" class="text-center sortable align-middle"> Thông tin lý trình</th>
+                    <th colspan="6" class="text-center sortable align-middle"> Cấu tạo đế cống</th>
                 </tr>
                 <tr>
                     <th> Từ lý trình</th>
@@ -157,8 +157,8 @@
                             </td>
                             <td class="text-center">@stt</td>
                             <td>@item.TTTDCongHoRanh_TenLoaiTamDanTieuChuan </td>
-                            <td>@item.ThongTinLyTrinhTruyenDan_TuLyTrinh </td>
-                            <td>@item.ThongTinLyTrinhTruyenDan_DenLyTrinh</td>
+                           @*  <td>@item.ThongTinLyTrinhTruyenDan_TuLyTrinh </td>
+                            <td>@item.ThongTinLyTrinhTruyenDan_DenLyTrinh</td> *@
                             <td>@GetTenDanhMucById(item.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "") </td>
                             <td>@GetTenDanhMucById(item.ThongTinDuongTruyenDan_LoaiTruyenDan ?? "") </td>
                             <td>@GetTenDanhMucById(item.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan ?? "") </td>

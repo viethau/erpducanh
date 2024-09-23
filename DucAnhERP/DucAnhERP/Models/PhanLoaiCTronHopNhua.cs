@@ -84,7 +84,7 @@ namespace DucAnhERP.Models
         public Double? TTKTHHCongHopRanh_CCaoChatMatTrong { get; set; } = 0;
         [Required(ErrorMessage = "Bạn phải nhập chiều cao chát mặt ngoài !")]
         [Range(0, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
-        public Double? TTKTHHCongHopRanh_CCaoChatmatNgoai { get; set; } = 0;
+        public Double? TTKTHHCongHopRanh_CCaoChatMatNgoai { get; set; } = 0;
         [Required(ErrorMessage = "Bạn phải nhập C.Dầy phủ bì!")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
         [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]

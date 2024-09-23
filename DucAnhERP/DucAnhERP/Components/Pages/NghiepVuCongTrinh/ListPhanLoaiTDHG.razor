@@ -89,21 +89,24 @@
         <table class="table table-hover table-bordered">
             <thead class="bg-info">
                 <tr>
-                    <th> </th>
-                    <th> STT</th>
-                    <th onclick="@(() => SortTable("ThongTinTamDanHoGa2_PhanLoaiDayHoGa"))" class="text-center sortable align-middle">
+                    <th rowspan="2"> </th>
+                    <th rowspan="2"> STT</th>
+                    <th rowspan="2" onclick="@(() => SortTable("ThongTinTamDanHoGa2_PhanLoaiDayHoGa"))" class="text-center sortable align-middle">
                         <div class="mr-3">
                             Phân loại đậy hố ga
                             <span class="arrow @(GetSortStyle("ThongTinTamDanHoGa2_PhanLoaiDayHoGa"))"></span>
                         </div>
                     </th>
-                    <th onclick="@(() => SortTable("ThongTinTamDanHoGa2_HinhThucDayHoGa_Name"))" class="text-center sortable align-middle">
+                    <th rowspan="2" onclick="@(() => SortTable("ThongTinTamDanHoGa2_HinhThucDayHoGa_Name"))" class="text-center sortable align-middle">
                         <div class="mr-3">
                             Hình thức đậy hố ga
                             <span class="arrow @(GetSortStyle("ThongTinTamDanHoGa2_HinhThucDayHoGa_Name"))"></span>
                         </div>
                     </th>
-        
+                    <th colspan="2" class="text-center sortable align-middle">Loại tròn</th>
+                    <th colspan="3" class="text-center sortable align-middle">Loại vuông hoặc chữ nhật </th>
+                </tr>
+                <tr>
                     <th> Đường kính (m) </th>
                     <th> Chiều dầy (m)</th>
                     <th> D (m) </th>

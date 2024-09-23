@@ -86,6 +86,7 @@ namespace DucAnhERP.Services
                                 TTKTHHCongHopRanh_CCaoMuMoThotTren = pltdhg.TTKTHHCongHopRanh_CCaoMuMoThotTren,
                                 TTKTHHCongHopRanh_CRongMuMoTren = pltdhg.TTKTHHCongHopRanh_CRongMuMoTren,
                                 TTKTHHCongHopRanh_CCaoChatMatTrong = pltdhg.TTKTHHCongHopRanh_CCaoChatMatTrong,
+                                TTKTHHCongHopRanh_CCaoChatMatNgoai = pltdhg.TTKTHHCongHopRanh_CCaoChatMatNgoai,
                                 ThongTinKichThuocHinhHocOngNhua_CDayPhuBi = pltdhg.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi,
                                 Flag=pltdhg.Flag,
                                 CreateAt = pltdhg.CreateAt,
@@ -158,6 +159,7 @@ namespace DucAnhERP.Services
                                  pltdhg.TTKTHHCongHopRanh_CCaoMuMoThotTren == searchData.TTKTHHCongHopRanh_CCaoMuMoThotTren &&
                                  pltdhg.TTKTHHCongHopRanh_CRongMuMoTren == searchData.TTKTHHCongHopRanh_CRongMuMoTren &&
                                  pltdhg.TTKTHHCongHopRanh_CCaoChatMatTrong == searchData.TTKTHHCongHopRanh_CCaoChatMatTrong &&
+                                 pltdhg.TTKTHHCongHopRanh_CCaoChatMatNgoai == searchData.TTKTHHCongHopRanh_CCaoChatMatNgoai &&
                                  pltdhg.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi == searchData.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi
                                           ));
 
@@ -200,6 +202,7 @@ namespace DucAnhERP.Services
                                  pltdhg.TTKTHHCongHopRanh_CCaoMuMoThotTren == searchData.TTKTHHCongHopRanh_CCaoMuMoThotTren &&
                                  pltdhg.TTKTHHCongHopRanh_CRongMuMoTren == searchData.TTKTHHCongHopRanh_CRongMuMoTren &&
                                  pltdhg.TTKTHHCongHopRanh_CCaoChatMatTrong == searchData.TTKTHHCongHopRanh_CCaoChatMatTrong &&
+                                 pltdhg.TTKTHHCongHopRanh_CCaoChatMatNgoai == searchData.TTKTHHCongHopRanh_CCaoChatMatNgoai &&
                                  pltdhg.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi == searchData.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi
                                           ));
 

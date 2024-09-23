@@ -166,6 +166,39 @@ namespace DucAnhERP.Services
                             join loaiVatLieuDao_TTVLD in context.DSDanhMuc
                                  on nuocMua.TTVLDCongRanh_LoaiVatLieuDao equals loaiVatLieuDao_TTVLD.Id into gj25
                             from loaiVatLieuDao_TTVLD in gj25.DefaultIfEmpty()
+
+                            join KLBoSung1 in context.DSDanhMuc
+                               on nuocMua.HinhThucDauNoi1_KLBoSung equals KLBoSung1.Id into gj26
+                            from KLBoSung1 in gj26.DefaultIfEmpty() // Left join for HinhThucDauNoi1_KLBoSung
+
+                            join KLBoSung2 in context.DSDanhMuc
+                              on nuocMua.HinhThucDauNoi1_KLBoSung equals KLBoSung2.Id into gj27
+                            from KLBoSung2 in gj27.DefaultIfEmpty() // Left join for HinhThucDauNoi2_KLBoSung
+
+                            join KLBoSung3 in context.DSDanhMuc
+                              on nuocMua.HinhThucDauNoi1_KLBoSung equals KLBoSung3.Id into gj28
+                            from KLBoSung3 in gj28.DefaultIfEmpty() // Left join for HinhThucDauNoi2_KLBoSung
+
+                            join KLBoSung4 in context.DSDanhMuc
+                              on nuocMua.HinhThucDauNoi1_KLBoSung equals KLBoSung4.Id into gj29
+                            from KLBoSung4 in gj29.DefaultIfEmpty() // Left join for HinhThucDauNoi4_KLBoSung
+
+                            join KLBoSung5 in context.DSDanhMuc
+                              on nuocMua.HinhThucDauNoi1_KLBoSung equals KLBoSung5.Id into gj30
+                            from KLBoSung5 in gj30.DefaultIfEmpty() // Left join for HinhThucDauNoi5_KLBoSung
+
+                            join KLBoSung6 in context.DSDanhMuc
+                              on nuocMua.HinhThucDauNoi1_KLBoSung equals KLBoSung6.Id into gj31
+                            from KLBoSung6 in gj31.DefaultIfEmpty() // Left join for HinhThucDauNoi6_KLBoSung
+
+                            join KLBoSung7 in context.DSDanhMuc
+                              on nuocMua.HinhThucDauNoi1_KLBoSung equals KLBoSung7.Id into gj32
+                            from KLBoSung7 in gj32.DefaultIfEmpty() // Left join for HinhThucDauNoi7_KLBoSung
+
+                            join KLBoSung8 in context.DSDanhMuc
+                              on nuocMua.HinhThucDauNoi1_KLBoSung equals KLBoSung8.Id into gj33
+                            from KLBoSung8 in gj33.DefaultIfEmpty() // Left join for HinhThucDauNoi8_KLBoSung
+
                                 // Sắp xếp theo Flag của DSNuocMua
                             orderby nuocMua.Flag
                             select new NuocMuaModel
@@ -224,38 +257,128 @@ namespace DucAnhERP.Services
                                 MuMoThotTren_R = nuocMua.MuMoThotTren_R ?? 0,
                                 MuMoThotTren_C = nuocMua.MuMoThotTren_C ?? 0,
                                 MuMoThotTren_CdTuong = nuocMua.MuMoThotTren_CdTuong ?? 0,
+
                                 HinhThucDauNoi1_Loai = nuocMua.HinhThucDauNoi1_Loai ?? 0,
+                                HinhThucDauNoi1_KLBoSung = nuocMua.HinhThucDauNoi1_KLBoSung ?? "",
+                                HinhThucDauNoi1_KLBoSung_Name = KLBoSung1.Ten ?? "",
                                 HinhThucDauNoi1_CanhDai = nuocMua.HinhThucDauNoi1_CanhDai ?? 0,
+                                HinhThucDauNoi1_CDD = nuocMua.HinhThucDauNoi1_CDD ?? 0,
+                                HinhThucDauNoi1_CDR = nuocMua.HinhThucDauNoi1_CDR ?? 0,
+                                HinhThucDauNoi1_CDC = nuocMua.HinhThucDauNoi1_CDC ?? 0,
                                 HinhThucDauNoi1_CanhRong = nuocMua.HinhThucDauNoi1_CanhRong ?? 0,
+                                HinhThucDauNoi1_CRD = nuocMua.HinhThucDauNoi1_CRD ?? 0,
+                                HinhThucDauNoi1_CRR = nuocMua.HinhThucDauNoi1_CRR ?? 0,
+                                HinhThucDauNoi1_CRC = nuocMua.HinhThucDauNoi1_CRC ?? 0,
                                 HinhThucDauNoi1_CanhCheo = nuocMua.HinhThucDauNoi1_CanhCheo ?? 0,
+                                HinhThucDauNoi1_CCD = nuocMua.HinhThucDauNoi1_CCD ?? 0,
+                                HinhThucDauNoi1_CCR = nuocMua.HinhThucDauNoi1_CCR ?? 0,
+                                HinhThucDauNoi1_CCC = nuocMua.HinhThucDauNoi1_CCC ?? 0,
                                 HinhThucDauNoi2_Loai = nuocMua.HinhThucDauNoi2_Loai ?? 0,
+                                HinhThucDauNoi2_KLBoSung = nuocMua.HinhThucDauNoi2_KLBoSung ?? "",
+                                HinhThucDauNoi2_KLBoSung_Name = KLBoSung2.Ten ?? "",
                                 HinhThucDauNoi2_CanhDai = nuocMua.HinhThucDauNoi2_CanhDai ?? 0,
+                                HinhThucDauNoi2_CDD = nuocMua.HinhThucDauNoi2_CDD ?? 0,
+                                HinhThucDauNoi2_CDR = nuocMua.HinhThucDauNoi2_CDR ?? 0,
+                                HinhThucDauNoi2_CDC = nuocMua.HinhThucDauNoi2_CDC ?? 0,
                                 HinhThucDauNoi2_CanhRong = nuocMua.HinhThucDauNoi2_CanhRong ?? 0,
+                                HinhThucDauNoi2_CRD = nuocMua.HinhThucDauNoi2_CRD ?? 0,
+                                HinhThucDauNoi2_CRR = nuocMua.HinhThucDauNoi2_CRR ?? 0,
+                                HinhThucDauNoi2_CRC = nuocMua.HinhThucDauNoi2_CRC ?? 0,
                                 HinhThucDauNoi2_CanhCheo = nuocMua.HinhThucDauNoi2_CanhCheo ?? 0,
+                                HinhThucDauNoi2_CCD = nuocMua.HinhThucDauNoi2_CCD ?? 0,
+                                HinhThucDauNoi2_CCR = nuocMua.HinhThucDauNoi2_CCR ?? 0,
+                                HinhThucDauNoi2_CCC = nuocMua.HinhThucDauNoi2_CCC ?? 0,
                                 HinhThucDauNoi3_Loai = nuocMua.HinhThucDauNoi3_Loai ?? 0,
+                                HinhThucDauNoi3_KLBoSung = nuocMua.HinhThucDauNoi3_KLBoSung ?? "",
+                                HinhThucDauNoi3_KLBoSung_Name = KLBoSung3.Ten ?? "",
                                 HinhThucDauNoi3_CanhDai = nuocMua.HinhThucDauNoi3_CanhDai ?? 0,
+                                HinhThucDauNoi3_CDD = nuocMua.HinhThucDauNoi3_CDD ?? 0,
+                                HinhThucDauNoi3_CDR = nuocMua.HinhThucDauNoi3_CDR ?? 0,
+                                HinhThucDauNoi3_CDC = nuocMua.HinhThucDauNoi3_CDC ?? 0,
                                 HinhThucDauNoi3_CanhRong = nuocMua.HinhThucDauNoi3_CanhRong ?? 0,
+                                HinhThucDauNoi3_CRD = nuocMua.HinhThucDauNoi3_CRD ?? 0,
+                                HinhThucDauNoi3_CRR = nuocMua.HinhThucDauNoi3_CRR ?? 0,
+                                HinhThucDauNoi3_CRC = nuocMua.HinhThucDauNoi3_CRC ?? 0,
                                 HinhThucDauNoi3_CanhCheo = nuocMua.HinhThucDauNoi3_CanhCheo ?? 0,
+                                HinhThucDauNoi3_CCD = nuocMua.HinhThucDauNoi3_CCD ?? 0,
+                                HinhThucDauNoi3_CCR = nuocMua.HinhThucDauNoi3_CCR ?? 0,
+                                HinhThucDauNoi3_CCC = nuocMua.HinhThucDauNoi3_CCC ?? 0,
                                 HinhThucDauNoi4_Loai = nuocMua.HinhThucDauNoi4_Loai ?? 0,
+                                HinhThucDauNoi4_KLBoSung = nuocMua.HinhThucDauNoi4_KLBoSung ?? "",
+                                HinhThucDauNoi4_KLBoSung_Name = KLBoSung4.Ten ?? "",
                                 HinhThucDauNoi4_CanhDai = nuocMua.HinhThucDauNoi4_CanhDai ?? 0,
+                                HinhThucDauNoi4_CDD = nuocMua.HinhThucDauNoi4_CDD ?? 0,
+                                HinhThucDauNoi4_CDR = nuocMua.HinhThucDauNoi4_CDR ?? 0,
+                                HinhThucDauNoi4_CDC = nuocMua.HinhThucDauNoi4_CDC ?? 0,
                                 HinhThucDauNoi4_CanhRong = nuocMua.HinhThucDauNoi4_CanhRong ?? 0,
+                                HinhThucDauNoi4_CRD = nuocMua.HinhThucDauNoi4_CRD ?? 0,
+                                HinhThucDauNoi4_CRR = nuocMua.HinhThucDauNoi4_CRR ?? 0,
+                                HinhThucDauNoi4_CRC = nuocMua.HinhThucDauNoi4_CRC ?? 0,
                                 HinhThucDauNoi4_CanhCheo = nuocMua.HinhThucDauNoi4_CanhCheo ?? 0,
+                                HinhThucDauNoi4_CCD = nuocMua.HinhThucDauNoi4_CCD ?? 0,
+                                HinhThucDauNoi4_CCR = nuocMua.HinhThucDauNoi4_CCR ?? 0,
+                                HinhThucDauNoi4_CCC = nuocMua.HinhThucDauNoi4_CCC ?? 0,
                                 HinhThucDauNoi5_Loai = nuocMua.HinhThucDauNoi5_Loai ?? 0,
+                                HinhThucDauNoi5_KLBoSung = nuocMua.HinhThucDauNoi5_KLBoSung ?? "",
+                                HinhThucDauNoi5_KLBoSung_Name = KLBoSung5.Ten ?? "",
                                 HinhThucDauNoi5_CanhDai = nuocMua.HinhThucDauNoi5_CanhDai ?? 0,
+                                HinhThucDauNoi5_CDD = nuocMua.HinhThucDauNoi5_CDD ?? 0,
+                                HinhThucDauNoi5_CDR = nuocMua.HinhThucDauNoi5_CDR ?? 0,
+                                HinhThucDauNoi5_CDC = nuocMua.HinhThucDauNoi5_CDC ?? 0,
                                 HinhThucDauNoi5_CanhRong = nuocMua.HinhThucDauNoi5_CanhRong ?? 0,
+                                HinhThucDauNoi5_CRD = nuocMua.HinhThucDauNoi5_CRD ?? 0,
+                                HinhThucDauNoi5_CRR = nuocMua.HinhThucDauNoi5_CRR ?? 0,
+                                HinhThucDauNoi5_CRC = nuocMua.HinhThucDauNoi5_CRC ?? 0,
                                 HinhThucDauNoi5_CanhCheo = nuocMua.HinhThucDauNoi5_CanhCheo ?? 0,
+                                HinhThucDauNoi5_CCD = nuocMua.HinhThucDauNoi5_CCD ?? 0,
+                                HinhThucDauNoi5_CCR = nuocMua.HinhThucDauNoi5_CCR ?? 0,
+                                HinhThucDauNoi5_CCC = nuocMua.HinhThucDauNoi5_CCC ?? 0,
                                 HinhThucDauNoi6_Loai = nuocMua.HinhThucDauNoi6_Loai ?? 0,
+                                HinhThucDauNoi6_KLBoSung = nuocMua.HinhThucDauNoi6_KLBoSung ?? "",
+                                HinhThucDauNoi6_KLBoSung_Name = KLBoSung6.Ten ?? "",
                                 HinhThucDauNoi6_CanhDai = nuocMua.HinhThucDauNoi6_CanhDai ?? 0,
+                                HinhThucDauNoi6_CDD = nuocMua.HinhThucDauNoi6_CDD ?? 0,
+                                HinhThucDauNoi6_CDR = nuocMua.HinhThucDauNoi6_CDR ?? 0,
+                                HinhThucDauNoi6_CDC = nuocMua.HinhThucDauNoi6_CDC ?? 0,
                                 HinhThucDauNoi6_CanhRong = nuocMua.HinhThucDauNoi6_CanhRong ?? 0,
+                                HinhThucDauNoi6_CRD = nuocMua.HinhThucDauNoi6_CRD ?? 0,
+                                HinhThucDauNoi6_CRR = nuocMua.HinhThucDauNoi6_CRR ?? 0,
+                                HinhThucDauNoi6_CRC = nuocMua.HinhThucDauNoi6_CRC ?? 0,
                                 HinhThucDauNoi6_CanhCheo = nuocMua.HinhThucDauNoi6_CanhCheo ?? 0,
+                                HinhThucDauNoi6_CCD = nuocMua.HinhThucDauNoi6_CCD ?? 0,
+                                HinhThucDauNoi6_CCR = nuocMua.HinhThucDauNoi6_CCR ?? 0,
+                                HinhThucDauNoi6_CCC = nuocMua.HinhThucDauNoi6_CCC ?? 0,
                                 HinhThucDauNoi7_Loai = nuocMua.HinhThucDauNoi7_Loai ?? 0,
+                                HinhThucDauNoi7_KLBoSung = nuocMua.HinhThucDauNoi7_KLBoSung ?? "",
+                                HinhThucDauNoi7_KLBoSung_Name = KLBoSung7.Ten ?? "",
                                 HinhThucDauNoi7_CanhDai = nuocMua.HinhThucDauNoi7_CanhDai ?? 0,
+                                HinhThucDauNoi7_CDD = nuocMua.HinhThucDauNoi7_CDD ?? 0,
+                                HinhThucDauNoi7_CDR = nuocMua.HinhThucDauNoi7_CDR ?? 0,
+                                HinhThucDauNoi7_CDC = nuocMua.HinhThucDauNoi7_CDC ?? 0,
                                 HinhThucDauNoi7_CanhRong = nuocMua.HinhThucDauNoi7_CanhRong ?? 0,
+                                HinhThucDauNoi7_CRD = nuocMua.HinhThucDauNoi7_CRD ?? 0,
+                                HinhThucDauNoi7_CRR = nuocMua.HinhThucDauNoi7_CRR ?? 0,
+                                HinhThucDauNoi7_CRC = nuocMua.HinhThucDauNoi7_CRC ?? 0,
                                 HinhThucDauNoi7_CanhCheo = nuocMua.HinhThucDauNoi7_CanhCheo ?? 0,
+                                HinhThucDauNoi7_CCD = nuocMua.HinhThucDauNoi7_CCD ?? 0,
+                                HinhThucDauNoi7_CCR = nuocMua.HinhThucDauNoi7_CCR ?? 0,
+                                HinhThucDauNoi7_CCC = nuocMua.HinhThucDauNoi7_CCC ?? 0,
                                 HinhThucDauNoi8_Loai = nuocMua.HinhThucDauNoi8_Loai ?? 0,
+                                HinhThucDauNoi8_KLBoSung = nuocMua.HinhThucDauNoi8_KLBoSung ?? "",
+                                HinhThucDauNoi8_KLBoSung_Name = KLBoSung8.Ten ?? "",
                                 HinhThucDauNoi8_CanhDai = nuocMua.HinhThucDauNoi8_CanhDai ?? 0,
+                                HinhThucDauNoi8_CDD = nuocMua.HinhThucDauNoi8_CDD ?? 0,
+                                HinhThucDauNoi8_CDR = nuocMua.HinhThucDauNoi8_CDR ?? 0,
+                                HinhThucDauNoi8_CDC = nuocMua.HinhThucDauNoi8_CDC ?? 0,
                                 HinhThucDauNoi8_CanhRong = nuocMua.HinhThucDauNoi8_CanhRong ?? 0,
+                                HinhThucDauNoi8_CRD = nuocMua.HinhThucDauNoi8_CRD ?? 0,
+                                HinhThucDauNoi8_CRR = nuocMua.HinhThucDauNoi8_CRR ?? 0,
+                                HinhThucDauNoi8_CRC = nuocMua.HinhThucDauNoi8_CRC ?? 0,
                                 HinhThucDauNoi8_CanhCheo = nuocMua.HinhThucDauNoi8_CanhCheo ?? 0,
+                                HinhThucDauNoi8_CCD = nuocMua.HinhThucDauNoi8_CCD ?? 0,
+                                HinhThucDauNoi8_CCR = nuocMua.HinhThucDauNoi8_CCR ?? 0,
+                                HinhThucDauNoi8_CCC = nuocMua.HinhThucDauNoi8_CCC ?? 0,
+
                                 ThongTinTamDanHoGa2_PhanLoaiDayHoGa = nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
                                 PhanLoaiTDHoGa_PhanLoaiDayHoGa = phanLoaiTDHoGa.ThongTinTamDanHoGa2_PhanLoaiDayHoGa??"",
                                 ThongTinTamDanHoGa2_HinhThucDayHoGa = nuocMua.ThongTinTamDanHoGa2_HinhThucDayHoGa ?? "",
