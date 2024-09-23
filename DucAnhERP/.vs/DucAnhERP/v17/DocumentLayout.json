@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\services\\phanloaidecongrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\services\\phanloaidecongrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\ducanherp.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\ducanherp.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\components\\pages\\nghiepvucongtrinh\\listnuocmua.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\components\\pages\\nghiepvucongtrinh\\listnuocmua.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\components\\pages\\nghiepvucongtrinh\\test.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\components\\pages\\nghiepvucongtrinh\\test.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,34 +22,45 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ListNuocMua.razor",
-              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
-              "RelativeDocumentMoniker": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
-              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
-              "RelativeToolTip": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
-              "ViewState": "AQIAAPsWAAAAAAAAAAAhwBcXAAAQAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-09-19T07:26:37.514Z",
-              "IsPinned": true,
+              "DocumentIndex": 0,
+              "Title": "DucAnhERP",
+              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\DucAnhERP.csproj",
+              "RelativeDocumentMoniker": "DucAnhERP\\DucAnhERP.csproj",
+              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\DucAnhERP.csproj",
+              "RelativeToolTip": "DucAnhERP\\DucAnhERP.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-09-20T10:15:17.071Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "PhanLoaiDeCongRepository.cs",
-              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Services\\PhanLoaiDeCongRepository.cs",
-              "RelativeDocumentMoniker": "DucAnhERP\\Services\\PhanLoaiDeCongRepository.cs",
-              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Services\\PhanLoaiDeCongRepository.cs",
-              "RelativeToolTip": "DucAnhERP\\Services\\PhanLoaiDeCongRepository.cs",
-              "ViewState": "AQIAAFkAAAAAAAAAAAAcwHUAAAAQAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-20T04:12:03.63Z",
+              "DocumentIndex": 1,
+              "Title": "App.razor",
+              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\App.razor",
+              "RelativeDocumentMoniker": "DucAnhERP\\Components\\App.razor",
+              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\App.razor*",
+              "RelativeToolTip": "DucAnhERP\\Components\\App.razor*",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAAACAAAAAEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-09-20T08:42:05.112Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Test.razor",
+              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\Test.razor",
+              "RelativeDocumentMoniker": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\Test.razor",
+              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\Test.razor",
+              "RelativeToolTip": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\Test.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-09-20T06:53:21.617Z"
             }
           ]
         }
