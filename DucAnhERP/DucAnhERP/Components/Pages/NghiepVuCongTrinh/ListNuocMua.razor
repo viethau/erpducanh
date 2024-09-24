@@ -33,7 +33,7 @@
 <div class="container-fluid">
     <div class="d-inline">
         <button class="mx-2 my-3 btn btn-primary" @onclick="ShowModal">Thêm mới</button>
-        @* <a href="/files/file_mau.xlsx" download="file_mau.xlsx" class="btn btn-link  my-3">Tải về file mẫu</a> *@
+        @* <a href="/files/file_mau_nuocmua.xlsx" download="file_mau_nuocmua.xlsx" class="btn btn-link  my-3">Tải về file mẫu</a> *@
     </div>
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
         <BodyTemplate>
@@ -3499,7 +3499,7 @@
                                 <span class="arrow @(GetSortStyle("MuMoThotDuoi_C"))"></span>
                             </div>
                         </th>
-                        <th onclick="@(() => SortTable("MuMoThotDuoi_CdTuong"))" class="text-center text-danger sortable align-middle">
+                        <th onclick="@(() => SortTable("MuMoThotDuoi_CdTuong"))" class="text-center  sortable align-middle">
                             <div class="mr-3 ">
                                 CD tường (m)
                                 <span class="arrow @(GetSortStyle("MuMoThotDuoi_CdTuong"))"></span>
@@ -3535,65 +3535,65 @@
 
                         @* Hạng mục chiếm chỗ hố ga *@
                         
-                         <th class="text-center align-middle">Mángthu</th>
-                         <th class="text-center align-middle">KLbổsung</th>
-                         <th class="text-center align-middle">Cạnhdài</th>
+                         <th class="text-center align-middle">Máng thu</th>
+                         <th class="text-center align-middle">KL bổ sung</th>
+                         <th class="text-center align-middle">Cạnh dài</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnhrộng</th>
+                         <th class="text-center align-middle">Cạnh rộng</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnhchéo</th>
+                         <th class="text-center align-middle">Cạnh chéo</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
                          <th class="text-center align-middle">D1500</th>
-                         <th class="text-center align-middle">KLbổsung</th>
-                         <th class="text-center align-middle">Cạnhdài</th>
+                         <th class="text-center align-middle">KL bổ sung</th>
+                         <th class="text-center align-middle">Cạnh dài</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnhrộng</th>
+                         <th class="text-center align-middle">Cạnh rộng</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnhchéo</th>
+                         <th class="text-center align-middle">Cạnh chéo</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
                          <th class="text-center align-middle">D1000</th>
-                         <th class="text-center align-middle">KLbổsung</th>
+                         <th class="text-center align-middle">KL bổ sung</th>
                          <th class="text-center align-middle">Cạnhdài</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnhrộng</th>
+                         <th class="text-center align-middle">Cạnh rộng</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnhchéo</th>
+                         <th class="text-center align-middle">Cạnh chéo</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">RãnhB1000</th>
-                         <th class="text-center align-middle">KLbổsung</th>
-                         <th class="text-center align-middle">Cạnhdài</th>
+                         <th class="text-center align-middle">Rãnh B1000</th>
+                         <th class="text-center align-middle">KL bổsung</th>
+                         <th class="text-center align-middle">Cạnh dài</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnhrộng</th>
+                         <th class="text-center align-middle">Cạnh rộng</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnhchéo</th>
+                         <th class="text-center align-middle">Cạnh chéo</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
                          <th class="text-center align-middle">B1000CL</th>
-                         <th class="text-center align-middle">KLbổsung</th>
-                         <th class="text-center align-middle">Cạnhdài</th>
+                         <th class="text-center align-middle">KL bổ sung</th>
+                         <th class="text-center align-middle">Cạnh dài</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
@@ -3606,7 +3606,7 @@
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
                          <th class="text-center align-middle">D600</th>
-                         <th class="text-center align-middle">KLbổsung</th>
+                         <th class="text-center align-middle">KL bổ sung</th>
                          <th class="text-center align-middle">Cạnhdài</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
@@ -3615,35 +3615,35 @@
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnhchéo</th>
+                         <th class="text-center align-middle">Cạnh chéo</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">RãnhB800</th>
-                         <th class="text-center align-middle">KLbổsung</th>
-                         <th class="text-center align-middle">Cạnhdài</th>
+                         <th class="text-center align-middle">Rãnh B800</th>
+                         <th class="text-center align-middle">KL bổ sung</th>
+                         <th class="text-center align-middle">Cạnh dài</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnhrộng</th>
+                         <th class="text-center align-middle">Cạnh rộng</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnhchéo</th>
+                         <th class="text-center align-middle">Cạnh chéo</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
                          <th class="text-center align-middle">B2000</th>
-                         <th class="text-center align-middle">KLbổsung</th>
-                         <th class="text-center align-middle">Cạnhdài</th>
+                         <th class="text-center align-middle">KL bổ sung</th>
+                         <th class="text-center align-middle">Cạnh dài</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnhrộng</th>
+                         <th class="text-center align-middle">Cạnh rộng</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnhchéo</th>
+                         <th class="text-center align-middle">Cạnh chéo</th>
                          <th class="text-center align-middle">D</th>
                          <th class="text-center align-middle">R</th>
                          <th class="text-center align-middle">C</th>
@@ -5614,7 +5614,7 @@
                                 <td class="text-center">@item.MuMoThotTren_CdTuong</td>
 
                                 <td class="text-center ">@item.HinhThucDauNoi1_Loai</td>
-                                <td class="text-center ">@item.HinhThucDauNoi1_KLBoSung</td>
+                                <td class="text-center ">@item.HinhThucDauNoi1_KLBoSung_Name</td>
                                 <td class="text-center ">@item.HinhThucDauNoi1_CanhDai</td>
                                 <td class="text-center ">@item.HinhThucDauNoi1_CDD</td>
                                 <td class="text-center ">@item.HinhThucDauNoi1_CDR</td>
@@ -6226,18 +6226,57 @@
         isLoading = true;
         var helper = new DataConversionHelper();
         listDanhMuc = await DanhMucRepository.GetAll();
-        var nuocmuas = await NuocMuaRepository.GetData();
-
+        var nuocMuaRepository = await NuocMuaRepository.GetData();
+        List<NuocMuaModel> nuocmuas ;
+        nuocmuas = await ConvertDanhMuc(nuocMuaRepository);
         listModel = nuocmuas;
         listNuocMuaModel = Paging(nuocmuas);
         isLoading = false;
 
     }
 
+    public async Task<List<NuocMuaModel>> ConvertDanhMuc(List<NuocMuaModel> listNuocMua)
+    {
+        if(listNuocMua.Count()>0){
+            foreach(var item in listNuocMua){
+                item.ThongTinChungHoGa_HinhThucHoGa_Name = GetTenDanhMucById(item.ThongTinChungHoGa_HinhThucHoGa);
+                item.ThongTinChungHoGa_KetCauMuMo_Name = GetTenDanhMucById(item.ThongTinChungHoGa_KetCauMuMo);
+                item.ThongTinChungHoGa_KetCauTuong_Name = GetTenDanhMucById(item.ThongTinChungHoGa_KetCauTuong);
+                item.ThongTinChungHoGa_HinhThucMongHoGa_Name = GetTenDanhMucById(item.ThongTinChungHoGa_HinhThucMongHoGa);
+                item.ThongTinChungHoGa_KetCauMong_Name = GetTenDanhMucById(item.ThongTinChungHoGa_KetCauMong);
+                item.ThongTinChungHoGa_ChatMatTrong_Name = GetTenDanhMucById(item.ThongTinChungHoGa_ChatMatTrong);
+                item.ThongTinChungHoGa_ChatMatNgoai_Name = GetTenDanhMucById(item.ThongTinChungHoGa_ChatMatNgoai);
+                item.HinhThucDauNoi1_KLBoSung_Name =GetTenDanhMucById(item.HinhThucDauNoi1_KLBoSung);
+                item.HinhThucDauNoi2_KLBoSung_Name =  GetTenDanhMucById(item.HinhThucDauNoi2_KLBoSung);
+                item.HinhThucDauNoi3_KLBoSung_Name = GetTenDanhMucById(item.HinhThucDauNoi3_KLBoSung);
+                item.HinhThucDauNoi4_KLBoSung_Name = GetTenDanhMucById(item.HinhThucDauNoi4_KLBoSung);
+                item.HinhThucDauNoi5_KLBoSung_Name =  GetTenDanhMucById(item.HinhThucDauNoi5_KLBoSung);
+                item.HinhThucDauNoi6_KLBoSung_Name =GetTenDanhMucById(item.HinhThucDauNoi6_KLBoSung);
+                item.HinhThucDauNoi7_KLBoSung_Name = GetTenDanhMucById(item.HinhThucDauNoi7_KLBoSung);
+                item.HinhThucDauNoi8_KLBoSung_Name =  GetTenDanhMucById(item.HinhThucDauNoi8_KLBoSung);
+                item.ThongTinTamDanHoGa2_HinhThucDayHoGa_Name =GetTenDanhMucById(item.ThongTinTamDanHoGa2_HinhThucDayHoGa);
+                item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao_Name = GetTenDanhMucById(item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao);
+                item.ThongTinDuongTruyenDan_HinhThucTruyenDan_Name = GetTenDanhMucById(item.ThongTinDuongTruyenDan_HinhThucTruyenDan);
+                item.ThongTinDuongTruyenDan_LoaiTruyenDan_Name = GetTenDanhMucById(item.ThongTinDuongTruyenDan_LoaiTruyenDan);
+                item.ThongTinMongDuongTruyenDan_LoaiMong_Name = GetTenDanhMucById(item.ThongTinMongDuongTruyenDan_LoaiMong);
+                item.ThongTinMongDuongTruyenDan_HinhThucMong_Name =GetTenDanhMucById(item.ThongTinMongDuongTruyenDan_HinhThucMong);
+                item.TTKTHHCongHopRanh_CauTaoTuong_Name = GetTenDanhMucById(item.TTKTHHCongHopRanh_CauTaoTuong);
+                item.TTKTHHCongHopRanh_CauTaoMuMo_Name = GetTenDanhMucById(item.TTKTHHCongHopRanh_CauTaoMuMo);
+                item.TTKTHHCongHopRanh_ChatMatTrong_Name = GetTenDanhMucById(item.TTKTHHCongHopRanh_ChatMatTrong);
+                item.TTKTHHCongHopRanh_ChatMatNgoai_Name = GetTenDanhMucById(item.TTKTHHCongHopRanh_ChatMatNgoai);
+                item.TTKTHHCongHopRanh_CauTaoThanhChong_Name =GetTenDanhMucById(item.TTKTHHCongHopRanh_CauTaoThanhChong);
+                item.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name = GetTenDanhMucById(item.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan);
+                item.TTTDCongHoRanh_CauTaoTamDanTruyenDan_Name = GetTenDanhMucById(item.TTTDCongHoRanh_CauTaoTamDanTruyenDan);
+                item.TTVLDCongRanh_LoaiVatLieuDao_Name = GetTenDanhMucById(item.TTVLDCongRanh_LoaiVatLieuDao);
+            }
+        }
+        return listNuocMua;
+    }
+
     public string GetTenDanhMucById(string id)
     {
         var danhMuc = listDanhMuc.FirstOrDefault(dm => dm.Id == id);
-        return danhMuc != null ? danhMuc.Ten : null;
+        return danhMuc != null ? danhMuc.Ten : "";
     }
 
     public async Task<string> GetTenPhanLoaiHoGaById(string id)
