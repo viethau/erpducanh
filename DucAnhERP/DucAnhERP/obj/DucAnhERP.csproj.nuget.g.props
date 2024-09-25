@@ -13,6 +13,7 @@
     <SourceRoot Include="C:\Users\qminh\.nuget\packages\" />
   </ItemGroup>
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)z.blazor.diagrams\3.0.2\buildTransitive\Z.Blazor.Diagrams.props" Condition="Exists('$(NuGetPackageRoot)z.blazor.diagrams\3.0.2\buildTransitive\Z.Blazor.Diagrams.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.entityframeworkcore\8.0.5\buildTransitive\net8.0\Microsoft.EntityFrameworkCore.props" Condition="Exists('$(NuGetPackageRoot)microsoft.entityframeworkcore\8.0.5\buildTransitive\net8.0\Microsoft.EntityFrameworkCore.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.entityframeworkcore.design\8.0.5\build\net8.0\Microsoft.EntityFrameworkCore.Design.props" Condition="Exists('$(NuGetPackageRoot)microsoft.entityframeworkcore.design\8.0.5\build\net8.0\Microsoft.EntityFrameworkCore.Design.props')" />
     <Import Project="$(NuGetPackageRoot)blazorinputfile\0.2.0\buildTransitive\BlazorInputFile.props" Condition="Exists('$(NuGetPackageRoot)blazorinputfile\0.2.0\buildTransitive\BlazorInputFile.props')" />

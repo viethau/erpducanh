@@ -178,21 +178,23 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Components.Web/3.1.0-preview3.19555.2": {
+      "Microsoft.AspNetCore.Components.Web/8.0.0": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Components": "3.1.0-preview3.19555.2",
-          "Microsoft.AspNetCore.Components.Forms": "3.1.0-preview3.19555.2",
-          "Microsoft.Extensions.DependencyInjection": "3.1.0-preview3.19553.2",
-          "Microsoft.JSInterop": "3.1.0-preview3.19553.2"
+          "Microsoft.AspNetCore.Components": "8.0.0",
+          "Microsoft.AspNetCore.Components.Forms": "8.0.0",
+          "Microsoft.Extensions.DependencyInjection": "8.0.0",
+          "Microsoft.Extensions.Primitives": "8.0.0",
+          "Microsoft.JSInterop": "8.0.0",
+          "System.IO.Pipelines": "8.0.0"
         },
         "compile": {
-          "lib/netcoreapp3.1/Microsoft.AspNetCore.Components.Web.dll": {
+          "lib/net8.0/Microsoft.AspNetCore.Components.Web.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/netcoreapp3.1/Microsoft.AspNetCore.Components.Web.dll": {
+          "lib/net8.0/Microsoft.AspNetCore.Components.Web.dll": {
             "related": ".xml"
           }
         }
@@ -1346,15 +1348,15 @@
           }
         }
       },
-      "Microsoft.JSInterop/3.1.0-preview3.19553.2": {
+      "Microsoft.JSInterop/8.0.0": {
         "type": "package",
         "compile": {
-          "lib/netcoreapp3.1/Microsoft.JSInterop.dll": {
+          "lib/net8.0/Microsoft.JSInterop.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/netcoreapp3.1/Microsoft.JSInterop.dll": {
+          "lib/net8.0/Microsoft.JSInterop.dll": {
             "related": ".xml"
           }
         }
@@ -1422,6 +1424,15 @@
         },
         "runtime": {
           "lib/netstandard2.0/Mono.TextTemplating.dll": {}
+        }
+      },
+      "SvgPathProperties/1.1.2": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/SvgPathProperties.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SvgPathProperties.dll": {}
         }
       },
       "System.CodeDom/4.4.0": {
@@ -2070,6 +2081,38 @@
             "rid": "win"
           }
         }
+      },
+      "Z.Blazor.Diagrams/3.0.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.AspNetCore.Components": "[8.0.0, 9.0.0)",
+          "Microsoft.AspNetCore.Components.Web": "[8.0.0, 9.0.0)",
+          "Z.Blazor.Diagrams.Core": "3.0.2"
+        },
+        "compile": {
+          "lib/net8.0/Blazor.Diagrams.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/Blazor.Diagrams.dll": {}
+        },
+        "build": {
+          "buildTransitive/Z.Blazor.Diagrams.props": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/Z.Blazor.Diagrams.props": {}
+        }
+      },
+      "Z.Blazor.Diagrams.Core/3.0.2": {
+        "type": "package",
+        "dependencies": {
+          "SvgPathProperties": "1.1.2"
+        },
+        "compile": {
+          "lib/net8.0/Blazor.Diagrams.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/Blazor.Diagrams.Core.dll": {}
+        }
       }
     }
   },
@@ -2286,20 +2329,18 @@
         "microsoft.aspnetcore.components.forms.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Components.Web/3.1.0-preview3.19555.2": {
-      "sha512": "uC2CyckKfSSUOEW5q+zeuFV7TJfSevRd/w/yQyaWry5QokG3kIwidq+BKWF6b6eRL+Qr5J18JTx2os1M91sQlQ==",
+    "Microsoft.AspNetCore.Components.Web/8.0.0": {
+      "sha512": "aokUKvFoNqxR6bf0+iKrDfQ79OLHWYn5UGYp5MU65/il1vuRK7MAF18oGj7QgiZJUu3cMAZjCFkHbsWLhQxCsA==",
       "type": "package",
-      "path": "microsoft.aspnetcore.components.web/3.1.0-preview3.19555.2",
+      "path": "microsoft.aspnetcore.components.web/8.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "THIRD-PARTY-NOTICES.txt",
-        "lib/netcoreapp3.1/Microsoft.AspNetCore.Components.Web.dll",
-        "lib/netcoreapp3.1/Microsoft.AspNetCore.Components.Web.xml",
-        "lib/netstandard2.0/Microsoft.AspNetCore.Components.Web.dll",
-        "lib/netstandard2.0/Microsoft.AspNetCore.Components.Web.xml",
-        "microsoft.aspnetcore.components.web.3.1.0-preview3.19555.2.nupkg.sha512",
+        "lib/net8.0/Microsoft.AspNetCore.Components.Web.dll",
+        "lib/net8.0/Microsoft.AspNetCore.Components.Web.xml",
+        "microsoft.aspnetcore.components.web.8.0.0.nupkg.sha512",
         "microsoft.aspnetcore.components.web.nuspec"
       ]
     },
@@ -4052,20 +4093,19 @@
         "microsoft.io.recyclablememorystream.nuspec"
       ]
     },
-    "Microsoft.JSInterop/3.1.0-preview3.19553.2": {
-      "sha512": "zKD7Rkln28oHN9fij0oY1P8Iz5vgWXkl/wkHBgBkBFKeevWb2Kz9fZ1pdJxXFF+kf5UsrFpqtO8CT+WA1W8Y+A==",
+    "Microsoft.JSInterop/8.0.0": {
+      "sha512": "qQqASbHxWIddssdEBKUQ/49j21SEstiho6VAepPQa9eISLCBCE6wq0m3YaB6cpdF5U+AWX5F3FvDfmssql3xtw==",
       "type": "package",
-      "path": "microsoft.jsinterop/3.1.0-preview3.19553.2",
+      "path": "microsoft.jsinterop/8.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "lib/netcoreapp3.1/Microsoft.JSInterop.dll",
-        "lib/netcoreapp3.1/Microsoft.JSInterop.xml",
-        "lib/netstandard2.0/Microsoft.JSInterop.dll",
-        "lib/netstandard2.0/Microsoft.JSInterop.xml",
-        "microsoft.jsinterop.3.1.0-preview3.19553.2.nupkg.sha512",
-        "microsoft.jsinterop.nuspec",
-        "packageIcon.png"
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net8.0/Microsoft.JSInterop.dll",
+        "lib/net8.0/Microsoft.JSInterop.xml",
+        "microsoft.jsinterop.8.0.0.nupkg.sha512",
+        "microsoft.jsinterop.nuspec"
       ]
     },
     "Microsoft.NETCore.Platforms/1.1.0": {
@@ -4158,6 +4198,19 @@
         "lib/netstandard2.0/Mono.TextTemplating.dll",
         "mono.texttemplating.2.2.1.nupkg.sha512",
         "mono.texttemplating.nuspec"
+      ]
+    },
+    "SvgPathProperties/1.1.2": {
+      "sha512": "oqCX5+CxcLfC1lC6gfzOSM+WOmfwn4V7yzMHQfofi+QmYoY+Hq5oye6BgnqhHC+3BSsiadLSOnfYxpcv/enkcw==",
+      "type": "package",
+      "path": "svgpathproperties/1.1.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/netstandard2.0/SvgPathProperties.dll",
+        "svgpathproperties.1.1.2.nupkg.sha512",
+        "svgpathproperties.nuspec"
       ]
     },
     "System.CodeDom/4.4.0": {
@@ -5478,6 +5531,52 @@
         "system.windows.extensions.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "Z.Blazor.Diagrams/3.0.2": {
+      "sha512": "8FRMg43r9OuwW624IGTuNNGNyZZ3MF+WP01uUTww9uqNFvAzO4rPd2E/UuzQphwm5eP9x1+bLGZOKgYjEx6SGg==",
+      "type": "package",
+      "path": "z.blazor.diagrams/3.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "ZBD.png",
+        "build/Microsoft.AspNetCore.StaticWebAssets.props",
+        "build/Z.Blazor.Diagrams.props",
+        "buildMultiTargeting/Z.Blazor.Diagrams.props",
+        "buildTransitive/Z.Blazor.Diagrams.props",
+        "lib/net6.0/Blazor.Diagrams.dll",
+        "lib/net7.0/Blazor.Diagrams.dll",
+        "lib/net8.0/Blazor.Diagrams.dll",
+        "staticwebassets/Z.Blazor.Diagrams.bundle.scp.css",
+        "staticwebassets/default.styles.css",
+        "staticwebassets/default.styles.min.css",
+        "staticwebassets/default.styles.min.css.gz",
+        "staticwebassets/script.js",
+        "staticwebassets/script.min.js",
+        "staticwebassets/script.min.js.gz",
+        "staticwebassets/style.css",
+        "staticwebassets/style.min.css",
+        "staticwebassets/style.min.css.gz",
+        "z.blazor.diagrams.3.0.2.nupkg.sha512",
+        "z.blazor.diagrams.nuspec"
+      ]
+    },
+    "Z.Blazor.Diagrams.Core/3.0.2": {
+      "sha512": "81uZP5vvzjaExYgr8Eq6RoVG4IS+g6tSseK7U7DQQk1tpTdt/wvSTG3TdL3O6zQKbBcDs2t+sxgLRxBknnzoeA==",
+      "type": "package",
+      "path": "z.blazor.diagrams.core/3.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "ZBD.png",
+        "lib/net6.0/Blazor.Diagrams.Core.dll",
+        "lib/net7.0/Blazor.Diagrams.Core.dll",
+        "lib/net8.0/Blazor.Diagrams.Core.dll",
+        "z.blazor.diagrams.core.3.0.2.nupkg.sha512",
+        "z.blazor.diagrams.core.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -5489,7 +5588,8 @@
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 8.0.5",
       "Microsoft.AspNetCore.SignalR.Client >= 8.0.6",
       "Microsoft.EntityFrameworkCore.SqlServer >= 8.0.5",
-      "Microsoft.EntityFrameworkCore.Tools >= 8.0.5"
+      "Microsoft.EntityFrameworkCore.Tools >= 8.0.5",
+      "Z.Blazor.Diagrams >= 3.0.2"
     ]
   },
   "packageFolders": {
@@ -5568,6 +5668,10 @@
           "Microsoft.EntityFrameworkCore.Tools": {
             "target": "Package",
             "version": "[8.0.5, )"
+          },
+          "Z.Blazor.Diagrams": {
+            "target": "Package",
+            "version": "[3.0.2, )"
           }
         },
         "imports": [

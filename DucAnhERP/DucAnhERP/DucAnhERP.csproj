@@ -16,6 +16,7 @@
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.5" />
+    <PackageReference Include="Z.Blazor.Diagrams" Version="3.0.2" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\helpers\\dsnuocmuaconversionhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\helpers\\dsnuocmuaconversionhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\components\\pages\\nghiepvucongtrinh\\listmangthu.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\components\\pages\\nghiepvucongtrinh\\listmangthu.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\models\\mangthu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\models\\mangthu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\components\\pages\\nghiepvucongtrinh\\listnuocmua.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\components\\pages\\nghiepvucongtrinh\\listnuocmua.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\components\\pages\\nghiepvucongtrinh\\uploadnuocmua.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\components\\pages\\nghiepvucongtrinh\\uploadnuocmua.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\models\\nuocmua.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\models\\nuocmua.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\components\\layout\\navmenu.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\components\\layout\\navmenu.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,58 +26,59 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "ListNuocMua.razor",
-              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
-              "RelativeDocumentMoniker": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
-              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
-              "RelativeToolTip": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
-              "ViewState": "AQIAADMOAAAAAAAAAAAjwD0OAABDAAAA",
+              "DocumentIndex": 3,
+              "Title": "NavMenu.razor",
+              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Layout\\NavMenu.razor",
+              "RelativeDocumentMoniker": "DucAnhERP\\Components\\Layout\\NavMenu.razor",
+              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Layout\\NavMenu.razor",
+              "RelativeToolTip": "DucAnhERP\\Components\\Layout\\NavMenu.razor",
+              "ViewState": "AQIAAGcAAAAAAAAAAAAAAHQAAAAdAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-09-19T07:26:37.514Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "DSNuocMuaConversionHelper.cs",
-              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Helpers\\DSNuocMuaConversionHelper.cs",
-              "RelativeDocumentMoniker": "DucAnhERP\\Helpers\\DSNuocMuaConversionHelper.cs",
-              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Helpers\\DSNuocMuaConversionHelper.cs",
-              "RelativeToolTip": "DucAnhERP\\Helpers\\DSNuocMuaConversionHelper.cs",
-              "ViewState": "AQIAANAEAAAAAAAAAIAxwNAEAAAWAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-24T01:23:23.81Z",
+              "WhenOpened": "2024-09-25T04:05:27.666Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "UploadNuocMua.razor",
-              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\UploadNuocMua.razor",
-              "RelativeDocumentMoniker": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\UploadNuocMua.razor",
-              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\UploadNuocMua.razor",
-              "RelativeToolTip": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\UploadNuocMua.razor",
-              "ViewState": "AQIAABQDAAAAAAAAAAAAACUDAABOAAAA",
+              "Title": "ListNuocMua.razor",
+              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
+              "RelativeDocumentMoniker": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
+              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
+              "RelativeToolTip": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
+              "ViewState": "AQIAADkAAAAAAAAAAAAAAEMAAAA7AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-09-23T08:26:44.028Z"
+              "WhenOpened": "2024-09-25T03:34:09.288Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "NuocMua.cs",
-              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Models\\NuocMua.cs",
-              "RelativeDocumentMoniker": "DucAnhERP\\Models\\NuocMua.cs",
-              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Models\\NuocMua.cs",
-              "RelativeToolTip": "DucAnhERP\\Models\\NuocMua.cs",
-              "ViewState": "AQIAACMCAAAAAAAAAAAlwDMCAAAXAAAA",
+              "DocumentIndex": 1,
+              "Title": "MangThu.cs",
+              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Models\\MangThu.cs",
+              "RelativeDocumentMoniker": "DucAnhERP\\Models\\MangThu.cs",
+              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Models\\MangThu.cs",
+              "RelativeToolTip": "DucAnhERP\\Models\\MangThu.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-23T06:58:42.844Z"
+              "WhenOpened": "2024-09-25T02:41:29.657Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ListMangThu.razor",
+              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListMangThu.razor",
+              "RelativeDocumentMoniker": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListMangThu.razor",
+              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListMangThu.razor",
+              "RelativeToolTip": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListMangThu.razor",
+              "ViewState": "AQIAADMAAAAAAAAAAAApwHgAAAAeAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-09-25T02:41:00.68Z",
+              "EditorCaption": ""
             }
           ]
         }

@@ -1,24 +1,150 @@
 ﻿@page "/NghiepVuCongtrinh/Test"
-@using DucAnhERP.ViewModel
-@using DucAnhERP.Models
-@using DucAnhERP.Components.Pages.Common
-@using System.Linq
-@using DucAnhERP.SeedWork
-@using Microsoft.AspNetCore.Authorization
-@using DucAnhERP.Helpers
-@inject NavigationManager navigation
-@inject IHopRanhThangRepository HopRanhThangRepository
-@inject IDanhMucRepository DanhMucRepository
-@inject DucAnhERP.Services.ToastService ToastService
-@attribute [Authorize]
+@using Blazor.Diagrams
+@using Blazor.Diagrams.Core.Models
+@using Blazor.Diagrams.Core.Anchors
+@using Blazor.Diagrams.Core.Geometry
+@using Blazor.Diagrams.Core.Routers
+@using Blazor.Diagrams.Core.PathGenerators
+@using Blazor.Diagrams.Components
+@using Blazor.Diagrams.Options
+@inject IJSRuntime JSRuntime
 
-<div class="container-fluid">
-    abcbcbcbcb
-
-sóadosad
-đá
-a
+<div class="diagram-container">
+    <CascadingValue Value="Diagram" IsFixed="true">
+        <DiagramCanvas></DiagramCanvas>
+    </CascadingValue>
 </div>
-@code{
-   
+
+<style>
+    .diagram-container {
+        width: 100%;
+        height: 500px;
+        border: 1px solid black;
+    }
+</style>
+
+@code {
+    private BlazorDiagram Diagram { get; set; } = null!;
+    private int verticalSpacing = 80; // Khoảng cách dọc giữa các node
+    private int horizontalSpacing = 150; // Khoảng cách ngang giữa các node
+
+    protected override void OnInitialized()
+    {
+        var options = new BlazorDiagramOptions
+            {
+                AllowMultiSelection = true,
+                Zoom = { Enabled = false },
+                Links =
+            {
+                DefaultRouter = new NormalRouter(),
+                DefaultPathGenerator = new SmoothPathGenerator()
+            },
+            };
+
+        Diagram = new BlazorDiagram(options);
+
+        string formula1 = "=IF(AND(JC22=\"Có\",IZ22=\"Tường xây gạch\"),IF(JA22=\"Không mũ mố\",JO22,JO22+JP22+JR22),IF(AND(JC22=\"Không\",JA22=\"Mũ mố xây gạch\"),JR22+JS22,0))";
+        InitializeDiagramFromFormula(formula1);
+    }
+
+    private void InitializeDiagramFromFormula(string formula)
+    {
+        var startNode = CreateNode("Start", new Point(300, 50));
+        var endNode = CreateNode("End", new Point(300, 500));
+        ParseFormula(formula, startNode, endNode, 1);
+    }
+
+    private void ParseFormula(string formula, NodeModel currentNode, NodeModel endNode, int level)
+    {
+        if (formula.StartsWith("=IF("))
+        {
+            int startIndex = formula.IndexOf('(') + 1;
+            int endIndex = formula.LastIndexOf(')');
+            string content = formula.Substring(startIndex, endIndex - startIndex);
+            var parts = content.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (parts.Length > 0)
+            {
+                var conditionNode = CreateNode(parts[0].Trim(), new Point(currentNode.Position.X, currentNode.Position.Y + verticalSpacing * level));
+                ConnectNodes(currentNode, conditionNode);
+
+                // Xử lý phần true
+                if (parts.Length > 1)
+                {
+                    var trueNode = CreateNode(parts[1].Trim(), new Point(conditionNode.Position.X + horizontalSpacing, conditionNode.Position.Y));
+                    ConnectNodes(conditionNode, trueNode, "True", LinkMarker.Arrow);
+                    ParseFormula(parts[1].Trim(), trueNode, endNode, level + 1);
+
+                    // Thêm node kết quả cho phần true
+                    var trueResultNode = CreateNode("Result: " + parts[1].Trim(), new Point(trueNode.Position.X + horizontalSpacing, trueNode.Position.Y));
+                    ConnectNodes(trueNode, trueResultNode, "Result", LinkMarker.Arrow);
+                    ConnectNodes(trueResultNode, endNode);
+                }
+                else
+                {
+                    ConnectNodes(conditionNode, endNode, "True", LinkMarker.Arrow);
+                }
+
+                // Xử lý phần false
+                if (parts.Length > 2)
+                {
+                    var falseNode = CreateNode(parts[2].Trim(), new Point(conditionNode.Position.X + horizontalSpacing, conditionNode.Position.Y - verticalSpacing));
+                    ConnectNodes(conditionNode, falseNode, "False", LinkMarker.Arrow);
+                    ParseFormula(parts[2].Trim(), falseNode, endNode, level + 1);
+
+                    // Thêm node kết quả cho phần false
+                    var falseResultNode = CreateNode("Result: " + parts[2].Trim(), new Point(falseNode.Position.X + horizontalSpacing, falseNode.Position.Y));
+                    ConnectNodes(falseNode, falseResultNode, "Result", LinkMarker.Arrow);
+                    ConnectNodes(falseResultNode, endNode);
+                }
+                else
+                {
+                    ConnectNodes(conditionNode, endNode, "False", LinkMarker.Arrow);
+                }
+            }
+        }
+        else if (formula.Contains("AND") || formula.Contains("OR"))
+        {
+            int functionStartIndex = formula.IndexOfAny(new[] { 'A', 'O' });
+            int startIndex = formula.IndexOf('(') + 1;
+            int endIndex = formula.LastIndexOf(')');
+            string content = formula.Substring(startIndex, endIndex - startIndex);
+            var conditions = content.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var condition in conditions)
+            {
+                var conditionNode = CreateNode(condition.Trim(), new Point(currentNode.Position.X, currentNode.Position.Y + verticalSpacing * level));
+                ConnectNodes(currentNode, conditionNode);
+                currentNode = conditionNode;
+            }
+            ConnectNodes(currentNode, endNode);
+        }
+        else
+        {
+            ConnectNodes(currentNode, endNode);
+        }
+    }
+
+    private NodeModel CreateNode(string title, Point position)
+    {
+        return Diagram.Nodes.Add(new NodeModel(position) { Title = title });
+    }
+
+    private void ConnectNodes(NodeModel source, NodeModel target, string? label = null, LinkMarker? marker = null)
+    {
+        var link = Diagram.Links.Add(new LinkModel(
+            new ShapeIntersectionAnchor(source),
+            new ShapeIntersectionAnchor(target)
+        ));
+
+        if (label != null)
+        {
+            link.Labels.Add(new LinkLabelModel(link, label));
+        }
+
+        if (marker != null)
+        {
+            link.TargetMarker = marker;
+        }
+    }
 }

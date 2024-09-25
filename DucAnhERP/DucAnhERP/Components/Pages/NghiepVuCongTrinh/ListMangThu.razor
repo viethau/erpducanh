@@ -1,0 +1,900 @@
+﻿@page "/NghiepVuCongtrinh/listMangThu"
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using System.Linq
+@using DucAnhERP.SeedWork
+@using Microsoft.AspNetCore.Authorization
+@using DucAnhERP.Helpers
+@inject NavigationManager navigation
+@inject IDanhMucRepository DanhMucRepository
+
+@attribute [Authorize]
+
+<style>
+    table {
+        position: relative;
+    }
+
+        table thead tr td {
+            /*   white-space: nowrap; */
+            text-align: center;
+            padding: 2px 5px;
+        }
+</style>
+<div class="container-fluid">
+    <div class="d-inline">
+        <button class="mx-2 my-3 btn btn-primary" @onclick="ShowModal">Thêm mới</button>
+        @* <a href="/files/file_mau_nuocmua.xlsx" download="file_mau_nuocmua.xlsx" class="btn btn-link  my-3">Tải về file mẫu</a> *@
+    </div>
+    <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
+        <BodyTemplate>
+            <EditForm Model="Input" method="post" FormName="Thêm mới" OnValidSubmit="HandleValidSubmit">
+                <div>
+                    <div>
+                        <div class="row">
+                            <div class="col">
+                                <h4>Thông tin lý trình </h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="TTLT_TuyenDuong">Tuyến đường <span class="text-danger">*</span></label>
+                                        <InputText @oninput="OnInputChange" @bind-Value="Input.TTLT_TuyenDuong" class="form-control" id="TTLT_TuyenDuong" />
+                                        <ValidationMessage For="() => Input.TTLT_TuyenDuong" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="TTLT_LyTrinhTaiTimHoGa">Lý trình tại tim hố ga <span class="text-danger">*</span></label>
+                                        <InputText @oninput="OnInputChange" @bind-Value="Input.TTLT_LyTrinhTaiTimHoGa" class="form-control" id="TTLT_LyTrinhTaiTimHoGa" />
+                                        <ValidationMessage For="() => Input.TTLT_LyTrinhTaiTimHoGa" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="TTLT_TenHoGaSauPhanLoai">Tên hố ga sau phân loại <span class="text-danger"></span></label>
+                                        <InputText readonly @bind-Value="Input.TTLT_TenHoGaSauPhanLoai" class="form-control" id="TTLT_TenHoGaSauPhanLoai"  />
+                                        <ValidationMessage For="() => Input.TTLT_TenHoGaSauPhanLoai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="TTLT_TenHoGaTheoBanVe">Tên hố ga theo bản vẽ <span class="text-danger">*</span></label>
+                                        <InputText @oninput="OnInputChange" @bind-Value="Input.TTLT_TenHoGaTheoBanVe" class="form-control" id="TTLT_TenHoGaTheoBanVe" />
+                                        <ValidationMessage For="() => Input.TTLT_TenHoGaTheoBanVe" class="text-danger" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4>Thông tin chung máng thu </h4>
+                                <hr />
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="TTCMT_TenMangThuTheoBanVe">Tên máng thu theo bản vẽ<span class="text-danger">*</span></label>
+                                        <InputText @oninput="OnInputChange" @bind-Value="Input.TTCMT_TenMangThuTheoBanVe" class="form-control" id="TTCMT_TenMangThuTheoBanVe" />
+                                        <ValidationMessage For="() => Input.TTCMT_TenMangThuTheoBanVe" class="text-danger" />
+                                    </div>
+                                    
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="TTCMT_MangThuNuocSauPhanLoai">Máng thu nước sau phân loại <span class="text-danger"></span></label>
+                                        <InputText readonly @bind-Value="Input.TTCMT_MangThuNuocSauPhanLoai" class="form-control" id="TTCMT_MangThuNuocSauPhanLoai" />
+                                        <ValidationMessage For="() => Input.TTCMT_MangThuNuocSauPhanLoai" class="text-danger" />
+                                    </div>
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                        <label for="TTCMT_HinhThucThuNuoc">Hình thức thu nước <span class="text-danger">*</span></label>
+                                        <InputText @oninput="OnInputChange" @bind-Value="Input.TTCMT_HinhThucThuNuoc" class="form-control" id="TTCMT_HinhThucThuNuoc" />
+                                        <ValidationMessage For="() => Input.TTCMT_HinhThucThuNuoc" class="text-danger" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2">Thông tin chung hố ga</h4>
+                                <hr />
+                                <div class="row">
+                                   
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-4">
+                                        <label for="TTBVHE_CauTao"> Hình thức hố ga <span class="text-danger">*</span></label>
+                                        <select @oninput="OnInputChange" id="TTBVHE_CauTao" class="form-control" @bind="Input.TTBVHE_CauTao">
+                                            <option value="">Hình thức hố ga ...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("HG_HTHGa"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
+                                        </select>
+                                        <ValidationMessage For="() => Input.TTBVHE_CauTao" class="text-danger" />
+                                    </div>
+                                  
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="mt-2">Thông tin kích thước hình học hố ga</h4>
+                                <hr />
+                                <h5 class="mt-2">1.Thông tin phủ bì hố ga (m)</h5>
+                                <div class="row">
+                                    <div class="form-floating col-6">
+                                        <label for="TTBVHE_CRongCuaThu">Chiểu dài (m) <span class="text-danger">*</span></label>
+                                        <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTBVHE_CRongCuaThu" class="form-control" id="TTBVHE_CRongCuaThu" />
+                                        <ValidationMessage For="() => Input.TTBVHE_CRongCuaThu" class="text-danger" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="row my-5 d-flex justify-content-end">
+                        <div>
+                            <button type="submit" class="btn btn-primary btn-sm btn-block">@TitleModal</button>
+                        </div>
+                    </div>
+                </div>
+
+            </EditForm>
+        </BodyTemplate>
+
+    </CustomModal>
+
+    <div>
+        <div class="card-header mt-3">
+            <h5>MÁNG THU</h5>
+        </div>
+        <div >
+           
+            <table id="tb-listthoatnuoc" class="table table-bordered table-hover" cellpadding="1" cellspacing="2">
+                <thead>
+                    <tr>
+                        <th class="text-center" rowspan="3"></th>
+                        <th class="text-center" rowspan="3">No.</th>
+                        <th class="text-center" colspan="4" rowspan="2">Thông tin lý trình</th>
+                        <th class="text-center" colspan="3" rowspan="2">Thông tin chung máng thu</th>
+                        <th class="text-center" colspan="11">Thông tin bó vỉa hàm ếch</th>
+                        <th class="text-center" colspan="41">Thông tin kích thước hình học hố thu</th>
+                        <th class="text-center" colspan="32">Hạng mục chiếm chỗ hố thu</th>
+                        <th class="text-center" colspan="8">Thông tin tấm đan hố thu</th>
+                        <th class="text-center" colspan="4">Thông tin dầm ngang</th>
+                        <th class="text-center" colspan="4" rowspan="2">Thông tin vật liệu đào hố thu</th>
+                        <th class="text-center" colspan="26" >Thông tin cao độ</th>
+                        <th class="text-center" colspan="20">Thông tin chiếm chỗ đắp trả</th>
+                        <th class="text-center" colspan="4" rowspan="2">Thông tin mái đào</th>
+                        <th class="text-center" colspan="10" >Thông tin diện tích đào</th>
+                        <th class="text-center" colspan="5" rowspan="2">Diện tích đào trung bình</th>
+                        <th class="text-center" colspan="24">Thông tin khối lượng đào</th>
+                        <th class="text-center" colspan="12" rowspan="2">Thông tin khối lượng đào trung bình</th>
+                        <th class="text-center" colspan="3" rowspan="2">Thông tin đường truyền dẫn</th>
+                        <th class="text-center" colspan="3" rowspan="2">Thông tin chiều dài</th>
+                        <th class="text-center" colspan="3" rowspan="2">Thông tin móng đường truyền dẫn</th>
+                        <th class="text-center" colspan="9">Thông tin đế cống</th>
+                        <th class="text-center" colspan="10" rowspan="2">Thông tin cấu tạo cống tròn</th>
+                        <th class="text-center" colspan="8" rowspan="2">Thông tính tính KL cấu kiện cống tròn, cống hộp (các loại phải lắp đặt)</th>
+                        <th class="text-center" colspan="29">Thông tin kích thước hình học cống hộp, rãnh</th>
+                        <th class="text-center" colspan="19">Thông tin tấm đan cống hộp, rãnh</th>
+                        <th class="text-center" rowspan="2" colspan="6">Thông tin kích thước hình học ống nhựa</th>
+                        <th class="text-center" colspan="28">Cao độ thượng lưu</th>
+                        <th class="text-center" colspan="7"> Thông tin vật liệu đào cống, rãnh </th>
+                        <th class="text-center" colspan="24"> Thông tin C.Cao C.Chỗ cống tròn </th>
+                        <th class="text-center" colspan="18"> Thông tin C.Cao C.Chỗ cống hộp, rãnh </th>
+                        <th class="text-center" colspan="18"> Thông tin C.Cao C.Chỗ ống nhựa </th>
+                        <th class="text-center" colspan="4"> Thông tin mái đào </th>
+                        <th class="text-center" colspan="4"> D.Tích đào thượng lưu cống, rãnh, ống nhựa </th>
+                        <th class="text-center" colspan="4"> D.Tích đào hạ lưu cống, rãnh, ống nhựa </th>
+                        <th class="text-center" colspan="4" rowspan="2">Diện tích đào trung bình</th>
+                        <th class="text-center" colspan="3" rowspan="2">KL đào cống, rãnh, ống nhựa</th>
+                        <th class="text-center" colspan="15">Thông tin KL chiếm chỗ</th>
+                        <th class="text-center" colspan="3" rowspan="2">Kl đắp trả</th>
+                        <th class="text-center" colspan="3" rowspan="2">KL thừa</th>
+                        <th class="text-center" colspan="6" >D.Tích đắp cát</th>
+                        <th class="text-center" colspan="3">Diện tích đắp cát trung bình</th>
+                        <th class="text-center" colspan="3">Thông tin KL đắp cát</th>
+                        <th class="text-center" colspan="2">Tọa độ</th>
+                        
+                    </tr>
+                    <tr>
+                        <th class="text-center" rowspan="2"> Cấu tạo bó vỉa hàm ếch</th>
+                        <th class="text-center" rowspan="2">C.Rộng cửa thu  </th>
+                        <th class="text-center" colspan="3">KTHH lót bó vỉa  </th>
+                        <th class="text-center" colspan="3">KTHH móng bó vỉa  </th>
+                        <th class="text-center" colspan="3">KTHH bó vỉa hàm ếch </th>
+
+                        <th class="text-center" colspan="7">Thông tin chung hố thu </th>
+                        <th class="text-center" colspan="2">Thông tin phủ bì hố thu (m) </th>
+                        <th class="text-center" colspan="3">Kích thước hình học bê tông lót móng hố thu (m) </th>
+                        <th class="text-center" colspan="3">Kích thước hình học bê tông móng hố thu (m) </th>
+                        <th class="text-center" colspan="3">KTHH đế hố thu </th>
+                        <th class="text-center" colspan="4">Kích thước hình học tường hố thu (m </th>
+                        <th class="text-center" colspan="5">KTHH dầm giữa hố thu </th>
+                        <th class="text-center" colspan="3">Chát hố thu mặt trong  </th>
+                        <th class="text-center" colspan="3">Chát hố thu mặt ngoài, cạnh 01 +02 (m)  </th>
+                        <th class="text-center" colspan="4">Kích thước hình học tường mũ mố thớt dưới (m)  </th>
+                        <th class="text-center" colspan="4">Kích thước hình học tường mũ mố thớt trên (m) </th>
+
+                        <th class="text-center" colspan="4">Hình thức đấu nối </th>
+                        <th class="text-center" colspan="4">Hình thức đấu nối </th>
+                        <th class="text-center" colspan="4">Hình thức đấu nối </th>
+                        <th class="text-center" colspan="4">Hình thức đấu nối </th>
+                        <th class="text-center" colspan="4">Hình thức đấu nối </th>
+                        <th class="text-center" colspan="4">Hình thức đấu nối </th>
+                        <th class="text-center" colspan="4">Hình thức đấu nối </th>
+                        <th class="text-center" colspan="4">Hình thức đấu nối </th>
+
+                        <th class="text-center" rowspan="2">Phân loại đậy hố thu </th>
+                        <th class="text-center" rowspan="2">Hình thức đậy hố thu </th>
+                        <th class="text-center" colspan="2">Loại tròn </th>
+                        <th class="text-center" colspan="4">Loại vuông hoặc chữ nhật </th>
+
+                        <th class="text-center" rowspan="2">Cấu tạo dầm ngang</th>
+                        <th class="text-center" colspan="3">KTHH dầm ngang</th>
+
+                        <th class="text-center" colspan="9">Cao độ bó vỉa hàm ếch</th>
+                        <th class="text-center" colspan="2">Cao độ dầm ngang</th>
+                        <th class="text-center" colspan="15">Cao độ hố thu</th>
+
+                        <th class="text-center" colspan="10">Bó vỉa C.Chỗ đắp trả</th>
+                        <th class="text-center" colspan="10">Hố thu C.Chỗ đắp trả</th>
+
+                        <th class="text-center" colspan="5">Diện tích đào bó vỉa</th>
+                        <th class="text-center" colspan="5">Diện tích đào hố thu</th>
+
+                        <th class="text-center" colspan="12">Thông tin KL đào bó vỉa</th>
+                        <th class="text-center" colspan="12">Thông tin KL đào hố thu</th>
+
+                        <th class="text-center" rowspan="2">Tên loại đế cống</th>
+                        <th class="text-center" rowspan="2">Cấu tạo đế cống</th>
+                        <th class="text-center" colspan="3">KTHH đế cống</th>
+                        <th class="text-center" colspan="4">Khối lượng đế cống</th>
+
+                        <th class="text-center" colspan="4">Thông tin chung</th>
+                        <th class="text-center" colspan="2">Lót móng</th>
+                        <th class="text-center" colspan="2">Móng</th>
+                        <th class="text-center" colspan="2">Đế</th>
+                        <th class="text-center" colspan="6">Thân</th>
+                        <th class="text-center" colspan="2">Mũ mố dưới</th>
+                        <th class="text-center" colspan="2">Mũ mố trên</th>
+                        <th class="text-center" colspan="6">Thanh chống</th>
+                        <th class="text-center" colspan="2">Chát</th>
+                        <th class="text-center" rowspan="2"> Tổng chiều cao (m)</th>
+
+                        <th class="text-center" colspan="6"> Thông tin tấm đan tiêu chuẩn</th>
+                        <th class="text-center" colspan="6"> Thông tin tấm đan loại 02</th>
+                        <th class="text-center" colspan="7"> Thông tin tính tấm đan bổ sung</th>
+
+                        <th class="text-center" rowspan="2"> Hiện trạng trước khi đào thượng lưu (m)</th>
+                        <th class="text-center" colspan="6"> Đáy đào thượng lưu</th>
+                        <th class="text-center" colspan="5">Đỉnh lót thượng lưu</th>
+                        <th class="text-center" colspan="6"> Đỉnh móng thượng lưu</th>
+                        <th class="text-center" colspan="3"> Mũ tường, tường thượng lưu</th>
+                        <th class="text-center" colspan="7"> Đỉnh hoàn thiện thượng lưu</th>
+
+                        <th class="text-center" rowspan="2"> Loại vật liệu đào</th>
+                        <th class="text-center" colspan="3"> Thượng lưu</th>
+                        <th class="text-center" colspan="3"> Hạ lưu</th>
+                        
+                        <th class="text-center" colspan="3"> Lót C.Chỗ đất</th>
+                        <th class="text-center" colspan="3"> Lót C.Chỗ đá</th>
+                        <th class="text-center" colspan="3"> Móng C.Chỗ đất</th>
+                        <th class="text-center" colspan="3"> Móng C.Chỗ đá</th>
+                        <th class="text-center" colspan="3"> Đế C.Chỗ đất</th>
+                        <th class="text-center" colspan="3"> Đế C.Chỗ đá</th>
+                        <th class="text-center" colspan="3"> Đỉnh cống C.Chỗ đất</th>
+                        <th class="text-center" colspan="3"> Đỉnh cống C.Chỗ đá</th>
+
+
+
+                        <th class="text-center" colspan="3">C.Cao đệm cát C.Chỗ đất </th>
+                        <th class="text-center" colspan="3">C.Cao đệm cát C.Chỗ đá </th>
+                        <th class="text-center" colspan="3">C.Cao ống C.Chỗ đất </th>
+                        <th class="text-center" colspan="3">C.Cao ống C.Chỗ đá </th>
+                        <th class="text-center" colspan="3">C.Cao đắp cát C.Chỗ đất </th>
+                        <th class="text-center" colspan="3">C.Cao đắp cát C.Chỗ đá </th>
+
+                        <th class="text-center" colspan="3">C.Cao đệm cát C.Chỗ đất </th>
+                        <th class="text-center" colspan="3">C.Cao đệm cát C.Chỗ đá </th>
+                        <th class="text-center" colspan="3">C.Cao ống C.Chỗ đất </th>
+                        <th class="text-center" colspan="3">C.Cao ống C.Chỗ đá </th>
+                        <th class="text-center" colspan="3">C.Cao đắp cát C.Chỗ đất </th>
+                        <th class="text-center" colspan="3">C.Cao đắp cát C.Chỗ đá </th>
+
+                        <th class="text-center" colspan="4"> Thông tin mái đào cống, rãnh, ống nhựa</th>
+
+                        <th class="text-center" colspan="2"> Đào đất</th>
+                        <th class="text-center" colspan="2">Đào đá </th>
+
+                        <th class="text-center" colspan="2"> Đào đất</th>
+                        <th class="text-center" colspan="2"> Đào đá</th>
+                        
+                        <th class="text-center" colspan="3">KL C.Chỗ C.Tròn </th>
+                        <th class="text-center" colspan="3">KL C.Chỗ C.hộp </th>
+                        <th class="text-center" colspan="3">KL C.Chỗ rãnh xây + bê tông </th>
+                        <th class="text-center" colspan="3">KL C.Chỗ ống nhựa </th>
+                        <th class="text-center" colspan="3">Tổng KL chiếm chỗ</th>
+                        <th class="text-center" colspan="3">Thượng lưu</th>
+                        <th class="text-center" colspan="3">Hạ lưu</th>
+
+
+                    </tr>
+                    <tr>
+                        <th>Tuyến đường                 </th>
+                        <th>Lý trình tại tim hố ga      </th>
+                        <th>Tên hố ga sau phân loại     </th>
+                        <th>Tên hố ga theo bản vẽ       </th>
+                        <th>Tên máng thu theo bản vẽ    </th>
+                        <th>Máng thu nước sau phân loại </th>
+                        <th>Hình thức thu nước          </th>
+
+                        <th> D (m)</th>
+                        <th> R (m)</th>
+                        <th> C (m)</th>
+                        <th> D (m)</th>
+                        <th> R (m)</th>
+                        <th> C (m)</th>
+                        <th> D (m)</th>
+                        <th> R (m)</th>
+                        <th> C (m)</th>
+
+                        <th>Hình thức hố thu</th>
+                        <th>Kết cấu mũ mố</th>
+                        <th>Kết cấu tường</th>
+                        <th>Hình thức móng hố thu</th>
+                        <th>Kết cấu móng</th>
+                        <th>Chát mặt trong</th>
+                        <th>Chát mặt ngoài</th>
+                        <th>C.Dài (m)</th>
+                        <th>C.rộng (m)</th>
+                        <th> D (m) </th>
+                        <th> R (m) </th>
+                        <th> C (m) </th>
+                        <th> D (m) </th>
+                        <th> R (m) </th>
+                        <th> C (m) </th>
+                        <th> D (m) </th>
+                        <th> R (m) </th>
+                        <th> C (m) </th>
+                        <th> D (m) </th>
+                        <th> R (m) </th>
+                        <th> C (m) </th>
+                        <th> CD tường (m) </th>
+                        <th> D (m) </th>
+                        <th> R (m) </th>
+                        <th> C (m) </th>
+                        <th> CD dầm (m) </th>
+                        <th> C.Cao tường từ đáy dầm giữa so với đáy hố thu (m) </th>
+                        <th> D (m) </th>
+                        <th> R (m) </th>
+                        <th> C (m) </th>
+                        <th> D (m) </th>
+                        <th> R (m) </th>
+                        <th> C (m) </th>
+                        <th> D (m) </th>
+                        <th> R (m) </th>
+                        <th> C (m) </th>
+                        <th> CD tường (m) </th>
+                        <th> D (m) </th>
+                        <th> R (m) </th>
+                        <th> C (m) </th>
+                        <th> CD tường (m) </th>
+
+                        <th> Loại </th>
+                        <th> Cạnh dài</th>
+                        <th> Cạnh rộng</th>
+                        <th> Cạnh chéo </th>
+                        <th> Loại </th>
+                        <th> Cạnh dài</th>
+                        <th> Cạnh rộng</th>
+                        <th> Cạnh chéo </th>
+                        <th> Loại </th>
+                        <th> Cạnh dài</th>
+                        <th> Cạnh rộng</th>
+                        <th> Cạnh chéo </th>
+                        <th> Loại </th>
+                        <th> Cạnh dài</th>
+                        <th> Cạnh rộng</th>
+                        <th> Cạnh chéo </th>
+                        <th> Loại </th>
+                        <th> Cạnh dài</th>
+                        <th> Cạnh rộng</th>
+                        <th> Cạnh chéo </th>
+                        <th> Loại </th>
+                        <th> Cạnh dài</th>
+                        <th> Cạnh rộng</th>
+                        <th> Cạnh chéo </th>
+                        <th> Loại </th>
+                        <th> Cạnh dài</th>
+                        <th> Cạnh rộng</th>
+                        <th> Cạnh chéo </th>
+                        <th> Loại </th>
+                        <th> Cạnh dài</th>
+                        <th> Cạnh rộng</th>
+                        <th> Cạnh chéo </th>
+
+                        <th> Đường kính (m)</th>
+                        <th> Chiều dầy (m)</th>
+                        <th> D (m)</th>
+                        <th> R (m)</th>
+                        <th> C (m)</th>
+                        <th>Số lượng nắp đậy (C.Kiện)</th>
+
+                        <th> D (m) </th>
+                        <th> R (m) </th>
+                        <th> C (m) </th>
+
+                        <th> Loại vật liệu đào</th>
+                        <th> Chiều cao đào đá (m)</th>
+                        <th> Chiều cao đào đất (m)</th>
+                        <th> Tổng chiều cao đào </th>
+
+                        <th> Cao độ hiện trạng trước khi đào (m)</th>
+                        <th> Đáy đào</th>
+                        <th> C.Sâu đào</th>
+                        <th> Đỉnh lót</th>
+                        <th> Đỉnh móng</th>
+                        <th> Đỉnh bó vỉa hàm ếch</th>
+                        <th> Tổng chiều cao bó vỉa</th>
+                        <th> Chênh cao đỉnh bó vỉa và hiện trạng đào</th>
+                        <th> Tổng chiều cao chiếm chỗ đắp trả</th>
+                        <th> CĐ đỉnh dầm ngang</th>
+                        <th> CĐ hiện trạng trước khi lắp đặt</th>
+                        <th> Cao độ hiện trạng trước khi đào (m)</th>
+                        <th> Đáy đào (m)</th>
+                        <th> C.Sâu đào (m)</th>
+                        <th> Đỉnh lót móng (m)</th>
+                        <th> CĐ đỉnh móng</th>
+                        <th> CĐ đáy hố thu (m)</th>
+                        <th>  C.Cao tường (m) </th>
+                        <th>  Đỉnh tường dưới dầm giữa tường (m) </th>
+                        <th>  Đỉnh dầm giữa tường (m) </th>
+                        <th>  Đỉnh tường (m) </th>
+                        <th>  Đỉnh mũ mố thớt dưới (m) </th>
+                        <th> CĐ đỉnh hố thu (m)</th>
+                        <th> Tổng chiều cao hố thu</th>
+                        <th> Chênh cao đỉnh hố thu và hiện trạng đào (m)</th>
+                        <th> Tổng chiều cao chiếm chỗ đắp trả</th>
+
+                        <th> C.Cao lót bó vỉa C.Chỗ đất (m)     </th>
+                        <th> C.Cao móng bó vỉa C.Chỗ đất (m)    </th>
+                        <th> C.Cao bó vỉa C.Chỗ đất (m)         </th>
+                        <th> C.Cao lót bó vỉa C.Chỗ đá (m)      </th>
+                        <th> C.Cao móng bó vỉa C.Chỗ đá (m)     </th>
+                        <th> C.Cao bó vỉa C.Chỗ đá (m)          </th>
+                        <th> Tổng C.Cao C.Chỗ đất               </th>
+                        <th> Tổng C.Cao C.Chỗ đá                </th>
+                        <th> Chênh đất so với thiết kế          </th>
+                        <th> Chênh đá so với thiết kế           </th>
+                        <th> Chiều cao lót C.Chỗ đất (m)        </th>
+                        <th> Chiều cao móng C.Chỗ đất (m)       </th>
+                        <th> Chiều cao tường C.Chỗ đất (m)      </th>
+                        <th> Chiều cao lót C.Chỗ đá (m)         </th>
+                        <th> Chiều cao móng C.Chỗ đá (m)        </th>
+                        <th> Chiều cao tường C.Chỗ đá (m)       </th>
+                        <th> Tổng C.Cao đất C.Chỗ               </th>
+                        <th> Tổng C.Cao đá C.Chỗ                </th>
+                        <th> Chênh đất so với thiết kế          </th>
+                        <th> Chênh đá so với thiết kế           </th>
+
+                        <th> Chiều rộng đáy đào nhỏ (m) </th>
+                        <th> Tỷ lệ mở mái (m)</th>
+                        <th> Số cạnh mái trái</th>
+                        <th> Số cạnh mái phải</th>
+
+                        <th> C.Rộng đào đáy lớn đất (m)</th>
+                        <th> C.Rộng đào đáy lớn đá (m)</th>
+                        <th> Diện tích đào đất (m2)</th>
+                        <th> Diện tích đào đá (m2)</th>
+                        <th> Tổng DT đào (m2)</th>
+                        <th> C.Rộng đào đáy lớn đất (m)</th>
+                        <th> C.Rộng đào đáy lớn đá (m)</th>
+                        <th> Diện tích đào đất (m2)</th>
+                        <th> Diện tích đào đá (m2)</th>
+                        <th> Tổng DT đào (m2)</th>
+                        <th> C.Rộng đào đáy lớn đất (m)</th>
+                        <th> C.Rộng đào đáy lớn đá (m)</th>
+                        <th> Diện tích đào đất (m2)</th>
+                        <th> Diện tích đào đá (m2)</th>
+                        <th> Tổng DT đào (m2)</th>
+
+                        <th> KL đào đất (m3)                  </th>
+                        <th> KL đào đá (m3)                   </th>
+                        <th> Tổng KL đào (m3)                 </th>
+                        <th> Kl chiếm chỗ đất (m3)            </th>
+                        <th> KL chiếm chỗ đá (m3)             </th>
+                        <th> Tổng chiếm chỗ (m3)              </th>
+                        <th> KL đắp trả đất (m3)              </th>
+                        <th> KL đắp trả đá (m3)               </th>
+                        <th> Tổng đắp trả (m3)                </th>
+                        <th> KL thừa đất (m3)                 </th>
+                        <th> KL thừa đá (m3)                  </th>
+                        <th> Tổng thừa (m3)                   </th>
+                        <th> KL đào đất (m3)                  </th>
+                        <th> KL đào đá (m3)                   </th>
+                        <th> Tổng KL đào (m3)                 </th>
+                        <th> Kl chiếm chỗ đất (m3)            </th>
+                        <th> KL chiếm chỗ đá (m3)             </th>
+                        <th> Tổng chiếm chỗ (m3)              </th>
+                        <th> KL đắp trả đất (m3)              </th>
+                        <th> KL đắp trả đá (m3)               </th>
+                        <th> Tổng đắp trả (m3)                </th>
+                        <th> KL thừa đất (m3)                 </th>
+                        <th> KL thừa đá (m3)                  </th>
+                        <th> Tổng thừa (m3)                   </th>
+
+                        <th> KL đào đất (m3)       </th>
+                        <th> KL đào đá (m3)        </th>
+                        <th> Tổng KL đào (m3)      </th>
+                        <th> Kl chiếm chỗ đất (m3) </th>
+                        <th> KL chiếm chỗ đá (m3)  </th>
+                        <th> Tổng chiếm chỗ (m3)   </th>
+                        <th> KL đắp trả đất (m3)   </th>
+                        <th> KL đắp trả đá (m3)    </th>
+                        <th> Tổng đắp trả (m3)     </th>
+                        <th> KL thừa đất (m3)      </th>
+                        <th> KL thừa đá (m3)       </th>
+                        <th> Tổng thừa (m3)        </th>
+
+                        <th> Hình thức truyền dẫn</th>
+                        <th> Loại truyền dẫn</th>
+                        <th> Tên loại truyền dẫn sau phân loại</th>
+                        <th> Tổng chiều dài (m)</th>
+                        <th> Chiều dài 01 cấu kiện (m)</th>
+                        <th> SL cấu kiện tính KL</th>
+                        <th>  Phân loại móng </th>
+                        <th>  Loại móng </th>
+                        <th>  Hình thức móng  </th>
+                        <th>  D </th>
+                        <th>  R </th>
+                        <th>  C </th>
+                        <th>  SL đế cống/01 cấu kiện truyền dẫn (C.Kiện) </th>
+                        <th>  KL 01 đế cống </th>
+                        <th>  Tổng số lượng đế cống </th>
+                        <th>  Tổng KL đế cống </th>
+
+                        <th> C.Dầy phủ bì (m)                         </th>
+                        <th> Số cạnh                                  </th>
+                        <th> Lòng sử dụng (m)                         </th>
+                        <th> C.Cao cấu kiện                           </th>
+                        <th> C.Cao lót móng (m)                       </th>
+                        <th> C.Rộng lót móng                          </th>
+                        <th> C.Cao móng (m)                           </th>
+                        <th> C.Rộng móng (m)                          </th>
+                        <th> C.Cao đế (tại vị trí đặt C.Kiện) (m)     </th>
+                        <th> Tổng C.Cao cống (m)                      </th>
+
+                        <th> Chiều dài mối nối C.Kiện (m)                                              </th>
+                        <th> Số lượng C.Kiện dùng để tính chiều dài bổ sung (C.Kiện)                   </th>
+                        <th> SL cấu kiện nguyên                                                        </th>
+                        <th> C.Dài cần để lắp đặt được theo số CK nguyên (m)                           </th>
+                        <th> Tổng C.Dài lắp đặt theo số CK nguyên (m)                                  </th>
+                        <th> C.Dài thực tế còn thừa (+)/thiếu (-) so với C.Rộng lòng mũ mố hố thu (m)  </th>
+                        <th> Xác định ống cống cần thêm                                                </th>
+                        <th> C.Dài còn thừa (+)/thiếu (-) sau tính theo CK tính KL (m)                 </th>
+
+                        <th>  Cấu tạo tường</th>
+                        <th> Cấu tạo mũ mố</th>
+                        <th> Chát mặt trong</th>
+                        <th> Chát mặt ngoài</th>
+                        <th> C.Cao lót móng (m)</th>
+                        <th> C.Rộng lót móng (m)</th>
+                        <th> C.Cao móng (m)</th>
+                        <th> C.Rộng móng (m)</th>
+                        <th> C.Cao đế (m)</th>
+                        <th> C.Rộng đế (m)</th>
+                        <th> C.Dầy tường 01 bên (m)</th>
+                        <th> Số lượng tường (m)</th>
+                        <th> C.Rộng lòng sử dụng (m)</th>
+                        <th> C.Cao tường cống hộp (m)</th>
+                        <th> C.Cao tường rãnh</th>
+                        <th> C.Cao tường gộp</th>
+                        <th> C.Cao mũ mố thớt dưới (m)</th>
+                        <th> C.Rộng mũ mố dưới</th>
+                        <th> C.Cao mũ mố thớt trên (m)</th>
+                        <th> C.Rộng mũ mố trên</th>
+                        <th> Loại thanh chống</th>
+                        <th> Cấu tạo thanh chống</th>
+                        <th> C.Cao thanh chống (m)</th>
+                        <th> C.Rộng thanh chống (m)</th>
+                        <th> C.Dài (m)</th>
+                        <th> Số lượng thanh chống (cái)</th>
+                        <th> C.Cao chát mặt trong (m)</th>
+                        <th> C.Cao chát mặt ngoài (m) </th>
+                        
+                        <th> Tên loại tấm đan tiêu chuẩn</th>
+                        <th>  Cấu tạo tấm đan truyền dẫn tấm đan tiêu chuẩn</th>
+                        <th>  Số lượng </th>
+                        <th>  C.Dài </th>
+                        <th>  C.Rộng </th>
+                        <th>  C.Cao </th>
+                        <th>  Tên loại tấm đan loại 02</th>
+                        <th>  Cấu tạo tấm đan truyền dẫn</th>
+                        <th>  Số lượng </th>
+                        <th>  C.Dài </th>
+                        <th>  C.Rộng </th>
+                        <th>  C.Cao </th>
+                        <th>  Chiều dài mối nối (m)</th>
+                        <th>  Số lượng T.Đan dùng để tính chiều dài bổ sung (C.Kiện)</th>
+                        <th>  SL cấu kiện nguyên</th>
+                        <th>  Chiều dài cần để lắp đặt được theo số CK nguyên (m)</th>
+                        <th>  Tổng chiều dài lắp đặt theo số CK nguyên (m)</th>
+                        <th>  Chiều dài thực tế còn thừa (+)/thiếu (-) so với C.Rộng lòng mũ mố hố thu (m)</th>
+                        <th>  Xác định ống cống cần thêm</th>
+                        <th>   C.Dầy phủ bì (m) </th>
+                        <th>   Số cạnh </th>
+                        <th>   Lòng sử dụng (m) </th>
+                        <th>   Tổng C.Cao ống (m) </th>
+                        <th>   C.Cao đệm cát (m) </th>
+                        <th>   C.Cao đắp cát (m) </th>
+
+                        <th> Đáy đào gộp (C.Tròn, C.Hộp, Rãnh, Ô.Nhựa) (m)</th>
+                        <th> Chiều sâu đào</th>
+                        <th> Đáy đào cống tròn (m)</th>
+                        <th> Đáy đào cống hộp (m)</th>
+                        <th> Đáy đào rãnh (m)</th>
+                        <th> Đáy đào ống nhựa (m)</th>
+                        <th> Đỉnh lót gộp (C.Tròn, C.Hộp, Rãnh, ống nhựa) (m)</th>
+                        <th> Đỉnh lót ống nhựa</th>
+                        <th> Đỉnh lót cống tròn (m)</th>
+                        <th> Đỉnh lót cống hộp (m)</th>
+                        <th> Đỉnh lót rãnh (m)</th>
+                        <th> Đỉnh móng gộp (C.Tròn, C.Hộp, Rãnh) (m)</th>
+                        <th> Đỉnh móng cống tròn (m)</th>
+                        <th> Đỉnh móng cống hộp (m)</th>
+                        <th> Đỉnh móng rãnh (m)</th>
+                        <th> Đỉnh đế cống (m)</th>
+                        <th> Đáy dòng chảy (m)</th>
+                        <th> C.Cao tường cống, rãnh (m)</th>
+                        <th> Đỉnh tường C.Hộp, rãnh (m)</th>
+                        <th> Đỉnh mũ mố thớt dưới cống hộp rãnh (m)</th>
+                        <th> Đỉnh gộp (C.Tròn, C.Hộp, rãnh, Ô.Nhựa (m)</th>
+                        <th> Đỉnh trong lòng sử dụng (m)</th>
+                        <th> Đỉnh cống tròn (m)</th>
+                        <th> Đỉnh cống hộp (m)</th>
+                        <th> Đỉnh rãnh (m)</th>
+                        <th> Đỉnh ống nhựa (m)</th>
+                        <th> Đỉnh đắp cát (m) </th>
+
+                        <th> Chiều cao đào đá (m)</th>
+                        <th> Chiều cao đào đất (m)</th>
+                        <th> Tổng chiều sâu đào</th>
+                        <th> Chiều cao đào đá (m)</th>
+                        <th> Chiều cao đào đất (m)</th>
+                        <th> Tổng chiều sâu đào</th>
+                        <th> C.Cao lót T.Lưu</th>
+                        <th> C.Cao lót H.lưu</th>
+                        <th> C.Cao lót móng T.Bình</th>
+                        <th> C.Cao lót T.Lưu</th>
+                        <th> C.Cao lót H.lưu</th>
+                        <th> C.Cao lót móng T.Bình</th>
+                        <th> C.Cao móng T.Lưu</th>
+                        <th> C.Cao móng H.Lưu</th>
+                        <th> C.Cao móng T.Bình</th>
+                        <th> C.Cao móng T.Lưu</th>
+                        <th> C.Cao móng H.Lưu</th>
+                        <th> C.Cao móng T.Bình</th>
+                        <th> C.Cao đế T.Lưu</th>
+                        <th> C.Cao đế H.Lưu</th>
+                        <th> C.Cao đế T.Bình</th>
+                        <th> C.Cao đế T.Lưu</th>
+                        <th> C.Cao đế H.Lưu</th>
+                        <th> C.Cao đế T.Bình</th>
+                        <th> C.Cao cống T.Lưu</th>
+                        <th> C.Cao cống H.Lưu</th>
+                        <th> C.Cống cống T.Bình</th>
+                        <th> C.Cao cống T.Lưu</th>
+                        <th> C.Cao cống H.Lưu</th>
+                        <th> C.Cống cống T.Bình </th>
+
+                        <th> C.Cao lót T.Lưu     </th>
+                        <th> C.Cao lót H.Lưu     </th>
+                        <th> C.Cao lót T.Bình    </th>
+                        <th> C.Cao lót T.Lưu     </th>
+                        <th> C.Cao lót H.Lưu     </th>
+                        <th> C.Cao lót T.Bình    </th>
+                        <th> C.Cao móng T.Lưu    </th>
+                        <th> C.Cao móng H.Lưu    </th>
+                        <th> C.Cao móng T.Bình   </th>
+                        <th> C.Cao móng T.Lưu    </th>
+                        <th> C.Cao móng H.Lưu    </th>
+                        <th> C.Cao móng T.Bình   </th>
+                        <th> C.Cao tường T.Lưu   </th>
+                        <th> C.Cao tường H.Lưu   </th>
+                        <th> C.Cao tường T.Bình  </th>
+                        <th> C.Cao tường T.Lưu   </th>
+                        <th> C.Cao tường H.Lưu   </th>
+                        <th> C.Cao tường T.Bình  </th>
+
+                        <th>C.Cao đệm cát T.Lưu                  </th>
+                        <th>C.Cao đệm cát H.Lưu                  </th>
+                        <th>C.Cao đệm cát T.Bình                 </th>
+                        <th>C.Cao đệm cát T.Lưu                  </th>
+                        <th>C.Cao đệm cát H.Lưu                  </th>
+                        <th>C.Cao đệm cát T.Bình                 </th>
+                        <th>C.Cao ống T.Lưu                      </th>
+                        <th>C.Cao ống H.Lưu                      </th>
+                        <th>C.Cao T.Bình                         </th>
+                        <th>C.Cao ống T.Lưu                      </th>
+                        <th>C.Cao ống H.Lưu                      </th>
+                        <th>C.Cao T.Bình                         </th>
+                        <th>C.Cao đắp cát T.Lưu                  </th>
+                        <th>C.Cao Đắp cát H.Lưu                  </th>
+                        <th>C.Cao đắp cát T.Bình                 </th>
+                        <th>C.Cao đắp cát T.Lưu                  </th>
+                        <th>C.Cao Đắp cát H.Lưu                  </th>
+                        <th>C.Cao đắp cát T.Bình                 </th>
+                        <th>Chiều rộng đáy đào nhỏ (m)           </th>
+                        <th>Tỷ lệ mở mái                         </th>
+                        <th>Số cạnh mái trái                     </th>
+                        <th>Số cạnh mái phải                     </th>
+                        <th>C.Rộng đào đáy lớn (m)               </th>
+                        <th>D.Tích đào (m2)                      </th>
+                        <th>C.Rộng đào đáy lớn (m)               </th>
+                        <th>D.Tích đào (m2)                      </th>
+                        <th>C.Rộng đào đáy lớn (m)               </th>
+                        <th>D.Tích đào (m2)                      </th>
+                        <th>C.Rộng đào đáy lớn (m)               </th>
+                        <th>D.Tích đào (m2)                      </th>
+
+                        <th>  C.Rộng đào đáy lớn (m)</th>
+                        <th> D.Tích đào (m2)</th>
+                        <th> C.Rộng đào đáy lớn (m)</th>
+                        <th> D.Tích đào (m2)</th>
+                        <th> KL đào đất (m3)</th>
+                        <th> KL đào đá (m3)</th>
+                        <th> Tổng KL đào cống, rãnh, ống nhựa (m3)</th>
+                        <th> KL C.Chỗ đất cống tròn (m3)</th>
+                        <th> KL C.Chỗ đá cống tròn (m3)</th>
+                        <th> Tổng KL chiếm chỗ C.Tròn (m3)</th>
+                        <th> KL C.chỗ đất cống hộp (m3)</th>
+                        <th> KL C.chỗ đá cống hộp (m3)</th>
+                        <th> Tổng KL C.chỗ cống hộp (m3)</th>
+                        <th> KL C.chỗ đất rãnh (m3)</th>
+                        <th> KL C.chỗ đá rãnh (m3)</th>
+                        <th> Tổng KL C.chỗ rãnh (m3)</th>
+                        <th> KL C.Chỗ đất ống nhựa (m)</th>
+                        <th> KL C.Chỗ đá ống nhựa (m3)</th>
+                        <th> Tổng KL C.Chỗ ống nhựa (m3)</th>
+                        <th> KL C.chỗ đất (m3)</th>
+                        <th> KL C.Chỗ đá (m3)</th>
+                        <th> Tổng chiếm chỗ (m3) </th>
+
+                        <th>  KL đắp trả đất (m3) </th>
+                        <th> KL đắp trả đá (m3) </th>
+                        <th> Tổng KL đắp trả (m3) </th>
+                        <th> KL thừa đất (m3) </th>
+                        <th> KL thừa đá (m3) </th>
+                        <th> Tổng KL thừa (m3) </th>
+                        <th> C.Sâu đắp (m) </th>
+                        <th> C.Rộng đắp đáy lớn (m) </th>
+                        <th> D.Tích đắp (m2) </th>
+                        <th> C.Sâu đắp (m) </th>
+                        <th> C.Rộng đắp đáy lớn (m) </th>
+                        <th> D.Tích đắp (m2) </th>
+                        <th> C.Sâu đắp (m) </th>
+                        <th> C.Rộng đắp đáy lớn (m) </th>
+                        <th> D.Tích đắp (m2) </th>
+                        <th> KL đắp cát trước chiếm chỗ (m3) </th>
+                        <th> KL chiếm chỗ (m3) </th>
+                        <th> KL đắp cát sau chiếm chỗ (m3)</th>
+                        <th> x</th>
+                        <th> y</th>
+                    </tr>
+                </thead>
+                
+            </table>
+        </div>
+       
+    </div>
+    <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+    <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
+</div>
+
+
+@code{
+    [SupplyParameterFromForm]
+    private MangThu Input { get; set; } = new();
+    public List<DanhMuc> listDanhMuc = new();
+    private bool isEdit = false;
+    private bool isLoading = false;
+    //modal
+    private bool isModalVisible = false;
+    private string TitleModal = "Thêm mới thông tin";
+
+    public ConfirmModal confirmModal { get; set; }
+
+
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        isLoading = true;
+
+        listDanhMuc = await DanhMucRepository.GetAll();
+
+        isLoading = false;
+
+    }
+
+    private void ShowModal()
+    {
+        isModalVisible = true;
+        Input = new MangThu();
+        if (isEdit == true)
+        {
+            TitleModal = "Cập nhật thông tin";
+        }
+        else
+        {
+            TitleModal = "Thêm mới thông tin";
+        }
+    }
+
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+        Input = new();
+        isEdit = false;
+    }
+
+    private void HandleSave()
+    {
+        // Logic for saving
+        isModalVisible = false;
+    }
+
+    private void HandleCancel()
+    {
+        // Logic for canceling
+        isModalVisible = false;
+        Input = new();
+        isEdit = false;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            Console.WriteLine(Input);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
+        }
+    }
+
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        if (confirmed)
+        {
+            Console.WriteLine("abc");
+        }
+    }
+
+
+    //bắt sự kiện khi thay đổi
+    private System.Timers.Timer _typingTimer;
+    private int _delay = 3000; // Thời gian chờ (3000ms)
+
+    private void OnInputChange(ChangeEventArgs e)
+    {
+        // Dừng timer nếu đang chạy
+        _typingTimer?.Stop();
+
+        // Khởi động lại timer
+        _typingTimer = new System.Timers.Timer(_delay);
+        _typingTimer.Elapsed += OnTypingStopped;
+        _typingTimer.AutoReset = false;
+        _typingTimer.Start();
+    }
+
+
+    private async void OnTypingStopped(object sender, System.Timers.ElapsedEventArgs e)
+    {
+        // Xử lý khi người dùng ngừng nhập
+        Console.WriteLine("Người dùng đã ngừng nhập.");
+    }
+
+    public List<DanhMuc> FindByIdNhomDanhMuc(string idNhomDanhMuc)
+    {
+        return listDanhMuc.Where(dm => dm.IdNhomDanhMuc == idNhomDanhMuc).ToList();
+    }
+}
