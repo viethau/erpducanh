@@ -12,6 +12,9 @@ namespace DucAnhERP.Repository
 
         Task<bool> GetDMByTenNhomDanhMuc(string ten);
 
+        Task<List<DanhMuc>> GetDMisExist(string idNhomDanhMuc, string Ten);
+        Task<List<DanhMuc>> GetDMisExistEdit(string Id, string idNhomDanhMuc, string Ten);
+
         Task<bool> CheckUsingId(string id);
 
         Task<bool> CheckExistId(string id);

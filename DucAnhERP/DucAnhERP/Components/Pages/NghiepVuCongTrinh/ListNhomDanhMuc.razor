@@ -11,16 +11,16 @@
 <div class="m-5">
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
         <BodyTemplate>
-            <EditForm Model="mNhomDanhMuc" OnValidSubmit="HandleValidSubmit">
+            <EditForm Model="nhomDanhMuc" OnValidSubmit="HandleValidSubmit">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <div class="row">
 
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="Ten">Tên nhóm danh mục</label>
-                            <InputText id="Ten" class="form-control" @bind-Value="mNhomDanhMuc.Ten" />
-                            <ValidationMessage For="() => mNhomDanhMuc.Ten" class="text-danger" />
+                            <label for="Ten">Tên nhóm danh mục <span class="text-danger">*</span></label>
+                            <InputText id="Ten" class="form-control" @bind-Value="nhomDanhMuc.Ten" />
+                            <ValidationMessage For="() => nhomDanhMuc.Ten" class="text-danger" />
 
                         </div>
                     </div>
@@ -34,8 +34,8 @@
         </BodyTemplate>
     </CustomModal>
 
-    <button class="btn btn-primary" @onclick="ShowModal">Thêm danh mục</button>
-    <h3 class="mt-2">Danh sách danh mục</h3>
+    <button class="btn btn-primary" @onclick="ShowModal">Thêm nhóm danh mục</button>
+    <h3 class="mt-2">Danh sách nhóm danh mục</h3>
     @if (!listNhomDanhMuc.Any())
     {
         <div class="pt-3 pl-4">
@@ -105,10 +105,10 @@
 
 @code {
     private List<NhomDanhMuc> nhomDanhMucs = new List<NhomDanhMuc>();
-    private NhomDanhMuc mNhomDanhMuc = new();
+    private NhomDanhMuc nhomDanhMuc = new();
 
     private bool isModalVisible = false;
-    private string TitleModal = "Thêm mới danh mục";
+    private string TitleModal = "Thêm mới nhóm danh mục";
     bool isEdit = false;
 
     private void ShowModal()
@@ -132,7 +132,7 @@
     {
         // Logic for canceling
         isModalVisible = false;
-        mNhomDanhMuc = new();
+        nhomDanhMuc = new();
     }
 
     [Parameter]
@@ -183,23 +183,37 @@
 
     private async Task HandleValidSubmit()
     {
-
-        if (isEdit)
+        var isExistTen = await NhomDanhMucRepository.GetNDMByTen(nhomDanhMuc.Ten);
+        if (isExistTen)
         {
-            await NhomDanhMucRepository.Update(mNhomDanhMuc);
-            ToastService.ShowToast("Thông báo", "Cập nhật danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
-            await LoadNhomDanhMuc();
-            isModalVisible = false;
-            mNhomDanhMuc = new NhomDanhMuc();
+            ToastService.ShowToast(
+               "Thông báo",
+                "Tên nhóm danh mục đã tồn tại.",
+                cssClass: "toast-danger",
+                iconClass: "fa fa-exclamation-circle",
+                progressBarClass: "bg-info",
+                duration: 5000);
         }
         else
         {
-            await NhomDanhMucRepository.Insert(mNhomDanhMuc);
-            ToastService.ShowToast("Thông báo", "Thêm danh mục thành công.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
-            await LoadNhomDanhMuc();
-            isModalVisible = false;
-            mNhomDanhMuc = new NhomDanhMuc();
+            if (isEdit)
+            {
+                await NhomDanhMucRepository.Update(nhomDanhMuc);
+                ToastService.ShowToast("Thông báo", "Cập nhật nhóm danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                await LoadNhomDanhMuc();
+                isModalVisible = false;
+                nhomDanhMuc = new NhomDanhMuc();
+            }
+            else
+            {
+                await NhomDanhMucRepository.Insert(nhomDanhMuc);
+                ToastService.ShowToast("Thông báo", "Thêm nhóm danh mục thành công.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+                await LoadNhomDanhMuc();
+                isModalVisible = false;
+                nhomDanhMuc = new NhomDanhMuc();
+            }
         }
+       
 
     }
 
@@ -228,7 +242,7 @@
                 }
                 else
                 {
-                    ToastService.ShowToast("Thông báo", "Xóa nhóm danh mục không thành công.", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+                    ToastService.ShowToast("Thông báo", "Không thể xóa nhóm danh mục đang được sử dụng!", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
                 }
 
                 await LoadNhomDanhMuc();
@@ -241,7 +255,7 @@
     private async Task Edit(string id)
     {
         TitleModal = "Cập nhật nhóm danh mục !";
-        mNhomDanhMuc = await NhomDanhMucRepository.GetById(id);
+        nhomDanhMuc = await NhomDanhMucRepository.GetById(id);
         isEdit = true;
         isModalVisible = true;
     }

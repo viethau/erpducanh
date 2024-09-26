@@ -7,5 +7,6 @@ namespace DucAnhERP.Repository
     {
         Task<List<NhomDanhMucModel>> GetAllNDM();
         Task<bool> DeleteByIdResult(string id);
+        Task<bool> GetNDMByTen(string Ten);
     }
 }

@@ -16,9 +16,9 @@
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-3">
                         <div class="form-group">
-                            <label for="IdNhomDanhMuc">Nhóm danh mục</label>
+                            <label for="IdNhomDanhMuc">Nhóm danh mục <span class="text-danger">*</span></label>
                             <InputSelect id="IdNhomDanhMuc" class="form-control" @bind-Value="newDanhMuc.IdNhomDanhMuc">
                                 <option value="">Nhóm danh mục...</option>
                                 @foreach (var nhom in nhomDanhMucs)
@@ -29,16 +29,22 @@
                             <ValidationMessage For="() => newDanhMuc.IdNhomDanhMuc" class="text-danger" />
                         </div>
                     </div>
-                    <div class="col-6">
-
+                    <div class="col-3">
                         <div class="form-group">
-                            <label for="Ten">Tên</label>
+                            <label for="Ten">Tên <span class="text-danger">*</span></label>
                             <InputText id="Ten" class="form-control" @bind-Value="newDanhMuc.Ten" />
                             <ValidationMessage For="() => newDanhMuc.Ten" class="text-danger" />
 
                         </div>
                     </div>
-
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="Ten">ghi chú</label>
+                            <InputText id="GhiChu" class="form-control" @bind-Value="newDanhMuc.GhiChu" />
+                            <ValidationMessage For="() => newDanhMuc.GhiChu" class="text-danger" />
+                        </div>
+                    </div>
+                 
                 </div>
                 <div class="row justify-content-end">
                     <button class="btn btn-primary mr-2" type="submit">Save</button>
@@ -73,6 +79,9 @@
                     <th onclick="@(() => SortTable("Ten"))" class="text-center sortable" scope="col" sortable>
                         <div class="pb-3">Tên  <span class="arrow @(GetSortStyle("Ten"))"></span></div>
                     </th>
+                    <th onclick="@(() => SortTable("GhiChu"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Chi chú  <span class="arrow @(GetSortStyle("GhiChu"))"></span></div>
+                    </th>
                     <th class="text-center" colspan="2" >
                       
                     </th>
@@ -93,6 +102,7 @@
                             <td class="text-center">@stt</td>
                             <td class="text-left">@dm.TenNhom</td>
                             <td class="text-center">@dm.Ten</td>
+                            <td class="text-center">@dm.GhiChu</td>
                             <td class="text-center">
                                 <button class="btn btn-primary" @onclick="()=>Edit(dm.Id)">
                                     <i class="fas fa-edit"></i>
@@ -139,6 +149,7 @@
     private void HandleModalClose(bool isVisible)
     {
         isModalVisible = isVisible;
+        isEdit = false;
     }
 
     private void HandleSave()
@@ -151,6 +162,7 @@
     {
         // Logic for canceling
         isModalVisible = false;
+        isEdit = false;
         newDanhMuc = new DanhMuc();
     }
 
@@ -202,30 +214,60 @@
 
     private async Task HandleValidSubmit()
     {
-        bool isTen = await DanhMucRepository.GetDMByTenNhomDanhMuc(newDanhMuc.Ten);
-        if (isTen)
-        {
-            ToastService.ShowToast(
-                "Thông báo",
-                 "Tên danh mục đã tồn tại.",
-                 cssClass: "toast-danger",
-                 iconClass: "fa fa-exclamation-circle",
-                 progressBarClass: "bg-info",
-                 duration: 5000);
-        }
-        else
-        {
 
-            if (isEdit)
+        if (isEdit)
+        {
+            List<DanhMuc> DMisExistEdit = new();
+             DMisExistEdit = await DanhMucRepository.GetDMisExist(newDanhMuc.IdNhomDanhMuc, newDanhMuc.Ten);
+            if (DMisExistEdit.Count() > 0)
+            {
+                if (DMisExistEdit[0].Id == newDanhMuc.Id)
+                {
+                    await DanhMucRepository.Update(newDanhMuc);
+                    ToastService.ShowToast("Thông báo", "Cập nhật danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                    await LoadDanhMuc();
+                    isModalVisible = false;
+                    newDanhMuc = new DanhMuc();
+                    isEdit = false;
+                }
+                else
+                {
+                    ToastService.ShowToast(
+                    "Thông báo",
+                     "Tên danh mục đã tồn tại.",
+                     cssClass: "toast-danger",
+                     iconClass: "fa fa-exclamation-circle",
+                     progressBarClass: "bg-info",
+                     duration: 5000);
+                }
+                
+            }
+            else
             {
                 await DanhMucRepository.Update(newDanhMuc);
                 ToastService.ShowToast("Thông báo", "Cập nhật danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                 await LoadDanhMuc();
                 isModalVisible = false;
-                newDanhMuc = new DanhMuc();
+                newDanhMuc = new DanhMuc(); 
+                isEdit =false;
+            }
+        }
+        else
+        {
+            var DMisExistInsert  = await DanhMucRepository.GetDMisExist(newDanhMuc.IdNhomDanhMuc, newDanhMuc.Ten);
+            if (DMisExistInsert.Count() > 0)
+            {
+                ToastService.ShowToast(
+                    "Thông báo",
+                     "Tên danh mục đã tồn tại.",
+                     cssClass: "toast-danger",
+                     iconClass: "fa fa-exclamation-circle",
+                     progressBarClass: "bg-info",
+                     duration: 5000);
             }
             else
             {
+
                 await DanhMucRepository.Insert(newDanhMuc);
                 ToastService.ShowToast("Thông báo", "Thêm danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                 await LoadDanhMuc();
@@ -233,6 +275,7 @@
                 newDanhMuc = new DanhMuc();
             }
         }
+        
     }
 
     private string deleteId;

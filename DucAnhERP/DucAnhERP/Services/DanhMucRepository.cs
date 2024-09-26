@@ -23,12 +23,14 @@ namespace DucAnhERP.Services
                         join nhomDanhMuc in context.DSNhomDanhMuc
                         on danhMuc.IdNhomDanhMuc equals nhomDanhMuc.Id into nhomDanhMucGroup
                         from nhomDanhMuc in nhomDanhMucGroup.DefaultIfEmpty()
+                        orderby danhMuc.CreateAt descending
                         select new DanhMucModel
                         {
                             Id = danhMuc.Id,
                             IdNhomDanhMuc = danhMuc.IdNhomDanhMuc,
                             Ten = danhMuc.Ten,
-                            TenNhom = nhomDanhMuc != null ? nhomDanhMuc.Ten : "Không xác định" // Tên từ bảng NhomDanhMuc
+                            TenNhom = nhomDanhMuc != null ? nhomDanhMuc.Ten : "Không xác định", // Tên từ bảng NhomDanhMuc
+                            GhiChu = danhMuc.GhiChu != null ? danhMuc.GhiChu : ""
                         };
 
             var data = await query
@@ -46,13 +48,46 @@ namespace DucAnhERP.Services
                          {
                              Id = danhMuc.Id,
                              IdNhomDanhMuc = danhMuc.IdNhomDanhMuc,
-                             Ten = danhMuc.Ten
+                             Ten = danhMuc.Ten,
+                             GhiChu = danhMuc.GhiChu != null ? danhMuc.GhiChu : ""
                          });
 
             var data = await query.ToListAsync();
             return data;
         }
 
+        public async Task<List<DanhMuc>> GetDMisExist(string idNhomDanhMuc ,string Ten)
+        {
+            using var context = _context.CreateDbContext();
+            var query = context.DSDanhMuc
+                         .Where(danhMuc => danhMuc.IdNhomDanhMuc.ToUpper() == idNhomDanhMuc.ToUpper() && danhMuc.Ten.ToUpper() == Ten.ToUpper())
+                         .Select(danhMuc => new DanhMuc
+                         {
+                             Id = danhMuc.Id,
+                             IdNhomDanhMuc = danhMuc.IdNhomDanhMuc,
+                             Ten = danhMuc.Ten,
+                             GhiChu = danhMuc.GhiChu != null ? danhMuc.GhiChu : ""
+                         });
+
+            var data = await query.ToListAsync();
+            return data;
+        }
+        public async Task<List<DanhMuc>> GetDMisExistEdit(string Id ,string idNhomDanhMuc, string Ten)
+        {
+            using var context = _context.CreateDbContext();
+            var query = context.DSDanhMuc
+                         .Where(danhMuc => danhMuc.Id==Id && danhMuc.IdNhomDanhMuc.ToUpper() == idNhomDanhMuc.ToUpper() && danhMuc.Ten.ToUpper() == Ten.ToUpper())
+                         .Select(danhMuc => new DanhMuc
+                         {
+                             Id = danhMuc.Id,
+                             IdNhomDanhMuc = danhMuc.IdNhomDanhMuc,
+                             Ten = danhMuc.Ten,
+                             GhiChu = danhMuc.GhiChu != null ? danhMuc.GhiChu : ""
+                         });
+
+            var data = await query.ToListAsync();
+            return data;
+        }
         public async Task<bool> GetDMByTenNhomDanhMuc(string Ten)
         {
             bool isSuccess =false;      
@@ -63,7 +98,8 @@ namespace DucAnhERP.Services
                          {
                              Id = danhMuc.Id,
                              IdNhomDanhMuc = danhMuc.IdNhomDanhMuc,
-                             Ten = danhMuc.Ten
+                             Ten = danhMuc.Ten,
+                             GhiChu = danhMuc.GhiChu != null ? danhMuc.GhiChu : ""
                          });
 
             var data = await query.ToListAsync();

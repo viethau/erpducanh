@@ -3,6 +3,7 @@ using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.Intrinsics.Arm;
 using System.Xml.Linq;
 
 namespace DucAnhERP.Services
@@ -25,18 +26,41 @@ namespace DucAnhERP.Services
         {
             using var context = _context.CreateDbContext();
             var query = from ndm in context.DSNhomDanhMuc
-                        orderby ndm.Ten
+                        orderby ndm.CreateAt descending
                         select new NhomDanhMucModel
                         {
                             Id = ndm.Id,
                             Ten = ndm.Ten,
-                          
+                            CreateAt = ndm.CreateAt,
+                            CreateBy = ndm.CreateBy,
+                            IsActive = ndm.IsActive,
                         };
 
             var data = await query.ToListAsync();
             return data;
         }
 
+        public async Task<bool> GetNDMByTen(string Ten)
+        {
+            bool isSuccess = false;
+            using var context = _context.CreateDbContext();
+            var query = context.DSNhomDanhMuc
+                         .Where(ndm => ndm.Ten.ToUpper() == Ten.ToUpper())
+                         .Select(ndm => new NhomDanhMucModel
+                         {
+                             Id = ndm.Id,
+                             Ten = ndm.Ten,
+                             CreateAt = ndm.CreateAt,
+                             CreateBy = ndm.CreateBy,
+                             IsActive = ndm.IsActive,
+                         });
+
+            var data = await query.ToListAsync();
+
+            // Kiểm tra nếu danh sách kết quả rỗng hoặc không có dữ liệu khớp
+            isSuccess = data.Any();
+            return (isSuccess);
+        }
 
         public async Task Update(NhomDanhMuc NhomDanhMuc)
         {
