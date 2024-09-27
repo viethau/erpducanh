@@ -1,5 +1,6 @@
 ﻿html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    overflow:hidden!important;
 }
 
 a, .btn-link {
@@ -7,11 +8,25 @@ a, .btn-link {
 }
 
 .our-table {
+    height: calc(100vh - (19rem + 1px)) !important;
     position: relative;
-    overflow-x: scroll;
+    overflow: scroll;
     white-space: nowrap;
+    scrollbar-color: #a9a9a9 transparent;
+    scrollbar-width: thin;
 }
 
+table th {
+    padding: 5px !important;
+}
+table td{
+    padding:5px !important;
+}
+
+.sidebar {
+    overflow-y: scroll !important;
+    height: calc(100vh - (3.5rem + 1px)) !important;
+}
 
 .modal {
     position: absolute !important;

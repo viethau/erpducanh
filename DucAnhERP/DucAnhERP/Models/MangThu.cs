@@ -271,8 +271,8 @@ namespace DucAnhERP.Models
         public Double? TTKTHHCHR_MMD_CRongMuMoDuoi { get; set; } = 0;
         public Double? TTKTHHCHR_MMT_CCaoMuMoThotTren { get; set; } = 0;
         public Double? TTKTHHCHR_MMT_CRongMuMoTren { get; set; } = 0;
-        public Double? TTKTHHCHR_TC_LoaiThanhChong { get; set; } = 0;
-        public Double? TTKTHHCHR_TC_CauTaoThanhChong { get; set; } = 0;
+        public string? TTKTHHCHR_TC_LoaiThanhChong { get; set; } = "";
+        public string? TTKTHHCHR_TC_CauTaoThanhChong { get; set; } = "";
         public Double? TTKTHHCHR_TC_CCaoThanhChong { get; set; } = 0;
         public Double? TTKTHHCHR_TC_CRongThanhChong { get; set; } = 0;
         public Double? TTKTHHCHR_TC_CDai { get; set; } = 0;

@@ -4,7 +4,7 @@
 @using DucAnhERP.Components.Pages.Common
 @using System.Linq
 @using DucAnhERP.SeedWork
-@using Microsoft.AspNetCore.Authorization
+@* @using Microsoft.AspNetCore.Authorization *@
 @inject IDanhMucRepository DanhMucRepository
 @inject IPhanLoaiDeCongRepository PhanLoaiDeCongRepository
 @inject DucAnhERP.Services.ToastService ToastService
@@ -76,14 +76,7 @@
     <button class="btn btn-primary" @onclick="ShowModal">Thêm phân loại đế cống</button>
 
     <h3 class="mt-2">Danh sách phân loại đế cống </h3>
-    @if (!listPLCTronHopNhuaModel.Any())
-    {
-        <div class="pt-3 pl-4">
-            <div class="callout callout-warning">
-                <h5>Không có dữ liệu tương ứng!</h5>
-            </div>
-        </div>
-    }
+   
     <div class="row mt-3 our-table">
         <table class="table table-hover table-bordered">
             <thead class="bg-info ">
@@ -148,6 +141,14 @@
                         stt++;
                     }
 
+                </tbody>
+            }
+            else
+            {
+                <tbody>
+                    <tr>
+                        <td colspan="8"> Không có dữ liệu</td>
+                    </tr>
                 </tbody>
             }
 

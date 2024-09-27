@@ -4,7 +4,7 @@
 @using DucAnhERP.Components.Pages.Common
 @using System.Linq
 @using DucAnhERP.SeedWork
-@using Microsoft.AspNetCore.Authorization
+@* @using Microsoft.AspNetCore.Authorization *@
 @inject IDanhMucRepository DanhMucRepository
 @inject INhomDanhMucRepository NhomDanhMucRepository
 @inject DucAnhERP.Services.ToastService ToastService
@@ -56,14 +56,7 @@
 
     <button class="btn btn-primary" @onclick="ShowModal">Thêm nhóm danh mục</button>
     <h3 class="mt-2">Danh sách nhóm danh mục</h3>
-    @if (!listDanhMuc.Any())
-    {
-        <div class="pt-3 pl-4">
-            <div class="callout callout-warning">
-                <h5>Không có dữ liệu tương ứng!</h5>
-            </div>
-        </div>
-    }
+
     <div class="row mt-3">
         <table class="table table-hover table-bordered">
             <thead class="bg-info">
@@ -121,7 +114,14 @@
 
                 </tbody>
             }
-
+            else
+            {
+                <tbody>
+                    <tr>
+                        <td colspan="5"> Không có dữ liệu</td>
+                    </tr>
+                </tbody>
+            }
         </table>
 
     </div>
@@ -234,7 +234,7 @@
                 {
                     ToastService.ShowToast(
                     "Thông báo",
-                     "Tên danh mục đã tồn tại.",
+                     "Danh mục đã tồn tại.",
                      cssClass: "toast-danger",
                      iconClass: "fa fa-exclamation-circle",
                      progressBarClass: "bg-info",
@@ -259,7 +259,7 @@
             {
                 ToastService.ShowToast(
                     "Thông báo",
-                     "Tên danh mục đã tồn tại.",
+                     "Danh mục đã tồn tại.",
                      cssClass: "toast-danger",
                      iconClass: "fa fa-exclamation-circle",
                      progressBarClass: "bg-info",

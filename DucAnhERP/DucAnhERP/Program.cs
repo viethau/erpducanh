@@ -56,7 +56,7 @@ builder.Services.AddSingleton<ILoginService, LoginService>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 builder.Services.AddScoped<IDanhMucRepository, DanhMucRepository>();
 builder.Services.AddScoped<INhomDanhMucRepository, NhomNhomDanhMucRepository>();
-builder.Services.AddScoped <IHopRanhThangRepository, HopRanhThangRepository>();
+builder.Services.AddScoped<IHopRanhThangRepository, HopRanhThangRepository>();
 builder.Services.AddScoped<IExcelRepository, ExcelRepository>();
 builder.Services.AddScoped<INuocMuaRepository, NuocMuaRepository>();
 builder.Services.AddScoped<IPhanLoaiHoGaRepository, PhanLoaiHoGaRepository>();
@@ -69,10 +69,10 @@ builder.Services.AddScoped<IPhanLoaiTDanTDanRepository, PhanLoaiTDanTDanReposito
 
 
 builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultScheme = IdentityConstants.ApplicationScheme;
-        options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-    })
+{
+    options.DefaultScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+})
     .AddIdentityCookies();
 
 //builder.Services.ConfigureApplicationCookie(options =>
