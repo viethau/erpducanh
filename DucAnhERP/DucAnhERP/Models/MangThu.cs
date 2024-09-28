@@ -7,6 +7,7 @@ namespace DucAnhERP.Models
 {
     public class MangThu
     {
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public string? TTLT_TuyenDuong { get; set; } = "";
         public string? TTLT_LyTrinhTaiTimHoGa { get; set; } = "";
         public string? TTLT_TenHoGaSauPhanLoai { get; set; } = "";
@@ -391,7 +392,7 @@ namespace DucAnhERP.Models
         public Double? TTCCCCCT_CDat_CCongCongTBinh { get; set; } = 0;
         public Double? TTCCCCCT_CDa_CCaoCongTLuu { get; set; } = 0;
         public Double? TTCCCCCT_CDa_CCaoCongHLuu { get; set; } = 0;
-        public Double? TTCCCCCT_Cda_CCongCongTBinh { get; set; } = 0;
+        public Double? TTCCCCCT_CDa_CCongCongTBinh { get; set; } = 0;
         public Double? TTCCCCCHR_LDat_CCaoLotTLuu { get; set; } = 0;
         public Double? TTCCCCCHR_LDat_CCaoLotHLuu { get; set; } = 0;
         public Double? TTCCCCCHR_LDat_CCaoLotTBinh { get; set; } = 0;
@@ -482,6 +483,9 @@ namespace DucAnhERP.Models
         public Double? TTKLDC_KlDapCatSauChiemCho { get; set; } = 0;
         public Double? ToaDo_X { get; set; } = 0;
         public Double? ToaDo_Y { get; set; } = 0;
-
+        public int Flag { get; set; } = 0;
+        public DateTime? CreateAt { get; set; }
+        public string? CreateBy { get; set; }
+        public int? IsActive { get; set; }
     }
 }
