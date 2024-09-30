@@ -7,6 +7,7 @@ namespace DucAnhERP.Models
 {
     public class MangThu
     {
+        [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string? TTLT_TuyenDuong { get; set; } = "";
         public string? TTLT_LyTrinhTaiTimHoGa { get; set; } = "";

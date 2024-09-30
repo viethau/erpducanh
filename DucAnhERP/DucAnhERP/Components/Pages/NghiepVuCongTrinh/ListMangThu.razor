@@ -9,6 +9,7 @@
 @inject NavigationManager navigation
 @inject DucAnhERP.Services.ToastService ToastService
 @inject IDanhMucRepository DanhMucRepository
+@inject IMangThuRepository MangThuRepository
 
 
 @* @attribute [Authorize] *@
@@ -4355,7 +4356,7 @@
         set;
     }
 
-    public MangThuModel MangThuModel
+    public MangThuModel mangThuModel
     {
         get;
         set;
@@ -4373,9 +4374,14 @@
     private async Task LoadData()
     {
         isLoading = true;
-
         listDanhMuc = await DanhMucRepository.GetAll();
 
+        var mangThuRepository = await MangThuRepository.GetData();
+        List<MangThuModel> mangThus ;
+        mangThus = mangThuRepository;
+        listModel = mangThus;
+        listMangThuModel = Paging(mangThus);
+ 
         isLoading = false;
 
     }
@@ -4486,5 +4492,60 @@
     public List<DanhMuc> FindByIdNhomDanhMuc(string idNhomDanhMuc)
     {
         return listDanhMuc.Where(dm => dm.IdNhomDanhMuc == idNhomDanhMuc).ToList();
+    }
+
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        mangThuModel.PageNumber = 1;
+        Paging(listModel);
+    }
+
+
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        mangThuModel.PageNumber = page;
+        Paging(listModel);
+    }
+
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+        mangThuModel.PageNumber = 1;
+        mangThuModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+
+    // Xử lý paging
+    private List<MangThuModel> Paging(List<MangThuModel> mangThus)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = mangThus.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        mangThus = mangThus.Skip((mangThuModel.PageNumber - 1) * mangThuModel.PageSize).Take(mangThuModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listMangThuModel.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var item in mangThus)
+        {
+            listMangThuModel.Add(item);
+        }
+
+        // Tạo pagelist mới
+
+        var pagelist = new PageList<MangThuModel>(listMangThuModel, count, mangThuModel.PageNumber, mangThuModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return mangThus;
     }
 }

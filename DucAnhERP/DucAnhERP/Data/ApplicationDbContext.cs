@@ -50,6 +50,9 @@ namespace DucAnhERP.Data
         public DbSet<PhanLoaiDeCong> PhanLoaiDeCongs { get; set; }
         public DbSet<PhanLoaiThanhChong> PhanLoaiThanhChongs { get; set; }
         public DbSet<PhanLoaiTDanTDan> PhanLoaiTDanTDans { get; set; }
+        public DbSet<MangThu> MangThus { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

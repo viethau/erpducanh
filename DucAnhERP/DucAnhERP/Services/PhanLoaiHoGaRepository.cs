@@ -72,7 +72,7 @@ namespace DucAnhERP.Services
                                 ThongTinChungHoGa_KetCauMong = plhg.ThongTinChungHoGa_KetCauMong ?? "",
                                 ThongTinChungHoGa_KetCauMong_Name = ketCauMong.Ten,
                                 ThongTinChungHoGa_ChatMatTrong = plhg.ThongTinChungHoGa_ChatMatTrong ?? "",
-                                ThongTinChungHoGa_ChatMatTrong_Name = chatMatNgoai.Ten,
+                                ThongTinChungHoGa_ChatMatTrong_Name = chatMatTrong.Ten,
                                 ThongTinChungHoGa_ChatMatNgoai = plhg.ThongTinChungHoGa_ChatMatNgoai ?? "",
                                 ThongTinChungHoGa_ChatMatNgoai_Name = chatMatNgoai.Ten,
                                 PhuBiHoGa_CDai = plhg.PhuBiHoGa_CDai ?? 0,

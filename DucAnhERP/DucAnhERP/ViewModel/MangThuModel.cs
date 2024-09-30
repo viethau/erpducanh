@@ -1,7 +1,11 @@
-﻿namespace DucAnhERP.ViewModel
+﻿using DucAnhERP.SeedWork;
+using System.ComponentModel.DataAnnotations;
+
+namespace DucAnhERP.ViewModel
 {
-    public class MangThuModel
+    public class MangThuModel : PagingParameters
     {
+        [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string? TTLT_TuyenDuong { get; set; } = "";
         public string? TTLT_LyTrinhTaiTimHoGa { get; set; } = "";
