@@ -109,7 +109,8 @@ namespace DucAnhERP.Helpers
             CheckObjHelper checkObjhelper = new();
             if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
             {
-                id = await PhanLoaiHoGaRepository.InsertId(searchData,Input.ThongTinChungHoGa_TenHoGaTheoBanVe);
+                string HoGa_KetCauTuong = GetTenDanhMucById(searchData.ThongTinChungHoGa_KetCauTuong);
+                id = await PhanLoaiHoGaRepository.InsertId(searchData,Input.ThongTinChungHoGa_TenHoGaTheoBanVe, HoGa_KetCauTuong);
                 Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
             }
             return id;

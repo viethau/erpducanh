@@ -66,15 +66,15 @@ namespace DucAnhERP.Services
                                 ThongTinChungHoGa_KetCauMuMo = plhg.ThongTinChungHoGa_KetCauMuMo ?? "",
                                 ThongTinChungHoGa_KetCauMuMo_Name = ketCauMuMo.Ten ?? "",
                                 ThongTinChungHoGa_KetCauTuong = plhg.ThongTinChungHoGa_KetCauTuong ?? "",
-                                ThongTinChungHoGa_KetCauTuong_Name = ketCauTuong.Ten,
+                                ThongTinChungHoGa_KetCauTuong_Name = ketCauTuong.Ten ?? "",
                                 ThongTinChungHoGa_HinhThucMongHoGa = plhg.ThongTinChungHoGa_HinhThucMongHoGa ?? "",
-                                ThongTinChungHoGa_HinhThucMongHoGa_Name = hinhThucMongHoGa.Ten,
+                                ThongTinChungHoGa_HinhThucMongHoGa_Name = hinhThucMongHoGa.Ten ?? "",
                                 ThongTinChungHoGa_KetCauMong = plhg.ThongTinChungHoGa_KetCauMong ?? "",
-                                ThongTinChungHoGa_KetCauMong_Name = ketCauMong.Ten,
+                                ThongTinChungHoGa_KetCauMong_Name = ketCauMong.Ten ?? "",
                                 ThongTinChungHoGa_ChatMatTrong = plhg.ThongTinChungHoGa_ChatMatTrong ?? "",
-                                ThongTinChungHoGa_ChatMatTrong_Name = chatMatTrong.Ten,
+                                ThongTinChungHoGa_ChatMatTrong_Name = chatMatTrong.Ten ?? "",
                                 ThongTinChungHoGa_ChatMatNgoai = plhg.ThongTinChungHoGa_ChatMatNgoai ?? "",
-                                ThongTinChungHoGa_ChatMatNgoai_Name = chatMatNgoai.Ten,
+                                ThongTinChungHoGa_ChatMatNgoai_Name = chatMatNgoai.Ten ?? "",
                                 PhuBiHoGa_CDai = plhg.PhuBiHoGa_CDai ?? 0,
                                 PhuBiHoGa_CRong = plhg.PhuBiHoGa_CRong ?? 0,
                                 BeTongLotMong_D = plhg.BeTongLotMong_D ?? 0,
@@ -82,13 +82,13 @@ namespace DucAnhERP.Services
                                 BeTongLotMong_C = plhg.BeTongLotMong_C ?? 0,
                                 BeTongMongHoGa_D = plhg.BeTongMongHoGa_D ?? 0,
                                 BeTongMongHoGa_R = plhg.BeTongMongHoGa_R ?? 0,
-                                BeTongMongHoGa_C = 0,
+                                BeTongMongHoGa_C = plhg.BeTongMongHoGa_C ?? 0,
                                 DeHoGa_D = plhg.DeHoGa_D ?? 0,
                                 DeHoGa_R = plhg.DeHoGa_R ?? 0,
                                 DeHoGa_C = plhg.DeHoGa_C ?? 0,
                                 TuongHoGa_D = plhg.TuongHoGa_D ?? 0,
                                 TuongHoGa_R = plhg.TuongHoGa_R ?? 0,
-                                TuongHoGa_C = 0,
+                                TuongHoGa_C = plhg.TuongHoGa_C ?? 0,
                                 TuongHoGa_CdTuong = plhg.TuongHoGa_CdTuong ?? 0,
                                 DamGiuaHoGa_D = plhg.DamGiuaHoGa_D ?? 0,
                                 DamGiuaHoGa_R = plhg.DamGiuaHoGa_R ?? 0,
@@ -97,10 +97,10 @@ namespace DucAnhERP.Services
                                 DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa = plhg.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa ?? 0,
                                 ChatMatTrong_D = plhg.ChatMatTrong_D ?? 0,
                                 ChatMatTrong_R = plhg.ChatMatTrong_R ?? 0,
-                                ChatMatTrong_C = 0,
+                                ChatMatTrong_C = plhg.ChatMatTrong_C ?? 0,
                                 ChatMatNgoaiCanh_D = plhg.ChatMatNgoaiCanh_D ?? 0,
                                 ChatMatNgoaiCanh_R = plhg.ChatMatNgoaiCanh_R ?? 0,
-                                ChatMatNgoaiCanh_C = 0,
+                                ChatMatNgoaiCanh_C = plhg.ChatMatNgoaiCanh_C ?? 0,
                                 MuMoThotDuoi_D = plhg.MuMoThotDuoi_D ?? 0,
                                 MuMoThotDuoi_R = plhg.MuMoThotDuoi_R ?? 0,
                                 MuMoThotDuoi_C = plhg.MuMoThotDuoi_C ?? 0,
@@ -201,7 +201,7 @@ namespace DucAnhERP.Services
                                         plhg.ThongTinChungHoGa_KetCauMong == searchData.ThongTinChungHoGa_KetCauMong &&
                                         plhg.ThongTinChungHoGa_ChatMatTrong == searchData.ThongTinChungHoGa_ChatMatTrong &&
                                         plhg.ThongTinChungHoGa_ChatMatNgoai == searchData.ThongTinChungHoGa_ChatMatNgoai &&
-                                        plhg.PhuBiHoGa_CDai == Math.Round(searchData.PhuBiHoGa_CDai??0, 2) &&
+                                        plhg.PhuBiHoGa_CDai == searchData.PhuBiHoGa_CDai &&
                                         plhg.PhuBiHoGa_CRong == searchData.PhuBiHoGa_CRong &&
                                         plhg.BeTongLotMong_D == searchData.BeTongLotMong_D &&
                                         plhg.BeTongLotMong_R == searchData.BeTongLotMong_R &&
@@ -297,7 +297,7 @@ namespace DucAnhERP.Services
                                         plhg.ThongTinChungHoGa_KetCauMong == searchData.ThongTinChungHoGa_KetCauMong &&
                                         plhg.ThongTinChungHoGa_ChatMatTrong == searchData.ThongTinChungHoGa_ChatMatTrong &&
                                         plhg.ThongTinChungHoGa_ChatMatNgoai == searchData.ThongTinChungHoGa_ChatMatNgoai &&
-                                        plhg.PhuBiHoGa_CDai == Math.Round(searchData.PhuBiHoGa_CDai ?? 0, 2) &&
+                                        plhg.PhuBiHoGa_CDai == searchData.PhuBiHoGa_CDai &&
                                         plhg.PhuBiHoGa_CRong == searchData.PhuBiHoGa_CRong &&
                                         plhg.BeTongLotMong_D == searchData.BeTongLotMong_D &&
                                         plhg.BeTongLotMong_R == searchData.BeTongLotMong_R &&
@@ -475,7 +475,7 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
             }
         }
-       public async Task<string> InsertId(PhanLoaiHoGa entity , string ThongTinChungHoGa_TenHoGaTheoBanVe)
+       public async Task<string> InsertId(PhanLoaiHoGa entity , string ThongTinChungHoGa_TenHoGaTheoBanVe ,string ThongTinChungHoGa_KetCauTuong)
         {
             try
             {
@@ -493,11 +493,12 @@ namespace DucAnhERP.Services
 
                 // Tăng giá trị Flag lên 1
                 entity.Flag = maxFlag + 1;
+                ThongTinChungHoGa_KetCauTuong = ThongTinChungHoGa_KetCauTuong.ToUpper().Trim();
                 if (ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G"))
                 {
-                    if(entity.ThongTinChungHoGa_KetCauTuong.ToUpper().Trim() == "Tường bê tông".ToUpper().Trim())
+                    if(ThongTinChungHoGa_KetCauTuong == "Tường bê tông".ToUpper().Trim()  || ThongTinChungHoGa_KetCauTuong == "Tường bê tông cốt thép".ToUpper().Trim())
                     {
-                        entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag + "=G" + "(BT)";
+                        entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag  + "(BT)" + "=G";
                     }
                     else
                     {
@@ -506,7 +507,7 @@ namespace DucAnhERP.Services
                 }
                 else
                 {
-                    if (entity.ThongTinChungHoGa_KetCauTuong.ToUpper().Trim() == "Tường bê tông".ToUpper().Trim())
+                    if (ThongTinChungHoGa_KetCauTuong == "Tường bê tông".ToUpper().Trim() || ThongTinChungHoGa_KetCauTuong == "Tường bê tông cốt thép".ToUpper().Trim())
                     {
                         entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag + "(BT)";
                     }

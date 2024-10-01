@@ -1424,7 +1424,8 @@
         CheckObjHelper checkObjhelper = new();
         if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
         {
-            id = await PhanLoaiHoGaRepository.InsertId(searchData, Input.ThongTinChungHoGa_TenHoGaTheoBanVe);
+            string HoGa_KetCauTuong = GetTenDanhMucById(searchData.ThongTinChungHoGa_KetCauTuong);
+            id = await PhanLoaiHoGaRepository.InsertId(searchData, Input.ThongTinChungHoGa_TenHoGaTheoBanVe, HoGa_KetCauTuong);
             Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
         }
         return id;
@@ -1435,7 +1436,7 @@
     {
         PhanLoaiHoGa searchData = new PhanLoaiHoGa
             {
-                ThongTinChungHoGa_TenHoGaSauPhanLoai = Input.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                // ThongTinChungHoGa_TenHoGaSauPhanLoai = Input.ThongTinChungHoGa_TenHoGaSauPhanLoai,
 
                 ThongTinChungHoGa_HinhThucHoGa = Input.ThongTinChungHoGa_HinhThucHoGa,
                 ThongTinChungHoGa_KetCauMuMo = Input.ThongTinChungHoGa_KetCauMuMo,
@@ -1514,6 +1515,10 @@
 
         PhanLoaiHoGa plHoGa = new();
         phanloai = new();
+        if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.Trim() == "M9T.9=G")
+        {
+            Console.WriteLine(Input.ThongTinChungHoGa_TenHoGaTheoBanVe.Trim());
+        }
         plHoGa = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaByDetail(searchData);
         if (plHoGa != null)
         {
