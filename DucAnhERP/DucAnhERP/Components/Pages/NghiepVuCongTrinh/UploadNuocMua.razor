@@ -1420,12 +1420,15 @@
                 HinhThucDauNoi8_CanhRong = Input.HinhThucDauNoi8_CanhRong,
                 HinhThucDauNoi8_CanhCheo = Input.HinhThucDauNoi8_CanhCheo
             };
-
+        if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
+        {
+            searchData.G = "=G";
+        }
         CheckObjHelper checkObjhelper = new();
         if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
         {
             string HoGa_KetCauTuong = GetTenDanhMucById(searchData.ThongTinChungHoGa_KetCauTuong);
-            id = await PhanLoaiHoGaRepository.InsertId(searchData, Input.ThongTinChungHoGa_TenHoGaTheoBanVe, HoGa_KetCauTuong);
+            id = await PhanLoaiHoGaRepository.InsertId(searchData, HoGa_KetCauTuong);
             Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
         }
         return id;
@@ -1515,11 +1518,12 @@
 
         PhanLoaiHoGa plHoGa = new();
         phanloai = new();
-        if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.Trim() == "M9T.9=G")
+        if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
         {
-            Console.WriteLine(Input.ThongTinChungHoGa_TenHoGaTheoBanVe.Trim());
+            searchData.G = "=G";
         }
         plHoGa = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaByDetail(searchData);
+      
         if (plHoGa != null)
         {
             phanloai.Name = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai;

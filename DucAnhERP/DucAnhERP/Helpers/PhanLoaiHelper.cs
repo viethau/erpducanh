@@ -106,11 +106,15 @@ namespace DucAnhERP.Helpers
                 HinhThucDauNoi8_CanhCheo = Input.HinhThucDauNoi8_CanhCheo
             };
 
+            if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G"))
+            {
+                searchData.G = "=G";
+            }
             CheckObjHelper checkObjhelper = new();
             if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
             {
                 string HoGa_KetCauTuong = GetTenDanhMucById(searchData.ThongTinChungHoGa_KetCauTuong);
-                id = await PhanLoaiHoGaRepository.InsertId(searchData,Input.ThongTinChungHoGa_TenHoGaTheoBanVe, HoGa_KetCauTuong);
+                id = await PhanLoaiHoGaRepository.InsertId(searchData, HoGa_KetCauTuong);
                 Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
             }
             return id;

@@ -6431,10 +6431,14 @@
             };
 
         CheckObjHelper checkObjhelper = new();
+        if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
+        {
+            searchData.G = "=G";
+        }
         if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
         {
             string HoGa_KetCauTuong = GetTenDanhMucById(searchData.ThongTinChungHoGa_KetCauTuong);
-            var id = await PhanLoaiHoGaRepository.InsertId(searchData, Input.ThongTinChungHoGa_TenHoGaTheoBanVe,HoGa_KetCauTuong);
+            var id = await PhanLoaiHoGaRepository.InsertId(searchData,HoGa_KetCauTuong);
             Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
         }
 
@@ -6522,6 +6526,10 @@
             };
 
         PhanLoaiHoGa plHoGa = new();
+         if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
+        {
+            searchData.G = "=G";
+        }
         plHoGa = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaByDetail(searchData);
         if (plHoGa == null)
         {

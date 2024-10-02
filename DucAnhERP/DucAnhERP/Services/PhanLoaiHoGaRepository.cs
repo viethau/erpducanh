@@ -194,6 +194,7 @@ namespace DucAnhERP.Services
                 // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
                 var query = context.PhanLoaiHoGas
                              .Where(plhg => (
+                                        plhg.G == searchData.G &&
                                         plhg.ThongTinChungHoGa_HinhThucHoGa == searchData.ThongTinChungHoGa_HinhThucHoGa &&
                                         plhg.ThongTinChungHoGa_KetCauMuMo == searchData.ThongTinChungHoGa_KetCauMuMo &&
                                         plhg.ThongTinChungHoGa_KetCauTuong == searchData.ThongTinChungHoGa_KetCauTuong &&
@@ -290,6 +291,7 @@ namespace DucAnhERP.Services
                 var query = context.PhanLoaiHoGas
                              .Where(plhg => (
                                         plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai == searchData.ThongTinChungHoGa_TenHoGaSauPhanLoai ||
+                                        plhg.G == searchData.G &&
                                         plhg.ThongTinChungHoGa_HinhThucHoGa == searchData.ThongTinChungHoGa_HinhThucHoGa &&
                                         plhg.ThongTinChungHoGa_KetCauMuMo == searchData.ThongTinChungHoGa_KetCauMuMo &&
                                         plhg.ThongTinChungHoGa_KetCauTuong == searchData.ThongTinChungHoGa_KetCauTuong &&
@@ -363,7 +365,6 @@ namespace DucAnhERP.Services
                                         plhg.HinhThucDauNoi8_CanhDai == searchData.HinhThucDauNoi8_CanhDai &&
                                         plhg.HinhThucDauNoi8_CanhRong == searchData.HinhThucDauNoi8_CanhRong &&
                                         plhg.HinhThucDauNoi8_CanhCheo == searchData.HinhThucDauNoi8_CanhCheo
-
                                           ));
                 var sqlQuery = query.ToQueryString();
                 var result = await query.FirstOrDefaultAsync();
@@ -475,7 +476,7 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
             }
         }
-       public async Task<string> InsertId(PhanLoaiHoGa entity , string ThongTinChungHoGa_TenHoGaTheoBanVe ,string ThongTinChungHoGa_KetCauTuong)
+       public async Task<string> InsertId(PhanLoaiHoGa entity ,string ThongTinChungHoGa_KetCauTuong)
         {
             try
             {
@@ -494,7 +495,7 @@ namespace DucAnhERP.Services
                 // Tăng giá trị Flag lên 1
                 entity.Flag = maxFlag + 1;
                 ThongTinChungHoGa_KetCauTuong = ThongTinChungHoGa_KetCauTuong.ToUpper().Trim();
-                if (ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G"))
+                if (entity.G == "=G")
                 {
                     if(ThongTinChungHoGa_KetCauTuong == "Tường bê tông".ToUpper().Trim()  || ThongTinChungHoGa_KetCauTuong == "Tường bê tông cốt thép".ToUpper().Trim())
                     {

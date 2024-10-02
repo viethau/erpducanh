@@ -642,7 +642,7 @@ namespace DucAnhERP.Helpers
             double result = 0;
             result = DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa > 0 ? ThongTinCaoDoHoGa_DinhTuong - ThongTinCaoDoHoGa_CdDayHoGa - DamGiuaHoGa_C : ThongTinCaoDoHoGa_DinhTuong - ThongTinCaoDoHoGa_CdDayHoGa;
             result = Math.Round(result, 3);
-            return Math.Round(result, 2, MidpointRounding.AwayFromZero);
+            return Math.Round(result, 1, MidpointRounding.AwayFromZero);
         }
 
         public double TTCCCCDTHT_ChieuCaoLotDat(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat, double BeTongLotMong_C)
