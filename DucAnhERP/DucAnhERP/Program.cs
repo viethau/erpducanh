@@ -41,7 +41,7 @@ builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<IMajorRepository, MajorRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IPermissionRepository, PermissionRepository>();
+builder.Services.AddScoped<IPermissionRepository, MPermissionRepository>();
 builder.Services.AddScoped<IPermissionControlRepository, PermissionControlRepository>();
 builder.Services.AddScoped<IMajorUserPermissionRepository, MajorUserPermissionRepository>();
 builder.Services.AddScoped<ISortService, SortService>();

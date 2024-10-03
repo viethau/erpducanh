@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Components\Pages\CaiDatHeThong\listPermissionsControl.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BlazorInputFile" Version="0.2.0" />
     <PackageReference Include="EPPlus" Version="7.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="8.0.8" />
@@ -22,6 +26,18 @@
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
     <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\Pages\CaiDatHeThong\listPermissionsControl.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\Pages\CaiDatHeThong\listPermissionsControl.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\Pages\CaiDatHeThong\listPermissionsControl.razor" />
   </ItemGroup>
 
 </Project>

@@ -4,6 +4,7 @@ using DucAnhERP.Data;
 using DucAnhERP.Models;
 using DucAnhERP.SeedWork;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace DucAnhERP.Services
 {
@@ -41,6 +42,7 @@ namespace DucAnhERP.Services
                         on major.ParentId equals parent.Id into parentGroup
                         from parent in parentGroup.DefaultIfEmpty()
                         where major.IsActive == 1
+                        orderby major.CreateAt descending
                         select new MajorModel
                         {
                             Id = major.Id,
@@ -120,9 +122,21 @@ namespace DucAnhERP.Services
             return majors;
         }
 
-        public Task<List<MMajor>> GetAll()
+        public async Task<List<MMajor>> GetAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                using var context = _context.CreateDbContext();
+                List<MMajor> list = new ();
+                list = await context.MMajors.ToListAsync();
+                return list;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
         }
 
         public async Task Update(MMajor major)
@@ -160,8 +174,7 @@ namespace DucAnhERP.Services
             {
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
             }
-            entity.IsActive = 0;
-            context.MMajors.Update(entity);
+            context.Set<MMajor>().Remove(entity);
             await context.SaveChangesAsync();
         }
 

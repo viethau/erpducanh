@@ -8,7 +8,7 @@ a, .btn-link {
 }
 
 .our-table {
-    height: calc(100vh - (19rem + 1px)) !important;
+    max-height: calc(100vh - (19rem + 1px)) !important;
     position: relative;
     overflow: scroll;
     white-space: nowrap;
@@ -358,7 +358,9 @@ h1:focus {
     animation: fadeOut 5s forwards;
 }
 
-
+.nav-item .nav-link {
+    line-height: 1.2rem;
+}
 
 @keyframes fadeOut {
     0% {

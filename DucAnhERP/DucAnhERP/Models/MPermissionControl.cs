@@ -17,5 +17,6 @@ namespace DucAnhERP.Models
         public DateTime UpdateAt { get; set; }
         public string UpdateBy { get; set; }
         public int IsActive { get; set; }
+
     }
 }

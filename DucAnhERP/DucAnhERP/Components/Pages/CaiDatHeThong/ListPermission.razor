@@ -1,0 +1,475 @@
+﻿@page "/CaiDatHeThong/listPermission"
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using System.Linq
+@using DucAnhERP.SeedWork
+@using Microsoft.AspNetCore.Authorization
+@inject NavigationManager navigation
+@inject DucAnhERP.Services.ToastService ToastService
+@inject IMajorRepository MajorRepository
+@attribute [Authorize]
+
+<div class="mx-5 my-2">
+    <h3>Danh sách quyền </h3>
+    <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
+        <BodyTemplate>
+            <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
+                <div class="row">
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="MajorId">Mã nghiệp vụ <span class="text-danger">*</span></label>
+                        <select id="MajorId" class="form-control" @bind="Input.MajorId">
+                            <option value="" selected>Mã nghiệp vụ...</option>
+                            @if (listMajor != null)
+                            {
+                                @foreach (var item in listMajor)
+                                {
+                                    <option value="@item.Id">@item.MajorName</option>
+                                }
+                            }
+                        </select>
+                        <ValidationMessage For="()=>Input.MajorId"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="PermissionType">Loại quyền <span class="text-danger">*</span></label>
+                        <select id="PermissionType" class="form-control" @bind="Input.PermissionType">
+                            <option value="" selected>Loại quyền!</option>
+                            @if (listPermissionType != null)
+                            {
+                                @foreach (var item in listPermissionType)
+                                {
+                                    <option value="@item.Key">@item.Value</option>
+                                }
+                            }
+                        </select>
+                        <ValidationMessage For="()=>Input.PermissionType"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="PermissionName">Tên quyền</label>
+                        <InputText class="form-control" id="PermissionName" @bind-Value="Input.PermissionName" />
+                        <ValidationMessage For="()=>Input.PermissionName"></ValidationMessage>
+                    </div>
+                </div>
+
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="row mt-5 justify-content-end">
+                    <button class="btn btn-primary mr-2" type="submit">Save</button>
+                    <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+                </div>
+            </EditForm>
+        </BodyTemplate>
+    </CustomModal>
+
+    <div>
+        <EditForm Model="permissionModel" FormName="SearchNghiepVu" OnValidSubmit="@Search">
+            <DataAnnotationsValidator />
+            <div class="d-flex">
+                <div class="form-group">
+                    <label for="MajorId">Mã nghiệp vụ <span class="text-danger">*</span></label>
+                    
+                    <InputSelect class="form-control" @bind-Value="permissionModel.MajorId">
+                        <option value="" selected>Chọn nghiệp...</option>
+                        @if (listMajor != null)
+                        {
+                            @foreach (var major in listMajor)
+                            {
+                                <option value="@major.Id">@major.MajorName</option>
+                            }
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="()=>permissionModel.MajorId"></ValidationMessage>
+                </div>
+                <div class="form-group ml-5">
+                    <label for="PermissionName">Tên quyền</label>
+                    <InputText class="form-control" id="table" @bind-Value="permissionModel.PermissionName" />
+                </div>
+
+                <div class="form-group ml-5">
+                    <label>&nbsp;</label>
+                    <button type="submit" class="btn btn-primary form-control">Tìm kiếm</button>
+                </div>
+                <div class="form-group ml-5">
+                    <label>&nbsp;</label>
+                    <button @onclick="ShowModal" class="btn btn-primary form-control">Tạo mới</button>
+                </div>
+            </div>
+        </EditForm>
+
+        <div class="row mt-3 our-table">
+            <table class="table table-hover table-bordered">
+                <thead class="bg-info">
+                    <tr>
+                        <th class="text-center" rowspan="2">
+                        </th>
+                        <th class="text-center" rowspan="2" scope="col">
+                            <div class="pb-3">No.</div>
+                        </th>
+                        <th onclick="@(() => SortTable("MajorName"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">
+                                Nghiệp vụ
+                                <span class="arrow @(GetSortStyle("MajorName"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("PermissionTypeName"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Loại quyền</div>
+                            <span class="arrow @(GetSortStyle("PermissionTypeName"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("PermissionName"))" rowspan="2" class="text-center sortable" scope="col" sortable>
+                            <div class="pb-3">Tên quyền</div>
+                            <span class="arrow @(GetSortStyle("PermissionName"))"></span>
+                        </th>
+                        @* <th class="text-center" colspan="2" scope="col">Thông tin tạo</th> *@
+                    </tr>
+                   @*  <tr>
+                        <th class="text-center" scope="col">Người tạo</th>
+                        <th class="text-center" scope="col">Ngày tạo</th>
+                    </tr> *@
+                </thead>
+                @if (listPermisson.Any())
+                {
+                    <tbody>
+                        @{
+                            int stt = 0;
+                        }
+                        @foreach (var item in listPermisson)
+                        {
+                            stt++;
+                            <tr>
+                                <td class="d-flex flex-column text-center nowrap">
+                                    <div class="d-inline-block">
+                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+
+                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.MajorName )">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td class="text-center" scope="row">@stt</td>
+                                <td class="text-left">@item.MajorName</td>
+                                <td class="text-center">@item.PermissionTypeName</td>
+                                <td class="text-left">@item.PermissionName</td>
+                             @*    <td class="text-center">@item.CreateBy</td>
+                                <td class="text-center">@item.CreateAt</td> *@
+                            </tr>
+                        }
+
+                    </tbody>
+                }
+                else
+                {
+                    <tbody>
+                        <tr>
+                            <td class="text-danger" colspan="7"> không có dữ liệu ...</td>
+                        </tr>
+                    </tbody>
+                }
+
+            </table>
+
+        </div>
+
+        @if (listPermisson.Any())
+        {
+            <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+        }
+
+    </div>
+
+    <SuccessModal @ref="successModal" OnResponseClick="Redirect"></SuccessModal>
+    <ErrorModal @ref="errorModal"></ErrorModal>
+    <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+
+</div>
+
+
+@code {
+
+    private MPermission Input = new();
+    private List<MMajor> listMajor = new();
+    private bool isModalVisible = false;
+    private bool isLoading = false;
+    private string TitleModal = "Thêm";
+    private bool isEdit = false;
+
+    Dictionary<string, string> listPermissionType = new Dictionary<string, string>
+    {
+        { "1", "Xem" },
+        { "2", "Xuất" },
+        { "3", "Tạo" },
+        { "4", "Sửa" },
+        { "5", "Xóa" },
+        { "6", "Khác" }
+    };
+
+    [Parameter]
+    public SuccessModal successModal { get; set; }
+
+    [Parameter]
+    public ErrorModal errorModal { get; set; }
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+
+    private void ShowModal()
+    {
+        isModalVisible = true;
+        Input = new();
+    }
+
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+        Input = new();
+        isEdit = false;
+
+    }
+
+    private void HandleSave()
+    {
+        // Logic for saving
+        isModalVisible = false;
+
+    }
+
+    private void HandleCancel()
+    {
+        // Logic for canceling
+        isModalVisible = false;
+        Input = new();
+        isEdit = false;
+
+    }
+
+    public List<PermissionModel> listPermisson
+    {
+        get;
+        set;
+    } = new();
+
+    public List<PermissionModel> listModel
+    {
+        get;
+        set;
+    } = new();
+
+    [SupplyParameterFromForm(FormName = "SearchNghiepVu")]
+    public PermissionModel permissionModel
+    {
+        get;
+        set;
+    }
+
+    public MetaData MetaData
+    {
+        get;
+        set;
+    }
+
+
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        permissionModel =new();
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+
+        listMajor = await MajorRepository.GetAll();
+        listModel = await PermissionService.GetAllByVM(permissionModel);
+        if (listModel != null)
+        {
+            foreach (var item in listModel)
+            {
+                foreach (var type in listPermissionType)
+                {
+                    if (int.TryParse(type.Key, out var parsedValue) && item.PermissionType == parsedValue)
+                    {
+                        item.PermissionTypeName = type.Value;
+                        break;
+                    }
+
+                }
+            }
+        }
+        listPermisson = Paging(listModel);
+    }
+
+    private async Task HandleEdit(string id)
+    {
+        TitleModal = "Cập nhật!";
+        Input = await PermissionService.GetById(id);
+        isEdit = true;
+        isModalVisible = true;
+    }
+
+    private string deleteId;
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        deleteId = id;
+        confirmModal.Title = "Xác nhận xóa";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.openModal();
+
+    }
+
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        if (confirmed)
+        {
+            if (!string.IsNullOrEmpty(deleteId))
+            {
+                await PermissionService.DeleteById(deleteId);
+                ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                await LoadData();
+                deleteId = "";
+            }
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+
+        var condition =  await PermissionService.GetExist(Input);
+        if (isEdit)
+        {
+            if (condition != null && condition.Count() > 0 && Input.PermissionName.ToUpper().Trim() == condition[0]?.PermissionName?.ToUpper().Trim())
+            {
+                ToastService.ShowToast(
+                       "Thông báo",
+                        "Đã tồn tại",
+                       cssClass: "toast-danger",
+                      iconClass: "fa fa-exclamation-circle",
+                       progressBarClass: "bg-info",
+                       duration: 5000
+                   );
+                return;
+
+            }
+            else
+            {
+                await PermissionService.Update(Input);
+                ToastService.ShowToast(
+                    "Thông báo",
+                    "cập nhật thành công.",
+                    iconClass: "fa fa-check-circle",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                );
+                Input.Id = Guid.NewGuid().ToString();
+                await LoadData();
+                isEdit = false;
+                isModalVisible = false;
+            }
+        }
+        else
+        {
+            if (condition != null && condition.Count() >0 )
+            {
+                ToastService.ShowToast(
+                       "Thông báo",
+                        "Đã tồn tại",
+                       cssClass: "toast-danger",
+                      iconClass: "fa fa-exclamation-circle",
+                       progressBarClass: "bg-info",
+                       duration: 5000
+                   );
+                return;
+
+            }
+            else
+            {
+                await PermissionService.Insert(Input);
+                ToastService.ShowToast(
+                    "Thông báo",
+                    "Thêm thành công.",
+                    iconClass: "fa fa-check-circle",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                );
+                Input.Id = Guid.NewGuid().ToString();
+                await LoadData();
+            }
+        }
+
+        
+
+
+
+    }
+
+    // Xử lý tìm kiếm
+    public async Task Search()
+    {
+        permissionModel.PageNumber = 1;
+        await LoadData();
+    }
+
+
+
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        permissionModel.PageNumber = 1;
+        Paging(listModel);
+    }
+
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        permissionModel.PageNumber = page;
+        Paging(listModel);
+    }
+
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+
+        permissionModel.PageNumber = 1;
+        permissionModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+
+    // Xử lý paging
+    private List<PermissionModel> Paging(List<PermissionModel> list)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = list.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        list = list.Skip((permissionModel.PageNumber - 1) * permissionModel.PageSize).Take(permissionModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listPermisson.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var item in list)
+        {
+            listPermisson.Add(item);
+        }
+
+        // Tạo pagelist mới
+        var pagelist = new PageList<PermissionModel>(listPermisson, count, permissionModel.PageNumber, permissionModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return list;
+    }
+
+
+
+    private void Redirect()
+    {
+        Input = new();
+    }
+
+}

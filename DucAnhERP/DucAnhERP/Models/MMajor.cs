@@ -2,7 +2,7 @@
 
 namespace DucAnhERP.Models
 {
-    public class MMajor 
+    public class MMajor
     {
         [Key]
         public string Id { get; set; }
@@ -14,8 +14,8 @@ namespace DucAnhERP.Models
         [Required(ErrorMessage = "Bạn phải nhập thứ tự sắp xếp!")]
         public int Order { get; set; }
         public string? Table { get; set; }
-        public DateTime CreateAt { get; set; }
-        public string CreateBy { get; set; }
-        public int IsActive { get; set; }
+        public DateTime CreateAt { get; set; } = DateTime.Now;
+        public string CreateBy { get; set; } = "test.vp@gmail.com";
+        public int IsActive { get; set; } = 1;
     }
 }

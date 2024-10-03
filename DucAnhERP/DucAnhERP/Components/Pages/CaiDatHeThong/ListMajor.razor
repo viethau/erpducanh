@@ -1,0 +1,456 @@
+﻿@page "/CaiDatHeThong/listMajor"
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using System.Linq
+@using DucAnhERP.SeedWork
+@using Microsoft.AspNetCore.Authorization
+@inject NavigationManager navigation
+@inject DucAnhERP.Services.ToastService ToastService
+@inject IMajorRepository MajorRepository
+@attribute [Authorize]
+
+<div class="mx-5 my-2">
+    <h3>Danh sách nghiệp vụ</h3>
+    <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
+        <BodyTemplate>
+            <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
+                <div class="row">
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="ParentId">Nghiệp vụ cha <span class="text-danger">*</span></label>
+                        <select id="ParentId" class="form-control" @bind="Input.ParentId">
+                            <option value="" selected>Chọn nghiệp vụ cha nếu có!</option>
+                            @if (listParentMajor != null)
+                            {
+                                @foreach (var major in listParentMajor)
+                                {
+                                    <option value="@major.Id">@major.MajorName</option>
+                                }
+                            }
+                        </select>
+                        <ValidationMessage For="()=>Input.ParentId"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="majorName">Tên nghiệp vụ</label>
+                        <InputText class="form-control" id="MajorName" @bind-Value="Input.MajorName" />
+                        <ValidationMessage For="()=>Input.MajorName"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="Order">Thứ tự sắp xếp</label>
+                        <InputNumber class="form-control" id="Order" @bind-Value="Input.Order" />
+                        <ValidationMessage For="()=>Input.Order"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="Table">Tên bảng</label>
+                        <InputText class="form-control" id="Table" @bind-Value="Input.Table" />
+                        <ValidationMessage For="()=>Input.Table"></ValidationMessage>
+                    </div>
+                </div>
+            
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="row mt-5 justify-content-end">
+                    <button class="btn btn-primary mr-2" type="submit">Save</button>
+                    <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+                </div>
+            </EditForm>
+        </BodyTemplate>
+    </CustomModal>
+
+    <div>
+        <EditForm Model="majorModel" FormName="SearchNghiepVu" OnValidSubmit="@Search">
+            <DataAnnotationsValidator />
+            <div class="d-flex">
+                <div class="form-group">
+                    <label for="parentMajor">Nghiệp vụ cha</label>
+                    <InputSelect class="form-control" @bind-Value="majorModel.ParentId">
+                        <option value="" selected>Chọn nghiệp vụ cha nếu có!</option>
+                        @if (listParentMajor != null)
+                        {
+                            @foreach (var major in listParentMajor)
+                            {
+                                <option value="@major.Id">@major.MajorName</option>
+                            }
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="()=>majorModel.ParentId"></ValidationMessage>
+                </div>
+                <div class="form-group ml-5">
+                    <label for="majorName">Tên nghiệp vụ</label>
+                    <InputText class="form-control" id="majorName" @bind-Value="majorModel.MajorName" />
+                    <ValidationMessage For="()=>majorModel.MajorName"></ValidationMessage>
+                </div>
+                <div class="form-group ml-5">
+                    <label for="table">Tên bảng</label>
+                    <InputText class="form-control" id="table" @bind-Value="majorModel.Table" />
+                </div>
+                <div class="form-group ml-5">
+                    <label for="table">Người tạo</label>
+                    <InputText class="form-control" id="createBy" @bind-Value="majorModel.CreateBy" />
+                </div>
+                <div class="form-group ml-5">
+                    <label>&nbsp;</label>
+                    <button type="submit" class="btn btn-primary form-control">Tìm kiếm</button>
+                </div>
+
+                <div class="form-group ml-5">
+                    <label>&nbsp;</label>
+                    <button @onclick="ShowModal" class="btn btn-primary form-control">Tạo mới</button>
+                </div>
+            </div>
+        </EditForm>
+
+        <div class="row mt-3 our-table">
+            <table class="table table-hover table-bordered">
+                <thead class="bg-info">
+                    <tr>
+                        <th class="text-center" rowspan="2">
+                        </th>
+                        <th class="text-center" rowspan="2" scope="col">
+                            <div class="pb-3">No.</div>
+                        </th>
+                        <th onclick="@(() => SortTable("ParentName"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">
+                                Nghiệp vụ cha
+                                <span class="arrow @(GetSortStyle("ParentName"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("MajorName"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Tên nghiệp vụ</div>
+                            <span class="arrow @(GetSortStyle("MajorName"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("Order"))" rowspan="2" class="text-center sortable" scope="col" sortable>
+                            <div class="pb-3">Thứ tự sắp xếp</div>
+                            <span class="arrow @(GetSortStyle("Order"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("Table"))" rowspan="2" class="text-center sortable" scope="col" sortable>
+                            <div class="pb-3">Tên bảng</div>
+                            <span class="arrow @(GetSortStyle("Table"))"></span>
+                        </th>
+                        <th class="text-center" colspan="2" scope="col">Thông tin tạo</th>
+
+                    </tr>
+                    <tr>
+                        <th class="text-center" scope="col">Người tạo</th>
+                        <th class="text-center" scope="col">Ngày tạo</th>
+                    </tr>
+                </thead>
+                @if (listMajor.Any())
+                {
+                    <tbody>
+                        @{
+                            int stt = 0;
+                        }
+                        @foreach (var item in listMajor)
+                        {
+                             stt ++;
+                            <tr>
+                                <td class="d-flex flex-column text-center nowrap">
+                                    <div class="d-inline-block">
+                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+
+                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.MajorName )">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td class="text-center" scope="row">@stt</td>
+                                <td class="text-left">@item.ParentName</td>
+                                <td class="text-left">@item.MajorName</td>
+                                <td class="text-center">@item.Order</td>
+                                <td class="text-left">@item.Table</td>
+                                <td class="text-center">@item.CreateBy</td>
+                                <td class="text-center">@item.CreateAt</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                }
+                else
+                {
+                    <tbody>
+                        <tr>
+                            <td class="text-danger" colspan="8"> không có dữ liệu ...</td>
+                        </tr>
+                    </tbody>
+                }
+
+            </table>
+            <SuccessModal @ref="successModal" OnResponseClick="Redirect"></SuccessModal>
+            <ErrorModal @ref="errorModal"></ErrorModal>
+            <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+           
+        </div>
+
+        @if (listMajor.Any())
+        {
+            <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+        }
+
+    </div>
+</div>
+
+
+
+
+
+@code {
+
+    private MMajor Input = new();
+
+    private bool isModalVisible = false;
+    private bool isLoading = false;
+    private string TitleModal = "Thêm";
+    private bool isEdit = false;
+
+    [Parameter]
+    public SuccessModal successModal { get; set; }
+
+    [Parameter]
+    public ErrorModal errorModal { get; set; }
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+
+    private void ShowModal()
+    {
+        isModalVisible = true;
+        Input = new();
+    }
+
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+        Input = new();
+        isEdit = false;
+
+    }
+
+    private void HandleSave()
+    {
+        // Logic for saving
+        isModalVisible = false;
+
+    }
+
+    private void HandleCancel()
+    {
+        // Logic for canceling
+        isModalVisible = false;
+        Input = new();
+        isEdit = false;
+
+    }
+
+    public List<MajorModel> listMajor
+    {
+        get;
+        set;
+    } = new();
+
+    public List<MajorModel> listModel
+    {
+        get;
+        set;
+    } = new();
+
+    [SupplyParameterFromForm(FormName = "SearchNghiepVu")]
+    public MajorModel majorModel
+    {
+        get;
+        set;
+    }
+
+    public MetaData MetaData
+    {
+        get;
+        set;
+    }
+
+    private List<MMajor> listParentMajor = new List<MMajor>();
+
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        majorModel = new();
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        listParentMajor = await MajorService.GetAllParentMajor();
+        var majors = await MajorService.GetAll(majorModel);
+        listModel = majors;
+        listMajor = Paging(majors);
+    }
+    private async Task LoadMajor()
+    {
+        var majors = await MajorService.GetAll(majorModel);
+        listModel = majors;
+        listMajor = Paging(majors);
+
+    }
+
+
+    private async Task HandleEdit(string id)
+    {
+        TitleModal = "Cập nhật!";
+        Input = await MajorRepository.GetById(id);
+        isEdit = true;
+        isModalVisible = true;
+    }
+
+    private string deleteId;
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        deleteId = id;
+        confirmModal.Title = "Xác nhận xóa";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.openModal();
+
+    }
+
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        if (confirmed)
+        {
+            if (!string.IsNullOrEmpty(deleteId))
+            {
+                await MajorService.DeleteById(deleteId);
+                ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                await LoadData();
+                deleteId = "";
+            }
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        //Validate
+        var majorObj = await MajorService.GetMajorByName(Input.MajorName);
+
+        if (majorObj != null)
+        {
+            if (majorObj.Table == Input.Table)
+            {
+                ToastService.ShowToast(
+                       "Thông báo",
+                       "Đã tồn tại tên nghiệp vụ và tên bảng giống nội dung bạn đã nhập. Vui lòng thay đổi nội dung nhập và thử lại!",
+                       cssClass: "toast-danger",
+                      iconClass: "fa fa-exclamation-circle",
+                       progressBarClass: "bg-info",
+                       duration: 5000
+                   );
+                return;
+            }
+           
+
+        }
+        else
+        {
+            if (isEdit)
+            {
+                await MajorService.Update(Input);
+                ToastService.ShowToast(
+                    "Thông báo",
+                    "Cập nhật thành công.",
+                    iconClass: "fa fa-check-circle",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                );
+                Input.Id = Guid.NewGuid().ToString();
+                await LoadData();
+                isEdit = false;
+                isModalVisible = false;
+            }
+            else
+            {
+                var result = await MajorService.AddMajor(Input);
+                ToastService.ShowToast(
+                    "Thông báo",
+                    "Thêm thành công.",
+                    iconClass: "fa fa-check-circle",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                );
+                Input.Id = Guid.NewGuid().ToString();
+                await LoadData();
+            }
+        }
+       
+
+    }
+
+    // Xử lý tìm kiếm
+    public async Task Search()
+    {
+        majorModel.PageNumber = 1;
+        await LoadData();
+    }
+
+  
+
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        majorModel.PageNumber = 1;
+        Paging(listModel);
+    }
+
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        majorModel.PageNumber = page;
+        Paging(listModel);
+    }
+
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+
+        majorModel.PageNumber = 1;
+        majorModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+
+    // Xử lý paging
+    private List<MajorModel> Paging(List<MajorModel> majors)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = majors.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        majors = majors.Skip((majorModel.PageNumber - 1) * majorModel.PageSize).Take(majorModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listMajor.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var major in majors)
+        {
+            listMajor.Add(major);
+        }
+
+        // Tạo pagelist mới
+        var pagelist = new PageList<MajorModel>(listMajor, count, majorModel.PageNumber, majorModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return majors;
+    }
+
+
+
+    private void Redirect()
+    {
+        Input = new();
+    }
+
+}
