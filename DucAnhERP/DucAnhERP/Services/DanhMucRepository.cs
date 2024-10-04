@@ -16,7 +16,7 @@ namespace DucAnhERP.Services
             _context = context;
         }
 
-        public async Task<List<DanhMucModel>> GetAllDM()
+        public async Task<List<DanhMucModel>> GetAllDM(DanhMucModel dm)
         {
             using var context = _context.CreateDbContext();
             var query = from danhMuc in context.DSDanhMuc
@@ -32,6 +32,12 @@ namespace DucAnhERP.Services
                             TenNhom = nhomDanhMuc != null ? nhomDanhMuc.Ten : "Không xác định", // Tên từ bảng NhomDanhMuc
                             GhiChu = danhMuc.GhiChu != null ? danhMuc.GhiChu : ""
                         };
+
+            if (!string.IsNullOrEmpty(dm.IdNhomDanhMuc))
+            {
+                query = query.Where(m => m.IdNhomDanhMuc == dm.IdNhomDanhMuc);
+            }
+
 
             var data = await query
                 .OrderBy(dm => dm.Ten)

@@ -54,8 +54,37 @@
         </BodyTemplate>
     </CustomModal>
 
-    <button class="btn btn-primary" @onclick="ShowModal">Thêm nhóm danh mục</button>
     <h3 class="mt-2">Danh sách nhóm danh mục</h3>
+
+    <EditForm Model="dmModel" FormName="Search" OnValidSubmit="@Search">
+        <DataAnnotationsValidator />
+        <div class="d-flex">
+            <div class="form-group">
+                <label for="IdNhomDanhMuc">Nhóm danh mục <span class="text-danger">*</span></label>
+                <InputSelect class="form-control" @bind-Value="dmModel.IdNhomDanhMuc">
+                    <option value="" selected>Chọn nhóm danh mục...</option>
+                    @if (nhomDanhMucs != null)
+                    {
+                        @foreach (var nhomDM in nhomDanhMucs)
+                        {
+                            <option value="@nhomDM.Id">@nhomDM.Ten</option>
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="()=>dmModel.IdNhomDanhMuc"></ValidationMessage>
+            </div>
+           
+
+            <div class="form-group ml-5">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-primary form-control">Tìm kiếm</button>
+            </div>
+            <div class="form-group ml-5">
+                <label>&nbsp;</label>
+                <button @onclick="ShowModal" class="btn btn-primary form-control">Tạo mới</button>
+            </div>
+        </div>
+    </EditForm>
 
     <div class="row mt-3">
         <table class="table table-hover table-bordered">
@@ -201,12 +230,16 @@
         nhomDanhMucs = await NhomDanhMucRepository.GetAll();
         await LoadDanhMuc();
     }
-
+    public async Task Search()
+    {
+        dmModel.PageNumber = 1;
+        await LoadDanhMuc();
+    }
 
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadDanhMuc()
     {
-        var danhmucs = await DanhMucRepository.GetAllDM();
+        var danhmucs = await DanhMucRepository.GetAllDM(dmModel);
         listModel = danhmucs;
         listDanhMuc = Paging(danhmucs);
         Console.WriteLine(listDanhMuc);

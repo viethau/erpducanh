@@ -17,9 +17,9 @@
             <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
                 <div class="row">
                     <div class="form-floating col-sm-6 col-md-3">
-                        <label for="MajorId">Mã nghiệp vụ <span class="text-danger">*</span></label>
+                        <label for="MajorId">Nghiệp vụ <span class="text-danger">*</span></label>
                         <select id="MajorId" class="form-control" @bind="Input.MajorId">
-                            <option value="" selected>Mã nghiệp vụ...</option>
+                            <option value="" selected>Nghiệp vụ...</option>
                             @if (listMajor != null)
                             {
                                 @foreach (var item in listMajor)
@@ -33,7 +33,7 @@
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="PermissionType">Loại quyền <span class="text-danger">*</span></label>
                         <select id="PermissionType" class="form-control" @bind="Input.PermissionType">
-                            <option value="" selected>Loại quyền!</option>
+                            <option value="0" selected >Loại quyền...</option>
                             @if (listPermissionType != null)
                             {
                                 @foreach (var item in listPermissionType)
@@ -66,10 +66,10 @@
             <DataAnnotationsValidator />
             <div class="d-flex">
                 <div class="form-group">
-                    <label for="MajorId">Mã nghiệp vụ <span class="text-danger">*</span></label>
+                    <label for="MajorId">Nghiệp vụ <span class="text-danger"></span></label>
                     
                     <InputSelect class="form-control" @bind-Value="permissionModel.MajorId">
-                        <option value="" selected>Chọn nghiệp...</option>
+                        <option value="" selected>Chọn nghiệp vụ...</option>
                         @if (listMajor != null)
                         {
                             @foreach (var major in listMajor)
@@ -83,6 +83,7 @@
                 <div class="form-group ml-5">
                     <label for="PermissionName">Tên quyền</label>
                     <InputText class="form-control" id="table" @bind-Value="permissionModel.PermissionName" />
+
                 </div>
 
                 <div class="form-group ml-5">

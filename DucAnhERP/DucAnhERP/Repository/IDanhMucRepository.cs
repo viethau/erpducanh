@@ -5,7 +5,7 @@ namespace DucAnhERP.Repository
 {
     public interface IDanhMucRepository : IBaseRepository<DanhMuc>
     {
-        Task<List<DanhMucModel>> GetAllDM();
+        Task<List<DanhMucModel>> GetAllDM(DanhMucModel dm);
 
         Task<List<DanhMuc>> GetDMByIdNhomDanhMuc(string idNhomDanhMuc);
         Task<string> GetIdDMByTen(string Ten ,string ?IdNhomDanhMuc=null);

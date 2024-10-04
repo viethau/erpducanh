@@ -4,6 +4,7 @@ using DucAnhERP.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using DucAnhERP.ViewModel;
 
 namespace DucAnhERP.Services
 {
@@ -63,7 +64,7 @@ namespace DucAnhERP.Services
                                     join b in context.MPermissions on a.PermissionId equals b.Id
                                     where a.UserId.Equals(user.Id) &&
                                           a.MajorId.Equals(majorId) &&
-                                          a.ScreenId.Equals(screenId) &&
+                                          //a.ScreenId.Equals(screenId) &&
                                           //a.CompanyId.Equals(user.CompanyId) &&
                                           b.PermissionType == permissionType &&
                                           a.IsActive == 1 &&
@@ -89,14 +90,11 @@ namespace DucAnhERP.Services
             {
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
             }
-            entity.IsActive = 0;
-            entity.UpdateAt = DateTime.Now;
-            entity.UpdateBy = "anhtuan.vp98@gmail.com";
-            context.MMajorUserPermissions.Update(entity);
+            context.Set<MMajorUserPermission>().Remove(entity);
             await context.SaveChangesAsync();
         }
 
-        public async Task DeleteExistPermission(string companyId, string majorId, string userId, string screenId)
+        public async Task DeleteExistPermission(string companyId, string majorId, string userId)
         {
             using var context = _context.CreateDbContext();
             try
@@ -107,7 +105,6 @@ namespace DucAnhERP.Services
                         p.CompanyId == companyId &&
                         p.MajorId == majorId &&
                         p.UserId == userId &&
-                        p.ScreenId == screenId &&
                         p.IsActive == 1);
 
                 var permissionsToDelete = await result.ToListAsync();
@@ -118,8 +115,6 @@ namespace DucAnhERP.Services
                     foreach (var permission in permissionsToDelete)
                     {
                         permission.IsActive = 0;
-                        permission.UpdateAt = DateTime.Now;
-                        permission.UpdateBy = "anhtuan.vp98@gmai.com";
                         context.MMajorUserPermissions.Update(permission);
 
                     }
@@ -132,15 +127,98 @@ namespace DucAnhERP.Services
             }
         }
 
-        public Task<List<MMajorUserPermission>> GetAll()
+        public async Task<List<MMajorUserPermission>> GetAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var entity = await context.MMajorUserPermissions.ToListAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
         }
+
+        public async Task<List<MMajorUserPermission>> GetExist(MMajorUserPermission input)
+        {
+            using var context = _context.CreateDbContext();
+
+            var query = context.MMajorUserPermissions
+                     .Where(item =>
+                     item.CompanyId == input.CompanyId &&
+                         item.MajorId == input.MajorId &&
+                        item.UserId == input.UserId &&
+                        item.PermissionId == input.PermissionId)
+                     .OrderByDescending(permission => permission.CreateAt);
+
+            // Lấy kết quả dưới dạng danh sách
+            var data = await query.ToListAsync();
+            return data;
+
+        }
+
+        public async Task<List<MajorUserPermissionModel>> GetAllByVM(MajorUserPermissionModel majorUserPermissionModel)
+        {
+            using var context = _context.CreateDbContext();
+            var query = from perContr in context.MMajorUserPermissions
+                        join company in context.MCompanies
+                        on perContr.CompanyId equals company.Id into gr1
+                        from company in gr1.DefaultIfEmpty()
+                        join major in context.MMajors
+                       on perContr.MajorId equals major.Id into gr2
+                        from major in gr2.DefaultIfEmpty()
+                        join user in context.ApplicationUsers
+                      on perContr.UserId equals user.Id into gr3
+                        from user in gr3.DefaultIfEmpty()
+                        join permission in context.MPermissions
+                      on perContr.PermissionId equals permission.Id into gr4
+                        from permission in gr4.DefaultIfEmpty()
+
+                        orderby perContr.CreateAt descending
+                        select new MajorUserPermissionModel
+                        {
+                            Id = perContr.Id,
+                            CompanyId = perContr.CompanyId,
+                            CompanyName = company.CompanyName,
+                            MajorId = perContr.MajorId,
+                            MajorName = major.MajorName,
+                            PermissionId = perContr.PermissionId,
+                            PermissionName = permission.PermissionName,
+                            UserId = perContr.Id,
+                            UserName = user.UserName,
+                            CreateAt = perContr.CreateAt,
+                            CreateBy = perContr.CreateBy,
+                            IsActive = perContr.IsActive
+                        };
+
+            if (!string.IsNullOrEmpty(majorUserPermissionModel.CompanyId))
+            {
+                query = query.Where(m => m.CompanyId == majorUserPermissionModel.CompanyId);
+            }
+
+            if (!string.IsNullOrEmpty(majorUserPermissionModel.MajorId))
+            {
+                query = query.Where(m => m.MajorId == majorUserPermissionModel.MajorId);
+            }
+
+            if (!string.IsNullOrEmpty(majorUserPermissionModel.UserId))
+            {
+                query = query.Where(m => m.UserId == majorUserPermissionModel.UserId);
+            }
+
+            var data = await query.ToListAsync();
+            return data;
+        }
+
 
         public async Task<List<MMajorUserPermission>> GetByCompanyUser(string companyId, string screenId, string userId)
         {
             using var context = _context.CreateDbContext();
-            var major = await context.MMajorUserPermissions.Where(x => x.CompanyId == companyId && x.ScreenId == screenId && x.UserId == userId && x.IsActive == 1).ToListAsync();
+            var major = await context.MMajorUserPermissions.Where(x => x.CompanyId == companyId && x.UserId == userId && x.IsActive == 1).ToListAsync();
             return major;
         }
 

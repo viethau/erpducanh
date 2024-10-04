@@ -4527,25 +4527,30 @@
     // Xử lý paging
     private List<MangThuModel> Paging(List<MangThuModel> mangThus)
     {
-        // Đếm số bản ghi thỏa mãn
-        var count = mangThus.Count();
-
-        // Lọc bản ghi theo page hiện tại và page size
-        mangThus = mangThus.Skip((mangThuModel.PageNumber - 1) * mangThuModel.PageSize).Take(mangThuModel.PageSize).ToList();
-
-        // Xóa danh sách đang hiển thị trên màn hình
-        listMangThuModel.Clear();
-
-        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
-        foreach (var item in mangThus)
+        if ( mangThus.Count > 0)
         {
-            listMangThuModel.Add(item);
+                 // Đếm số bản ghi thỏa mãn
+            var count = mangThus.Count();
+
+            // Lọc bản ghi theo page hiện tại và page size
+            mangThus = mangThus.Skip((mangThuModel.PageNumber - 1) * mangThuModel.PageSize).Take(mangThuModel.PageSize).ToList();
+
+            // Xóa danh sách đang hiển thị trên màn hình
+            listMangThuModel.Clear();
+
+            // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+            foreach (var item in mangThus)
+            {
+                listMangThuModel.Add(item);
+            }
+
+            // Tạo pagelist mới
+
+            var pagelist = new PageList<MangThuModel>(listMangThuModel, count, mangThuModel.PageNumber, mangThuModel.PageSize);
+            MetaData = pagelist.MetaData;
+       
         }
-
-        // Tạo pagelist mới
-
-        var pagelist = new PageList<MangThuModel>(listMangThuModel, count, mangThuModel.PageNumber, mangThuModel.PageSize);
-        MetaData = pagelist.MetaData;
-        return mangThus;
+         return mangThus;
+       
     }
 }

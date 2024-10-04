@@ -47,9 +47,20 @@ namespace DucAnhERP.Services
             await context.SaveChangesAsync();
         }
 
-        public Task<List<MCompany>> GetAll()
+        public async Task<List<MCompany>> GetAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var entity = await context.MCompanies.ToListAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
         }
 
         public async Task<List<MCompany>> GetAllCompanies()

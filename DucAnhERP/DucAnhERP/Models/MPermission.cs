@@ -8,9 +8,11 @@ namespace DucAnhERP.Models
         public string Id { get; set; } = Guid.NewGuid().ToString();
         [Required(ErrorMessage = "Bạn phải nhập mã nghiệp vụ")]
         public string MajorId { get; set; } = "";
-        [Required(ErrorMessage = "Bạn phải nhập loại quyền")]
+
+        [Required(ErrorMessage = "Bạn phải chọn loại quyền")]
+        [Range(1, int.MaxValue, ErrorMessage = "Bạn phải chọn loại quyền hợp lệ.")]
         public int PermissionType { get; set; } = 0;
-        [Required(ErrorMessage = "Bạn phải nhập tên quyền")]
+        
         public string PermissionName { get; set; } = "";
         public DateTime CreateAt { get; set; } = DateTime.Now;
         public string CreateBy { get; set; } = "test.vp@gmail.com";

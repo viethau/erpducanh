@@ -6,6 +6,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.Design;
 
 namespace DucAnhERP.Services
 {
@@ -50,14 +51,89 @@ namespace DucAnhERP.Services
             {
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
             }
-            entity.IsActive = 0;
-            context.MPermissionControls.Update(entity);
+            context.Set<MPermissionControl>().Remove(entity);
             await context.SaveChangesAsync();
         }
 
-        public Task<List<MPermissionControl>> GetAll()
+        public async Task<List<MPermissionControl>> GetAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var entity = await context.MPermissionControls.ToListAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
+        }
+
+        public async Task<List<MPermissionControl>> GetExist(MPermissionControl input)
+        {
+            using var context = _context.CreateDbContext();
+
+            var query = context.MPermissionControls
+                     .Where(item =>
+                     item.CompanyId == input.CompanyId &&
+                         item.MajorId == input.MajorId &&
+                        item.UserId == input.UserId)
+                     .OrderByDescending(permission => permission.CreateAt);
+
+            // Lấy kết quả dưới dạng danh sách
+            var data = await query.ToListAsync();
+            return data;
+
+        }
+
+        public async Task<List<PermissionControlModel>> GetAllByVM(PermissionControlModel permissionControlModel)
+        {
+            using var context = _context.CreateDbContext();
+            var query = from perContr in context.MPermissionControls
+                        join company in context.MCompanies
+                        on perContr.CompanyId equals company.Id into gr1
+                        from company in gr1.DefaultIfEmpty()
+                        join major in context.MMajors
+                       on perContr.MajorId equals major.Id into gr2
+                        from major in gr2.DefaultIfEmpty()
+                        join user in context.ApplicationUsers
+                      on perContr.UserId equals user.Id into gr3
+                        from user in gr3.DefaultIfEmpty()
+
+                        orderby perContr.CreateAt descending
+                        select new PermissionControlModel
+                        {
+                            Id = perContr.Id,
+                            CompanyId = perContr.CompanyId,
+                            CompanyName = company.CompanyName,
+                            MajorId = perContr.MajorId,
+                            MajorName = major.MajorName,
+                            UserId = perContr.Id,
+                            UserName = user.UserName,
+                            CreateAt = perContr.CreateAt,
+                            CreateBy = perContr.CreateBy,
+                            IsActive = perContr.IsActive
+                        };
+
+            if (!string.IsNullOrEmpty(permissionControlModel.CompanyId))
+            {
+                query = query.Where(m => m.CompanyId == permissionControlModel.CompanyId);
+            }
+
+            if (!string.IsNullOrEmpty(permissionControlModel.MajorId))
+            {
+                query = query.Where(m => m.MajorId == permissionControlModel.MajorId);
+            }
+
+            if (!string.IsNullOrEmpty(permissionControlModel.UserId))
+            {
+                query = query.Where(m => m.UserId == permissionControlModel.UserId);
+            }
+
+            var data = await query.ToListAsync();
+            return data;
         }
 
         public async Task<MPermissionControl> GetById(string id)
@@ -75,14 +151,22 @@ namespace DucAnhERP.Services
 
         public async Task Insert(MPermissionControl entity)
         {
-            using var context = _context.CreateDbContext();
-            if (entity == null)
+            try
             {
-                throw new Exception("Không có bản ghi nào để thêm!");
-            }
+                using var context = _context.CreateDbContext();
+                if (entity == null)
+                {
+                    throw new Exception("Không có bản ghi nào để thêm!");
+                }
 
-            context.MPermissionControls.Add(entity);
-            await context.SaveChangesAsync();
+                context.MPermissionControls.Add(entity);
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+            }
         }
 
         public async Task<bool> InsertPermission(MajorUserPermissionModel majorUserPermission, List<PermissionModel> corePermission)
@@ -102,9 +186,7 @@ namespace DucAnhERP.Services
                         MajorId = majorUserPermission.MajorId,
                         UserId = majorUserPermission.UserId,
                         CreateAt = DateTime.Now,
-                        CreateBy = "anhtuan.vp98@gmail.com",
-                        UpdateAt = DateTime.Now,
-                        UpdateBy = "anhtuan.vp98@gmail.com",
+                        CreateBy = "test.vp@gmail.com",
                         IsActive = 1
                     };
 
@@ -112,7 +194,7 @@ namespace DucAnhERP.Services
                     await context.SaveChangesAsync();
 
                     // Xóa logic record cũ của table m_major_user_permission
-                    await _majorUserPermissionRepository.DeleteExistPermission(majorUserPermission.CompanyId, majorUserPermission.MajorId, majorUserPermission.UserId, majorUserPermission.ScreenId);
+                    await _majorUserPermissionRepository.DeleteExistPermission(majorUserPermission.CompanyId, majorUserPermission.MajorId, majorUserPermission.UserId);
 
 
                     // Đăng ký mới table m_major_user_permission
@@ -126,12 +208,11 @@ namespace DucAnhERP.Services
                                 CompanyId = majorUserPermission.CompanyId,
                                 MajorId = majorUserPermission.MajorId,
                                 UserId = majorUserPermission.UserId,
-                                ScreenId = majorUserPermission.ScreenId,
+                                
                                 PermissionId = permission.Id,
                                 CreateAt = DateTime.Now,
                                 CreateBy = "anhtuan.vp98@gmail.com",
-                                UpdateAt = DateTime.Now,
-                                UpdateBy = "anhtuan.vp98@gmail.com",
+                             
                                 IsActive = 1
                             };
 
@@ -198,7 +279,6 @@ namespace DucAnhERP.Services
             {
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {mPermission.Id}");
             }
-
             context.MPermissionControls.Update(mPermission);
             await context.SaveChangesAsync();
         }

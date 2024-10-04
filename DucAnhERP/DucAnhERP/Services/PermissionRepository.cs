@@ -124,8 +124,6 @@ namespace DucAnhERP.Services
                             MajorId = permission.MajorId,
                             PermissionType = permission.PermissionType,
                             PermissionName = permission.PermissionName,
-                          
-                            
                         };
 
             return await query.OrderBy(p => p.PermissionType).ToListAsync();
@@ -137,9 +135,20 @@ namespace DucAnhERP.Services
             return await query.ToListAsync();
         }
 
-        public Task<List<MPermission>> GetAll()
+        public async Task<List<MPermission>> GetAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var entity = await context.MPermissions.ToListAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
         }
         public async Task<MPermission> GetById(string id)
         {

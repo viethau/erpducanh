@@ -31,7 +31,7 @@
                         <ValidationMessage For="()=>Input.ParentId"></ValidationMessage>
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
-                        <label for="majorName">Tên nghiệp vụ</label>
+                        <label for="majorName">Tên nghiệp vụ <span class="text-danger">*</span></label>
                         <InputText class="form-control" id="MajorName" @bind-Value="Input.MajorName" />
                         <ValidationMessage For="()=>Input.MajorName"></ValidationMessage>
                     </div>
@@ -64,7 +64,7 @@
                 <div class="form-group">
                     <label for="parentMajor">Nghiệp vụ cha</label>
                     <InputSelect class="form-control" @bind-Value="majorModel.ParentId">
-                        <option value="" selected>Chọn nghiệp vụ cha nếu có!</option>
+                        <option value="" selected>Chọn nghiệp vụ cha...</option>
                         @if (listParentMajor != null)
                         {
                             @foreach (var major in listParentMajor)

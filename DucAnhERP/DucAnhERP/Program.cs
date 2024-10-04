@@ -66,6 +66,7 @@ builder.Services.AddScoped<IPhanLoaiMongCTronRepository, PhanLoaiMongCTronReposi
 builder.Services.AddScoped<IPhanLoaiDeCongRepository, PhanLoaiDeCongRepository>();
 builder.Services.AddScoped<IPhanLoaiThanhChongRepository, PhanLoaiThanhChongRepository>();
 builder.Services.AddScoped<IPhanLoaiTDanTDanRepository, PhanLoaiTDanTDanRepository>();
+builder.Services.AddScoped<IMangThuRepository, MangThuRepository>();
 
 
 builder.Services.AddAuthentication(options =>
