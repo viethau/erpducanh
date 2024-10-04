@@ -151,8 +151,7 @@ namespace DucAnhERP.Services
                      .Where(item =>
                      item.CompanyId == input.CompanyId &&
                          item.MajorId == input.MajorId &&
-                        item.UserId == input.UserId &&
-                        item.PermissionId == input.PermissionId)
+                        item.UserId == input.UserId )
                      .OrderByDescending(permission => permission.CreateAt);
 
             // Lấy kết quả dưới dạng danh sách
@@ -174,9 +173,7 @@ namespace DucAnhERP.Services
                         join user in context.ApplicationUsers
                       on perContr.UserId equals user.Id into gr3
                         from user in gr3.DefaultIfEmpty()
-                        join permission in context.MPermissions
-                      on perContr.PermissionId equals permission.Id into gr4
-                        from permission in gr4.DefaultIfEmpty()
+                       
 
                         orderby perContr.CreateAt descending
                         select new MajorUserPermissionModel
@@ -187,7 +184,7 @@ namespace DucAnhERP.Services
                             MajorId = perContr.MajorId,
                             MajorName = major.MajorName,
                             PermissionId = perContr.PermissionId,
-                            PermissionName = permission.PermissionName,
+                            PermissionName = "",
                             UserId = perContr.Id,
                             UserName = user.UserName,
                             CreateAt = perContr.CreateAt,

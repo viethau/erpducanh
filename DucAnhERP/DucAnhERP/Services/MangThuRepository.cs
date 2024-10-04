@@ -31,7 +31,7 @@ namespace DucAnhERP.Services
             }
         }
 
-        public async Task<List<MangThuModel>> GetData()
+        public async Task<List<MangThuModel>> GetAllByVM()
         {
 
             try

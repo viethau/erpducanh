@@ -1,0 +1,38 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+
+<div class="multiselect">
+    <div id="checkboxes">
+        @foreach (var item in this.Items)
+        {
+            <div>
+                <label for="@item.Value">
+                    <input type="checkbox" id="@item.Value" checked="@item.Selected" @onchange="@((e) => CheckboxChanged(e, item.Value))" />
+                    @item.Text
+                </label>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public MultiSelectList Items { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<MultiSelectList> ItemsChanged { get; set; }
+
+    private void CheckboxChanged(ChangeEventArgs e, string key)
+    {
+        // Lấy đối tượng Item theo giá trị key
+        var item = this.Items.FirstOrDefault(i => i.Value == key);
+
+        if (item != null)
+        {
+            // Cập nhật trạng thái đã chọn của item
+            item.Selected = (bool)e.Value;
+
+            // Gọi EventCallback để thông báo việc thay đổi danh sách Items
+            ItemsChanged.InvokeAsync(Items);
+        }
+    }
+}

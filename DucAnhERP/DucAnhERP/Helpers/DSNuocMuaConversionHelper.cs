@@ -78,9 +78,7 @@ namespace DucAnhERP.Helpers
 
         public async Task<NuocMua> ConvertNuocMua(NuocMua item, List<DanhMuc> listDM)
         {
-            Double a = 0.0304999999994;
-            var b = Math.Round(a, 3);
-            var c = Math.Round(b, 2 , MidpointRounding.AwayFromZero);
+
             listDanhMuc = listDM;
             item.ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao = ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao(item.ThongTinCaoDoHoGa_CaoDoTuNhien??0, item.ThongTinCaoDoHoGa_CaoDoDinhK98??0, item.ThongTinCaoDoHoGa_CdDinhViaHeHoanThien ??0);
             item.ThongTinCaoDoHoGa_CdDinhMong = ThongTinCaoDoHoGa_CdDinhMong(item.ThongTinChungHoGa_HinhThucHoGa, item.ThongTinChungHoGa_HinhThucMongHoGa, item.ThongTinCaoDoHoGa_CdDayHoGa ?? 0, item.DeHoGa_C ??0);

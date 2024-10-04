@@ -4376,7 +4376,7 @@
         isLoading = true;
         listDanhMuc = await DanhMucRepository.GetAll();
 
-        var mangThuRepository = await MangThuRepository.GetData();
+        var mangThuRepository = await MangThuRepository.GetAllByVM();
         List<MangThuModel> mangThus ;
         mangThus = mangThuRepository;
         listModel = mangThus;

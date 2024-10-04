@@ -19,7 +19,7 @@
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ParentId">Nghiệp vụ cha <span class="text-danger">*</span></label>
                         <select id="ParentId" class="form-control" @bind="Input.ParentId">
-                            <option value="" selected>Chọn nghiệp vụ cha nếu có!</option>
+                            <option value="" selected>Chọn nghiệp vụ cha...</option>
                             @if (listParentMajor != null)
                             {
                                 @foreach (var major in listParentMajor)
@@ -333,19 +333,50 @@
 
         if (majorObj != null)
         {
-            if (majorObj.Table == Input.Table)
+            if (majorObj.Table.Trim().ToUpper() == Input.Table.Trim().ToUpper())
             {
                 ToastService.ShowToast(
-                       "Thông báo",
-                       "Đã tồn tại tên nghiệp vụ và tên bảng giống nội dung bạn đã nhập. Vui lòng thay đổi nội dung nhập và thử lại!",
-                       cssClass: "toast-danger",
-                      iconClass: "fa fa-exclamation-circle",
-                       progressBarClass: "bg-info",
-                       duration: 5000
-                   );
+                            "Thông báo",
+                            "Đã tồn tại tên nghiệp vụ và tên bảng giống nội dung bạn đã nhập. Vui lòng thay đổi nội dung nhập và thử lại!",
+                            cssClass: "toast-danger",
+                           iconClass: "fa fa-exclamation-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
                 return;
             }
-           
+            else 
+            {
+                if (isEdit)
+                {
+                    await MajorService.Update(Input);
+                    ToastService.ShowToast(
+                        "Thông báo",
+                        "Cập nhật thành công.",
+                        iconClass: "fa fa-check-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
+                    Input.Id = Guid.NewGuid().ToString();
+                    await LoadData();
+                    isEdit = false;
+                    isModalVisible = false;
+                }
+                else
+                {
+                    var result = await MajorService.AddMajor(Input);
+                    ToastService.ShowToast(
+                        "Thông báo",
+                        "Thêm thành công.",
+                        iconClass: "fa fa-check-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
+                    Input.Id = Guid.NewGuid().ToString();
+                    await LoadData();
+                }
+            }
+
 
         }
         else

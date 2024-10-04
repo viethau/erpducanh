@@ -1,10 +1,13 @@
 ﻿@page "/CaiDatHeThong/listMajorUserPermission"
+@using DucAnhERP.Helpers
 @using DucAnhERP.ViewModel
 @using DucAnhERP.Models
 @using DucAnhERP.Components.Pages.Common
 @using System.Linq
 @using DucAnhERP.SeedWork
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using System.Text.Json
 @inject NavigationManager navigation
 @inject DucAnhERP.Services.ToastService ToastService
 @inject IMajorRepository MajorRepository
@@ -58,10 +61,10 @@
                         </InputSelect>
                         <ValidationMessage For="()=>Input.UserId"></ValidationMessage>
                     </div>
-                    <div class="form-floating col-sm-6 col-md-3">
+                   @*  <div class="form-floating col-sm-6 col-md-3">
                         <label for="PermissionId">Loại quyền <span class="text-danger">*</span></label>
                         <InputSelect class="form-control" @bind-Value="Input.PermissionId">
-                            <option value="" selected>Chọn người dùng...</option>
+                            <option value="" selected>Chọn loại quyền ...</option>
                             @if (listPermission != null)
                             {
                                 @foreach (var user in listPermission)
@@ -70,6 +73,12 @@
                                 }
                             }
                         </InputSelect>
+                        <ValidationMessage For="()=>Input.PermissionId"></ValidationMessage>
+                    </div> *@
+
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <p>Loại quyền: @string.Join(", ", selectedItems.Select(item => item.Text))</p>
+                        <MultiSelect Items="newlist" ItemsChanged="OnItemsChanged" />
                         <ValidationMessage For="()=>Input.PermissionId"></ValidationMessage>
                     </div>
                 </div>
@@ -130,10 +139,10 @@
                     </InputSelect>
                     <ValidationMessage For="()=>majorUserPermissionModel.UserId"></ValidationMessage>
                 </div>
-                <div class="form-group ml-3">
+                @* <div class="form-group ml-3">
                     <label for="PermissionId">Loại quyền <span class="text-danger">*</span></label>
                     <InputSelect class="form-control" @bind-Value="majorUserPermissionModel.UserId">
-                        <option value="" selected>Chọn người dùng...</option>
+                        <option value="" selected>Chọn loại quyền...</option>
                         @if (listPermission != null)
                         {
                             @foreach (var user in listPermission)
@@ -144,7 +153,7 @@
                     </InputSelect>
                     <ValidationMessage For="()=>majorUserPermissionModel.PermissionId"></ValidationMessage>
                 </div>
-
+ *@
                 <div class="form-group ml-5">
                     <label>&nbsp;</label>
                     <button type="submit" class="btn btn-primary form-control">Tìm kiếm</button>
@@ -198,6 +207,7 @@
                         }
                         @foreach (var item in listPermissionsControl)
                         {
+                            selectedItemstemp = JsonSerializer.Deserialize<List<SelectedItem>>(item?.PermissionId);
                             stt++;
                             <tr>
                                 <td class="d-flex flex-column text-center nowrap">
@@ -215,7 +225,7 @@
                                 <td class="text-left">@item.CompanyName</td>
                                 <td class="text-center">@item.MajorName</td>
                                 <td class="text-left">@item.UserName</td>
-                                <td class="text-left">@item.PermissionName</td>
+                                <td class="text-left">@string.Join(", ", selectedItemstemp.Select(item => item.Text))</td>
                                 @*    <td class="text-center">@item.CreateBy</td>
                         <td class="text-center">@item.CreateAt</td> *@
                             </tr>
@@ -271,6 +281,32 @@
 
     [Parameter]
     public ConfirmModal confirmModal { get; set; }
+
+
+    // Danh sách quyền (ví dụ)
+    private MultiSelectList newlist = new MultiSelectList(
+        new List<SelectListItem>
+            {
+           
+            }, "Value", "Text", "Selected"
+    );
+
+    // Danh sách các mục được chọn
+    private List<SelectedItem> selectedItems = new List<SelectedItem>();
+    private List<SelectedItem> selectedItemstemp = new List<SelectedItem>();
+
+    private void OnItemsChanged(IEnumerable<SelectListItem> items)
+    {
+        selectedItems = items
+            .Where(i => i.Selected)        
+            .Select(i => new SelectedItem   
+                {
+                    Value = i.Value,            
+                    Text = i.Text              
+                })
+            .ToList();    
+        Input.PermissionId = JsonSerializer.Serialize(selectedItems);
+    }
 
     private void ShowModal()
     {
@@ -341,6 +377,16 @@
         listCompany = await CompanyService.GetAll();
         listApplicationUser = await UserService.GetAll();
         listPermission = await PermissionService.GetAll();
+        newlist = new MultiSelectList(
+       listPermission.Select(permission => new SelectListItem
+           {
+               Value = permission.Id,      // Gán Id vào Value
+               Text = permission.PermissionName,  // Gán tên vào Text
+               Selected = false            // Mặc định là không chọn
+           }).ToList(),
+       "Value",   // Tên trường cho Value
+       "Text"     // Tên trường cho Text
+       );
         listModel = await MajorUserPermissionService.GetAllByVM(majorUserPermissionModel);
        
         listPermissionsControl = Paging(listModel);
@@ -352,6 +398,29 @@
         Input = await MajorUserPermissionService.GetById(id);
         isEdit = true;
         isModalVisible = true;
+        // Chuyển đổi chuỗi JSON thành danh sách các quyền đã chọn (SelectedItem)
+        // Giả sử Input.PermissionId là chuỗi JSON của các mục được chọn
+        if (!string.IsNullOrEmpty(Input.PermissionId))
+        {
+            // Chuyển đổi chuỗi JSON thành danh sách các quyền đã chọn (SelectedItem)
+            selectedItemstemp = JsonSerializer.Deserialize<List<SelectedItem>>(Input.PermissionId);
+
+            // Thiết lập giá trị đã chọn dựa trên `selectedItemstemp`
+            foreach (var item in newlist)
+            {
+                // Kiểm tra nếu quyền này đã được chọn (dựa trên Value)
+                var selected = selectedItemstemp.FirstOrDefault(i => i.Value == item.Value );
+                if (selected != null)
+                {
+                    // Đánh dấu quyền này là đã được chọn
+                    item.Selected = true;
+                }
+            }
+        }
+
+
+
+
     }
 
     private string deleteId;
@@ -384,7 +453,7 @@
         var condition = await MajorUserPermissionService.GetExist(Input);
         if (isEdit)
         {
-            if (condition != null && condition.Count() > 0)
+            if (condition != null && condition.Count() > 1)
             {
                 ToastService.ShowToast(
                        "Thông báo",

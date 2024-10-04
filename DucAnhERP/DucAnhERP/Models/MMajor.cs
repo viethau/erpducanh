@@ -5,7 +5,7 @@ namespace DucAnhERP.Models
     public class MMajor
     {
         [Key]
-        public string Id { get; set; }
+        public string Id { get; set; } =Guid.NewGuid().ToString();
         public string? ParentId { get; set; }
 
         [Required(ErrorMessage = "Bạn phải nhập tên nghiệp vụ!")]
@@ -13,7 +13,7 @@ namespace DucAnhERP.Models
 
         [Required(ErrorMessage = "Bạn phải nhập thứ tự sắp xếp!")]
         public int Order { get; set; }
-        public string? Table { get; set; }
+        public string? Table { get; set; } = "";
         public DateTime CreateAt { get; set; } = DateTime.Now;
         public string CreateBy { get; set; } = "test.vp@gmail.com";
         public int IsActive { get; set; } = 1;
