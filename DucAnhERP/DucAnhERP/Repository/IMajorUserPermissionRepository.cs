@@ -1,5 +1,5 @@
-﻿using DucAnhERP.ViewModel;
-using DucAnhERP.Models;
+﻿using DucAnhERP.Models;
+using DucAnhERP.ViewModel;
 
 namespace DucAnhERP.Repository
 {
@@ -13,5 +13,7 @@ namespace DucAnhERP.Repository
 
         Task<List<MajorUserPermissionModel>> GetAllByVM(MajorUserPermissionModel mModel);
         Task<List<MMajorUserPermission>> GetExist(MMajorUserPermission input);
+
+        Task<string> InsertById(MMajorUserPermission entity);
     }
 }

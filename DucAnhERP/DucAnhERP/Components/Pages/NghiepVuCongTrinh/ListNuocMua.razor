@@ -46,12 +46,12 @@
                                 <hr />
                                 <div class="row">
                                     <div class="form-floating col-6">
-                                        <label for="ThongTinLyTrinh_TuyenDuong">Tuyến đường <span class="text-danger">*</span></label>
+                                        <label for="ThongTinLyTrinh_TuyenDuong">Tuyến đường <span class="text-danger"></span></label>
                                         <InputText @oninput="OnInputChange" @bind-Value="Input.ThongTinLyTrinh_TuyenDuong" class="form-control" id="ThongTinLyTrinh_TuyenDuong" placeholder="Tuyến đường" />
                                         <ValidationMessage For="() => Input.ThongTinLyTrinh_TuyenDuong" class="text-danger" />
                                     </div>
                                     <div class="form-floating col-6">
-                                        <label for="ThongTinLyTrinh_LyTrinhTaiTimHoGa">Lý trình tại tim hố ga <span class="text-danger">*</span></label>
+                                        <label for="ThongTinLyTrinh_LyTrinhTaiTimHoGa">Lý trình tại tim hố ga <span class="text-danger"></span></label>
                                         <InputText @oninput="OnInputChange" @bind-Value="Input.ThongTinLyTrinh_LyTrinhTaiTimHoGa" class="form-control" id="ThongTinLyTrinh_LyTrinhTaiTimHoGa" placeholder="Lý trình tại tim hố ga" />
                                         <ValidationMessage For="() => Input.ThongTinLyTrinh_LyTrinhTaiTimHoGa" class="text-danger" />
                                     </div>
@@ -70,12 +70,12 @@
                                         <ValidationMessage For="() => Input.ThongTinChungHoGa_TenHoGaSauPhanLoai" class="text-danger" /> *@
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-4">
-                                        <label for="ThongTinChungHoGa_TenHoGaTheoBanVe">Tên hố ga theo bản vẽ <span class="text-danger">*</span></label>
+                                        <label for="ThongTinChungHoGa_TenHoGaTheoBanVe">Tên hố ga theo bản vẽ <span class="text-danger"></span></label>
                                         <InputText @oninput="OnInputChange" @bind-Value="Input.ThongTinChungHoGa_TenHoGaTheoBanVe" class="form-control" id="ThongTinChungHoGa_TenHoGaTheoBanVe" placeholder="Tên hố ga theo bản vẽ" />
                                         <ValidationMessage For="() => Input.ThongTinChungHoGa_TenHoGaTheoBanVe" class="text-danger" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-4">
-                                        <label for="ThongTinChungHoGa_HinhThucHoGa"> Hình thức hố ga <span class="text-danger">*</span></label>
+                                        <label for="ThongTinChungHoGa_HinhThucHoGa"> Hình thức hố ga <span class="text-danger"></span></label>
                                         <select @oninput="OnInputChange" id="ThongTinChungHoGa_HinhThucHoGa" class="form-control" @bind="Input.ThongTinChungHoGa_HinhThucHoGa">
                                             <option value="">Hình thức hố ga ...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("HG_HTHGa"))
@@ -86,7 +86,7 @@
                                         <ValidationMessage For="() => Input.ThongTinChungHoGa_HinhThucHoGa" class="text-danger" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-4">
-                                        <label for="ThongTinChungHoGa_KetCauMuMo"> Kết cấu mũ mố <span class="text-danger">*</span></label>
+                                        <label for="ThongTinChungHoGa_KetCauMuMo"> Kết cấu mũ mố <span class="text-danger"></span></label>
                                         <select @oninput="OnInputChange" id="ThongTinChungHoGa_KetCauMuMo" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauMuMo">
                                             <option value="">Kết cấu mũ mố ...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("HG_LMMHoGa"))
@@ -97,7 +97,7 @@
                                         <ValidationMessage For="() => Input.ThongTinChungHoGa_KetCauMuMo" class="text-danger" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-4">
-                                        <label for="ThongTinChungHoGa_KetCauTuong"> Kết cấu tường <span class="text-danger">*</span></label>
+                                        <label for="ThongTinChungHoGa_KetCauTuong"> Kết cấu tường <span class="text-danger"></span></label>
                                         <select @oninput="OnInputChange" id="ThongTinChungHoGa_KetCauTuong" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauTuong" name="ThongTinChungHoGa_KetCauTuong">
                                             <option value="">Kết cấu tường ...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("HG_LTHoGa"))
@@ -108,7 +108,7 @@
                                         <ValidationMessage For="() => Input.ThongTinChungHoGa_KetCauTuong" class="text-danger" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-4">
-                                        <label for="ThongTinChungHoGa_HinhThucMongHoGa"> Hình thức móng hố ga <span class="text-danger">*</span></label>
+                                        <label for="ThongTinChungHoGa_HinhThucMongHoGa"> Hình thức móng hố ga <span class="text-danger"></span></label>
                                         <select @oninput="OnInputChange" id="ThongTinChungHoGa_HinhThucMongHoGa" class="form-control" @bind="Input.ThongTinChungHoGa_HinhThucMongHoGa">
                                             <option value="">Hình thức móng hố ga  ...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("HG_HTMHoGa"))
@@ -119,7 +119,7 @@
                                         <ValidationMessage For="() => Input.ThongTinChungHoGa_HinhThucMongHoGa" class="text-danger" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-4">
-                                        <label for="ThongTinChungHoGa_KetCauMong"> Kết cấu móng <span class="text-danger">*</span></label>
+                                        <label for="ThongTinChungHoGa_KetCauMong"> Kết cấu móng <span class="text-danger"></span></label>
                                         <select @oninput="OnInputChange" id="ThongTinChungHoGa_KetCauMong" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauMong">
                                             <option value="">Kết cấu móng ...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("HG_LMHoGa"))
@@ -143,7 +143,7 @@
                                     </div>
 
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-4">
-                                        <label for="ThongTinChungHoGa_ChatMatNgoai"> Chát mặt ngoài <span class="text-danger">*</span></label>
+                                        <label for="ThongTinChungHoGa_ChatMatNgoai"> Chát mặt ngoài <span class="text-danger"></span></label>
                                         <select @oninput="OnInputChange" id="ThongTinChungHoGa_ChatMatNgoai" class="form-control" @bind="Input.ThongTinChungHoGa_ChatMatNgoai">
                                             <option value="">Chát mặt ngoài ...</option>
                                             @foreach (var dm in FindByIdNhomDanhMuc("DM_CoKhong"))

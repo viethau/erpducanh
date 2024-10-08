@@ -15,9 +15,17 @@ namespace DucAnhERP.Models
         [Required(ErrorMessage = "Bạn phải chọn loại quyền")]
         [StringLength(int.MaxValue, MinimumLength = 3, ErrorMessage = "Bạn phải chọn loại quyền")]
         public string PermissionId { get; set; }
-        public int DayinWeek { get; set; } = (int)DateTime.Now.DayOfWeek;
+        [Required(ErrorMessage = "Bạn phải chọn thứ")]
+        [StringLength(int.MaxValue, MinimumLength = 3, ErrorMessage = "Bạn phải chọn thứ")]
+        public string DayinWeek { get; set; }
         public DateTime CreateAt { get; set; }= DateTime.Now;
         public string CreateBy { get; set; } = "test.vp@gmail.com";
         public int IsActive { get; set; } = 1;
     }
+
+    public class MMajorUserPermissionDetail : MMajorUserPermission
+    {
+        public string Id_MMajorUserPermission { get; set; }
+    }
+
 }

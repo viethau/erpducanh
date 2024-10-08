@@ -24,6 +24,7 @@ namespace DucAnhERP.Data
         public DbSet<MMajor> MMajors { get; set; }
 
         public DbSet<MMajorUserPermission> MMajorUserPermissions { get; set; }
+        public DbSet<MMajorUserPermissionDetail> MMajorUserPermissionDetails { get; set; }
 
         public DbSet<MPermissionControl> MPermissionControls { get; set; }
 
