@@ -1,12 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Rendering
 
 <div class="multiselect">
-    <div id="checkboxes">
+    <div id="checkboxes" class="row flex-row">
         @foreach (var item in this.Items)
         {
             <div>
                 <label for="@item.Value">
-                    <input type="checkbox" id="@item.Value" checked="@item.Selected" @onchange="@((e) => CheckboxChanged(e, item.Value))" />
+                    <input class="ml-3 " type="checkbox" id="@item.Value" checked="@item.Selected" @onchange="@((e) => CheckboxChanged(e, item.Value))" />
                     @item.Text
                 </label>
             </div>

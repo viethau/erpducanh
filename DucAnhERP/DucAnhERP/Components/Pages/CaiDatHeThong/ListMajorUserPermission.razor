@@ -72,23 +72,15 @@
                 </div>
                 <div class="row">
                     <div class="form-floating col-sm-12 col-md-12">
-                        <label>Thứ <span class="text-danger">*</span> : @string.Join(", ", SelectedDays.Select(item => item.Text)) </label>
-                        <div class="form-control">
-                            @foreach (var item in listDayinWeek)
-                            {
-                               
-                                    <input type="checkbox" @onchange="() => ToggleSelection(item)" />
-                                    <label class="ml-2 mr-3">@item.Text</label>
-                               
-                            }
-                       </div>
-                        <ValidationMessage For="()=>Input.UserId"></ValidationMessage>
+                        <label>Thứ <span class="text-danger">*</span> : @string.Join(", ", selectedDays.Select(item => item.Text)) </label>
+                        <MultiSelect Items="listDayinWeek" ItemsChanged="ToggleSelection" />
+                        <ValidationMessage For="()=>Input.DayinWeek"></ValidationMessage>
                     </div>
                     <p></p>
-                   
+
                 </div>
                 <DataAnnotationsValidator />
-                <ValidationSummary />
+        
                 <div class="row mt-5 justify-content-end">
                     <button class="btn btn-primary mr-2" type="submit">Save</button>
                     <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
@@ -143,7 +135,7 @@
                     </InputSelect>
                     <ValidationMessage For="()=>majorUserPermissionModel.UserId"></ValidationMessage>
                 </div>
-                
+
                 <div class="form-group ml-5">
                     <label>&nbsp;</label>
                     <button type="submit" class="btn btn-primary form-control">Tìm kiếm</button>
@@ -182,6 +174,10 @@
                             <div class="pb-3">Loại quyền</div>
                             <span class="arrow @(GetSortStyle("PermissionId"))"></span>
                         </th>
+                        <th onclick="@(() => SortTable("DayinWeek"))" rowspan="2" class="text-center sortable" scope="col" sortable>
+                            <div class="pb-3">Ngày trong tuần</div>
+                            <span class="arrow @(GetSortStyle("DayinWeek"))"></span>
+                        </th>
                         @* <th class="text-center" colspan="2" scope="col">Thông tin tạo</th> *@
                     </tr>
                     @*  <tr>
@@ -198,6 +194,7 @@
                         @foreach (var item in listPermissionsControl)
                         {
                             selectedItemstemp = JsonSerializer.Deserialize<List<SelectedItem>>(item?.PermissionId);
+                            selectedItemDaysTemp = JsonSerializer.Deserialize<List<SelectedItem>>(item?.DayinWeek);
                             stt++;
                             <tr>
                                 <td class="d-flex flex-column text-center nowrap">
@@ -216,6 +213,7 @@
                                 <td class="text-center">@item.MajorName</td>
                                 <td class="text-left">@item.UserName</td>
                                 <td class="text-left">@string.Join(", ", selectedItemstemp.Select(item => item.Text))</td>
+                                <td class="text-left">@string.Join(", ", selectedItemDaysTemp.Select(item => item.Text))</td>
                                 @*    <td class="text-center">@item.CreateBy</td>
                         <td class="text-center">@item.CreateAt</td> *@
                             </tr>
@@ -273,7 +271,7 @@
     public ConfirmModal confirmModal { get; set; }
 
 
-    // Danh sách quyền 
+    // Danh sách quyền
     private MultiSelectList newlist = new MultiSelectList(
         new List<SelectListItem>
         {
@@ -283,7 +281,7 @@
 
     private MultiSelectList listDayinWeek = new MultiSelectList(
        new List<SelectListItem>
-           {
+                       {
             new SelectListItem { Value = "1", Text = "Thứ 2" },
             new SelectListItem { Value = "2", Text = "Thứ 3" },
             new SelectListItem { Value = "3", Text = "Thứ 4" },
@@ -291,76 +289,75 @@
             new SelectListItem { Value = "5", Text = "Thứ 6" },
             new SelectListItem { Value = "6", Text = "Thứ 7" },
             new SelectListItem { Value = "0", Text = "Chủ nhật" }
-           }, "Value", "Text");
+                       }, "Value", "Text");
 
-
-    // Danh sách các mục được chọn
     private List<SelectedItem> selectedItems = new List<SelectedItem>();
     private List<SelectedItem> selectedItemstemp = new List<SelectedItem>();
-    // Danh sách các mục SelectListItem đã chọn
-    private List<SelectListItem> SelectedDays = new List<SelectListItem>();
+
+    private List<SelectedItem> selectedDays = new List<SelectedItem>();
+    private List<SelectedItem> selectedItemDaysTemp = new List<SelectedItem>();
 
 
     private void OnItemsChanged(IEnumerable<SelectListItem> items)
     {
         selectedItems = items
-            .Where(i => i.Selected)        
-            .Select(i => new SelectedItem   
+            .Where(i => i.Selected)
+            .Select(i => new SelectedItem
                 {
-                    Value = i.Value,            
-                    Text = i.Text              
+                    Value = i.Value,
+                    Text = i.Text
                 })
-            .ToList();    
+            .ToList();
         Input.PermissionId = JsonSerializer.Serialize(selectedItems);
     }
 
-    // Phương thức để thêm hoặc bỏ chọn ngày
-    private void ToggleSelection(SelectListItem item)
+    private void ToggleSelection(IEnumerable<SelectListItem> items)
     {
-        // Kiểm tra nếu đã chọn ngày này
-        var existingItem = SelectedDays.FirstOrDefault(i => i.Value == item.Value);
-
-        if (existingItem != null)
-        {
-            // Nếu đã chọn, thì bỏ chọn
-            SelectedDays.Remove(existingItem);
-        }
-        else
-        {
-            // Nếu chưa chọn, thì thêm vào danh sách đã chọn
-            SelectedDays.Add(item);
-        }
-
-        // Chỉ serialize các thuộc tính Value và Text
-        var selectedDaysToSerialize = SelectedDays.Select(i => new
-        {
-            i.Value,
-            i.Text
-        }).ToList();
-
-        // Serialize danh sách đã chọn thành JSON
-        Input.DayinWeek = JsonSerializer.Serialize(selectedDaysToSerialize);
+        selectedDays = items
+            .Where(i => i.Selected)
+            .Select(i => new SelectedItem
+                {
+                    Value = i.Value,
+                    Text = i.Text
+                })
+            .ToList();
+        Input.DayinWeek = JsonSerializer.Serialize(selectedDays);
     }
 
+    private void RefreshInput()
+    {
+        Input = new();
+        selectedDays = new();
+        selectedItems = new();
+        listDayinWeek = new MultiSelectList(
+       new List<SelectListItem>
+                               {
+            new SelectListItem { Value = "1", Text = "Thứ 2" ,Selected =false},
+            new SelectListItem { Value = "2", Text = "Thứ 3",Selected =false },
+            new SelectListItem { Value = "3", Text = "Thứ 4" ,Selected =false},
+            new SelectListItem { Value = "4", Text = "Thứ 5" ,Selected =false},
+            new SelectListItem { Value = "5", Text = "Thứ 6",Selected =false },
+            new SelectListItem { Value = "6", Text = "Thứ 7" ,Selected =false},
+            new SelectListItem { Value = "0", Text = "Chủ nhật" }
+                               }, "Value", "Text");
+    }
     private void ShowModal()
     {
         isModalVisible = true;
-        Input = new();
     }
 
     private void HandleModalClose(bool isVisible)
     {
         isModalVisible = isVisible;
-        Input = new();
         isEdit = false;
-
+        RefreshInput();
     }
 
     private void HandleSave()
     {
         // Logic for saving
         isModalVisible = false;
-
+        RefreshInput();
     }
 
     private void HandleCancel()
@@ -368,8 +365,20 @@
         // Logic for canceling
         isModalVisible = false;
         Input = new();
+        selectedDays = new();
+        selectedItems = new();
         isEdit = false;
-
+        listDayinWeek = new MultiSelectList(
+          new List<SelectListItem>
+             {
+                new SelectListItem { Value = "1", Text = "Thứ 2" ,Selected =false},
+                new SelectListItem { Value = "2", Text = "Thứ 3",Selected =false },
+                new SelectListItem { Value = "3", Text = "Thứ 4" ,Selected =false},
+                new SelectListItem { Value = "4", Text = "Thứ 5" ,Selected =false},
+                new SelectListItem { Value = "5", Text = "Thứ 6",Selected =false },
+                new SelectListItem { Value = "6", Text = "Thứ 7" ,Selected =false},
+                new SelectListItem { Value = "0", Text = "Chủ nhật" }
+             }, "Value", "Text");
     }
 
     public List<MajorUserPermissionModel> listPermissionsControl
@@ -412,17 +421,17 @@
         listApplicationUser = await UserService.GetAll();
         listPermission = await PermissionService.GetAll();
         newlist = new MultiSelectList(
-       listPermission.Select(permission => new SelectListItem
-           {
-               Value = permission.Id,      // Gán Id vào Value
-               Text = permission.PermissionName,  // Gán tên vào Text
-               Selected = false            // Mặc định là không chọn
-           }).ToList(),
-       "Value",   // Tên trường cho Value
-       "Text"     // Tên trường cho Text
-       );
+           listPermission.Select(permission => new SelectListItem
+               {
+                   Value = permission.Id,
+                   Text = permission.PermissionName,
+                   Selected = false
+               }).ToList(),
+           "Value",
+           "Text"
+           );
         listModel = await MajorUserPermissionService.GetAllByVM(majorUserPermissionModel);
-       
+
         listPermissionsControl = Paging(listModel);
     }
 
@@ -432,8 +441,6 @@
         Input = await MajorUserPermissionService.GetById(id);
         isEdit = true;
         isModalVisible = true;
-        // Chuyển đổi chuỗi JSON thành danh sách các quyền đã chọn (SelectedItem)
-        // Giả sử Input.PermissionId là chuỗi JSON của các mục được chọn
         if (!string.IsNullOrEmpty(Input.PermissionId))
         {
             // Chuyển đổi chuỗi JSON thành danh sách các quyền đã chọn (SelectedItem)
@@ -443,7 +450,7 @@
             foreach (var item in newlist)
             {
                 // Kiểm tra nếu quyền này đã được chọn (dựa trên Value)
-                var selected = selectedItemstemp.FirstOrDefault(i => i.Value == item.Value );
+                var selected = selectedItemstemp.FirstOrDefault(i => i.Value == item.Value);
                 if (selected != null)
                 {
                     // Đánh dấu quyền này là đã được chọn
@@ -451,10 +458,24 @@
                 }
             }
         }
+        if (!string.IsNullOrEmpty(Input.DayinWeek))
+        {
 
+            // Chuyển đổi chuỗi JSON thành danh sách các quyền đã chọn (SelectedItem)
+            selectedItemDaysTemp = JsonSerializer.Deserialize<List<SelectedItem>>(Input.DayinWeek);
 
-
-
+            // Thiết lập giá trị đã chọn dựa trên `selectedItemstemp`
+            foreach (var item in listDayinWeek)
+            {
+                // Kiểm tra nếu quyền này đã được chọn (dựa trên Value)
+                var selected = selectedItemDaysTemp.FirstOrDefault(i => i.Value == item.Value);
+                if (selected != null)
+                {
+                    // Đánh dấu quyền này là đã được chọn
+                    item.Selected = true;
+                }
+            }
+        }
     }
 
     private string deleteId;
@@ -483,7 +504,7 @@
 
     private async Task HandleValidSubmit()
     {
-        
+
         var condition = await MajorUserPermissionRepository.GetExist(Input);
         if (isEdit)
         {
@@ -515,6 +536,7 @@
                 await LoadData();
                 isEdit = false;
                 isModalVisible = false;
+                RefreshInput();
             }
         }
         else
@@ -544,13 +566,9 @@
                 );
                 Input.Id = Guid.NewGuid().ToString();
                 await LoadData();
+                RefreshInput();
             }
         }
-
-
-
-
-
     }
 
     // Xử lý tìm kiếm

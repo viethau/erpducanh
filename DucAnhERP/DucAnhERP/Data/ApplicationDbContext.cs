@@ -83,6 +83,7 @@ namespace DucAnhERP.Data
                     .IsUnicode(false);
                 entity.Property(e => e.Subject).IsRequired();
 
+
                 modelBuilder.Entity<NuocMua>()
                 .ToTable(tb => tb.UseSqlOutputClause(false));
                 modelBuilder.Entity<PhanLoaiHoGa>()

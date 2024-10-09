@@ -14,6 +14,7 @@ namespace DucAnhERP.ViewModel
         public string UserName { get; set; }
         public string PermissionId { get; set; }
         public string PermissionName { get; set; }
+        public string DayinWeek { get; set; }
         public DateTime CreateAt { get; set; }
         public string CreateBy { get; set; } 
         public int IsActive { get; set; } 

@@ -94,6 +94,7 @@ namespace DucAnhERP.Services
             {
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
             }
+            await DeleteByIdDetail(entity.Id);
             context.Set<MMajorUserPermission>().Remove(entity);
             await context.SaveChangesAsync();
         }
@@ -149,18 +150,27 @@ namespace DucAnhERP.Services
 
         public async Task<List<MMajorUserPermission>> GetExist(MMajorUserPermission input)
         {
-            using var context = _context.CreateDbContext();
+            try
+            {
+                using var context = _context.CreateDbContext();
 
-            var query = context.MMajorUserPermissions
-                     .Where(item =>
-                     item.CompanyId == input.CompanyId &&
-                         item.MajorId == input.MajorId &&
-                        item.UserId == input.UserId)
-                     .OrderByDescending(permission => permission.CreateAt);
+                var query = context.MMajorUserPermissions
+                         .Where(item =>
+                         item.CompanyId == input.CompanyId &&
+                             item.MajorId == input.MajorId &&
+                            item.UserId == input.UserId)
+                         ;
 
-            // Lấy kết quả dưới dạng danh sách
-            var data = await query.ToListAsync();
-            return data;
+                // Lấy kết quả dưới dạng danh sách
+                var data = await query.ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+          
 
         }
 
@@ -191,6 +201,7 @@ namespace DucAnhERP.Services
                             PermissionName = "",
                             UserId = perContr.Id,
                             UserName = user.UserName,
+                            DayinWeek = perContr.DayinWeek,
                             CreateAt = perContr.CreateAt,
                             CreateBy = perContr.CreateBy,
                             IsActive = perContr.IsActive
@@ -248,22 +259,17 @@ namespace DucAnhERP.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task<string> InsertById(MMajorUserPermission entity)
+        public async Task Update(MMajorUserPermission mMajorUserPermission)
         {
             using var context = _context.CreateDbContext();
+            var entity = await GetById(mMajorUserPermission.Id);
 
             if (entity == null)
             {
-                throw new Exception("Không có bản ghi nào để thêm!");
+                throw new Exception($"Không tìm thấy bản ghi theo ID: {mMajorUserPermission.Id}");
             }
-
-            // Thêm đối tượng vào DbContext
-            context.MMajorUserPermissions.Add(entity);
-
-            // Lưu thay đổi vào cơ sở dữ liệu
-            await context.SaveChangesAsync();
-
-            // Trả về Id của đối tượng đã được thêm
+            await DeleteByIdDetail(entity.Id);
+            context.MMajorUserPermissions.Update(mMajorUserPermission);
             if (!string.IsNullOrEmpty(entity.PermissionId))
             {
                 // Chuyển đổi PermissionId từ JSON thành danh sách SelectedItem
@@ -280,6 +286,8 @@ namespace DucAnhERP.Services
                         MajorId = entity.MajorId,
                         UserId = entity.UserId,
                         PermissionId = item.Value,
+                        Id_MMajorUserPermission = entity.Id,
+                        DayinWeek = entity.DayinWeek,
                         CreateAt = entity.CreateAt,
                         CreateBy = entity.CreateBy,
                         IsActive = entity.IsActive
@@ -289,10 +297,99 @@ namespace DucAnhERP.Services
                 // Gọi hàm InsertMultiple để thêm các chi tiết quyền
                 await InsertMultiple(listDetails);
             }
-
-            return entity.Id;
+            
+            await context.SaveChangesAsync();
         }
 
+        public async Task UpdateMulti(MMajorUserPermission[] entities)
+        {
+            using var context = _context.CreateDbContext();
+            string[] ids = entities.Select(x => x.Id).ToArray();
+            var listEntities = await context.MMajorUserPermissions.Where(x => ids.Contains(x.Id)).ToListAsync();
+            foreach (var entity in listEntities)
+            {
+                context.MMajorUserPermissions.Update(entity);
+            }
+            await context.SaveChangesAsync();
+        }
+
+
+        public async Task<string> InsertById(MMajorUserPermission entity)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                if (entity == null)
+                {
+                    throw new Exception("Không có bản ghi nào để thêm!");
+                }
+
+                // Thêm đối tượng vào DbContext
+                context.MMajorUserPermissions.Add(entity);
+
+                // Lưu thay đổi vào cơ sở dữ liệu
+                await context.SaveChangesAsync();
+                var id  = entity.Id;
+                // Trả về Id của đối tượng đã được thêm
+                if (!string.IsNullOrEmpty(entity.PermissionId))
+                {
+                    // Chuyển đổi PermissionId từ JSON thành danh sách SelectedItem
+                    List<SelectedItem> list = JsonSerializer.Deserialize<List<SelectedItem>>(entity.PermissionId);
+                    List<MMajorUserPermissionDetail> listDetails = new();
+
+                    // Duyệt qua danh sách SelectedItem và tạo danh sách MMajorUserPermissionDetail
+                    foreach (var item in list)
+                    {
+                        listDetails.Add(new MMajorUserPermissionDetail
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            CompanyId = entity.CompanyId,
+                            MajorId = entity.MajorId,
+                            UserId = entity.UserId,
+                            PermissionId = item.Value,
+                            Id_MMajorUserPermission = id,
+                            DayinWeek  = entity.DayinWeek,
+                            CreateAt = entity.CreateAt,
+                            CreateBy = entity.CreateBy,
+                            IsActive = entity.IsActive
+                        });
+                    }
+
+                    // Gọi hàm InsertMultiple để thêm các chi tiết quyền
+                    await InsertMultiple(listDetails);
+                }
+
+                return id;
+            } 
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+           
+        }
+
+        public async Task DeleteByIdDetail(string id_MMajorUserPermission)
+        {
+            using var context = _context.CreateDbContext();
+
+            // Tìm các bản ghi chi tiết theo Id_MMajorUserPermission
+            var entities = context.MMajorUserPermissionDetails
+                .Where(detail => detail.Id_MMajorUserPermission == id_MMajorUserPermission).ToList();
+
+            // Nếu không tìm thấy bản ghi nào, ném ra ngoại lệ
+            if (entities == null || !entities.Any())
+            {
+                throw new Exception($"Không tìm thấy bản ghi nào theo Id_MMajorUserPermission: {id_MMajorUserPermission}");
+            }
+
+            // Xóa các bản ghi tìm được
+            context.MMajorUserPermissionDetails.RemoveRange(entities);
+
+            // Lưu thay đổi vào cơ sở dữ liệu
+            await context.SaveChangesAsync();
+        }
         public async Task<List<string>> InsertMultiple(List<MMajorUserPermissionDetail> entities)
         {
             using var context = _context.CreateDbContext();
@@ -313,32 +410,7 @@ namespace DucAnhERP.Services
         }
 
 
-        public async Task Update(MMajorUserPermission mMajorUserPermission)
-        {
-            using var context = _context.CreateDbContext();
-            var entity = await GetById(mMajorUserPermission.Id);
-
-            if (entity == null)
-            {
-                throw new Exception($"Không tìm thấy bản ghi theo ID: {mMajorUserPermission.Id}");
-            }
-
-            context.MMajorUserPermissions.Update(mMajorUserPermission);
-            await context.SaveChangesAsync();
-        }
-
-        public async Task UpdateMulti(MMajorUserPermission[] entities)
-        {
-            using var context = _context.CreateDbContext();
-            string[] ids = entities.Select(x => x.Id).ToArray();
-            var listEntities = await context.MMajorUserPermissions.Where(x => ids.Contains(x.Id)).ToListAsync();
-            foreach (var entity in listEntities)
-            {
-                context.MMajorUserPermissions.Update(entity);
-            }
-            await context.SaveChangesAsync();
-        }
-
+       
 
     }
 }
