@@ -274,24 +274,29 @@ namespace DucAnhERP.Services
             {
                 // Chuyển đổi PermissionId từ JSON thành danh sách SelectedItem
                 List<SelectedItem> list = JsonSerializer.Deserialize<List<SelectedItem>>(entity.PermissionId);
+                List<SelectedItem> listDay = JsonSerializer.Deserialize<List<SelectedItem>>(entity.DayinWeek);
                 List<MMajorUserPermissionDetail> listDetails = new();
 
                 // Duyệt qua danh sách SelectedItem và tạo danh sách MMajorUserPermissionDetail
                 foreach (var item in list)
                 {
-                    listDetails.Add(new MMajorUserPermissionDetail
+                    foreach (var day in listDay)
                     {
-                        Id = Guid.NewGuid().ToString(),
-                        CompanyId = entity.CompanyId,
-                        MajorId = entity.MajorId,
-                        UserId = entity.UserId,
-                        PermissionId = item.Value,
-                        Id_MMajorUserPermission = entity.Id,
-                        DayinWeek = entity.DayinWeek,
-                        CreateAt = entity.CreateAt,
-                        CreateBy = entity.CreateBy,
-                        IsActive = entity.IsActive
-                    });
+                        listDetails.Add(new MMajorUserPermissionDetail
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            CompanyId = entity.CompanyId,
+                            MajorId = entity.MajorId,
+                            UserId = entity.UserId,
+                            PermissionId = item.Value,
+                            Id_MMajorUserPermission = entity.Id,
+                            DayinWeek = int.Parse(day.Value),
+                            CreateAt = entity.CreateAt,
+                            CreateBy = entity.CreateBy,
+                            IsActive = entity.IsActive
+                        });
+                    }
+                       
                 }
 
                 // Gọi hàm InsertMultiple để thêm các chi tiết quyền
@@ -332,14 +337,15 @@ namespace DucAnhERP.Services
                 await context.SaveChangesAsync();
                 var id  = entity.Id;
                 // Trả về Id của đối tượng đã được thêm
-                if (!string.IsNullOrEmpty(entity.PermissionId))
-                {
-                    // Chuyển đổi PermissionId từ JSON thành danh sách SelectedItem
-                    List<SelectedItem> list = JsonSerializer.Deserialize<List<SelectedItem>>(entity.PermissionId);
-                    List<MMajorUserPermissionDetail> listDetails = new();
+                // Chuyển đổi PermissionId từ JSON thành danh sách SelectedItem
+                List<SelectedItem> list = JsonSerializer.Deserialize<List<SelectedItem>>(entity.PermissionId);
+                List<SelectedItem> listDay = JsonSerializer.Deserialize<List<SelectedItem>>(entity.DayinWeek);
+                List<MMajorUserPermissionDetail> listDetails = new();
 
-                    // Duyệt qua danh sách SelectedItem và tạo danh sách MMajorUserPermissionDetail
-                    foreach (var item in list)
+                // Duyệt qua danh sách SelectedItem và tạo danh sách MMajorUserPermissionDetail
+                foreach (var item in list)
+                {
+                    foreach (var day in listDay)
                     {
                         listDetails.Add(new MMajorUserPermissionDetail
                         {
@@ -348,18 +354,17 @@ namespace DucAnhERP.Services
                             MajorId = entity.MajorId,
                             UserId = entity.UserId,
                             PermissionId = item.Value,
-                            Id_MMajorUserPermission = id,
-                            DayinWeek  = entity.DayinWeek,
+                            Id_MMajorUserPermission = entity.Id,
+                            DayinWeek = int.Parse(day.Value),
                             CreateAt = entity.CreateAt,
                             CreateBy = entity.CreateBy,
                             IsActive = entity.IsActive
                         });
                     }
 
-                    // Gọi hàm InsertMultiple để thêm các chi tiết quyền
-                    await InsertMultiple(listDetails);
                 }
-
+                // Gọi hàm InsertMultiple để thêm các chi tiết quyền
+                await InsertMultiple(listDetails);
                 return id;
             } 
             catch (Exception ex)

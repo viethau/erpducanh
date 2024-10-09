@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Components\Pages\NghiepVuCongTrinh\Test.razor~RF29bcef.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BlazorInputFile" Version="0.2.0" />
     <PackageReference Include="EPPlus" Version="7.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Forms" Version="8.0.8" />

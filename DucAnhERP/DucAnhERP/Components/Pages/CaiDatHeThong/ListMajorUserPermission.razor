@@ -80,7 +80,7 @@
 
                 </div>
                 <DataAnnotationsValidator />
-        
+
                 <div class="row mt-5 justify-content-end">
                     <button class="btn btn-primary mr-2" type="submit">Save</button>
                     <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
@@ -281,7 +281,7 @@
 
     private MultiSelectList listDayinWeek = new MultiSelectList(
        new List<SelectListItem>
-                       {
+                           {
             new SelectListItem { Value = "1", Text = "Thứ 2" },
             new SelectListItem { Value = "2", Text = "Thứ 3" },
             new SelectListItem { Value = "3", Text = "Thứ 4" },
@@ -289,7 +289,7 @@
             new SelectListItem { Value = "5", Text = "Thứ 6" },
             new SelectListItem { Value = "6", Text = "Thứ 7" },
             new SelectListItem { Value = "0", Text = "Chủ nhật" }
-                       }, "Value", "Text");
+                           }, "Value", "Text");
 
     private List<SelectedItem> selectedItems = new List<SelectedItem>();
     private List<SelectedItem> selectedItemstemp = new List<SelectedItem>();
@@ -331,7 +331,7 @@
         selectedItems = new();
         listDayinWeek = new MultiSelectList(
        new List<SelectListItem>
-                               {
+                                   {
             new SelectListItem { Value = "1", Text = "Thứ 2" ,Selected =false},
             new SelectListItem { Value = "2", Text = "Thứ 3",Selected =false },
             new SelectListItem { Value = "3", Text = "Thứ 4" ,Selected =false},
@@ -339,7 +339,7 @@
             new SelectListItem { Value = "5", Text = "Thứ 6",Selected =false },
             new SelectListItem { Value = "6", Text = "Thứ 7" ,Selected =false},
             new SelectListItem { Value = "0", Text = "Chủ nhật" }
-                               }, "Value", "Text");
+                                   }, "Value", "Text");
     }
     private void ShowModal()
     {
@@ -370,7 +370,7 @@
         isEdit = false;
         listDayinWeek = new MultiSelectList(
           new List<SelectListItem>
-             {
+                 {
                 new SelectListItem { Value = "1", Text = "Thứ 2" ,Selected =false},
                 new SelectListItem { Value = "2", Text = "Thứ 3",Selected =false },
                 new SelectListItem { Value = "3", Text = "Thứ 4" ,Selected =false},
@@ -378,7 +378,7 @@
                 new SelectListItem { Value = "5", Text = "Thứ 6",Selected =false },
                 new SelectListItem { Value = "6", Text = "Thứ 7" ,Selected =false},
                 new SelectListItem { Value = "0", Text = "Chủ nhật" }
-             }, "Value", "Text");
+                 }, "Value", "Text");
     }
 
     public List<MajorUserPermissionModel> listPermissionsControl
@@ -508,17 +508,36 @@
         var condition = await MajorUserPermissionRepository.GetExist(Input);
         if (isEdit)
         {
-            if (condition != null && condition.Count() > 1)
+            if (condition != null && condition.Count() > 0)
             {
-                ToastService.ShowToast(
-                       "Thông báo",
-                        "Đã tồn tại",
-                       cssClass: "toast-danger",
-                      iconClass: "fa fa-exclamation-circle",
-                       progressBarClass: "bg-info",
-                       duration: 5000
-                   );
-                return;
+                if(condition[0].Id == Input.Id)
+                {
+                    await MajorUserPermissionService.Update(Input);
+                    ToastService.ShowToast(
+                        "Thông báo",
+                        "cập nhật thành công.",
+                        iconClass: "fa fa-check-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
+                    Input.Id = Guid.NewGuid().ToString();
+                    await LoadData();
+                    isEdit = false;
+                    isModalVisible = false;
+                    RefreshInput();
+                }
+                else
+                {
+                    ToastService.ShowToast(
+                      "Thông báo",
+                       "Đã tồn tại",
+                      cssClass: "toast-danger",
+                     iconClass: "fa fa-exclamation-circle",
+                      progressBarClass: "bg-info",
+                      duration: 5000
+                  );
+                 
+                }
 
             }
             else

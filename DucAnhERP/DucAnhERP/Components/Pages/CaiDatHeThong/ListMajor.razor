@@ -1,4 +1,5 @@
 ﻿@page "/CaiDatHeThong/listMajor"
+@using DucAnhERP.Helpers
 @using DucAnhERP.ViewModel
 @using DucAnhERP.Models
 @using DucAnhERP.Components.Pages.Common
@@ -45,6 +46,7 @@
                         <InputText class="form-control" id="Table" @bind-Value="Input.Table" />
                         <ValidationMessage For="()=>Input.Table"></ValidationMessage>
                     </div>
+                   
                 </div>
             
                 <DataAnnotationsValidator />
@@ -73,6 +75,11 @@
                             }
                         }
                     </InputSelect>
+                    <ValidationMessage For="()=>majorModel.ParentId"></ValidationMessage>
+                </div>
+                <div class="form-floating col-sm-6 col-md-3">
+                    <label for="Table">Chọn</label>
+                    <Select2 Id="mySelect2" Items="@selectItems" OnChange="@OnSelectChange"></Select2>
                     <ValidationMessage For="()=>majorModel.ParentId"></ValidationMessage>
                 </div>
                 <div class="form-group ml-5">
@@ -204,6 +211,18 @@
     private bool isLoading = false;
     private string TitleModal = "Thêm";
     private bool isEdit = false;
+
+    private List<SelectedItem> selectItems = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "1", Text = "Option 1" },
+        new SelectedItem { Value = "2", Text = "Option 2" },
+        new SelectedItem { Value = "3", Text = "Option 3" }
+    };
+
+    private void OnSelectChange(SelectedItem selectedItem)
+    {
+        Console.WriteLine($"Selected Item: Value = {selectedItem.Value}, Text = {selectedItem.Text}");
+    }
 
     [Parameter]
     public SuccessModal successModal { get; set; }

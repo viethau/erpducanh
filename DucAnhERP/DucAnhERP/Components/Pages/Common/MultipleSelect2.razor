@@ -1,0 +1,34 @@
+@using DucAnhERP.Helpers
+@inject IJSRuntime JSRuntime
+
+<select id="@Id" class="form-control" multiple="multiple">
+    @if (Items != null && Items.Any())
+    {
+        @foreach (var item in Items)
+        {
+            <option value="@item.Value" selected="@item.IsSelected">@item.Text</option>
+        }
+    }
+</select>
+
+@code {
+    [Parameter] public string Id { get; set; }
+    [Parameter] public List<SelectedItem> Items { get; set; } = new List<SelectedItem>();
+    [Parameter] public EventCallback<List<string>> OnChange { get; set; }
+
+    private async Task HandleChange(ChangeEventArgs e)
+    {
+        // L?y danh sách các giá tr? ?ã ch?n
+        var selectedValues = ((string[])e.Value).ToList();
+        await OnChange.InvokeAsync(selectedValues);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // G?i JavaScript ?? kh?i t?o Select2 v?i multiple
+            await JSRuntime.InvokeVoidAsync("select2Blazor.initMultipleSelect2", Id);
+        }
+    }
+}

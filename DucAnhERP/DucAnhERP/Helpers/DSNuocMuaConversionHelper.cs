@@ -1586,95 +1586,6 @@ namespace DucAnhERP.Helpers
             }
             return result;
         }
-
-
-
-
-
-
-
-
-
-
-
-        public double TTKTHHCongHopRanh_CCaoTuongRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_CCaoTuongCongRanh, double CDHaLu_CCaoTuongCongRanh)
-        {
-            double result = 0;
-            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
-            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH XÂY".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper())
-            {
-                result = (CDThuongLuu_CCaoTuongCongRanh + CDHaLu_CCaoTuongCongRanh) / 2;
-            }
-
-
-            return Math.Round(result, 2);
-        }
-        public double TTKTHHCongHopRanh_CCaoTuongGop(double TTKTHHCongHopRanh_CCaoTuongCongHop, double TTKTHHCongHopRanh_CCaoTuongRanh)
-        {
-            double result = 0;
-            result = TTKTHHCongHopRanh_CCaoTuongCongHop + TTKTHHCongHopRanh_CCaoTuongRanh;
-
-            return Math.Round(result, 2);
-        }
-        public double TTTDCongHoRanh_CDai1(double[] TTTDCongHoRanh_ChieuDaiThucTes, string[] ThongTinDuongTruyenDan_HinhThucTruyenDans, string[] TTTDCongHoRanh_XacDinhOngCongCanThems, string ThongTinDuongTruyenDan_HinhThucTruyenDan, string TTTDCongHoRanh_XacDinhOngCongCanThem)
-        {
-            try
-            {
-                ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
-                // Kiểm tra điều kiện TTTDCongHoRanh_XacDinhOngCongCanThem có phải là "Thêm 01" không
-                if (TTTDCongHoRanh_XacDinhOngCongCanThem == "Thêm 01")
-                {
-                    // Lọc các giá trị TTTDCongHoRanh_ChieuDaiThucTes thoả mãn điều kiện từ ThongTinDuongTruyenDan_HinhThucTruyenDans và hsValues
-                    //var filteredValues = TTTDCongHoRanh_ChieuDaiThucTes
-                    //    .Where((hrValue, index) =>
-                    //        GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDans[index].ToUpper().Trim()) == ThongTinDuongTruyenDan_HinhThucTruyenDan.ToUpper().Trim()
-                    //        && TTTDCongHoRanh_XacDinhOngCongCanThems[index] == "Thêm 01")
-                    //    .ToArray();
-
-                    List<double> filteredValues = new List<double>();
-
-                    // Duyệt qua các phần tử của mảng hrValues
-                    for (int index = 0; index < TTTDCongHoRanh_ChieuDaiThucTes.Length; index++)
-                    {
-                        double hrValue = TTTDCongHoRanh_ChieuDaiThucTes[index];
-                        string enValue = ThongTinDuongTruyenDan_HinhThucTruyenDans[index];
-                        string hsValue = TTTDCongHoRanh_XacDinhOngCongCanThems[index];
-
-                        // Kiểm tra điều kiện enValues[index] == en100
-                        bool isEnMatch = GetTenDanhMucById(enValue).ToUpper().Trim() == ThongTinDuongTruyenDan_HinhThucTruyenDan.ToUpper().Trim();
-
-                        // Kiểm tra điều kiện hsValues[index] == "Thêm 01"
-                        bool isHsMatch = hsValue == "Thêm 01";
-
-                        // Nếu cả hai điều kiện đều đúng, thêm hrValue vào danh sách
-                        if (isEnMatch && isHsMatch)
-                        {
-                            filteredValues.Add(hrValue);
-                        }
-                    }
-
-                    // Chuyển danh sách về mảng
-                    double[] filteredArray = filteredValues.ToArray();
-
-                    // Nếu có các giá trị thoả mãn, tính trung bình
-                    if (filteredValues.Any())
-                    {
-                        double average = filteredValues.Average();
-                        // Lấy giá trị tuyệt đối và làm tròn đến 2 chữ số thập phân
-                        return Math.Round(Math.Abs(average), 2);
-                    }
-                }
-
-                // Nếu không thoả mãn điều kiện, trả về 0
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-        }
-
         public double CDThuongLuu_DinhCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhTrongLongSuDung, double ThongTinCauTaoCongTron_CDayPhuBi)
         {
             ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
@@ -1684,11 +1595,8 @@ namespace DucAnhERP.Helpers
             {
                 result = CDThuongLuu_DinhTrongLongSuDung + ThongTinCauTaoCongTron_CDayPhuBi;
             }
-
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+            return Math.Round(result, 2);
         }
-
         public double CDThuongLuu_DinhCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhTrongLongSuDung, double TTKTHHCongHopRanh_CCaoMuMoThotTren)
         {
             ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
@@ -1699,10 +1607,9 @@ namespace DucAnhERP.Helpers
                 result = CDThuongLuu_DinhTrongLongSuDung + TTKTHHCongHopRanh_CCaoMuMoThotTren;
             }
 
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
-        }
 
+            return Math.Round(result, 2);
+        }
         public double CDThuongLuu_DinhRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhTrongLongSuDung, double TTKTHHCongHopRanh_CCaoMuMoThotTren)
         {
             ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
@@ -1713,10 +1620,8 @@ namespace DucAnhERP.Helpers
                 result = CDThuongLuu_DinhTrongLongSuDung + TTKTHHCongHopRanh_CCaoMuMoThotTren;
             }
 
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+            return Math.Round(result, 2);
         }
-
         public double CDThuongLuu_DinhOngNhua(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhTrongLongSuDung, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi)
         {
             ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
@@ -1727,10 +1632,8 @@ namespace DucAnhERP.Helpers
                 result = CDThuongLuu_DinhTrongLongSuDung + ThongTinKichThuocHinhHocOngNhua_CDayPhuBi;
             }
 
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+            return Math.Round(result, 2);
         }
-
         public double CDThuongLuu_DinhDapCat(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhOngNhua, double ThongTinKichThuocHinhHocOngNhua_CCaoDapCat)
         {
             ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
@@ -1741,32 +1644,8 @@ namespace DucAnhERP.Helpers
                 result = CDThuongLuu_DinhOngNhua + ThongTinKichThuocHinhHocOngNhua_CCaoDapCat;
             }
 
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+            return Math.Round(result, 2);
         }
-
-        public double CDThuongLuu_DinhMuMoThotDuoiCongHopRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhCongHop, double CDThuongLuu_DinhRanh, double TTKTHHCongHopRanh_CCaoMuMoThotTren)
-        {
-            double result;
-            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
-            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "CỐNG HỘP")
-            {
-                result = CDThuongLuu_DinhCongHop - TTKTHHCongHopRanh_CCaoMuMoThotTren;
-            }
-            else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH XÂY" || ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH BÊ TÔNG")
-            {
-                result = CDThuongLuu_DinhRanh - TTKTHHCongHopRanh_CCaoMuMoThotTren;
-            }
-            else
-            {
-                result = 0;
-            }
-
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
-        }
-
-
         public double CDThuongLuu_DinhGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhTrongLongSuDung, double ThongTinCauTaoCongTron_CDayPhuBi, double TTKTHHCongHopRanh_CCaoMuMoThotTren, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDThuongLuu_DayDongChay)
         {
             ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
@@ -1793,11 +1672,29 @@ namespace DucAnhERP.Helpers
                 result = CDThuongLuu_DayDongChay + 0;
             }
 
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+
+            return Math.Round(result, 2);
         }
+        public double CDThuongLuu_DinhMuMoThotDuoiCongHopRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhCongHop, double CDThuongLuu_DinhRanh, double TTKTHHCongHopRanh_CCaoMuMoThotTren)
+        {
+            double result;
+            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "CỐNG HỘP")
+            {
+                result = CDThuongLuu_DinhCongHop - TTKTHHCongHopRanh_CCaoMuMoThotTren;
+            }
+            else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH XÂY" || ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH BÊ TÔNG")
+            {
+                result = CDThuongLuu_DinhRanh - TTKTHHCongHopRanh_CCaoMuMoThotTren;
+            }
+            else
+            {
+                result = 0;
+            }
 
 
+            return Math.Round(result, 2);
+        }
         public double CDThuongLuu_DinhTuongCHopRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhMuMoThotDuoiCongHopRanh, double TTKTHHCongHopRanh_CCaoMuMoThotDuoi)
         {
             ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
@@ -1810,10 +1707,9 @@ namespace DucAnhERP.Helpers
                 result = CDThuongLuu_DinhMuMoThotDuoiCongHopRanh - TTKTHHCongHopRanh_CCaoMuMoThotDuoi;
             }
 
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
-        }
 
+            return Math.Round(result, 2);
+        }
         public double CDThuongLuu_CCaoTuongCongRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhTuongCHopRanh, double CDThuongLuu_DayDongChay)
         {
             ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
@@ -1826,148 +1722,27 @@ namespace DucAnhERP.Helpers
                 result = CDThuongLuu_DinhTuongCHopRanh - CDThuongLuu_DayDongChay;
             }
 
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+
+            return Math.Round(result, 1);
         }
-
-        public double CDHaLu_DinhDapCat(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhOngNhua, double ThongTinKichThuocHinhHocOngNhua_CCaoDapCat)
-        {
-            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
-            double result = 0;
-
-            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "ỐNG NHỰA")
-            {
-                result = CDHaLu_DinhOngNhua + ThongTinKichThuocHinhHocOngNhua_CCaoDapCat;
-            }
-
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
-        }
-
-        public double CDHaLu_DinhOngNhua(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi)
-        {
-            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
-            double result = 0;
-
-            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "ỐNG NHỰA")
-            {
-                result = CDHaLu_DinhTrongLongSuDung + ThongTinKichThuocHinhHocOngNhua_CDayPhuBi;
-            }
-
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
-        }
-
-        public double CDHaLu_DinhRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double TTKTHHCongHopRanh_CCaoMuMoThotTren)
-        {
-            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
-            double result = 0;
-
-            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH XÂY" || ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH BÊ TÔNG")
-            {
-                result = CDHaLu_DinhTrongLongSuDung + TTKTHHCongHopRanh_CCaoMuMoThotTren;
-            }
-
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
-        }
-
-        public double CDHaLu_DinhCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double TTKTHHCongHopRanh_CCaoMuMoThotTren)
-        {
-            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
-            double result = 0;
-
-            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "CỐNG HỘP")
-            {
-                result = CDHaLu_DinhTrongLongSuDung + TTKTHHCongHopRanh_CCaoMuMoThotTren;
-            }
-
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
-        }
-
-        public double CDHaLu_DinhCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double ThongTinCauTaoCongTron_CDayPhuBi)
-        {
-            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
-            double result = 0;
-
-            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "CỐNG TRÒN")
-            {
-                result = CDHaLu_DinhTrongLongSuDung + ThongTinCauTaoCongTron_CDayPhuBi;
-            }
-
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
-        }
-
-        public double CDHaLu_DinhGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double ThongTinCauTaoCongTron_CDayPhuBi, double TTKTHHCongHopRanh_CCaoMuMoThotTren, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDHaLu_DayDongChay)
+        public double TTKTHHCongHopRanh_CCaoTuongRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_CCaoTuongCongRanh, double CDHaLu_CCaoTuongCongRanh)
         {
             double result = 0;
             ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
-            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống tròn".ToUpper())
+            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH XÂY".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper())
             {
-                result = CDHaLu_DinhTrongLongSuDung + ThongTinCauTaoCongTron_CDayPhuBi;
-            }
-            else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
-            {
-                result = CDHaLu_DinhTrongLongSuDung + TTKTHHCongHopRanh_CCaoMuMoThotTren;
-            }
-            else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH XÂY".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper())
-            {
-                result = CDHaLu_DinhTrongLongSuDung + TTKTHHCongHopRanh_CCaoMuMoThotTren;
-            }
-            else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Ống nhựa".ToUpper())
-            {
-                result = CDHaLu_DinhTrongLongSuDung + ThongTinKichThuocHinhHocOngNhua_CDayPhuBi;
-            }
-            else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper())
-            {
-                result = CDHaLu_DayDongChay + 0;
+                result = (CDThuongLuu_CCaoTuongCongRanh + CDHaLu_CCaoTuongCongRanh) / 2;
             }
 
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+
+            return Math.Round(result, 2);
         }
-
-        public double CDHaLu_DinhMuMoThotDuoiCongHopRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhCongHop, double TTKTHHCongHopRanh_CCaoMuMoThotTren, double CDHaLu_DinhRanh)
+        public double TTKTHHCongHopRanh_CCaoTuongGop(double TTKTHHCongHopRanh_CCaoTuongCongHop, double TTKTHHCongHopRanh_CCaoTuongRanh)
         {
             double result = 0;
-            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
-            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
-            {
-                result = CDHaLu_DinhCongHop - TTKTHHCongHopRanh_CCaoMuMoThotTren;
-            }
-            else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH XÂY".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper())
-            {
-                result = CDHaLu_DinhRanh - TTKTHHCongHopRanh_CCaoMuMoThotTren;
-            }
+            result = TTKTHHCongHopRanh_CCaoTuongCongHop + TTKTHHCongHopRanh_CCaoTuongRanh;
 
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
-        }
-        public double CDHaLu_DinhTuongCHopRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhMuMoThotDuoiCongHopRanh, double TTKTHHCongHopRanh_CCaoMuMoThotDuoi)
-        {
-            double result = 0;
-            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
-            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH XÂY".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
-            {
-                result = CDHaLu_DinhMuMoThotDuoiCongHopRanh - TTKTHHCongHopRanh_CCaoMuMoThotDuoi;
-            }
-
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
-        }
-        public double CDHaLu_CCaoTuongCongRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTuongCHopRanh, double CDHaLu_DayDongChay)
-        {
-            double result = 0;
-            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
-            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH XÂY".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
-            {
-                result = CDHaLu_DinhTuongCHopRanh - CDHaLu_DayDongChay;
-            }
-
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+            return Math.Round(result, 2);
         }
         public double CDHaLu_DinhDeCong(string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi)
         {
@@ -1978,8 +1753,8 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_DayDongChay - ThongTinCauTaoCongTron_CDayPhuBi;
             }
 
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+
+            return result;
         }
         public double CDHaLu_DinhMongRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay)
         {
@@ -1991,8 +1766,8 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_DayDongChay;
             }
 
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+
+            return result;
         }
         public double CDHaLu_DinhMongCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double TTKTHHCongHopRanh_CCaoDe)
         {
@@ -2003,9 +1778,7 @@ namespace DucAnhERP.Helpers
             {
                 result = CDHaLu_DayDongChay - TTKTHHCongHopRanh_CCaoDe;
             }
-
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+            return result;
         }
         public double CDHaLu_DinhMongCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDHaLu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe)
         {
@@ -2023,11 +1796,8 @@ namespace DucAnhERP.Helpers
                     result = CDHaLu_DinhDeCong - ThongTinCauTaoCongTron_CCaoDe;
                 }
             }
-
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+            return result;
         }
-
         public double CDHaLu_DinhMongGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDHaLu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe, double TTKTHHCongHopRanh_CCaoDe)
         {
             double result = 0;
@@ -2066,8 +1836,8 @@ namespace DucAnhERP.Helpers
                 }
             }
 
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+
+            return result;
         }
         public double CDHaLu_DinhLotRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DinhMongRanh, double TTKTHHCongHopRanh_CCaoMong)
         {
@@ -2081,10 +1851,9 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_DinhMongRanh - TTKTHHCongHopRanh_CCaoMong;
             }
 
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
-        }
 
+            return result;
+        }
         public double CDHaLu_DinhLotCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DinhMongCongHop, double TTKTHHCongHopRanh_CCaoMong)
         {
             double result = 0;
@@ -2095,11 +1864,8 @@ namespace DucAnhERP.Helpers
             {
                 result = CDHaLu_DinhMongCongHop - TTKTHHCongHopRanh_CCaoMong;
             }
-
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+            return result;
         }
-
         public double CDHaLu_DinhLotCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DinhMongCongTron, double ThongTinCauTaoCongTron_CCaoMong)
         {
             double result = 0;
@@ -2112,10 +1878,9 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_DinhMongCongTron - ThongTinCauTaoCongTron_CCaoMong;
             }
 
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
-        }
 
+            return result;
+        }
         public double CDHaLu_DinhLotOngNhua(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi)
         {
             double result = 0;
@@ -2127,11 +1892,8 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_DayDongChay - ThongTinKichThuocHinhHocOngNhua_CDayPhuBi;
             }
 
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+            return result;
         }
-
-
         public double CDHaLu_DinhLotGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDHaLu_DinhMongCongTron, double ThongTinCauTaoCongTron_CCaoMong, double CDHaLu_DinhMongCongHop, double TTKTHHCongHopRanh_CCaoMong, double CDHaLu_DinhMongRanh)
         {
             double result = 0; // Khai báo biến result
@@ -2173,12 +1935,8 @@ namespace DucAnhERP.Helpers
                     result = CDHaLu_DinhMongRanh - TTKTHHCongHopRanh_CCaoMong;
                 }
             }
-
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+            return result;
         }
-
-
         public double CDHaLu_DayDaoOngNhua(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDHaLu_DinhLotOngNhua, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
         {
             double result = 0;
@@ -2197,30 +1955,23 @@ namespace DucAnhERP.Helpers
                 }
             }
 
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+            return result;
         }
-
         public double CDHaLu_DayDaoRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhLotRanh, double TTKTHHCongHopRanh_CCaoLotMong)
         {
             double result = 0;
             ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
-
             if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH XÂY" || ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH BÊ TÔNG")
             {
                 result = CDHaLu_DinhLotRanh - TTKTHHCongHopRanh_CCaoLotMong;
             }
-
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+            return result;
         }
-
         public double CDHaLu_DayDaoCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double TTKTHHCongHopRanh_CCaoDe, double CDHaLu_DinhLotCongHop, double TTKTHHCongHopRanh_CCaoLotMong)
         {
             double result = 0;
             ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
             ThongTinMongDuongTruyenDan_LoaiMong = GetTenDanhMucById(ThongTinMongDuongTruyenDan_LoaiMong).ToUpper().Trim();
-
             if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "CỐNG HỘP" && ThongTinMongDuongTruyenDan_LoaiMong == "KHÔNG CÓ MÓNG")
             {
                 result = CDHaLu_DayDongChay - TTKTHHCongHopRanh_CCaoDe;
@@ -2229,11 +1980,8 @@ namespace DucAnhERP.Helpers
             {
                 result = CDHaLu_DinhLotCongHop - TTKTHHCongHopRanh_CCaoLotMong;
             }
-
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+            return result;
         }
-
         public double CDHaLu_DayDaoCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDHaLu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe, double CDHaLu_DinhLotCongTron, double ThongTinCauTaoCongTron_CCaoLotMong)
         {
             double result = 0;
@@ -2255,11 +2003,8 @@ namespace DucAnhERP.Helpers
                     result = CDHaLu_DinhLotCongTron - ThongTinCauTaoCongTron_CCaoLotMong;
                 }
             }
-
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+            return result;
         }
-
         public double CDHaLu_DayDaoGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDHaLu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe,
                              double CDHaLu_DinhLotCongTron, double ThongTinCauTaoCongTron_CCaoLotMong, double TTKTHHCongHopRanh_CCaoDe, double CDHaLu_DinhLotCongHop, double TTKTHHCongHopRanh_CCaoLotMong,
                              double CDHaLu_DinhLotRanh, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDHaLu_DinhLotOngNhua, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
@@ -2321,9 +2066,222 @@ namespace DucAnhERP.Helpers
                     result = CDHaLu_DayDongChay;
                 }
             }
-            // Làm tròn đến 3 chữ số thập phân
+
             return Math.Round(result, 2);
         }
+
+
+
+
+
+
+
+
+
+
+        public double TTTDCongHoRanh_CDai1(double[] TTTDCongHoRanh_ChieuDaiThucTes, string[] ThongTinDuongTruyenDan_HinhThucTruyenDans, string[] TTTDCongHoRanh_XacDinhOngCongCanThems, string ThongTinDuongTruyenDan_HinhThucTruyenDan, string TTTDCongHoRanh_XacDinhOngCongCanThem)
+        {
+            try
+            {
+                ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+                // Kiểm tra điều kiện TTTDCongHoRanh_XacDinhOngCongCanThem có phải là "Thêm 01" không
+                if (TTTDCongHoRanh_XacDinhOngCongCanThem == "Thêm 01")
+                {
+                    // Lọc các giá trị TTTDCongHoRanh_ChieuDaiThucTes thoả mãn điều kiện từ ThongTinDuongTruyenDan_HinhThucTruyenDans và hsValues
+                    //var filteredValues = TTTDCongHoRanh_ChieuDaiThucTes
+                    //    .Where((hrValue, index) =>
+                    //        GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDans[index].ToUpper().Trim()) == ThongTinDuongTruyenDan_HinhThucTruyenDan.ToUpper().Trim()
+                    //        && TTTDCongHoRanh_XacDinhOngCongCanThems[index] == "Thêm 01")
+                    //    .ToArray();
+
+                    List<double> filteredValues = new List<double>();
+
+                    // Duyệt qua các phần tử của mảng hrValues
+                    for (int index = 0; index < TTTDCongHoRanh_ChieuDaiThucTes.Length; index++)
+                    {
+                        double hrValue = TTTDCongHoRanh_ChieuDaiThucTes[index];
+                        string enValue = ThongTinDuongTruyenDan_HinhThucTruyenDans[index];
+                        string hsValue = TTTDCongHoRanh_XacDinhOngCongCanThems[index];
+
+                        // Kiểm tra điều kiện enValues[index] == en100
+                        bool isEnMatch = GetTenDanhMucById(enValue).ToUpper().Trim() == ThongTinDuongTruyenDan_HinhThucTruyenDan.ToUpper().Trim();
+
+                        // Kiểm tra điều kiện hsValues[index] == "Thêm 01"
+                        bool isHsMatch = hsValue == "Thêm 01";
+
+                        // Nếu cả hai điều kiện đều đúng, thêm hrValue vào danh sách
+                        if (isEnMatch && isHsMatch)
+                        {
+                            filteredValues.Add(hrValue);
+                        }
+                    }
+
+                    // Chuyển danh sách về mảng
+                    double[] filteredArray = filteredValues.ToArray();
+
+                    // Nếu có các giá trị thoả mãn, tính trung bình
+                    if (filteredValues.Any())
+                    {
+                        double average = filteredValues.Average();
+                        // Lấy giá trị tuyệt đối và làm tròn đến 2 chữ số thập phân
+                        return Math.Round(Math.Abs(average), 2);
+                    }
+                }
+
+                // Nếu không thoả mãn điều kiện, trả về 0
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
+        public double CDHaLu_DinhDapCat(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhOngNhua, double ThongTinKichThuocHinhHocOngNhua_CCaoDapCat)
+        {
+            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+            double result = 0;
+
+            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "ỐNG NHỰA")
+            {
+                result = CDHaLu_DinhOngNhua + ThongTinKichThuocHinhHocOngNhua_CCaoDapCat;
+            }
+
+            
+            return Math.Round(result, 2); 
+        }
+
+        public double CDHaLu_DinhOngNhua(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi)
+        {
+            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+            double result = 0;
+
+            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "ỐNG NHỰA")
+            {
+                result = CDHaLu_DinhTrongLongSuDung + ThongTinKichThuocHinhHocOngNhua_CDayPhuBi;
+            }
+
+            
+            return Math.Round(result, 2); 
+        }
+
+        public double CDHaLu_DinhRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double TTKTHHCongHopRanh_CCaoMuMoThotTren)
+        {
+            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+            double result = 0;
+
+            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH XÂY" || ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH BÊ TÔNG")
+            {
+                result = CDHaLu_DinhTrongLongSuDung + TTKTHHCongHopRanh_CCaoMuMoThotTren;
+            }
+
+            
+            return Math.Round(result, 2); 
+        }
+
+        public double CDHaLu_DinhCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double TTKTHHCongHopRanh_CCaoMuMoThotTren)
+        {
+            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+            double result = 0;
+
+            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "CỐNG HỘP")
+            {
+                result = CDHaLu_DinhTrongLongSuDung + TTKTHHCongHopRanh_CCaoMuMoThotTren;
+            }
+
+            
+            return Math.Round(result, 2); 
+        }
+
+        public double CDHaLu_DinhCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double ThongTinCauTaoCongTron_CDayPhuBi)
+        {
+            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+            double result = 0;
+
+            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "CỐNG TRÒN")
+            {
+                result = CDHaLu_DinhTrongLongSuDung + ThongTinCauTaoCongTron_CDayPhuBi;
+            }
+
+            
+            return Math.Round(result, 2); 
+        }
+
+        public double CDHaLu_DinhGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double ThongTinCauTaoCongTron_CDayPhuBi, double TTKTHHCongHopRanh_CCaoMuMoThotTren, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDHaLu_DayDongChay)
+        {
+            double result = 0;
+            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống tròn".ToUpper())
+            {
+                result = CDHaLu_DinhTrongLongSuDung + ThongTinCauTaoCongTron_CDayPhuBi;
+            }
+            else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
+            {
+                result = CDHaLu_DinhTrongLongSuDung + TTKTHHCongHopRanh_CCaoMuMoThotTren;
+            }
+            else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH XÂY".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper())
+            {
+                result = CDHaLu_DinhTrongLongSuDung + TTKTHHCongHopRanh_CCaoMuMoThotTren;
+            }
+            else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Ống nhựa".ToUpper())
+            {
+                result = CDHaLu_DinhTrongLongSuDung + ThongTinKichThuocHinhHocOngNhua_CDayPhuBi;
+            }
+            else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh thang".ToUpper())
+            {
+                result = CDHaLu_DayDongChay + 0;
+            }
+
+            
+            return Math.Round(result, 2); 
+        }
+
+        public double CDHaLu_DinhMuMoThotDuoiCongHopRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhCongHop, double TTKTHHCongHopRanh_CCaoMuMoThotTren, double CDHaLu_DinhRanh)
+        {
+            double result = 0;
+            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
+            {
+                result = CDHaLu_DinhCongHop - TTKTHHCongHopRanh_CCaoMuMoThotTren;
+            }
+            else if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH XÂY".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper())
+            {
+                result = CDHaLu_DinhRanh - TTKTHHCongHopRanh_CCaoMuMoThotTren;
+            }
+
+            
+            return Math.Round(result, 2); 
+        }
+        public double CDHaLu_DinhTuongCHopRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhMuMoThotDuoiCongHopRanh, double TTKTHHCongHopRanh_CCaoMuMoThotDuoi)
+        {
+            double result = 0;
+            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH XÂY".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
+            {
+                result = CDHaLu_DinhMuMoThotDuoiCongHopRanh - TTKTHHCongHopRanh_CCaoMuMoThotDuoi;
+            }
+
+            
+            return Math.Round(result, 2); 
+        }
+        public double CDHaLu_CCaoTuongCongRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTuongCHopRanh, double CDHaLu_DayDongChay)
+        {
+            double result = 0;
+            ThongTinDuongTruyenDan_HinhThucTruyenDan = GetTenDanhMucById(ThongTinDuongTruyenDan_HinhThucTruyenDan).ToUpper().Trim();
+            if (ThongTinDuongTruyenDan_HinhThucTruyenDan == "RÃNH XÂY".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Rãnh bê tông".ToUpper() || ThongTinDuongTruyenDan_HinhThucTruyenDan == "Cống hộp".ToUpper())
+            {
+                result = CDHaLu_DinhTuongCHopRanh - CDHaLu_DayDongChay;
+            }
+
+            
+            return Math.Round(result, 2); 
+        }
+        
+        
+
+       
+        
 
         public double CDHaLu_ChieuSauDao(double CDHaLu_DayDaoGop, double CDHaLu_HienTrangTruocKhiDaoHaLuu)
         {
@@ -2333,8 +2291,8 @@ namespace DucAnhERP.Helpers
             {
                 result = CDHaLu_HienTrangTruocKhiDaoHaLuu - CDHaLu_DayDaoGop;
             }
-            // Làm tròn đến 3 chữ số thập phân
-            result = Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+            
+            result = Math.Round(result, 2); 
             return result;
         }
 
@@ -2358,8 +2316,8 @@ namespace DucAnhERP.Helpers
                 result = CDThuongLuu_ChieuSauDao - TTVLDCongRanh_TLChieuCaoDaoDa;
             }
 
-            // Làm tròn đến 3 chữ số thập phân
-            result = Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+            
+            result = Math.Round(result, 2); 
             return result;
         }
 
@@ -2381,8 +2339,8 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_ChieuSauDao - TTVLDCongRanh_HLChieuCaoDaoDa;
             }
 
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+            
+            return Math.Round(result, 2); 
         }
 
 
@@ -2398,8 +2356,8 @@ namespace DucAnhERP.Helpers
                     : TTVLDCongRanh_TLChieuCaoDaoDat;
             }
 
-            // Làm tròn đến 3 chữ số thập phân
-            return Math.Round(result, 2); // Làm tròn đến 2 chữ số thập phân
+            
+            return Math.Round(result, 2); 
         }
 
         public double TTCCCCT_CCaoLotDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double ThongTinCauTaoCongTron_CCaoLotMong)
@@ -3631,7 +3589,7 @@ namespace DucAnhERP.Helpers
             {
                 // Tính toán giá trị
                 double giaTri = ((TTCCCCCHR_CCaoLotDatTBinh * TTKTHHCongHopRanh_CRongLotMong) + (TTKTHHCongHopRanh_CRongMong * TTCCCCCHR_CCaoMongDatTBinh) + (TTCCCCCHR_CCaoTuongDatTBinh * ((TTKTHHCongHopRanh_CDayTuong01Ben * TTKTHHCongHopRanh_SoLuongTuong) + TTKTHHCongHopRanh_CRongLongSuDung))) * TTCDSLCauKienDuongTruyenDan_TongChieuDai;
-                // Làm tròn đến 2 chữ số thập phân
+                
                 return Math.Round(giaTri, 2);
             }
             else
@@ -3646,7 +3604,7 @@ namespace DucAnhERP.Helpers
             {
                 // Tính toán giá trị
                 double giaTri = ((TTCCCCCHR_CCaoLotDaTBinh * TTKTHHCongHopRanh_CRongLotMong) + (TTKTHHCongHopRanh_CRongMong * TTCCCCCHR_CCaoMongDaTBinh) + (TTCCCCCHR_CCaoTuongDaTBinh * ((TTKTHHCongHopRanh_CDayTuong01Ben * TTKTHHCongHopRanh_SoLuongTuong) + TTKTHHCongHopRanh_CRongLongSuDung))) * TTCDSLCauKienDuongTruyenDan_TongChieuDai;
-                // Làm tròn đến 2 chữ số thập phân
+                
                 return Math.Round(giaTri, 2);
             }
             else
