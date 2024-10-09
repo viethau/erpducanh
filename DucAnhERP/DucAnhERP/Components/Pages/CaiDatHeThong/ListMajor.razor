@@ -17,18 +17,10 @@
         <BodyTemplate>
             <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
                 <div class="row">
+
                     <div class="form-floating col-sm-6 col-md-3">
-                        <label for="ParentId">Nghiệp vụ cha <span class="text-danger">*</span></label>
-                        <select id="ParentId" class="form-control" @bind="Input.ParentId">
-                            <option value="" selected>Chọn nghiệp vụ cha...</option>
-                            @if (listParentMajor != null)
-                            {
-                                @foreach (var major in listParentMajor)
-                                {
-                                    <option value="@major.Id">@major.MajorName</option>
-                                }
-                            }
-                        </select>
+                        <label for="Table">Nghiệp vụ cha</label>
+                        <Select2 Id="ParentId" Items="@selectItems" OnChange="@OnSelectChange1"></Select2>
                         <ValidationMessage For="()=>Input.ParentId"></ValidationMessage>
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
@@ -46,9 +38,9 @@
                         <InputText class="form-control" id="Table" @bind-Value="Input.Table" />
                         <ValidationMessage For="()=>Input.Table"></ValidationMessage>
                     </div>
-                   
+
                 </div>
-            
+
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <div class="row mt-5 justify-content-end">
@@ -62,23 +54,10 @@
     <div>
         <EditForm Model="majorModel" FormName="SearchNghiepVu" OnValidSubmit="@Search">
             <DataAnnotationsValidator />
-            <div class="d-flex">
-                <div class="form-group">
-                    <label for="parentMajor">Nghiệp vụ cha</label>
-                    <InputSelect class="form-control" @bind-Value="majorModel.ParentId">
-                        <option value="" selected>Chọn nghiệp vụ cha...</option>
-                        @if (listParentMajor != null)
-                        {
-                            @foreach (var major in listParentMajor)
-                            {
-                                <option value="@major.Id">@major.MajorName</option>
-                            }
-                        }
-                    </InputSelect>
-                    <ValidationMessage For="()=>majorModel.ParentId"></ValidationMessage>
-                </div>
-                <div class="form-floating col-sm-6 col-md-3">
-                    <label for="Table">Chọn</label>
+            <div class="d-flex row">
+
+                <div class="form-floating col-sm-3 col-md-3">
+                    <label for="Table">Nghiệp vụ cha</label>
                     <Select2 Id="mySelect2" Items="@selectItems" OnChange="@OnSelectChange"></Select2>
                     <ValidationMessage For="()=>majorModel.ParentId"></ValidationMessage>
                 </div>
@@ -150,7 +129,7 @@
                         }
                         @foreach (var item in listMajor)
                         {
-                             stt ++;
+                            stt++;
                             <tr>
                                 <td class="d-flex flex-column text-center nowrap">
                                     <div class="d-inline-block">
@@ -188,7 +167,7 @@
             <SuccessModal @ref="successModal" OnResponseClick="Redirect"></SuccessModal>
             <ErrorModal @ref="errorModal"></ErrorModal>
             <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
-           
+
         </div>
 
         @if (listMajor.Any())
@@ -213,15 +192,17 @@
     private bool isEdit = false;
 
     private List<SelectedItem> selectItems = new List<SelectedItem>
-    {
-        new SelectedItem { Value = "1", Text = "Option 1" },
-        new SelectedItem { Value = "2", Text = "Option 2" },
-        new SelectedItem { Value = "3", Text = "Option 3" }
+    {    new SelectedItem { Value = "", Text = "chọn...",IsSelected=true },
     };
 
     private void OnSelectChange(SelectedItem selectedItem)
     {
-        Console.WriteLine($"Selected Item: Value = {selectedItem.Value}, Text = {selectedItem.Text}");
+        majorModel.ParentId = selectedItem.Value;
+    }
+
+    private void OnSelectChange1(SelectedItem selectedItem)
+    {
+        Input.ParentId = selectedItem.Value;
     }
 
     [Parameter]
@@ -244,6 +225,7 @@
         isModalVisible = isVisible;
         Input = new();
         isEdit = false;
+        Refresh();
 
     }
 
@@ -260,6 +242,7 @@
         isModalVisible = false;
         Input = new();
         isEdit = false;
+        Refresh();
 
     }
 
@@ -300,6 +283,16 @@
     private async Task LoadData()
     {
         listParentMajor = await MajorService.GetAllParentMajor();
+
+        selectItems = listParentMajor.Select(major => new SelectedItem
+            {
+                Value = major.Id,
+                Text = major.MajorName
+            }).ToList();
+
+        // Thêm phần tử mặc định "chọn..."
+        selectItems.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+
         var majors = await MajorService.GetAll(majorModel);
         listModel = majors;
         listMajor = Paging(majors);
@@ -319,6 +312,10 @@
         Input = await MajorRepository.GetById(id);
         isEdit = true;
         isModalVisible = true;
+        foreach (var item in selectItems)
+        {
+            item.IsSelected = item.Value == Input.ParentId;
+        }
     }
 
     private string deleteId;
@@ -345,6 +342,14 @@
         }
     }
 
+    private void Refresh()
+    {
+        foreach (var item in selectItems)
+        {
+            item.IsSelected = item.Value == "";
+        }
+    }
+
     private async Task HandleValidSubmit()
     {
         //Validate
@@ -364,7 +369,7 @@
                         );
                 return;
             }
-            else 
+            else
             {
                 if (isEdit)
                 {
@@ -380,6 +385,7 @@
                     await LoadData();
                     isEdit = false;
                     isModalVisible = false;
+                    Refresh();
                 }
                 else
                 {
@@ -393,6 +399,7 @@
                     );
                     Input.Id = Guid.NewGuid().ToString();
                     await LoadData();
+                    Refresh();
                 }
             }
 
@@ -429,7 +436,7 @@
                 await LoadData();
             }
         }
-       
+
 
     }
 
@@ -440,7 +447,7 @@
         await LoadData();
     }
 
-  
+
 
     // Sắp xếp data
     private void SortTable(string columnName)

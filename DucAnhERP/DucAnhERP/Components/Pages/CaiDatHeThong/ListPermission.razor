@@ -1,4 +1,5 @@
 ﻿@page "/CaiDatHeThong/listPermission"
+@using DucAnhERP.Helpers
 @using DucAnhERP.ViewModel
 @using DucAnhERP.Models
 @using DucAnhERP.Components.Pages.Common
@@ -16,7 +17,7 @@
         <BodyTemplate>
             <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
                 <div class="row">
-                    <div class="form-floating col-sm-6 col-md-3">
+                    @* <div class="form-floating col-sm-6 col-md-3">
                         <label for="MajorId">Nghiệp vụ <span class="text-danger">*</span></label>
                         <select id="MajorId" class="form-control" @bind="Input.MajorId">
                             <option value="" selected>Nghiệp vụ...</option>
@@ -29,8 +30,13 @@
                             }
                         </select>
                         <ValidationMessage For="()=>Input.MajorId"></ValidationMessage>
-                    </div>
+                    </div> *@
                     <div class="form-floating col-sm-6 col-md-3">
+                        <label for="MajorId">Nghiệp vụ</label>
+                        <Select2 Id="MajorId" Items="@selectMajors" OnChange="@OnSelectMajor"></Select2>
+                        <ValidationMessage For="()=>Input.MajorId"></ValidationMessage>
+                    </div>
+                   @*  <div class="form-floating col-sm-6 col-md-3">
                         <label for="PermissionType">Loại quyền <span class="text-danger">*</span></label>
                         <select id="PermissionType" class="form-control" @bind="Input.PermissionType">
                             <option value="0" selected >Loại quyền...</option>
@@ -42,6 +48,11 @@
                                 }
                             }
                         </select>
+                        <ValidationMessage For="()=>Input.PermissionType"></ValidationMessage>
+                    </div> *@
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="ParentId">Loại quyền</label>
+                        <Select2 Id="ParentId" Items="@selectPermission" OnChange="@OnSelectPermission"></Select2>
                         <ValidationMessage For="()=>Input.PermissionType"></ValidationMessage>
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
@@ -64,8 +75,8 @@
     <div>
         <EditForm Model="permissionModel" FormName="SearchNghiepVu" OnValidSubmit="@Search">
             <DataAnnotationsValidator />
-            <div class="d-flex">
-                <div class="form-group">
+            <div class="d-flex row">
+                @* <div class="form-group">
                     <label for="MajorId">Nghiệp vụ <span class="text-danger"></span></label>
                     
                     <InputSelect class="form-control" @bind-Value="permissionModel.MajorId">
@@ -78,6 +89,11 @@
                             }
                         }
                     </InputSelect>
+                    <ValidationMessage For="()=>permissionModel.MajorId"></ValidationMessage>
+                </div> *@
+                <div class="form-floating col-sm-3 col-md-3">
+                    <label for="MajorId">Nghiệp vụ</label>
+                    <Select2 Id="MajorId1" Items="@selectMajors" OnChange="@OnSelectMajor1"></Select2>
                     <ValidationMessage For="()=>permissionModel.MajorId"></ValidationMessage>
                 </div>
                 <div class="form-group ml-5">
@@ -195,16 +211,35 @@
     private string TitleModal = "Thêm";
     private bool isEdit = false;
 
-    Dictionary<string, string> listPermissionType = new Dictionary<string, string>
+
+    private List<SelectedItem> selectPermission = new List<SelectedItem>
+    {    
+        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
+        new SelectedItem { Value = "1", Text = "Xem"},
+        new SelectedItem { Value = "2", Text = "Xuất"},
+        new SelectedItem { Value = "3", Text = "Tạo" },
+        new SelectedItem { Value = "4", Text = "Sửa"},
+        new SelectedItem { Value = "5", Text = "Xóa" },
+        new SelectedItem { Value = "6", Text = "Khác" },
+    };
+    private List<SelectedItem> selectMajors = new List<SelectedItem>
     {
-        { "1", "Xem" },
-        { "2", "Xuất" },
-        { "3", "Tạo" },
-        { "4", "Sửa" },
-        { "5", "Xóa" },
-        { "6", "Khác" }
+        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
     };
 
+    private void OnSelectPermission(SelectedItem selectedItem)
+    {
+        Input.PermissionType = int.Parse(selectedItem.Value);
+    }
+
+    private void OnSelectMajor(SelectedItem selectedItem)
+    {
+        Input.MajorId = selectedItem.Value;
+    }
+    private void OnSelectMajor1(SelectedItem selectedItem)
+    {
+        permissionModel.MajorId = selectedItem.Value;
+    }
     [Parameter]
     public SuccessModal successModal { get; set; }
 
@@ -225,14 +260,14 @@
         isModalVisible = isVisible;
         Input = new();
         isEdit = false;
-
+        Refresh();
     }
 
     private void HandleSave()
     {
         // Logic for saving
         isModalVisible = false;
-
+        Refresh();
     }
 
     private void HandleCancel()
@@ -286,17 +321,27 @@
         {
             foreach (var item in listModel)
             {
-                foreach (var type in listPermissionType)
+                foreach (var type in selectPermission)
                 {
-                    if (int.TryParse(type.Key, out var parsedValue) && item.PermissionType == parsedValue)
+                    if (int.TryParse(type.Value, out var parsedValue) && item.PermissionType == parsedValue)
                     {
-                        item.PermissionTypeName = type.Value;
+                        item.PermissionTypeName = type.Text;
                         break;
                     }
 
                 }
             }
         }
+
+        selectMajors = listMajor.Select(major => new SelectedItem
+            {
+                Value = major.Id,
+                Text = major.MajorName
+            }).ToList();
+
+        // Thêm phần tử mặc định "chọn..."
+        selectMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+
         listPermisson = Paging(listModel);
     }
 
@@ -306,6 +351,14 @@
         Input = await PermissionService.GetById(id);
         isEdit = true;
         isModalVisible = true;
+        foreach (var item in selectMajors)
+        {
+            item.IsSelected = item.Value == Input.MajorId;
+        }
+        foreach (var item in selectPermission)
+        {
+            item.IsSelected = item.Value == Input.PermissionType.ToString();
+        }
     }
 
     private string deleteId;
@@ -329,6 +382,18 @@
                 await LoadData();
                 deleteId = "";
             }
+        }
+    }
+
+    private void Refresh()
+    {
+        foreach (var item in selectPermission)
+        {
+            item.IsSelected = item.Value == "";
+        }
+        foreach (var item in selectMajors)
+        {
+            item.IsSelected = item.Value == "";
         }
     }
 
@@ -365,6 +430,7 @@
                 await LoadData();
                 isEdit = false;
                 isModalVisible = false;
+                Refresh();
             }
         }
         else
@@ -394,11 +460,10 @@
                 );
                 Input.Id = Guid.NewGuid().ToString();
                 await LoadData();
+                Refresh();
             }
         }
-
         
-
 
 
     }

@@ -1,4 +1,5 @@
 ﻿@page "/CaiDatHeThong/ListPermissionsControl"
+@using DucAnhERP.Helpers
 @using DucAnhERP.ViewModel
 @using DucAnhERP.Models
 @using DucAnhERP.Components.Pages.Common
@@ -16,48 +17,24 @@
         <BodyTemplate>
             <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
                 <div class="row">
+                  
                     <div class="form-floating col-sm-6 col-md-3">
-                        <label for="MajorId">Công ty <span class="text-danger">*</span></label>
-                        <InputSelect class="form-control" @bind-Value="Input.CompanyId">
-                            <option value="" selected>chọn công ty...</option>
-                            @if (listCompany != null)
-                            {
-                                @foreach (var company in listCompany)
-                                {
-                                    <option value="@company.Id">@company.CompanyName</option>
-                                }
-                            }
-                        </InputSelect>
+                        <label for="CompanyId">Công ty</label>
+                        <Select2 Id="CompanyId" Items="@selectCompanys" OnChange="@OnSelectCompany"></Select2>
                         <ValidationMessage For="()=>Input.CompanyId"></ValidationMessage>
                     </div>
+                   
                     <div class="form-floating col-sm-6 col-md-3">
-                        <label for="MajorId">Nghiệp vụ <span class="text-danger">*</span></label>
-                        <InputSelect class="form-control" @bind-Value="Input.MajorId">
-                            <option value="" selected>Chọn nghiệp...</option>
-                            @if (listMajor != null)
-                            {
-                                @foreach (var major in listMajor)
-                                {
-                                    <option value="@major.Id">@major.MajorName</option>
-                                }
-                            }
-                        </InputSelect>
+                        <label for="MajorId">Nghiệp vụ</label>
+                        <Select2 Id="MajorId" Items="@selectMajors" OnChange="@OnSelectMajor"></Select2>
                         <ValidationMessage For="()=>Input.MajorId"></ValidationMessage>
                     </div>
-                  <div class="form-floating col-sm-6 col-md-3">
-                        <label for="MajorId">Người dùng <span class="text-danger">*</span></label>
-                        <InputSelect class="form-control" @bind-Value="Input.UserId">
-                            <option value="" selected>Chọn người dùng...</option>
-                            @if (listApplicationUser != null)
-                            {
-                                @foreach (var user in listApplicationUser)
-                                {
-                                    <option value="@user.Id">@user.UserName</option>
-                                }
-                            }
-                        </InputSelect>
+                 
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="UserId">Người dùng</label>
+                        <Select2 Id="UserId" Items="@selectUsers" OnChange="@OnSelectUser"></Select2>
                         <ValidationMessage For="()=>Input.UserId"></ValidationMessage>
-                  </div>
+                    </div>
                 </div>
 
                 <DataAnnotationsValidator />
@@ -74,46 +51,20 @@
         <EditForm Model="permissionsControlModel" FormName="SearchNghiepVu" OnValidSubmit="@Search">
             <DataAnnotationsValidator />
             <div class="d-flex">
-                <div class="form-group">
-                    <label for="MajorId">Công ty <span class="text-danger"></span></label>
-                    <InputSelect class="form-control" @bind-Value="permissionsControlModel.CompanyId">
-                        <option value="" selected>chọn công ty...</option>
-                        @if (listCompany != null)
-                        {
-                            @foreach (var company in listCompany)
-                            {
-                                <option value="@company.Id">@company.CompanyName</option>
-                            }
-                        }
-                    </InputSelect>
+                <div class="form-floating col-sm-6 col-md-3">
+                    <label for="CompanyId">Công ty</label>
+                    <Select2 Id="CompanyId1" Items="@selectCompanys" OnChange="@OnSelectCompany1"></Select2>
                     <ValidationMessage For="()=>permissionsControlModel.CompanyId"></ValidationMessage>
                 </div>
-                <div class="form-group ml-3">
-                    <label for="MajorId">Nghiệp vụ <span class="text-danger"></span></label>
-                    <InputSelect class="form-control" @bind-Value="permissionsControlModel.MajorId">
-                        <option value="" selected>Chọn nghiệp...</option>
-                        @if (listMajor != null)
-                        {
-                            @foreach (var major in listMajor)
-                            {
-                                <option value="@major.Id">@major.MajorName</option>
-                            }
-                        }
-                    </InputSelect>
+           
+                <div class="form-floating col-sm-3 col-md-3">
+                    <label for="MajorId">Nghiệp vụ</label>
+                    <Select2 Id="MajorId1" Items="@selectMajors" OnChange="@OnSelectMajor1"></Select2>
                     <ValidationMessage For="()=>permissionsControlModel.MajorId"></ValidationMessage>
                 </div>
-                <div class="form-group ml-3">
-                    <label for="MajorId">Người dùng <span class="text-danger">*</span></label>
-                    <InputSelect class="form-control" @bind-Value="permissionsControlModel.UserId">
-                        <option value="" selected>Chọn người dùng...</option>
-                        @if (listApplicationUser != null)
-                        {
-                            @foreach (var user in listApplicationUser)
-                            {
-                                <option value="@user.Id">@user.UserName</option>
-                            }
-                        }
-                    </InputSelect>
+                <div class="form-floating col-sm-3 col-md-3">
+                    <label for="UserId1">Người dùng</label>
+                    <Select2 Id="UserId1" Items="@selectUsers" OnChange="@OnSelectUser1"></Select2>
                     <ValidationMessage For="()=>permissionsControlModel.UserId"></ValidationMessage>
                 </div>
 
@@ -228,6 +179,45 @@
     private string TitleModal = "Thêm";
     private bool isEdit = false;
 
+    private List<SelectedItem> selectMajors = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
+    };
+    private List<SelectedItem> selectCompanys = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
+    }; 
+    private List<SelectedItem> selectUsers = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
+    };
+
+
+    private void OnSelectCompany(SelectedItem selectedItem)
+    {
+        Input.CompanyId = selectedItem.Value;
+    }
+    private void OnSelectCompany1(SelectedItem selectedItem)
+    {
+        permissionsControlModel.CompanyId = selectedItem.Value;
+    }
+
+    private void OnSelectMajor(SelectedItem selectedItem)
+    {
+        Input.MajorId = selectedItem.Value;
+    }
+    private void OnSelectMajor1(SelectedItem selectedItem)
+    {
+        permissionsControlModel.MajorId = selectedItem.Value;
+    }
+    private void OnSelectUser(SelectedItem selectedItem)
+    {
+        Input.UserId = selectedItem.Value;
+    }
+    private void OnSelectUser1(SelectedItem selectedItem)
+    {
+        permissionsControlModel.UserId = selectedItem.Value;
+    }
 
     [Parameter]
     public SuccessModal successModal { get; set; }
@@ -249,7 +239,7 @@
         isModalVisible = isVisible;
         Input = new();
         isEdit = false;
-
+        Refresh();
     }
 
     private void HandleSave()
@@ -265,7 +255,7 @@
         isModalVisible = false;
         Input = new();
         isEdit = false;
-
+        Refresh();
     }
 
     public List<PermissionControlModel> listPermissionsControl
@@ -309,7 +299,34 @@
         listApplicationUser = await UserService.GetAll();
         listModel = await PermissionControlService.GetAllByVM(permissionsControlModel);
         listPermissionsControl = Paging(listModel);
+
+        selectMajors = listMajor.Select(major => new SelectedItem
+            {
+                Value = major.Id,
+                Text = major.MajorName
+            }).ToList();
+
+        // Thêm phần tử mặc định "chọn..."
+        selectMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        selectCompanys = listCompany.Select(major => new SelectedItem
+            {
+                Value = major.Id,
+                Text = major.CompanyName
+            }).ToList();
+
+        // Thêm phần tử mặc định "chọn..."
+        selectCompanys.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+
+        selectUsers = listApplicationUser.Select(major => new SelectedItem
+            {
+                Value = major.Id,
+                Text = major.UserName
+            }).ToList();
+
+        // Thêm phần tử mặc định "chọn..."
+        selectUsers.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
     }
+
 
     private async Task HandleEdit(string id)
     {
@@ -317,6 +334,19 @@
         Input = await PermissionControlService.GetById(id);
         isEdit = true;
         isModalVisible = true;
+
+        foreach (var item in selectMajors)
+        {
+            item.IsSelected = item.Value == Input.MajorId;
+        }
+        foreach (var item in selectUsers)
+        {
+            item.IsSelected = item.Value == Input.UserId;
+        }
+        foreach (var item in selectCompanys)
+        {
+            item.IsSelected = item.Value == Input.CompanyId;
+        }
     }
 
     private string deleteId;
@@ -377,6 +407,7 @@
                 await LoadData();
                 isEdit = false;
                 isModalVisible = false;
+                Refresh();
             }
         }
         else
@@ -406,13 +437,26 @@
                 );
                 Input.Id = Guid.NewGuid().ToString();
                 await LoadData();
+                Refresh();
             }
         }
 
+    }
 
-
-
-
+    private void Refresh()
+    {
+        foreach (var item in selectCompanys)
+        {
+            item.IsSelected = item.Value == "";
+        }
+        foreach (var item in selectMajors)
+        {
+            item.IsSelected = item.Value == "";
+        }
+        foreach (var item in selectUsers)
+        {
+            item.IsSelected = item.Value == "";
+        }
     }
 
     // Xử lý tìm kiếm
@@ -421,8 +465,6 @@
         permissionsControlModel.PageNumber = 1;
         await LoadData();
     }
-
-
 
     // Sắp xếp data
     private void SortTable(string columnName)

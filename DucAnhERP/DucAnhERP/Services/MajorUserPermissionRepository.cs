@@ -199,7 +199,7 @@ namespace DucAnhERP.Services
                             MajorName = major.MajorName,
                             PermissionId = perContr.PermissionId,
                             PermissionName = "",
-                            UserId = perContr.Id,
+                            UserId = user.Id,
                             UserName = user.UserName,
                             DayinWeek = perContr.DayinWeek,
                             CreateAt = perContr.CreateAt,

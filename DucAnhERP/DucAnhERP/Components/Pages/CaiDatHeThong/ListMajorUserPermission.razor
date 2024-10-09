@@ -21,7 +21,7 @@
         <BodyTemplate>
             <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
                 <div class="row">
-                    <div class="form-floating col-sm-6 col-md-3">
+                    @* <div class="form-floating col-sm-6 col-md-3">
                         <label for="CompanyId">Công ty <span class="text-danger">*</span></label>
                         <InputSelect class="form-control" @bind-Value="Input.CompanyId">
                             <option value="" selected>chọn công ty...</option>
@@ -62,8 +62,24 @@
                             }
                         </InputSelect>
                         <ValidationMessage For="()=>Input.UserId"></ValidationMessage>
+                    </div> *@
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="CompanyId">Công ty</label>
+                        <Select2 Id="CompanyId" Items="@selectCompanys" OnChange="@OnSelectCompany"></Select2>
+                        <ValidationMessage For="()=>Input.CompanyId"></ValidationMessage>
                     </div>
 
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="MajorId">Nghiệp vụ</label>
+                        <Select2 Id="MajorId" Items="@selectMajors" OnChange="@OnSelectMajor"></Select2>
+                        <ValidationMessage For="()=>Input.MajorId"></ValidationMessage>
+                    </div>
+
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="UserId">Người dùng</label>
+                        <Select2 Id="UserId" Items="@selectUsers" OnChange="@OnSelectUser"></Select2>
+                        <ValidationMessage For="()=>Input.UserId"></ValidationMessage>
+                    </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <p>Loại quyền: @string.Join(", ", selectedItems.Select(item => item.Text))</p>
                         <MultiSelect Items="newlist" ItemsChanged="OnItemsChanged" />
@@ -93,7 +109,7 @@
         <EditForm Model="majorUserPermissionModel" FormName="SearchNghiepVu" OnValidSubmit="@Search">
             <DataAnnotationsValidator />
             <div class="d-flex">
-                <div class="form-group">
+                @* <div class="form-group">
                     <label for="CompanyId">Công ty <span class="text-danger"></span></label>
                     <InputSelect class="form-control" @bind-Value="majorUserPermissionModel.CompanyId">
                         <option value="" selected>chọn công ty...</option>
@@ -133,6 +149,24 @@
                             }
                         }
                     </InputSelect>
+                    <ValidationMessage For="()=>majorUserPermissionModel.UserId"></ValidationMessage>
+                </div> *@
+
+
+                <div class="form-floating col-sm-6 col-md-3">
+                    <label for="CompanyId">Công ty</label>
+                    <Select2 Id="CompanyId1" Items="@selectCompanys" OnChange="@OnSelectCompany1"></Select2>
+                    <ValidationMessage For="()=>majorUserPermissionModel.CompanyId"></ValidationMessage>
+                </div>
+
+                <div class="form-floating col-sm-3 col-md-3">
+                    <label for="MajorId">Nghiệp vụ</label>
+                    <Select2 Id="MajorId1" Items="@selectMajors" OnChange="@OnSelectMajor1"></Select2>
+                    <ValidationMessage For="()=>majorUserPermissionModel.MajorId"></ValidationMessage>
+                </div>
+                <div class="form-floating col-sm-3 col-md-3">
+                    <label for="UserId1">Người dùng</label>
+                    <Select2 Id="UserId1" Items="@selectUsers" OnChange="@OnSelectUser1"></Select2>
                     <ValidationMessage For="()=>majorUserPermissionModel.UserId"></ValidationMessage>
                 </div>
 
@@ -260,6 +294,45 @@
     private string TitleModal = "Thêm";
     private bool isEdit = false;
 
+    private List<SelectedItem> selectMajors = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
+    };
+    private List<SelectedItem> selectCompanys = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
+    };
+    private List<SelectedItem> selectUsers = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
+    };
+
+
+    private void OnSelectCompany(SelectedItem selectedItem)
+    {
+        Input.CompanyId = selectedItem.Value;
+    }
+    private void OnSelectCompany1(SelectedItem selectedItem)
+    {
+        majorUserPermissionModel.CompanyId = selectedItem.Value;
+    }
+
+    private void OnSelectMajor(SelectedItem selectedItem)
+    {
+        Input.MajorId = selectedItem.Value;
+    }
+    private void OnSelectMajor1(SelectedItem selectedItem)
+    {
+        majorUserPermissionModel.MajorId = selectedItem.Value;
+    }
+    private void OnSelectUser(SelectedItem selectedItem)
+    {
+        Input.UserId = selectedItem.Value;
+    }
+    private void OnSelectUser1(SelectedItem selectedItem)
+    {
+        majorUserPermissionModel.UserId = selectedItem.Value;
+    }
 
     [Parameter]
     public SuccessModal successModal { get; set; }
@@ -340,6 +413,19 @@
             new SelectListItem { Value = "6", Text = "Thứ 7" ,Selected =false},
             new SelectListItem { Value = "0", Text = "Chủ nhật" }
                                    }, "Value", "Text");
+
+        foreach (var item in selectCompanys)
+        {
+            item.IsSelected = item.Value == "";
+        }
+        foreach (var item in selectMajors)
+        {
+            item.IsSelected = item.Value == "";
+        }
+        foreach (var item in selectUsers)
+        {
+            item.IsSelected = item.Value == "";
+        }
     }
     private void ShowModal()
     {
@@ -379,6 +465,7 @@
                 new SelectListItem { Value = "6", Text = "Thứ 7" ,Selected =false},
                 new SelectListItem { Value = "0", Text = "Chủ nhật" }
                  }, "Value", "Text");
+        RefreshInput();
     }
 
     public List<MajorUserPermissionModel> listPermissionsControl
@@ -433,6 +520,32 @@
         listModel = await MajorUserPermissionService.GetAllByVM(majorUserPermissionModel);
 
         listPermissionsControl = Paging(listModel);
+
+        selectMajors = listMajor.Select(major => new SelectedItem
+            {
+                Value = major.Id,
+                Text = major.MajorName
+            }).ToList();
+
+        // Thêm phần tử mặc định "chọn..."
+        selectMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        selectCompanys = listCompany.Select(major => new SelectedItem
+            {
+                Value = major.Id,
+                Text = major.CompanyName
+            }).ToList();
+
+        // Thêm phần tử mặc định "chọn..."
+        selectCompanys.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+
+        selectUsers = listApplicationUser.Select(major => new SelectedItem
+            {
+                Value = major.Id,
+                Text = major.UserName
+            }).ToList();
+
+        // Thêm phần tử mặc định "chọn..."
+        selectUsers.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
     }
 
     private async Task HandleEdit(string id)
@@ -475,6 +588,19 @@
                     item.Selected = true;
                 }
             }
+        }
+
+        foreach (var item in selectMajors)
+        {
+            item.IsSelected = item.Value == Input.MajorId;
+        }
+        foreach (var item in selectUsers)
+        {
+            item.IsSelected = item.Value == Input.UserId;
+        }
+        foreach (var item in selectCompanys)
+        {
+            item.IsSelected = item.Value == Input.CompanyId;
         }
     }
 
@@ -536,7 +662,7 @@
                       progressBarClass: "bg-info",
                       duration: 5000
                   );
-                 
+
                 }
 
             }
@@ -588,6 +714,8 @@
                 RefreshInput();
             }
         }
+
+       
     }
 
     // Xử lý tìm kiếm
