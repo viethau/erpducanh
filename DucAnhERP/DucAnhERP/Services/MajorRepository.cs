@@ -42,7 +42,7 @@ namespace DucAnhERP.Services
                         on major.ParentId equals parent.Id into parentGroup
                         from parent in parentGroup.DefaultIfEmpty()
                         where major.IsActive == 1
-                        orderby major.CreateAt descending
+                        orderby major.Order ascending
                         select new MajorModel
                         {
                             Id = major.Id,
@@ -169,11 +169,21 @@ namespace DucAnhERP.Services
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
-
+            var isExist = await context.MMajorUserPermissions.Where(x => x.MajorId == id && x.IsActive == 1).ToListAsync();
+            var isExist1 = await context.MPermissions.Where(x => x.MajorId == id && x.IsActive == 1).ToListAsync();
             if (entity == null)
             {
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
             }
+            if (isExist !=null && isExist.Count() >0)
+            {
+                throw new Exception($"Nghiệp vụ :{entity.MajorName} đang được sử dụng !");
+            }
+            if (isExist != null && isExist1.Count() > 0)
+            {
+                throw new Exception($"Nghiệp vụ :{entity.MajorName} đang được sử dụng !");
+            }
+
             context.Set<MMajor>().Remove(entity);
             await context.SaveChangesAsync();
         }
@@ -185,7 +195,7 @@ namespace DucAnhERP.Services
                 var model = await GetById(id);
                 if (model == null)
                 {
-                    throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
+                    throw new Exception($"Không tìm thấy bản ghi theo ID: {id} vui lòng tải lại trang!");
                 }
 
                 if (model.CreateAt > baseTime)

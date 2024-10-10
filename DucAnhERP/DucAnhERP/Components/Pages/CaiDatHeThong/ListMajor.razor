@@ -61,19 +61,16 @@
                     <Select2 Id="mySelect2" Items="@selectItems" OnChange="@OnSelectChange"></Select2>
                     <ValidationMessage For="()=>majorModel.ParentId"></ValidationMessage>
                 </div>
-                <div class="form-group ml-5">
+                <div class="form-floating col-sm-3 col-md-3">
                     <label for="majorName">Tên nghiệp vụ</label>
                     <InputText class="form-control" id="majorName" @bind-Value="majorModel.MajorName" />
                     <ValidationMessage For="()=>majorModel.MajorName"></ValidationMessage>
                 </div>
-                <div class="form-group ml-5">
+                <div class="form-floating col-sm-3 col-md-3">
                     <label for="table">Tên bảng</label>
                     <InputText class="form-control" id="table" @bind-Value="majorModel.Table" />
                 </div>
-                <div class="form-group ml-5">
-                    <label for="table">Người tạo</label>
-                    <InputText class="form-control" id="createBy" @bind-Value="majorModel.CreateBy" />
-                </div>
+
                 <div class="form-group ml-5">
                     <label>&nbsp;</label>
                     <button type="submit" class="btn btn-primary form-control">Tìm kiếm</button>
@@ -90,36 +87,33 @@
             <table class="table table-hover table-bordered">
                 <thead class="bg-info">
                     <tr>
-                        <th class="text-center" rowspan="2">
+                        <th class="text-center">
                         </th>
-                        <th class="text-center" rowspan="2" scope="col">
+                        <th class="text-center" scope="col">
                             <div class="pb-3">No.</div>
                         </th>
-                        <th onclick="@(() => SortTable("ParentName"))" rowspan="2" class="text-center sortable" scope="col">
+                        <th onclick="@(() => SortTable("ParentName"))" class="text-center sortable" scope="col">
                             <div class="pb-3">
                                 Nghiệp vụ cha
                                 <span class="arrow @(GetSortStyle("ParentName"))"></span>
                             </div>
                         </th>
-                        <th onclick="@(() => SortTable("MajorName"))" rowspan="2" class="text-center sortable" scope="col">
+                        <th onclick="@(() => SortTable("MajorName"))" class="text-center sortable" scope="col">
                             <div class="pb-3">Tên nghiệp vụ</div>
                             <span class="arrow @(GetSortStyle("MajorName"))"></span>
                         </th>
-                        <th onclick="@(() => SortTable("Order"))" rowspan="2" class="text-center sortable" scope="col" sortable>
+                        <th onclick="@(() => SortTable("Order"))" class="text-center sortable" scope="col" sortable>
                             <div class="pb-3">Thứ tự sắp xếp</div>
                             <span class="arrow @(GetSortStyle("Order"))"></span>
                         </th>
-                        <th onclick="@(() => SortTable("Table"))" rowspan="2" class="text-center sortable" scope="col" sortable>
+                        <th onclick="@(() => SortTable("Table"))" class="text-center sortable" scope="col" sortable>
                             <div class="pb-3">Tên bảng</div>
                             <span class="arrow @(GetSortStyle("Table"))"></span>
                         </th>
-                        <th class="text-center" colspan="2" scope="col">Thông tin tạo</th>
+
 
                     </tr>
-                    <tr>
-                        <th class="text-center" scope="col">Người tạo</th>
-                        <th class="text-center" scope="col">Ngày tạo</th>
-                    </tr>
+
                 </thead>
                 @if (listMajor.Any())
                 {
@@ -147,8 +141,6 @@
                                 <td class="text-left">@item.MajorName</td>
                                 <td class="text-center">@item.Order</td>
                                 <td class="text-left">@item.Table</td>
-                                <td class="text-center">@item.CreateBy</td>
-                                <td class="text-center">@item.CreateAt</td>
                             </tr>
                         }
 
@@ -190,6 +182,7 @@
     private bool isLoading = false;
     private string TitleModal = "Thêm";
     private bool isEdit = false;
+    private DateTime baseTime;
 
     private List<SelectedItem> selectItems = new List<SelectedItem>
     {    new SelectedItem { Value = "", Text = "chọn...",IsSelected=true },
@@ -282,6 +275,7 @@
 
     private async Task LoadData()
     {
+
         listParentMajor = await MajorService.GetAllParentMajor();
 
         selectItems = listParentMajor.Select(major => new SelectedItem
@@ -296,26 +290,41 @@
         var majors = await MajorService.GetAll(majorModel);
         listModel = majors;
         listMajor = Paging(majors);
+        baseTime = DateTime.Now;
+
     }
     private async Task LoadMajor()
     {
         var majors = await MajorService.GetAll(majorModel);
         listModel = majors;
         listMajor = Paging(majors);
-
     }
-
 
     private async Task HandleEdit(string id)
     {
-        TitleModal = "Cập nhật!";
-        Input = await MajorRepository.GetById(id);
-        isEdit = true;
-        isModalVisible = true;
-        foreach (var item in selectItems)
+        try
         {
-            item.IsSelected = item.Value == Input.ParentId;
+            TitleModal = "Cập nhật!";
+            Input = await MajorRepository.GetById(id);
+            isEdit = true;
+            isModalVisible = true;
+            foreach (var item in selectItems)
+            {
+                item.IsSelected = item.Value == Input.ParentId;
+            }
         }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                            "Thông báo",
+                            ex.Message,
+                            cssClass: "toast-danger",
+                           iconClass: "fa fa-exclamation-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
+        }
+
     }
 
     private string deleteId;
@@ -330,16 +339,39 @@
 
     private async Task HandleResponseClick(bool confirmed)
     {
-        if (confirmed)
+        try
         {
-            if (!string.IsNullOrEmpty(deleteId))
+            if (confirmed)
             {
-                await MajorService.DeleteById(deleteId);
-                ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
-                await LoadData();
-                deleteId = "";
+                if (!string.IsNullOrEmpty(deleteId))
+                {
+                    string[] ids = { deleteId };
+                    // Check data bị update bởi người dùng khác
+                    var isValid = await MajorService.CheckExclusive(ids, baseTime);
+                    if (isValid)
+                    {
+                        await MajorService.DeleteById(deleteId);
+                        ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                        await LoadData();
+                        deleteId = "";
+                    }
+
+                }
             }
         }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                            "Thông báo",
+                            ex.Message,
+                            cssClass: "toast-danger",
+                           iconClass: "fa fa-exclamation-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
+
+        }
+
     }
 
     private void Refresh()
@@ -352,40 +384,118 @@
 
     private async Task HandleValidSubmit()
     {
-        //Validate
-        var majorObj = await MajorService.GetMajorByName(Input.MajorName);
-
-        if (majorObj != null)
+        try
         {
-            if (majorObj.Table.Trim().ToUpper() == Input.Table.Trim().ToUpper())
+            //Validate
+            var majorObj = await MajorService.GetMajorByName(Input.MajorName);
+
+            if (majorObj != null)
             {
-                ToastService.ShowToast(
+                if ((majorObj.Table.Trim().ToUpper() == Input.Table.Trim().ToUpper() && majorObj.MajorName.Trim().ToUpper() == Input.MajorName.Trim().ToUpper()) || majorObj.MajorName.Trim().ToUpper() == Input.MajorName.Trim().ToUpper())
+                {
+                    if (isEdit && majorObj.Id == Input.Id)
+                    {
+                        string[] ids = { Input.Id };
+                        // Check data bị update bởi người dùng khác
+                        var isValid = await MajorService.CheckExclusive(ids, baseTime);
+                        if (isValid)
+                        {
+                            await MajorService.Update(Input);
+                            ToastService.ShowToast(
+                                "Thông báo",
+                                "Cập nhật thành công.",
+                                iconClass: "fa fa-check-circle",
+                                progressBarClass: "bg-info",
+                                duration: 5000
+                            );
+                            Input.Id = Guid.NewGuid().ToString();
+                            await LoadData();
+                            isEdit = false;
+                            isModalVisible = false;
+                            Refresh();
+                        }
+
+                    }
+                    else
+                    {
+                        ToastService.ShowToast(
+                               "Thông báo",
+                               "Đã tồn tại tên nghiệp vụ và tên bảng giống nội dung bạn đã nhập. Vui lòng thay đổi nội dung nhập và thử lại!",
+                               cssClass: "toast-danger",
+                              iconClass: "fa fa-exclamation-circle",
+                               progressBarClass: "bg-info",
+                               duration: 5000
+                           );
+                        return;
+                    }
+                }
+                else
+                {
+                    if (isEdit)
+                    {
+                        string[] ids = { Input.Id };
+                        // Check data bị update bởi người dùng khác
+                        var isValid = await MajorService.CheckExclusive(ids, baseTime);
+                        if (isValid)
+                        {
+                            await MajorService.Update(Input);
+                            ToastService.ShowToast(
+                                "Thông báo",
+                                "Cập nhật thành công.",
+                                iconClass: "fa fa-check-circle",
+                                progressBarClass: "bg-info",
+                                duration: 5000
+                            );
+                            Input.Id = Guid.NewGuid().ToString();
+                            await LoadData();
+                            isEdit = false;
+                            isModalVisible = false;
+                            Refresh();
+                        }
+
+                    }
+                    else
+                    {
+                        var result = await MajorService.AddMajor(Input);
+                        ToastService.ShowToast(
                             "Thông báo",
-                            "Đã tồn tại tên nghiệp vụ và tên bảng giống nội dung bạn đã nhập. Vui lòng thay đổi nội dung nhập và thử lại!",
-                            cssClass: "toast-danger",
-                           iconClass: "fa fa-exclamation-circle",
+                            "Thêm thành công.",
+                            iconClass: "fa fa-check-circle",
                             progressBarClass: "bg-info",
                             duration: 5000
                         );
-                return;
+                        Input.Id = Guid.NewGuid().ToString();
+                        await LoadData();
+                        Refresh();
+                    }
+                }
+
+
             }
             else
             {
                 if (isEdit)
                 {
-                    await MajorService.Update(Input);
-                    ToastService.ShowToast(
-                        "Thông báo",
-                        "Cập nhật thành công.",
-                        iconClass: "fa fa-check-circle",
-                        progressBarClass: "bg-info",
-                        duration: 5000
-                    );
-                    Input.Id = Guid.NewGuid().ToString();
-                    await LoadData();
-                    isEdit = false;
-                    isModalVisible = false;
-                    Refresh();
+                    string[] ids = { Input.Id };
+                    // Check data bị update bởi người dùng khác
+                    var isValid = await MajorService.CheckExclusive(ids, baseTime);
+                    if (isValid)
+                    {
+                        await MajorService.Update(Input);
+                        ToastService.ShowToast(
+                            "Thông báo",
+                            "Cập nhật thành công.",
+                            iconClass: "fa fa-check-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
+                        Input.Id = Guid.NewGuid().ToString();
+                        await LoadData();
+                        isEdit = false;
+                        isModalVisible = false;
+                        Refresh();
+                    }
+
                 }
                 else
                 {
@@ -399,44 +509,21 @@
                     );
                     Input.Id = Guid.NewGuid().ToString();
                     await LoadData();
-                    Refresh();
                 }
             }
 
-
         }
-        else
+        catch (Exception ex)
         {
-            if (isEdit)
-            {
-                await MajorService.Update(Input);
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "Cập nhật thành công.",
-                    iconClass: "fa fa-check-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                Input.Id = Guid.NewGuid().ToString();
-                await LoadData();
-                isEdit = false;
-                isModalVisible = false;
-            }
-            else
-            {
-                var result = await MajorService.AddMajor(Input);
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "Thêm thành công.",
-                    iconClass: "fa fa-check-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                Input.Id = Guid.NewGuid().ToString();
-                await LoadData();
-            }
+            ToastService.ShowToast(
+                                "Thông báo",
+                               ex.Message,
+                                cssClass: "toast-danger",
+                               iconClass: "fa fa-exclamation-circle",
+                                progressBarClass: "bg-info",
+                                duration: 5000
+                            );
         }
-
 
     }
 

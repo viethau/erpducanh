@@ -21,48 +21,7 @@
         <BodyTemplate>
             <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
                 <div class="row">
-                    @* <div class="form-floating col-sm-6 col-md-3">
-                        <label for="CompanyId">Công ty <span class="text-danger">*</span></label>
-                        <InputSelect class="form-control" @bind-Value="Input.CompanyId">
-                            <option value="" selected>chọn công ty...</option>
-                            @if (listCompany != null)
-                            {
-                                @foreach (var company in listCompany)
-                                {
-                                    <option value="@company.Id">@company.CompanyName</option>
-                                }
-                            }
-                        </InputSelect>
-                        <ValidationMessage For="()=>Input.CompanyId"></ValidationMessage>
-                    </div>
-                    <div class="form-floating col-sm-6 col-md-3">
-                        <label for="MajorId">Nghiệp vụ <span class="text-danger">*</span></label>
-                        <InputSelect class="form-control" @bind-Value="Input.MajorId">
-                            <option value="" selected>Chọn nghiệp...</option>
-                            @if (listMajor != null)
-                            {
-                                @foreach (var major in listMajor)
-                                {
-                                    <option value="@major.Id">@major.MajorName</option>
-                                }
-                            }
-                        </InputSelect>
-                        <ValidationMessage For="()=>Input.MajorId"></ValidationMessage>
-                    </div>
-                    <div class="form-floating col-sm-6 col-md-3">
-                        <label for="UserId">Người dùng <span class="text-danger">*</span></label>
-                        <InputSelect class="form-control" @bind-Value="Input.UserId">
-                            <option value="" selected>Chọn người dùng...</option>
-                            @if (listApplicationUser != null)
-                            {
-                                @foreach (var user in listApplicationUser)
-                                {
-                                    <option value="@user.Id">@user.UserName</option>
-                                }
-                            }
-                        </InputSelect>
-                        <ValidationMessage For="()=>Input.UserId"></ValidationMessage>
-                    </div> *@
+                    
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="CompanyId">Công ty</label>
                         <Select2 Id="CompanyId" Items="@selectCompanys" OnChange="@OnSelectCompany"></Select2>
@@ -109,49 +68,7 @@
         <EditForm Model="majorUserPermissionModel" FormName="SearchNghiepVu" OnValidSubmit="@Search">
             <DataAnnotationsValidator />
             <div class="d-flex">
-                @* <div class="form-group">
-                    <label for="CompanyId">Công ty <span class="text-danger"></span></label>
-                    <InputSelect class="form-control" @bind-Value="majorUserPermissionModel.CompanyId">
-                        <option value="" selected>chọn công ty...</option>
-                        @if (listCompany != null)
-                        {
-                            @foreach (var company in listCompany)
-                            {
-                                <option value="@company.Id">@company.CompanyName</option>
-                            }
-                        }
-                    </InputSelect>
-                    <ValidationMessage For="()=>majorUserPermissionModel.CompanyId"></ValidationMessage>
-                </div>
-                <div class="form-group ml-3">
-                    <label for="MajorId">Nghiệp vụ <span class="text-danger"></span></label>
-                    <InputSelect class="form-control" @bind-Value="majorUserPermissionModel.MajorId">
-                        <option value="" selected>Chọn nghiệp...</option>
-                        @if (listMajor != null)
-                        {
-                            @foreach (var major in listMajor)
-                            {
-                                <option value="@major.Id">@major.MajorName</option>
-                            }
-                        }
-                    </InputSelect>
-                    <ValidationMessage For="()=>majorUserPermissionModel.MajorId"></ValidationMessage>
-                </div>
-                <div class="form-group ml-3">
-                    <label for="UserId">Người dùng <span class="text-danger"></span></label>
-                    <InputSelect class="form-control" @bind-Value="majorUserPermissionModel.UserId">
-                        <option value="" selected>Chọn người dùng...</option>
-                        @if (listApplicationUser != null)
-                        {
-                            @foreach (var user in listApplicationUser)
-                            {
-                                <option value="@user.Id">@user.UserName</option>
-                            }
-                        }
-                    </InputSelect>
-                    <ValidationMessage For="()=>majorUserPermissionModel.UserId"></ValidationMessage>
-                </div> *@
-
+                
 
                 <div class="form-floating col-sm-6 col-md-3">
                     <label for="CompanyId">Công ty</label>
@@ -293,6 +210,7 @@
     private bool isLoading = false;
     private string TitleModal = "Thêm";
     private bool isEdit = false;
+    private DateTime baseTime;
 
     private List<SelectedItem> selectMajors = new List<SelectedItem>
     {
@@ -502,105 +420,134 @@
 
     private async Task LoadData()
     {
+        try
+        {
+            listMajor = await MajorRepository.GetAll();
+            listCompany = await CompanyService.GetAll();
+            listApplicationUser = await UserService.GetAll();
+            listPermission = await PermissionService.GetAll();
+            newlist = new MultiSelectList(
+               listPermission.Select(permission => new SelectListItem
+                   {
+                       Value = permission.Id,
+                       Text = permission.PermissionName,
+                       Selected = false
+                   }).ToList(),
+               "Value",
+               "Text"
+               );
+            listModel = await MajorUserPermissionService.GetAllByVM(majorUserPermissionModel);
 
-        listMajor = await MajorRepository.GetAll();
-        listCompany = await CompanyService.GetAll();
-        listApplicationUser = await UserService.GetAll();
-        listPermission = await PermissionService.GetAll();
-        newlist = new MultiSelectList(
-           listPermission.Select(permission => new SelectListItem
-               {
-                   Value = permission.Id,
-                   Text = permission.PermissionName,
-                   Selected = false
-               }).ToList(),
-           "Value",
-           "Text"
-           );
-        listModel = await MajorUserPermissionService.GetAllByVM(majorUserPermissionModel);
+            listPermissionsControl = Paging(listModel);
 
-        listPermissionsControl = Paging(listModel);
+            selectMajors = listMajor.Select(major => new SelectedItem
+                {
+                    Value = major.Id,
+                    Text = major.MajorName
+                }).ToList();
 
-        selectMajors = listMajor.Select(major => new SelectedItem
-            {
-                Value = major.Id,
-                Text = major.MajorName
-            }).ToList();
+            // Thêm phần tử mặc định "chọn..."
+            selectMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            selectCompanys = listCompany.Select(major => new SelectedItem
+                {
+                    Value = major.Id,
+                    Text = major.CompanyName
+                }).ToList();
 
-        // Thêm phần tử mặc định "chọn..."
-        selectMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
-        selectCompanys = listCompany.Select(major => new SelectedItem
-            {
-                Value = major.Id,
-                Text = major.CompanyName
-            }).ToList();
+            // Thêm phần tử mặc định "chọn..."
+            selectCompanys.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
 
-        // Thêm phần tử mặc định "chọn..."
-        selectCompanys.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            selectUsers = listApplicationUser.Select(major => new SelectedItem
+                {
+                    Value = major.Id,
+                    Text = major.UserName
+                }).ToList();
 
-        selectUsers = listApplicationUser.Select(major => new SelectedItem
-            {
-                Value = major.Id,
-                Text = major.UserName
-            }).ToList();
+            // Thêm phần tử mặc định "chọn..."
+            selectUsers.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            baseTime = DateTime.Now;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                      "Thông báo",
+                      ex.Message,
+                      cssClass: "toast-danger",
+                     iconClass: "fa fa-exclamation-circle",
+                      progressBarClass: "bg-info",
+                      duration: 7000
+                  );
+        }
 
-        // Thêm phần tử mặc định "chọn..."
-        selectUsers.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
     }
 
     private async Task HandleEdit(string id)
     {
-        TitleModal = "Cập nhật!";
-        Input = await MajorUserPermissionService.GetById(id);
-        isEdit = true;
-        isModalVisible = true;
-        if (!string.IsNullOrEmpty(Input.PermissionId))
+        try
         {
-            // Chuyển đổi chuỗi JSON thành danh sách các quyền đã chọn (SelectedItem)
-            selectedItemstemp = JsonSerializer.Deserialize<List<SelectedItem>>(Input.PermissionId);
-
-            // Thiết lập giá trị đã chọn dựa trên `selectedItemstemp`
-            foreach (var item in newlist)
+            TitleModal = "Cập nhật!";
+            Input = await MajorUserPermissionService.GetById(id);
+            isEdit = true;
+            isModalVisible = true;
+            if (!string.IsNullOrEmpty(Input.PermissionId))
             {
-                // Kiểm tra nếu quyền này đã được chọn (dựa trên Value)
-                var selected = selectedItemstemp.FirstOrDefault(i => i.Value == item.Value);
-                if (selected != null)
+                // Chuyển đổi chuỗi JSON thành danh sách các quyền đã chọn (SelectedItem)
+                selectedItemstemp = JsonSerializer.Deserialize<List<SelectedItem>>(Input.PermissionId);
+
+                // Thiết lập giá trị đã chọn dựa trên `selectedItemstemp`
+                foreach (var item in newlist)
                 {
-                    // Đánh dấu quyền này là đã được chọn
-                    item.Selected = true;
+                    // Kiểm tra nếu quyền này đã được chọn (dựa trên Value)
+                    var selected = selectedItemstemp.FirstOrDefault(i => i.Value == item.Value);
+                    if (selected != null)
+                    {
+                        // Đánh dấu quyền này là đã được chọn
+                        item.Selected = true;
+                    }
                 }
             }
-        }
-        if (!string.IsNullOrEmpty(Input.DayinWeek))
-        {
-
-            // Chuyển đổi chuỗi JSON thành danh sách các quyền đã chọn (SelectedItem)
-            selectedItemDaysTemp = JsonSerializer.Deserialize<List<SelectedItem>>(Input.DayinWeek);
-
-            // Thiết lập giá trị đã chọn dựa trên `selectedItemstemp`
-            foreach (var item in listDayinWeek)
+            if (!string.IsNullOrEmpty(Input.DayinWeek))
             {
-                // Kiểm tra nếu quyền này đã được chọn (dựa trên Value)
-                var selected = selectedItemDaysTemp.FirstOrDefault(i => i.Value == item.Value);
-                if (selected != null)
+
+                // Chuyển đổi chuỗi JSON thành danh sách các quyền đã chọn (SelectedItem)
+                selectedItemDaysTemp = JsonSerializer.Deserialize<List<SelectedItem>>(Input.DayinWeek);
+
+                // Thiết lập giá trị đã chọn dựa trên `selectedItemstemp`
+                foreach (var item in listDayinWeek)
                 {
-                    // Đánh dấu quyền này là đã được chọn
-                    item.Selected = true;
+                    // Kiểm tra nếu quyền này đã được chọn (dựa trên Value)
+                    var selected = selectedItemDaysTemp.FirstOrDefault(i => i.Value == item.Value);
+                    if (selected != null)
+                    {
+                        // Đánh dấu quyền này là đã được chọn
+                        item.Selected = true;
+                    }
                 }
             }
-        }
 
-        foreach (var item in selectMajors)
-        {
-            item.IsSelected = item.Value == Input.MajorId;
+            foreach (var item in selectMajors)
+            {
+                item.IsSelected = item.Value == Input.MajorId;
+            }
+            foreach (var item in selectUsers)
+            {
+                item.IsSelected = item.Value == Input.UserId;
+            }
+            foreach (var item in selectCompanys)
+            {
+                item.IsSelected = item.Value == Input.CompanyId;
+            }
         }
-        foreach (var item in selectUsers)
+        catch (Exception ex)
         {
-            item.IsSelected = item.Value == Input.UserId;
-        }
-        foreach (var item in selectCompanys)
-        {
-            item.IsSelected = item.Value == Input.CompanyId;
+            ToastService.ShowToast(
+                      "Thông báo",
+                      ex.Message,
+                      cssClass: "toast-danger",
+                     iconClass: "fa fa-exclamation-circle",
+                      progressBarClass: "bg-info",
+                      duration: 7000
+                  );
         }
     }
 
@@ -616,106 +563,146 @@
 
     private async Task HandleResponseClick(bool confirmed)
     {
-        if (confirmed)
+        try
         {
-            if (!string.IsNullOrEmpty(deleteId))
+            if (confirmed)
             {
-                await MajorUserPermissionService.DeleteById(deleteId);
-                ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
-                await LoadData();
-                deleteId = "";
+                if (!string.IsNullOrEmpty(deleteId))
+                {
+                    string[] ids = {deleteId};
+                    var isValid = await MajorUserPermissionService.CheckExclusive(ids, baseTime);
+                    if (isValid)
+                    {
+                        await MajorUserPermissionService.DeleteById(deleteId);
+                        ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                        await LoadData();
+                        deleteId = "";
+                    }
+
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                       "Thông báo",
+                       ex.Message,
+                       cssClass: "toast-danger",
+                      iconClass: "fa fa-exclamation-circle",
+                       progressBarClass: "bg-info",
+                       duration: 7000
+                   );
         }
     }
 
     private async Task HandleValidSubmit()
     {
-
-        var condition = await MajorUserPermissionRepository.GetExist(Input);
-        if (isEdit)
+        try
         {
-            if (condition != null && condition.Count() > 0)
+            var condition = await MajorUserPermissionRepository.GetExist(Input);
+            if (isEdit)
             {
-                if(condition[0].Id == Input.Id)
+                if (condition != null && condition.Count() > 0)
                 {
-                    await MajorUserPermissionService.Update(Input);
+                    if (condition[0].Id == Input.Id)
+                    {
+                        string[] ids = { Input.Id };
+                        var isValid = await MajorUserPermissionService.CheckExclusive(ids, baseTime);
+                        if (isValid)
+                        {
+                            await MajorUserPermissionService.Update(Input);
+                            ToastService.ShowToast(
+                                "Thông báo",
+                                "cập nhật thành công.",
+                                iconClass: "fa fa-check-circle",
+                                progressBarClass: "bg-info",
+                                duration: 5000
+                            );
+                            Input.Id = Guid.NewGuid().ToString();
+                            await LoadData();
+                            isEdit = false;
+                            isModalVisible = false;
+                            RefreshInput();
+                        }
+                    }
+                    else
+                    {
+                        ToastService.ShowToast(
+                          "Thông báo",
+                           "Đã tồn tại",
+                          cssClass: "toast-danger",
+                         iconClass: "fa fa-exclamation-circle",
+                          progressBarClass: "bg-info",
+                          duration: 5000
+                      );
+
+                    }
+
+                }
+                else
+                {
+                    string[] ids = { Input.Id };
+                    var isValid = await MajorUserPermissionService.CheckExclusive(ids, baseTime);
+                    if (isValid)
+                    {
+                        await MajorUserPermissionService.Update(Input);
+                        ToastService.ShowToast(
+                            "Thông báo",
+                            "cập nhật thành công.",
+                            iconClass: "fa fa-check-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
+                        Input.Id = Guid.NewGuid().ToString();
+                        await LoadData();
+                        isEdit = false;
+                        isModalVisible = false;
+                        RefreshInput();
+                    }
+                }
+            }
+            else
+            {
+                if (condition != null && condition.Count() > 0)
+                {
+                    ToastService.ShowToast(
+                           "Thông báo",
+                            "Đã tồn tại",
+                           cssClass: "toast-danger",
+                          iconClass: "fa fa-exclamation-circle",
+                           progressBarClass: "bg-info",
+                           duration: 5000
+                       );
+                    return;
+
+                }
+                else
+                {
+                    await MajorUserPermissionRepository.InsertById(Input);
                     ToastService.ShowToast(
                         "Thông báo",
-                        "cập nhật thành công.",
+                        "Thêm thành công.",
                         iconClass: "fa fa-check-circle",
                         progressBarClass: "bg-info",
                         duration: 5000
                     );
                     Input.Id = Guid.NewGuid().ToString();
                     await LoadData();
-                    isEdit = false;
-                    isModalVisible = false;
                     RefreshInput();
                 }
-                else
-                {
-                    ToastService.ShowToast(
-                      "Thông báo",
-                       "Đã tồn tại",
-                      cssClass: "toast-danger",
-                     iconClass: "fa fa-exclamation-circle",
-                      progressBarClass: "bg-info",
-                      duration: 5000
-                  );
-
-                }
-
-            }
-            else
-            {
-
-                await MajorUserPermissionService.Update(Input);
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "cập nhật thành công.",
-                    iconClass: "fa fa-check-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                Input.Id = Guid.NewGuid().ToString();
-                await LoadData();
-                isEdit = false;
-                isModalVisible = false;
-                RefreshInput();
             }
         }
-        else
+        catch (Exception ex)
         {
-            if (condition != null && condition.Count() > 0)
-            {
-                ToastService.ShowToast(
+            ToastService.ShowToast(
                        "Thông báo",
-                        "Đã tồn tại",
+                       ex.Message,
                        cssClass: "toast-danger",
                       iconClass: "fa fa-exclamation-circle",
                        progressBarClass: "bg-info",
-                       duration: 5000
+                       duration: 7000
                    );
-                return;
-
-            }
-            else
-            {
-                await MajorUserPermissionRepository.InsertById(Input);
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "Thêm thành công.",
-                    iconClass: "fa fa-check-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                Input.Id = Guid.NewGuid().ToString();
-                await LoadData();
-                RefreshInput();
-            }
         }
-
-       
     }
 
     // Xử lý tìm kiếm

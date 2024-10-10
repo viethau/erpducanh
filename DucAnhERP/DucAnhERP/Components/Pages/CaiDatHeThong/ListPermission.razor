@@ -17,39 +17,13 @@
         <BodyTemplate>
             <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
                 <div class="row">
-                    @* <div class="form-floating col-sm-6 col-md-3">
-                        <label for="MajorId">Nghiệp vụ <span class="text-danger">*</span></label>
-                        <select id="MajorId" class="form-control" @bind="Input.MajorId">
-                            <option value="" selected>Nghiệp vụ...</option>
-                            @if (listMajor != null)
-                            {
-                                @foreach (var item in listMajor)
-                                {
-                                    <option value="@item.Id">@item.MajorName</option>
-                                }
-                            }
-                        </select>
-                        <ValidationMessage For="()=>Input.MajorId"></ValidationMessage>
-                    </div> *@
+                  
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="MajorId">Nghiệp vụ</label>
                         <Select2 Id="MajorId" Items="@selectMajors" OnChange="@OnSelectMajor"></Select2>
                         <ValidationMessage For="()=>Input.MajorId"></ValidationMessage>
                     </div>
-                   @*  <div class="form-floating col-sm-6 col-md-3">
-                        <label for="PermissionType">Loại quyền <span class="text-danger">*</span></label>
-                        <select id="PermissionType" class="form-control" @bind="Input.PermissionType">
-                            <option value="0" selected >Loại quyền...</option>
-                            @if (listPermissionType != null)
-                            {
-                                @foreach (var item in listPermissionType)
-                                {
-                                    <option value="@item.Key">@item.Value</option>
-                                }
-                            }
-                        </select>
-                        <ValidationMessage For="()=>Input.PermissionType"></ValidationMessage>
-                    </div> *@
+                   
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ParentId">Loại quyền</label>
                         <Select2 Id="ParentId" Items="@selectPermission" OnChange="@OnSelectPermission"></Select2>
@@ -76,21 +50,7 @@
         <EditForm Model="permissionModel" FormName="SearchNghiepVu" OnValidSubmit="@Search">
             <DataAnnotationsValidator />
             <div class="d-flex row">
-                @* <div class="form-group">
-                    <label for="MajorId">Nghiệp vụ <span class="text-danger"></span></label>
-                    
-                    <InputSelect class="form-control" @bind-Value="permissionModel.MajorId">
-                        <option value="" selected>Chọn nghiệp vụ...</option>
-                        @if (listMajor != null)
-                        {
-                            @foreach (var major in listMajor)
-                            {
-                                <option value="@major.Id">@major.MajorName</option>
-                            }
-                        }
-                    </InputSelect>
-                    <ValidationMessage For="()=>permissionModel.MajorId"></ValidationMessage>
-                </div> *@
+              
                 <div class="form-floating col-sm-3 col-md-3">
                     <label for="MajorId">Nghiệp vụ</label>
                     <Select2 Id="MajorId1" Items="@selectMajors" OnChange="@OnSelectMajor1"></Select2>
@@ -210,7 +170,7 @@
     private bool isLoading = false;
     private string TitleModal = "Thêm";
     private bool isEdit = false;
-
+    private DateTime baseTime;
 
     private List<SelectedItem> selectPermission = new List<SelectedItem>
     {    
@@ -315,49 +275,79 @@
     private async Task LoadData()
     {
 
-        listMajor = await MajorRepository.GetAll();
-        listModel = await PermissionService.GetAllByVM(permissionModel);
-        if (listModel != null)
+        try
         {
-            foreach (var item in listModel)
-            {
-                foreach (var type in selectPermission)
-                {
-                    if (int.TryParse(type.Value, out var parsedValue) && item.PermissionType == parsedValue)
-                    {
-                        item.PermissionTypeName = type.Text;
-                        break;
-                    }
 
+            listMajor = await MajorRepository.GetAll();
+            listModel = await PermissionService.GetAllByVM(permissionModel);
+            if (listModel != null)
+            {
+                foreach (var item in listModel)
+                {
+                    foreach (var type in selectPermission)
+                    {
+                        if (int.TryParse(type.Value, out var parsedValue) && item.PermissionType == parsedValue)
+                        {
+                            item.PermissionTypeName = type.Text;
+                            break;
+                        }
+
+                    }
                 }
             }
+
+            selectMajors = listMajor.Select(major => new SelectedItem
+                {
+                    Value = major.Id,
+                    Text = major.MajorName
+                }).ToList();
+
+            // Thêm phần tử mặc định "chọn..."
+            selectMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+
+            listPermisson = Paging(listModel);
+            baseTime = DateTime.Now;
         }
-
-        selectMajors = listMajor.Select(major => new SelectedItem
-            {
-                Value = major.Id,
-                Text = major.MajorName
-            }).ToList();
-
-        // Thêm phần tử mặc định "chọn..."
-        selectMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
-
-        listPermisson = Paging(listModel);
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                      "Thông báo",
+                      ex.Message,
+                      cssClass: "toast-danger",
+                     iconClass: "fa fa-exclamation-circle",
+                      progressBarClass: "bg-info",
+                      duration: 7000
+                  );
+        }
     }
 
     private async Task HandleEdit(string id)
     {
-        TitleModal = "Cập nhật!";
-        Input = await PermissionService.GetById(id);
-        isEdit = true;
-        isModalVisible = true;
-        foreach (var item in selectMajors)
+        try
         {
-            item.IsSelected = item.Value == Input.MajorId;
+            TitleModal = "Cập nhật!";
+            Input = await PermissionService.GetById(id);
+            isEdit = true;
+            isModalVisible = true;
+            foreach (var item in selectMajors)
+            {
+                item.IsSelected = item.Value == Input.MajorId;
+            }
+            foreach (var item in selectPermission)
+            {
+                item.IsSelected = item.Value == Input.PermissionType.ToString();
+            }
         }
-        foreach (var item in selectPermission)
+        catch (Exception ex)
         {
-            item.IsSelected = item.Value == Input.PermissionType.ToString();
+            ToastService.ShowToast(
+                      "Thông báo",
+                      ex.Message,
+                      cssClass: "toast-danger",
+                     iconClass: "fa fa-exclamation-circle",
+                      progressBarClass: "bg-info",
+                      duration: 7000
+                  );
         }
     }
 
@@ -373,15 +363,35 @@
 
     private async Task HandleResponseClick(bool confirmed)
     {
-        if (confirmed)
+        try
         {
-            if (!string.IsNullOrEmpty(deleteId))
+            if (confirmed)
             {
-                await PermissionService.DeleteById(deleteId);
-                ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
-                await LoadData();
-                deleteId = "";
+                if (!string.IsNullOrEmpty(deleteId))
+                {
+                    string[] ids = { deleteId };
+                    var isValid = await PermissionService.CheckExclusive(ids, baseTime);
+                    if (isValid)
+                    {
+                        await PermissionService.DeleteById(deleteId);
+                        ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                        await LoadData();
+                        deleteId = "";
+                    }
+
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                      "Thông báo",
+                      ex.Message,
+                      cssClass: "toast-danger",
+                     iconClass: "fa fa-exclamation-circle",
+                      progressBarClass: "bg-info",
+                      duration: 7000
+                  );
         }
     }
 
@@ -399,73 +409,88 @@
 
     private async Task HandleValidSubmit()
     {
-
-        var condition =  await PermissionService.GetExist(Input);
-        if (isEdit)
+        try
         {
-            if (condition != null && condition.Count() > 0 && Input.PermissionName.ToUpper().Trim() == condition[0]?.PermissionName?.ToUpper().Trim())
+            var condition = await PermissionService.GetExist(Input);
+            if (isEdit)
             {
-                ToastService.ShowToast(
-                       "Thông báo",
-                        "Đã tồn tại",
-                       cssClass: "toast-danger",
-                      iconClass: "fa fa-exclamation-circle",
-                       progressBarClass: "bg-info",
-                       duration: 5000
-                   );
-                return;
+                if (condition != null && condition.Count() > 0 && Input.PermissionName.ToUpper().Trim() == condition[0]?.PermissionName?.ToUpper().Trim())
+                {
+                    ToastService.ShowToast(
+                           "Thông báo",
+                            "Đã tồn tại",
+                           cssClass: "toast-danger",
+                          iconClass: "fa fa-exclamation-circle",
+                           progressBarClass: "bg-info",
+                           duration: 5000
+                       );
+                    return;
 
+                }
+                else
+                {
+                    string[] ids = { Input.Id };
+                    var isValid = await PermissionService.CheckExclusive(ids, baseTime);
+                    if (isValid)
+                    {
+                        await PermissionService.Update(Input);
+                        ToastService.ShowToast(
+                            "Thông báo",
+                            "cập nhật thành công.",
+                            iconClass: "fa fa-check-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
+                        Input.Id = Guid.NewGuid().ToString();
+                        await LoadData();
+                        isEdit = false;
+                        isModalVisible = false;
+                        Refresh();
+                    }
+                }
             }
             else
             {
-                await PermissionService.Update(Input);
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "cập nhật thành công.",
-                    iconClass: "fa fa-check-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                Input.Id = Guid.NewGuid().ToString();
-                await LoadData();
-                isEdit = false;
-                isModalVisible = false;
-                Refresh();
+                if (condition != null && condition.Count() > 0)
+                {
+                    ToastService.ShowToast(
+                           "Thông báo",
+                            "Đã tồn tại",
+                           cssClass: "toast-danger",
+                          iconClass: "fa fa-exclamation-circle",
+                           progressBarClass: "bg-info",
+                           duration: 5000
+                       );
+                    return;
+
+                }
+                else
+                {
+                    await PermissionService.Insert(Input);
+                    ToastService.ShowToast(
+                        "Thông báo",
+                        "Thêm thành công.",
+                        iconClass: "fa fa-check-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
+                    Input.Id = Guid.NewGuid().ToString();
+                    await LoadData();
+                    Refresh();
+                }
             }
         }
-        else
+        catch (Exception ex)
         {
-            if (condition != null && condition.Count() >0 )
-            {
-                ToastService.ShowToast(
-                       "Thông báo",
-                        "Đã tồn tại",
-                       cssClass: "toast-danger",
-                      iconClass: "fa fa-exclamation-circle",
-                       progressBarClass: "bg-info",
-                       duration: 5000
-                   );
-                return;
-
-            }
-            else
-            {
-                await PermissionService.Insert(Input);
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "Thêm thành công.",
-                    iconClass: "fa fa-check-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                Input.Id = Guid.NewGuid().ToString();
-                await LoadData();
-                Refresh();
-            }
+            ToastService.ShowToast(
+                      "Thông báo",
+                      ex.Message,
+                      cssClass: "toast-danger",
+                     iconClass: "fa fa-exclamation-circle",
+                      progressBarClass: "bg-info",
+                      duration: 7000
+                  );
         }
-        
-
-
     }
 
     // Xử lý tìm kiếm

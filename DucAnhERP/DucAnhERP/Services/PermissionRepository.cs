@@ -66,9 +66,15 @@ namespace DucAnhERP.Services
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
+            var isExist = await context.MMajorUserPermissionDetails.Where(x => x.PermissionId.Equals(id)).ToListAsync();
+
             if (entity == null)
             {
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
+            }
+            if (isExist != null && isExist.Count() >0 )
+            {
+                throw new Exception($"Không thể xóa bản ghi đang được sử dụng : {id}");
             }
             context.Set<MPermission>().Remove(entity);
             await context.SaveChangesAsync();
@@ -108,7 +114,6 @@ namespace DucAnhERP.Services
             var data = await query.ToListAsync();
             return data;
         }
-
 
         public async Task<List<PermissionModel>> GetAllCorePermission(string screenId, string companyId)
         {

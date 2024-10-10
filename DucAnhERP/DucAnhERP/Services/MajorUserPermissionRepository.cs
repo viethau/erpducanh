@@ -56,13 +56,6 @@ namespace DucAnhERP.Services
                 var loginUserName = authState.User.Identity.Name;
                 var user = await _userManager.FindByNameAsync(loginUserName);
 
-                // Nếu không có công ty và phòng ban thì là tài khoản admin
-                //if (user.CompanyId is null && user.DeptId is null)
-                //{
-                //    return true;
-                //}
-
-
                 // Thực hiện truy vấn SQL
                 var result = await (from a in context.MMajorUserPermissions
                                     join b in context.MPermissions on a.PermissionId equals b.Id
@@ -167,11 +160,8 @@ namespace DucAnhERP.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                throw;
+                throw new Exception ($"lỗi {ex.Message}");
             }
-          
-
         }
 
         public async Task<List<MajorUserPermissionModel>> GetAllByVM(MajorUserPermissionModel majorUserPermissionModel)
@@ -270,11 +260,11 @@ namespace DucAnhERP.Services
             }
             await DeleteByIdDetail(entity.Id);
             context.MMajorUserPermissions.Update(mMajorUserPermission);
-            if (!string.IsNullOrEmpty(entity.PermissionId))
+            if (!string.IsNullOrEmpty(mMajorUserPermission.PermissionId))
             {
                 // Chuyển đổi PermissionId từ JSON thành danh sách SelectedItem
-                List<SelectedItem> list = JsonSerializer.Deserialize<List<SelectedItem>>(entity.PermissionId);
-                List<SelectedItem> listDay = JsonSerializer.Deserialize<List<SelectedItem>>(entity.DayinWeek);
+                List<SelectedItem> list = JsonSerializer.Deserialize<List<SelectedItem>>(mMajorUserPermission.PermissionId);
+                List<SelectedItem> listDay = JsonSerializer.Deserialize<List<SelectedItem>>(mMajorUserPermission.DayinWeek);
                 List<MMajorUserPermissionDetail> listDetails = new();
 
                 // Duyệt qua danh sách SelectedItem và tạo danh sách MMajorUserPermissionDetail
