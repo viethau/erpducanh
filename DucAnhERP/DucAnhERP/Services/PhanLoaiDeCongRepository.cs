@@ -124,6 +124,30 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
+
+        public async Task<PhanLoaiDeCong> GetNumberPhanLoai(PhanLoaiDeCong searchData)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
+                var query = context.PhanLoaiDeCongs
+                             .Where(pldc => (
+                                     pldc.ThongTinDuongTruyenDan_LoaiTruyenDan == searchData.ThongTinDuongTruyenDan_LoaiTruyenDan &&
+                                     pldc.ThongTinDeCong_CauTaoDeCong == searchData.ThongTinDeCong_CauTaoDeCong 
+                                          )).OrderByDescending(pldc => pldc.Loai);
+
+                var result = await query.FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
+        }
         public async Task<PhanLoaiDeCong> GetPhanLoaiDeCongExist(PhanLoaiDeCong searchData)
         {
             try
@@ -269,7 +293,17 @@ namespace DucAnhERP.Services
 
                 // Tăng giá trị Flag lên 1
                 entity.Flag = maxFlag + 1;
-                entity.ThongTinDeCong_TenLoaiDeCong = "Đế cống " + CTDC + " " + LoaiTD + " loại " + entity.Flag;
+                var maxLoai = await GetNumberPhanLoai(entity);
+                if (maxLoai != null)
+                {
+                    // Tăng giá trị Flag lên 1
+                    entity.Loai = (maxLoai.Loai ?? 0) + 1;
+                }
+                else
+                {
+                    entity.Loai = 1;
+                }
+                entity.ThongTinDeCong_TenLoaiDeCong = "Đế cống " + CTDC + " " + LoaiTD + " loại " + entity.Loai;
 
                 // Chèn bản ghi mới vào bảng
                 context.PhanLoaiDeCongs.Add(entity);

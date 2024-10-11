@@ -735,6 +735,7 @@ namespace DucAnhERP.Services
                                 ToaDoX = nuocMua.ToaDoX ?? 0,
                                 ToaDoY = nuocMua.ToaDoY ?? 0,
                                 Flag = nuocMua.Flag,
+                                TraiPhai = nuocMua.TraiPhai,
                             };
                 var data = await query.ToListAsync();
                 return data;
@@ -812,7 +813,6 @@ namespace DucAnhERP.Services
             // Trả về false nếu không tìm thấy bản ghi
             return false;
         }
-
 
         public async Task<NuocMua> GetById(string id)
         {
@@ -943,6 +943,90 @@ namespace DucAnhERP.Services
             {
                 Console.WriteLine(ex.Message);
                 return 0; // Trả về 0 nếu có lỗi xảy ra
+            }
+        }
+
+        //báo cáo 
+        public async Task<List<NuocMuaModel>> GetBaoCaoTTHoGa(NuocMuaModel nuocMuaModel)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var query = from nuocMua in context.DSNuocMua
+                                // Left join với bảng PhanLoaiHoGas
+                            join phanLoaiHoGa in context.PhanLoaiHoGas
+                            on nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai equals phanLoaiHoGa.Id into phanLoaiHoGaJoin
+                            from phanLoaiHoGa in phanLoaiHoGaJoin.DefaultIfEmpty()
+
+                            join phanLoaiTDHoGa in context.PhanLoaiTDHoGas
+                           on nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa equals phanLoaiTDHoGa.Id into phanLoaiTDHoGaJoin
+                            from phanLoaiTDHoGa in phanLoaiTDHoGaJoin.DefaultIfEmpty()
+
+                            join hinhThucTruyenDan in context.DSDanhMuc
+                               on nuocMua.ThongTinDuongTruyenDan_HinhThucTruyenDan equals hinhThucTruyenDan.Id into gj13
+                            from hinhThucTruyenDan in gj13.DefaultIfEmpty()
+
+                            join loaiTruyenDan in context.DSDanhMuc
+                               on nuocMua.ThongTinDuongTruyenDan_LoaiTruyenDan equals loaiTruyenDan.Id into gj14
+                            from loaiTruyenDan in gj14.DefaultIfEmpty() 
+
+                            // Sắp xếp theo Flag của DSNuocMua
+                            orderby nuocMua.Flag
+                            select new NuocMuaModel
+                            {
+                                Id = nuocMua.Id,
+                                ThongTinLyTrinh_TuyenDuong = nuocMua.ThongTinLyTrinh_TuyenDuong ?? "",
+                                ThongTinLyTrinh_LyTrinhTaiTimHoGa = nuocMua.ThongTinLyTrinh_LyTrinhTaiTimHoGa ?? "",
+                                ThongTinChungHoGa_TenHoGaSauPhanLoai = nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
+                                PhanLoaiHoGas_TenHoGaSauPhanLoai = phanLoaiHoGa != null ? phanLoaiHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai : "",
+                                ThongTinChungHoGa_TenHoGaTheoBanVe = nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe ?? "",
+                                ThongTinTamDanHoGa2_PhanLoaiDayHoGa = nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
+                                PhanLoaiTDHoGa_PhanLoaiDayHoGa = phanLoaiTDHoGa.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
+                                ThongTinTamDanHoGa2_SoLuongNapDay = nuocMua.ThongTinTamDanHoGa2_SoLuongNapDay ?? 0,
+
+                                ThongTinDuongTruyenDan_HinhThucTruyenDan = nuocMua.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "",
+                                ThongTinDuongTruyenDan_HinhThucTruyenDan_Name = hinhThucTruyenDan.Ten,
+                                ThongTinDuongTruyenDan_LoaiTruyenDan = nuocMua.ThongTinDuongTruyenDan_LoaiTruyenDan ?? "",
+                                ThongTinDuongTruyenDan_LoaiTruyenDan_Name = loaiTruyenDan.Ten,
+
+                                ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao = nuocMua.ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao ?? 0,
+                                ThongTinCaoDoHoGa_DayDao = nuocMua.ThongTinCaoDoHoGa_DayDao ?? 0,
+                                ThongTinCaoDoHoGa_CSauDao = nuocMua.ThongTinCaoDoHoGa_CSauDao ?? 0,
+                                ThongTinCaoDoHoGa_DinhLotMong = nuocMua.ThongTinCaoDoHoGa_DinhLotMong ?? 0,
+                                ThongTinCaoDoHoGa_CdDinhMong = nuocMua.ThongTinCaoDoHoGa_CdDinhMong ?? 0,
+                                ThongTinCaoDoHoGa_CdDayHoGa = nuocMua.ThongTinCaoDoHoGa_CdDayHoGa ?? 0,
+                                ThongTinCaoDoHoGa_CCaoTuong = nuocMua.ThongTinCaoDoHoGa_CCaoTuong ?? 0,
+                                ThongTinCaoDoHoGa_DinhTuongDuoiDamGiuaTuong = nuocMua.ThongTinCaoDoHoGa_DinhTuongDuoiDamGiuaTuong ?? 0,
+                                ThongTinCaoDoHoGa_DinhDamGiuaTuong = nuocMua.ThongTinCaoDoHoGa_DinhDamGiuaTuong ?? 0,
+                                ThongTinCaoDoHoGa_DinhTuong = nuocMua.ThongTinCaoDoHoGa_DinhTuong ?? 0,
+                                ThongTinCaoDoHoGa_DinhMuMoThotDuoi = nuocMua.ThongTinCaoDoHoGa_DinhMuMoThotDuoi ?? 0,
+                                ThongTinCaoDoHoGa_CdDinhHoGa = nuocMua.ThongTinCaoDoHoGa_CdDinhHoGa ?? 0,
+
+                                ToaDoX = nuocMua.ToaDoX ?? 0,
+                                ToaDoY = nuocMua.ToaDoY ?? 0,
+                                Flag = nuocMua.Flag,
+                                TraiPhai = nuocMua.TraiPhai,
+                            };
+
+                if (string.IsNullOrEmpty(nuocMuaModel.ThongTinChungHoGa_TenHoGaSauPhanLoai))
+                {
+                    query.Where(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai.Equals(nuocMuaModel.ThongTinChungHoGa_TenHoGaSauPhanLoai));
+                }
+                if (string.IsNullOrEmpty(nuocMuaModel.ThongTinChungHoGa_TenHoGaTheoBanVe))
+                {
+                    query.Where(x => x.ThongTinChungHoGa_TenHoGaTheoBanVe.Equals(nuocMuaModel.ThongTinChungHoGa_TenHoGaTheoBanVe));
+                }
+                if (nuocMuaModel.TraiPhai != 2)
+                {
+                    query.Where(x => x.TraiPhai.Equals(nuocMuaModel.TraiPhai));
+                }
+                var data = await query.ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+               
+                throw new Exception ($"Lỗi dữ liệu {ex.Message}!");
             }
         }
     }

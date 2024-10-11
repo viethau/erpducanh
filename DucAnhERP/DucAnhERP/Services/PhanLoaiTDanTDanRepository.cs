@@ -135,6 +135,32 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
+        public async Task<PhanLoaiTDanTDan> GetNumberPhanLoai(PhanLoaiTDanTDan searchData)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
+                var query = context.PhanLoaiTDanTDans
+                             .Where(pltdtd => (
+                                    //pltdtd.ThongTinLyTrinhTruyenDan_TuLyTrinh == searchData.ThongTinLyTrinhTruyenDan_TuLyTrinh &&
+                                    //pltdtd.ThongTinLyTrinhTruyenDan_DenLyTrinh == searchData.ThongTinLyTrinhTruyenDan_DenLyTrinh &&
+
+                                    pltdtd.ThongTinDuongTruyenDan_HinhThucTruyenDan == searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan &&
+                                    pltdtd.ThongTinDuongTruyenDan_LoaiTruyenDan == searchData.ThongTinDuongTruyenDan_LoaiTruyenDan &&
+                                    pltdtd.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan == searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan 
+                                          )).OrderByDescending(pltdtd => pltdtd.Loai);
+                var result = await query.FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
+        }
         public async Task<PhanLoaiTDanTDan> GetPhanLoaiTDanTDanExist(PhanLoaiTDanTDan searchData)
         {
             try
@@ -283,7 +309,17 @@ namespace DucAnhERP.Services
 
                 // Tăng giá trị Flag lên 1
                 entity.Flag = maxFlag + 1;
-                entity.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = "Tấm đan tiêu chuẩn loại " + entity.Flag +" "+ HTTD +" "+ LTD+" "+ CTTDTC;
+                var maxLoai = await GetNumberPhanLoai(entity);
+                if (maxLoai != null)
+                {
+                    // Tăng giá trị Flag lên 1
+                    entity.Loai = (maxLoai.Loai ?? 0) + 1;
+                }
+                else
+                {
+                    entity.Loai = 1;
+                }
+                entity.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = "Tấm đan tiêu chuẩn loại " + entity.Loai +" "+ HTTD +" "+ LTD+" "+ CTTDTC;
 
                 // Chèn bản ghi mới vào bảng
                 context.PhanLoaiTDanTDans.Add(entity);

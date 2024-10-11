@@ -136,6 +136,31 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
+        public async Task<PhanLoaiMongCTron> GetNumberPhanLoai(PhanLoaiMongCTron searchData)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
+                var query = context.PhanLoaiMongCTrons
+                             .Where(plmct => (
+                                    plmct.ThongTinDuongTruyenDan_HinhThucTruyenDan == searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan &&
+                                    plmct.ThongTinDuongTruyenDan_LoaiTruyenDan == searchData.ThongTinDuongTruyenDan_LoaiTruyenDan &&
+                                    plmct.ThongTinMongDuongTruyenDan_LoaiMong == searchData.ThongTinMongDuongTruyenDan_LoaiMong &&
+                                    plmct.ThongTinMongDuongTruyenDan_HinhThucMong == searchData.ThongTinMongDuongTruyenDan_HinhThucMong
+                                          )).OrderByDescending(plmct => plmct.Loai);
+
+                var result = await query.FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
+        }
         public async Task<PhanLoaiMongCTron> GetPhanLoaiMongCTronExist(PhanLoaiMongCTron searchData)
         {
             try
@@ -349,7 +374,17 @@ namespace DucAnhERP.Services
 
                 // Tăng giá trị Flag lên 1
                 entity.Flag = maxFlag + 1;
-                entity.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = LoaiTD + " " + LoaiM +" "+HTM+ " loại " + entity.Flag;
+                var maxLoai = await GetNumberPhanLoai(entity);
+                if (maxLoai != null)
+                {
+                    // Tăng giá trị Flag lên 1
+                    entity.Loai = (maxLoai.Loai ?? 0) + 1;
+                }
+                else
+                {
+                    entity.Loai = 1;
+                }
+                entity.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = LoaiTD + " " + LoaiM +" "+HTM+ " loại " + entity.Loai;
 
                 // Chèn bản ghi mới vào bảng
                 context.PhanLoaiMongCTrons.Add(entity);

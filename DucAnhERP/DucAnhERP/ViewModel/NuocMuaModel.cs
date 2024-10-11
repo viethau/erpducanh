@@ -541,9 +541,12 @@ namespace DucAnhERP.ViewModel
         public Double ToaDoX { get; set; }
         public Double ToaDoY { get; set; }
 
+        // TraiPhai 0= Trái , 1= phải , 2 all
+        public int? TraiPhai { get; set; } = 2;
         public int Flag { get; set; } = 0;
         public DateTime? CreateAt { get; set; }
         public string? CreateBy { get; set; }
         public int? IsActive { get; set; }
+
     }
 }

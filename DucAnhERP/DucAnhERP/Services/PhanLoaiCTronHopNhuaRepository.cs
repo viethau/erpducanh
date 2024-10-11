@@ -30,7 +30,6 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-
         public async Task<List<PhanLoaiCTronHopNhuaModel>> GetAllByVM()
         {
             try
@@ -173,7 +172,32 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
+        public async Task<PhanLoaiCTronHopNhua> GetNumberPhanLoai(PhanLoaiCTronHopNhua searchData)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
 
+                // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
+                var query = context.PhanLoaiCTronHopNhuas
+                 .Where(pltdhg => (
+                     pltdhg.ThongTinDuongTruyenDan_HinhThucTruyenDan == searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan &&
+                     pltdhg.ThongTinDuongTruyenDan_LoaiTruyenDan == searchData.ThongTinDuongTruyenDan_LoaiTruyenDan &&
+                     pltdhg.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien == searchData.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien
+                              ))
+                 .OrderByDescending(pltdhg => pltdhg.Loai);
+
+
+                var result = await query.FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
+        }
         public async Task<PhanLoaiCTronHopNhua> GetPhanLoaiCTronHopNhuaExist(PhanLoaiCTronHopNhua searchData)
         {
             try
@@ -216,7 +240,6 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-
         public async Task Update(PhanLoaiCTronHopNhua PhanLoaiCTronHopNhua)
         {
             using var context = _context.CreateDbContext();
@@ -230,7 +253,6 @@ namespace DucAnhERP.Services
             context.PhanLoaiCTronHopNhuas.Update(PhanLoaiCTronHopNhua);
             await context.SaveChangesAsync();
         }
-
         public async Task UpdateMulti(PhanLoaiCTronHopNhua[] PhanLoaiCTronHopNhua)
         {
             using var context = _context.CreateDbContext();
@@ -242,7 +264,6 @@ namespace DucAnhERP.Services
             }
             await context.SaveChangesAsync();
         }
-
         public async Task DeleteById(string id)
         {
             using var context = _context.CreateDbContext();
@@ -256,7 +277,6 @@ namespace DucAnhERP.Services
             context.Set<PhanLoaiCTronHopNhua>().Remove(entity);
             await context.SaveChangesAsync();
         }
-
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
         {
             foreach (var id in ids)
@@ -269,7 +289,6 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-
         public async Task<PhanLoaiCTronHopNhua> GetById(string id)
         {
             using var context = _context.CreateDbContext();
@@ -282,7 +301,6 @@ namespace DucAnhERP.Services
 
             return entity;
         }
-
         public async Task Insert(PhanLoaiCTronHopNhua entity)
         {
             try
@@ -315,7 +333,6 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
             }
         }
-
         public async Task<string> InsertLaterFlag(PhanLoaiCTronHopNhua entity, int FlagLast)
         {
             string id = "";
@@ -398,7 +415,26 @@ namespace DucAnhERP.Services
 
                 // Tăng giá trị Flag lên 1
                 entity.Flag = maxFlag + 1;
-                entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = HinhThucTD +" "+ LoaiTD + " loại " + entity.Flag +" ,L="+entity.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien + "m";
+
+                // Kiểm tra xem bảng có bản ghi nào không
+                var maxLoai =  await GetNumberPhanLoai(entity);
+                if (maxLoai != null) {
+                    // Tăng giá trị Flag lên 1
+                    entity.Loai = (maxLoai.Loai??0 ) + 1;
+                }
+                else
+                {
+                    entity.Loai = 1;
+                }
+                if(entity.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien > 0)
+                {
+                    entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = HinhThucTD + " " + LoaiTD + " loại " + entity.Loai + " ,L=" + entity.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien + "m";
+                }
+                else
+                {
+                    entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = HinhThucTD + " " + LoaiTD + " loại " + entity.Loai ;
+                }
+                
 
                 // Chèn bản ghi mới vào bảng
                 context.PhanLoaiCTronHopNhuas.Add(entity);

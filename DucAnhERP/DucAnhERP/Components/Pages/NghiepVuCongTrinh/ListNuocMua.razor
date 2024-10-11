@@ -406,8 +406,8 @@
                                         <ValidationMessage For="() => Input.HinhThucDauNoi1_CDC" class="text-danger" />
                                     </div>
                                 </div>
-                                 <div class="row">
-                                     <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                         <label for="HinhThucDauNoi1_CanhRong">Cạnh rộng <span class="text-danger">*</span></label>
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi1_CanhRong" class="form-control" id="HinhThucDauNoi1_CanhRong" placeholder="Cạnh rộng" />
                                         <ValidationMessage For="() => Input.HinhThucDauNoi1_CanhRong" class="text-danger" />
@@ -428,8 +428,8 @@
                                         <ValidationMessage For="() => Input.HinhThucDauNoi1_CRC" class="text-danger" />
                                     </div>
                                 </div>
-                                 <div class="row">
-                                      <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                <div class="row">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                         <label for="HinhThucDauNoi1_CanhCheo">Cạnh chéo <span class="text-danger">*</span></label>
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi1_CanhCheo" class="form-control" id="HinhThucDauNoi1_CanhCheo" placeholder="Cạnh chéo" />
                                         <ValidationMessage For="() => Input.HinhThucDauNoi1_CanhCheo" class="text-danger" />
@@ -497,7 +497,7 @@
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi2_CanhRong" class="form-control" id="HinhThucDauNoi2_CanhRong" placeholder="Cạnh rộng" />
                                         <ValidationMessage For="() => Input.HinhThucDauNoi2_CanhRong" class="text-danger" />
                                     </div>
-                                    
+
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                         <label for="HinhThucDauNoi2_CRD">D <span class="text-danger">*</span></label>
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi2_CRD" class="form-control" id="HinhThucDauNoi2_CRD" placeholder="Loại" />
@@ -544,18 +544,18 @@
                                         <ValidationMessage For="() => Input.HinhThucDauNoi3_Loai" class="text-danger" />
                                     </div>
                                     <div class="form-floating col-sm-6 col-md-6">
-                                    <label for="HinhThucDauNoi3_KLBoSung"> KL bổ sung <span class="text-danger">*</span></label>
-                                    <select @oninput="OnInputChange" id="HinhThucDauNoi3_KLBoSung" class="form-control" @bind="Input.HinhThucDauNoi3_KLBoSung">
-                                        <option value="">KL bổ sung ...</option>
-                                        @foreach (var dm in FindByIdNhomDanhMuc("DM_CoKhong"))
-                                        {
-                                            <option value="@dm.Id">@dm.Ten</option>
-                                        }
+                                        <label for="HinhThucDauNoi3_KLBoSung"> KL bổ sung <span class="text-danger">*</span></label>
+                                        <select @oninput="OnInputChange" id="HinhThucDauNoi3_KLBoSung" class="form-control" @bind="Input.HinhThucDauNoi3_KLBoSung">
+                                            <option value="">KL bổ sung ...</option>
+                                            @foreach (var dm in FindByIdNhomDanhMuc("DM_CoKhong"))
+                                            {
+                                                <option value="@dm.Id">@dm.Ten</option>
+                                            }
                                         </select>
                                         <ValidationMessage For="() => Input.HinhThucDauNoi3_KLBoSung" class="text-danger" />
                                     </div>
 
-                                   
+
                                 </div>
                                 <div class="row">
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-3">
@@ -602,7 +602,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                     <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                         <label for="HinhThucDauNoi3_CanhCheo">Cạnh chéo </label>
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi3_CanhCheo" class="form-control" id="HinhThucDauNoi3_CanhCheo" placeholder="Cạnh chéo" />
                                         <ValidationMessage For="() => Input.HinhThucDauNoi3_CanhCheo" class="text-danger" />
@@ -630,7 +630,7 @@
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi4_Loai" class="form-control" id="HinhThucDauNoi4_Loai" placeholder="Loại" />
                                         <ValidationMessage For="() => Input.HinhThucDauNoi4_Loai" class="text-danger" />
                                     </div>
-                                   <div class="form-floating col-sm-6 col-md-6">
+                                    <div class="form-floating col-sm-6 col-md-6">
                                         <label for="HinhThucDauNoi4_KLBoSung"> KL bổ sung <span class="text-danger">*</span></label>
                                         <select @oninput="OnInputChange" id="HinhThucDauNoi4_KLBoSung" class="form-control" @bind="Input.HinhThucDauNoi4_KLBoSung">
                                             <option value="">KL bổ sung ...</option>
@@ -670,7 +670,7 @@
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi4_CanhRong" class="form-control" id="HinhThucDauNoi4_CanhRong" placeholder="Cạnh rộng" />
                                         <ValidationMessage For="() => Input.HinhThucDauNoi4_CanhRong" class="text-danger" />
                                     </div>
-                                    
+
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                         <label for="HinhThucDauNoi4_CRD">D <span class="text-danger">*</span></label>
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi4_CRD" class="form-control" id="HinhThucDauNoi4_CRD" placeholder="Loại" />
@@ -688,7 +688,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    
+
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                         <label for="HinhThucDauNoi4_CanhCheo">Cạnh chéo </label>
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi4_CanhCheo" class="form-control" id="HinhThucDauNoi4_CanhCheo" placeholder="Cạnh chéo" />
@@ -749,9 +749,10 @@
                                         <label for="HinhThucDauNoi5_CDC">C <span class="text-danger">*</span></label>
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi5_CDC" class="form-control" id="HinhThucDauNoi5_CDC" placeholder="Loại" />
                                         <ValidationMessage For="() => Input.HinhThucDauNoi5_CDC" class="text-danger" />
-                                    </div></div>
+                                    </div>
+                                </div>
                                 <div class="row">
-                                     <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                         <label for="HinhThucDauNoi5_CanhRong">Cạnh rộng </label>
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi5_CanhRong" class="form-control" id="HinhThucDauNoi5_CanhRong" placeholder="Cạnh rộng" />
                                         <ValidationMessage For="() => Input.HinhThucDauNoi5_CanhRong" class="text-danger" />
@@ -774,12 +775,12 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                     <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                         <label for="HinhThucDauNoi5_CanhCheo">Cạnh chéo </label>
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi5_CanhCheo" class="form-control" id="HinhThucDauNoi5_CanhCheo" placeholder="Cạnh chéo" />
                                         <ValidationMessage For="() => Input.HinhThucDauNoi5_CanhCheo" class="text-danger" />
                                     </div>
-                                    
+
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                         <label for="HinhThucDauNoi5_CCD">D <span class="text-danger">*</span></label>
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi5_CCD" class="form-control" id="HinhThucDauNoi5_CCD" placeholder="Loại" />
@@ -839,7 +840,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                     <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                         <label for="HinhThucDauNoi6_CanhRong">Cạnh rộng </label>
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi6_CanhRong" class="form-control" id="HinhThucDauNoi6_CanhRong" placeholder="Cạnh rộng" />
                                         <ValidationMessage For="() => Input.HinhThucDauNoi6_CanhRong" class="text-danger" />
@@ -902,7 +903,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                     <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                         <label for="HinhThucDauNoi7_CanhDai">Cạnh dài </label>
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi7_CanhDai" class="form-control" id="HinhThucDauNoi7_CanhDai" placeholder="Cạnh dài" />
                                         <ValidationMessage For="() => Input.HinhThucDauNoi7_CanhDai" class="text-danger" />
@@ -929,7 +930,7 @@
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi7_CanhRong" class="form-control" id="HinhThucDauNoi7_CanhRong" placeholder="Cạnh rộng" />
                                         <ValidationMessage For="() => Input.HinhThucDauNoi7_CanhRong" class="text-danger" />
                                     </div>
-                                    
+
                                     <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                         <label for="HinhThucDauNoi7_CRD">D <span class="text-danger">*</span></label>
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi7_CRD" class="form-control" id="HinhThucDauNoi7_CRD" placeholder="Loại" />
@@ -947,7 +948,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                     <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                         <label for="HinhThucDauNoi7_CanhCheo">Cạnh chéo </label>
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi7_CanhCheo" class="form-control" id="HinhThucDauNoi7_CanhCheo" placeholder="Cạnh chéo" />
                                         <ValidationMessage For="() => Input.HinhThucDauNoi7_CanhCheo" class="text-danger" />
@@ -988,7 +989,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                      <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                         <label for="HinhThucDauNoi8_CanhDai">Cạnh dài </label>
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi8_CanhDai" class="form-control" id="HinhThucDauNoi8_CanhDai" placeholder="Cạnh dài" />
                                         <ValidationMessage For="() => Input.HinhThucDauNoi8_CanhDai" class="text-danger" />
@@ -1010,7 +1011,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                     <div class="form-floating col-sm-6 col-md-3 col-lg-3">
+                                    <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                         <label for="HinhThucDauNoi8_CanhRong">Cạnh rộng </label>
                                         <InputNumber @oninput="OnInputChange" @bind-Value="Input.HinhThucDauNoi8_CanhRong" class="form-control" id="HinhThucDauNoi8_CanhRong" placeholder="Cạnh rộng" />
                                         <ValidationMessage For="() => Input.HinhThucDauNoi8_CanhRong" class="text-danger" />
@@ -3533,222 +3534,222 @@
 
 
                         @* Hạng mục chiếm chỗ hố ga *@
-                        
-                         <th class="text-center align-middle">Máng thu</th>
-                         <th class="text-center align-middle">KL bổ sung</th>
-                         <th class="text-center align-middle">Cạnh dài</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnh rộng</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnh chéo</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">D1500</th>
-                         <th class="text-center align-middle">KL bổ sung</th>
-                         <th class="text-center align-middle">Cạnh dài</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnh rộng</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnh chéo</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">D1000</th>
-                         <th class="text-center align-middle">KL bổ sung</th>
-                         <th class="text-center align-middle">Cạnhdài</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnh rộng</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnh chéo</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Rãnh B1000</th>
-                         <th class="text-center align-middle">KL bổsung</th>
-                         <th class="text-center align-middle">Cạnh dài</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnh rộng</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnh chéo</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">B1000CL</th>
-                         <th class="text-center align-middle">KL bổ sung</th>
-                         <th class="text-center align-middle">Cạnh dài</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnhrộng</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnhchéo</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">D600</th>
-                         <th class="text-center align-middle">KL bổ sung</th>
-                         <th class="text-center align-middle">Cạnhdài</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnhrộng</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnh chéo</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Rãnh B800</th>
-                         <th class="text-center align-middle">KL bổ sung</th>
-                         <th class="text-center align-middle">Cạnh dài</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnh rộng</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnh chéo</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">B2000</th>
-                         <th class="text-center align-middle">KL bổ sung</th>
-                         <th class="text-center align-middle">Cạnh dài</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnh rộng</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
-                         <th class="text-center align-middle">Cạnh chéo</th>
-                         <th class="text-center align-middle">D</th>
-                         <th class="text-center align-middle">R</th>
-                         <th class="text-center align-middle">C</th>
+
+                        <th class="text-center align-middle">Máng thu</th>
+                        <th class="text-center align-middle">KL bổ sung</th>
+                        <th class="text-center align-middle">Cạnh dài</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">Cạnh rộng</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">Cạnh chéo</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">D1500</th>
+                        <th class="text-center align-middle">KL bổ sung</th>
+                        <th class="text-center align-middle">Cạnh dài</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">Cạnh rộng</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">Cạnh chéo</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">D1000</th>
+                        <th class="text-center align-middle">KL bổ sung</th>
+                        <th class="text-center align-middle">Cạnhdài</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">Cạnh rộng</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">Cạnh chéo</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">Rãnh B1000</th>
+                        <th class="text-center align-middle">KL bổsung</th>
+                        <th class="text-center align-middle">Cạnh dài</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">Cạnh rộng</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">Cạnh chéo</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">B1000CL</th>
+                        <th class="text-center align-middle">KL bổ sung</th>
+                        <th class="text-center align-middle">Cạnh dài</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">Cạnhrộng</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">Cạnhchéo</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">D600</th>
+                        <th class="text-center align-middle">KL bổ sung</th>
+                        <th class="text-center align-middle">Cạnhdài</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">Cạnhrộng</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">Cạnh chéo</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">Rãnh B800</th>
+                        <th class="text-center align-middle">KL bổ sung</th>
+                        <th class="text-center align-middle">Cạnh dài</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">Cạnh rộng</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">Cạnh chéo</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">B2000</th>
+                        <th class="text-center align-middle">KL bổ sung</th>
+                        <th class="text-center align-middle">Cạnh dài</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">Cạnh rộng</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
+                        <th class="text-center align-middle">Cạnh chéo</th>
+                        <th class="text-center align-middle">D</th>
+                        <th class="text-center align-middle">R</th>
+                        <th class="text-center align-middle">C</th>
 
                         @* <th onclick="@(() => SortTable("HinhThucDauNoi1_Loai"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Máng thu  <span class="arrow @(GetSortStyle("HinhThucDauNoi1_Loai"))"></span></div>
+                        <div class="mr-3 ">Máng thu  <span class="arrow @(GetSortStyle("HinhThucDauNoi1_Loai"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi1_CanhDai"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh dài  <span class="arrow @(GetSortStyle("HinhThucDauNoi1_CanhDai"))"></span></div>
+                        <div class="mr-3 ">Cạnh dài  <span class="arrow @(GetSortStyle("HinhThucDauNoi1_CanhDai"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi1_CanhRong"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh rộng  <span class="arrow @(GetSortStyle("HinhThucDauNoi1_CanhRong"))"></span></div>
+                        <div class="mr-3 ">Cạnh rộng  <span class="arrow @(GetSortStyle("HinhThucDauNoi1_CanhRong"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi1_CanhCheo"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh chéo  <span class="arrow @(GetSortStyle("HinhThucDauNoi1_CanhCheo"))"></span></div>
+                        <div class="mr-3 ">Cạnh chéo  <span class="arrow @(GetSortStyle("HinhThucDauNoi1_CanhCheo"))"></span></div>
                         </th>
 
                         <th onclick="@(() => SortTable("HinhThucDauNoi2_Loai"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">D1500  <span class="arrow @(GetSortStyle("HinhThucDauNoi2_Loai"))"></span></div>
+                        <div class="mr-3 ">D1500  <span class="arrow @(GetSortStyle("HinhThucDauNoi2_Loai"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi2_CanhDai"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh dài  <span class="arrow @(GetSortStyle("HinhThucDauNoi2_CanhDai"))"></span></div>
+                        <div class="mr-3 ">Cạnh dài  <span class="arrow @(GetSortStyle("HinhThucDauNoi2_CanhDai"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi2_CanhRong"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh rộng  <span class="arrow @(GetSortStyle("HinhThucDauNoi2_CanhRong"))"></span></div>
+                        <div class="mr-3 ">Cạnh rộng  <span class="arrow @(GetSortStyle("HinhThucDauNoi2_CanhRong"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi2_CanhCheo"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh chéo  <span class="arrow @(GetSortStyle("HinhThucDauNoi2_CanhCheo"))"></span></div>
+                        <div class="mr-3 ">Cạnh chéo  <span class="arrow @(GetSortStyle("HinhThucDauNoi2_CanhCheo"))"></span></div>
                         </th>
 
                         <th onclick="@(() => SortTable("HinhThucDauNoi3_Loai"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">D1000  <span class="arrow @(GetSortStyle("HinhThucDauNoi3_Loai"))"></span></div>
+                        <div class="mr-3 ">D1000  <span class="arrow @(GetSortStyle("HinhThucDauNoi3_Loai"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi3_CanhDai"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh dài  <span class="arrow @(GetSortStyle("HinhThucDauNoi3_CanhDai"))"></span></div>
+                        <div class="mr-3 ">Cạnh dài  <span class="arrow @(GetSortStyle("HinhThucDauNoi3_CanhDai"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi3_CanhRong"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh rộng  <span class="arrow @(GetSortStyle("HinhThucDauNoi3_CanhRong"))"></span></div>
+                        <div class="mr-3 ">Cạnh rộng  <span class="arrow @(GetSortStyle("HinhThucDauNoi3_CanhRong"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi3_CanhCheo"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh chéo  <span class="arrow @(GetSortStyle("HinhThucDauNoi3_CanhCheo"))"></span></div>
+                        <div class="mr-3 ">Cạnh chéo  <span class="arrow @(GetSortStyle("HinhThucDauNoi3_CanhCheo"))"></span></div>
                         </th>
 
                         <th onclick="@(() => SortTable("HinhThucDauNoi4_Loai"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Rãnh B1000  <span class="arrow @(GetSortStyle("HinhThucDauNoi4_Loai"))"></span></div>
+                        <div class="mr-3 ">Rãnh B1000  <span class="arrow @(GetSortStyle("HinhThucDauNoi4_Loai"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi4_CanhDai"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh dài  <span class="arrow @(GetSortStyle("HinhThucDauNoi4_CanhDai"))"></span></div>
+                        <div class="mr-3 ">Cạnh dài  <span class="arrow @(GetSortStyle("HinhThucDauNoi4_CanhDai"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi4_CanhRong"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh rộng  <span class="arrow @(GetSortStyle("HinhThucDauNoi4_CanhRong"))"></span></div>
+                        <div class="mr-3 ">Cạnh rộng  <span class="arrow @(GetSortStyle("HinhThucDauNoi4_CanhRong"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi4_CanhCheo"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh chéo  <span class="arrow @(GetSortStyle("HinhThucDauNoi4_CanhCheo"))"></span></div>
+                        <div class="mr-3 ">Cạnh chéo  <span class="arrow @(GetSortStyle("HinhThucDauNoi4_CanhCheo"))"></span></div>
                         </th>
 
                         <th onclick="@(() => SortTable("HinhThucDauNoi5_Loai"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">B1000CL   <span class="arrow @(GetSortStyle("HinhThucDauNoi5_Loai"))"></span></div>
+                        <div class="mr-3 ">B1000CL   <span class="arrow @(GetSortStyle("HinhThucDauNoi5_Loai"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi5_CanhDai"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh dài  <span class="arrow @(GetSortStyle("HinhThucDauNoi5_CanhDai"))"></span></div>
+                        <div class="mr-3 ">Cạnh dài  <span class="arrow @(GetSortStyle("HinhThucDauNoi5_CanhDai"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi5_CanhRong"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh rộng  <span class="arrow @(GetSortStyle("HinhThucDauNoi5_CanhRong"))"></span></div>
+                        <div class="mr-3 ">Cạnh rộng  <span class="arrow @(GetSortStyle("HinhThucDauNoi5_CanhRong"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi5_CanhCheo"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh chéo  <span class="arrow @(GetSortStyle("HinhThucDauNoi5_CanhCheo"))"></span></div>
+                        <div class="mr-3 ">Cạnh chéo  <span class="arrow @(GetSortStyle("HinhThucDauNoi5_CanhCheo"))"></span></div>
                         </th>
 
                         <th onclick="@(() => SortTable("HinhThucDauNoi6_Loai"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">D600  <span class="arrow @(GetSortStyle("HinhThucDauNoi6_Loai"))"></span></div>
+                        <div class="mr-3 ">D600  <span class="arrow @(GetSortStyle("HinhThucDauNoi6_Loai"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi6_CanhDai"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh dài  <span class="arrow @(GetSortStyle("HinhThucDauNoi6_CanhDai"))"></span></div>
+                        <div class="mr-3 ">Cạnh dài  <span class="arrow @(GetSortStyle("HinhThucDauNoi6_CanhDai"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi6_CanhRong"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh rộng  <span class="arrow @(GetSortStyle("HinhThucDauNoi6_CanhRong"))"></span></div>
+                        <div class="mr-3 ">Cạnh rộng  <span class="arrow @(GetSortStyle("HinhThucDauNoi6_CanhRong"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi6_CanhCheo"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh chéo  <span class="arrow @(GetSortStyle("HinhThucDauNoi6_CanhCheo"))"></span></div>
+                        <div class="mr-3 ">Cạnh chéo  <span class="arrow @(GetSortStyle("HinhThucDauNoi6_CanhCheo"))"></span></div>
                         </th>
 
                         <th onclick="@(() => SortTable("HinhThucDauNoi7_Loai"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Rãnh B800  <span class="arrow @(GetSortStyle("HinhThucDauNoi7_Loai"))"></span></div>
+                        <div class="mr-3 ">Rãnh B800  <span class="arrow @(GetSortStyle("HinhThucDauNoi7_Loai"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi7_CanhDai"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh dài  <span class="arrow @(GetSortStyle("HinhThucDauNoi7_CanhDai"))"></span></div>
+                        <div class="mr-3 ">Cạnh dài  <span class="arrow @(GetSortStyle("HinhThucDauNoi7_CanhDai"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi7_CanhRong"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh rộng  <span class="arrow @(GetSortStyle("HinhThucDauNoi7_CanhRong"))"></span></div>
+                        <div class="mr-3 ">Cạnh rộng  <span class="arrow @(GetSortStyle("HinhThucDauNoi7_CanhRong"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi7_CanhCheo"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh chéo  <span class="arrow @(GetSortStyle("HinhThucDauNoi7_CanhCheo"))"></span></div>
+                        <div class="mr-3 ">Cạnh chéo  <span class="arrow @(GetSortStyle("HinhThucDauNoi7_CanhCheo"))"></span></div>
                         </th>
 
                         <th onclick="@(() => SortTable("HinhThucDauNoi8_Loai"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">B2000  <span class="arrow @(GetSortStyle("HinhThucDauNoi8_Loai"))"></span></div>
+                        <div class="mr-3 ">B2000  <span class="arrow @(GetSortStyle("HinhThucDauNoi8_Loai"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi8_CanhDai"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh dài  <span class="arrow @(GetSortStyle("HinhThucDauNoi8_CanhDai"))"></span></div>
+                        <div class="mr-3 ">Cạnh dài  <span class="arrow @(GetSortStyle("HinhThucDauNoi8_CanhDai"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi8_CanhRong"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh rộng  <span class="arrow @(GetSortStyle("HinhThucDauNoi8_CanhRong"))"></span></div>
+                        <div class="mr-3 ">Cạnh rộng  <span class="arrow @(GetSortStyle("HinhThucDauNoi8_CanhRong"))"></span></div>
                         </th>
                         <th onclick="@(() => SortTable("HinhThucDauNoi8_CanhCheo"))" class="text-center sortable align-middle">
-                            <div class="mr-3 ">Cạnh chéo  <span class="arrow @(GetSortStyle("HinhThucDauNoi8_CanhCheo"))"></span></div>
+                        <div class="mr-3 ">Cạnh chéo  <span class="arrow @(GetSortStyle("HinhThucDauNoi8_CanhCheo"))"></span></div>
                         </th> *@
 
                         @* Thông tin tấm đan hố ga *@
@@ -3982,427 +3983,527 @@
                         </th>
 
                         @* Thông tin khối lượng đào *@
-                        <th onclick="@(() => SortTable("TTKLD_CRongDaoDayLonDat"))" class="text-center text-danger sortable align-middle"> 
-	                         <div class="mr-3 ">C.Rộng đào đáy lớn đất (m)	
-                        <span class="arrow @(GetSortStyle("TTKLD_CRongDaoDayLonDat"))"></span></div>
-                         </th>
-                         <th onclick="@(() => SortTable("TTKLD_CRongDaoDayLonDa"))" class="text-center text-danger sortable align-middle"> 
-	                         <div class="mr-3 ">C.Rộng đào đáy lớn đá (m)	
-                        <span class="arrow @(GetSortStyle("TTKLD_CRongDaoDayLonDa"))"></span></div>
-                         </th>
-                         <th onclick="@(() => SortTable("TTKLD_DienTichDaoDat"))" class="text-center text-danger sortable align-middle"> 
-	                         <div class="mr-3 ">Diện tích đào đất (m2)	
-                        <span class="arrow @(GetSortStyle("TTKLD_DienTichDaoDat"))"></span></div>
-                         </th>
-                         <th onclick="@(() => SortTable("TTKLD_DienTichDaoDa"))" class="text-center text-danger sortable align-middle"> 
-	                         <div class="mr-3 ">Diện tích đào đá (m2)	
-                        <span class="arrow @(GetSortStyle("TTKLD_DienTichDaoDa"))"></span></div>
-                         </th>
-                         <th onclick="@(() => SortTable("TTKLD_TongDtDao"))" class="text-center text-danger sortable align-middle"> 
-	                         <div class="mr-3 ">Tổng DT đào (m2)	
-                        <span class="arrow @(GetSortStyle("TTKLD_TongDtDao"))"></span></div>
-                         </th>
-                         <th onclick="@(() => SortTable("TTKLD_KlDaoDat"))" class="text-center text-danger sortable align-middle"> 
-	                         <div class="mr-3 ">KL đào đất (m3)	
-                        <span class="arrow @(GetSortStyle("TTKLD_KlDaoDat"))"></span></div>
-                         </th>
-                         <th onclick="@(() => SortTable("TTKLD_KlDaoDa"))" class="text-center text-danger sortable align-middle"> 
-	                         <div class="mr-3 ">KL đào đá (m3)	
-                        <span class="arrow @(GetSortStyle("TTKLD_KlDaoDa"))"></span></div>
-                         </th>
-                         <th onclick="@(() => SortTable("TTKLD_TongKlDao"))" class="text-center text-danger sortable align-middle"> 
-	                         <div class="mr-3 ">Tổng KL đào (m3)	
-                        <span class="arrow @(GetSortStyle("TTKLD_TongKlDao"))"></span></div>
-                         </th>
-                         <th onclick="@(() => SortTable("TTKLD_KlChiemChoDat"))" class="text-center text-danger sortable align-middle"> 
-	                         <div class="mr-3 ">KL chiếm chỗ đất (m3)	
-                        <span class="arrow @(GetSortStyle("TTKLD_KlChiemChoDat"))"></span></div>
-                         </th>
-                         <th onclick="@(() => SortTable("TTKLD_KlChiemChoDa"))" class="text-center text-danger sortable align-middle"> 
-	                         <div class="mr-3 ">KL chiếm chỗ đá (m3)	
-                        <span class="arrow @(GetSortStyle("TTKLD_KlChiemChoDa"))"></span></div>
-                         </th>
-                         <th onclick="@(() => SortTable("TTKLD_TongChiemCho"))" class="text-center text-danger sortable align-middle"> 
-	                         <div class="mr-3 ">Tổng chiếm chỗ (m3)	
-                        <span class="arrow @(GetSortStyle("TTKLD_TongChiemCho"))"></span></div>
-                         </th>
-                         <th onclick="@(() => SortTable("TTKLD_KlDapTraDat"))" class="text-center text-danger sortable align-middle"> 
-	                         <div class="mr-3 ">KL đắp trả đất (m3)	
-                        <span class="arrow @(GetSortStyle("TTKLD_KlDapTraDat"))"></span></div>
-                         </th>
-                         <th onclick="@(() => SortTable("TTKLD_KlDapTraDa"))" class="text-center text-danger sortable align-middle"> 
-	                         <div class="mr-3 ">KL đắp trả đá (m3)	
-                        <span class="arrow @(GetSortStyle("TTKLD_KlDapTraDa"))"></span></div>
-                         </th>
-                         <th onclick="@(() => SortTable("TTKLD_TongDapTra"))" class="text-center text-danger sortable align-middle"> 
-	                         <div class="mr-3 ">Tổng đắp trả (m3)	
-                        <span class="arrow @(GetSortStyle("TTKLD_TongDapTra"))"></span></div>
-                         </th>
-                         <th onclick="@(() => SortTable("TTKLD_KlThuaDat"))" class="text-center text-danger sortable align-middle"> 
-	                         <div class="mr-3 ">KL thừa đất (m3)	
-                        <span class="arrow @(GetSortStyle("TTKLD_KlThuaDat"))"></span></div>
-                         </th>
-                         <th onclick="@(() => SortTable("TTKLD_KlThuaDa"))" class="text-center text-danger sortable align-middle"> 
-	                         <div class="mr-3 ">KL thừa đá (m3)	
-                        <span class="arrow @(GetSortStyle("TTKLD_KlThuaDa"))"></span></div>
-                         </th>
-                         <th onclick="@(() => SortTable("TTKLD_TongThua"))" class="text-center text-danger sortable align-middle"> 
-	                         <div class="mr-3 ">Tổng thừa (m3)
+                        <th onclick="@(() => SortTable("TTKLD_CRongDaoDayLonDat"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3 ">
+                                C.Rộng đào đáy lớn đất (m)
+                                <span class="arrow @(GetSortStyle("TTKLD_CRongDaoDayLonDat"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("TTKLD_CRongDaoDayLonDa"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3 ">
+                                C.Rộng đào đáy lớn đá (m)
+                                <span class="arrow @(GetSortStyle("TTKLD_CRongDaoDayLonDa"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("TTKLD_DienTichDaoDat"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3 ">
+                                Diện tích đào đất (m2)
+                                <span class="arrow @(GetSortStyle("TTKLD_DienTichDaoDat"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("TTKLD_DienTichDaoDa"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3 ">
+                                Diện tích đào đá (m2)
+                                <span class="arrow @(GetSortStyle("TTKLD_DienTichDaoDa"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("TTKLD_TongDtDao"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3 ">
+                                Tổng DT đào (m2)
+                                <span class="arrow @(GetSortStyle("TTKLD_TongDtDao"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("TTKLD_KlDaoDat"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3 ">
+                                KL đào đất (m3)
+                                <span class="arrow @(GetSortStyle("TTKLD_KlDaoDat"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("TTKLD_KlDaoDa"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3 ">
+                                KL đào đá (m3)
+                                <span class="arrow @(GetSortStyle("TTKLD_KlDaoDa"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("TTKLD_TongKlDao"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3 ">
+                                Tổng KL đào (m3)
+                                <span class="arrow @(GetSortStyle("TTKLD_TongKlDao"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("TTKLD_KlChiemChoDat"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3 ">
+                                KL chiếm chỗ đất (m3)
+                                <span class="arrow @(GetSortStyle("TTKLD_KlChiemChoDat"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("TTKLD_KlChiemChoDa"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3 ">
+                                KL chiếm chỗ đá (m3)
+                                <span class="arrow @(GetSortStyle("TTKLD_KlChiemChoDa"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("TTKLD_TongChiemCho"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3 ">
+                                Tổng chiếm chỗ (m3)
+                                <span class="arrow @(GetSortStyle("TTKLD_TongChiemCho"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("TTKLD_KlDapTraDat"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3 ">
+                                KL đắp trả đất (m3)
+                                <span class="arrow @(GetSortStyle("TTKLD_KlDapTraDat"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("TTKLD_KlDapTraDa"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3 ">
+                                KL đắp trả đá (m3)
+                                <span class="arrow @(GetSortStyle("TTKLD_KlDapTraDa"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("TTKLD_TongDapTra"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3 ">
+                                Tổng đắp trả (m3)
+                                <span class="arrow @(GetSortStyle("TTKLD_TongDapTra"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("TTKLD_KlThuaDat"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3 ">
+                                KL thừa đất (m3)
+                                <span class="arrow @(GetSortStyle("TTKLD_KlThuaDat"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("TTKLD_KlThuaDa"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3 ">
+                                KL thừa đá (m3)
+                                <span class="arrow @(GetSortStyle("TTKLD_KlThuaDa"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("TTKLD_TongThua"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3 ">
+                                Tổng thừa (m3)
                                 <span class="arrow @(GetSortStyle("TTKLD_TongThua"))"></span>
                             </div>
-                         </th>
+                        </th>
 
-                       @* Thông tin lý trình truyền dẫn *@
+                        @* Thông tin lý trình truyền dẫn *@
                         <th onclick="@(() => SortTable("ThongTinLyTrinhTruyenDan_TuLyTrinh"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Từ lý trình
+                            <div class="mr-3">
+                                Từ lý trình
                                 <span class="arrow @(GetSortStyle("ThongTinLyTrinhTruyenDan_TuLyTrinh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinLyTrinhTruyenDan_DenLyTrinh"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Đến lý trình
+                            <div class="mr-3">
+                                Đến lý trình
                                 <span class="arrow @(GetSortStyle("ThongTinLyTrinhTruyenDan_DenLyTrinh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinLyTrinhTruyenDan_TuHoGa"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Từ hố ga
+                            <div class="mr-3">
+                                Từ hố ga
                                 <span class="arrow @(GetSortStyle("ThongTinLyTrinhTruyenDan_TuHoGa"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinLyTrinhTruyenDan_DenHoGa"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Đến hố ga
+                            <div class="mr-3">
+                                Đến hố ga
                                 <span class="arrow @(GetSortStyle("ThongTinLyTrinhTruyenDan_DenHoGa"))"></span>
                             </div>
                         </th>
 
                         @* Thông tin đường truyền dẫn *@
                         <th onclick="@(() => SortTable("ThongTinDuongTruyenDan_HinhThucTruyenDan_Name"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Hình thức truyền dẫn
+                            <div class="mr-3">
+                                Hình thức truyền dẫn
                                 <span class="arrow @(GetSortStyle("ThongTinDuongTruyenDan_HinhThucTruyenDan_Name"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinDuongTruyenDan_LoaiTruyenDan_Name"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Loại truyền dẫn
+                            <div class="mr-3">
+                                Loại truyền dẫn
                                 <span class="arrow @(GetSortStyle("ThongTinDuongTruyenDan_LoaiTruyenDan_Name"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai"))" class="text-center text-info sortable align-middle">
-                            <div class="mr-3">Tên loại truyền dẫn sau phân loại
+                            <div class="mr-3">
+                                Tên loại truyền dẫn sau phân loại
                                 <span class="arrow @(GetSortStyle("PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai"))"></span>
                             </div>
                         </th>
-    
-
-                      @* Thông tin chiều dài *@
-                    <th onclick="@(() => SortTable("TTCDSLCauKienDuongTruyenDan_TongChieuDai"))" class="text-center sortable align-middle">
-                        <div class="mr-3">Tổng chiều dài (m)
-                            <span class="arrow @(GetSortStyle("TTCDSLCauKienDuongTruyenDan_TongChieuDai"))"></span>
-                        </div>
-                    </th>
-                    <th onclick="@(() => SortTable("TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien"))" class="text-center sortable align-middle">
-                        <div class="mr-3">Chiều dài 01 cấu kiện (m)
-                            <span class="arrow @(GetSortStyle("TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien"))"></span>
-                        </div>
-                    </th>
-                    <th onclick="@(() => SortTable("TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl"))" class="text-center text-danger sortable align-middle">
-                        <div class="mr-3">SL cấu kiện tính KL
-                            <span class="arrow @(GetSortStyle("TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl"))"></span>
-                        </div>
-                    </th>
-
-                    @* Thông tin móng đường truyền dẫn *@
-                    <th onclick="@(() => SortTable("PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop"))" class="text-center text-info sortable align-middle">
-                        <div class="mr-3">Phân loại móng cống tròn, cống hộp
-                            <span class="arrow @(GetSortStyle("PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop"))"></span>
-                        </div>
-                    </th>
-                    <th onclick="@(() => SortTable("ThongTinMongDuongTruyenDan_LoaiMong_Name"))" class="text-center sortable align-middle">
-                        <div class="mr-3">Loại móng
-                            <span class="arrow @(GetSortStyle("ThongTinMongDuongTruyenDan_LoaiMong_Name"))"></span>
-                        </div>
-                    </th>
-                    <th onclick="@(() => SortTable("ThongTinMongDuongTruyenDan_HinhThucMong_Name"))" class="text-center sortable align-middle">
-                        <div class="mr-3">Hình thức móng
-                            <span class="arrow @(GetSortStyle("ThongTinMongDuongTruyenDan_HinhThucMong_Name"))"></span>
-                        </div>
-                    </th>
-
-                    @* Thông tin đế cống *@
-                    <th onclick="@(() => SortTable("ThongTinDeCong_D"))" class="text-center sortable align-middle">
-                        <div class="mr-3">D
-                            <span class="arrow @(GetSortStyle("ThongTinDeCong_D"))"></span>
-                        </div>
-                    </th>
-                    <th onclick="@(() => SortTable("ThongTinDeCong_R"))" class="text-center sortable align-middle">
-                        <div class="mr-3">R
-                            <span class="arrow @(GetSortStyle("ThongTinDeCong_R"))"></span>
-                        </div>
-                    </th>
-                    <th onclick="@(() => SortTable("ThongTinDeCong_C"))" class="text-center sortable align-middle">
-                        <div class="mr-3">C
-                            <span class="arrow @(GetSortStyle("ThongTinDeCong_C"))"></span>
-                        </div>
-                    </th>
-                    <th onclick="@(() => SortTable("ThongTinDeCong_SlDeCong01CauKienTruyenDan"))" class="text-center sortable align-middle">
-                        <div class="mr-3">SL đế cống/01 cấu kiện truyền dẫn (C.Kiện)
-                            <span class="arrow @(GetSortStyle("ThongTinDeCong_SlDeCong01CauKienTruyenDan"))"></span>
-                        </div>
-                    </th>
-                    <th onclick="@(() => SortTable("ThongTinDeCong_Kl01DeCong"))" class="text-center sortable align-middle">
-                        <div class="mr-3">KL 01 đế cống
-                            <span class="arrow @(GetSortStyle("ThongTinDeCong_Kl01DeCong"))"></span>
-                        </div>
-                    </th>
-                    <th onclick="@(() => SortTable("ThongTinDeCong_TongSoLuongDC"))" class="text-center text-danger sortable align-middle">
-                        <div class="mr-3">Tổng số lượng đế cống
-                            <span class="arrow @(GetSortStyle("ThongTinDeCong_TongSoLuongDC"))"></span>
-                        </div>
-                    </th>
-                    <th onclick="@(() => SortTable("ThongTinDeCong_TongKLDeCong"))" class="text-center text-danger sortable align-middle">
-                        <div class="mr-3">Tổng KL đế cống
-                            <span class="arrow @(GetSortStyle("ThongTinDeCong_TongKLDeCong"))"></span>
-                        </div>
-                    </th>
 
 
-                       @* Thông tin cấu tạo cống tròn *@
+                        @* Thông tin chiều dài *@
+                        <th onclick="@(() => SortTable("TTCDSLCauKienDuongTruyenDan_TongChieuDai"))" class="text-center sortable align-middle">
+                            <div class="mr-3">
+                                Tổng chiều dài (m)
+                                <span class="arrow @(GetSortStyle("TTCDSLCauKienDuongTruyenDan_TongChieuDai"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien"))" class="text-center sortable align-middle">
+                            <div class="mr-3">
+                                Chiều dài 01 cấu kiện (m)
+                                <span class="arrow @(GetSortStyle("TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3">
+                                SL cấu kiện tính KL
+                                <span class="arrow @(GetSortStyle("TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl"))"></span>
+                            </div>
+                        </th>
+
+                        @* Thông tin móng đường truyền dẫn *@
+                        <th onclick="@(() => SortTable("PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop"))" class="text-center text-info sortable align-middle">
+                            <div class="mr-3">
+                                Phân loại móng cống tròn, cống hộp
+                                <span class="arrow @(GetSortStyle("PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("ThongTinMongDuongTruyenDan_LoaiMong_Name"))" class="text-center sortable align-middle">
+                            <div class="mr-3">
+                                Loại móng
+                                <span class="arrow @(GetSortStyle("ThongTinMongDuongTruyenDan_LoaiMong_Name"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("ThongTinMongDuongTruyenDan_HinhThucMong_Name"))" class="text-center sortable align-middle">
+                            <div class="mr-3">
+                                Hình thức móng
+                                <span class="arrow @(GetSortStyle("ThongTinMongDuongTruyenDan_HinhThucMong_Name"))"></span>
+                            </div>
+                        </th>
+
+                        @* Thông tin đế cống *@
+                        <th onclick="@(() => SortTable("ThongTinDeCong_D"))" class="text-center sortable align-middle">
+                            <div class="mr-3">
+                                D
+                                <span class="arrow @(GetSortStyle("ThongTinDeCong_D"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("ThongTinDeCong_R"))" class="text-center sortable align-middle">
+                            <div class="mr-3">
+                                R
+                                <span class="arrow @(GetSortStyle("ThongTinDeCong_R"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("ThongTinDeCong_C"))" class="text-center sortable align-middle">
+                            <div class="mr-3">
+                                C
+                                <span class="arrow @(GetSortStyle("ThongTinDeCong_C"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("ThongTinDeCong_SlDeCong01CauKienTruyenDan"))" class="text-center sortable align-middle">
+                            <div class="mr-3">
+                                SL đế cống/01 cấu kiện truyền dẫn (C.Kiện)
+                                <span class="arrow @(GetSortStyle("ThongTinDeCong_SlDeCong01CauKienTruyenDan"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("ThongTinDeCong_Kl01DeCong"))" class="text-center sortable align-middle">
+                            <div class="mr-3">
+                                KL 01 đế cống
+                                <span class="arrow @(GetSortStyle("ThongTinDeCong_Kl01DeCong"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("ThongTinDeCong_TongSoLuongDC"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3">
+                                Tổng số lượng đế cống
+                                <span class="arrow @(GetSortStyle("ThongTinDeCong_TongSoLuongDC"))"></span>
+                            </div>
+                        </th>
+                        <th onclick="@(() => SortTable("ThongTinDeCong_TongKLDeCong"))" class="text-center text-danger sortable align-middle">
+                            <div class="mr-3">
+                                Tổng KL đế cống
+                                <span class="arrow @(GetSortStyle("ThongTinDeCong_TongKLDeCong"))"></span>
+                            </div>
+                        </th>
+
+
+                        @* Thông tin cấu tạo cống tròn *@
                         <th onclick="@(() => SortTable("ThongTinCauTaoCongTron_CDayPhuBi"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Dầy phủ bì (m)
+                            <div class="mr-3">
+                                C.Dầy phủ bì (m)
                                 <span class="arrow @(GetSortStyle("ThongTinCauTaoCongTron_CDayPhuBi"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinCauTaoCongTron_SoCanh"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Số cạnh
+                            <div class="mr-3">
+                                Số cạnh
                                 <span class="arrow @(GetSortStyle("ThongTinCauTaoCongTron_SoCanh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinCauTaoCongTron_LongSuDung"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Lòng sử dụng (m)
+                            <div class="mr-3">
+                                Lòng sử dụng (m)
                                 <span class="arrow @(GetSortStyle("ThongTinCauTaoCongTron_LongSuDung"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinCauTaoCongTron_CCaoCauKien"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao cấu kiện
+                            <div class="mr-3">
+                                C.Cao cấu kiện
                                 <span class="arrow @(GetSortStyle("ThongTinCauTaoCongTron_CCaoCauKien"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinCauTaoCongTron_CCaoLotMong"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Cao lót móng (m)
+                            <div class="mr-3">
+                                C.Cao lót móng (m)
                                 <span class="arrow @(GetSortStyle("ThongTinCauTaoCongTron_CCaoLotMong"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinCauTaoCongTron_CRongLotMong"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Rộng lót móng
+                            <div class="mr-3">
+                                C.Rộng lót móng
                                 <span class="arrow @(GetSortStyle("ThongTinCauTaoCongTron_CRongLotMong"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinCauTaoCongTron_CCaoMong"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Cao móng (m)
+                            <div class="mr-3">
+                                C.Cao móng (m)
                                 <span class="arrow @(GetSortStyle("ThongTinCauTaoCongTron_CCaoMong"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinCauTaoCongTron_CRongMong"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Rộng móng (m)
+                            <div class="mr-3">
+                                C.Rộng móng (m)
                                 <span class="arrow @(GetSortStyle("ThongTinCauTaoCongTron_CRongMong"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinCauTaoCongTron_CCaoDe"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Cao đế (tại vị trí đặt C.Kiện) (m)
+                            <div class="mr-3">
+                                C.Cao đế (tại vị trí đặt C.Kiện) (m)
                                 <span class="arrow @(GetSortStyle("ThongTinCauTaoCongTron_CCaoDe"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinCauTaoCongTron_TongCCaoCong"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Tổng C.Cao cống (m)
+                            <div class="mr-3">
+                                Tổng C.Cao cống (m)
                                 <span class="arrow @(GetSortStyle("ThongTinCauTaoCongTron_TongCCaoCong"))"></span>
                             </div>
                         </th>
 
                         @* Thông tin tính KL cấu kiện cống tròn, cống hộp *@
                         <th onclick="@(() => SortTable("TTTKLCKCTCH_CDMoiNoiCKien"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Chiều dài mối nối C.Kiện (m)
+                            <div class="mr-3">
+                                Chiều dài mối nối C.Kiện (m)
                                 <span class="arrow @(GetSortStyle("TTTKLCKCTCH_CDMoiNoiCKien"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTKLCKCTCH_SLCKDungDeTinhCD"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Số lượng C.Kiện dùng để tính chiều dài bổ sung (C.Kiện)
+                            <div class="mr-3">
+                                Số lượng C.Kiện dùng để tính chiều dài bổ sung (C.Kiện)
                                 <span class="arrow @(GetSortStyle("TTTKLCKCTCH_SLCKDungDeTinhCD"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTKLCKCTCH_SLCKNguyen"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">SL cấu kiện nguyên
+                            <div class="mr-3">
+                                SL cấu kiện nguyên
                                 <span class="arrow @(GetSortStyle("TTTKLCKCTCH_SLCKNguyen"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTKLCKCTCH_CDCanLapDat"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Dài cần để lắp đặt được theo số CK nguyên (m)
+                            <div class="mr-3">
+                                C.Dài cần để lắp đặt được theo số CK nguyên (m)
                                 <span class="arrow @(GetSortStyle("TTTKLCKCTCH_CDCanLapDat"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTKLCKCTCH_TongCD"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Tổng C.Dài lắp đặt theo số CK nguyên (m)
+                            <div class="mr-3">
+                                Tổng C.Dài lắp đặt theo số CK nguyên (m)
                                 <span class="arrow @(GetSortStyle("TTTKLCKCTCH_TongCD"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTKLCKCTCH_CDThucTeThuaThieu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Dài thực tế còn thừa (+)/thiếu (-) so với C.Rộng lòng mũ mố hố ga (m)
+                            <div class="mr-3">
+                                C.Dài thực tế còn thừa (+)/thiếu (-) so với C.Rộng lòng mũ mố hố ga (m)
                                 <span class="arrow @(GetSortStyle("TTTKLCKCTCH_CDThucTeThuaThieu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTKLCKCTCH_XacDinhCongCanThem"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Xác định ống cống cần thêm
+                            <div class="mr-3">
+                                Xác định ống cống cần thêm
                                 <span class="arrow @(GetSortStyle("TTTKLCKCTCH_XacDinhCongCanThem"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTKLCKCTCH_CDThuaThieuSauTinh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Dài còn thừa (+)/thiếu (-) sau tính theo CK tính KL (m)
+                            <div class="mr-3">
+                                C.Dài còn thừa (+)/thiếu (-) sau tính theo CK tính KL (m)
                                 <span class="arrow @(GetSortStyle("TTTKLCKCTCH_CDThuaThieuSauTinh"))"></span>
                             </div>
                         </th>
 
 
 
-                       @* Thông tin kích thước hình học cống hộp, rãnh *@
+                        @* Thông tin kích thước hình học cống hộp, rãnh *@
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CauTaoTuong_Name"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Cấu tạo tường
+                            <div class="mr-3">
+                                Cấu tạo tường
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CauTaoTuong_Name"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CauTaoMuMo_Name"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Cấu tạo mũ mố
+                            <div class="mr-3">
+                                Cấu tạo mũ mố
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CauTaoMuMo_Name"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_ChatMatTrong_Name"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Chát mặt trong
+                            <div class="mr-3">
+                                Chát mặt trong
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_ChatMatTrong_Name"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_ChatMatNgoai_Name"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Chát mặt ngoài
+                            <div class="mr-3">
+                                Chát mặt ngoài
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_ChatMatNgoai_Name"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CCaoLotMong"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Cao lót móng (m)
+                            <div class="mr-3">
+                                C.Cao lót móng (m)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CCaoLotMong"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CRongLotMong"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Rộng lót móng (m)
+                            <div class="mr-3">
+                                C.Rộng lót móng (m)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CRongLotMong"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CCaoMong"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Cao móng (m)
+                            <div class="mr-3">
+                                C.Cao móng (m)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CCaoMong"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CRongMong"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Rộng móng (m)
+                            <div class="mr-3">
+                                C.Rộng móng (m)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CRongMong"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CCaoDe"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Cao đế (m)
+                            <div class="mr-3">
+                                C.Cao đế (m)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CCaoDe"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CRongDe"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Rộng đế (m)
+                            <div class="mr-3">
+                                C.Rộng đế (m)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CRongDe"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CDayTuong01Ben"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Dầy tường 01 bên (m)
+                            <div class="mr-3">
+                                C.Dầy tường 01 bên (m)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CDayTuong01Ben"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_SoLuongTuong"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Số lượng tường (m)
+                            <div class="mr-3">
+                                Số lượng tường (m)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_SoLuongTuong"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CRongLongSuDung"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Rộng lòng sử dụng (m)
+                            <div class="mr-3">
+                                C.Rộng lòng sử dụng (m)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CRongLongSuDung"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CCaoTuongCongHop"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Cao tường cống hộp (m)
+                            <div class="mr-3">
+                                C.Cao tường cống hộp (m)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CCaoTuongCongHop"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CCaoTuongRanh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao tường rãnh
+                            <div class="mr-3">
+                                C.Cao tường rãnh
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CCaoTuongRanh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CCaoTuongGop"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao tường gộp
+                            <div class="mr-3">
+                                C.Cao tường gộp
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CCaoTuongGop"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CCaoMuMoThotDuoi"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Cao mũ mố thớt dưới (m)
+                            <div class="mr-3">
+                                C.Cao mũ mố thớt dưới (m)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CCaoMuMoThotDuoi"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CRongMuMoDuoi"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Rộng mũ mố dưới
+                            <div class="mr-3">
+                                C.Rộng mũ mố dưới
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CRongMuMoDuoi"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CCaoMuMoThotTren"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Cao mũ mố thớt trên (m)
+                            <div class="mr-3">
+                                C.Cao mũ mố thớt trên (m)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CCaoMuMoThotTren"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CRongMuMoTren"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Rộng mũ mố trên
+                            <div class="mr-3">
+                                C.Rộng mũ mố trên
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CRongMuMoTren"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("PhanLoaiThanhChong_LoaiThanhChong"))" class="text-center text-info sortable align-middle">
-                            <div class="mr-3">Loại thanh chống
+                            <div class="mr-3">
+                                Loại thanh chống
                                 <span class="arrow @(GetSortStyle("PhanLoaiThanhChong_LoaiThanhChong"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CauTaoThanhChong_Name"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Cấu tạo thanh chống
+                            <div class="mr-3">
+                                Cấu tạo thanh chống
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CauTaoThanhChong_Name"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CCaoThanhChong"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Cao thanh chống (m)
+                            <div class="mr-3">
+                                C.Cao thanh chống (m)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CCaoThanhChong"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CRongThanhChong"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Rộng thanh chống (m)
+                            <div class="mr-3">
+                                C.Rộng thanh chống (m)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CRongThanhChong"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CDai"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Dài (m)
+                            <div class="mr-3">
+                                C.Dài (m)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CDai"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_SoLuongThanhChong"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Số lượng thanh chống (cái)
+                            <div class="mr-3">
+                                Số lượng thanh chống (cái)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_SoLuongThanhChong"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CCaoChatMatTrong"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao chát mặt trong (m)
+                            <div class="mr-3">
+                                C.Cao chát mặt trong (m)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CCaoChatMatTrong"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_CCaoChatmatNgoai"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao chát mặt ngoài (m)
+                            <div class="mr-3">
+                                C.Cao chát mặt ngoài (m)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_CCaoChatmatNgoai"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTKTHHCongHopRanh_TongChieuCao"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Tổng chiều cao (m)
+                            <div class="mr-3">
+                                Tổng chiều cao (m)
                                 <span class="arrow @(GetSortStyle("TTKTHHCongHopRanh_TongChieuCao"))"></span>
                             </div>
                         </th>
@@ -4410,97 +4511,116 @@
 
                         @* Thông tin tấm đan tiêu chuẩn và loại 02 *@
                         <th onclick="@(() => SortTable("PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan"))" class="text-center text-info sortable align-middle">
-                            <div class="mr-3">Tên loại tấm đan tiêu chuẩn
+                            <div class="mr-3">
+                                Tên loại tấm đan tiêu chuẩn
                                 <span class="arrow @(GetSortStyle("PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Cấu tạo tấm đan truyền dẫn tấm đan tiêu chuẩn
+                            <div class="mr-3">
+                                Cấu tạo tấm đan truyền dẫn tấm đan tiêu chuẩn
                                 <span class="arrow @(GetSortStyle("TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTDCongHoRanh_SoLuong"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Số lượng
+                            <div class="mr-3">
+                                Số lượng
                                 <span class="arrow @(GetSortStyle("TTTDCongHoRanh_SoLuong"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTDCongHoRanh_CDai"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Dài
+                            <div class="mr-3">
+                                C.Dài
                                 <span class="arrow @(GetSortStyle("TTTDCongHoRanh_CDai"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTDCongHoRanh_CRong"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Rộng
+                            <div class="mr-3">
+                                C.Rộng
                                 <span class="arrow @(GetSortStyle("TTTDCongHoRanh_CRong"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTDCongHoRanh_CCao"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Cao
+                            <div class="mr-3">
+                                C.Cao
                                 <span class="arrow @(GetSortStyle("TTTDCongHoRanh_CCao"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("PhanLoaiTDanTDan_TenLoaiTamDanLoai02"))" class="text-center text-info sortable align-middle">
-                            <div class="mr-3">Tên loại tấm đan loại 02
+                            <div class="mr-3">
+                                Tên loại tấm đan loại 02
                                 <span class="arrow @(GetSortStyle("PhanLoaiTDanTDan_TenLoaiTamDanLoai02"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTDCongHoRanh_CauTaoTamDanTruyenDan_Name"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Cấu tạo tấm đan truyền dẫn
+                            <div class="mr-3">
+                                Cấu tạo tấm đan truyền dẫn
                                 <span class="arrow @(GetSortStyle("TTTDCongHoRanh_CauTaoTamDanTruyenDan_Name"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTDCongHoRanh_SoLuong1"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Số lượng
+                            <div class="mr-3">
+                                Số lượng
                                 <span class="arrow @(GetSortStyle("TTTDCongHoRanh_SoLuong1"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTDCongHoRanh_CDai1"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Dài
+                            <div class="mr-3">
+                                C.Dài
                                 <span class="arrow @(GetSortStyle("TTTDCongHoRanh_CDai1"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTDCongHoRanh_CRong1"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Rộng
+                            <div class="mr-3">
+                                C.Rộng
                                 <span class="arrow @(GetSortStyle("TTTDCongHoRanh_CRong1"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTDCongHoRanh_CCao1"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Cao
+                            <div class="mr-3">
+                                C.Cao
                                 <span class="arrow @(GetSortStyle("TTTDCongHoRanh_CCao1"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTDCongHoRanh_ChieuDaiMoiNoi"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Chiều dài mối nối (m)
+                            <div class="mr-3">
+                                Chiều dài mối nối (m)
                                 <span class="arrow @(GetSortStyle("TTTDCongHoRanh_ChieuDaiMoiNoi"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTDCongHoRanh_SoLuongTDanDungDeTinhChieuDaiBoSung"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Số lượng T.Đan dùng để tính chiều dài bổ sung (C.Kiện)
+                            <div class="mr-3">
+                                Số lượng T.Đan dùng để tính chiều dài bổ sung (C.Kiện)
                                 <span class="arrow @(GetSortStyle("TTTDCongHoRanh_SoLuongTDanDungDeTinhChieuDaiBoSung"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTDCongHoRanh_SLCauKienNguyen"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">SL cấu kiện nguyên
+                            <div class="mr-3">
+                                SL cấu kiện nguyên
                                 <span class="arrow @(GetSortStyle("TTTDCongHoRanh_SLCauKienNguyen"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTDCongHoRanh_ChieuDaiTheoSoCKNguyen"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Chiều dài cần để lắp đặt được theo số CK nguyên (m)
+                            <div class="mr-3">
+                                Chiều dài cần để lắp đặt được theo số CK nguyên (m)
                                 <span class="arrow @(GetSortStyle("TTTDCongHoRanh_ChieuDaiTheoSoCKNguyen"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTDCongHoRanh_TongChieuDaiTheoCKNguyen"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Tổng chiều dài lắp đặt theo số CK nguyên (m)
+                            <div class="mr-3">
+                                Tổng chiều dài lắp đặt theo số CK nguyên (m)
                                 <span class="arrow @(GetSortStyle("TTTDCongHoRanh_TongChieuDaiTheoCKNguyen"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTDCongHoRanh_ChieuDaiThucTe"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Chiều dài thực tế còn thừa (+)/thiếu (-) so với C.Rộng lòng mũ mố hố ga (m)
+                            <div class="mr-3">
+                                Chiều dài thực tế còn thừa (+)/thiếu (-) so với C.Rộng lòng mũ mố hố ga (m)
                                 <span class="arrow @(GetSortStyle("TTTDCongHoRanh_ChieuDaiThucTe"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTTDCongHoRanh_XacDinhOngCongCanThem"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Xác định ống cống cần thêm
+                            <div class="mr-3">
+                                Xác định ống cống cần thêm
                                 <span class="arrow @(GetSortStyle("TTTDCongHoRanh_XacDinhOngCongCanThem"))"></span>
                             </div>
                         </th>
@@ -4509,32 +4629,38 @@
 
                         @* Thông tin kích thước hình học ống nhựa *@
                         <th onclick="@(() => SortTable("ThongTinKichThuocHinhHocOngNhua_CDayPhuBi"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Dầy phủ bì (m)
+                            <div class="mr-3">
+                                C.Dầy phủ bì (m)
                                 <span class="arrow @(GetSortStyle("ThongTinKichThuocHinhHocOngNhua_CDayPhuBi"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinKichThuocHinhHocOngNhua_SoCanh"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Số cạnh
+                            <div class="mr-3">
+                                Số cạnh
                                 <span class="arrow @(GetSortStyle("ThongTinKichThuocHinhHocOngNhua_SoCanh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinKichThuocHinhHocOngNhua_LongSuDung"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Lòng sử dụng (m)
+                            <div class="mr-3">
+                                Lòng sử dụng (m)
                                 <span class="arrow @(GetSortStyle("ThongTinKichThuocHinhHocOngNhua_LongSuDung"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinKichThuocHinhHocOngNhua_TongCCaoOng"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Tổng C.Cao ống (m)
+                            <div class="mr-3">
+                                Tổng C.Cao ống (m)
                                 <span class="arrow @(GetSortStyle("ThongTinKichThuocHinhHocOngNhua_TongCCaoOng"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinKichThuocHinhHocOngNhua_CCaoDemCat"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Cao đệm cát (m)
+                            <div class="mr-3">
+                                C.Cao đệm cát (m)
                                 <span class="arrow @(GetSortStyle("ThongTinKichThuocHinhHocOngNhua_CCaoDemCat"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("ThongTinKichThuocHinhHocOngNhua_CCaoDapCat"))" class="text-center sortable align-middle">
-                            <div class="mr-3">C.Cao đắp cát (m)
+                            <div class="mr-3">
+                                C.Cao đắp cát (m)
                                 <span class="arrow @(GetSortStyle("ThongTinKichThuocHinhHocOngNhua_CCaoDapCat"))"></span>
                             </div>
                         </th>
@@ -4542,286 +4668,342 @@
 
                         @* Cao độ thượng lưu *@
                         <th onclick="@(() => SortTable("CDThuongLuu_HienTrangTruocKhiDaoThuongLuu"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Hiện trạng trước khi đào thượng lưu (m)
+                            <div class="mr-3">
+                                Hiện trạng trước khi đào thượng lưu (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_HienTrangTruocKhiDaoThuongLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DayDaoGop"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đáy đào gộp (C.Tròn, C.Hộp, Rãnh, Ô.Nhựa, rãnh thang)
+                            <div class="mr-3">
+                                Đáy đào gộp (C.Tròn, C.Hộp, Rãnh, Ô.Nhựa, rãnh thang)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DayDaoGop"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_ChieuSauDao"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Chiều sâu đào
+                            <div class="mr-3">
+                                Chiều sâu đào
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_ChieuSauDao"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DayDaoCongTron"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đáy đào cống tròn (m)
+                            <div class="mr-3">
+                                Đáy đào cống tròn (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DayDaoCongTron"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DayDaoCongHop"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đáy đào cống hộp (m)
+                            <div class="mr-3">
+                                Đáy đào cống hộp (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DayDaoCongHop"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DayDaoRanh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đáy đào rãnh (m)
+                            <div class="mr-3">
+                                Đáy đào rãnh (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DayDaoRanh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DayDaoOngNhua"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đáy đào ống nhựa (m)
+                            <div class="mr-3">
+                                Đáy đào ống nhựa (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DayDaoOngNhua"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhLotGop"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh lót gộp (C.Tròn, C.Hộp, Rãnh, ống nhựa, rãnh thang)
+                            <div class="mr-3">
+                                Đỉnh lót gộp (C.Tròn, C.Hộp, Rãnh, ống nhựa, rãnh thang)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhLotGop"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhLotOngNhua"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh lót ống nhựa
+                            <div class="mr-3">
+                                Đỉnh lót ống nhựa
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhLotOngNhua"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhLotCongTron"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh lót cống tròn (m)
+                            <div class="mr-3">
+                                Đỉnh lót cống tròn (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhLotCongTron"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhLotCongHop"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh lót cống hộp (m)
+                            <div class="mr-3">
+                                Đỉnh lót cống hộp (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhLotCongHop"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhLotRanh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh lót rãnh (m)
+                            <div class="mr-3">
+                                Đỉnh lót rãnh (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhLotRanh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhMongGop"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh móng gộp (C.Tròn, C.Hộp, Rãnh, rãnh thang)
+                            <div class="mr-3">
+                                Đỉnh móng gộp (C.Tròn, C.Hộp, Rãnh, rãnh thang)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhMongGop"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhMongCongTron"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh móng cống tròn (m)
+                            <div class="mr-3">
+                                Đỉnh móng cống tròn (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhMongCongTron"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhMongCongHop"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh móng cống hộp (m)
+                            <div class="mr-3">
+                                Đỉnh móng cống hộp (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhMongCongHop"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhMongRanh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh móng rãnh (m)
+                            <div class="mr-3">
+                                Đỉnh móng rãnh (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhMongRanh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhDeCong"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh đế cống (m)
+                            <div class="mr-3">
+                                Đỉnh đế cống (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhDeCong"))"></span>
                             </div>
                         </th>
 
                         <th onclick="@(() => SortTable("CDThuongLuu_DayDongChay"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Đáy dòng chảy (m)
+                            <div class="mr-3">
+                                Đáy dòng chảy (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DayDongChay"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_CCaoTuongCongRanh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao tường cống, rãnh (m)
+                            <div class="mr-3">
+                                C.Cao tường cống, rãnh (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_CCaoTuongCongRanh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhTuongCHopRanh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh tường C.Hộp, rãnh (m)
+                            <div class="mr-3">
+                                Đỉnh tường C.Hộp, rãnh (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhTuongCHopRanh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhMuMoThotDuoiCongHopRanh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh mũ mố thớt dưới cống hộp rãnh (m)
+                            <div class="mr-3">
+                                Đỉnh mũ mố thớt dưới cống hộp rãnh (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhMuMoThotDuoiCongHopRanh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhGop"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh gộp (C.Tròn, C.Hộp, rãnh, Ô.Nhựa, Rãnh thang (m)
+                            <div class="mr-3">
+                                Đỉnh gộp (C.Tròn, C.Hộp, rãnh, Ô.Nhựa, Rãnh thang (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhGop"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhTrongLongSuDung"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Đỉnh trong lòng sử dụng (m)
+                            <div class="mr-3">
+                                Đỉnh trong lòng sử dụng (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhTrongLongSuDung"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhCongTron"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh cống tròn (m)
+                            <div class="mr-3">
+                                Đỉnh cống tròn (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhCongTron"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhCongHop"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh cống hộp (m)
+                            <div class="mr-3">
+                                Đỉnh cống hộp (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhCongHop"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhRanh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh rãnh (m)
+                            <div class="mr-3">
+                                Đỉnh rãnh (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhRanh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhOngNhua"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh ống nhựa (m)
+                            <div class="mr-3">
+                                Đỉnh ống nhựa (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhOngNhua"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDThuongLuu_DinhDapCat"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh đắp cát (m)
+                            <div class="mr-3">
+                                Đỉnh đắp cát (m)
                                 <span class="arrow @(GetSortStyle("CDThuongLuu_DinhDapCat"))"></span>
                             </div>
                         </th>
 
 
-                       @* Cao độ hạ lưu *@
+                        @* Cao độ hạ lưu *@
                         <th onclick="@(() => SortTable("CDHaLu_HienTrangTruocKhiDaoHaLuu"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Hiện trạng trước khi đào hạ lưu (m)
+                            <div class="mr-3">
+                                Hiện trạng trước khi đào hạ lưu (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_HienTrangTruocKhiDaoHaLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DayDaoGop"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đáy đào gộp (C.Tròn, C.Hộp, Rãnh, Ô.Nhựa, rãnh thang)
+                            <div class="mr-3">
+                                Đáy đào gộp (C.Tròn, C.Hộp, Rãnh, Ô.Nhựa, rãnh thang)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DayDaoGop"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_ChieuSauDao"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Chiều sâu đào
+                            <div class="mr-3">
+                                Chiều sâu đào
                                 <span class="arrow @(GetSortStyle("CDHaLu_ChieuSauDao"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DayDaoCongTron"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đáy đào cống tròn (m)
+                            <div class="mr-3">
+                                Đáy đào cống tròn (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DayDaoCongTron"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DayDaoCongHop"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đáy đào cống hộp (m)
+                            <div class="mr-3">
+                                Đáy đào cống hộp (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DayDaoCongHop"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DayDaoRanh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đáy đào rãnh (m)
+                            <div class="mr-3">
+                                Đáy đào rãnh (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DayDaoRanh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DayDaoOngNhua"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đáy đào ống nhựa (m)
+                            <div class="mr-3">
+                                Đáy đào ống nhựa (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DayDaoOngNhua"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhLotGop"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh lót gộp (C.Tròn, C.Hộp, Rãnh, ống nhựa, rãnh thang)
+                            <div class="mr-3">
+                                Đỉnh lót gộp (C.Tròn, C.Hộp, Rãnh, ống nhựa, rãnh thang)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhLotGop"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhLotOngNhua"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh lót ống nhựa
+                            <div class="mr-3">
+                                Đỉnh lót ống nhựa
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhLotOngNhua"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhLotCongTron"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh lót cống tròn (m)
+                            <div class="mr-3">
+                                Đỉnh lót cống tròn (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhLotCongTron"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhLotCongHop"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh lót cống hộp (m)
+                            <div class="mr-3">
+                                Đỉnh lót cống hộp (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhLotCongHop"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhLotRanh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh lót rãnh (m)
+                            <div class="mr-3">
+                                Đỉnh lót rãnh (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhLotRanh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhMongGop"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh móng gộp (C.Tròn, C.Hộp, Rãnh, rãnh thang)
+                            <div class="mr-3">
+                                Đỉnh móng gộp (C.Tròn, C.Hộp, Rãnh, rãnh thang)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhMongGop"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhMongCongTron"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh móng cống tròn (m)
+                            <div class="mr-3">
+                                Đỉnh móng cống tròn (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhMongCongTron"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhMongCongHop"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh móng cống hộp (m)
+                            <div class="mr-3">
+                                Đỉnh móng cống hộp (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhMongCongHop"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhMongRanh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh móng rãnh (m)
+                            <div class="mr-3">
+                                Đỉnh móng rãnh (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhMongRanh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhDeCong"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh đế cống (m)
+                            <div class="mr-3">
+                                Đỉnh đế cống (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhDeCong"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DayDongChay"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Đáy dòng chảy (m)
+                            <div class="mr-3">
+                                Đáy dòng chảy (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DayDongChay"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_CCaoTuongCongRanh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao tường cống, rãnh (m)
+                            <div class="mr-3">
+                                C.Cao tường cống, rãnh (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_CCaoTuongCongRanh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhTuongCHopRanh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh tường C.Hộp, rãnh (m)
+                            <div class="mr-3">
+                                Đỉnh tường C.Hộp, rãnh (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhTuongCHopRanh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhMuMoThotDuoiCongHopRanh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh mũ mố thớt dưới cống hộp rãnh (m)
+                            <div class="mr-3">
+                                Đỉnh mũ mố thớt dưới cống hộp rãnh (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhMuMoThotDuoiCongHopRanh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhGop"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh gộp (C.Tròn, C.Hộp, rãnh, Ô.Nhựa, Rãnh thang (m)
+                            <div class="mr-3">
+                                Đỉnh gộp (C.Tròn, C.Hộp, rãnh, Ô.Nhựa, Rãnh thang (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhGop"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhTrongLongSuDung"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Đỉnh trong lòng sử dụng (m)
+                            <div class="mr-3">
+                                Đỉnh trong lòng sử dụng (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhTrongLongSuDung"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhCongTron"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh cống tròn (m)
+                            <div class="mr-3">
+                                Đỉnh cống tròn (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhCongTron"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhCongHop"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh cống hộp (m)
+                            <div class="mr-3">
+                                Đỉnh cống hộp (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhCongHop"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhRanh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh rãnh (m)
+                            <div class="mr-3">
+                                Đỉnh rãnh (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhRanh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhOngNhua"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh ống nhựa (m)
+                            <div class="mr-3">
+                                Đỉnh ống nhựa (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhOngNhua"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("CDHaLu_DinhDapCat"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Đỉnh đắp cát (m)
+                            <div class="mr-3">
+                                Đỉnh đắp cát (m)
                                 <span class="arrow @(GetSortStyle("CDHaLu_DinhDapCat"))"></span>
                             </div>
                         </th>
@@ -4829,32 +5011,38 @@
 
                         @* Thông tin vật liệu đào cống, rãnh *@
                         <th onclick="@(() => SortTable("TTVLDCongRanh_TLChieuCaoDaoDa"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Chiều cao đào đá (m)
+                            <div class="mr-3">
+                                Chiều cao đào đá (m)
                                 <span class="arrow @(GetSortStyle("TTVLDCongRanh_TLChieuCaoDaoDa"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTVLDCongRanh_TLChieuCaoDaoDat"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Chiều cao đào đất (m)
+                            <div class="mr-3">
+                                Chiều cao đào đất (m)
                                 <span class="arrow @(GetSortStyle("TTVLDCongRanh_TLChieuCaoDaoDat"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTVLDCongRanh_TLTongChieuSauDao"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Tổng chiều sâu đào
+                            <div class="mr-3">
+                                Tổng chiều sâu đào
                                 <span class="arrow @(GetSortStyle("TTVLDCongRanh_TLTongChieuSauDao"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTVLDCongRanh_HLChieuCaoDaoDa"))" class="text-center sortable align-middle">
-                            <div class="mr-3">Chiều cao đào đá (m)
+                            <div class="mr-3">
+                                Chiều cao đào đá (m)
                                 <span class="arrow @(GetSortStyle("TTVLDCongRanh_HLChieuCaoDaoDa"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTVLDCongRanh_HLChieuCaoDaoDat"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Chiều cao đào đất (m)
+                            <div class="mr-3">
+                                Chiều cao đào đất (m)
                                 <span class="arrow @(GetSortStyle("TTVLDCongRanh_HLChieuCaoDaoDat"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTVLDCongRanh_HLTongChieuSauDao"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">Tổng chiều sâu đào
+                            <div class="mr-3">
+                                Tổng chiều sâu đào
                                 <span class="arrow @(GetSortStyle("TTVLDCongRanh_HLTongChieuSauDao"))"></span>
                             </div>
                         </th>
@@ -4862,123 +5050,147 @@
 
                         @* Thông tin C.Cao C.Chỗ cống tròn *@
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoLotDatTLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao lót T.Lưu
+                            <div class="mr-3">
+                                C.Cao lót T.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoLotDatTLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoLotDatHLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao lót H.Lưu
+                            <div class="mr-3">
+                                C.Cao lót H.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoLotDatHLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoLotDatMongTBinh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao lót móng T.Bình
+                            <div class="mr-3">
+                                C.Cao lót móng T.Bình
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoLotDatMongTBinh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoLotDaTLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao lót T.Lưu
+                            <div class="mr-3">
+                                C.Cao lót T.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoLotDaTLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoLotDaHLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao lót H.Lưu
+                            <div class="mr-3">
+                                C.Cao lót H.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoLotDaHLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoLotDaMongTBinh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao lót móng T.Bình
+                            <div class="mr-3">
+                                C.Cao lót móng T.Bình
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoLotDaMongTBinh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoMongDatTLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao móng T.Lưu
+                            <div class="mr-3">
+                                C.Cao móng T.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoMongDatTLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoMongDatHLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao móng H.Lưu
+                            <div class="mr-3">
+                                C.Cao móng H.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoMongDatHLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoMongDatTBinh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao móng T.Bình
+                            <div class="mr-3">
+                                C.Cao móng T.Bình
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoMongDatTBinh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoMongDaTLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao móng T.Lưu
+                            <div class="mr-3">
+                                C.Cao móng T.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoMongDaTLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoMongDaHLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao móng H.Lưu
+                            <div class="mr-3">
+                                C.Cao móng H.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoMongDaHLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoMongDaTBinh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao móng T.Bình
+                            <div class="mr-3">
+                                C.Cao móng T.Bình
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoMongDaTBinh"))"></span>
                             </div>
                         </th>
                         @* Thông tin C.Cao C.Chỗ cống tròn *@
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoDeDatTLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao đế T.Lưu
+                            <div class="mr-3">
+                                C.Cao đế T.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoDeDatTLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoDeDatHLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao đế H.Lưu
+                            <div class="mr-3">
+                                C.Cao đế H.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoDeDatHLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoDeDatTBinh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao đế T.Bình
+                            <div class="mr-3">
+                                C.Cao đế T.Bình
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoDeDatTBinh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoDeDaTLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao đế T.Lưu
+                            <div class="mr-3">
+                                C.Cao đế T.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoDeDaTLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoDeDaHLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao đế H.Lưu
+                            <div class="mr-3">
+                                C.Cao đế H.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoDeDaHLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoDeDaTBinh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao đế T.Bình
+                            <div class="mr-3">
+                                C.Cao đế T.Bình
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoDeDaTBinh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoCongDatTLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao cống T.Lưu
+                            <div class="mr-3">
+                                C.Cao cống T.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoCongDatTLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoCongDatHLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao cống H.Lưu
+                            <div class="mr-3">
+                                C.Cao cống H.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoCongDatHLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCongCongDatTBinh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao cống T.Bình
+                            <div class="mr-3">
+                                C.Cao cống T.Bình
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCongCongDatTBinh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoCongDaTLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao cống T.Lưu
+                            <div class="mr-3">
+                                C.Cao cống T.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoCongDaTLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCaoCongDaHLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao cống H.Lưu
+                            <div class="mr-3">
+                                C.Cao cống H.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCaoCongDaHLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCT_CCongCongDaTBinh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao cống T.Bình
+                            <div class="mr-3">
+                                C.Cao cống T.Bình
                                 <span class="arrow @(GetSortStyle("TTCCCCT_CCongCongDaTBinh"))"></span>
                             </div>
                         </th>
@@ -4986,47 +5198,56 @@
 
                         @* Thông tin C.Cao C.Chỗ cống tròn *@
                         <th onclick="@(() => SortTable("TTCCCCCHR_CCaoLotDatTLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao lót T.Lưu
+                            <div class="mr-3">
+                                C.Cao lót T.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCCHR_CCaoLotDatTLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCCHR_CCaoLotDatHLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao lót H.Lưu
+                            <div class="mr-3">
+                                C.Cao lót H.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCCHR_CCaoLotDatHLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCCHR_CCaoLotDatTBinh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao lót T.Bình
+                            <div class="mr-3">
+                                C.Cao lót T.Bình
                                 <span class="arrow @(GetSortStyle("TTCCCCCHR_CCaoLotDatTBinh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCCHR_CCaoLotDaTLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao lót T.Lưu
+                            <div class="mr-3">
+                                C.Cao lót T.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCCHR_CCaoLotDaTLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCCHR_CCaoLotDaHLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao lót H.Lưu
+                            <div class="mr-3">
+                                C.Cao lót H.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCCHR_CCaoLotDaHLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCCHR_CCaoLotDaTBinh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao lót T.Bình
+                            <div class="mr-3">
+                                C.Cao lót T.Bình
                                 <span class="arrow @(GetSortStyle("TTCCCCCHR_CCaoLotDaTBinh"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCCHR_CCaoMongDatTLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao móng T.Lưu
+                            <div class="mr-3">
+                                C.Cao móng T.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCCHR_CCaoMongDatTLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCCHR_CCaoMongDatHLuu"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao móng H.Lưu
+                            <div class="mr-3">
+                                C.Cao móng H.Lưu
                                 <span class="arrow @(GetSortStyle("TTCCCCCHR_CCaoMongDatHLuu"))"></span>
                             </div>
                         </th>
                         <th onclick="@(() => SortTable("TTCCCCCHR_CCaoMongDatTBinh"))" class="text-center text-danger sortable align-middle">
-                            <div class="mr-3">C.Cao móng T.Bình
+                            <div class="mr-3">
+                                C.Cao móng T.Bình
                                 <span class="arrow @(GetSortStyle("TTCCCCCHR_CCaoMongDatTBinh"))"></span>
                             </div>
                         </th>
@@ -5727,37 +5948,37 @@
 
 
                                 @* <td class="text-center">@item.HinhThucDauNoi1_Loai</td>
-                                <td class="text-center">@item.HinhThucDauNoi1_CanhDai</td>
-                                <td class="text-center">@item.HinhThucDauNoi1_CanhRong</td>
-                                <td class="text-center">@item.HinhThucDauNoi1_CanhCheo</td>
-                                <td class="text-center">@item.HinhThucDauNoi2_Loai</td>
-                                <td class="text-center">@item.HinhThucDauNoi2_CanhDai</td>
-                                <td class="text-center">@item.HinhThucDauNoi2_CanhRong</td>
-                                <td class="text-center">@item.HinhThucDauNoi2_CanhCheo</td>
-                                <td class="text-center">@item.HinhThucDauNoi3_Loai</td>
-                                <td class="text-center">@item.HinhThucDauNoi3_CanhDai</td>
-                                <td class="text-center">@item.HinhThucDauNoi3_CanhRong</td>
-                                <td class="text-center">@item.HinhThucDauNoi3_CanhCheo</td>
-                                <td class="text-center">@item.HinhThucDauNoi4_Loai</td>
-                                <td class="text-center">@item.HinhThucDauNoi4_CanhDai</td>
-                                <td class="text-center">@item.HinhThucDauNoi4_CanhRong</td>
-                                <td class="text-center">@item.HinhThucDauNoi4_CanhCheo</td>
-                                <td class="text-center">@item.HinhThucDauNoi5_Loai</td>
-                                <td class="text-center">@item.HinhThucDauNoi5_CanhDai</td>
-                                <td class="text-center">@item.HinhThucDauNoi5_CanhRong</td>
-                                <td class="text-center">@item.HinhThucDauNoi5_CanhCheo</td>
-                                <td class="text-center">@item.HinhThucDauNoi6_Loai</td>
-                                <td class="text-center">@item.HinhThucDauNoi6_CanhDai</td>
-                                <td class="text-center">@item.HinhThucDauNoi6_CanhRong</td>
-                                <td class="text-center">@item.HinhThucDauNoi6_CanhCheo</td>
-                                <td class="text-center">@item.HinhThucDauNoi7_Loai</td>
-                                <td class="text-center">@item.HinhThucDauNoi7_CanhDai</td>
-                                <td class="text-center">@item.HinhThucDauNoi7_CanhRong</td>
-                                <td class="text-center">@item.HinhThucDauNoi7_CanhCheo</td>
-                                <td class="text-center">@item.HinhThucDauNoi8_Loai</td>
-                                <td class="text-center">@item.HinhThucDauNoi8_CanhDai</td>
-                                <td class="text-center">@item.HinhThucDauNoi8_CanhRong</td>
-                                <td class="text-center">@item.HinhThucDauNoi8_CanhCheo</td> *@
+                        <td class="text-center">@item.HinhThucDauNoi1_CanhDai</td>
+                        <td class="text-center">@item.HinhThucDauNoi1_CanhRong</td>
+                        <td class="text-center">@item.HinhThucDauNoi1_CanhCheo</td>
+                        <td class="text-center">@item.HinhThucDauNoi2_Loai</td>
+                        <td class="text-center">@item.HinhThucDauNoi2_CanhDai</td>
+                        <td class="text-center">@item.HinhThucDauNoi2_CanhRong</td>
+                        <td class="text-center">@item.HinhThucDauNoi2_CanhCheo</td>
+                        <td class="text-center">@item.HinhThucDauNoi3_Loai</td>
+                        <td class="text-center">@item.HinhThucDauNoi3_CanhDai</td>
+                        <td class="text-center">@item.HinhThucDauNoi3_CanhRong</td>
+                        <td class="text-center">@item.HinhThucDauNoi3_CanhCheo</td>
+                        <td class="text-center">@item.HinhThucDauNoi4_Loai</td>
+                        <td class="text-center">@item.HinhThucDauNoi4_CanhDai</td>
+                        <td class="text-center">@item.HinhThucDauNoi4_CanhRong</td>
+                        <td class="text-center">@item.HinhThucDauNoi4_CanhCheo</td>
+                        <td class="text-center">@item.HinhThucDauNoi5_Loai</td>
+                        <td class="text-center">@item.HinhThucDauNoi5_CanhDai</td>
+                        <td class="text-center">@item.HinhThucDauNoi5_CanhRong</td>
+                        <td class="text-center">@item.HinhThucDauNoi5_CanhCheo</td>
+                        <td class="text-center">@item.HinhThucDauNoi6_Loai</td>
+                        <td class="text-center">@item.HinhThucDauNoi6_CanhDai</td>
+                        <td class="text-center">@item.HinhThucDauNoi6_CanhRong</td>
+                        <td class="text-center">@item.HinhThucDauNoi6_CanhCheo</td>
+                        <td class="text-center">@item.HinhThucDauNoi7_Loai</td>
+                        <td class="text-center">@item.HinhThucDauNoi7_CanhDai</td>
+                        <td class="text-center">@item.HinhThucDauNoi7_CanhRong</td>
+                        <td class="text-center">@item.HinhThucDauNoi7_CanhCheo</td>
+                        <td class="text-center">@item.HinhThucDauNoi8_Loai</td>
+                        <td class="text-center">@item.HinhThucDauNoi8_CanhDai</td>
+                        <td class="text-center">@item.HinhThucDauNoi8_CanhRong</td>
+                        <td class="text-center">@item.HinhThucDauNoi8_CanhCheo</td> *@
 
                                 <td class="text-center text-info">@item.PhanLoaiTDHoGa_PhanLoaiDayHoGa</td>
                                 <td class="text-center">@item.ThongTinTamDanHoGa2_HinhThucDayHoGa_Name</td>
@@ -6094,7 +6315,9 @@
                             </tr>
                         }
                     </tbody>
-                }else{
+                }
+                else
+                {
                     <tbody>
                         <tr>
                             <td colspan="395"> Không có dữ liệu</td>
@@ -6122,6 +6345,7 @@
     private bool isEdit = false;
     private NuocMuaModel nuocMuaVM;
     private bool isLoading = false;
+    private DateTime baseTime;
 
     public List<NuocMuaModel> listNuocMuaModel
     {
@@ -6226,18 +6450,20 @@
         var helper = new DataConversionHelper();
         listDanhMuc = await DanhMucRepository.GetAll();
         var nuocMuaRepository = await NuocMuaRepository.GetData();
-        List<NuocMuaModel> nuocmuas ;
+        List<NuocMuaModel> nuocmuas;
         nuocmuas = await ConvertDanhMuc(nuocMuaRepository);
         listModel = nuocmuas;
         listNuocMuaModel = Paging(nuocmuas);
         isLoading = false;
-
+        baseTime = DateTime.Now;
     }
 
     public async Task<List<NuocMuaModel>> ConvertDanhMuc(List<NuocMuaModel> listNuocMua)
     {
-        if(listNuocMua.Count()>0){
-            foreach(var item in listNuocMua){
+        if (listNuocMua.Count() > 0)
+        {
+            foreach (var item in listNuocMua)
+            {
                 item.ThongTinChungHoGa_HinhThucHoGa_Name = GetTenDanhMucById(item.ThongTinChungHoGa_HinhThucHoGa);
                 item.ThongTinChungHoGa_KetCauMuMo_Name = GetTenDanhMucById(item.ThongTinChungHoGa_KetCauMuMo);
                 item.ThongTinChungHoGa_KetCauTuong_Name = GetTenDanhMucById(item.ThongTinChungHoGa_KetCauTuong);
@@ -6245,25 +6471,25 @@
                 item.ThongTinChungHoGa_KetCauMong_Name = GetTenDanhMucById(item.ThongTinChungHoGa_KetCauMong);
                 item.ThongTinChungHoGa_ChatMatTrong_Name = GetTenDanhMucById(item.ThongTinChungHoGa_ChatMatTrong);
                 item.ThongTinChungHoGa_ChatMatNgoai_Name = GetTenDanhMucById(item.ThongTinChungHoGa_ChatMatNgoai);
-                item.HinhThucDauNoi1_KLBoSung_Name =GetTenDanhMucById(item.HinhThucDauNoi1_KLBoSung);
-                item.HinhThucDauNoi2_KLBoSung_Name =  GetTenDanhMucById(item.HinhThucDauNoi2_KLBoSung);
+                item.HinhThucDauNoi1_KLBoSung_Name = GetTenDanhMucById(item.HinhThucDauNoi1_KLBoSung);
+                item.HinhThucDauNoi2_KLBoSung_Name = GetTenDanhMucById(item.HinhThucDauNoi2_KLBoSung);
                 item.HinhThucDauNoi3_KLBoSung_Name = GetTenDanhMucById(item.HinhThucDauNoi3_KLBoSung);
                 item.HinhThucDauNoi4_KLBoSung_Name = GetTenDanhMucById(item.HinhThucDauNoi4_KLBoSung);
-                item.HinhThucDauNoi5_KLBoSung_Name =  GetTenDanhMucById(item.HinhThucDauNoi5_KLBoSung);
-                item.HinhThucDauNoi6_KLBoSung_Name =GetTenDanhMucById(item.HinhThucDauNoi6_KLBoSung);
+                item.HinhThucDauNoi5_KLBoSung_Name = GetTenDanhMucById(item.HinhThucDauNoi5_KLBoSung);
+                item.HinhThucDauNoi6_KLBoSung_Name = GetTenDanhMucById(item.HinhThucDauNoi6_KLBoSung);
                 item.HinhThucDauNoi7_KLBoSung_Name = GetTenDanhMucById(item.HinhThucDauNoi7_KLBoSung);
-                item.HinhThucDauNoi8_KLBoSung_Name =  GetTenDanhMucById(item.HinhThucDauNoi8_KLBoSung);
-                item.ThongTinTamDanHoGa2_HinhThucDayHoGa_Name =GetTenDanhMucById(item.ThongTinTamDanHoGa2_HinhThucDayHoGa);
+                item.HinhThucDauNoi8_KLBoSung_Name = GetTenDanhMucById(item.HinhThucDauNoi8_KLBoSung);
+                item.ThongTinTamDanHoGa2_HinhThucDayHoGa_Name = GetTenDanhMucById(item.ThongTinTamDanHoGa2_HinhThucDayHoGa);
                 item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao_Name = GetTenDanhMucById(item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao);
                 item.ThongTinDuongTruyenDan_HinhThucTruyenDan_Name = GetTenDanhMucById(item.ThongTinDuongTruyenDan_HinhThucTruyenDan);
                 item.ThongTinDuongTruyenDan_LoaiTruyenDan_Name = GetTenDanhMucById(item.ThongTinDuongTruyenDan_LoaiTruyenDan);
                 item.ThongTinMongDuongTruyenDan_LoaiMong_Name = GetTenDanhMucById(item.ThongTinMongDuongTruyenDan_LoaiMong);
-                item.ThongTinMongDuongTruyenDan_HinhThucMong_Name =GetTenDanhMucById(item.ThongTinMongDuongTruyenDan_HinhThucMong);
+                item.ThongTinMongDuongTruyenDan_HinhThucMong_Name = GetTenDanhMucById(item.ThongTinMongDuongTruyenDan_HinhThucMong);
                 item.TTKTHHCongHopRanh_CauTaoTuong_Name = GetTenDanhMucById(item.TTKTHHCongHopRanh_CauTaoTuong);
                 item.TTKTHHCongHopRanh_CauTaoMuMo_Name = GetTenDanhMucById(item.TTKTHHCongHopRanh_CauTaoMuMo);
                 item.TTKTHHCongHopRanh_ChatMatTrong_Name = GetTenDanhMucById(item.TTKTHHCongHopRanh_ChatMatTrong);
                 item.TTKTHHCongHopRanh_ChatMatNgoai_Name = GetTenDanhMucById(item.TTKTHHCongHopRanh_ChatMatNgoai);
-                item.TTKTHHCongHopRanh_CauTaoThanhChong_Name =GetTenDanhMucById(item.TTKTHHCongHopRanh_CauTaoThanhChong);
+                item.TTKTHHCongHopRanh_CauTaoThanhChong_Name = GetTenDanhMucById(item.TTKTHHCongHopRanh_CauTaoThanhChong);
                 item.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name = GetTenDanhMucById(item.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan);
                 item.TTTDCongHoRanh_CauTaoTamDanTruyenDan_Name = GetTenDanhMucById(item.TTTDCongHoRanh_CauTaoTamDanTruyenDan);
                 item.TTVLDCongRanh_LoaiVatLieuDao_Name = GetTenDanhMucById(item.TTVLDCongRanh_LoaiVatLieuDao);
@@ -6341,11 +6567,26 @@
     //Thêm sửa
     private async Task HandleEdit(NuocMuaModel nuocmuavm, string Id)
     {
-        isEdit = true;
-        nuocMuaVM = nuocmuavm;
-        Input = await NuocMuaRepository.GetById(Id);
-        TitleModal = "Cập nhật thông tin";
-        isModalVisible = true;
+        try
+        {
+            isEdit = true;
+            nuocMuaVM = nuocmuavm;
+            Input = await NuocMuaRepository.GetById(Id);
+            TitleModal = "Cập nhật thông tin";
+            isModalVisible = true;
+        }
+        catch (Exception ex)
+        {
+
+            ToastService.ShowToast(
+                   "Thông báo lỗi ",
+                   ex.Message,
+                   cssClass: "toast-danger",
+                   iconClass: "fa fa-exclamation-circle",
+                   progressBarClass: "bg-info",
+                   duration: 5000
+               );
+        }
 
     }
 
@@ -6438,7 +6679,7 @@
         if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
         {
             string HoGa_KetCauTuong = GetTenDanhMucById(searchData.ThongTinChungHoGa_KetCauTuong);
-            var id = await PhanLoaiHoGaRepository.InsertId(searchData,HoGa_KetCauTuong);
+            var id = await PhanLoaiHoGaRepository.InsertId(searchData, HoGa_KetCauTuong);
             Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
         }
 
@@ -6526,7 +6767,7 @@
             };
 
         PhanLoaiHoGa plHoGa = new();
-         if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
+        if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
         {
             searchData.G = "=G";
         }
@@ -7035,23 +7276,28 @@
 
                 if (isEdit)
                 {
-                    // Cập nhật thông tin
-                    DSNuocMuaConversionHelper helper = new();
-                    await NuocMuaRepository.Update(Input);
-                    isModalVisible = false;
-                    isEdit = false;
+                    string[] ids = { Input.Id };
+                    var isValid = await NuocMuaRepository.CheckExclusive(ids, baseTime);
+                    if (isValid)
+                    {
+                        // Cập nhật thông tin
+                        DSNuocMuaConversionHelper helper = new();
+                        await NuocMuaRepository.Update(Input);
+                        isModalVisible = false;
+                        isEdit = false;
 
-                    Input = new NuocMua();
-                    ToastService.ShowToast(
-                        "Thông báo",
-                        "Cập nhật thành công.",
-                        cssClass: "toast-success",
-                       iconClass: "fa fa-check-circle",
-                        progressBarClass: "bg-info",
-                        duration: 5000
-                    );
-                    await LoadData();
-                    nuocMuaVM = new();
+                        Input = new NuocMua();
+                        ToastService.ShowToast(
+                            "Thông báo",
+                            "Cập nhật thành công.",
+                            cssClass: "toast-success",
+                           iconClass: "fa fa-check-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
+                        await LoadData();
+                        nuocMuaVM = new();
+                    }
                 }
                 else if (Flag > 0)
                 {
@@ -7091,8 +7337,15 @@
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
-            throw;
+
+            ToastService.ShowToast(
+                   "Thông báo lỗi ",
+                   ex.Message,
+                   cssClass: "toast-danger",
+                   iconClass: "fa fa-exclamation-circle",
+                   progressBarClass: "bg-info",
+                   duration: 5000
+               );
         }
 
     }
@@ -7147,14 +7400,8 @@
             if (!result)
             {
                 // Hiển thị thông báo nếu không tồn tại danh mục
-                ToastService.ShowToast(
-                    "Thông báo",
-                    message,
-                    cssClass: "toast-danger",
-                    iconClass: "fa fa-exclamation-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
+
+
             }
 
             return result;
@@ -7184,16 +7431,38 @@
 
     private async Task HandleResponseClick(bool confirmed)
     {
-        if (confirmed)
+        try
         {
-            if (!string.IsNullOrEmpty(deleteId))
+            if (confirmed)
             {
-                await NuocMuaRepository.DeleteById(deleteId);
-                await LoadData();
-                ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-bell", progressBarClass: "bg-info", duration: 5000);
-                deleteId = null;
+                if (!string.IsNullOrEmpty(deleteId))
+                {
+                    string[] ids = { deleteId };
+                    var isValid = await NuocMuaRepository.CheckExclusive(ids, baseTime);
+                    if (isValid)
+                    {
+                        await NuocMuaRepository.DeleteById(deleteId);
+                        await LoadData();
+                        ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-bell", progressBarClass: "bg-info", duration: 5000);
+
+                    }
+                    deleteId = null;
+                }
             }
         }
+        catch (Exception ex)
+        {
+
+            ToastService.ShowToast(
+                   "Thông báo lỗi ",
+                   ex.Message,
+                   cssClass: "toast-danger",
+                   iconClass: "fa fa-exclamation-circle",
+                   progressBarClass: "bg-info",
+                   duration: 5000
+               );
+        }
+
     }
 
     // Sắp xếp data

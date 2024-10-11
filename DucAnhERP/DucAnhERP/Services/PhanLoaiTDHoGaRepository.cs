@@ -154,6 +154,7 @@ namespace DucAnhERP.Services
             }
         }
 
+       
         public async Task Update(PhanLoaiTDHoGa PhanLoaiTDHoGa)
         {
             using var context = _context.CreateDbContext();

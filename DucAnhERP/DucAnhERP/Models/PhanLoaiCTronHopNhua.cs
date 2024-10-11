@@ -90,6 +90,7 @@ namespace DucAnhERP.Models
         [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
         public Double? ThongTinKichThuocHinhHocOngNhua_CDayPhuBi { get; set; } = 0;
 
+        public int? Loai { get; set; } = 0;
         public DateTime? CreateAt { get; set; } = DateTime.Now;
         public string? CreateBy { get; set; } = "";
         public int? IsActive { get; set; } = 1;

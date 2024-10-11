@@ -91,7 +91,7 @@ namespace DucAnhERP.Helpers
 
             item.ThongTinCaoDoHoGa_TongChieuCaoHoGa = ThongTinCaoDoHoGa_TongChieuCaoHoGa(item.ThongTinCaoDoHoGa_CdDinhHoGa ?? 0, item.ThongTinCaoDoHoGa_DayDao ?? 0);
             item.ThongTinCaoDoHoGa_ChenhCaoDinhHoGaVaHienTrangDao = ThongTinCaoDoHoGa_ChenhCaoDinhHoGaVaHienTrangDao(item.ThongTinCaoDoHoGa_CdDinhHoGa ?? 0, item.ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao ?? 0);
-            item.ThongTinCaoDoHoGa_TongChieuCaoChiemChoDapTra = item.ThongTinCaoDoHoGa_TongChieuCaoHoGa - item.ThongTinCaoDoHoGa_ChenhCaoDinhHoGaVaHienTrangDao ?? 0;
+            item.ThongTinCaoDoHoGa_TongChieuCaoChiemChoDapTra = Math.Round((item.ThongTinCaoDoHoGa_TongChieuCaoHoGa - item.ThongTinCaoDoHoGa_ChenhCaoDinhHoGaVaHienTrangDao ?? 0),4);
             item.ThongTinCaoDoHoGa_DinhMuMoThotDuoi = ThongTinCaoDoHoGa_DinhMuMoThotDuoi(item.ThongTinCaoDoHoGa_CdDinhHoGa ?? 0, item.MuMoThotTren_C ?? 0, item.ThongTinTamDanHoGa2_C ?? 0);
             item.ThongTinCaoDoHoGa_DinhTuong = ThongTinCaoDoHoGa_DinhTuong(item.ThongTinCaoDoHoGa_DinhMuMoThotDuoi ?? 0, item.MuMoThotDuoi_C ?? 0);
             item.ThongTinCaoDoHoGa_DinhTuongDuoiDamGiuaTuong = ThongTinCaoDoHoGa_DinhTuongDuoiDamGiuaTuong(item.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa ?? 0, item.ThongTinCaoDoHoGa_CdDayHoGa ?? 0);
@@ -141,8 +141,8 @@ namespace DucAnhERP.Helpers
             item.TTTKLCKCTCH_TongCD = TTTKLCKCTCH_TongCD(item.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "", item.TTTKLCKCTCH_SLCKNguyen ?? 0, item.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien ?? 0, item.TTTKLCKCTCH_CDCanLapDat ?? 0);
             item.TTTKLCKCTCH_CDThucTeThuaThieu = TTTKLCKCTCH_CDThucTeThuaThieu(item.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "", item.TTTKLCKCTCH_TongCD ?? 0, item.TTCDSLCauKienDuongTruyenDan_TongChieuDai ?? 0);
             item.TTTKLCKCTCH_XDOngCongCanThem = TTTKLCKCTCH_XDOngCongCanThem(item.TTTKLCKCTCH_CDThucTeThuaThieu ?? 0);
-            item.TTTKLCKCTCH_CDThuaThieuSauTinhKL = TTTKLCKCTCH_CDThuaThieuSauTinhKL(item.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "", item.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl ?? 0, item.TTTKLCKCTCH_SLCKDungDeTinhCD ?? 0, item.TTTKLCKCTCH_CDMoiNoiCKien ?? 0, item.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien ?? 0, item.TTCDSLCauKienDuongTruyenDan_TongChieuDai ?? 0);
             item.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl = TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl(item.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "", item.TTTKLCKCTCH_XDOngCongCanThem ?? "", item.TTTKLCKCTCH_SLCKNguyen ?? 0, item.TTTKLCKCTCH_SLCKDungDeTinhCD ?? 0);
+            item.TTTKLCKCTCH_CDThuaThieuSauTinhKL = TTTKLCKCTCH_CDThuaThieuSauTinhKL(item.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "", item.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl ?? 0, item.TTTKLCKCTCH_SLCKDungDeTinhCD ?? 0, item.TTTKLCKCTCH_CDMoiNoiCKien ?? 0, item.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien ?? 0, item.TTCDSLCauKienDuongTruyenDan_TongChieuDai ?? 0);
             item.ThongTinDeCong_TongSoLuongDC = Math.Round((item.ThongTinDeCong_SlDeCong01CauKienTruyenDan * item.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl ?? 0), 4);
             item.ThongTinDeCong_TongKLDeCong = Math.Round(item.ThongTinDeCong_Kl01DeCong ?? 0 * item.ThongTinDeCong_TongSoLuongDC ?? 0, 2);
 
@@ -3418,6 +3418,7 @@ namespace DucAnhERP.Helpers
         public double DTDTB_DaoDatDTDao(double DTDTLCRONRT_DTichDaoDat, double DTDHLCRONRT_DTichDaoDat)
         {
             var results = (DTDTLCRONRT_DTichDaoDat + DTDHLCRONRT_DTichDaoDat) / 2;
+            results = Math.Round(results, 4);
             return results;
         }
         public double DTDTB_DaoDaCRDaoDayLon(double DTDTLCRONRT_CRongDaoDaDayLon, double DTDHLCRONRT_CRongDaoDaDayLon)

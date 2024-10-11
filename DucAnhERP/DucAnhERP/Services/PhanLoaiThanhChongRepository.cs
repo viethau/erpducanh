@@ -118,6 +118,30 @@ namespace DucAnhERP.Services
             }
         }
 
+        public async Task<PhanLoaiThanhChong> GetNumberPhanLoai(PhanLoaiThanhChong searchData)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
+                var query = context.PhanLoaiThanhChongs
+                             .Where(pltc => (
+                                    pltc.TTKTHHCongHopRanh_CauTaoThanhChong == searchData.TTKTHHCongHopRanh_CauTaoThanhChong
+                                          )).OrderByDescending(pltc => pltc.Loai);
+
+                var result = await query.FirstOrDefaultAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
+        }
+
+
         public async Task<PhanLoaiThanhChong> GetPhanLoaiThanhChongExist(PhanLoaiThanhChong searchData)
         {
             try
@@ -332,11 +356,21 @@ namespace DucAnhERP.Services
 
                 // Tăng giá trị Flag lên 1
                 entity.Flag = maxFlag + 1;
+                
+                var maxLoai = await GetNumberPhanLoai(entity);
+                if (maxLoai != null)
+                {
+                    // Tăng giá trị Flag lên 1
+                    entity.Loai = (maxLoai.Loai ?? 0) + 1;
+                }
+                else
+                {
+                    entity.Loai = 1;
+                }
                 if (string.IsNullOrEmpty(entity.TTKTHHCongHopRanh_LoaiThanhChong))
                 {
-                    entity.TTKTHHCongHopRanh_LoaiThanhChong = "Thanh chống loại " + entity.Flag + " "+CTTC;
+                    entity.TTKTHHCongHopRanh_LoaiThanhChong = "Thanh chống loại " + entity.Loai + " " + CTTC;
                 }
-                
                 // Chèn bản ghi mới vào bảng
                 context.PhanLoaiThanhChongs.Add(entity);
                 await context.SaveChangesAsync();

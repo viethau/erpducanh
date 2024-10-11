@@ -8,5 +8,6 @@ namespace DucAnhERP.Repository
         Task<List<NuocMuaModel>> GetData();
         Task<int> MultiInsert(List<NuocMua> entities);
         Task<string> InsertLaterFlag(NuocMua entity, int FlagLast);
+        Task<List<NuocMuaModel>> GetBaoCaoTTHoGa(NuocMuaModel nuocMuaModel);
     }
 }
