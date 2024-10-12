@@ -20,17 +20,16 @@
             text-align: center;
             padding: 2px 5px;
         }
+
+        .flex-header  {
+        position: sticky ;
+        top: -1px;
+        z-index: 1;
+        background-color: cadetblue; /* Màu nền cho thead để không bị chồng dữ liệu */
+    }
 </style>
 <div class="container-fluid">
     <div class="row m-3 ">
-        <div class="col-md-3 col-sm-6">
-            <button class="btn btn-primary me-2" @onclick="ViewHorizontal" title="Xem theo chiều ngang">
-                <i class="fas fa-arrows-alt-h"></i>
-            </button>
-            <button class="btn btn-secondary" @onclick="ViewVertical" title="Xem theo chiều dọc">
-                <i class="fas fa-arrows-alt-v"></i>
-            </button>
-        </div>
         <div class="col-md-9 col-sm-12">
             <EditForm Model="Input" FormName="Search" OnValidSubmit="@Search">
                 <DataAnnotationsValidator />
@@ -57,7 +56,17 @@
                 </div>
             </EditForm>
         </div>
-
+        <div class="col-md-3 col-sm-6 text-end">
+            <button class="btn btn-primary me-2" @onclick="ViewHorizontal" title="Xem theo chiều ngang">
+                <i class="fas fa-arrows-alt-h"></i>
+            </button>
+            <button class="btn btn-secondary" @onclick="ViewVertical" title="Xem theo chiều dọc">
+                <i class="fas fa-arrows-alt-v"></i>
+            </button>
+            <button class="btn btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
+                <i class="fas fa-thumbtack"></i>
+            </button>
+        </div>
 
     </div>
     <div id="tableContainer ">
@@ -68,7 +77,7 @@
                 </div>
                 <div class=" mt-2">
                     <table id="tb-left" class="table table-hover table-bordered mt-3">
-                        <thead class="bg-info">
+                        <thead class="bg-info @thumbtack">
                             <tr>
                                 <th class="text-center" rowspan="2">STT</th>
                                 <th class="text-center" colspan="2"> Thông tin lý trình </th>
@@ -277,7 +286,7 @@
                 </div>
                 <div class=" mt-2">
                     <table id="tb-right" class="table table-hover table-bordered mt-3">
-                        <thead class="bg-info">
+                        <thead class="bg-info @thumbtack">
                             <tr>
                                 <th class="text-center" rowspan="2">STT</th>
                                 <th class="text-center" colspan="2"> Thông tin lý trình </th>
@@ -495,6 +504,7 @@
     private List<SelectedItem> selectHTTruyenDan = new();
     private string layoutClass = "d-flex justify-content-between";
     private string space = "ml-5";
+    private string thumbtack = "";
 
     private void OnSelectChange(SelectedItem selectedItem)
     {
@@ -559,7 +569,7 @@
         var nuocMuaRepositoryLeft = await NuocMuaRepository.GetBaoCaoTTHoGa(Input);
         listModelLeft = nuocMuaRepositoryLeft;
         listNuocMuaModelLeft = Paging(listModelLeft, listNuocMuaModelLeft);
-        Input.TraiPhai = 1;
+        Input.TraiPhai = 0;
         var nuocMuaRepositoryRight = await NuocMuaRepository.GetBaoCaoTTHoGa(Input);
         listModelRight = nuocMuaRepositoryRight;
         listNuocMuaModelRight = Paging(listModelRight, listNuocMuaModelRight);
@@ -647,5 +657,9 @@
     {
         layoutClass = "d-block";
         space = "m-0";
+    }
+    private void ThumbtackHeader()
+    {
+        thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
     }
 }

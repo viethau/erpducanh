@@ -15,7 +15,9 @@ a, .btn-link {
     scrollbar-color: #a9a9a9 transparent;
     scrollbar-width: thin;
 }
-
+.text-end{
+    text-align:end;
+}
 
 
 table th {
@@ -25,6 +27,9 @@ table td{
     padding:5px !important;
 }
 
+.table thead th {
+    border-bottom: none!important; 
+}
 .sidebar {
     overflow-y: scroll !important;
     height: calc(100vh - (3.5rem + 1px)) !important;

@@ -1033,5 +1033,93 @@ namespace DucAnhERP.Services
                 throw new Exception ($"Lỗi dữ liệu {ex.Message}!");
             }
         }
+
+        public async Task<List<NuocMuaModel>> GetBaoCaoKLBPhapHGa(NuocMuaModel nuocMuaModel)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var query = from nuocMua in context.DSNuocMua
+                                // Left join với bảng PhanLoaiHoGas
+                            join phanLoaiHoGa in context.PhanLoaiHoGas
+                            on nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai equals phanLoaiHoGa.Id into phanLoaiHoGaJoin
+                            from phanLoaiHoGa in phanLoaiHoGaJoin.DefaultIfEmpty()
+
+                            join phanLoaiTDHoGa in context.PhanLoaiTDHoGas
+                           on nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa equals phanLoaiTDHoGa.Id into phanLoaiTDHoGaJoin
+                            from phanLoaiTDHoGa in phanLoaiTDHoGaJoin.DefaultIfEmpty()
+
+                            join loaiVatLieuDao in context.DSDanhMuc
+                               on nuocMua.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao equals loaiVatLieuDao.Id into gj3
+                            from loaiVatLieuDao in gj3.DefaultIfEmpty()
+
+                                // Sắp xếp theo Flag của DSNuocMua
+                            orderby nuocMua.Flag
+                            select new NuocMuaModel
+                            {
+                                Id = nuocMua.Id,
+                                ThongTinLyTrinh_TuyenDuong = nuocMua.ThongTinLyTrinh_TuyenDuong ?? "",
+                                ThongTinLyTrinh_LyTrinhTaiTimHoGa = nuocMua.ThongTinLyTrinh_LyTrinhTaiTimHoGa ?? "",
+                                ThongTinChungHoGa_TenHoGaSauPhanLoai = nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
+                                PhanLoaiHoGas_TenHoGaSauPhanLoai = phanLoaiHoGa != null ? phanLoaiHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai : "",
+                                ThongTinChungHoGa_TenHoGaTheoBanVe = nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe ?? "",
+                                ThongTinTamDanHoGa2_PhanLoaiDayHoGa = nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
+                                PhanLoaiTDHoGa_PhanLoaiDayHoGa = phanLoaiTDHoGa.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
+
+                                ThongTinVatLieuDaoHoGa_LoaiVatLieuDao = nuocMua.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao ?? "",
+                                ThongTinVatLieuDaoHoGa_LoaiVatLieuDao_Name = loaiVatLieuDao.Ten ?? "",
+                                ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa = nuocMua.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa ?? 0,
+                                ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat = nuocMua.ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat ?? 0,
+                                ThongTinMaiDao_ChieuRongDayDaoNho = nuocMua.ThongTinMaiDao_ChieuRongDayDaoNho ?? 0,
+                                ThongTinMaiDao_TyLeMoMai = nuocMua.ThongTinMaiDao_TyLeMoMai ?? 0,
+                                ThongTinMaiDao_SoCanhMaiTrai = nuocMua.ThongTinMaiDao_SoCanhMaiTrai ?? 0,
+                                ThongTinMaiDao_SoCanhMaiPhai = nuocMua.ThongTinMaiDao_SoCanhMaiPhai ?? 0,
+                                TTKLD_CRongDaoDayLonDat = nuocMua.TTKLD_CRongDaoDayLonDat ?? 0,
+                                TTKLD_CRongDaoDayLonDa = nuocMua.TTKLD_CRongDaoDayLonDa ?? 0,
+                                TTKLD_DienTichDaoDat = nuocMua.TTKLD_DienTichDaoDat ?? 0,
+                                TTKLD_DienTichDaoDa = nuocMua.TTKLD_DienTichDaoDa ?? 0,
+                                TTKLD_KlDaoDat = nuocMua.TTKLD_KlDaoDat ?? 0,
+                                TTKLD_KlDaoDa = nuocMua.TTKLD_KlDaoDa ?? 0,
+                                TTKLD_TongKlDao = nuocMua.TTKLD_TongKlDao ?? 0,
+                                TTKLD_KlChiemChoDat = nuocMua.TTKLD_KlChiemChoDat ?? 0,
+                                TTKLD_KlChiemChoDa = nuocMua.TTKLD_KlChiemChoDa ?? 0,
+                                TTKLD_TongChiemCho = nuocMua.TTKLD_TongChiemCho ?? 0,
+                                TTKLD_KlDapTraDat = nuocMua.TTKLD_KlDapTraDat ?? 0,
+                                TTKLD_KlDapTraDa = nuocMua.TTKLD_KlDapTraDa ?? 0,
+                                TTKLD_TongDapTra = nuocMua.TTKLD_TongDapTra ?? 0,
+
+
+
+                                ToaDoX = nuocMua.ToaDoX ?? 0,
+                                ToaDoY = nuocMua.ToaDoY ?? 0,
+                                Flag = nuocMua.Flag,
+                                TraiPhai = nuocMua.TraiPhai,
+                            };
+
+                if (!string.IsNullOrEmpty(nuocMuaModel.ThongTinChungHoGa_TenHoGaSauPhanLoai))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai == nuocMuaModel.ThongTinChungHoGa_TenHoGaSauPhanLoai);
+                }
+                if (!string.IsNullOrEmpty(nuocMuaModel.ThongTinTamDanHoGa2_PhanLoaiDayHoGa))
+                {
+                    query = query.Where(x => x.ThongTinTamDanHoGa2_PhanLoaiDayHoGa == nuocMuaModel.ThongTinTamDanHoGa2_PhanLoaiDayHoGa);
+                }
+                if (!string.IsNullOrEmpty(nuocMuaModel.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao))
+                {
+                    query = query.Where(x => x.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao == nuocMuaModel.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao);
+                }
+                if (nuocMuaModel.TraiPhai != 2)
+                {
+                    query = query.Where(x => x.TraiPhai.Equals(nuocMuaModel.TraiPhai));
+                }
+                var data = await query.ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception($"Lỗi dữ liệu {ex.Message}!");
+            }
+        }
     }
 }
