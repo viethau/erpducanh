@@ -38,6 +38,7 @@ builder.Services.Configure<FormOptions>(options =>
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
+builder.Services.AddScoped<ToastService>();
 builder.Services.AddScoped<IMajorRepository, MajorRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -67,7 +68,7 @@ builder.Services.AddScoped<IPhanLoaiDeCongRepository, PhanLoaiDeCongRepository>(
 builder.Services.AddScoped<IPhanLoaiThanhChongRepository, PhanLoaiThanhChongRepository>();
 builder.Services.AddScoped<IPhanLoaiTDanTDanRepository, PhanLoaiTDanTDanRepository>();
 builder.Services.AddScoped<IMangThuRepository, MangThuRepository>();
-builder.Services.AddScoped<ToastService>();
+
 
 
 

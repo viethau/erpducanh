@@ -238,27 +238,64 @@
 
     private async void OnSelectMajor(SelectedItem selectedItem)
     {
-        Input.MajorId = selectedItem.Value;
+        try
+        {
+            Input.MajorId = selectedItem.Value;
+            permissionModel.MajorId = selectedItem.Value;
+            var list = await PermissionService.GetAllByVM(permissionModel);
+            selectedItems = new();
+            Input.PermissionId = "[]";
+            listPer = new MultiSelectList(
+                    list.Select(permission => new SelectListItem
+                        {
+                            Value = permission.Id,
+                            Text = permission.PermissionName,
+                            Selected = false
+                        }).ToList(),
+                    "Value",
+                    "Text"
+                    );
+          
+            MMajorUserPermission InputTemp = new();
 
-
-        permissionModel.MajorId = selectedItem.Value;
-        var list = await PermissionService.GetAllByVM(permissionModel);
-        selectedItems = new();
-
-        await InvokeAsync(() =>
+            InputTemp = await MajorUserPermissionService.GetById(Input.Id);
+            if (!string.IsNullOrEmpty(InputTemp.PermissionId))
             {
-                listPer = new MultiSelectList(
-                list.Select(permission => new SelectListItem
+                selectedItemstemp = JsonSerializer.Deserialize<List<SelectedItem>>(InputTemp.PermissionId);
+
+                // Thiết lập giá trị đã chọn dựa trên `selectedItemstemp`
+                foreach (var item in listPer)
+                {
+                    // Kiểm tra nếu quyền này đã được chọn (dựa trên Value)
+                    var selected = selectedItemstemp.FirstOrDefault(i => i.Value == item.Value);
+                    if (selected != null)
                     {
-                        Value = permission.Id,
-                        Text = permission.PermissionName,
-                        Selected = false
-                    }).ToList(),
-                "Value",
-                "Text"
-                );
-                StateHasChanged();
-            });
+                        // Đánh dấu quyền này là đã được chọn
+                        item.Selected = true;
+                        Input.PermissionId = InputTemp.PermissionId;
+                    }
+                }
+            }
+
+            await InvokeAsync(() =>
+              {
+                  StateHasChanged();
+              });
+
+            
+        }
+        catch (Exception ex)
+        {
+            
+            ToastService.ShowToast(
+                     "Thông báo",
+                     ex.Message,
+                     cssClass: "toast-danger",
+                    iconClass: "fa fa-exclamation-circle",
+                     progressBarClass: "bg-info",
+                     duration: 7000
+                 );
+        }
 
     }
     private void OnSelectMajor1(SelectedItem selectedItem)
