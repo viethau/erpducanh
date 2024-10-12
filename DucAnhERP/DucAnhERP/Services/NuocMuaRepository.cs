@@ -1008,17 +1008,21 @@ namespace DucAnhERP.Services
                                 TraiPhai = nuocMua.TraiPhai,
                             };
 
-                if (string.IsNullOrEmpty(nuocMuaModel.ThongTinChungHoGa_TenHoGaSauPhanLoai))
+                if (!string.IsNullOrEmpty(nuocMuaModel.ThongTinChungHoGa_TenHoGaSauPhanLoai))
                 {
-                    query.Where(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai.Equals(nuocMuaModel.ThongTinChungHoGa_TenHoGaSauPhanLoai));
+                    query = query.Where(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai == nuocMuaModel.ThongTinChungHoGa_TenHoGaSauPhanLoai);
                 }
-                if (string.IsNullOrEmpty(nuocMuaModel.ThongTinChungHoGa_TenHoGaTheoBanVe))
+                if (!string.IsNullOrEmpty(nuocMuaModel.ThongTinTamDanHoGa2_PhanLoaiDayHoGa))
                 {
-                    query.Where(x => x.ThongTinChungHoGa_TenHoGaTheoBanVe.Equals(nuocMuaModel.ThongTinChungHoGa_TenHoGaTheoBanVe));
+                    query = query.Where(x => x.ThongTinTamDanHoGa2_PhanLoaiDayHoGa == nuocMuaModel.ThongTinTamDanHoGa2_PhanLoaiDayHoGa);
+                }
+                if (!string.IsNullOrEmpty(nuocMuaModel.ThongTinDuongTruyenDan_HinhThucTruyenDan))
+                {
+                    query = query.Where(x => x.ThongTinDuongTruyenDan_HinhThucTruyenDan == nuocMuaModel.ThongTinDuongTruyenDan_HinhThucTruyenDan);
                 }
                 if (nuocMuaModel.TraiPhai != 2)
                 {
-                    query.Where(x => x.TraiPhai.Equals(nuocMuaModel.TraiPhai));
+                    query = query.Where(x => x.TraiPhai.Equals(nuocMuaModel.TraiPhai));
                 }
                 var data = await query.ToListAsync();
                 return data;

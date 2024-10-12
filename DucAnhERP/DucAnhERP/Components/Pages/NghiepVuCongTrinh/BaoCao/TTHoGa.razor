@@ -23,28 +23,33 @@
 </style>
 <div class="container-fluid">
     <div class="m-5">
-        <div class="card-header mt-1">
+        <div class=" mt-1">
             <h3 class="mt-2">BẢNG THÔNG TIN TỔNG HỢP HỐ GA NƯỚC MƯA DỌC PHÍA TRÁI</h3>
         </div>
-        <div class="our-table">
-            <EditForm Model="Input" FormName="Search" OnValidSubmit="@Search">
-                <DataAnnotationsValidator />
-                <div class="d-flex row">
-
-                    <div class="form-floating col-sm-3 col-md-3">
-                    <label for="Table">Nghiệp vụ cha</label>
+        <EditForm Model="Input" FormName="Search" OnValidSubmit="@Search">
+            <DataAnnotationsValidator />
+            <div class=" row">
+               
+                <div class="form-group col-sm-3 col-md-3 ml-2">
+                    <label for="Table">Tên loại tấm đan</label>
                     <Select2 Id="mySelect2" Items="@selectPLDayHoGa" OnChange="@OnSelectChange"></Select2>
                     <ValidationMessage For="()=>Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa"></ValidationMessage>
-                    </div>
-
-
-                    <div class="col-sm-3 col-md-3 ml-5">
-                        <label>&nbsp;</label>
-                        <button type="submit" class="btn btn-primary form-control">Tìm kiếm</button>
-                    </div>
                 </div>
-            </EditForm>
-            <table class="table table-hover table-bordered">
+                <div class="form-group col-sm-3 col-md-3 ml-2">
+                    <label for="Table">Hình thức truyền dẫn</label>
+                    <Select2 Id="mySelect3" Items="@selectHTTruyenDan" OnChange="@OnSelectChangeTD"></Select2>
+                    <ValidationMessage For="()=>Input.ThongTinDuongTruyenDan_HinhThucTruyenDan"></ValidationMessage>
+                </div>
+            
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button type="submit" class="btn btn-primary form-control">Tìm kiếm</button>
+                </div>
+            </div>
+
+        </EditForm>
+        <div class="our-table mt-2">
+            <table class="table table-hover table-bordered mt-3">
                 <thead class="bg-info">
                     <tr>
                         <th class="text-center" rowspan="2">STT</th>
@@ -259,10 +264,15 @@
     private NuocMuaModel Input = new NuocMuaModel();
 
     private List<SelectedItem> selectPLDayHoGa = new();
+    private List<SelectedItem> selectHTTruyenDan = new();
 
     private void OnSelectChange(SelectedItem selectedItem)
     {
         Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = selectedItem.Value;
+    }
+    private void OnSelectChangeTD(SelectedItem selectedItem)
+    {
+        Input.ThongTinDuongTruyenDan_HinhThucTruyenDan = selectedItem.Value;
     }
 
     public List<NuocMuaModel> listNuocMuaModel
@@ -294,6 +304,38 @@
     {
         nuocMuaModel = new();
         await LoadData();
+        selectPLDayHoGa = new();
+        foreach (var item in listModel)
+        {
+            // Kiểm tra xem item đã tồn tại trong danh sách selectPLDayHoGa hay chưa
+            if (!selectPLDayHoGa.Any(x => x.Value == item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa))
+            {
+                if (!string.IsNullOrEmpty(item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa))
+                {
+                    // Nếu chưa tồn tại, thêm item vào danh sách
+                    selectPLDayHoGa.Add(new SelectedItem
+                        {
+                            Value = item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa,
+                            Text = item.PhanLoaiTDHoGa_PhanLoaiDayHoGa
+                        });
+                }
+            }
+           
+            // Kiểm tra và thêm item vào selectHTTruyenDan nếu chưa tồn tại
+            if (!string.IsNullOrEmpty(item.ThongTinDuongTruyenDan_HinhThucTruyenDan) &&
+                !selectHTTruyenDan.Any(x => x.Value == item.ThongTinDuongTruyenDan_HinhThucTruyenDan))
+            {
+                selectHTTruyenDan.Add(new SelectedItem
+                    {
+                        Value = item.ThongTinDuongTruyenDan_HinhThucTruyenDan,
+                        Text = item.ThongTinDuongTruyenDan_HinhThucTruyenDan_Name
+                    });
+            }
+
+        }
+        // Thêm phần tử mặc định "chọn..."
+        selectPLDayHoGa.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        selectHTTruyenDan.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
     }
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
@@ -302,24 +344,7 @@
         var nuocMuaRepository = await NuocMuaRepository.GetBaoCaoTTHoGa(Input);
         listModel = nuocMuaRepository;
         listNuocMuaModel = Paging(nuocMuaRepository);
-       
-        foreach (var item in listNuocMuaModel)
-        {
-            // Kiểm tra xem item đã tồn tại trong danh sách selectPLDayHoGa hay chưa
-            if (!selectPLDayHoGa.Any(x => x.Value == item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa))
-            {
-                // Nếu chưa tồn tại, thêm item vào danh sách
-                selectPLDayHoGa.Add(new SelectedItem
-                    {
-                        Value = item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa,
-                        Text = item.PhanLoaiTDHoGa_PhanLoaiDayHoGa
-                    });
-            }
-        }
-
-
-        // Thêm phần tử mặc định "chọn..."
-        selectPLDayHoGa.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        
         isLoading = false;
     }
     public async Task Search()

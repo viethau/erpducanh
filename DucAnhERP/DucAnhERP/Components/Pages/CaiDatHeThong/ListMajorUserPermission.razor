@@ -21,7 +21,7 @@
         <BodyTemplate>
             <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
                 <div class="row">
-                    
+
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="CompanyId">Công ty</label>
                         <Select2 Id="CompanyId" Items="@selectCompanys" OnChange="@OnSelectCompany"></Select2>
@@ -41,7 +41,7 @@
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <p>Loại quyền: @string.Join(", ", selectedItems.Select(item => item.Text))</p>
-                        <MultiSelect Items="newlist" ItemsChanged="OnItemsChanged" />
+                        <MultiSelect Items="listPer" ItemsChanged="OnItemsChanged" />
                         <ValidationMessage For="()=>Input.PermissionId"></ValidationMessage>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
         <EditForm Model="majorUserPermissionModel" FormName="SearchNghiepVu" OnValidSubmit="@Search">
             <DataAnnotationsValidator />
             <div class="d-flex">
-                
+
 
                 <div class="form-floating col-sm-6 col-md-3">
                     <label for="CompanyId">Công ty</label>
@@ -136,13 +136,13 @@
                     <th class="text-center" scope="col">Ngày tạo</th>
                     </tr> *@
                 </thead>
-                @if (listPermissionsControl.Any())
+                @if (listMajorUserPermissionModel.Any())
                 {
                     <tbody>
                         @{
                             int stt = 0;
                         }
-                        @foreach (var item in listPermissionsControl)
+                        @foreach (var item in listMajorUserPermissionModel)
                         {
                             selectedItemstemp = JsonSerializer.Deserialize<List<SelectedItem>>(item?.PermissionId);
                             selectedItemDaysTemp = JsonSerializer.Deserialize<List<SelectedItem>>(item?.DayinWeek);
@@ -185,7 +185,7 @@
 
         </div>
 
-        @if (listPermissionsControl.Any())
+        @if (listMajorUserPermissionModel.Any())
         {
             <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
         }
@@ -206,6 +206,7 @@
     private List<MCompany> listCompany = new();
     private List<ApplicationUser> listApplicationUser = new();
     private List<MPermission> listPermission = new();
+    PermissionModel permissionModel = new();
     private bool isModalVisible = false;
     private bool isLoading = false;
     private string TitleModal = "Thêm";
@@ -235,9 +236,30 @@
         majorUserPermissionModel.CompanyId = selectedItem.Value;
     }
 
-    private void OnSelectMajor(SelectedItem selectedItem)
+    private async void OnSelectMajor(SelectedItem selectedItem)
     {
         Input.MajorId = selectedItem.Value;
+
+
+        permissionModel.MajorId = selectedItem.Value;
+        var list = await PermissionService.GetAllByVM(permissionModel);
+        selectedItems = new();
+
+        await InvokeAsync(() =>
+            {
+                listPer = new MultiSelectList(
+                list.Select(permission => new SelectListItem
+                    {
+                        Value = permission.Id,
+                        Text = permission.PermissionName,
+                        Selected = false
+                    }).ToList(),
+                "Value",
+                "Text"
+                );
+                StateHasChanged();
+            });
+
     }
     private void OnSelectMajor1(SelectedItem selectedItem)
     {
@@ -263,7 +285,7 @@
 
 
     // Danh sách quyền
-    private MultiSelectList newlist = new MultiSelectList(
+    private MultiSelectList listPer = new MultiSelectList(
         new List<SelectListItem>
         {
 
@@ -272,7 +294,7 @@
 
     private MultiSelectList listDayinWeek = new MultiSelectList(
        new List<SelectListItem>
-                           {
+                                       {
             new SelectListItem { Value = "1", Text = "Thứ 2" },
             new SelectListItem { Value = "2", Text = "Thứ 3" },
             new SelectListItem { Value = "3", Text = "Thứ 4" },
@@ -280,7 +302,7 @@
             new SelectListItem { Value = "5", Text = "Thứ 6" },
             new SelectListItem { Value = "6", Text = "Thứ 7" },
             new SelectListItem { Value = "0", Text = "Chủ nhật" }
-                           }, "Value", "Text");
+                                       }, "Value", "Text");
 
     private List<SelectedItem> selectedItems = new List<SelectedItem>();
     private List<SelectedItem> selectedItemstemp = new List<SelectedItem>();
@@ -322,7 +344,7 @@
         selectedItems = new();
         listDayinWeek = new MultiSelectList(
        new List<SelectListItem>
-                                   {
+                                               {
             new SelectListItem { Value = "1", Text = "Thứ 2" ,Selected =false},
             new SelectListItem { Value = "2", Text = "Thứ 3",Selected =false },
             new SelectListItem { Value = "3", Text = "Thứ 4" ,Selected =false},
@@ -330,7 +352,7 @@
             new SelectListItem { Value = "5", Text = "Thứ 6",Selected =false },
             new SelectListItem { Value = "6", Text = "Thứ 7" ,Selected =false},
             new SelectListItem { Value = "0", Text = "Chủ nhật" }
-                                   }, "Value", "Text");
+                                               }, "Value", "Text");
 
         foreach (var item in selectCompanys)
         {
@@ -348,6 +370,12 @@
     private void ShowModal()
     {
         isModalVisible = true;
+        selectedItems = new();
+        listPer = new MultiSelectList(new List<SelectListItem>
+        {
+
+        }, "Value", "Text", "Selected"
+                                    );
     }
 
     private void HandleModalClose(bool isVisible)
@@ -374,7 +402,7 @@
         isEdit = false;
         listDayinWeek = new MultiSelectList(
           new List<SelectListItem>
-                 {
+                             {
                 new SelectListItem { Value = "1", Text = "Thứ 2" ,Selected =false},
                 new SelectListItem { Value = "2", Text = "Thứ 3",Selected =false },
                 new SelectListItem { Value = "3", Text = "Thứ 4" ,Selected =false},
@@ -382,11 +410,11 @@
                 new SelectListItem { Value = "5", Text = "Thứ 6",Selected =false },
                 new SelectListItem { Value = "6", Text = "Thứ 7" ,Selected =false},
                 new SelectListItem { Value = "0", Text = "Chủ nhật" }
-                 }, "Value", "Text");
+                             }, "Value", "Text");
         RefreshInput();
     }
 
-    public List<MajorUserPermissionModel> listPermissionsControl
+    public List<MajorUserPermissionModel> listMajorUserPermissionModel
     {
         get;
         set;
@@ -425,20 +453,11 @@
             listMajor = await MajorRepository.GetAll();
             listCompany = await CompanyService.GetAll();
             listApplicationUser = await UserService.GetAll();
-            listPermission = await PermissionService.GetAll();
-            newlist = new MultiSelectList(
-               listPermission.Select(permission => new SelectListItem
-                   {
-                       Value = permission.Id,
-                       Text = permission.PermissionName,
-                       Selected = false
-                   }).ToList(),
-               "Value",
-               "Text"
-               );
+
+
             listModel = await MajorUserPermissionService.GetAllByVM(majorUserPermissionModel);
 
-            listPermissionsControl = Paging(listModel);
+            listMajorUserPermissionModel = Paging(listModel);
 
             selectMajors = listMajor.Select(major => new SelectedItem
                 {
@@ -491,11 +510,23 @@
             isModalVisible = true;
             if (!string.IsNullOrEmpty(Input.PermissionId))
             {
+                permissionModel.MajorId = Input.MajorId;
+                var listPerTemp = await PermissionService.GetAllByVM(permissionModel);
+                listPer = new MultiSelectList(
+                listPerTemp.Select(permission => new SelectListItem
+                    {
+                        Value = permission.Id,
+                        Text = permission.PermissionName,
+                        Selected = false
+                    }).ToList(),
+                "Value",
+                "Text"
+                );
                 // Chuyển đổi chuỗi JSON thành danh sách các quyền đã chọn (SelectedItem)
                 selectedItemstemp = JsonSerializer.Deserialize<List<SelectedItem>>(Input.PermissionId);
 
                 // Thiết lập giá trị đã chọn dựa trên `selectedItemstemp`
-                foreach (var item in newlist)
+                foreach (var item in listPer)
                 {
                     // Kiểm tra nếu quyền này đã được chọn (dựa trên Value)
                     var selected = selectedItemstemp.FirstOrDefault(i => i.Value == item.Value);
@@ -569,7 +600,7 @@
             {
                 if (!string.IsNullOrEmpty(deleteId))
                 {
-                    string[] ids = {deleteId};
+                    string[] ids = { deleteId };
                     var isValid = await MajorUserPermissionService.CheckExclusive(ids, baseTime);
                     if (isValid)
                     {
@@ -600,6 +631,17 @@
         try
         {
             var condition = await MajorUserPermissionRepository.GetExist(Input);
+            string[] idPermissions = [];
+            selectedItemstemp = JsonSerializer.Deserialize<List<SelectedItem>>(Input.PermissionId);
+            if (selectedItemstemp != null && selectedItemstemp.Count > 0)
+            {
+                idPermissions = selectedItemstemp.Select(item => item.Value).ToArray();
+            }
+            selectedItemstemp = new();
+            var isValidPermission = await PermissionService.CheckExclusive(idPermissions, baseTime);
+            string[] idMajors = { Input.MajorId };
+            var isValidMajor = await MajorService.CheckExclusive(idMajors, baseTime);
+
             if (isEdit)
             {
                 if (condition != null && condition.Count() > 0)
@@ -608,7 +650,8 @@
                     {
                         string[] ids = { Input.Id };
                         var isValid = await MajorUserPermissionService.CheckExclusive(ids, baseTime);
-                        if (isValid)
+
+                        if (isValid && isValidPermission && isValidMajor)
                         {
                             await MajorUserPermissionService.Update(Input);
                             ToastService.ShowToast(
@@ -643,7 +686,7 @@
                 {
                     string[] ids = { Input.Id };
                     var isValid = await MajorUserPermissionService.CheckExclusive(ids, baseTime);
-                    if (isValid)
+                    if (isValid && isValidPermission && isValidMajor)
                     {
                         await MajorUserPermissionService.Update(Input);
                         ToastService.ShowToast(
@@ -678,17 +721,20 @@
                 }
                 else
                 {
-                    await MajorUserPermissionRepository.InsertById(Input);
-                    ToastService.ShowToast(
-                        "Thông báo",
-                        "Thêm thành công.",
-                        iconClass: "fa fa-check-circle",
-                        progressBarClass: "bg-info",
-                        duration: 5000
-                    );
-                    Input.Id = Guid.NewGuid().ToString();
-                    await LoadData();
-                    RefreshInput();
+                    if (isValidPermission && isValidMajor)
+                    {
+                        await MajorUserPermissionRepository.InsertById(Input);
+                        ToastService.ShowToast(
+                            "Thông báo",
+                            "Thêm thành công.",
+                            iconClass: "fa fa-check-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
+                        Input.Id = Guid.NewGuid().ToString();
+                        await LoadData();
+                        RefreshInput();
+                    }
                 }
             }
         }
@@ -754,16 +800,16 @@
         list = list.Skip((majorUserPermissionModel.PageNumber - 1) * majorUserPermissionModel.PageSize).Take(majorUserPermissionModel.PageSize).ToList();
 
         // Xóa danh sách đang hiển thị trên màn hình
-        listPermissionsControl.Clear();
+        listMajorUserPermissionModel.Clear();
 
         // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
         foreach (var item in list)
         {
-            listPermissionsControl.Add(item);
+            listMajorUserPermissionModel.Add(item);
         }
 
         // Tạo pagelist mới
-        var pagelist = new PageList<MajorUserPermissionModel>(listPermissionsControl, count, majorUserPermissionModel.PageNumber, majorUserPermissionModel.PageSize);
+        var pagelist = new PageList<MajorUserPermissionModel>(listMajorUserPermissionModel, count, majorUserPermissionModel.PageNumber, majorUserPermissionModel.PageSize);
         MetaData = pagelist.MetaData;
         return list;
     }
