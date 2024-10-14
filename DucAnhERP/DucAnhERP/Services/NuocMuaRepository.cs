@@ -3,18 +3,17 @@ using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace DucAnhERP.Services
 {
     public class NuocMuaRepository : INuocMuaRepository
     {
         private readonly IDbContextFactory<ApplicationDbContext> _context;
-
         public NuocMuaRepository(IDbContextFactory<ApplicationDbContext> context)
         {
             _context = context;
         }
-
         public async Task<List<NuocMua>> GetAll()
         {
             try
@@ -30,8 +29,7 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-
-        public async Task<List<NuocMuaModel>> GetData()
+        public async Task<List<NuocMuaModel>> GetAllByVM(NuocMuaModel nuocMuaModel)
         {
 
             try
@@ -737,6 +735,10 @@ namespace DucAnhERP.Services
                                 Flag = nuocMua.Flag,
                                 TraiPhai = nuocMua.TraiPhai,
                             };
+                if( nuocMuaModel.TraiPhai < 2)
+                {
+                    query = query.Where(x=>x.TraiPhai == nuocMuaModel.TraiPhai);
+                }
                 var data = await query.ToListAsync();
                 return data;
             }
@@ -746,7 +748,6 @@ namespace DucAnhERP.Services
                 throw;
             }
         }
-
         public async Task Update(NuocMua nuocMua)
         {
             using var context = _context.CreateDbContext();
@@ -783,7 +784,6 @@ namespace DucAnhERP.Services
             context.Set<NuocMua>().Remove(entity);
             await context.SaveChangesAsync();
         }
-
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
         {
             foreach (var id in ids)
@@ -797,7 +797,6 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-
         public async Task<bool> CheckExistId(string field, string value)
         {
             // Thực hiện truy vấn kiểm tra bản ghi dựa trên tên field và giá trị value
@@ -813,7 +812,6 @@ namespace DucAnhERP.Services
             // Trả về false nếu không tìm thấy bản ghi
             return false;
         }
-
         public async Task<NuocMua> GetById(string id)
         {
             try
@@ -837,7 +835,6 @@ namespace DucAnhERP.Services
             }
 
         }
-
         public async Task Insert(NuocMua entity)
         {
             try
@@ -864,7 +861,6 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.Message);
             }
         }
-
         public async Task<string> InsertLaterFlag(NuocMua entity, int FlagLast)
         {
             string id = "";
@@ -924,9 +920,10 @@ namespace DucAnhERP.Services
                 }
 
                 // Kiểm tra xem bảng có bản ghi nào không
-                var maxFlag = await context.DSNuocMua.AnyAsync()
-                              ? await context.DSNuocMua.MaxAsync(x => x.Flag)
-                              : 0;
+                var maxFlag = await context.DSNuocMua.AnyAsync(x => x.TraiPhai == entities[0].TraiPhai)
+                               ? await context.DSNuocMua.Where(x => x.TraiPhai == entities[0].TraiPhai).MaxAsync(x => x.Flag)
+                               : 0;
+
 
                 foreach (var entity in entities)
                 {
@@ -1033,7 +1030,6 @@ namespace DucAnhERP.Services
                 throw new Exception ($"Lỗi dữ liệu {ex.Message}!");
             }
         }
-
         public async Task<List<NuocMuaModel>> GetBaoCaoKLBPhapHGa(NuocMuaModel nuocMuaModel)
         {
             try
@@ -1119,6 +1115,65 @@ namespace DucAnhERP.Services
             {
 
                 throw new Exception($"Lỗi dữ liệu {ex.Message}!");
+            }
+        }
+        public async Task<List<NuocMuaModel>> GetBaoCaoKHopHGaTDan(NuocMuaModel nuocMuaModel)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var query = from nuocMua in context.DSNuocMua
+                                // Left join với bảng PhanLoaiHoGas
+                            join phanLoaiHoGa in context.PhanLoaiHoGas
+                            on nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai equals phanLoaiHoGa.Id into phanLoaiHoGaJoin
+                            from phanLoaiHoGa in phanLoaiHoGaJoin.DefaultIfEmpty()
+
+                                // Left join với bảng PhanLoaiTDHoGas
+                            join phanLoaiTDHoGa in context.PhanLoaiTDHoGas
+                            on nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa equals phanLoaiTDHoGa.Id into phanLoaiTDHoGaJoin
+                            from phanLoaiTDHoGa in phanLoaiTDHoGaJoin.DefaultIfEmpty()
+
+                            orderby nuocMua.Flag
+                            select new NuocMuaModel
+                            {
+                                Id = nuocMua.Id,
+                                ThongTinLyTrinh_TuyenDuong = nuocMua.ThongTinLyTrinh_TuyenDuong ?? "",
+                                ThongTinLyTrinh_LyTrinhTaiTimHoGa = nuocMua.ThongTinLyTrinh_LyTrinhTaiTimHoGa ?? "",
+                                ThongTinChungHoGa_TenHoGaSauPhanLoai = nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
+                                PhanLoaiHoGas_TenHoGaSauPhanLoai = phanLoaiHoGa != null ? phanLoaiHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai : "",
+
+                                ThongTinTamDanHoGa2_PhanLoaiDayHoGa = nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
+                                PhanLoaiTDHoGa_PhanLoaiDayHoGa = phanLoaiTDHoGa.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
+                               
+                                ThongTinTamDanHoGa2_DuongKinh = nuocMua.ThongTinTamDanHoGa2_DuongKinh ?? 0,
+                                ThongTinTamDanHoGa2_ChieuDay = nuocMua.ThongTinTamDanHoGa2_ChieuDay ?? 0,
+
+                                ThongTinTamDanHoGa2_D = nuocMua.ThongTinTamDanHoGa2_D ?? 0,
+                                ThongTinTamDanHoGa2_R = nuocMua.ThongTinTamDanHoGa2_R ?? 0,
+                                ThongTinTamDanHoGa2_C = nuocMua.ThongTinTamDanHoGa2_C ?? 0,
+                                ThongTinTamDanHoGa2_SoLuongNapDay = nuocMua.ThongTinTamDanHoGa2_SoLuongNapDay ?? 0,
+
+                                ToaDoX = nuocMua.ToaDoX ?? 0,
+                                ToaDoY = nuocMua.ToaDoY ?? 0,
+                                Flag = nuocMua.Flag,
+                                TraiPhai = nuocMua.TraiPhai,
+                            };
+
+                if (!string.IsNullOrEmpty(nuocMuaModel.ThongTinTamDanHoGa2_PhanLoaiDayHoGa))
+                {
+                    query = query.Where(x => x.ThongTinTamDanHoGa2_PhanLoaiDayHoGa == nuocMuaModel.ThongTinTamDanHoGa2_PhanLoaiDayHoGa);
+                }
+                if (nuocMuaModel.TraiPhai != 2)
+                {
+                    query = query.Where(x => x.TraiPhai.Equals(nuocMuaModel.TraiPhai));
+                }
+                var data = await query.ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
             }
         }
     }

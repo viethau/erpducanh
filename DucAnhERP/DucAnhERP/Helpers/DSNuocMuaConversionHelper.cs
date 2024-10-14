@@ -372,6 +372,7 @@ namespace DucAnhERP.Helpers
             {
                 result = ThongTinCaoDoHoGa_CaoDoTuNhien;
             }
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double ThongTinCaoDoHoGa_CdDinhMong(string ThongTinChungHoGa_HinhThucHoGa, string ThongTinChungHoGa_HinhThucMongHoGa, double ThongTinCaoDoHoGa_CdDayHoGa, double DeHoGa_C)
@@ -389,7 +390,8 @@ namespace DucAnhERP.Helpers
                 result = ThongTinCaoDoHoGa_CdDayHoGa;
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double ThongTinCaoDoHoGa_DinhLotMong(string ThongTinChungHoGa_HinhThucMongHoGa, double ThongTinCaoDoHoGa_CdDinhMong, double BeTongMongHoGa_C)
         {
@@ -403,7 +405,8 @@ namespace DucAnhERP.Helpers
                 result = ThongTinCaoDoHoGa_CdDinhMong - BeTongMongHoGa_C;
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4); 
+            return result;
         }
         public double ThongTinCaoDoHoGa_DayDao(string ThongTinChungHoGa_HinhThucHoGa, string ThongTinChungHoGa_HinhThucMongHoGa, double ThongTinCaoDoHoGa_DinhLotMong, double BeTongLotMong_C, double ThongTinCaoDoHoGa_CdDayHoGa, double DeHoGa_C)
         {
@@ -422,11 +425,15 @@ namespace DucAnhERP.Helpers
             {
                 result = ThongTinCaoDoHoGa_CdDayHoGa;
             }
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double ThongTinCaoDoHoGa_CSauDao(double ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao, double ThongTinCaoDoHoGa_DayDao)
         {
-            return Math.Round(ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao - ThongTinCaoDoHoGa_DayDao, 2);
+            double result = 0;
+            result = ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao - ThongTinCaoDoHoGa_DayDao;
+            result = Math.Round(result, 4);
+            return Math.Round(result, 2);
         }
         public double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinCaoDoHoGa_CSauDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa)
         {
@@ -444,19 +451,21 @@ namespace DucAnhERP.Helpers
             {
                 result = ThongTinCaoDoHoGa_CSauDao - ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa;
             }
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double ThongTinCaoDoHoGa_TongChieuCaoHoGa(double ThongTinCaoDoHoGa_CdDinhHoGa, double ThongTinCaoDoHoGa_DayDao)
         {
             double result = 0;
             result = ThongTinCaoDoHoGa_CdDinhHoGa - ThongTinCaoDoHoGa_DayDao;
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double ThongTinCaoDoHoGa_ChenhCaoDinhHoGaVaHienTrangDao(double ThongTinCaoDoHoGa_CdDinhHoGa, double ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao)
         {
             double result = 0;
             result = ThongTinCaoDoHoGa_CdDinhHoGa - ThongTinCaoDoHoGa_CaoDoHienTrangTruocKhiDao;
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double ThongTinCaoDoHoGa_DinhMuMoThotDuoi(double ThongTinCaoDoHoGa_CdDinhHoGa, double MuMoThotTren_C, double ThongTinTamDanHoGa2_C)
@@ -472,30 +481,35 @@ namespace DucAnhERP.Helpers
                 result = ThongTinCaoDoHoGa_CdDinhHoGa - ThongTinTamDanHoGa2_C;
                 ;
             }
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double ThongTinCaoDoHoGa_DinhTuong(double ThongTinCaoDoHoGa_DinhMuMoThotDuoi, double MuMoThotDuoi_C)
         {
             double result = 0;
             result = ThongTinCaoDoHoGa_DinhMuMoThotDuoi - MuMoThotDuoi_C;
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double ThongTinCaoDoHoGa_DinhTuongDuoiDamGiuaTuong(double DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa, double ThongTinCaoDoHoGa_CdDayHoGa)
         {
             double result = 0;
             result = DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa > 0 ? ThongTinCaoDoHoGa_CdDayHoGa + DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa : 0;
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double ThongTinCaoDoHoGa_DinhDamGiuaTuong(double DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa, double ThongTinCaoDoHoGa_DinhTuongDuoiDamGiuaTuong, double DamGiuaHoGa_C)
         {
             double result = 0;
             result = DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa > 0 ? ThongTinCaoDoHoGa_DinhTuongDuoiDamGiuaTuong + DamGiuaHoGa_C : 0;
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double ThongTinCaoDoHoGa_CCaoTuong(double DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa, double ThongTinCaoDoHoGa_DinhTuong, double ThongTinCaoDoHoGa_CdDayHoGa, double DamGiuaHoGa_C)
         {
             double result = 0;
             result = DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa > 0 ? ThongTinCaoDoHoGa_DinhTuong - ThongTinCaoDoHoGa_CdDayHoGa - DamGiuaHoGa_C : ThongTinCaoDoHoGa_DinhTuong - ThongTinCaoDoHoGa_CdDayHoGa;
+            result = Math.Round(result, 4);
             return Math.Round(result, 1);
         }
         public double ChatMatTrong_C(string ThongTinChungHoGa_ChatMatTrong, string ThongTinChungHoGa_KetCauTuong, string ThongTinChungHoGa_KetCauMuMo, double TuongHoGa_C, double DamGiuaHoGa_C, double MuMoThotDuoi_C, double MuMoThotTren_C)
@@ -535,7 +549,8 @@ namespace DucAnhERP.Helpers
                 result = 0;
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double ChatMatNgoaiCanh_C(string ThongTinChungHoGa_ChatMatNgoai, string ThongTinChungHoGa_KetCauTuong, string ThongTinChungHoGa_KetCauMuMo, double TuongHoGa_C, double DamGiuaHoGa_CdDam, double MuMoThotDuoi_C, double MuMoThotTren_C, double MuMoThotTren_CdTuong)
         {
@@ -587,7 +602,7 @@ namespace DucAnhERP.Helpers
             {
                 result = ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat >= BeTongLotMong_C ? BeTongLotMong_C : ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat;
             }
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double TTCCCCDTHT_ChieuCaoMongDat(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat, double BeTongLotMong_C, double BeTongMongHoGa_C)
@@ -611,7 +626,7 @@ namespace DucAnhERP.Helpers
                 }
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double TTCCCCDTHT_ChieuCaoTuongDat(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat, double BeTongLotMong_C, double BeTongMongHoGa_C, double TuongHoGa_C, double DamGiuaHoGa_C, double MuMoThotDuoi_C, double MuMoThotTren_C)
@@ -637,7 +652,7 @@ namespace DucAnhERP.Helpers
                 }
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double TTCCCCDTHT_ChieuCaoLotDa(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa, double ThongTinVatLieuDaoHoGa_TongChieuCaoDao, double TTCCCCDTHT_ChieuCaoLotDat, double BeTongLotMong_C)
@@ -662,8 +677,8 @@ namespace DucAnhERP.Helpers
                 }
             }
 
-
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double TTCCCCDTHT_ChieuCaoMongDa(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa, double ThongTinVatLieuDaoHoGa_TongChieuCaoDao, double TTCCCCDTHT_ChieuCaoMongDat, double TTCCCCDTHT_ChieuCaoLotDa, double BeTongLotMong_C, double BeTongMongHoGa_C)
         {
@@ -704,7 +719,8 @@ namespace DucAnhERP.Helpers
             }
 
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double TTCCCCDTHT_ChieuCaoTuongDa(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa, double ThongTinVatLieuDaoHoGa_TongChieuCaoDao, double TTCCCCDTHT_ChieuCaoTuongDat, double TTCCCCDTHT_ChieuCaoLotDa, double TTCCCCDTHT_ChieuCaoMongDa, double BeTongLotMong_C, double BeTongMongHoGa_C, double TuongHoGa_C, double DamGiuaHoGa_C, double MuMoThotDuoi_C, double MuMoThotTren_C)
         {
@@ -745,10 +761,9 @@ namespace DucAnhERP.Helpers
             }
 
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4); 
+            return result;
         }
-
-
         public double TTKLD_CRongDaoDayLonDat(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat, double ThongTinMaiDao_TyLeMoMai, double ThongTinMaiDao_SoCanhMaiTrai, double ThongTinMaiDao_SoCanhMaiPhai, double ThongTinMaiDao_ChieuRongDayDaoNho)
         {
             double result = 0;
@@ -759,7 +774,7 @@ namespace DucAnhERP.Helpers
                 result = (ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat * ThongTinMaiDao_TyLeMoMai * (ThongTinMaiDao_SoCanhMaiTrai + ThongTinMaiDao_SoCanhMaiPhai)) + ThongTinMaiDao_ChieuRongDayDaoNho;
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double TTKLD_CRongDaoDayLonDa(string ThongTinVatLieuDaoHoGa_LoaiVatLieuDao, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa, double ThongTinMaiDao_TyLeMoMai, double ThongTinMaiDao_SoCanhMaiTrai, double ThongTinMaiDao_SoCanhMaiPhai, double TTKLD_CRongDaoDayLonDat, double ThongTinMaiDao_ChieuRongDayDaoNho)
@@ -778,14 +793,14 @@ namespace DucAnhERP.Helpers
                 }
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double TTKLD_DienTichDaoDat(double TTKLD_CRongDaoDayLonDat, double ThongTinMaiDao_ChieuRongDayDaoNho, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat)
         {
             double result = 0;
             result = (TTKLD_CRongDaoDayLonDat + ThongTinMaiDao_ChieuRongDayDaoNho) * (ThongTinVatLieuDaoHoGa_ChieuCaoDaoDat / 2);
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double TTKLD_DienTichDaoDa(double TTKLD_CRongDaoDayLonDa, double TTKLD_CRongDaoDayLonDat, double ThongTinMaiDao_ChieuRongDayDaoNho, double ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa)
@@ -800,7 +815,7 @@ namespace DucAnhERP.Helpers
             {
                 result = (TTKLD_CRongDaoDayLonDa + ThongTinMaiDao_ChieuRongDayDaoNho) * (ThongTinVatLieuDaoHoGa_ChieuCaoDaoDa / 2);
             }
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double TTKLD_TongDtDao(double TTKLD_DienTichDaoDat, double TTKLD_DienTichDaoDa)
@@ -808,7 +823,7 @@ namespace DucAnhERP.Helpers
             // Tính tổng và làm tròn đến 2 chữ số thập phân
             double result = 0;
             result = TTKLD_DienTichDaoDat + TTKLD_DienTichDaoDa;
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double TTKLD_KlDaoDat(double TTKLD_DienTichDaoDat, double BeTongLotMong_D, double PhuBiHoGa_CDai, string ThongTinChungHoGa_TenHoGaTheoBanVe)
@@ -823,21 +838,21 @@ namespace DucAnhERP.Helpers
             {
                 result = BeTongLotMong_D > 0 ? TTKLD_DienTichDaoDat * BeTongLotMong_D : TTKLD_DienTichDaoDat * PhuBiHoGa_CDai;
             }
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double TTKLD_KlDaoDa(double TTKLD_DienTichDaoDa, double BeTongLotMong_D, double PhuBiHoGa_CDai, string ThongTinChungHoGa_TenHoGaTheoBanVe)
         {
             string cuoi2KyTu = ThongTinChungHoGa_TenHoGaTheoBanVe.Length >= 2 ? ThongTinChungHoGa_TenHoGaTheoBanVe.Substring(ThongTinChungHoGa_TenHoGaTheoBanVe.Length - 2) : string.Empty;
             double result = cuoi2KyTu == "=G" ? 0 : (BeTongLotMong_D > 0 ? TTKLD_DienTichDaoDa * BeTongLotMong_D : TTKLD_DienTichDaoDa * PhuBiHoGa_CDai);
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double TTKLD_TongKlDao(double TTKLD_KlDaoDat, double TTKLD_KlDaoDa)
         {
             double result = 0;
             result = TTKLD_KlDaoDat + TTKLD_KlDaoDa;
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double TTKLD_KlChiemChoDat(string ThongTinChungHoGa_TenHoGaTheoBanVe, double BeTongLotMong_D, double DThongTinChungHoGa_TenHoGaTheoBanVe, double BeTongLotMong_R, double TBeTongMongHoGa_D, double TBeTongMongHoGa_R, double TTCCCCDTHT_ChieuCaoMongDat, double TTCCCCDTHT_ChieuCaoTuongDat, double PhuBiHoGa_CDai, double PhuBiHoGa_CRong)
@@ -861,7 +876,7 @@ namespace DucAnhERP.Helpers
                          (TTCCCCDTHT_ChieuCaoTuongDat * PhuBiHoGa_CDai * PhuBiHoGa_CRong);
             }
 
-            Math.Round(result, 3);
+            Math.Round(result,4);
             return Math.Round(result, 2);
         }
         public double TTKLD_KlChiemChoDa(string ThongTinChungHoGa_TenHoGaTheoBanVe, double BeTongLotMong_D, double TTCCCCDTHT_ChieuCaoLotDa, double BeTongLotMong_R, double TBeTongMongHoGa_D, double TBeTongMongHoGa_R, double TTCCCCDTHT_ChieuCaoMongDa, double TTCCCCDTHT_ChieuCaoTuongDa, double PhuBiHoGa_CDai, double PhuBiHoGa_CRong)
@@ -885,45 +900,49 @@ namespace DucAnhERP.Helpers
                          (TTCCCCDTHT_ChieuCaoTuongDa * PhuBiHoGa_CDai * PhuBiHoGa_CRong);
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double TTKLD_TongChiemCho(double TTKLD_KlChiemChoDat, double TTKLD_KlChiemChoDa)
         {
-            double result = TTKLD_KlChiemChoDat + TTKLD_KlChiemChoDa;
-
+            double result = 0;
+            result = TTKLD_KlChiemChoDat + TTKLD_KlChiemChoDa;
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double TTKLD_KlDapTraDat(double TTKLD_KlDaoDat, double TTKLD_KlChiemChoDat)
         {
-            double result = TTKLD_KlDaoDat - TTKLD_KlChiemChoDat;
-
+            double result = 0;
+            result = TTKLD_KlDaoDat - TTKLD_KlChiemChoDat;
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double TTKLD_KlDapTraDa(double TTKLD_KlDaoDa, double TTKLD_KlChiemChoDa)
         {
-            double result = TTKLD_KlDaoDa - TTKLD_KlChiemChoDa;
-
+            double result = 0;
+            result = TTKLD_KlDaoDa - TTKLD_KlChiemChoDa;
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double TTKLD_TongDapTra(double TTKLD_KlDapTraDat, double TTKLD_KlDapTraDa)
         {
-            double result = TTKLD_KlDapTraDat + TTKLD_KlDapTraDa;
-
+            double result = 0;
+            result = TTKLD_KlDapTraDat + TTKLD_KlDapTraDa;
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double ThongTinCauTaoCongTron_CCaoCauKien(double ThongTinCauTaoCongTron_CDayPhuBi, double ThongTinCauTaoCongTron_SoCanh, double ThongTinCauTaoCongTron_LongSuDung)
         {
             double result = 0;
             result = (ThongTinCauTaoCongTron_CDayPhuBi * ThongTinCauTaoCongTron_SoCanh) + ThongTinCauTaoCongTron_LongSuDung;
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double ThongTinCauTaoCongTron_TongCCaoCong(double ThongTinCauTaoCongTron_CCaoCauKien, double ThongTinCauTaoCongTron_CCaoLotMong, double ThongTinCauTaoCongTron_CCaoMong, double ThongTinCauTaoCongTron_CCaoDe)
         {
             double result = 0;
             result = ThongTinCauTaoCongTron_CCaoCauKien + ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong + ThongTinCauTaoCongTron_CCaoDe;
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double TTTKLCKCTCH_SLCKNguyen(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double TTCDSLCauKienDuongTruyenDan_TongChieuDai, double TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien, double TTTKLCKCTCH_CDMoiNoiCKien)
@@ -943,7 +962,7 @@ namespace DucAnhERP.Helpers
                 result = 0;
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double TTTKLCKCTCH_CDCanLapDat(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double TTTKLCKCTCH_SLCKNguyen, double TTTKLCKCTCH_SLCKDungDeTinhCD, double TTTKLCKCTCH_CDMoiNoiCKien)
@@ -958,7 +977,8 @@ namespace DucAnhERP.Helpers
             {
                 result = 0;
             }
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4); 
+            return result;
         }
         public double TTTKLCKCTCH_TongCD(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double TTTKLCKCTCH_SLCKNguyen, double TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien, double TTTKLCKCTCH_CDCanLapDat)
         {
@@ -972,7 +992,8 @@ namespace DucAnhERP.Helpers
             {
                 result = 0;
             }
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double TTTKLCKCTCH_CDThucTeThuaThieu(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double TTTKLCKCTCH_TongCD, double TTCDSLCauKienDuongTruyenDan_TongChieuDai)
         {
@@ -986,7 +1007,8 @@ namespace DucAnhERP.Helpers
             {
                 result = 0;
             }
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public string TTTKLCKCTCH_XDOngCongCanThem(double TTTKLCKCTCH_CDThucTeThuaThieu)
         {
@@ -1011,8 +1033,8 @@ namespace DucAnhERP.Helpers
             {
                 result = 0;
             }
-            result = Math.Round(result, 3);
-            return Math.Round(result, 2, MidpointRounding.AwayFromZero);
+            result = Math.Round(result, 4);
+            return Math.Round(result, 2);
         }
         public double TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string TTTKLCKCTCH_XDOngCongCanThem, double TTTKLCKCTCH_SLCKNguyen, double TTTKLCKCTCH_SLCKDungDeTinhCD)
         {
@@ -1034,8 +1056,8 @@ namespace DucAnhERP.Helpers
                 result = 0;
             }
 
-
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double TTKTHHCongHopRanh_CCaoChatMatTrong(string TTKTHHCongHopRanh_ChatMatTrong, string TTKTHHCongHopRanh_CauTaoTuong, string TTKTHHCongHopRanh_CauTaoMuMo, double TTKTHHCongHopRanh_CCaoTuongGop, double TTKTHHCongHopRanh_CCaoMuMoThotDuoi, double TTKTHHCongHopRanh_CCaoMuMoThotTren)
         {
@@ -1054,7 +1076,8 @@ namespace DucAnhERP.Helpers
             }
 
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double TTKTHHCongHopRanh_CCaoChatmatNgoai(string TTKTHHCongHopRanh_ChatMatNgoai, string TTKTHHCongHopRanh_CauTaoTuong, string TTKTHHCongHopRanh_CauTaoMuMo, double TTKTHHCongHopRanh_CCaoTuongGop, double TTKTHHCongHopRanh_CCaoMuMoThotDuoi, double TTKTHHCongHopRanh_CCaoMuMoThotTren, double TTKTHHCongHopRanh_CRongMuMoTren)
         {
@@ -1070,7 +1093,8 @@ namespace DucAnhERP.Helpers
             {
                 result = TTKTHHCongHopRanh_CCaoMuMoThotTren + TTKTHHCongHopRanh_CRongMuMoTren;
             }
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double TTKTHHCongHopRanh_TongChieuCao(double TTKTHHCongHopRanh_CCaoLotMong, double TTKTHHCongHopRanh_CCaoMong, double TTKTHHCongHopRanh_CCaoDe, double TTKTHHCongHopRanh_CCaoTuongGop, double TTKTHHCongHopRanh_CCaoMuMoThotDuoi, double TTKTHHCongHopRanh_CCaoMuMoThotTren)
         {
@@ -1081,13 +1105,15 @@ namespace DucAnhERP.Helpers
                             + TTKTHHCongHopRanh_CCaoMuMoThotDuoi
                             + TTKTHHCongHopRanh_CCaoMuMoThotTren;
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double ThongTinKichThuocHinhHocOngNhua_TongCCaoOng(double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double ThongTinKichThuocHinhHocOngNhua_SoCanh, double ThongTinKichThuocHinhHocOngNhua_LongSuDung)
         {
-            double result = (ThongTinKichThuocHinhHocOngNhua_CDayPhuBi * ThongTinKichThuocHinhHocOngNhua_SoCanh)
+            double result = 0;
+            result = (ThongTinKichThuocHinhHocOngNhua_CDayPhuBi * ThongTinKichThuocHinhHocOngNhua_SoCanh)
                             + ThongTinKichThuocHinhHocOngNhua_LongSuDung;
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public int TTTDCongHoRanh_SLCauKienNguyen(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double TTCDSLCauKienDuongTruyenDan_TongChieuDai, double TTTDCongHoRanh_Cdai, double TTTDCongHoRanh_ChieuDaiMoiNoi)
@@ -1127,7 +1153,8 @@ namespace DucAnhERP.Helpers
             }
 
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double TTTDCongHoRanh_ChieuDaiTheoSoCKNguyen(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double TTTDCongHoRanh_SLCauKienNguyen, double TTTDCongHoRanh_ChieuDaiMoiNoi)
         {
@@ -1136,7 +1163,8 @@ namespace DucAnhERP.Helpers
                 ? TTTDCongHoRanh_SLCauKienNguyen * TTTDCongHoRanh_ChieuDaiMoiNoi
                 : 0;
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double TTTDCongHoRanh_ChieuDaiThucTe(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double TTTDCongHoRanh_TongChieuDaiTheoCKNguyen, double TTCDSLCauKienDuongTruyenDan_TongChieuDai)
         {
@@ -1145,7 +1173,8 @@ namespace DucAnhERP.Helpers
                 ? TTTDCongHoRanh_TongChieuDaiTheoCKNguyen - TTCDSLCauKienDuongTruyenDan_TongChieuDai
                 : 0;
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double TTTDCongHoRanh_TongChieuDaiTheoCKNguyen(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double TTTDCongHoRanh_SLCauKienNguyen, double TTTDCongHoRanh_Cdai, double TTTDCongHoRanh_ChieuDaiTheoSoCKNguyen)
         {
@@ -1154,7 +1183,8 @@ namespace DucAnhERP.Helpers
                 ? (TTTDCongHoRanh_SLCauKienNguyen * TTTDCongHoRanh_Cdai) + TTTDCongHoRanh_ChieuDaiTheoSoCKNguyen
                 : 0;
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public string TTTDCongHoRanh_XacDinhOngCongCanThem(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double TTTDCongHoRanh_ChieuDaiThucTe)
         {
@@ -1209,7 +1239,8 @@ namespace DucAnhERP.Helpers
                 result = 0;
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDThuongLuu_DinhMongRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay)
         {
@@ -1226,7 +1257,8 @@ namespace DucAnhERP.Helpers
                 result = 0;
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDThuongLuu_DinhMongCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double TTKTHHCongHopRanh_CCaoDe)
         {
@@ -1242,7 +1274,8 @@ namespace DucAnhERP.Helpers
                 result = 0;
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDThuongLuu_DinhMongCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDThuongLuu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe)
         {
@@ -1261,7 +1294,8 @@ namespace DucAnhERP.Helpers
                 }
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDThuongLuu_DinhMongGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDThuongLuu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe, double TTKTHHCongHopRanh_CCaoDe)
         {
@@ -1309,7 +1343,8 @@ namespace DucAnhERP.Helpers
 
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDThuongLuu_DinhLotRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DinhMongRanh, double TTKTHHCongHopRanh_CCaoMong)
         {
@@ -1321,7 +1356,8 @@ namespace DucAnhERP.Helpers
                 result = CDThuongLuu_DinhMongRanh - TTKTHHCongHopRanh_CCaoMong;
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDThuongLuu_DinhLotCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DinhMongCongHop, double TTKTHHCongHopRanh_CCaoMong)
         {
@@ -1333,7 +1369,8 @@ namespace DucAnhERP.Helpers
                 result = CDThuongLuu_DinhMongCongHop - TTKTHHCongHopRanh_CCaoMong;
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDThuongLuu_DinhLotCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DinhMongCongTron, double ThongTinCauTaoCongTron_CCaoMong)
         {
@@ -1344,7 +1381,8 @@ namespace DucAnhERP.Helpers
             {
                 result = CDThuongLuu_DinhMongCongTron - ThongTinCauTaoCongTron_CCaoMong;
             }
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDThuongLuu_DinhLotOngNhua(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi)
         {
@@ -1356,7 +1394,8 @@ namespace DucAnhERP.Helpers
                 result = CDThuongLuu_DayDongChay - ThongTinKichThuocHinhHocOngNhua_CDayPhuBi;
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDThuongLuu_DinhLotGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDThuongLuu_DinhMongCongTron, double ThongTinCauTaoCongTron_CCaoMong, double CDThuongLuu_DinhMongCongHop, double TTKTHHCongHopRanh_CCaoMong, double CDThuongLuu_DinhMongRanh)
         {
@@ -1426,7 +1465,8 @@ namespace DucAnhERP.Helpers
             }
 
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDThuongLuu_DayDaoOngNhua(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDThuongLuu_DinhLotOngNhua, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
         {
@@ -1445,7 +1485,8 @@ namespace DucAnhERP.Helpers
                 }
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDThuongLuu_DayDaoRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhLotRanh, double TTKTHHCongHopRanh_CCaoLotMong)
         {
@@ -1456,7 +1497,8 @@ namespace DucAnhERP.Helpers
                 result = CDThuongLuu_DinhLotRanh - TTKTHHCongHopRanh_CCaoLotMong;
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDThuongLuu_DayDaoCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double TTKTHHCongHopRanh_CCaoDe, double CDThuongLuu_DinhLotCongHop, double TTKTHHCongHopRanh_CCaoLotMong)
         {
@@ -1478,7 +1520,8 @@ namespace DucAnhERP.Helpers
             }
 
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDThuongLuu_DayDaoCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDThuongLuu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe, double CDThuongLuu_DinhLotCongTron, double ThongTinCauTaoCongTron_CCaoLotMong)
         {
@@ -1502,7 +1545,8 @@ namespace DucAnhERP.Helpers
                     result = CDThuongLuu_DinhLotCongTron - ThongTinCauTaoCongTron_CCaoLotMong;
                 }
             }
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDThuongLuu_DayDaoGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDThuongLuu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDThuongLuu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe, double CDThuongLuu_DinhLotCongTron, double ThongTinCauTaoCongTron_CCaoLotMong, double TTKTHHCongHopRanh_CCaoDe, double CDThuongLuu_DinhLotCongHop, double TTKTHHCongHopRanh_CCaoLotMong, double CDThuongLuu_DinhLotRanh, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDThuongLuu_DinhLotOngNhua, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
         {
@@ -1579,7 +1623,7 @@ namespace DucAnhERP.Helpers
                 result = 0;
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double CDThuongLuu_ChieuSauDao(double CDThuongLuu_HienTrangTruocKhiDaoThuongLuu, double CDThuongLuu_DayDaoGop)
@@ -1590,8 +1634,9 @@ namespace DucAnhERP.Helpers
             {
                 result = CDThuongLuu_HienTrangTruocKhiDaoThuongLuu - CDThuongLuu_DayDaoGop;
             }
-            Math.Round(result, 4);
-            result = Math.Round(result, 4); return result;
+           
+            result = Math.Round(result, 4); 
+            return result;
         }
         public double CDThuongLuu_DinhCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhTrongLongSuDung, double ThongTinCauTaoCongTron_CDayPhuBi)
         {
@@ -1602,6 +1647,7 @@ namespace DucAnhERP.Helpers
             {
                 result = CDThuongLuu_DinhTrongLongSuDung + ThongTinCauTaoCongTron_CDayPhuBi;
             }
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double CDThuongLuu_DinhCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhTrongLongSuDung, double TTKTHHCongHopRanh_CCaoMuMoThotTren)
@@ -1613,7 +1659,7 @@ namespace DucAnhERP.Helpers
             {
                 result = CDThuongLuu_DinhTrongLongSuDung + TTKTHHCongHopRanh_CCaoMuMoThotTren;
             }
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double CDThuongLuu_DinhRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhTrongLongSuDung, double TTKTHHCongHopRanh_CCaoMuMoThotTren)
@@ -1625,7 +1671,7 @@ namespace DucAnhERP.Helpers
             {
                 result = CDThuongLuu_DinhTrongLongSuDung + TTKTHHCongHopRanh_CCaoMuMoThotTren;
             }
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double CDThuongLuu_DinhOngNhua(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhTrongLongSuDung, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi)
@@ -1637,7 +1683,7 @@ namespace DucAnhERP.Helpers
             {
                 result = CDThuongLuu_DinhTrongLongSuDung + ThongTinKichThuocHinhHocOngNhua_CDayPhuBi;
             }
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double CDThuongLuu_DinhDapCat(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhOngNhua, double ThongTinKichThuocHinhHocOngNhua_CCaoDapCat)
@@ -1649,7 +1695,7 @@ namespace DucAnhERP.Helpers
             {
                 result = CDThuongLuu_DinhOngNhua + ThongTinKichThuocHinhHocOngNhua_CCaoDapCat;
             }
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double CDThuongLuu_DinhGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhTrongLongSuDung, double ThongTinCauTaoCongTron_CDayPhuBi, double TTKTHHCongHopRanh_CCaoMuMoThotTren, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDThuongLuu_DayDongChay)
@@ -1678,7 +1724,7 @@ namespace DucAnhERP.Helpers
                 result = CDThuongLuu_DayDongChay + 0;
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double CDThuongLuu_DinhMuMoThotDuoiCongHopRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhCongHop, double CDThuongLuu_DinhRanh, double TTKTHHCongHopRanh_CCaoMuMoThotTren)
@@ -1698,7 +1744,7 @@ namespace DucAnhERP.Helpers
                 result = 0;
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double CDThuongLuu_DinhTuongCHopRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhMuMoThotDuoiCongHopRanh, double TTKTHHCongHopRanh_CCaoMuMoThotDuoi)
@@ -1713,7 +1759,7 @@ namespace DucAnhERP.Helpers
                 result = CDThuongLuu_DinhMuMoThotDuoiCongHopRanh - TTKTHHCongHopRanh_CCaoMuMoThotDuoi;
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double CDThuongLuu_CCaoTuongCongRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_DinhTuongCHopRanh, double CDThuongLuu_DayDongChay)
@@ -1728,7 +1774,7 @@ namespace DucAnhERP.Helpers
                 result = CDThuongLuu_DinhTuongCHopRanh - CDThuongLuu_DayDongChay;
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 1);
         }
         public double TTKTHHCongHopRanh_CCaoTuongRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDThuongLuu_CCaoTuongCongRanh, double CDHaLu_CCaoTuongCongRanh)
@@ -1740,14 +1786,14 @@ namespace DucAnhERP.Helpers
                 result = (CDThuongLuu_CCaoTuongCongRanh + CDHaLu_CCaoTuongCongRanh) / 2;
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double TTKTHHCongHopRanh_CCaoTuongGop(double TTKTHHCongHopRanh_CCaoTuongCongHop, double TTKTHHCongHopRanh_CCaoTuongRanh)
         {
             double result = 0;
             result = TTKTHHCongHopRanh_CCaoTuongCongHop + TTKTHHCongHopRanh_CCaoTuongRanh;
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double CDHaLu_DinhDeCong(string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi)
@@ -1759,8 +1805,8 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_DayDongChay - ThongTinCauTaoCongTron_CDayPhuBi;
             }
 
-
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDHaLu_DinhMongRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay)
         {
@@ -1772,8 +1818,8 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_DayDongChay;
             }
 
-
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDHaLu_DinhMongCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double TTKTHHCongHopRanh_CCaoDe)
         {
@@ -1784,7 +1830,8 @@ namespace DucAnhERP.Helpers
             {
                 result = CDHaLu_DayDongChay - TTKTHHCongHopRanh_CCaoDe;
             }
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDHaLu_DinhMongCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDHaLu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe)
         {
@@ -1802,7 +1849,8 @@ namespace DucAnhERP.Helpers
                     result = CDHaLu_DinhDeCong - ThongTinCauTaoCongTron_CCaoDe;
                 }
             }
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4); 
+            return result;
         }
         public double CDHaLu_DinhMongGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDHaLu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe, double TTKTHHCongHopRanh_CCaoDe)
         {
@@ -1843,7 +1891,8 @@ namespace DucAnhERP.Helpers
             }
 
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDHaLu_DinhLotRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DinhMongRanh, double TTKTHHCongHopRanh_CCaoMong)
         {
@@ -1858,7 +1907,8 @@ namespace DucAnhERP.Helpers
             }
 
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDHaLu_DinhLotCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DinhMongCongHop, double TTKTHHCongHopRanh_CCaoMong)
         {
@@ -1870,7 +1920,8 @@ namespace DucAnhERP.Helpers
             {
                 result = CDHaLu_DinhMongCongHop - TTKTHHCongHopRanh_CCaoMong;
             }
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDHaLu_DinhLotCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DinhMongCongTron, double ThongTinCauTaoCongTron_CCaoMong)
         {
@@ -1884,8 +1935,8 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_DinhMongCongTron - ThongTinCauTaoCongTron_CCaoMong;
             }
 
-
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDHaLu_DinhLotOngNhua(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi)
         {
@@ -1898,7 +1949,8 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_DayDongChay - ThongTinKichThuocHinhHocOngNhua_CDayPhuBi;
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDHaLu_DinhLotGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDHaLu_DinhMongCongTron, double ThongTinCauTaoCongTron_CCaoMong, double CDHaLu_DinhMongCongHop, double TTKTHHCongHopRanh_CCaoMong, double CDHaLu_DinhMongRanh)
         {
@@ -1941,7 +1993,8 @@ namespace DucAnhERP.Helpers
                     result = CDHaLu_DinhMongRanh - TTKTHHCongHopRanh_CCaoMong;
                 }
             }
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDHaLu_DayDaoOngNhua(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDHaLu_DinhLotOngNhua, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
         {
@@ -1961,7 +2014,8 @@ namespace DucAnhERP.Helpers
                 }
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDHaLu_DayDaoRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhLotRanh, double TTKTHHCongHopRanh_CCaoLotMong)
         {
@@ -1971,7 +2025,8 @@ namespace DucAnhERP.Helpers
             {
                 result = CDHaLu_DinhLotRanh - TTKTHHCongHopRanh_CCaoLotMong;
             }
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDHaLu_DayDaoCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double TTKTHHCongHopRanh_CCaoDe, double CDHaLu_DinhLotCongHop, double TTKTHHCongHopRanh_CCaoLotMong)
         {
@@ -1986,7 +2041,8 @@ namespace DucAnhERP.Helpers
             {
                 result = CDHaLu_DinhLotCongHop - TTKTHHCongHopRanh_CCaoLotMong;
             }
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDHaLu_DayDaoCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDHaLu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe, double CDHaLu_DinhLotCongTron, double ThongTinCauTaoCongTron_CCaoLotMong)
         {
@@ -2009,7 +2065,8 @@ namespace DucAnhERP.Helpers
                     result = CDHaLu_DinhLotCongTron - ThongTinCauTaoCongTron_CCaoLotMong;
                 }
             }
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double CDHaLu_DayDaoGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, string ThongTinMongDuongTruyenDan_LoaiMong, double CDHaLu_DayDongChay, double ThongTinCauTaoCongTron_CDayPhuBi, double CDHaLu_DinhDeCong, double ThongTinCauTaoCongTron_CCaoDe,
                              double CDHaLu_DinhLotCongTron, double ThongTinCauTaoCongTron_CCaoLotMong, double TTKTHHCongHopRanh_CCaoDe, double CDHaLu_DinhLotCongHop, double TTKTHHCongHopRanh_CCaoLotMong,
@@ -2072,7 +2129,7 @@ namespace DucAnhERP.Helpers
                     result = CDHaLu_DayDongChay;
                 }
             }
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double CDHaLu_ChieuSauDao(double CDHaLu_DayDaoGop, double CDHaLu_HienTrangTruocKhiDaoHaLuu)
@@ -2084,7 +2141,8 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_HienTrangTruocKhiDaoHaLuu - CDHaLu_DayDaoGop;
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double TTVLDCongRanh_TLChieuCaoDaoDat(string TTVLDCongRanh_LoaiVatLieuDao, double CDThuongLuu_ChieuSauDao, double TTVLDCongRanh_TLChieuCaoDaoDa)
         {
@@ -2105,7 +2163,8 @@ namespace DucAnhERP.Helpers
                 result = CDThuongLuu_ChieuSauDao - TTVLDCongRanh_TLChieuCaoDaoDa;
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double TTVLDCongRanh_HLChieuCaoDaoDat(string TTVLDCongRanh_LoaiVatLieuDao, double CDHaLu_ChieuSauDao, double TTVLDCongRanh_HLChieuCaoDaoDa)
         {
@@ -2126,7 +2185,8 @@ namespace DucAnhERP.Helpers
             }
 
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double TTCCCCT_CCaoLotDatTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDat, double ThongTinCauTaoCongTron_CCaoLotMong)
         {
@@ -2141,7 +2201,8 @@ namespace DucAnhERP.Helpers
             }
 
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double TTCCCCT_CCaoLotDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double ThongTinCauTaoCongTron_CCaoLotMong)
         {
@@ -2156,7 +2217,8 @@ namespace DucAnhERP.Helpers
                 result = 0;
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
 
         public double TTTDCongHoRanh_CDai1(double[] TTTDCongHoRanh_ChieuDaiThucTes, string[] ThongTinDuongTruyenDan_HinhThucTruyenDans, string[] TTTDCongHoRanh_XacDinhOngCongCanThems, string ThongTinDuongTruyenDan_HinhThucTruyenDan, string TTTDCongHoRanh_XacDinhOngCongCanThem)
@@ -2226,6 +2288,7 @@ namespace DucAnhERP.Helpers
             {
                 result = CDHaLu_DinhOngNhua + ThongTinKichThuocHinhHocOngNhua_CCaoDapCat;
             }
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double CDHaLu_DinhOngNhua(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi)
@@ -2238,7 +2301,7 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_DinhTrongLongSuDung + ThongTinKichThuocHinhHocOngNhua_CDayPhuBi;
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double CDHaLu_DinhRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double TTKTHHCongHopRanh_CCaoMuMoThotTren)
@@ -2251,7 +2314,7 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_DinhTrongLongSuDung + TTKTHHCongHopRanh_CCaoMuMoThotTren;
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double CDHaLu_DinhCongHop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double TTKTHHCongHopRanh_CCaoMuMoThotTren)
@@ -2264,7 +2327,7 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_DinhTrongLongSuDung + TTKTHHCongHopRanh_CCaoMuMoThotTren;
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double CDHaLu_DinhCongTron(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double ThongTinCauTaoCongTron_CDayPhuBi)
@@ -2277,7 +2340,7 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_DinhTrongLongSuDung + ThongTinCauTaoCongTron_CDayPhuBi;
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double CDHaLu_DinhGop(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTrongLongSuDung, double ThongTinCauTaoCongTron_CDayPhuBi, double TTKTHHCongHopRanh_CCaoMuMoThotTren, double ThongTinKichThuocHinhHocOngNhua_CDayPhuBi, double CDHaLu_DayDongChay)
@@ -2305,7 +2368,7 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_DayDongChay + 0;
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
 
@@ -2322,7 +2385,7 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_DinhRanh - TTKTHHCongHopRanh_CCaoMuMoThotTren;
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double CDHaLu_DinhTuongCHopRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhMuMoThotDuoiCongHopRanh, double TTKTHHCongHopRanh_CCaoMuMoThotDuoi)
@@ -2334,7 +2397,7 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_DinhMuMoThotDuoiCongHopRanh - TTKTHHCongHopRanh_CCaoMuMoThotDuoi;
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
         public double CDHaLu_CCaoTuongCongRanh(string ThongTinDuongTruyenDan_HinhThucTruyenDan, double CDHaLu_DinhTuongCHopRanh, double CDHaLu_DayDongChay)
@@ -2346,13 +2409,9 @@ namespace DucAnhERP.Helpers
                 result = CDHaLu_DinhTuongCHopRanh - CDHaLu_DayDongChay;
             }
 
-
+            result = Math.Round(result, 4);
             return Math.Round(result, 2);
         }
-
-
-
-
 
         public double TTCCCCT_CCaoLotDaTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double TTVLDCongRanh_TLTongChieuSauDao, double TTCCCCT_CCaoLotDatTLuu, double ThongTinCauTaoCongTron_CCaoLotMong)
         {
@@ -2514,7 +2573,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_HLChieuCaoDaoDa - TTCCCCT_CCaoLotDaHLuu;
                 }
             }
-
+            result = Math.Round(result, 4);
             return result;
 
         }
@@ -2537,6 +2596,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_TLChieuCaoDaoDat - (ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong);
                 }
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCT_CCaoDeDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double ThongTinCauTaoCongTron_CCaoLotMong, double ThongTinCauTaoCongTron_CCaoMong, double ThongTinCauTaoCongTron_CCaoDe)
@@ -2558,6 +2618,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_HLChieuCaoDaoDat - (ThongTinCauTaoCongTron_CCaoLotMong + ThongTinCauTaoCongTron_CCaoMong);
                 }
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCT_CCaoDeDaTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double ThongTinCauTaoCongTron_CCaoLotMong, double ThongTinCauTaoCongTron_CCaoMong, double ThongTinCauTaoCongTron_CCaoDe, double TTVLDCongRanh_TLTongChieuSauDao, double TTCCCCT_CCaoDeDatTLuu, double TTCCCCT_CCaoLotDaTLuu, double TTCCCCT_CCaoMongDaTLuu)
@@ -2591,6 +2652,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_TLChieuCaoDaoDa - (TTCCCCT_CCaoLotDaTLuu + TTCCCCT_CCaoMongDaTLuu);
                 }
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCT_CCaoDeDaHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDa, double ThongTinCauTaoCongTron_CCaoLotMong, double ThongTinCauTaoCongTron_CCaoMong, double ThongTinCauTaoCongTron_CCaoDe, double TTVLDCongRanh_HLTongChieuSauDao, double TTCCCCT_CCaoDeDatHLuu, double TTCCCCT_CCaoLotDaHLuu, double TTCCCCT_CCaoMongDaHLuu)
@@ -2624,7 +2686,8 @@ namespace DucAnhERP.Helpers
                 }
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
 
         }
         public double TTCCCCT_CCaoCongDatTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDat, double ThongTinCauTaoCongTron_CCaoLotMong, double ThongTinCauTaoCongTron_CCaoMong, double ThongTinCauTaoCongTron_CCaoDe, double ThongTinCauTaoCongTron_TongCCaoCong)
@@ -2647,7 +2710,8 @@ namespace DucAnhERP.Helpers
                 }
             }
 
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
 
         }
         public double TTCCCCT_CCaoCongDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double ThongTinCauTaoCongTron_CCaoLotMong, double ThongTinCauTaoCongTron_CCaoMong, double ThongTinCauTaoCongTron_CCaoDe, double ThongTinCauTaoCongTron_TongCCaoCong)
@@ -2736,7 +2800,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_HLChieuCaoDaoDa - (TTCCCCT_CCaoLotDaHLuu + TTCCCCT_CCaoMongDaHLuu + TTCCCCT_CCaoDeDaHLuu);
                 }
             }
-
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCCHR_CCaoLotDatTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDat, double TTKTHHCongHopRanh_CCaoLotMong)
@@ -2748,6 +2812,7 @@ namespace DucAnhERP.Helpers
             {
                 result = TTVLDCongRanh_TLChieuCaoDaoDat >= TTKTHHCongHopRanh_CCaoLotMong ? TTKTHHCongHopRanh_CCaoLotMong : TTVLDCongRanh_TLChieuCaoDaoDat;
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCCHR_CCaoLotDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double TTKTHHCongHopRanh_CCaoLotMong)
@@ -2759,6 +2824,7 @@ namespace DucAnhERP.Helpers
             {
                 result = TTVLDCongRanh_HLChieuCaoDaoDat >= TTKTHHCongHopRanh_CCaoLotMong ? TTKTHHCongHopRanh_CCaoLotMong : TTVLDCongRanh_HLChieuCaoDaoDat;
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCCHR_CCaoLotDaTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double TTVLDCongRanh_TLTongChieuSauDao, double TTKTHHCongHopRanh_CCaoLotMong, double TTCCCCCHR_CCaoLotDatTLuu)
@@ -2780,7 +2846,8 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_TLChieuCaoDaoDa;
                 }
             }
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4); 
+            return result;
         }
         public double TTCCCCCHR_CCaoLotDaHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDa, double TTVLDCongRanh_HLTongChieuSauDao, double TTKTHHCongHopRanh_CCaoLotMong, double TTCCCCCHR_CCaoLotDatHLuu)
         {
@@ -2801,7 +2868,8 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_HLChieuCaoDaoDa;
                 }
             }
-            result = Math.Round(result, 4); return result;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double TTCCCCCHR_CCaoMongDatTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDat, double TTKTHHCongHopRanh_CCaoLotMong, double TTKTHHCongHopRanh_CCaoMong)
         {
@@ -2822,6 +2890,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_TLChieuCaoDaoDat - TTKTHHCongHopRanh_CCaoLotMong;
                 }
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCCHR_CCaoMongDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double TTKTHHCongHopRanh_CCaoLotMong, double TTKTHHCongHopRanh_CCaoMong)
@@ -2843,6 +2912,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_HLChieuCaoDaoDat - TTKTHHCongHopRanh_CCaoLotMong;
                 }
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCCHR_CCaoMongDaTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double TTKTHHCongHopRanh_CCaoLotMong, double TTKTHHCongHopRanh_CCaoMong, double TTVLDCongRanh_TLTongChieuSauDao, double TTCCCCCHR_CCaoMongDatTLuu, double TTCCCCCHR_CCaoLotDaTLuu)
@@ -2875,6 +2945,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_TLChieuCaoDaoDa - TTCCCCCHR_CCaoLotDaTLuu;
                 }
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCCHR_CCaoMongDaHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDa, double TTKTHHCongHopRanh_CCaoLotMong, double TTKTHHCongHopRanh_CCaoMong, double TTVLDCongRanh_HLTongChieuSauDao, double TTCCCCCHR_CCaoMongDatHLuu, double TTCCCCCHR_CCaoLotDaHLuu)
@@ -2907,6 +2978,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_HLChieuCaoDaoDa - TTCCCCCHR_CCaoLotDaHLuu;
                 }
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCCHR_CCaoTuongDatTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDat, double TTKTHHCongHopRanh_CCaoLotMong, double TTKTHHCongHopRanh_CCaoMong, double TTKTHHCongHopRanh_TongChieuCao)
@@ -2956,6 +3028,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_HLChieuCaoDaoDat - giaTriToiDa;
                 }
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCCHR_CCaoTuongDaTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double TTKTHHCongHopRanh_CCaoLotMong, double TTKTHHCongHopRanh_CCaoMong, double TTKTHHCongHopRanh_TongChieuCao, double TTVLDCongRanh_TLTongChieuSauDao, double TTCCCCCHR_CCaoTuongDatTLuu, double TTCCCCCHR_CCaoLotDaTLuu, double TTCCCCCHR_CCaoMongDaTLuu)
@@ -2998,6 +3071,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_TLChieuCaoDaoDa - (TTCCCCCHR_CCaoLotDaTLuu + TTCCCCCHR_CCaoMongDaTLuu);
                 }
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCCHR_CCaoTuongDaHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDa, double TTKTHHCongHopRanh_CCaoLotMong, double TTKTHHCongHopRanh_CCaoMong, double TTKTHHCongHopRanh_TongChieuCao, double TTVLDCongRanh_HLTongChieuSauDao, double TTCCCCCHR_CCaoTuongDatHLuu, double TTCCCCCHR_CCaoLotDaHLuu, double TTCCCCCHR_CCaoMongDaHLuu)
@@ -3053,7 +3127,8 @@ namespace DucAnhERP.Helpers
             {
                 result = TTVLDCongRanh_TLChieuCaoDaoDat >= ThongTinKichThuocHinhHocOngNhua_CCaoDemCat ? ThongTinKichThuocHinhHocOngNhua_CCaoDemCat : TTVLDCongRanh_TLChieuCaoDaoDat;
             }
-             return result;
+            result = Math.Round(result, 4);
+            return result;
             
         }
         public double TTCCCCON_CCaoDemCatDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat)
@@ -3065,6 +3140,7 @@ namespace DucAnhERP.Helpers
             {
                 result = TTVLDCongRanh_HLChieuCaoDaoDat >= ThongTinKichThuocHinhHocOngNhua_CCaoDemCat ? ThongTinKichThuocHinhHocOngNhua_CCaoDemCat : TTVLDCongRanh_HLChieuCaoDaoDat;
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCON_CCaoDemCatDaTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double TTVLDCongRanh_TLTongChieuSauDao, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, double TTCCCCON_CCaoDemCatDatTLuu)
@@ -3087,6 +3163,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_TLChieuCaoDaoDa;
                 }
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCON_CCaoDemCatDaHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDa, double TTVLDCongRanh_HLTongChieuSauDao, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, double TTCCCCON_CCaoDemCatDatHLuu)
@@ -3109,6 +3186,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_HLChieuCaoDaoDa;
                 }
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCON_CCaoOngDatTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDat, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, double ThongTinKichThuocHinhHocOngNhua_TongCCaoOng)
@@ -3131,6 +3209,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_TLChieuCaoDaoDat - ThongTinKichThuocHinhHocOngNhua_CCaoDemCat;
                 }
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCON_CCaoOngDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, double ThongTinKichThuocHinhHocOngNhua_TongCCaoOng)
@@ -3153,6 +3232,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_HLChieuCaoDaoDat - ThongTinKichThuocHinhHocOngNhua_CCaoDemCat;
                 }
             }
+            result = Math.Round(result, 4);
             return result;
         }
 
@@ -3194,6 +3274,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_TLChieuCaoDaoDa - TTCCCCON_CCaoDemCatDaTLuu;
                 }
             }
+            result = Math.Round(result, 4);
             return result;
             
         }
@@ -3234,6 +3315,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_HLChieuCaoDaoDa - TTCCCCON_CCaoDemCatDaHLuu;
                 }
             }
+            result = Math.Round(result, 4);
             return result;
             
         }
@@ -3257,6 +3339,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_TLChieuCaoDaoDat - (ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat);
                 }
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCON_CCaoDapCatDatHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, double ThongTinKichThuocHinhHocOngNhua_TongCCaoOng, double ThongTinKichThuocHinhHocOngNhua_CCaoDapCat)
@@ -3279,6 +3362,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_HLChieuCaoDaoDat - (ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat);
                 }
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCON_CCaoDapCatDaTLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_TLChieuCaoDaoDa, double ThongTinKichThuocHinhHocOngNhua_TongCCaoOng, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, double ThongTinKichThuocHinhHocOngNhua_CCaoDapCat, double TTVLDCongRanh_TLTongChieuSauDao, double TTCCCCON_CCaoDapCatDatTLuu, double TTCCCCON_CCaoDemCatDaTLuu, double TTCCCCON_CCaoOngDaTLuu)
@@ -3311,6 +3395,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_TLChieuCaoDaoDa - (TTCCCCON_CCaoDemCatDaTLuu + TTCCCCON_CCaoOngDaTLuu);
                 }
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCCCON_CCaoDapCatDaHLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDa, double ThongTinKichThuocHinhHocOngNhua_TongCCaoOng, double ThongTinKichThuocHinhHocOngNhua_CCaoDemCat, double ThongTinKichThuocHinhHocOngNhua_CCaoDapCat, double TTVLDCongRanh_HLTongChieuSauDao, double TTCCCCON_CCaoDapCatDatHLuu, double TTCCCCON_CCaoDemCatDaTLuu, double TTCCCCON_CCaoOngDaTLuu)
@@ -3344,6 +3429,7 @@ namespace DucAnhERP.Helpers
                     result = TTVLDCongRanh_HLChieuCaoDaoDa - (TTCCCCON_CCaoDemCatDaTLuu + TTCCCCON_CCaoOngDaTLuu);
                 }
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double TTCCRT_LotDatHaLuu(string TTVLDCongRanh_LoaiVatLieuDao, double TTVLDCongRanh_HLChieuCaoDaoDat, double ThongTinRanhThang_CCaoLot)
@@ -3354,6 +3440,7 @@ namespace DucAnhERP.Helpers
             {
                 result = TTVLDCongRanh_HLChieuCaoDaoDat >= ThongTinRanhThang_CCaoLot ? ThongTinRanhThang_CCaoLot : TTVLDCongRanh_HLChieuCaoDaoDat;
             }
+            result = Math.Round(result, 4);
             return result;
         }
         public double DTDTLCRONRT_CRongDaoDatDayLon(double TTVLDCongRanh_TLChieuCaoDaoDat, double TTMDRanhOngThang_TyLeMoMai, double TTMDRanhOngThang_SoCanhMaiTrai, double TTMDRanhOngThang_SoCanhMaiPhai, double TTMDRanhOngThang_ChieuRongDayDaoNho)
@@ -3412,31 +3499,35 @@ namespace DucAnhERP.Helpers
 
         public double DTDTB_DaoDatCRDaoDayLon(double DTDTLCRONRT_CRongDaoDatDayLon, double DTDHLCRONRT_CRongDaoDatDayLon)
         {
-            var results = (DTDTLCRONRT_CRongDaoDatDayLon + DTDHLCRONRT_CRongDaoDatDayLon) / 2;
-            return results;
+            var result = (DTDTLCRONRT_CRongDaoDatDayLon + DTDHLCRONRT_CRongDaoDatDayLon) / 2;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double DTDTB_DaoDatDTDao(double DTDTLCRONRT_DTichDaoDat, double DTDHLCRONRT_DTichDaoDat)
         {
-            var results = (DTDTLCRONRT_DTichDaoDat + DTDHLCRONRT_DTichDaoDat) / 2;
-            results = Math.Round(results, 4);
-            return results;
+            var result = (DTDTLCRONRT_DTichDaoDat + DTDHLCRONRT_DTichDaoDat) / 2;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double DTDTB_DaoDaCRDaoDayLon(double DTDTLCRONRT_CRongDaoDaDayLon, double DTDHLCRONRT_CRongDaoDaDayLon)
         {
-            var results = (DTDTLCRONRT_CRongDaoDaDayLon + DTDHLCRONRT_CRongDaoDaDayLon) / 2;
-            return results;
+            var result = (DTDTLCRONRT_CRongDaoDaDayLon + DTDHLCRONRT_CRongDaoDaDayLon) / 2;
+            result = Math.Round(result, 4);
+            return result;
         }
         public double DTDTB_DaoDaDTDao(double DTDTLCRONRT_DTichDaoDa, double DTDHLCRONRT_DTichDaoDa)
         {
-            var results = (DTDTLCRONRT_DTichDaoDa + DTDHLCRONRT_DTichDaoDa) / 2;
-            return results;
+            var result = (DTDTLCRONRT_DTichDaoDa + DTDHLCRONRT_DTichDaoDa) / 2;
+            result = Math.Round(result, 4);
+            return result;
         }
 
         public double TKLD_KlDaoDat(double DTDTLCRONRT_DTichDaoDat, double DTDHLCRONRT_DTichDaoDat, double TTCDSLCauKienDuongTruyenDan_TongChieuDai)
         {
-            double results = 0;
-            results = Math.Round(((DTDTLCRONRT_DTichDaoDat + DTDHLCRONRT_DTichDaoDat) / 2) * TTCDSLCauKienDuongTruyenDan_TongChieuDai, 2);
-            return results;
+            double result = 0;
+            result = Math.Round(((DTDTLCRONRT_DTichDaoDat + DTDHLCRONRT_DTichDaoDat) / 2) * TTCDSLCauKienDuongTruyenDan_TongChieuDai, 2);
+
+            return result;
         }
         public double TKLD_KlDaoDa(double DTDTLCRONRT_DTichDaoDa, double DTDHLCRONRT_DTichDaoDa, double TTCDSLCauKienDuongTruyenDan_TongChieuDai)
         {
@@ -3621,7 +3712,7 @@ namespace DucAnhERP.Helpers
             ThongTinMongDuongTruyenDan_LoaiMong = GetTenDanhMucById(ThongTinMongDuongTruyenDan_LoaiMong).ToUpper().Trim();
             // Kiểm tra điều kiện và tính tổng nếu điều kiện đúng, sau đó làm tròn đến 2 chữ số thập phân
             result = (ThongTinDuongTruyenDan_HinhThucTruyenDan == "ỐNG NHỰA" && ThongTinMongDuongTruyenDan_LoaiMong == "ĐẮP CÁT") ? ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat + ThongTinKichThuocHinhHocOngNhua_CCaoDapCat : 0;
-
+            result = Math.Round(result, 4);
             result = Math.Round(result, 2);
             return result;
         }
@@ -3635,6 +3726,7 @@ namespace DucAnhERP.Helpers
             result = (ThongTinDuongTruyenDan_HinhThucTruyenDan == "ỐNG NHỰA" && ThongTinMongDuongTruyenDan_LoaiMong == "ĐẮP CÁT")
                ? (DTDC_TLCSauDap * TTMDRanhOngThang_TyLeMoMai * (TTMDRanhOngThang_SoCanhMaiTrai + TTMDRanhOngThang_SoCanhMaiPhai)) + TTMDRanhOngThang_ChieuRongDayDaoNho
                : 0;
+            result = Math.Round(result, 4);
             result = Math.Round(result, 2);
             return result;
         }
@@ -3648,6 +3740,7 @@ namespace DucAnhERP.Helpers
             result = (ThongTinDuongTruyenDan_HinhThucTruyenDan == "ỐNG NHỰA" && ThongTinMongDuongTruyenDan_LoaiMong == "ĐẮP CÁT")
                ? (DTDC_TLCRongDapDayLon + TTMDRanhOngThang_ChieuRongDayDaoNho) * ((ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat + ThongTinKichThuocHinhHocOngNhua_CCaoDapCat) / 2)
                : 0;
+            result = Math.Round(result, 4);
             result = Math.Round(result, 2);
             return result;
         }
@@ -3661,6 +3754,7 @@ namespace DucAnhERP.Helpers
             result = (ThongTinDuongTruyenDan_HinhThucTruyenDan == "ỐNG NHỰA" && ThongTinMongDuongTruyenDan_LoaiMong == "ĐẮP CÁT")
                ? ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat + ThongTinKichThuocHinhHocOngNhua_CCaoDapCat
                : 0;
+            result = Math.Round(result, 4);
             result = Math.Round(result, 2);
             return result;
         }
@@ -3674,6 +3768,7 @@ namespace DucAnhERP.Helpers
             result = (ThongTinDuongTruyenDan_HinhThucTruyenDan == "ỐNG NHỰA" && ThongTinMongDuongTruyenDan_LoaiMong == "ĐẮP CÁT")
                ? (DTDC_HLCSauDap * TTMDRanhOngThang_TyLeMoMai * (TTMDRanhOngThang_SoCanhMaiTrai + TTMDRanhOngThang_SoCanhMaiPhai)) + TTMDRanhOngThang_ChieuRongDayDaoNho
                : 0;
+            result = Math.Round(result, 4);
             result = Math.Round(result, 2);
             return result;
         }
@@ -3687,6 +3782,7 @@ namespace DucAnhERP.Helpers
             result = (ThongTinDuongTruyenDan_HinhThucTruyenDan == "ỐNG NHỰA" && ThongTinMongDuongTruyenDan_LoaiMong == "ĐẮP CÁT")
                ? (DTDC_HLCRongDapDayLon + TTMDRanhOngThang_ChieuRongDayDaoNho) * ((ThongTinKichThuocHinhHocOngNhua_TongCCaoOng + ThongTinKichThuocHinhHocOngNhua_CCaoDemCat + ThongTinKichThuocHinhHocOngNhua_CCaoDapCat) / 2)
                : 0;
+            result = Math.Round(result, 4);
             result = Math.Round(result, 2);
             return result;
         }
@@ -3717,6 +3813,7 @@ namespace DucAnhERP.Helpers
             double result = 0;
             // Tính giá trị theo công thức và làm tròn đến 2 chữ số thập phân
             result = ((DTDC_TLDTichDap + DTDC_HLDTichDap) / 2) * TTCDSLCauKienDuongTruyenDan_TongChieuDai;
+            result = Math.Round(result, 4);
             result = Math.Round(result, 2);
             return result;
         }
@@ -3732,8 +3829,10 @@ namespace DucAnhERP.Helpers
             {
                 // Tính giá trị theo công thức và làm tròn đến 2 chữ số thập phân
                 result = ((3.14 * ThongTinKichThuocHinhHocOngNhua_TongCCaoOng * ThongTinKichThuocHinhHocOngNhua_TongCCaoOng) / 4) * TTCDSLCauKienDuongTruyenDan_TongChieuDai;
-                return Math.Round(result, 2);
             }
+            result = Math.Round(result, 4);
+            return Math.Round(result, 2);
+
             return result;
         }
 

@@ -6449,7 +6449,9 @@
         isLoading = true;
         var helper = new DataConversionHelper();
         listDanhMuc = await DanhMucRepository.GetAll();
-        var nuocMuaRepository = await NuocMuaRepository.GetData();
+        NuocMuaModel nuocMuaModelSearch = new();
+        nuocMuaModelSearch.TraiPhai = 0; 
+        var nuocMuaRepository = await NuocMuaRepository.GetAllByVM(nuocMuaModelSearch);
         List<NuocMuaModel> nuocmuas;
         nuocmuas = await ConvertDanhMuc(nuocMuaRepository);
         listModel = nuocmuas;

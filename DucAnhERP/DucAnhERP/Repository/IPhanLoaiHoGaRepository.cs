@@ -12,5 +12,7 @@ namespace DucAnhERP.Repository
         Task<PhanLoaiHoGa> GetPhanLoaiHoGaExist(PhanLoaiHoGa searchData );
         Task<string> InsertId(PhanLoaiHoGa entity, string HoGa_KetCauTuong);
         Task<string> InsertLaterFlag(PhanLoaiHoGa entity, int FlagLast);
+        Task<List<PhanLoaiHoGaModel>> GetBaoCaoCTaoCHungHGa(PhanLoaiHoGaModel plhgModel);
+        Task<List<PhanLoaiHoGaModel>> GetBaoCaoKTHHHGa(PhanLoaiHoGaModel plhgMode);
     }
 }

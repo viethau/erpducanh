@@ -9,36 +9,36 @@ namespace DucAnhERP.Services
 {
     public class PhanLoaiHoGaRepository : IPhanLoaiHoGaRepository
     {
-      
+
         private readonly IDbContextFactory<ApplicationDbContext> _context;
 
         public PhanLoaiHoGaRepository(IDbContextFactory<ApplicationDbContext> context)
-            {
-                _context = context;
-            }
+        {
+            _context = context;
+        }
 
         public async Task<List<PhanLoaiHoGa>> GetAll()
+        {
+            try
             {
-                try
-                {
-                    using var context = _context.CreateDbContext();
-                    var entity = await context.PhanLoaiHoGas.ToListAsync();
-                    return entity;
-                }
-                catch (Exception ex)
-                {
-                    // Log the exception
-                    Console.Error.WriteLine($"An error occurred: {ex.Message}");
-                    throw; // Optionally rethrow the exception
-                }
+                using var context = _context.CreateDbContext();
+                var entity = await context.PhanLoaiHoGas.ToListAsync();
+                return entity;
             }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
+        }
         public async Task<List<PhanLoaiHoGaModel>> GetAllByVM()
         {
             try
             {
                 using var context = _context.CreateDbContext();
                 var query = from plhg in context.PhanLoaiHoGas
-                            join hinhThucHoGa  in context.DSDanhMuc
+                            join hinhThucHoGa in context.DSDanhMuc
                                 on plhg.ThongTinChungHoGa_HinhThucHoGa equals hinhThucHoGa.Id
                             join ketCauMuMo in context.DSDanhMuc
                                 on plhg.ThongTinChungHoGa_KetCauMuMo equals ketCauMuMo.Id
@@ -141,9 +141,9 @@ namespace DucAnhERP.Services
                                 HinhThucDauNoi8_CanhDai = plhg.HinhThucDauNoi8_CanhDai ?? 0,
                                 HinhThucDauNoi8_CanhRong = plhg.HinhThucDauNoi8_CanhRong ?? 0,
                                 HinhThucDauNoi8_CanhCheo = plhg.HinhThucDauNoi8_CanhCheo ?? 0,
-                                Flag=plhg.Flag,
-                                CreateAt=plhg.CreateAt ,
-                                CreateBy=plhg.CreateBy,
+                                Flag = plhg.Flag,
+                                CreateAt = plhg.CreateAt,
+                                CreateBy = plhg.CreateBy,
                                 IsActive = plhg.IsActive,
 
                             };
@@ -157,7 +157,7 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
                 throw;
             }
-            
+
         }
         public async Task<bool> CheckUsingId(string id)
         {
@@ -378,8 +378,9 @@ namespace DucAnhERP.Services
             }
         }
         public async Task Update(PhanLoaiHoGa phanloaihoga)
-         {
-            try { 
+        {
+            try
+            {
                 using var context = _context.CreateDbContext();
                 var entity = GetById(phanloaihoga.Id);
 
@@ -397,54 +398,54 @@ namespace DucAnhERP.Services
             }
         }
         public async Task UpdateMulti(PhanLoaiHoGa[] phanloaihoga)
+        {
+            using var context = _context.CreateDbContext();
+            string[] ids = phanloaihoga.Select(x => x.Id).ToArray();
+            var listEntities = await context.PhanLoaiHoGas.Where(x => ids.Contains(x.Id)).ToListAsync();
+            foreach (var entity in listEntities)
             {
-                using var context = _context.CreateDbContext();
-                string[] ids = phanloaihoga.Select(x => x.Id).ToArray();
-                var listEntities = await context.PhanLoaiHoGas.Where(x => ids.Contains(x.Id)).ToListAsync();
-                foreach (var entity in listEntities)
-                {
-                    context.PhanLoaiHoGas.Update(entity);
-                }
-                await context.SaveChangesAsync();
+                context.PhanLoaiHoGas.Update(entity);
             }
-       public async Task DeleteById(string id)
+            await context.SaveChangesAsync();
+        }
+        public async Task DeleteById(string id)
+        {
+            using var context = _context.CreateDbContext();
+            var entity = await GetById(id);
+
+            if (entity == null)
             {
-                using var context = _context.CreateDbContext();
-                var entity = await GetById(id);
-
-                if (entity == null)
-                {
-                    throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
-                }
-
-                context.Set<PhanLoaiHoGa>().Remove(entity);
-                await context.SaveChangesAsync();
+                throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
             }
-       public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
-            {
-                foreach (var id in ids)
-                {
-                    var model = await GetById(id);
-                    if (model == null)
-                    {
-                        throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
-                    }
-                }
-                return true;
-            }
-       public async Task<PhanLoaiHoGa> GetById(string id)
-            {
-                using var context = _context.CreateDbContext();
-                var entity = await context.PhanLoaiHoGas.Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
 
-                if (entity == null)
+            context.Set<PhanLoaiHoGa>().Remove(entity);
+            await context.SaveChangesAsync();
+        }
+        public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
+        {
+            foreach (var id in ids)
+            {
+                var model = await GetById(id);
+                if (model == null)
                 {
                     throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
                 }
-
-                return entity;
             }
-       public async Task Insert(PhanLoaiHoGa entity)
+            return true;
+        }
+        public async Task<PhanLoaiHoGa> GetById(string id)
+        {
+            using var context = _context.CreateDbContext();
+            var entity = await context.PhanLoaiHoGas.Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
+
+            if (entity == null)
+            {
+                throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
+            }
+
+            return entity;
+        }
+        public async Task Insert(PhanLoaiHoGa entity)
         {
             try
             {
@@ -465,7 +466,7 @@ namespace DucAnhERP.Services
                 {
                     entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag;
                 }
-                
+
 
                 // Chèn bản ghi mới vào bảng
                 context.PhanLoaiHoGas.Add(entity);
@@ -476,7 +477,7 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
             }
         }
-       public async Task<string> InsertId(PhanLoaiHoGa entity ,string ThongTinChungHoGa_KetCauTuong)
+        public async Task<string> InsertId(PhanLoaiHoGa entity, string ThongTinChungHoGa_KetCauTuong)
         {
             try
             {
@@ -497,9 +498,9 @@ namespace DucAnhERP.Services
                 ThongTinChungHoGa_KetCauTuong = ThongTinChungHoGa_KetCauTuong.ToUpper().Trim();
                 if (entity.G == "=G")
                 {
-                    if(ThongTinChungHoGa_KetCauTuong == "Tường bê tông".ToUpper().Trim()  || ThongTinChungHoGa_KetCauTuong == "Tường bê tông cốt thép".ToUpper().Trim())
+                    if (ThongTinChungHoGa_KetCauTuong == "Tường bê tông".ToUpper().Trim() || ThongTinChungHoGa_KetCauTuong == "Tường bê tông cốt thép".ToUpper().Trim())
                     {
-                        entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag  + "(BT)" + "=G";
+                        entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag + "(BT)" + "=G";
                     }
                     else
                     {
@@ -516,9 +517,9 @@ namespace DucAnhERP.Services
                     {
                         entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag;
                     }
-                    
+
                 }
-                
+
 
                 // Chèn bản ghi mới vào bảng
                 context.PhanLoaiHoGas.Add(entity);
@@ -533,7 +534,6 @@ namespace DucAnhERP.Services
                 throw; // Đảm bảo exception được ném ra ngoài nếu cần thiết
             }
         }
-
         public async Task<string> InsertLaterFlag(PhanLoaiHoGa entity, int FlagLast)
         {
             string id = "";
@@ -599,6 +599,161 @@ namespace DucAnhERP.Services
             }
         }
 
+        //báo cáo
+        public async Task<List<PhanLoaiHoGaModel>> GetBaoCaoCTaoCHungHGa(PhanLoaiHoGaModel plhgModel)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var query = from plhg in context.PhanLoaiHoGas
+                            join hinhThucHoGa in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_HinhThucHoGa equals hinhThucHoGa.Id
+                            join ketCauMuMo in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_KetCauMuMo equals ketCauMuMo.Id
+                            join ketCauTuong in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_KetCauTuong equals ketCauTuong.Id
+                            join hinhThucMongHoGa in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_HinhThucMongHoGa equals hinhThucMongHoGa.Id
+                            join ketCauMong in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_KetCauMong equals ketCauMong.Id
+
+                            join chatMatTrong in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_ChatMatTrong equals chatMatTrong.Id into gj2
+                            from chatMatTrong in gj2.DefaultIfEmpty() // Left join
+                            join chatMatNgoai in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_ChatMatNgoai equals chatMatNgoai.Id into gj3
+                            from chatMatNgoai in gj3.DefaultIfEmpty() // Left join
+
+                            orderby plhg.Flag
+                            select new PhanLoaiHoGaModel
+                            {
+                                Id = plhg.Id,
+                                ThongTinChungHoGa_TenHoGaSauPhanLoai = plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
+                                ThongTinChungHoGa_HinhThucHoGa = plhg.ThongTinChungHoGa_HinhThucHoGa ?? "",
+                                ThongTinChungHoGa_HinhThucHoGa_Name = hinhThucHoGa.Ten ?? "",
+                                ThongTinChungHoGa_KetCauMuMo = plhg.ThongTinChungHoGa_KetCauMuMo ?? "",
+                                ThongTinChungHoGa_KetCauMuMo_Name = ketCauMuMo.Ten ?? "",
+                                ThongTinChungHoGa_KetCauTuong = plhg.ThongTinChungHoGa_KetCauTuong ?? "",
+                                ThongTinChungHoGa_KetCauTuong_Name = ketCauTuong.Ten ?? "",
+                                ThongTinChungHoGa_HinhThucMongHoGa = plhg.ThongTinChungHoGa_HinhThucMongHoGa ?? "",
+                                ThongTinChungHoGa_HinhThucMongHoGa_Name = hinhThucMongHoGa.Ten ?? "",
+                                ThongTinChungHoGa_KetCauMong = plhg.ThongTinChungHoGa_KetCauMong ?? "",
+                                ThongTinChungHoGa_KetCauMong_Name = ketCauMong.Ten ?? "",
+                                ThongTinChungHoGa_ChatMatTrong = plhg.ThongTinChungHoGa_ChatMatTrong ?? "",
+                                ThongTinChungHoGa_ChatMatTrong_Name = chatMatTrong.Ten ?? "",
+                                ThongTinChungHoGa_ChatMatNgoai = plhg.ThongTinChungHoGa_ChatMatNgoai ?? "",
+                                ThongTinChungHoGa_ChatMatNgoai_Name = chatMatNgoai.Ten ?? "",
+                                PhuBiHoGa_CDai = plhg.PhuBiHoGa_CDai ?? 0,
+                                PhuBiHoGa_CRong = plhg.PhuBiHoGa_CRong ?? 0,
+                                Flag = plhg.Flag,
+                                CreateAt = plhg.CreateAt,
+                                CreateBy = plhg.CreateBy,
+                                IsActive = plhg.IsActive,
+
+                            };
+
+                if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_HinhThucHoGa))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_HinhThucHoGa == plhgModel.ThongTinChungHoGa_HinhThucHoGa);
+                }
+                if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauMuMo))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_KetCauMuMo == plhgModel.ThongTinChungHoGa_KetCauMuMo);
+                }
+                if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauTuong))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_KetCauTuong == plhgModel.ThongTinChungHoGa_KetCauTuong);
+                }
+                if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_HinhThucMongHoGa))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_HinhThucMongHoGa == plhgModel.ThongTinChungHoGa_HinhThucMongHoGa);
+                }
+                if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauMong))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_KetCauMong == plhgModel.ThongTinChungHoGa_KetCauMong);
+                }
+                var data = await query
+                    .ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+
+        }
+
+        public async Task<List<PhanLoaiHoGaModel>> GetBaoCaoKTHHHGa(PhanLoaiHoGaModel plhgMode)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var query = from plhg in context.PhanLoaiHoGas
+                            join hinhThucHoGa in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_HinhThucHoGa equals hinhThucHoGa.Id
+                            
+
+                            orderby plhg.Flag
+                            select new PhanLoaiHoGaModel
+                            {
+                                Id = plhg.Id,
+                                ThongTinChungHoGa_TenHoGaSauPhanLoai = plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
+                                ThongTinChungHoGa_HinhThucHoGa = plhg.ThongTinChungHoGa_HinhThucHoGa ?? "",
+                                ThongTinChungHoGa_HinhThucHoGa_Name = hinhThucHoGa.Ten ?? "",
+                                ThongTinChungHoGa_KetCauMuMo = plhg.ThongTinChungHoGa_KetCauMuMo ?? "",
+                                PhuBiHoGa_CDai = plhg.PhuBiHoGa_CDai ?? 0,
+                                PhuBiHoGa_CRong = plhg.PhuBiHoGa_CRong ?? 0,
+                                BeTongLotMong_D = plhg.BeTongLotMong_D ?? 0,
+                                BeTongLotMong_R = plhg.BeTongLotMong_R ?? 0,
+                                BeTongLotMong_C = plhg.BeTongLotMong_C ?? 0,
+                                BeTongMongHoGa_D = plhg.BeTongMongHoGa_D ?? 0,
+                                BeTongMongHoGa_R = plhg.BeTongMongHoGa_R ?? 0,
+                                BeTongMongHoGa_C = plhg.BeTongMongHoGa_C ?? 0,
+                                DeHoGa_D = plhg.DeHoGa_D ?? 0,
+                                DeHoGa_R = plhg.DeHoGa_R ?? 0,
+                                DeHoGa_C = plhg.DeHoGa_C ?? 0,
+                                TuongHoGa_D = plhg.TuongHoGa_D ?? 0,
+                                TuongHoGa_R = plhg.TuongHoGa_R ?? 0,
+                                TuongHoGa_C = plhg.TuongHoGa_C ?? 0,
+                                TuongHoGa_CdTuong = plhg.TuongHoGa_CdTuong ?? 0,
+                                DamGiuaHoGa_D = plhg.DamGiuaHoGa_D ?? 0,
+                                DamGiuaHoGa_R = plhg.DamGiuaHoGa_R ?? 0,
+                                DamGiuaHoGa_C = plhg.DamGiuaHoGa_C ?? 0,
+                                DamGiuaHoGa_CdDam = plhg.DamGiuaHoGa_CdDam ?? 0,
+                                DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa = plhg.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa ?? 0,
+                                ChatMatTrong_D = plhg.ChatMatTrong_D ?? 0,
+                                ChatMatTrong_R = plhg.ChatMatTrong_R ?? 0,
+                                ChatMatTrong_C = plhg.ChatMatTrong_C ?? 0,
+                                ChatMatNgoaiCanh_D = plhg.ChatMatNgoaiCanh_D ?? 0,
+                                ChatMatNgoaiCanh_R = plhg.ChatMatNgoaiCanh_R ?? 0,
+                                ChatMatNgoaiCanh_C = plhg.ChatMatNgoaiCanh_C ?? 0,
+                                MuMoThotDuoi_D = plhg.MuMoThotDuoi_D ?? 0,
+                                MuMoThotDuoi_R = plhg.MuMoThotDuoi_R ?? 0,
+                                MuMoThotDuoi_C = plhg.MuMoThotDuoi_C ?? 0,
+                                MuMoThotDuoi_CdTuong = plhg.MuMoThotDuoi_CdTuong ?? 0,
+                                MuMoThotTren_D = plhg.MuMoThotTren_D ?? 0,
+                                MuMoThotTren_R = plhg.MuMoThotTren_R ?? 0,
+                                MuMoThotTren_C = plhg.MuMoThotTren_C ?? 0,
+                                MuMoThotTren_CdTuong = plhg.MuMoThotTren_CdTuong ?? 0,
+                                Flag = plhg.Flag,
+                                CreateAt = plhg.CreateAt,
+                                CreateBy = plhg.CreateBy,
+                                IsActive = plhg.IsActive,
+
+                            };
+
+                var data = await query
+                    .ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+
+        }
     }
 
 }

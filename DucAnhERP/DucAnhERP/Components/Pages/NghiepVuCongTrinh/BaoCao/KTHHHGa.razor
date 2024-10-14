@@ -1,0 +1,522 @@
+﻿@page "/BaoCao/KTHHHGa"
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using System.Linq
+@using DucAnhERP.SeedWork
+@using DucAnhERP.Helpers
+@inject NavigationManager navigation
+@inject IPhanLoaiHoGaRepository PhanLoaiHoGaRepository
+@inject IDanhMucRepository DanhMucRepository
+
+@inject DucAnhERP.Services.ToastService ToastService
+<style>
+    table {
+        position: relative;
+    }
+
+        table thead tr td {
+            /*   white-space: nowrap; */
+            text-align: center;
+            padding: 2px 5px;
+        }
+
+    .flex-header {
+        position: sticky;
+        top: -1px;
+        z-index: 1;
+        background-color: cadetblue; /* Màu nền cho thead để không bị chồng dữ liệu */
+    }
+</style>
+<div class="container-fluid">
+    <div class="row m-3 ">
+        <div class="col-md-9 col-sm-12">
+            <EditForm Model="Input" FormName="Search" OnValidSubmit="@Search">
+                <DataAnnotationsValidator />
+                <div class="row">
+                    <div class="col-sm-4 col-md-2 mb-2">
+                        <label for="Table">Hình thức hố ha</label>
+                        <Select2 Id="select1" Items="@selectHTHG" OnChange="@OnSelectChangeHTHG"></Select2>
+                        <ValidationMessage For="()=>Input.ThongTinChungHoGa_HinhThucHoGa"></ValidationMessage>
+                    </div>
+
+                    <!-- Search Button -->
+                    <div class="col-sm-4 col-md-2 mb-2">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+        <div class="col-md-3 col-sm-6 text-end">
+            <button class="btn btn-primary me-2" @onclick="ViewHorizontal" title="Xem theo chiều ngang">
+                <i class="fas fa-arrows-alt-h"></i>
+            </button>
+            <button class="btn btn-secondary" @onclick="ViewVertical" title="Xem theo chiều dọc">
+                <i class="fas fa-arrows-alt-v"></i>
+            </button>
+            <button class="btn btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
+                <i class="fas fa-thumbtack"></i>
+            </button>
+        </div>
+
+    </div>
+    <div id="tableContainer ">
+        <div class="our-table @layoutClass ">
+            <div>
+                <div class=" mt-1">
+                    <h5 class="mt-2">BẢNG KÍCH THƯỚC HÌNH HOC CƠ BẢN HỐ GA</h5>
+                </div>
+                <div class=" mt-2">
+                    <table id="tb-left" class="table table-hover table-bordered mt-3">
+                        <thead class="bg-info @thumbtack">
+                            <tr>
+                                <th class="text-center" rowspan="2">STT</th>
+                                <th class="text-center" colspan="2"> Thông tin tên hố ga </th>
+                                <th class="text-center" colspan="3">Kích thước hình học bê tông lót móng hố ga (m)</th>
+                                <th class="text-center" colspan="3">Kích thước hình học bê tông móng hố ga (m)</th>
+                                <th class="text-center" colspan="3">KTHH đế hố ga (m)</th>
+                                <th class="text-center" colspan="4">Kích thước hình học tường hố ga (m)</th>
+                                <th class="text-center" colspan="5">KTHH dầm giữa hố ga (m)</th>
+                                <th class="text-center" colspan="3">Chát hố ga mặt trong (m) </th>
+                                <th class="text-center" colspan="3">Chát hố ga mặt ngoài, cạnh 01 +02 (m)</th>
+                                <th class="text-center" colspan="4">Kích thước hình học tường mũ mố thớt dưới (m)</th>
+                                <th class="text-center" colspan="4">Kích thước hình học tường mũ mố thớt trên (m)</th>
+                            </tr>
+                            <tr>
+                                <th onclick="@(() => SortTable("ThongTinChungHoGa_TenHoGaSauPhanLoai"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        Tên hố ga sau phân loại
+                                        <span class="arrow @(GetSortStyle("ThongTinChungHoGa_TenHoGaSauPhanLoai"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("ThongTinChungHoGa_HinhThucHoGa"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        Hình thức hố ga
+                                        <span class="arrow @(GetSortStyle("ThongTinChungHoGa_HinhThucHoGa"))"></span>
+                                    </div>
+                                </th>
+
+                                <th onclick="@(() => SortTable("BeTongLotMong_D"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        D
+                                        <span class="arrow @(GetSortStyle("BeTongLotMong_D"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("BeTongLotMong_R"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        R
+                                        <span class="arrow @(GetSortStyle("BeTongLotMong_R"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("BeTongLotMong_C"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        C
+                                        <span class="arrow @(GetSortStyle("BeTongLotMong_C"))"></span>
+                                    </div>
+                                </th>
+
+                                <th onclick="@(() => SortTable("BeTongMongHoGa_D"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        D
+                                        <span class="arrow @(GetSortStyle("BeTongMongHoGa_D"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("BeTongMongHoGa_R"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        R
+                                        <span class="arrow @(GetSortStyle("BeTongMongHoGa_R"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("BeTongMongHoGa_C"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        C
+                                        <span class="arrow @(GetSortStyle("BeTongMongHoGa_C"))"></span>
+                                    </div>
+                                </th>
+
+                                <th onclick="@(() => SortTable("DeHoGa_D"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        D
+                                        <span class="arrow @(GetSortStyle("DeHoGa_D"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("DeHoGa_R"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        R
+                                        <span class="arrow @(GetSortStyle("DeHoGa_R"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("DeHoGa_C"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        C
+                                        <span class="arrow @(GetSortStyle("DeHoGa_C"))"></span>
+                                    </div>
+                                </th>
+
+                                <th onclick="@(() => SortTable("TuongHoGa_D"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        D
+                                        <span class="arrow @(GetSortStyle("TuongHoGa_D"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("TuongHoGa_R"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        R
+                                        <span class="arrow @(GetSortStyle("TuongHoGa_R"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("TuongHoGa_C"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        C
+                                        <span class="arrow @(GetSortStyle("TuongHoGa_C"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("TuongHoGa_CdTuong"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        CD tường
+                                        <span class="arrow @(GetSortStyle("TuongHoGa_CdTuong"))"></span>
+                                    </div>
+                                </th>
+
+                                <th onclick="@(() => SortTable("DamGiuaHoGa_D"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        D
+                                        <span class="arrow @(GetSortStyle("DamGiuaHoGa_D"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("DamGiuaHoGa_R"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        R
+                                        <span class="arrow @(GetSortStyle("DamGiuaHoGa_R"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("DamGiuaHoGa_C"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        C
+                                        <span class="arrow @(GetSortStyle("DamGiuaHoGa_C"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("DamGiuaHoGa_CdDam"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        CD Dầm
+                                        <span class="arrow @(GetSortStyle("DamGiuaHoGa_CdDam"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        C.Cao dầm giữa tường so với đáy HG
+                                        <span class="arrow @(GetSortStyle("DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa"))"></span>
+                                    </div>
+                                </th>
+
+                                <th onclick="@(() => SortTable("ChatMatTrong_D"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        D
+                                        <span class="arrow @(GetSortStyle("ChatMatTrong_D"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("ChatMatTrong_R"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        R
+                                        <span class="arrow @(GetSortStyle("ChatMatTrong_R"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("ChatMatTrong_C"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        C
+                                        <span class="arrow @(GetSortStyle("ChatMatTrong_C"))"></span>
+                                    </div>
+                                </th>
+
+                                <th onclick="@(() => SortTable("ChatMatNgoaiCanh_D"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        D
+                                        <span class="arrow @(GetSortStyle("ChatMatNgoaiCanh_D"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("ChatMatNgoaiCanh_R"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        R
+                                        <span class="arrow @(GetSortStyle("ChatMatNgoaiCanh_R"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("ChatMatNgoaiCanh_C"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        C
+                                        <span class="arrow @(GetSortStyle("ChatMatNgoaiCanh_C"))"></span>
+                                    </div>
+                                </th>
+
+                                <th onclick="@(() => SortTable("MuMoThotDuoi_D"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        D
+                                        <span class="arrow @(GetSortStyle("MuMoThotDuoi_D"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("MuMoThotDuoi_R"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        R
+                                        <span class="arrow @(GetSortStyle("MuMoThotDuoi_R"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("MuMoThotDuoi_C"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        C
+                                        <span class="arrow @(GetSortStyle("MuMoThotDuoi_C"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("MuMoThotDuoi_CdTuong"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        CD tường
+                                        <span class="arrow @(GetSortStyle("MuMoThotDuoi_CdTuong"))"></span>
+                                    </div>
+                                </th>
+
+                                <th onclick="@(() => SortTable("MuMoThotTren_D"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        D
+                                        <span class="arrow @(GetSortStyle("MuMoThotTren_D"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("MuMoThotTren_R"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        R
+                                        <span class="arrow @(GetSortStyle("MuMoThotTren_R"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("MuMoThotTren_C"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        C
+                                        <span class="arrow @(GetSortStyle("MuMoThotTren_C"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("MuMoThotTren_CdTuong"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        CD tường
+                                        <span class="arrow @(GetSortStyle("MuMoThotTren_CdTuong"))"></span>
+                                    </div>
+                                </th>
+                            </tr>
+
+                        </thead>
+                        @if (listPhanLoaiHoGaModel.Any())
+                        {
+                            <tbody>
+                                @{
+                                    int stt = 0;
+                                }
+                                @foreach (var item in listPhanLoaiHoGaModel)
+                                {
+                                    stt++;
+                                    <tr>
+                                        <td class="text-center"> @stt</td>
+                                        <td class="text-center"> @item.ThongTinChungHoGa_TenHoGaSauPhanLoai</td>
+                                        <td class="text-center"> @item.ThongTinChungHoGa_HinhThucHoGa_Name      </td>
+                                        <td class="text-center"> @item.BeTongLotMong_D</td>
+                                        <td class="text-center"> @item.BeTongLotMong_R</td>
+                                        <td class="text-center"> @item.BeTongLotMong_C</td>
+                                        <td class="text-center"> @item.BeTongMongHoGa_D</td>
+                                        <td class="text-center"> @item.BeTongMongHoGa_R</td>
+                                        <td class="text-center"> @item.BeTongMongHoGa_C</td>
+                                        <td class="text-center"> @item.DeHoGa_D</td>
+                                        <td class="text-center"> @item.DeHoGa_R</td>
+                                        <td class="text-center"> @item.DeHoGa_C</td>
+                                        <td class="text-center"> @item.TuongHoGa_D</td>
+                                        <td class="text-center"> @item.TuongHoGa_R</td>
+                                        <td class="text-center"> @item.TuongHoGa_C</td>
+                                        <td class="text-center"> @item.TuongHoGa_CdTuong</td>
+                                        <td class="text-center"> @item.DamGiuaHoGa_D</td>
+                                        <td class="text-center"> @item.DamGiuaHoGa_R</td>
+                                        <td class="text-center"> @item.DamGiuaHoGa_C</td>
+                                        <td class="text-center"> @item.DamGiuaHoGa_CdDam</td>
+                                        <td class="text-center"> @item.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa</td>
+                                        <td class="text-center"> @item.ChatMatTrong_D</td>
+                                        <td class="text-center"> @item.ChatMatTrong_R</td>
+                                        <td class="text-center"> @item.ChatMatTrong_C</td>
+                                        <td class="text-center"> @item.ChatMatNgoaiCanh_D</td>
+                                        <td class="text-center"> @item.ChatMatNgoaiCanh_R</td>
+                                        <td class="text-center"> @item.ChatMatNgoaiCanh_C</td>
+                                        <td class="text-center"> @item.MuMoThotDuoi_D</td>
+                                        <td class="text-center"> @item.MuMoThotDuoi_R</td>
+                                        <td class="text-center"> @item.MuMoThotDuoi_C</td>
+                                        <td class="text-center"> @item.MuMoThotDuoi_CdTuong</td>
+                                        <td class="text-center"> @item.MuMoThotTren_D</td>
+                                        <td class="text-center"> @item.MuMoThotTren_R</td>
+                                        <td class="text-center"> @item.MuMoThotTren_C</td>
+                                        <td class="text-center"> @item.MuMoThotTren_CdTuong</td>
+
+
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+                        else
+                        {
+                            <tbody>
+                                <tr>
+                                    <td colspan="25"> Không có dữ liệu</td>
+                                </tr>
+                            </tbody>
+                        }
+
+
+                    </table>
+                </div>
+                <div class="mt-4">
+                    @if (listPhanLoaiHoGaModel.Any())
+                    {
+                        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
+</div>
+
+
+@code {
+
+    private bool isLoading = false;
+    private PhanLoaiHoGaModel Input = new PhanLoaiHoGaModel();
+
+    private List<SelectedItem> selectHTHG = new();
+    private List<SelectedItem> selectKCMM = new();
+    private List<SelectedItem> selectKCT = new();
+    private List<SelectedItem> selectHTM = new();
+    private List<SelectedItem> selectKCM = new();
+    private string layoutClass = "d-flex justify-content-between";
+    private string space = "ml-5";
+    private string thumbtack = "";
+
+    private void OnSelectChangeHTHG(SelectedItem selectedItem)
+    {
+        Input.ThongTinChungHoGa_HinhThucHoGa = selectedItem.Value;
+    }
+
+    public List<PhanLoaiHoGaModel> listPhanLoaiHoGaModel { get; set; } = new();
+    public List<PhanLoaiHoGaModel> listModel { get; set; } = new();
+    public MetaData MetaData { get; set; }
+    public PhanLoaiHoGaModel phanLoaiHoGaModel { get; set; }
+
+
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        phanLoaiHoGaModel = new();
+
+        await LoadData();
+        selectHTHG = new();
+        selectKCMM = new();
+        selectKCT = new();
+        selectHTM = new();
+        selectKCM = new();
+        foreach (var item in listModel)
+        {
+
+            // Kiểm tra và thêm item
+            if (!string.IsNullOrEmpty(item.ThongTinChungHoGa_HinhThucHoGa) && !selectHTHG.Any(x => x.Value == item.ThongTinChungHoGa_HinhThucHoGa))
+            {
+                selectHTHG.Add(new SelectedItem
+                    {
+                        Value = item.ThongTinChungHoGa_HinhThucHoGa,
+                        Text = item.ThongTinChungHoGa_HinhThucHoGa_Name ?? ""
+                    });
+            }
+
+
+        }
+
+        selectHTHG.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+    }
+    // Truy vấn data theo điều kiện tìm kiếm
+    private async Task LoadData()
+    {
+        isLoading = true;
+        var repository = await PhanLoaiHoGaRepository.GetBaoCaoKTHHHGa(Input);
+        listModel = repository;
+        listPhanLoaiHoGaModel = Paging(listModel);
+        isLoading = false;
+    }
+
+    public async Task Search()
+    {
+        phanLoaiHoGaModel.PageNumber = 1;
+        await LoadData();
+    }
+
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        phanLoaiHoGaModel.PageNumber = 1;
+        Paging(listModel);
+    }
+
+
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        phanLoaiHoGaModel.PageNumber = page;
+        Paging(listModel);
+    }
+
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+        phanLoaiHoGaModel.PageNumber = 1;
+        phanLoaiHoGaModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+
+
+    // Xử lý paging
+    private List<PhanLoaiHoGaModel> Paging(List<PhanLoaiHoGaModel> listModels)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = listModels.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        listModels = listModels.Skip((phanLoaiHoGaModel.PageNumber - 1) * phanLoaiHoGaModel.PageSize).Take(phanLoaiHoGaModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listPhanLoaiHoGaModel.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var major in listModels)
+        {
+            listPhanLoaiHoGaModel.Add(major);
+        }
+
+        // Tạo pagelist mới
+
+        var pagelist = new PageList<PhanLoaiHoGaModel>(listPhanLoaiHoGaModel, count, phanLoaiHoGaModel.PageNumber, phanLoaiHoGaModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return listModels;
+    }
+
+
+
+    private void ViewHorizontal()
+    {
+        layoutClass = "d-flex justify-content-between";
+        space = "ml-5";
+    }
+
+    private void ViewVertical()
+    {
+        layoutClass = "d-block";
+        space = "m-0";
+    }
+    private void ThumbtackHeader()
+    {
+        thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
+    }
+}
