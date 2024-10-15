@@ -13,5 +13,6 @@ namespace DucAnhERP.Repository
         Task<string> InsertId(PhanLoaiTDHoGa entity, string HinhThucDayHoGa);
         Task<string> InsertLaterFlag(PhanLoaiTDHoGa entity, int FlagLast);
         Task<List<PhanLoaiTDHoGaModel>> GetBaoCaoKTHHTDanHGa(PhanLoaiTDHoGaModel pltdhgaModel);
+        Task<List<PhanLoaiTDHoGaModel>> GetBaoCaoTDanHGaSDThep(PhanLoaiTDHoGaModel pltdhgaModel);
     }
 }

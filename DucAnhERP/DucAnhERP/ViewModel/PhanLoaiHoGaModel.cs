@@ -1,4 +1,5 @@
-﻿using DucAnhERP.SeedWork;
+﻿using DucAnhERP.Models;
+using DucAnhERP.SeedWork;
 
 namespace DucAnhERP.ViewModel
 {
@@ -91,4 +92,15 @@ namespace DucAnhERP.ViewModel
         public string? CreateBy { get; set; }
         public int? IsActive { get; set; }
     }
+
+    public class PLHGBaoCaoModel : PhanLoaiHoGaModel {
+        public int countTrai { get; set; }
+        public int countPhai { get; set; }
+        public int Tong { get; set; }
+    }
+    public class PLHGBaoCaoSLHGTTModel : PLHGBaoCaoModel
+    {
+        public string ThongTinLyTrinh_TuyenDuong { get; set; }
+    }
+   
 }

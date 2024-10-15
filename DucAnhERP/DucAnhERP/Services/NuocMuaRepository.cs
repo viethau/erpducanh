@@ -1176,5 +1176,151 @@ namespace DucAnhERP.Services
                 throw;
             }
         }
+        public async Task<List<PLHGBaoCaoModel>> GetBaoCaoTongSLHGa()
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var query = from d in context.DSNuocMua
+                            join p in context.PhanLoaiHoGas
+                            on d.ThongTinChungHoGa_TenHoGaSauPhanLoai equals p.Id
+                            group d by new { p.Id, p.ThongTinChungHoGa_TenHoGaSauPhanLoai } into grouped
+                            select new PLHGBaoCaoModel
+                            {
+                                Id = grouped.Key.Id,
+                                ThongTinChungHoGa_TenHoGaSauPhanLoai = grouped.Key.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                                countTrai = grouped.Sum(x => x.TraiPhai == 0 ? 1 : 0),
+                                countPhai = grouped.Sum(x => x.TraiPhai == 1 ? 1 : 0),
+                                Tong = grouped.Sum(x => (x.TraiPhai == 0 ? 1 : 0)) + grouped.Sum(x => (x.TraiPhai == 1 ? 1 : 0))
+                            };
+
+                var data = await query.ToListAsync();
+                return data;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Lỗi tải dữ liệu :"+ex.Message); 
+            }
+        }
+        public async Task<List<PLHGBaoCaoSLHGTTModel>> GetBaoCaoTongSLHGaTTuyen()
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var query = from n in context.DSNuocMua
+                            join p in context.PhanLoaiHoGas
+                            on n.ThongTinChungHoGa_TenHoGaSauPhanLoai equals p.Id
+                            group n by new { n.ThongTinLyTrinh_TuyenDuong, p.ThongTinChungHoGa_TenHoGaSauPhanLoai, p.Id } into grouped
+                            orderby grouped.Key.ThongTinLyTrinh_TuyenDuong
+                            select new PLHGBaoCaoSLHGTTModel
+                            {
+                                Id = grouped.Key.Id,
+                                ThongTinLyTrinh_TuyenDuong = grouped.Key.ThongTinLyTrinh_TuyenDuong,
+                                ThongTinChungHoGa_TenHoGaSauPhanLoai = grouped.Key.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                                countTrai = grouped.Sum(x => x.TraiPhai == 0 ? 1 : 0),
+                                countPhai = grouped.Sum(x => x.TraiPhai == 1 ? 1 : 0),
+                                Tong = grouped.Sum(x => x.TraiPhai == 0 ? 1 : 0) + grouped.Sum(x => x.TraiPhai == 1 ? 1 : 0)
+                            };
+
+
+                var data = await query.ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi tải dữ liệu :" + ex.Message);
+            }
+        }
+        public async Task<List<PLTDHGBaoCaoTSLTDHGModel>> GetBaoCaoTongSLTDanHGa()
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var query = from pl in context.PhanLoaiTDHoGas
+                            join n in context.DSNuocMua
+                                on pl.Id equals n.ThongTinTamDanHoGa2_PhanLoaiDayHoGa
+                            group n by new
+                            {
+                                pl.Id,
+                                pl.ThongTinTamDanHoGa2_PhanLoaiDayHoGa,
+                                pl.ThongTinTamDanHoGa2_DuongKinh,
+                                pl.ThongTinTamDanHoGa2_ChieuDay,
+                                pl.ThongTinTamDanHoGa2_D,
+                                pl.ThongTinTamDanHoGa2_R,
+                                pl.ThongTinTamDanHoGa2_C
+                            } into g
+                            select new PLTDHGBaoCaoTSLTDHGModel
+                            {
+                                Id= g.Key.Id,
+                                ThongTinTamDanHoGa2_PhanLoaiDayHoGa = g.Key.ThongTinTamDanHoGa2_PhanLoaiDayHoGa,
+                                ThongTinTamDanHoGa2_DuongKinh = g.Key.ThongTinTamDanHoGa2_DuongKinh??0,
+                                ThongTinTamDanHoGa2_ChieuDay = g.Key.ThongTinTamDanHoGa2_ChieuDay ?? 0,
+                                ThongTinTamDanHoGa2_D = g.Key.ThongTinTamDanHoGa2_D ?? 0,
+                                ThongTinTamDanHoGa2_R = g.Key.ThongTinTamDanHoGa2_R ?? 0,
+                                ThongTinTamDanHoGa2_C = g.Key.ThongTinTamDanHoGa2_C ??0,
+                                countTrai = (int)g.Sum(n => n.TraiPhai == 0 ? (n.ThongTinTamDanHoGa2_SoLuongNapDay ?? 0) : 0),
+                                countPhai = (int)g.Sum(n => n.TraiPhai == 1 ? (n.ThongTinTamDanHoGa2_SoLuongNapDay ?? 0) : 0),
+                                Tong = (int)g.Sum(n => (n.TraiPhai == 0 ? (n.ThongTinTamDanHoGa2_SoLuongNapDay ?? 0) : 0) +
+                                                  (n.TraiPhai == 1 ? (n.ThongTinTamDanHoGa2_SoLuongNapDay ?? 0) : 0))
+                            };
+
+                var result = query.ToList();
+
+
+                var data = await query.ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi tải dữ liệu :" + ex.Message);
+            }
+        }
+        public async Task<List<PLTDHGBaoCaoTSLTDHGTTModel>> GetBaoCaoSLTDanHGaTTuyen()
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var query = from pl in context.PhanLoaiTDHoGas
+                            join n in context.DSNuocMua
+                                on pl.Id equals n.ThongTinTamDanHoGa2_PhanLoaiDayHoGa
+                            group n by new
+                            {
+                                pl.Id,
+                                pl.ThongTinTamDanHoGa2_PhanLoaiDayHoGa,
+                                pl.ThongTinTamDanHoGa2_DuongKinh,
+                                pl.ThongTinTamDanHoGa2_ChieuDay,
+                                pl.ThongTinTamDanHoGa2_D,
+                                pl.ThongTinTamDanHoGa2_R,
+                                pl.ThongTinTamDanHoGa2_C,
+                                n.ThongTinLyTrinh_TuyenDuong
+                            } into g
+                            select new PLTDHGBaoCaoTSLTDHGTTModel
+                            {
+                                Id = g.Key.Id,
+                                ThongTinLyTrinh_TuyenDuong = g.Key.ThongTinLyTrinh_TuyenDuong,
+                                ThongTinTamDanHoGa2_PhanLoaiDayHoGa = g.Key.ThongTinTamDanHoGa2_PhanLoaiDayHoGa,
+                                ThongTinTamDanHoGa2_DuongKinh = g.Key.ThongTinTamDanHoGa2_DuongKinh ?? 0,
+                                ThongTinTamDanHoGa2_ChieuDay = g.Key.ThongTinTamDanHoGa2_ChieuDay ?? 0,
+                                ThongTinTamDanHoGa2_D = g.Key.ThongTinTamDanHoGa2_D ?? 0,
+                                ThongTinTamDanHoGa2_R = g.Key.ThongTinTamDanHoGa2_R ?? 0,
+                                ThongTinTamDanHoGa2_C = g.Key.ThongTinTamDanHoGa2_C ?? 0,
+                                countTrai = (int)g.Sum(n => n.TraiPhai == 0 ? (n.ThongTinTamDanHoGa2_SoLuongNapDay ?? 0) : 0),
+                                countPhai = (int)g.Sum(n => n.TraiPhai == 1 ? (n.ThongTinTamDanHoGa2_SoLuongNapDay ?? 0) : 0),
+                                Tong = (int)g.Sum(n => (n.TraiPhai == 0 ? (n.ThongTinTamDanHoGa2_SoLuongNapDay ?? 0) : 0) +
+                                                  (n.TraiPhai == 1 ? (n.ThongTinTamDanHoGa2_SoLuongNapDay ?? 0) : 0))
+                            };
+
+                var result = query
+                .OrderBy(g => g.ThongTinLyTrinh_TuyenDuong)
+                .ToList();
+
+                var data = await query.ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi tải dữ liệu :" + ex.Message);
+            }
+        }
     }
 }

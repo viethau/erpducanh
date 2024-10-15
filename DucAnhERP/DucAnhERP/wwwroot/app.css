@@ -15,6 +15,15 @@ a, .btn-link {
     scrollbar-color: #a9a9a9 transparent;
     scrollbar-width: thin;
 }
+.table-report {
+    max-height: calc(100vh - 1px) !important;
+    position: relative;
+    overflow: scroll;
+    white-space: nowrap;
+    scrollbar-color: #a9a9a9 transparent;
+    scrollbar-width: thin;
+}
+
 .text-end{
     text-align:end;
 }

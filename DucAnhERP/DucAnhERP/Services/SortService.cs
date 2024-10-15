@@ -43,7 +43,7 @@
                 IsSortedAscending = true;
 
             }
-            else // Nếu cột truyền vào là cột đang được sort
+            else // Nếu cột truyền vào là cột đang được sortSystem.NullReferenceException: 'Object reference not set to an instance of an object.'
             {
                 if (IsSortedAscending)
                 {
@@ -68,5 +68,6 @@
 
             return listData;
         }
+
     }
 }

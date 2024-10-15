@@ -12,5 +12,10 @@ namespace DucAnhERP.Repository
         Task<List<NuocMuaModel>> GetBaoCaoTTHoGa(NuocMuaModel nuocMuaModel);
         Task<List<NuocMuaModel>> GetBaoCaoKLBPhapHGa(NuocMuaModel nuocMuaModel);
         Task<List<NuocMuaModel>> GetBaoCaoKHopHGaTDan(NuocMuaModel nuocMuaModel);
+        Task<List<PLHGBaoCaoModel>> GetBaoCaoTongSLHGa();
+        Task<List<PLHGBaoCaoSLHGTTModel>> GetBaoCaoTongSLHGaTTuyen();
+        Task<List<PLTDHGBaoCaoTSLTDHGModel>> GetBaoCaoTongSLTDanHGa();
+        Task<List<PLTDHGBaoCaoTSLTDHGTTModel>> GetBaoCaoSLTDanHGaTTuyen();
+
     }
 }

@@ -38,4 +38,6 @@ namespace DucAnhERP.Models
         public string? CreateBy { get; set; } = "";
         public int? IsActive { get; set; } = 1;
     }
+
+    
 }

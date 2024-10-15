@@ -34,14 +34,14 @@
             <EditForm Model="Input" FormName="Search" OnValidSubmit="@Search">
                 <DataAnnotationsValidator />
                 <div class="row">
-                    <div class="col-sm-4 col-md-2 mb-2">
+                    <div class="col-sm-4 col-md-4 mb-2">
                         <label for="Table">Hình thức hố ha</label>
                         <Select2 Id="select1" Items="@selectHTHG" OnChange="@OnSelectChangeHTHG"></Select2>
                         <ValidationMessage For="()=>Input.ThongTinChungHoGa_HinhThucHoGa"></ValidationMessage>
                     </div>
 
                     <!-- Search Button -->
-                    <div class="col-sm-4 col-md-2 mb-2">
+                    <div class="col-sm-4 col-md-3 mb-2">
                         <label>&nbsp;</label>
                         <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
                     </div>

@@ -683,8 +683,7 @@ namespace DucAnhERP.Services
             }
 
         }
-
-        public async Task<List<PhanLoaiHoGaModel>> GetBaoCaoKTHHHGa(PhanLoaiHoGaModel plhgMode)
+        public async Task<List<PhanLoaiHoGaModel>> GetBaoCaoKTHHHGa(PhanLoaiHoGaModel plhgModel)
         {
             try
             {
@@ -753,6 +752,65 @@ namespace DucAnhERP.Services
                 throw;
             }
 
+        }
+        public async Task<List<PhanLoaiHoGaModel>> GetBaoCaoHGaSDThep(PhanLoaiHoGaModel plhgModel)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var query = from plhg in context.PhanLoaiHoGas
+                            join hinhThucHoGa in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_HinhThucHoGa equals hinhThucHoGa.Id
+                            join ketCauMuMo in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_KetCauMuMo equals ketCauMuMo.Id
+                            join ketCauTuong in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_KetCauTuong equals ketCauTuong.Id
+                            join hinhThucMongHoGa in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_HinhThucMongHoGa equals hinhThucMongHoGa.Id
+                            join ketCauMong in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_KetCauMong equals ketCauMong.Id
+
+                            orderby plhg.Flag
+                            select new PhanLoaiHoGaModel
+                            {
+                                Id = plhg.Id,
+                                ThongTinChungHoGa_TenHoGaSauPhanLoai = plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
+                                ThongTinChungHoGa_HinhThucHoGa = plhg.ThongTinChungHoGa_HinhThucHoGa ?? "",
+                                ThongTinChungHoGa_HinhThucHoGa_Name = hinhThucHoGa.Ten ?? "",
+                                ThongTinChungHoGa_KetCauMuMo = plhg.ThongTinChungHoGa_KetCauMuMo ?? "",
+                                ThongTinChungHoGa_KetCauMuMo_Name = ketCauMuMo.Ten ?? "",
+                                ThongTinChungHoGa_KetCauTuong = plhg.ThongTinChungHoGa_KetCauTuong ?? "",
+                                ThongTinChungHoGa_KetCauTuong_Name = ketCauTuong.Ten ?? "",
+                                ThongTinChungHoGa_KetCauMong = plhg.ThongTinChungHoGa_KetCauMong ?? "",
+                                ThongTinChungHoGa_KetCauMong_Name = ketCauMong.Ten ?? "",
+                               
+                                Flag = plhg.Flag,
+                                CreateAt = plhg.CreateAt,
+                                CreateBy = plhg.CreateBy,
+                                IsActive = plhg.IsActive,
+
+                            };
+                if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauMuMo))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_KetCauMuMo == plhgModel.ThongTinChungHoGa_KetCauMuMo);
+                }
+                if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauTuong))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_KetCauTuong == plhgModel.ThongTinChungHoGa_KetCauTuong);
+                }
+                if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauMong))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_KetCauMong == plhgModel.ThongTinChungHoGa_KetCauMong);
+                }
+                var data = await query
+                    .ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
         }
     }
 

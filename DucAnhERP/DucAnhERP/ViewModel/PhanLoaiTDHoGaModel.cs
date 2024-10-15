@@ -1,4 +1,5 @@
-﻿using DucAnhERP.SeedWork;
+﻿using DucAnhERP.Models;
+using DucAnhERP.SeedWork;
 using System.ComponentModel.DataAnnotations;
 
 namespace DucAnhERP.ViewModel
@@ -18,5 +19,17 @@ namespace DucAnhERP.ViewModel
         public DateTime? CreateAt { get; set; } = DateTime.Now;
         public string? CreateBy { get; set; } = "";
         public int? IsActive { get; set; } = 1;
+    }
+
+    public class PLTDHGBaoCaoTSLTDHGModel : PhanLoaiTDHoGaModel
+    {
+        public int countTrai { get; set; }
+        public int countPhai { get; set; }
+        public int Tong { get; set; }
+    }
+    public class PLTDHGBaoCaoTSLTDHGTTModel : PLTDHGBaoCaoTSLTDHGModel
+    {
+      
+        public string ThongTinLyTrinh_TuyenDuong { get; set; }
     }
 }

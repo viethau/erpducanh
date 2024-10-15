@@ -68,12 +68,7 @@
             </EditForm>
         </div>
         <div class="col-md-3 col-sm-6 text-end">
-            <button class="btn btn-primary me-2" @onclick="ViewHorizontal" title="Xem theo chiều ngang">
-                <i class="fas fa-arrows-alt-h"></i>
-            </button>
-            <button class="btn btn-secondary" @onclick="ViewVertical" title="Xem theo chiều dọc">
-                <i class="fas fa-arrows-alt-v"></i>
-            </button>
+            
             <button class="btn btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
@@ -81,7 +76,7 @@
 
     </div>
     <div id="tableContainer ">
-        <div class="our-table @layoutClass ">
+        <div class="table-report ">
             <div>
                 <div class=" mt-1">
                     <h5 class="mt-2">BẢNG THÔNG TIN CẤU TẠO CHUNG HỐ GA SAU PHÂN LOẠI</h5>
@@ -222,8 +217,6 @@
     private List<SelectedItem> selectKCT = new();
     private List<SelectedItem> selectHTM = new();
     private List<SelectedItem> selectKCM = new();
-    private string layoutClass = "d-flex justify-content-between";
-    private string space = "ml-5";
     private string thumbtack = "";
 
     private void OnSelectChangeHTHG(SelectedItem selectedItem)
@@ -390,19 +383,6 @@
         return listModels;
     }
 
-
-
-    private void ViewHorizontal()
-    {
-        layoutClass = "d-flex justify-content-between";
-        space = "ml-5";
-    }
-
-    private void ViewVertical()
-    {
-        layoutClass = "d-block";
-        space = "m-0";
-    }
     private void ThumbtackHeader()
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";

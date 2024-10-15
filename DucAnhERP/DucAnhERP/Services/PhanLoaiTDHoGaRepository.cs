@@ -382,6 +382,45 @@ namespace DucAnhERP.Services
             }
 
         }
+
+        public async Task<List<PhanLoaiTDHoGaModel>> GetBaoCaoTDanHGaSDThep(PhanLoaiTDHoGaModel pltdhgaModel)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var query = from pltdhg in context.PhanLoaiTDHoGas
+                            join hinhThucDayHoGa in context.DSDanhMuc
+                            on pltdhg.ThongTinTamDanHoGa2_HinhThucDayHoGa equals hinhThucDayHoGa.Id
+                            orderby pltdhg.Flag
+                            select new PhanLoaiTDHoGaModel
+                            {
+                                Id = pltdhg.Id,
+                                ThongTinTamDanHoGa2_PhanLoaiDayHoGa = pltdhg.ThongTinTamDanHoGa2_PhanLoaiDayHoGa,
+                                ThongTinTamDanHoGa2_HinhThucDayHoGa = pltdhg.ThongTinTamDanHoGa2_HinhThucDayHoGa,
+                                ThongTinTamDanHoGa2_HinhThucDayHoGa_Name = hinhThucDayHoGa.Ten,
+                                ThongTinTamDanHoGa2_D = pltdhg.ThongTinTamDanHoGa2_D,
+                                ThongTinTamDanHoGa2_R = pltdhg.ThongTinTamDanHoGa2_R,
+                                ThongTinTamDanHoGa2_C = pltdhg.ThongTinTamDanHoGa2_C,
+                                CreateAt = pltdhg.CreateAt,
+                                CreateBy = pltdhg.CreateBy,
+                                IsActive = pltdhg.IsActive,
+                                Flag = pltdhg.Flag,
+                            };
+                if (!string.IsNullOrEmpty(pltdhgaModel.ThongTinTamDanHoGa2_HinhThucDayHoGa))
+                {
+                    query = query.Where(x => x.ThongTinTamDanHoGa2_HinhThucDayHoGa == pltdhgaModel.ThongTinTamDanHoGa2_HinhThucDayHoGa);
+                }
+                var data = await query
+                    .ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+
+        }
     }
 
 }
