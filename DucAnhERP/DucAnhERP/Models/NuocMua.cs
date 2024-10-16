@@ -12,7 +12,7 @@ namespace DucAnhERP.Models
         [Required(ErrorMessage = "Bạn phải nhập Tuyến đường!")]
         //Thông tin lý trình
         public string? ThongTinLyTrinh_TuyenDuong { get; set; }
-        [Required(ErrorMessage = "Bạn phải nhập Lý trình tại tim hố ga!")]
+        //[Required(ErrorMessage = "Bạn phải nhập Lý trình tại tim hố ga!")]
         public string? ThongTinLyTrinh_LyTrinhTaiTimHoGa { get; set; }
         
         //Thông tin chung hố ga
@@ -20,20 +20,20 @@ namespace DucAnhERP.Models
         public string ThongTinChungHoGa_TenHoGaSauPhanLoai { get; set; } = "";
         [Required(ErrorMessage = "Bạn phải nhập Tên hố ga theo bản vẽ!")]
         public string ThongTinChungHoGa_TenHoGaTheoBanVe { get; set; } = "";
-        [Required(ErrorMessage = "Bạn phải nhập Hình thức hố ga !")]
+        //[Required(ErrorMessage = "Bạn phải nhập Hình thức hố ga !")]
         public string ThongTinChungHoGa_HinhThucHoGa { get; set; } = "";
-        [Required(ErrorMessage = "Bạn phải nhập  kết cấu mũ mố !")]
+        //[Required(ErrorMessage = "Bạn phải nhập kết cấu mũ mố !")]
         public string ThongTinChungHoGa_KetCauMuMo { get; set; } = "";
 
-        [Required(ErrorMessage = "Bạn phải nhập Kết cấu tường!")]
+        //[Required(ErrorMessage = "Bạn phải nhập Kết cấu tường!")]
         public string ThongTinChungHoGa_KetCauTuong { get; set; } = "";
-        [Required(ErrorMessage = "Bạn phải nhập Hình thức móng hố ga !")]
+        //[Required(ErrorMessage = "Bạn phải nhập Hình thức móng hố ga !")]
         public string ThongTinChungHoGa_HinhThucMongHoGa { get; set; } = "";
-        [Required(ErrorMessage = "Bạn phải nhập  Kết cấu móng !")]
+        //[Required(ErrorMessage = "Bạn phải nhập  Kết cấu móng !")]
         public string ThongTinChungHoGa_KetCauMong { get; set; } = "";
-        [Required(ErrorMessage = "Bạn phải nhập Chát mặt trong !")]
+        //[Required(ErrorMessage = "Bạn phải nhập Chát mặt trong !")]
         public string ThongTinChungHoGa_ChatMatTrong { get; set; } = "";
-        [Required(ErrorMessage = "Bạn phải nhập Chát mặt ngoài  !")]
+        //[Required(ErrorMessage = "Bạn phải nhập Chát mặt ngoài  !")]
         public string ThongTinChungHoGa_ChatMatNgoai { get; set; } = "";
         //Thông tin kích thước hình học hố ga
         //1.Thông tin phủ bì hố ga (m) 1.PhuBiHoGa

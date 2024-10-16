@@ -6406,23 +6406,23 @@
         Helpers.DSNuocMuaConversionHelper helpers = new();
         nuocMuaConvert = Input;
         nuocMuaConvert = await helpers.ConvertNuocMua(Input, listDanhMuc);
-        if (listNuocMuaModel.Count > 0 && string.IsNullOrEmpty(nuocMuaConvert.TTTDCongHoRanh_XacDinhOngCongCanThem) && string.IsNullOrEmpty(nuocMuaConvert.ThongTinDuongTruyenDan_HinhThucTruyenDan))
+        if (listModel.Count > 0 && string.IsNullOrEmpty(nuocMuaConvert.TTTDCongHoRanh_XacDinhOngCongCanThem) && string.IsNullOrEmpty(nuocMuaConvert.ThongTinDuongTruyenDan_HinhThucTruyenDan))
         {
             double[] ChieuDaiThucTes = { };
             string[] HinhThucTruyenDans = { };
             string[] XacDinhOngCongCanThems = { };
 
 
-            ChieuDaiThucTes = listNuocMuaModel
+            ChieuDaiThucTes = listModel
                  .Select(item => item.TTTDCongHoRanh_ChieuDaiThucTe).ToArray();
 
-            HinhThucTruyenDans = listNuocMuaModel
+            HinhThucTruyenDans = listModel
                 .Select(item => !string.IsNullOrEmpty(item.ThongTinDuongTruyenDan_HinhThucTruyenDan)
                                 ? item.ThongTinDuongTruyenDan_HinhThucTruyenDan
                                 : "")
                 .ToArray();
 
-            XacDinhOngCongCanThems = listNuocMuaModel
+            XacDinhOngCongCanThems = listModel
                .Select(item => !string.IsNullOrEmpty(item.TTTDCongHoRanh_XacDinhOngCongCanThem)
                                ? item.TTTDCongHoRanh_XacDinhOngCongCanThem
                                : "")
@@ -6432,7 +6432,7 @@
             nuocMuaConvert.TTTDCongHoRanh_CDai1 = TTTDCongHoRanh_CDai1(ChieuDaiThucTes, HinhThucTruyenDans, XacDinhOngCongCanThems, nuocMuaConvert.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "", nuocMuaConvert.TTTDCongHoRanh_XacDinhOngCongCanThem ?? "");
 
         }
-
+       
         Input = nuocMuaConvert;
         await LoadTenHoGaSauPhanLoai();
         await LoadTenHoGaSauPhanLoaiTDHoGa();
