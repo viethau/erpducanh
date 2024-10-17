@@ -1,4 +1,5 @@
 ﻿@page "/NghiepVuCongTrinh/PhanLoaiHoGa"
+@using DucAnhERP.Helpers
 @using DucAnhERP.ViewModel
 @using DucAnhERP.Models
 @using DucAnhERP.Components.Pages.Common
@@ -520,10 +521,48 @@
         </BodyTemplate>
     </CustomModal>
 
-    <button class="btn btn-primary" @onclick="ShowModal">Thêm phân loại hố ga</button>
+    <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
+        <DataAnnotationsValidator />
+        <div class="row ">
+            <!-- Select for nhóm danh mục-->
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Hình thức hố ga</label>
+                <Select2 Id="mySelect1" Items="@selectHTHG" OnChange="@OnSelectChangeHTHG"></Select2>
+                <ValidationMessage For="()=>InputMD.ThongTinChungHoGa_HinhThucHoGa"></ValidationMessage>
+            </div>
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Kết cấu mũ mỗ</label>
+                <Select2 Id="mySelect2" Items="@selectKCMM" OnChange="@OnSelectChangeKCMM"></Select2>
+                <ValidationMessage For="()=>InputMD.ThongTinChungHoGa_KetCauMuMo"></ValidationMessage>
+            </div>
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Kết cấu tường</label>
+                <Select2 Id="mySelect3" Items="@selectKCT" OnChange="@OnSelectChangeKCT"></Select2>
+                <ValidationMessage For="()=>InputMD.ThongTinChungHoGa_KetCauTuong"></ValidationMessage>
+            </div>
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Hình thức móng hố ga</label>
+                <Select2 Id="mySelect4" Items="@selectHTMHG" OnChange="@OnSelectChangeHTMHG"></Select2>
+                <ValidationMessage For="()=>InputMD.ThongTinChungHoGa_HinhThucMongHoGa"></ValidationMessage>
+            </div>
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Kết cấu móng</label>
+                <Select2 Id="mySelect5" Items="@selectKCM" OnChange="@OnSelectChangeKCM"></Select2>
+                <ValidationMessage For="()=>InputMD.ThongTinChungHoGa_KetCauMong"></ValidationMessage>
+            </div>
+            <!-- Search Button -->
+            <div class="col-sm-4 col-md-1 mb-1">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+            </div>
+            <div class="col-sm-4 col-md-1 mb-1">
+                <label>&nbsp;</label>
+                <button @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
+            </div>
+        </div>
+    </EditForm>
 
     <h3 class="mt-2">Danh sách phân loại hố ga</h3>
-
     <div class="row mt-3 our-table">
         <table class="table table-hover table-bordered">
             <thead class="bg-info">
@@ -807,7 +846,6 @@
             }
 
         </table>
-
     </div>
 
     @if (listPLHGModel.Any())
@@ -822,11 +860,43 @@
     private List<PhanLoaiHoGa> listPhanLoaiHoGa = new List<PhanLoaiHoGa>();
     private PhanLoaiHoGa Input = new();
     public List<DanhMuc> listDanhMuc = new();
+    public PhanLoaiHoGaModel InputMD = new();
 
     private bool isModalVisible = false;
     private bool isLoading = false;
     private string TitleModal = "Thêm phân loại hố ga";
 
+    private List<SelectedItem> selectHTHG = new();
+    private List<SelectedItem> selectKCMM = new();
+    private List<SelectedItem> selectKCT = new();
+    private List<SelectedItem> selectHTMHG = new();
+    private List<SelectedItem> selectKCM = new();
+    private void OnSelectChangeHTHG(SelectedItem selectedItem)
+    {
+        InputMD.ThongTinChungHoGa_HinhThucHoGa = selectedItem.Value;
+    }
+    private void OnSelectChangeKCMM(SelectedItem selectedItem)
+    {
+        InputMD.ThongTinChungHoGa_KetCauMuMo = selectedItem.Value;
+    }
+    private void OnSelectChangeKCT(SelectedItem selectedItem)
+    {
+        InputMD.ThongTinChungHoGa_KetCauTuong = selectedItem.Value;
+    }
+    private void OnSelectChangeHTMHG(SelectedItem selectedItem)
+    {
+        InputMD.ThongTinChungHoGa_HinhThucMongHoGa = selectedItem.Value;
+    }
+    private void OnSelectChangeKCM(SelectedItem selectedItem)
+    {
+        InputMD.ThongTinChungHoGa_KetCauMong = selectedItem.Value;
+    }
+
+    public async Task Search()
+    {
+        dmModel.PageNumber = 1;
+        await LoadData();
+    }
 
     private void ShowModal()
     {
@@ -858,32 +928,10 @@
 
     [Parameter]
     public ConfirmModal confirmModal { get; set; }
-
-    public List<PhanLoaiHoGaModel> listPLHGModel
-    {
-        get;
-        set;
-    } = new();
-
-    public List<PhanLoaiHoGaModel> listModel
-    {
-        get;
-        set;
-    } = new();
-
-    public MetaData MetaData
-    {
-        get;
-        set;
-    }
-
-    public PhanLoaiHoGaModel dmModel
-    {
-        get;
-        set;
-    }
-
-
+    public List<PhanLoaiHoGaModel> listPLHGModel { get;set;} = new();
+    public List<PhanLoaiHoGaModel> listModel{get;set;} = new();
+    public MetaData MetaData{get;set;}
+    public PhanLoaiHoGaModel dmModel{get;set;}
 
     public List<DanhMuc> FindByIdNhomDanhMuc(string idNhomDanhMuc)
     {
@@ -898,9 +946,79 @@
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
+        InputMD = new();
         await LoadData();
+        foreach (var item in listDanhMuc)
+        {
+            // Kiểm tra xem item đã tồn tại trong danh sách hay chưa
+            if (!selectHTHG.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "HG_HTHGa")
+            {
+                if (!string.IsNullOrEmpty(item.Id))
+                {
+                    // Nếu chưa tồn tại, thêm item vào danh sách
+                    selectHTHG.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.Ten
+                        });
+                }
+            }
+            if (!selectKCMM.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "HG_LMMHoGa")
+            {
+                if (!string.IsNullOrEmpty(item.Id))
+                {
+                    // Nếu chưa tồn tại, thêm item vào danh sách
+                    selectKCMM.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.Ten
+                        });
+                }
+            }
+            if (!selectKCT.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "HG_LTHoGa")
+            {
+                if (!string.IsNullOrEmpty(item.Id))
+                {
+                    // Nếu chưa tồn tại, thêm item vào danh sách
+                    selectKCT.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.Ten
+                        });
+                }
+            }
+            if (!selectHTMHG.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "HG_HTMHoGa")
+            {
+                if (!string.IsNullOrEmpty(item.Id))
+                {
+                    // Nếu chưa tồn tại, thêm item vào danh sách
+                    selectHTMHG.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.Ten
+                        });
+                }
+            }
+            if (!selectKCM.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "HG_LMHoGa")
+            {
+                if (!string.IsNullOrEmpty(item.Id))
+                {
+                    // Nếu chưa tồn tại, thêm item vào danh sách
+                    selectKCM.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.Ten
+                        });
+                }
+            }
+        }
+        // Thêm phần tử mặc định "chọn..."
+        selectHTHG.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        selectKCMM.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        selectKCT.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        selectHTMHG.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        selectKCM.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
     }
-
 
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
@@ -908,7 +1026,7 @@
         isLoading = true;
         dmModel = new();
         listDanhMuc = await DanhMucRepository.GetAll();
-        var plhg = await PhanLoaiHoGaRepository.GetAllByVM();
+        var plhg = await PhanLoaiHoGaRepository.GetAllByVM(InputMD);
         listModel = plhg;
         listPLHGModel = Paging(plhg);
         isLoading = false;

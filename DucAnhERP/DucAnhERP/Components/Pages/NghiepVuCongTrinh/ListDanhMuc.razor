@@ -1,4 +1,5 @@
 ﻿@page "/NghiepVuCongTrinh/DanhMuc"
+@using DucAnhERP.Helpers
 @using DucAnhERP.ViewModel
 @using DucAnhERP.Models
 @using DucAnhERP.Components.Pages.Common
@@ -12,39 +13,33 @@
 <div class="m-5">
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
         <BodyTemplate>
-            <EditForm Model="newDanhMuc" OnValidSubmit="HandleValidSubmit">
+            <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <div class="row">
                     <div class="col-3">
                         <div class="form-group">
-                            <label for="IdNhomDanhMuc">Nhóm danh mục <span class="text-danger">*</span></label>
-                            <InputSelect id="IdNhomDanhMuc" class="form-control" @bind-Value="newDanhMuc.IdNhomDanhMuc">
-                                <option value="">Nhóm danh mục...</option>
-                                @foreach (var nhom in nhomDanhMucs)
-                                {
-                                    <option value="@nhom.Id">@nhom.Ten</option>
-                                }
-                            </InputSelect>
-                            <ValidationMessage For="() => newDanhMuc.IdNhomDanhMuc" class="text-danger" />
+                            <label for="Table">Nhóm danh mục</label>
+                            <Select2 Id="mySelect3" Items="@selectNhomDM" OnChange="@OnSelectChangeNhomDMAdd"></Select2>
+                            <ValidationMessage For="()=>Input.IdNhomDanhMuc"></ValidationMessage>
                         </div>
                     </div>
                     <div class="col-3">
                         <div class="form-group">
                             <label for="Ten">Tên <span class="text-danger">*</span></label>
-                            <InputText id="Ten" class="form-control" @bind-Value="newDanhMuc.Ten" />
-                            <ValidationMessage For="() => newDanhMuc.Ten" class="text-danger" />
+                            <InputText id="Ten" class="form-control" @bind-Value="Input.Ten" />
+                            <ValidationMessage For="() => Input.Ten" class="text-danger" />
 
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="form-group">
                             <label for="Ten">ghi chú</label>
-                            <InputText id="GhiChu" class="form-control" @bind-Value="newDanhMuc.GhiChu" />
-                            <ValidationMessage For="() => newDanhMuc.GhiChu" class="text-danger" />
+                            <InputText id="GhiChu" class="form-control" @bind-Value="Input.GhiChu" />
+                            <ValidationMessage For="() => Input.GhiChu" class="text-danger" />
                         </div>
                     </div>
-                 
+
                 </div>
                 <div class="row justify-content-end">
                     <button class="btn btn-primary mr-2" type="submit">Save</button>
@@ -58,30 +53,21 @@
 
     <EditForm Model="dmModel" FormName="Search" OnValidSubmit="@Search">
         <DataAnnotationsValidator />
-        <div class="d-flex">
-            <div class="form-group">
-                <label for="IdNhomDanhMuc">Nhóm danh mục <span class="text-danger">*</span></label>
-                <InputSelect class="form-control" @bind-Value="dmModel.IdNhomDanhMuc">
-                    <option value="" selected>Chọn nhóm danh mục...</option>
-                    @if (nhomDanhMucs != null)
-                    {
-                        @foreach (var nhomDM in nhomDanhMucs)
-                        {
-                            <option value="@nhomDM.Id">@nhomDM.Ten</option>
-                        }
-                    }
-                </InputSelect>
+        <div class="row ">
+            <!-- Select for nhóm danh mục-->
+            <div class="col-sm-6 col-md-3 mb-3">
+                <label for="Table">Nhóm danh mục</label>
+                <Select2 Id="mySelect2" Items="@selectNhomDM" OnChange="@OnSelectChangeNhomDM"></Select2>
                 <ValidationMessage For="()=>dmModel.IdNhomDanhMuc"></ValidationMessage>
             </div>
-           
-
-            <div class="form-group ml-5">
+            <!-- Search Button -->
+            <div class="col-sm-6 col-md-2 mb-2">
                 <label>&nbsp;</label>
-                <button type="submit" class="btn btn-primary form-control">Tìm kiếm</button>
+                <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
             </div>
-            <div class="form-group ml-5">
+            <div class="col-sm-6 col-md-2 mb-2">
                 <label>&nbsp;</label>
-                <button @onclick="ShowModal" class="btn btn-primary form-control">Tạo mới</button>
+                <button @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
             </div>
         </div>
     </EditForm>
@@ -104,8 +90,8 @@
                     <th onclick="@(() => SortTable("GhiChu"))" class="text-center sortable" scope="col" sortable>
                         <div class="pb-3">Chi chú  <span class="arrow @(GetSortStyle("GhiChu"))"></span></div>
                     </th>
-                    <th class="text-center" colspan="2" >
-                      
+                    <th class="text-center" colspan="2">
+
                     </th>
                 </tr>
 
@@ -135,7 +121,7 @@
                                 <button class="btn btn-danger" @onclick="()=>ConfirmDelete(dm.Id,dm.Ten)">
                                     <i class="fas fa-trash"></i>
                                 </button>
-                               
+
                             </td>
                         </tr>
                         stt++;
@@ -164,11 +150,204 @@
 
 @code {
     private List<NhomDanhMuc> nhomDanhMucs = new List<NhomDanhMuc>();
-    private DanhMuc newDanhMuc = new DanhMuc();
+    private DanhMuc Input = new DanhMuc();
 
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới nhóm danh mục";
     bool isEdit = false;
+
+    private List<SelectedItem> selectNhomDM = new();
+    private void OnSelectChangeNhomDM(SelectedItem selectedItem)
+    {
+        dmModel.IdNhomDanhMuc = selectedItem.Value;
+    }
+    private void OnSelectChangeNhomDMAdd(SelectedItem selectedItem)
+    {
+        Input.IdNhomDanhMuc = selectedItem.Value;
+    }
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+
+    public List<DanhMucModel> listDanhMuc { get; set; } = new();
+    public List<DanhMucModel> listModel { get; set; } = new();
+    public MetaData MetaData { get; set; }
+    public DanhMucModel dmModel { get; set; }
+
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        dmModel = new();
+        nhomDanhMucs = await NhomDanhMucRepository.GetAll();
+        foreach (var item in nhomDanhMucs)
+        {
+            // Kiểm tra xem item đã tồn tại trong danh sách hay chưa
+            if (!selectNhomDM.Any(x => x.Value == item.Id))
+            {
+                if (!string.IsNullOrEmpty(item.Id))
+                {
+                    // Nếu chưa tồn tại, thêm item vào danh sách
+                    selectNhomDM.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.Ten
+                        });
+                }
+            }
+        }
+        // Thêm phần tử mặc định "chọn..."
+        selectNhomDM.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        await LoadDanhMuc();
+    }
+    public async Task Search()
+    {
+        dmModel.PageNumber = 1;
+        await LoadDanhMuc();
+    }
+
+    // Truy vấn data theo điều kiện tìm kiếm
+    private async Task LoadDanhMuc()
+    {
+        var danhmucs = await DanhMucRepository.GetAllDM(dmModel);
+        listModel = danhmucs;
+        listDanhMuc = Paging(danhmucs);
+        Console.WriteLine(listDanhMuc);
+    }
+
+    private async Task HandleValidSubmit()
+    {
+
+       try
+        {
+            if (isEdit)
+            {
+                List<DanhMuc> DMisExistEdit = new();
+                DMisExistEdit = await DanhMucRepository.GetDMisExist(Input.IdNhomDanhMuc, Input.Ten);
+                if (DMisExistEdit.Count() > 0)
+                {
+                    if (DMisExistEdit[0].Id == Input.Id)
+                    {
+                        await DanhMucRepository.Update(Input);
+                        ToastService.ShowToast("Thông báo", "Cập nhật danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                        await LoadDanhMuc();
+                        isModalVisible = false;
+                        Input = new DanhMuc();
+                        isEdit = false;
+                    }
+                    else
+                    {
+                        ToastService.ShowToast(
+                        "Thông báo",
+                         "Danh mục đã tồn tại.",
+                         cssClass: "toast-danger",
+                         iconClass: "fa fa-exclamation-circle",
+                         progressBarClass: "bg-info",
+                         duration: 5000);
+                    }
+
+                }
+                else
+                {
+                    await DanhMucRepository.Update(Input);
+                    ToastService.ShowToast("Thông báo", "Cập nhật danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                    await LoadDanhMuc();
+                    isModalVisible = false;
+                    Input = new DanhMuc();
+                    isEdit = false;
+                }
+            }
+            else
+            {
+                var DMisExistInsert = await DanhMucRepository.GetDMisExist(Input.IdNhomDanhMuc, Input.Ten);
+                if (DMisExistInsert.Count() > 0)
+                {
+                    ToastService.ShowToast(
+                        "Thông báo",
+                         "Danh mục đã tồn tại.",
+                         cssClass: "toast-danger",
+                         iconClass: "fa fa-exclamation-circle",
+                         progressBarClass: "bg-info",
+                         duration: 5000);
+                }
+                else
+                {
+
+                    await DanhMucRepository.Insert(Input);
+                    ToastService.ShowToast("Thông báo", "Thêm danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                    await LoadDanhMuc();
+                    isModalVisible = false;
+                    Input = new DanhMuc();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+
+    }
+
+    private string deleteId;
+
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        deleteId = id;
+        confirmModal.Title = "Xác nhận xóa";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.openModal();
+    }
+
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        try
+        {
+            if (confirmed)
+            {
+                if (!string.IsNullOrEmpty(deleteId))
+                {
+
+                    var result = await DanhMucRepository.CheckUsingId(deleteId);
+                    if (result)
+                    {
+                        ToastService.ShowToast("Thông báo", "Không thể xóa danh mục đang được sử dụng.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+                    }
+                    else
+                    {
+                        // Thực hiện hành động xóa
+                        await DanhMucRepository.DeleteById(deleteId);
+                        ToastService.ShowToast("Thông báo", "Xóa danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                        await LoadDanhMuc();
+                    }
+
+                    deleteId = "";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+       
+    }
+
+    private async Task Edit(string id)
+    {
+        try
+        {
+            TitleModal = "Cập nhật nhóm danh mục !";
+            Input = await DanhMucRepository.GetById(id);
+            isEdit = true;
+            isModalVisible = true;
+            foreach (var item in selectNhomDM)
+            {
+                item.IsSelected = item.Value == Input.IdNhomDanhMuc;
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+    }
 
     private void ShowModal()
     {
@@ -192,171 +371,8 @@
         // Logic for canceling
         isModalVisible = false;
         isEdit = false;
-        newDanhMuc = new DanhMuc();
+        Input = new DanhMuc();
     }
-
-    [Parameter]
-    public ConfirmModal confirmModal { get; set; }
-
-    public List<DanhMucModel> listDanhMuc
-    {
-        get;
-        set;
-    } = new();
-
-    public List<DanhMucModel> listModel
-    {
-        get;
-        set;
-    } = new();
-
-    public MetaData MetaData
-    {
-        get;
-        set;
-    }
-
-    public DanhMucModel dmModel
-    {
-        get;
-        set;
-    }
-
-
-    // Khởi tạo màn hình
-    protected override async Task OnInitializedAsync()
-    {
-        dmModel = new();
-        nhomDanhMucs = await NhomDanhMucRepository.GetAll();
-        await LoadDanhMuc();
-    }
-    public async Task Search()
-    {
-        dmModel.PageNumber = 1;
-        await LoadDanhMuc();
-    }
-
-    // Truy vấn data theo điều kiện tìm kiếm
-    private async Task LoadDanhMuc()
-    {
-        var danhmucs = await DanhMucRepository.GetAllDM(dmModel);
-        listModel = danhmucs;
-        listDanhMuc = Paging(danhmucs);
-        Console.WriteLine(listDanhMuc);
-    }
-
-    private async Task HandleValidSubmit()
-    {
-
-        if (isEdit)
-        {
-            List<DanhMuc> DMisExistEdit = new();
-             DMisExistEdit = await DanhMucRepository.GetDMisExist(newDanhMuc.IdNhomDanhMuc, newDanhMuc.Ten);
-            if (DMisExistEdit.Count() > 0)
-            {
-                if (DMisExistEdit[0].Id == newDanhMuc.Id)
-                {
-                    await DanhMucRepository.Update(newDanhMuc);
-                    ToastService.ShowToast("Thông báo", "Cập nhật danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
-                    await LoadDanhMuc();
-                    isModalVisible = false;
-                    newDanhMuc = new DanhMuc();
-                    isEdit = false;
-                }
-                else
-                {
-                    ToastService.ShowToast(
-                    "Thông báo",
-                     "Danh mục đã tồn tại.",
-                     cssClass: "toast-danger",
-                     iconClass: "fa fa-exclamation-circle",
-                     progressBarClass: "bg-info",
-                     duration: 5000);
-                }
-                
-            }
-            else
-            {
-                await DanhMucRepository.Update(newDanhMuc);
-                ToastService.ShowToast("Thông báo", "Cập nhật danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
-                await LoadDanhMuc();
-                isModalVisible = false;
-                newDanhMuc = new DanhMuc(); 
-                isEdit =false;
-            }
-        }
-        else
-        {
-            var DMisExistInsert  = await DanhMucRepository.GetDMisExist(newDanhMuc.IdNhomDanhMuc, newDanhMuc.Ten);
-            if (DMisExistInsert.Count() > 0)
-            {
-                ToastService.ShowToast(
-                    "Thông báo",
-                     "Danh mục đã tồn tại.",
-                     cssClass: "toast-danger",
-                     iconClass: "fa fa-exclamation-circle",
-                     progressBarClass: "bg-info",
-                     duration: 5000);
-            }
-            else
-            {
-
-                await DanhMucRepository.Insert(newDanhMuc);
-                ToastService.ShowToast("Thông báo", "Thêm danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
-                await LoadDanhMuc();
-                isModalVisible = false;
-                newDanhMuc = new DanhMuc();
-            }
-        }
-        
-    }
-
-    private string deleteId;
-
-    private async Task ConfirmDelete(string id, string Ten)
-    {
-        deleteId = id;
-        confirmModal.Title = "Xác nhận xóa";
-        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
-        confirmModal.openModal();
-
-    }
-
-    private async Task HandleResponseClick(bool confirmed)
-    {
-        if (confirmed)
-        {
-            if (!string.IsNullOrEmpty(deleteId))
-            {
-                
-                var result = await DanhMucRepository.CheckUsingId(deleteId);
-                if (result)
-                {
-                    ToastService.ShowToast("Thông báo", "Không thể xóa danh mục đang được sử dụng.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
-                }
-                else
-                {
-                    // Thực hiện hành động xóa
-                    await DanhMucRepository.DeleteById(deleteId);
-                    ToastService.ShowToast("Thông báo", "Xóa danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
-                    await LoadDanhMuc();
-                }
-
-                deleteId = "";
-            }
-        }
-    }
-
-
-    private async Task Edit(string id)
-    {
-        TitleModal = "Cập nhật nhóm danh mục !";
-        newDanhMuc = await DanhMucRepository.GetById(id);
-        isEdit = true;
-        isModalVisible = true;
-    }
-
-
 
     // Sắp xếp data
     private void SortTable(string columnName)

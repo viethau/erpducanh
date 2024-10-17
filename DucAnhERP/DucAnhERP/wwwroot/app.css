@@ -8,7 +8,7 @@ a, .btn-link {
 }
 
 .our-table {
-    max-height: calc(100vh - (19rem + 1px)) !important;
+    max-height: calc(100vh - (14rem + 1px)) !important;
     position: relative;
     overflow: scroll;
     white-space: nowrap;
@@ -22,6 +22,12 @@ a, .btn-link {
     white-space: nowrap;
     scrollbar-color: #a9a9a9 transparent;
     scrollbar-width: thin;
+}
+.flex-header {
+    position: sticky;
+    top: -1px;
+    z-index: 1;
+    background-color: cadetblue;
 }
 
 .text-end{

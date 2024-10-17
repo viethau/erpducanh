@@ -885,9 +885,12 @@ namespace DucAnhERP.Services
                 if (recordsToUpdate.Count() == 0)
                 {
                     // Kiểm tra xem bảng có bản ghi nào không
-                    var maxFlag = await context.DSNuocMua.AnyAsync()
-                                  ? await context.DSNuocMua.MaxAsync(x => x.Flag)
-                                  : 0;
+                    //var maxFlag = await context.DSNuocMua.AnyAsync()
+                    //              ? await context.DSNuocMua.MaxAsync(x => x.Flag)
+                    //              : 0;
+                    var maxFlag = await context.DSNuocMua.AnyAsync(x => x.TraiPhai == entity.TraiPhai)
+                              ? await context.DSNuocMua.Where(x => x.TraiPhai == entity.TraiPhai).MaxAsync(x => x.Flag)
+                              : 0;
 
                     // Tăng giá trị Flag lên 1
                     entity.Flag = maxFlag + 1;

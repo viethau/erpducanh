@@ -11,12 +11,10 @@ namespace DucAnhERP.Services
     {
 
         private readonly IDbContextFactory<ApplicationDbContext> _context;
-
         public PhanLoaiHoGaRepository(IDbContextFactory<ApplicationDbContext> context)
         {
             _context = context;
         }
-
         public async Task<List<PhanLoaiHoGa>> GetAll()
         {
             try
@@ -32,7 +30,7 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-        public async Task<List<PhanLoaiHoGaModel>> GetAllByVM()
+        public async Task<List<PhanLoaiHoGaModel>> GetAllByVM(PhanLoaiHoGaModel Input)
         {
             try
             {
@@ -147,7 +145,26 @@ namespace DucAnhERP.Services
                                 IsActive = plhg.IsActive,
 
                             };
-
+                if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_HinhThucHoGa))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_HinhThucHoGa == Input.ThongTinChungHoGa_HinhThucHoGa);
+                }
+                if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_KetCauMuMo))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_KetCauMuMo == Input.ThongTinChungHoGa_KetCauMuMo);
+                }
+                if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_KetCauTuong))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_KetCauTuong == Input.ThongTinChungHoGa_KetCauTuong);
+                }
+                if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_HinhThucMongHoGa))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_HinhThucMongHoGa == Input.ThongTinChungHoGa_HinhThucMongHoGa);
+                }
+                if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_KetCauMong))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_KetCauMong == Input.ThongTinChungHoGa_KetCauMong);
+                }
                 var data = await query
                     .ToListAsync();
                 return data;
@@ -157,7 +174,6 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
                 throw;
             }
-
         }
         public async Task<bool> CheckUsingId(string id)
         {

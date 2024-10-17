@@ -878,7 +878,7 @@ namespace DucAnhERP.Models
         public Double? ThongTinTamDanHoGa2_SoLuongNapDay { get; set; } = 0;
 
         //Thông tin vật liệu đào hố ga
-        [Required(ErrorMessage = "Bạn phải nhập loại vật liệu đào hố ga!")]
+        //[Required(ErrorMessage = "Bạn phải nhập Loại vật liệu đào hố ga!")]
         public string? ThongTinVatLieuDaoHoGa_LoaiVatLieuDao { get; set; } = "";
 
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
@@ -1351,7 +1351,7 @@ namespace DucAnhERP.Models
         public Double? CDHaLu_DinhDapCat { get; set; } = 0;
 
         //Thông tin vật liệu đào cống, rãnh
-        [Required(ErrorMessage = "Bạn phải nhập Loại vật liệu đào cống rãnh!")]
+        //[Required(ErrorMessage = "Bạn phải nhập Loại vật liệu đào cống rãnh!")]
         public string TTVLDCongRanh_LoaiVatLieuDao { get; set; } = "";
 
         [Required(ErrorMessage = "Bạn phải nhập Chiều cao đào đá thượng lưu!")]
