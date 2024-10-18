@@ -52,6 +52,7 @@ namespace DucAnhERP.Data
         public DbSet<PhanLoaiThanhChong> PhanLoaiThanhChongs { get; set; }
         public DbSet<PhanLoaiTDanTDan> PhanLoaiTDanTDans { get; set; }
         public DbSet<MangThu> MangThus { get; set; }
+        public DbSet<TKThepHGa> TKThepHGas { get; set; }
 
 
 

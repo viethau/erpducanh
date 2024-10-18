@@ -1,0 +1,411 @@
+﻿@page "/ThongKe/TKThepHGa"
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using System.Linq
+@using DucAnhERP.SeedWork
+@using DucAnhERP.Helpers
+@inject NavigationManager navigation
+@inject IPhanLoaiHoGaRepository PhanLoaiHoGaRepository
+@inject IDanhMucRepository DanhMucRepository
+
+@inject DucAnhERP.Services.ToastService ToastService
+<style>
+    table {
+        position: relative;
+    }
+
+        table thead tr td {
+            /*   white-space: nowrap; */
+            text-align: center;
+            padding: 2px 5px;
+        }
+
+</style>
+<div class="container-fluid">
+    <div class="mt-3">
+        <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
+            <BodyTemplate>
+                <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="row">
+                        @* <div class="col-3">
+                            <div class="form-group">
+                                <label for="Table">Nhóm danh mục</label>
+                                <Select2 Id="mySelect3" Items="@selectNhomDM" OnChange="@OnSelectChangeNhomDMAdd"></Select2>
+                                <ValidationMessage For="()=>Input.IdNhomDanhMuc"></ValidationMessage>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label for="Ten">Tên <span class="text-danger">*</span></label>
+                                <InputText id="Ten" class="form-control" @bind-Value="Input.Ten" />
+                                <ValidationMessage For="() => Input.Ten" class="text-danger" />
+                            </div>
+                        </div> *@
+
+                    </div>
+                    <div class="row justify-content-end">
+                        <button class="btn btn-primary mr-2" type="submit">Save</button>
+                        <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+                    </div>
+                </EditForm>
+            </BodyTemplate>
+        </CustomModal>
+    </div>
+    <div class="row m-3 ">
+        <div class="col-md-9 col-sm-12">
+            <EditForm Model="Input" FormName="Search" OnValidSubmit="@Search">
+                <DataAnnotationsValidator />
+                <div class="row">
+                    <div class="col-sm-4 col-md-3 mb-2">
+                        <label for="Table">Kết cấu móng</label>
+                        <Select2 Id="select3" Items="@selectKCMM" OnChange="@OnSelectChangeKCMM"></Select2>
+                        <ValidationMessage For="()=>Input.ThongTinChungHoGa_KetCauMong"></ValidationMessage>
+                    </div>
+                    <!-- Search Button -->
+                    <div class="col-sm-4 col-md-2 mb-2">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+        <div class="col-md-3 col-sm-6 text-end">
+            <button class="btn btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
+                <i class="fas fa-thumbtack"></i>
+            </button>
+        </div>
+    </div>
+    <div id="tableContainer ">
+        <div class="table-report ">
+            <div>
+                <div class=" mt-1">
+                    <h5 class="mt-2">BẢNG THỐNG KÊ THÉP HỐ GA THEO LOẠI HỐ GA</h5>
+                </div>
+                <div class=" mt-2">
+                    <table id="tb-left" class="table table-hover table-bordered mt-3">
+                        <thead class="bg-info @thumbtack">
+                            <tr>
+                                <th>STT</th>
+                                <th onclick="@(() => SortTable("ThongTinChungHoGa_TenHoGaSauPhanLoai"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        Loại cấu kiện
+                                        <span class="arrow @(GetSortStyle("ThongTinChungHoGa_TenHoGaSauPhanLoai"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("TenCongTac"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        Tên công tác
+                                        <span class="arrow @(GetSortStyle("TenCongTac"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("VTLayKhoiLuong"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        Vị trí lấy khối lượng
+                                        <span class="arrow @(GetSortStyle("VTLayKhoiLuong"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("LoaiThep"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        Loại thép
+                                        <span class="arrow @(GetSortStyle("LoaiThep"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("SoHieu"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        Số hiệu
+                                        <span class="arrow @(GetSortStyle("SoHieu"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("DKCD"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        Đường kính/chiều dầy(mm,mm2)
+                                        <span class="arrow @(GetSortStyle("DKCD"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("SoThanh"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        Số thanh/01 cấu kiện
+                                        <span class="arrow @(GetSortStyle("SoThanh"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("SoCK"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        Số cấu kiện
+                                        <span class="arrow @(GetSortStyle("SoCK"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("TongSoThanh"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        Tổng số thanh
+                                        <span class="arrow @(GetSortStyle("TongSoThanh"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("ChieuDai1Thanh"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        Chiều dài 01 thanh (mm)/diện tích (mm2)
+                                        <span class="arrow @(GetSortStyle("ChieuDai1Thanh"))"></span>
+                                    </div>
+                                </th
+                                 <th onclick="@(() => SortTable("TongChieuDai"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        Tổng chiều dài (m,m2)
+                                        <span class="arrow @(GetSortStyle("TongChieuDai"))"></span>
+                                    </div>
+                                </th>
+                                  <th onclick="@(() => SortTable("TrongLuong"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        Trọng lượng thép/(kg/m,m3)
+                                        <span class="arrow @(GetSortStyle("TrongLuong"))"></span>
+                                    </div>
+                                </th>
+                                 <th onclick="@(() => SortTable("TongTrongLuong"))" class="text-center sortable">
+                                    <div class="mr-3">
+                                        Tổng trọng lượng (kg)
+                                        <span class="arrow @(GetSortStyle("TongTrongLuong"))"></span>
+                                    </div>
+                                </th>
+                            </tr>
+
+                        </thead>
+                        @if (listPhanLoaiHoGaModel.Any())
+                        {
+                            <tbody>
+                                @{
+                                    int stt = 0;
+                                }
+                                @foreach (var item in listPhanLoaiHoGaModel)
+                                {
+                                    stt++;
+                                    <tr>
+                                        <td class="text-center"> @stt</td>
+                                        <td class="text-center"> @item.ThongTinChungHoGa_TenHoGaSauPhanLoai</td>
+                                        <td class="text-center"> @item.ThongTinChungHoGa_KetCauMuMo_Name</td>
+                                        <td class="text-center"> @item.ThongTinChungHoGa_KetCauTuong_Name</td>
+                                        <td class="text-center"> @item.ThongTinChungHoGa_KetCauMong_Name</td>
+                                         @* <td class="text-center"> @item.ThongTinChungHoGa_TenHoGaSauPhanLoai</td>
+                                         <td class="text-center"> @item.TenCongTac                          </td>
+                                         <td class="text-center"> @item.VTLayKhoiLuong                      </td>
+                                         <td class="text-center"> @item.LoaiThep                            </td>
+                                         <td class="text-center"> @item.SoHieu                              </td>
+                                         <td class="text-center"> @item.DKCD                                </td>
+                                         <td class="text-center"> @item.SoThanh                             </td>
+                                         <td class="text-center"> @item.SoCK                                </td>
+                                         <td class="text-center"> @item.TongSoThanh                         </td>
+                                         <td class="text-center"> @item.ChieuDai1Thanh                      </td>
+                                         <td class="text-center"> @item.TongChieuDai                        </td>
+                                         <td class="text-center"> @item.TrongLuong                          </td>
+                                         <td class="text-center"> @item.TongTrongLuong                      </td> *@
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+                        else
+                        {
+                            <tbody>
+                                <tr>
+                                    <td colspan="5"> Không có dữ liệu</td>
+                                </tr>
+                            </tbody>
+                        }
+
+
+                    </table>
+                </div>
+                <div class="mt-4">
+                    @if (listPhanLoaiHoGaModel.Any())
+                    {
+                        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
+</div>
+
+
+@code {
+
+    private bool isLoading = false;
+    private bool isModalVisible = false;
+    private string TitleModal = "Thêm mới ";
+    bool isEdit = false;
+    string thumbtack = "";
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+
+    private PhanLoaiHoGaModel Input = new PhanLoaiHoGaModel();
+
+    private List<SelectedItem> selectKCMM = new();
+    private void OnSelectChangeKCMM(SelectedItem selectedItem)
+    {
+        Input.ThongTinChungHoGa_KetCauMuMo = selectedItem.Value;
+    }
+
+    public List<PhanLoaiHoGaModel> listPhanLoaiHoGaModel { get; set; } = new();
+    public List<PhanLoaiHoGaModel> listModel { get; set; } = new();
+    public MetaData MetaData { get; set; }
+    public PhanLoaiHoGaModel phanLoaiHoGaModel { get; set; }
+
+
+
+    private void ShowModal()
+    {
+        isModalVisible = true;
+    }
+
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+        isEdit = false;
+    }
+
+    private void HandleSave()
+    {
+        // Logic for saving
+        isModalVisible = false;
+    }
+
+    private void HandleCancel()
+    {
+        // Logic for canceling
+        isModalVisible = false;
+        isEdit = false;
+     
+    }
+
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            phanLoaiHoGaModel = new();
+
+            await LoadData();
+
+            selectKCMM = new();
+            foreach (var item in listModel)
+            {
+                // Kiểm tra và thêm item
+                if (!string.IsNullOrEmpty(item.ThongTinChungHoGa_KetCauMuMo) && !selectKCMM.Any(x => x.Value == item.ThongTinChungHoGa_KetCauMuMo))
+                {
+                    selectKCMM.Add(new SelectedItem
+                        {
+                            Value = item.ThongTinChungHoGa_KetCauMuMo,
+                            Text = item.ThongTinChungHoGa_KetCauMuMo_Name ?? ""
+                        });
+                }
+               
+
+            }
+
+            selectKCMM.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+           
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+    // Truy vấn data theo điều kiện tìm kiếm
+    private async Task LoadData()
+    {
+        isLoading = true;
+        var repository = await PhanLoaiHoGaRepository.GetBaoCaoHGaSDThep(Input);
+        listModel = repository;
+        listPhanLoaiHoGaModel = Paging(listModel);
+        isLoading = false;
+    }
+
+    public async Task Search()
+    {
+        phanLoaiHoGaModel.PageNumber = 1;
+        await LoadData();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+
+        try
+        {
+            if (isEdit)
+            {
+               
+            }
+            else
+            {
+                
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+
+    }
+
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        phanLoaiHoGaModel.PageNumber = 1;
+        Paging(listModel);
+    }
+
+
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        phanLoaiHoGaModel.PageNumber = page;
+        Paging(listModel);
+    }
+
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+        phanLoaiHoGaModel.PageNumber = 1;
+        phanLoaiHoGaModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+
+
+    // Xử lý paging
+    private List<PhanLoaiHoGaModel> Paging(List<PhanLoaiHoGaModel> listModels)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = listModels.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        listModels = listModels.Skip((phanLoaiHoGaModel.PageNumber - 1) * phanLoaiHoGaModel.PageSize).Take(phanLoaiHoGaModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listPhanLoaiHoGaModel.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var major in listModels)
+        {
+            listPhanLoaiHoGaModel.Add(major);
+        }
+
+        // Tạo pagelist mới
+
+        var pagelist = new PageList<PhanLoaiHoGaModel>(listPhanLoaiHoGaModel, count, phanLoaiHoGaModel.PageNumber, phanLoaiHoGaModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return listModels;
+    }
+
+    private void ThumbtackHeader()
+    {
+        thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
+    }
+}
