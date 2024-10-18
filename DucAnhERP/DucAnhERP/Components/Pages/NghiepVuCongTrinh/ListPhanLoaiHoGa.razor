@@ -23,12 +23,12 @@
                         <h4 class="mt-2">Thông tin chung hố ga</h4>
                         <hr />
                         <div class="row">
-                            <div class="form-floating col-sm-6 col-md-4 col-lg-4 ">
+                            <div class="form-floating col-sm-6 col-md-3 col-lg-4 ">
                                 <label for="ThongTinChungHoGa_TenHoGaSauPhanLoai">Tên hố ga sau phân loại <span class="text-danger"></span></label>
                                 <InputText  @bind-Value="Input.ThongTinChungHoGa_TenHoGaSauPhanLoai" class="form-control" id="ThongTinChungHoGa_TenHoGaSauPhanLoai" placeholder="Tên hố ga sau phân loại" />
                                 <ValidationMessage For="() => Input.ThongTinChungHoGa_TenHoGaSauPhanLoai" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4 col-lg-4">
+                            <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                 <label for="ThongTinChungHoGa_HinhThucHoGa"> Hình thức hố ga <span class="text-danger">*</span></label>
                                 <select disabled="@isEdit" id="ThongTinChungHoGa_HinhThucHoGa" class="form-control" @bind="Input.ThongTinChungHoGa_HinhThucHoGa">
                                     <option value="">Hình thức hố ga ...</option>
@@ -39,7 +39,7 @@
                                 </select>
                                 <ValidationMessage For="() => Input.ThongTinChungHoGa_HinhThucHoGa" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4 col-lg-4">
+                            <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                 <label for="ThongTinChungHoGa_KetCauMuMo"> Kết cấu mũ mố <span class="text-danger">*</span></label>
                                 <select disabled="@isEdit" id="ThongTinChungHoGa_KetCauMuMo" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauMuMo">
                                     <option value="">Kết cấu mũ mố ...</option>
@@ -50,7 +50,7 @@
                                 </select>
                                 <ValidationMessage For="() => Input.ThongTinChungHoGa_KetCauMuMo" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4 col-lg-4">
+                            <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                 <label for="ThongTinChungHoGa_KetCauTuong"> Kết cấu tường <span class="text-danger">*</span></label>
                                 <select disabled="@isEdit" id="ThongTinChungHoGa_KetCauTuong" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauTuong" name="ThongTinChungHoGa_KetCauTuong">
                                     <option value="">Kết cấu tường ...</option>
@@ -61,7 +61,7 @@
                                 </select>
                                 <ValidationMessage For="() => Input.ThongTinChungHoGa_KetCauTuong" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4 col-lg-4">
+                            <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                 <label for="ThongTinChungHoGa_HinhThucMongHoGa"> Hình thức móng hố ga <span class="text-danger">*</span></label>
                                 <select disabled="@isEdit" id="ThongTinChungHoGa_HinhThucMongHoGa" class="form-control" @bind="Input.ThongTinChungHoGa_HinhThucMongHoGa">
                                     <option value="">Hình thức móng hố ga  ...</option>
@@ -72,7 +72,7 @@
                                 </select>
                                 <ValidationMessage For="() => Input.ThongTinChungHoGa_HinhThucMongHoGa" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4 col-lg-4">
+                            <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                 <label for="ThongTinChungHoGa_KetCauMong"> Kết cấu móng <span class="text-danger">*</span></label>
                                 <select disabled="@isEdit" id="ThongTinChungHoGa_KetCauMong" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauMong">
                                     <option value="">Kết cấu móng ...</option>
@@ -84,7 +84,7 @@
                                 <ValidationMessage For="() => Input.ThongTinChungHoGa_KetCauMong" class="text-danger" />
                             </div>
 
-                            <div class="form-floating col-sm-6 col-md-4 col-lg-4">
+                            <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                 <label for="ThongTinChungHoGa_ChatMatTrong"> Chát mặt trong <span class="text-danger">*</span></label>
                                 <select disabled="@isEdit" id="ThongTinChungHoGa_ChatMatTrong" class="form-control" @bind="Input.ThongTinChungHoGa_ChatMatTrong">
                                     <option value="">Chát mặt trong ...</option>
@@ -96,7 +96,7 @@
                                 <ValidationMessage For="() => Input.ThongTinChungHoGa_ChatMatTrong" class="text-danger" />
                             </div>
 
-                            <div class="form-floating col-sm-6 col-md-4 col-lg-4">
+                            <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                 <label for="ThongTinChungHoGa_ChatMatNgoai"> Chát mặt ngoài <span class="text-danger">*</span></label>
                                 <select disabled="@isEdit" id="ThongTinChungHoGa_ChatMatNgoai" class="form-control" @bind="Input.ThongTinChungHoGa_ChatMatNgoai">
                                     <option value="">Chát mặt ngoài ...</option>
@@ -117,12 +117,12 @@
                         <hr />
                         <h5 class="mt-2">1.Thông tin phủ bì hố ga (m)</h5>
                         <div class="row">
-                            <div class="form-floating col-6">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="PhuBiHoGa_CDai">Chiểu dài (m) <span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.PhuBiHoGa_CDai" class="form-control" id="PhuBiHoGa_CDai" placeholder="Chiểu dài" />
                                 <ValidationMessage For="() => Input.PhuBiHoGa_CDai" class="text-danger" />
                             </div>
-                            <div class="form-floating col-6">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="PhuBiHoGa_CRong">Chiều rộng (m)<span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.PhuBiHoGa_CRong" class="form-control" id="PhuBiHoGa_CRong" placeholder="Chiều rộng" />
                                 <ValidationMessage For="() => Input.PhuBiHoGa_CRong" class="text-danger" />
@@ -130,17 +130,17 @@
                         </div>
                         <h5 class="mt-2">2.Kích thước hình học bê tông lót móng hố ga (m)</h5>
                         <div class="row">
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="BeTongLotMong_D">Chiểu dài (m) <span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.BeTongLotMong_D" class="form-control" id="BeTongLotMong_D" placeholder="Chiểu dài" />
                                 <ValidationMessage For="() => Input.BeTongLotMong_D" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="BeTongLotMong_R">Chiều rộng (m)<span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.BeTongLotMong_R" class="form-control" id="BeTongLotMong_R" placeholder="Chiều rộng" />
                                 <ValidationMessage For="() => Input.BeTongLotMong_R" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="BeTongLotMong_C">Chiều cao (m)<span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.BeTongLotMong_C" class="form-control" id="BeTongLotMong_C" placeholder="Chiều cao" />
                                 <ValidationMessage For="() => Input.BeTongLotMong_C" class="text-danger" />
@@ -148,17 +148,17 @@
                         </div>
                         <h5 class="mt-2">3.Kích thước hình học bê tông móng hố ga (m)</h5>
                         <div class="row">
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="BeTongMongHoGa_D">Chiểu dài (m) <span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.BeTongMongHoGa_D" class="form-control" id="BeTongMongHoGa_D" placeholder="Chiểu dài" />
                                 <ValidationMessage For="() => Input.BeTongMongHoGa_D" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="BeTongLotMong_R">Chiều rộng (m)<span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.BeTongMongHoGa_R" class="form-control" id="BeTongMongHoGa_R" placeholder="Chiều rộng" />
                                 <ValidationMessage For="() => Input.BeTongMongHoGa_R" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="BeTongMongHoGa_C">Chiều cao (m)<span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.BeTongMongHoGa_C" class="form-control" id="BeTongMongHoGa_C" placeholder="Chiều cao" />
                                 <ValidationMessage For="() => Input.BeTongMongHoGa_C" class="text-danger" />
@@ -166,17 +166,17 @@
                         </div>
                         <h5 class="mt-2">4.KTHH đế hố ga(m)</h5>
                         <div class="row">
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="DeHoGa_D">Chiểu dài (m) <span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.DeHoGa_D" class="form-control" id="DeHoGa_D" placeholder="Chiểu dài" />
                                 <ValidationMessage For="() => Input.DeHoGa_D" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="DeHoGa_R">Chiều rộng (m)<span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.DeHoGa_R" class="form-control" id="DeHoGa_R" placeholder="Chiều rộng" />
                                 <ValidationMessage For="() => Input.DeHoGa_R" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="DeHoGa_C">Chiều cao (m)<span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.DeHoGa_C" class="form-control" id="DeHoGa_C" placeholder="Chiều cao" />
                                 <ValidationMessage For="() => Input.DeHoGa_C" class="text-danger" />
@@ -184,12 +184,12 @@
                         </div>
                         <h5 class="mt-2">5.Kích thước hình học tường hố ga (m)</h5>
                         <div class="row">
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TuongHoGa_D">Chiểu dài (m) <span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.TuongHoGa_D" class="form-control" id="TuongHoGa_D" placeholder="Chiểu dài" />
                                 <ValidationMessage For="() => Input.TuongHoGa_D" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TuongHoGa_R">Chiều rộng (m)<span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.TuongHoGa_R" class="form-control" id="TuongHoGa_R" placeholder="Chiều rộng" />
                                 <ValidationMessage For="() => Input.TuongHoGa_R" class="text-danger" />
@@ -199,7 +199,7 @@
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.TuongHoGa_C" class="form-control" id="TuongHoGa_C" placeholder="Chiều cao" />
                                 <ValidationMessage For="() => Input.TuongHoGa_C" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="DeHoGa_C">Chiều dài tường (m)<span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.TuongHoGa_CdTuong" class="form-control" id="TuongHoGa_CdTuong" placeholder="Chiều dài tường" />
                                 <ValidationMessage For="() => Input.TuongHoGa_CdTuong" class="text-danger" />
@@ -207,27 +207,27 @@
                         </div>
                         <h5 class="mt-2">6.KTHH dầm giữa hố ga (m)</h5>
                         <div class="row">
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="DamGiuaHoGa_D">Chiểu dài (m) <span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.DamGiuaHoGa_D" class="form-control" id="DamGiuaHoGa_D" placeholder="Chiểu dài" />
                                 <ValidationMessage For="() => Input.DamGiuaHoGa_D" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="DamGiuaHoGa_R">Chiều rộng (m)<span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.DamGiuaHoGa_R" class="form-control" id="DamGiuaHoGa_R" placeholder="Chiều rộng" />
                                 <ValidationMessage For="() => Input.DamGiuaHoGa_R" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="DamGiuaHoGa_C">Chiều cao (m)<span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.DamGiuaHoGa_C" class="form-control" id="DamGiuaHoGa_C" placeholder="Chiều cao" />
                                 <ValidationMessage For="() => Input.DamGiuaHoGa_C" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="DamGiuaHoGa_CdDam">Chiều dài tường (m)<span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.DamGiuaHoGa_CdDam" class="form-control" id="DamGiuaHoGa_CdDam" placeholder="Chiều dài dầm" />
                                 <ValidationMessage For="() => Input.DamGiuaHoGa_CdDam" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa">C.Cao dầm giữa tường so với đáy hố ga (m)<span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa" class="form-control" id="DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa" placeholder="Chiều dài dầm" />
                                 <ValidationMessage For="() => Input.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa" class="text-danger" />
@@ -235,17 +235,17 @@
                         </div>
                         <h5 class="mt-2">7.Chát hố ga mặt trong </h5>
                         <div class="row">
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="ChatMatTrong_D">Chiểu dài (m) <span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.ChatMatTrong_D" class="form-control" id="ChatMatTrong_D" placeholder="Chiểu dài" />
                                 <ValidationMessage For="() => Input.ChatMatTrong_D" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="ChatMatTrong_R">Chiều rộng (m)<span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.ChatMatTrong_R" class="form-control" id="ChatMatTrong_R" placeholder="Chiều rộng" />
                                 <ValidationMessage For="() => Input.ChatMatTrong_R" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="ChatMatTrong_C">Chiều cao (m)<span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.ChatMatTrong_C" class="form-control" id="ChatMatTrong_C" placeholder="Chiều cao" />
                                 <ValidationMessage For="() => Input.ChatMatTrong_C" class="text-danger" />
@@ -253,17 +253,17 @@
                         </div>
                         <h5 class="mt-2">8.Chát hố ga mặt ngoài, cạnh 01 +02 (m)  </h5>
                         <div class="row">
-                            <div class="form-floating col-sm-6 col-md-6">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="ChatMatNgoaiCanh_D">Chiểu dài (m) <span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.ChatMatNgoaiCanh_D" class="form-control" id="ChatMatNgoaiCanh_D" placeholder="Chiểu dài" />
                                 <ValidationMessage For="() => Input.ChatMatNgoaiCanh_D" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-6">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="ChatMatNgoaiCanh_R">Chiều rộng (m)<span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.ChatMatNgoaiCanh_R" class="form-control" id="ChatMatNgoaiCanh_R" placeholder="Chiều rộng" />
                                 <ValidationMessage For="() => Input.ChatMatNgoaiCanh_R" class="text-danger" />
                             </div>
-                            <div class="form-floating col-sm-6 col-md-4">
+                            <div class="form-floating col-sm-6 col-md-3">
                                 <label for="ChatMatNgoaiCanh_C">Chiều cao (m)<span class="text-danger">*</span></label>
                                 <InputNumber disabled="@isEdit" @bind-Value="Input.ChatMatNgoaiCanh_C" class="form-control" id="ChatMatNgoaiCanh_C" placeholder="Chiều cao" />
                                 <ValidationMessage For="() => Input.ChatMatNgoaiCanh_C" class="text-danger" />
@@ -662,7 +662,7 @@
 
                     <th>D (m)</th>
                     <th>R (m)</th>
-                    <th class="text-danger">C (m)</th>
+                    <th>C (m)</th>
                     <th>CD tường (m)</th>
 
                     <th>D (m)</th>
@@ -673,11 +673,11 @@
 
                     <th>D (m)</th>
                     <th>R (m)</th>
-                    <th class="text-danger">C (m)</th>
+                    <th>C (m)</th>
 
                     <th>D (m)</th>
                     <th>R (m)</th>
-                    <th class="text-danger">C (m)</th>
+                    <th>C (m)</th>
 
                     <th>D (m)</th>
                     <th>R (m)</th>
@@ -861,6 +861,7 @@
     private PhanLoaiHoGa Input = new();
     public List<DanhMuc> listDanhMuc = new();
     public PhanLoaiHoGaModel InputMD = new();
+    private DateTime baseTime;
 
     private bool isModalVisible = false;
     private bool isLoading = false;
@@ -947,6 +948,7 @@
     protected override async Task OnInitializedAsync()
     {
         InputMD = new();
+        baseTime = DateTime.Now;
         await LoadData();
         foreach (var item in listDanhMuc)
         {
@@ -1023,124 +1025,163 @@
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
     {
-        isLoading = true;
-        dmModel = new();
-        listDanhMuc = await DanhMucRepository.GetAll();
-        var plhg = await PhanLoaiHoGaRepository.GetAllByVM(InputMD);
-        listModel = plhg;
-        listPLHGModel = Paging(plhg);
-        isLoading = false;
+        try
+        {
+            isLoading = true;
+            dmModel = new();
+            listDanhMuc = await DanhMucRepository.GetAll();
+            var plhg = await PhanLoaiHoGaRepository.GetAllByVM(InputMD);
+            listModel = plhg;
+            listPLHGModel = Paging(plhg);
+            isLoading = false;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                           "Thông báo",
+                           ex.Message,
+                           cssClass: "toast-danger",
+                            iconClass: "fa fa-exclamation-circle",
+                           progressBarClass: "bg-info",
+                           duration: 5000
+                       );
+        }
     }
 
     private async Task HandleValidSubmit()
     {
-        PhanLoaiHoGa phanLoaiHoGaExist = new();
-        if (Input.ThongTinChungHoGa_TenHoGaSauPhanLoai.ToUpper().EndsWith("=G"))
+        try
         {
-            Input.G = "=G";
-        }
-        phanLoaiHoGaExist = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaExist(Input);
-        var existName =false;
-        existName = await PhanLoaiHoGaRepository.CheckUsingName(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
-        if (isEdit)
-        {
-            if (phanLoaiHoGaExist == null)
+            PhanLoaiHoGa phanLoaiHoGaExist = new();
+            if (Input.ThongTinChungHoGa_TenHoGaSauPhanLoai.ToUpper().EndsWith("=G"))
             {
-                // cập nhật 
-                await PhanLoaiHoGaRepository.Update(Input);
-                isModalVisible = false;
-                Input = new PhanLoaiHoGa();
-                isEdit = false;
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "Cập nhật thành công.",
-                    cssClass: "toast-success",
-                    iconClass: "fa fa-check-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                await LoadData();
+                Input.G = "=G";
             }
-            else
-            if (phanLoaiHoGaExist.ThongTinChungHoGa_TenHoGaSauPhanLoai.ToUpper().Trim() != Input.ThongTinChungHoGa_TenHoGaSauPhanLoai.ToUpper().Trim() && !existName)
+            phanLoaiHoGaExist = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaExist(Input);
+            var existName = false;
+            existName = await PhanLoaiHoGaRepository.CheckUsingName(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
+            if (isEdit)
             {
-                await PhanLoaiHoGaRepository.Update(Input);
-                isModalVisible = false;
-                Input = new PhanLoaiHoGa();
-                isEdit = false;
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "Cập nhật thành công.",
-                    cssClass: "toast-success",
-                    iconClass: "fa fa-check-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                await LoadData();
-            }
-            else
-            {
-                ToastService.ShowToast(
-                        "Thông báo",
-                        "Tên phân loại đã tồn tại. Vui lòng kiểm tra lại !",
-                        cssClass: "toast-danger",
-                         iconClass: "fa fa-exclamation-circle",
-                        progressBarClass: "bg-info",
-                        duration: 5000
-                    );
-            }
-        }
-        else
-        {
-            if (phanLoaiHoGaExist == null)
-            {
-                if (Flag > 0)
+                if (phanLoaiHoGaExist == null)
                 {
-                    // Thêm mới thông tin
-                    var id = await PhanLoaiHoGaRepository.InsertLaterFlag(Input, Flag);
-                    isModalVisible = false;
-                    Input = new PhanLoaiHoGa();
-                    ToastService.ShowToast(
-                        "Thông báo",
-                        "Chèn thành công.",
-                        cssClass: "toast-success",
-                        iconClass: "fa fa-check-circle",
-                        progressBarClass: "bg-info",
-                        duration: 5000
-                    );
-                    await LoadData();
-                    Flag = 0;
+                    string[] ids = { Input.Id };
+                    bool isValid = await PhanLoaiHoGaRepository.CheckExclusive(ids,baseTime);
+                    if (isValid)
+                    {
+                        // cập nhật
+                        await PhanLoaiHoGaRepository.Update(Input);
+                        isModalVisible = false;
+                        Input = new PhanLoaiHoGa();
+                        isEdit = false;
+                        ToastService.ShowToast(
+                            "Thông báo",
+                            "Cập nhật thành công.",
+                            cssClass: "toast-success",
+                            iconClass: "fa fa-check-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
+                        await LoadData();
+                    }
+
+                }
+                else
+                if (phanLoaiHoGaExist.ThongTinChungHoGa_TenHoGaSauPhanLoai.ToUpper().Trim() != Input.ThongTinChungHoGa_TenHoGaSauPhanLoai.ToUpper().Trim() && !existName)
+                {
+                    string[] ids = { Input.Id };
+                    bool isValid = await PhanLoaiHoGaRepository.CheckExclusive(ids, baseTime);
+                    if (isValid)
+                    {
+                        await PhanLoaiHoGaRepository.Update(Input);
+                        isModalVisible = false;
+                        Input = new PhanLoaiHoGa();
+                        isEdit = false;
+                        ToastService.ShowToast(
+                            "Thông báo",
+                            "Cập nhật thành công.",
+                            cssClass: "toast-success",
+                            iconClass: "fa fa-check-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
+                        await LoadData();
+                    }
                 }
                 else
                 {
-                    // Thêm mới thông tin
-                    await PhanLoaiHoGaRepository.Insert(Input);
-                    isModalVisible = false;
-                    Input = new PhanLoaiHoGa();
                     ToastService.ShowToast(
-                        "Thông báo",
-                        "Thêm thành công.",
-                        cssClass: "toast-success",
-                        iconClass: "fa fa-check-circle",
-                        progressBarClass: "bg-info",
-                        duration: 5000
-                    );
-                    await LoadData();
+                            "Thông báo",
+                            "Tên phân loại đã tồn tại. Vui lòng kiểm tra lại !",
+                            cssClass: "toast-danger",
+                             iconClass: "fa fa-exclamation-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
                 }
             }
             else
             {
-                ToastService.ShowToast(
-                       "Thông báo",
-                       "Phân loại hố ga đã tồn tại , Vui lòng kiểm tra lại !",
-                       cssClass: "toast-danger",
-                        iconClass: "fa fa-exclamation-circle",
-                       progressBarClass: "bg-info",
-                       duration: 5000
-                   );
+                if (phanLoaiHoGaExist == null)
+                {
+                    if (Flag > 0)
+                    {
+                        // Thêm mới thông tin
+                        var id = await PhanLoaiHoGaRepository.InsertLaterFlag(Input, Flag);
+                        isModalVisible = false;
+                        Input = new PhanLoaiHoGa();
+                        ToastService.ShowToast(
+                            "Thông báo",
+                            "Chèn thành công.",
+                            cssClass: "toast-success",
+                            iconClass: "fa fa-check-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
+                        await LoadData();
+                        Flag = 0;
+                    }
+                    else
+                    {
+                        // Thêm mới thông tin
+                        await PhanLoaiHoGaRepository.Insert(Input);
+                        isModalVisible = false;
+                        Input = new PhanLoaiHoGa();
+                        ToastService.ShowToast(
+                            "Thông báo",
+                            "Thêm thành công.",
+                            cssClass: "toast-success",
+                            iconClass: "fa fa-check-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
+                        await LoadData();
+                    }
+                }
+                else
+                {
+                    ToastService.ShowToast(
+                           "Thông báo",
+                           "Phân loại hố ga đã tồn tại , Vui lòng kiểm tra lại !",
+                           cssClass: "toast-danger",
+                            iconClass: "fa fa-exclamation-circle",
+                           progressBarClass: "bg-info",
+                           duration: 5000
+                       );
+                }
             }
+
         }
-        
+        catch (Exception ex)
+        {
+             ToastService.ShowToast(
+                           "Thông báo",
+                           ex.Message,
+                           cssClass: "toast-danger",
+                            iconClass: "fa fa-exclamation-circle",
+                           progressBarClass: "bg-info",
+                           duration: 5000
+                       );
+        }
     }
 
     private string deleteId;
@@ -1151,7 +1192,6 @@
         confirmModal.Title = "Xác nhận xóa";
         confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
         confirmModal.openModal();
-
     }
 
     private async Task HandleResponseClick(bool confirmed)
@@ -1179,13 +1219,27 @@
         }
     }
 
-
     private async Task HandleEdit(string id)
     {
-        TitleModal = "Cập nhật phân loại hố ga !";
-        Input = await PhanLoaiHoGaRepository.GetById(id);
-        isEdit = true;
-        isModalVisible = true;
+        try
+        {
+            TitleModal = "Cập nhật phân loại hố ga !";
+            Input = await PhanLoaiHoGaRepository.GetById(id);
+            isEdit = true;
+            isModalVisible = true;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                           "Thông báo",
+                           ex.Message,
+                           cssClass: "toast-danger",
+                            iconClass: "fa fa-exclamation-circle",
+                           progressBarClass: "bg-info",
+                           duration: 5000
+                       );
+        }
+       
     }
 
     int Flag = 0;

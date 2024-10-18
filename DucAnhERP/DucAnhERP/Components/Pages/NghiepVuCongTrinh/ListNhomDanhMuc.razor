@@ -11,7 +11,7 @@
 <div class="m-5">
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
         <BodyTemplate>
-            <EditForm Model="nhomDanhMuc" OnValidSubmit="HandleValidSubmit">
+            <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <div class="row">
@@ -19,8 +19,8 @@
                     <div class="col-6">
                         <div class="form-group">
                             <label for="Ten">Tên nhóm danh mục <span class="text-danger">*</span></label>
-                            <InputText id="Ten" class="form-control" @bind-Value="nhomDanhMuc.Ten" />
-                            <ValidationMessage For="() => nhomDanhMuc.Ten" class="text-danger" />
+                            <InputText id="Ten" class="form-control" @bind-Value="Input.Ten" />
+                            <ValidationMessage For="() => Input.Ten" class="text-danger" />
 
                         </div>
                     </div>
@@ -105,8 +105,9 @@
 </div>
 
 @code {
-    private List<NhomDanhMuc> nhomDanhMucs = new List<NhomDanhMuc>();
-    private NhomDanhMuc nhomDanhMuc = new();
+    private List<NhomDanhMuc> Inputs = new List<NhomDanhMuc>();
+    private NhomDanhMuc Input = new();
+    private DateTime baseTime;
 
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới nhóm danh mục";
@@ -133,7 +134,7 @@
     {
         // Logic for canceling
         isModalVisible = false;
-        nhomDanhMuc = new();
+        Input = new();
     }
 
     [Parameter]
@@ -167,8 +168,9 @@
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
+        baseTime = DateTime.Now;
         dmModel = new();
-        nhomDanhMucs = await NhomDanhMucRepository.GetAll();
+        Inputs = await NhomDanhMucRepository.GetAll();
         await LoadNhomDanhMuc();
     }
 
@@ -184,37 +186,49 @@
 
     private async Task HandleValidSubmit()
     {
-        var isExistTen = await NhomDanhMucRepository.GetNDMByTen(nhomDanhMuc.Ten);
-        if (isExistTen)
+        try
         {
-            ToastService.ShowToast(
-               "Thông báo",
-                "Tên nhóm danh mục đã tồn tại.",
-                cssClass: "toast-danger",
-                iconClass: "fa fa-exclamation-circle",
-                progressBarClass: "bg-info",
-                duration: 5000);
-        }
-        else
-        {
-            if (isEdit)
+            var isExistTen = await NhomDanhMucRepository.GetNDMByTen(Input.Ten);
+            if (isExistTen)
             {
-                await NhomDanhMucRepository.Update(nhomDanhMuc);
-                ToastService.ShowToast("Thông báo", "Cập nhật nhóm danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
-                await LoadNhomDanhMuc();
-                isModalVisible = false;
-                nhomDanhMuc = new NhomDanhMuc();
+                ToastService.ShowToast(
+                   "Thông báo",
+                    "Tên nhóm danh mục đã tồn tại.",
+                    cssClass: "toast-danger",
+                    iconClass: "fa fa-exclamation-circle",
+                    progressBarClass: "bg-info",
+                    duration: 5000);
             }
             else
             {
-                await NhomDanhMucRepository.Insert(nhomDanhMuc);
-                ToastService.ShowToast("Thông báo", "Thêm nhóm danh mục thành công.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
-                await LoadNhomDanhMuc();
-                isModalVisible = false;
-                nhomDanhMuc = new NhomDanhMuc();
+                if (isEdit)
+                {
+                    string[] ids= { Input.Id };
+                    bool isValid = await NhomDanhMucRepository.CheckExclusive(ids,baseTime);
+                    if (isValid)
+                    {
+                        await NhomDanhMucRepository.Update(Input);
+                        ToastService.ShowToast("Thông báo", "Cập nhật nhóm danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                        await LoadNhomDanhMuc();
+                        isModalVisible = false;
+                        Input = new NhomDanhMuc();
+                    }
+                }
+                else
+                {
+                    await NhomDanhMucRepository.Insert(Input);
+                    ToastService.ShowToast("Thông báo", "Thêm nhóm danh mục thành công.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+                    await LoadNhomDanhMuc();
+                    isModalVisible = false;
+                    Input = new NhomDanhMuc();
+                }
             }
+
         }
-       
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
 
     }
 
@@ -228,7 +242,6 @@
         confirmModal.openModal();
 
     }
-
     private async Task HandleResponseClick(bool confirmed)
     {
         if (confirmed)
@@ -252,13 +265,19 @@
             }
         }
     }
-
     private async Task Edit(string id)
     {
-        TitleModal = "Cập nhật nhóm danh mục !";
-        nhomDanhMuc = await NhomDanhMucRepository.GetById(id);
-        isEdit = true;
-        isModalVisible = true;
+        try
+        {
+            TitleModal = "Cập nhật nhóm danh mục !";
+            Input = await NhomDanhMucRepository.GetById(id);
+            isEdit = true;
+            isModalVisible = true;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
     }
 
     // Sắp xếp data

@@ -173,10 +173,12 @@
     public List<DanhMucModel> listModel { get; set; } = new();
     public MetaData MetaData { get; set; }
     public DanhMucModel dmModel { get; set; }
+    private DateTime baseTime;
 
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
+        baseTime = DateTime.Now;
         dmModel = new();
         nhomDanhMucs = await NhomDanhMucRepository.GetAll();
         foreach (var item in nhomDanhMucs)

@@ -100,8 +100,7 @@ namespace DucAnhERP.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-                throw;
+                throw new Exception($"Lỗi tải dữ liệu: {ex.Message}");
             }
 
         }

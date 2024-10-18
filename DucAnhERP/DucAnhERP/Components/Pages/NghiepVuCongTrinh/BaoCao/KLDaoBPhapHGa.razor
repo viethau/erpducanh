@@ -45,6 +45,20 @@
             </EditForm>
         </div>
         <div class="col-md-3 col-sm-6 text-end">
+            <button class="btn btn-primary me-2" @onclick="View" title="@(viewLeft == "d-block" ? "Xem bảng phải" : "Xem bảng trái")">
+                @if (viewLeft == "d-block")
+                {
+                    <i class="fas fa-arrow-right"></i>
+                }
+                else
+                {
+                    <i class="fas fa-arrow-left"></i>
+                }
+            </button>
+            <!-- Nút hiển thị cả hai bảng -->
+            <button class="btn btn-primary me-2" @onclick="ViewAll" title="Xem cả hai bảng">
+                <i class="fas fa-columns"></i>
+            </button>
             <button class="btn btn-primary me-2" @onclick="ViewHorizontal" title="Xem theo chiều ngang">
                 <i class="fas fa-arrows-alt-h"></i>
             </button>
@@ -59,7 +73,7 @@
     </div>
     <div id="tableContainer ">
         <div class="our-table @layoutClass">
-            <div>
+            <div class="@viewLeft">
                 <div class=" mt-1">
                     <h5 class="mt-2">BẢNG THÔNG TIN TỔNG HỢP ĐÀO BIỆN PHÁP HỐ GA NƯỚC MƯA DỌC PHÍA TRÁI</h5>
                 </div>
@@ -289,7 +303,7 @@
                     }
                 </div>
             </div>
-            <div class="@space">
+            <div class="@space @viewRight">
                 <div class=" mt-1">
                     <h5 class="mt-2">BẢNG THÔNG TIN TỔNG HỢP ĐÀO BIỆN PHÁP HỐ GA NƯỚC MƯA DỌC PHÍA PHẢI</h5>
                 </div>
@@ -706,6 +720,29 @@
         var pagelist = new PageList<NuocMuaModel>(listCurrentModels, count, nuocMuaModelRight.PageNumber, nuocMuaModelRight.PageSize);
         MetaData = pagelist.MetaData;
         return listModels;
+    }
+    private string viewLeft = "d-block";
+    private string viewRight = "d-none";
+
+    private void View()
+    {
+        if (viewLeft == "d-block")
+        {
+            viewLeft = "d-none";
+            viewRight = "d-block";
+        }
+        else
+        {
+            viewRight = "d-none";
+            viewLeft = "d-block";
+        }
+
+    }
+
+    private void ViewAll()
+    {
+        viewLeft = "d-block";
+        viewRight = "d-block";
     }
 
     private void ViewHorizontal()

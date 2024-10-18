@@ -171,8 +171,7 @@ namespace DucAnhERP.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-                throw;
+                throw new Exception("Lỗi load dữ liệu :"+ex.Message);
             }
         }
         public async Task<bool> CheckUsingId(string id)

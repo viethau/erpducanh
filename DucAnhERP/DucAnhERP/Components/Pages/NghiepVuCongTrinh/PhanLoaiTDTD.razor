@@ -13,7 +13,6 @@
     private bool isEdit { get; set; } = false;
 }
 <div class="m-5">
-
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
         <BodyTemplate>
             <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
@@ -188,7 +187,7 @@
     private List<PhanLoaiTDanTDan> listPhanLoaiTDanTDan = new List<PhanLoaiTDanTDan>();
     private PhanLoaiTDanTDan Input = new();
     public List<DanhMuc> listDanhMuc = new();
-
+    private DateTime baseTime;
     private bool isModalVisible = false;
     private bool isLoading = false;
     private string TitleModal = "Thêm mới loại đế cống";
@@ -264,6 +263,7 @@
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
+        baseTime = DateTime.Now;
         await LoadData();
     }
 
@@ -282,109 +282,132 @@
 
     private async Task HandleValidSubmit()
     {
-        PhanLoaiTDanTDan phanLoaiTDanTDanExist = new();
-        phanLoaiTDanTDanExist = await PhanLoaiTDanTDanRepository.GetPhanLoaiTDanTDanExist(Input);
-        var existName = false;
-        existName = await PhanLoaiTDanTDanRepository.CheckUsingName(Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan);
-        if (isEdit)
+        try
         {
+            PhanLoaiTDanTDan phanLoaiTDanTDanExist = new();
+            phanLoaiTDanTDanExist = await PhanLoaiTDanTDanRepository.GetPhanLoaiTDanTDanExist(Input);
+            var existName = false;
+            existName = await PhanLoaiTDanTDanRepository.CheckUsingName(Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan);
+            if (isEdit)
+            {
+                if (phanLoaiTDanTDanExist == null)
+                {
+                    string[] ids = { Input.Id };
+                    bool isValid = await PhanLoaiTDanTDanRepository.CheckExclusive(ids, baseTime);
+                    if (isValid)
+                    {
+                        // cập nhật
+                        await PhanLoaiTDanTDanRepository.Update(Input);
+                        isModalVisible = false;
+                        Input = new PhanLoaiTDanTDan();
+                        isEdit = false;
+                        ToastService.ShowToast(
+                            "Thông báo",
+                            "Cập nhật thành công.",
+                            cssClass: "toast-success",
+                           iconClass: "fa fa-check-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
+                        await LoadData();
+                    }
+                }
+                else
+                if (phanLoaiTDanTDanExist.TTTDCongHoRanh_TenLoaiTamDanTieuChuan.ToUpper().Trim() != Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan.ToUpper().Trim() && !existName)
+                {
+                    string[] ids = { Input.Id };
+                    bool isValid = await PhanLoaiTDanTDanRepository.CheckExclusive(ids, baseTime);
+                    if (isValid)
+                    {
+                        // cập nhật
+                        await PhanLoaiTDanTDanRepository.Update(Input);
+                        isModalVisible = false;
+                        Input = new PhanLoaiTDanTDan();
+                        isEdit = false;
+                        ToastService.ShowToast(
+                            "Thông báo",
+                            "Cập nhật thành công.",
+                            cssClass: "toast-success",
+                           iconClass: "fa fa-check-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
+                        await LoadData();
+                    }
+                }
+                else
+                {
+                    ToastService.ShowToast(
+                           "Thông báo",
+                           "Tên phân loại TĐan TDẫn đã tồn tại. Vui lòng kiểm tra lại !",
+                          iconClass: "fa fa-exclamation-circle",
+                           progressBarClass: "bg-info",
+                           duration: 5000
+                       );
+                }
+            }
+            else
             if (phanLoaiTDanTDanExist == null)
             {
-                // cập nhật
-                await PhanLoaiTDanTDanRepository.Update(Input);
-                isModalVisible = false;
-                Input = new PhanLoaiTDanTDan();
-                isEdit = false;
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "Cập nhật thành công.",
-                    cssClass: "toast-success",
-                   iconClass: "fa fa-check-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                await LoadData();
+
+                if (Flag > 0)
+                {
+                    // Thêm mới thông tin
+                    await PhanLoaiTDanTDanRepository.InsertLaterFlag(Input, Flag);
+                    isModalVisible = false;
+                    Input = new PhanLoaiTDanTDan();
+                    ToastService.ShowToast(
+                        "Thông báo",
+                        "Thêm thành công.",
+                        cssClass: "toast-success",
+                       iconClass: "fa fa-check-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
+                    await LoadData();
+                }
+                else
+                {
+
+                    // Thêm mới thông tin
+                    await PhanLoaiTDanTDanRepository.Insert(Input);
+                    isModalVisible = false;
+                    Input = new PhanLoaiTDanTDan();
+                    ToastService.ShowToast(
+                        "Thông báo",
+                        "Thêm thành công.",
+                        cssClass: "toast-success",
+                       iconClass: "fa fa-check-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
+                    await LoadData();
+                }
+
             }
             else
-            if (phanLoaiTDanTDanExist.TTTDCongHoRanh_TenLoaiTamDanTieuChuan.ToUpper().Trim() != Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan.ToUpper().Trim() && !existName)
-            {
-                // cập nhật
-                await PhanLoaiTDanTDanRepository.Update(Input);
-                isModalVisible = false;
-                Input = new PhanLoaiTDanTDan();
-                isEdit = false;
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "Cập nhật thành công.",
-                    cssClass: "toast-success",
-                   iconClass: "fa fa-check-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                await LoadData();
-            }
-            else
             {
                 ToastService.ShowToast(
-                       "Thông báo",
-                       "Tên phân loại TĐan TDẫn đã tồn tại. Vui lòng kiểm tra lại !",
+                        "Thông báo",
+                        "Phân loại TĐan TDẫn đã tồn tại , Vui lòng kiểm tra lại !",
+                        cssClass: "toast-danger",
                       iconClass: "fa fa-exclamation-circle",
-                       progressBarClass: "bg-info",
-                       duration: 5000
-                   );
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
             }
         }
-        else
-        if (phanLoaiTDanTDanExist == null)
-        {
-
-            if (Flag > 0)
-            {
-                // Thêm mới thông tin
-                await PhanLoaiTDanTDanRepository.InsertLaterFlag(Input, Flag);
-                isModalVisible = false;
-                Input = new PhanLoaiTDanTDan();
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "Thêm thành công.",
-                    cssClass: "toast-success",
-                   iconClass: "fa fa-check-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                await LoadData();
-            }
-            else
-            {
-
-                // Thêm mới thông tin
-                await PhanLoaiTDanTDanRepository.Insert(Input);
-                isModalVisible = false;
-                Input = new PhanLoaiTDanTDan();
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "Thêm thành công.",
-                    cssClass: "toast-success",
-                   iconClass: "fa fa-check-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                await LoadData();
-            }
-        
-        }
-        else
+        catch (Exception ex)
         {
             ToastService.ShowToast(
-                    "Thông báo",
-                    "Phân loại TĐan TDẫn đã tồn tại , Vui lòng kiểm tra lại !",
-                    cssClass: "toast-danger",
-                  iconClass: "fa fa-exclamation-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
+                  "Thông báo",
+                 ex.Message,
+                  cssClass: "toast-danger",
+                iconClass: "fa fa-exclamation-circle",
+                  progressBarClass: "bg-info",
+                  duration: 5000
+              );
         }
-
     }
 
     private string deleteId;
@@ -426,10 +449,25 @@
 
     private async Task HandleEdit(string id)
     {
-        TitleModal = "Cập nhật loại TĐan TDẫn !";
-        Input = await PhanLoaiTDanTDanRepository.GetById(id);
-        isEdit = true;
-        isModalVisible = true;
+        try
+        {
+            TitleModal = "Cập nhật loại TĐan TDẫn !";
+            Input = await PhanLoaiTDanTDanRepository.GetById(id);
+            isEdit = true;
+            isModalVisible = true;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                 "Thông báo",
+                ex.Message,
+                 cssClass: "toast-danger",
+               iconClass: "fa fa-exclamation-circle",
+                 progressBarClass: "bg-info",
+                 duration: 5000
+             );
+        }
+
     }
 
     int Flag = 0;

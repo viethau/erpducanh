@@ -213,6 +213,7 @@
     private List<PhanLoaiMongCTron> listPhanLoaiMongCTron = new List<PhanLoaiMongCTron>();
     private PhanLoaiMongCTron Input = new();
     public List<DanhMuc> listDanhMuc = new();
+    public DateTime baseTime;
 
     private bool isModalVisible = false;
     private bool isLoading = false;
@@ -291,6 +292,7 @@
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
+        baseTime = DateTime.Now;
         await LoadData();
     }
 
@@ -309,107 +311,126 @@
 
     private async Task HandleValidSubmit()
     {
-        PhanLoaiMongCTron phanLoaiMongCTronExist = new();
-        phanLoaiMongCTronExist = await PhanLoaiMongCTronRepository.GetPhanLoaiMongCTronExist(Input);
-        var existName = false;
-        existName = await PhanLoaiMongCTronRepository.CheckUsingName(Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop);
-        if (isEdit)
+        try
         {
-            if (phanLoaiMongCTronExist == null)
+            PhanLoaiMongCTron phanLoaiMongCTronExist = new();
+            phanLoaiMongCTronExist = await PhanLoaiMongCTronRepository.GetPhanLoaiMongCTronExist(Input);
+            var existName = false;
+            existName = await PhanLoaiMongCTronRepository.CheckUsingName(Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop);
+            if (isEdit)
             {
-                // cập nhật 
-                await PhanLoaiMongCTronRepository.Update(Input);
-                isModalVisible = false;
-                Input = new PhanLoaiMongCTron();
-                isEdit = false;
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "Cập nhật thành công.",
-                    cssClass: "toast-success",
-                    iconClass: "fa fa-check-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                await LoadData();
+                if (phanLoaiMongCTronExist == null)
+                {
+                    string[] ids = {Input.Id};
+                    bool isValid = await PhanLoaiMongCTronRepository.CheckExclusive(ids,baseTime);
+                    if (isValid)
+                    {
+                        // cập nhật
+                        await PhanLoaiMongCTronRepository.Update(Input);
+                        isModalVisible = false;
+                        Input = new PhanLoaiMongCTron();
+                        isEdit = false;
+                        ToastService.ShowToast(
+                            "Thông báo",
+                            "Cập nhật thành công.",
+                            cssClass: "toast-success",
+                            iconClass: "fa fa-check-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
+                        await LoadData();
+                    }
+                   
+                }
+                else
+                if (phanLoaiMongCTronExist.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop.ToUpper().Trim() != Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop.ToUpper().Trim() && !existName)
+                {
+                    // cập nhật
+                    await PhanLoaiMongCTronRepository.Update(Input);
+                    isModalVisible = false;
+                    Input = new PhanLoaiMongCTron();
+                    isEdit = false;
+                    ToastService.ShowToast(
+                        "Thông báo",
+                        "Cập nhật thành công.",
+                        cssClass: "toast-success",
+                        iconClass: "fa fa-check-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
+                    await LoadData();
+                }
+                else
+                {
+                    ToastService.ShowToast(
+                           "Thông báo",
+                           "Tên phân loại móng đã tồn tại. Vui lòng kiểm tra lại !",
+                           cssClass: "toast-danger",
+                            iconClass: "fa fa-exclamation-circle",
+                           progressBarClass: "bg-info",
+                           duration: 5000
+                       );
+                }
+            }
+            else if (phanLoaiMongCTronExist == null)
+            {
+                if (Flag > 0)
+                {
+                    // Thêm mới thông tin
+                    var id = await PhanLoaiMongCTronRepository.InsertLaterFlag(Input, Flag);
+                    isModalVisible = false;
+                    Input = new PhanLoaiMongCTron();
+                    ToastService.ShowToast(
+                        "Thông báo",
+                        "Chèn thành công.",
+                        cssClass: "toast-success",
+                        iconClass: "fa fa-check-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
+                    await LoadData();
+                    Flag = 0;
+                }
+                else
+                {
+                    // Thêm mới thông tin
+                    await PhanLoaiMongCTronRepository.Insert(Input);
+                    isModalVisible = false;
+                    Input = new PhanLoaiMongCTron();
+                    ToastService.ShowToast(
+                        "Thông báo",
+                        "Thêm thành công.",
+                        cssClass: "toast-success",
+                       iconClass: "fa fa-check-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
+                    await LoadData();
+                }
             }
             else
-            if (phanLoaiMongCTronExist.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop.ToUpper().Trim() != Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop.ToUpper().Trim() && !existName)
-            {
-                // cập nhật
-                await PhanLoaiMongCTronRepository.Update(Input);
-                isModalVisible = false;
-                Input = new PhanLoaiMongCTron();
-                isEdit = false;
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "Cập nhật thành công.",
-                    cssClass: "toast-success",
-                    iconClass: "fa fa-check-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                await LoadData();
-            }
-            else
             {
                 ToastService.ShowToast(
-                       "Thông báo",
-                       "Tên phân loại móng đã tồn tại. Vui lòng kiểm tra lại !",
-                       cssClass: "toast-danger",
-                        iconClass: "fa fa-exclamation-circle",
-                       progressBarClass: "bg-info",
-                       duration: 5000
-                   );
+                        "Thông báo",
+                        "Phân loại móng đã tồn tại , Vui lòng kiểm tra lại !",
+                        cssClass: "toast-danger",
+                         iconClass: "fa fa-exclamation-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
             }
         }
-        else if (phanLoaiMongCTronExist == null)
-        {
-            if (Flag > 0)
-            {
-                // Thêm mới thông tin
-                var id = await PhanLoaiMongCTronRepository.InsertLaterFlag(Input, Flag);
-                isModalVisible = false;
-                Input = new PhanLoaiMongCTron();
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "Chèn thành công.",
-                    cssClass: "toast-success",
-                    iconClass: "fa fa-check-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                await LoadData();
-                Flag = 0;
-            }
-            else
-            {
-                // Thêm mới thông tin
-                await PhanLoaiMongCTronRepository.Insert(Input);
-                isModalVisible = false;
-                Input = new PhanLoaiMongCTron();
-                ToastService.ShowToast(
-                    "Thông báo",
-                    "Thêm thành công.",
-                    cssClass: "toast-success",
-                   iconClass: "fa fa-check-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
-                await LoadData();
-            }
-        }
-        else
+        catch (Exception ex)
         {
             ToastService.ShowToast(
-                    "Thông báo",
-                    "Phân loại móng đã tồn tại , Vui lòng kiểm tra lại !",
-                    cssClass: "toast-danger",
-                     iconClass: "fa fa-exclamation-circle",
-                    progressBarClass: "bg-info",
-                    duration: 5000
-                );
+                        "Thông báo",
+                        ex.Message,
+                        cssClass: "toast-danger",
+                         iconClass: "fa fa-exclamation-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
         }
-
 
     }
 
@@ -452,10 +473,25 @@
 
     private async Task HandleEdit(string id)
     {
-        TitleModal = "Cập nhật loại cống !";
-        Input = await PhanLoaiMongCTronRepository.GetById(id);
-        isEdit = true;
-        isModalVisible = true;
+        try
+        {
+            TitleModal = "Cập nhật loại cống !";
+            Input = await PhanLoaiMongCTronRepository.GetById(id);
+            isEdit = true;
+            isModalVisible = true;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                        "Thông báo",
+                        ex.Message,
+                        cssClass: "toast-danger",
+                         iconClass: "fa fa-exclamation-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
+        }
+
     }
 
     int Flag = 0;
