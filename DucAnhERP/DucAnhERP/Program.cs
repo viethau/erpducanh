@@ -69,6 +69,7 @@ builder.Services.AddScoped<IPhanLoaiThanhChongRepository, PhanLoaiThanhChongRepo
 builder.Services.AddScoped<IPhanLoaiTDanTDanRepository, PhanLoaiTDanTDanRepository>();
 builder.Services.AddScoped<IMangThuRepository, MangThuRepository>();
 builder.Services.AddScoped<ITKThepHoGaRepository, TKThepHoGaRepository>();
+builder.Services.AddScoped<ITKThepTamDanRepository, TKThepTamDanRepository>();
 
 
 

@@ -57,7 +57,7 @@
             <!-- Select for nhóm danh mục-->
             <div class="col-sm-6 col-md-3 mb-3">
                 <label for="Table">Nhóm danh mục</label>
-                <Select2 Id="mySelect2" Items="@selectNhomDM" OnChange="@OnSelectChangeNhomDM"></Select2>
+                <Select2 Id="mySelect2" Items="@selectSearchNhomDM" OnChange="@OnSelectChangeSearchNhomDM"></Select2>
                 <ValidationMessage For="()=>dmModel.IdNhomDanhMuc"></ValidationMessage>
             </div>
             <!-- Search Button -->
@@ -157,7 +157,8 @@
     bool isEdit = false;
 
     private List<SelectedItem> selectNhomDM = new();
-    private void OnSelectChangeNhomDM(SelectedItem selectedItem)
+    private List<SelectedItem> selectSearchNhomDM = new();
+    private void OnSelectChangeSearchNhomDM(SelectedItem selectedItem)
     {
         dmModel.IdNhomDanhMuc = selectedItem.Value;
     }
@@ -196,9 +197,22 @@
                         });
                 }
             }
+            if (!selectSearchNhomDM.Any(x => x.Value == item.Id))
+            {
+                if (!string.IsNullOrEmpty(item.Id))
+                {
+                    // Nếu chưa tồn tại, thêm item vào danh sách
+                    selectSearchNhomDM.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.Ten
+                        });
+                }
+            }
         }
         // Thêm phần tử mặc định "chọn..."
         selectNhomDM.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        selectSearchNhomDM.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
         await LoadDanhMuc();
     }
     public async Task Search()

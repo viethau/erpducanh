@@ -1,5 +1,4 @@
-﻿
-using DucAnhERP.Data;
+﻿using DucAnhERP.Data;
 using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
@@ -7,21 +6,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DucAnhERP.Services
 {
-
-    public class TKThepHoGaRepository : ITKThepHoGaRepository
+    public class TKThepTamDanRepository : ITKThepTamDanRepository
     {
         private readonly IDbContextFactory<ApplicationDbContext> _context;
 
-        public TKThepHoGaRepository(IDbContextFactory<ApplicationDbContext> context)
+        public TKThepTamDanRepository(IDbContextFactory<ApplicationDbContext> context)
         {
             _context = context;
         }
-        public async Task<List<TKThepHoGa>> GetAll()
+        public async Task<List<TKThepTamDan>> GetAll()
         {
             try
             {
                 using var context = _context.CreateDbContext();
-                var entity = await context.TKThepHoGas.ToListAsync();
+                var entity = await context.TKThepTamDans.ToListAsync();
                 return entity;
             }
             catch (Exception ex)
@@ -31,10 +29,10 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-        public async Task<TKThepHoGa> GetById(string id)
+        public async Task<TKThepTamDan> GetById(string id)
         {
             using var context = _context.CreateDbContext();
-            var entity = await context.TKThepHoGas.Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
+            var entity = await context.TKThepTamDans.Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
 
             if (entity == null)
             {
@@ -43,24 +41,24 @@ namespace DucAnhERP.Services
 
             return entity;
         }
-        public async Task<List<TKThepHoGaModel>> GetAllByVM(TKThepHoGaModel mModel)
+        public async Task<List<TKThepTamDanModel>> GetAllByVM(TKThepTamDanModel mModel)
         {
             try
             {
                 using var context = _context.CreateDbContext();
-                var query = from tk in context.TKThepHoGas
-                            join plHoGa in context.PhanLoaiHoGas
-                            on tk.ThongTinChungHoGa_TenHoGaSauPhanLoai equals plHoGa.Id
+                var query = from tk in context.TKThepTamDans
+                            join plTDHG in context.PhanLoaiTDHoGas
+                            on tk.ThongTinTamDanHoGa2_PhanLoaiDayHoGa equals plTDHG.Id
                             join dm in context.DSDanhMuc
                             on tk.LoaiThep equals dm.Id
                             orderby tk.CreateAt
-                            select new TKThepHoGaModel
+                            select new TKThepTamDanModel
                             {
                                 Id = tk.Id,
                                 Flag = tk.Flag,
 
-                                ThongTinChungHoGa_TenHoGaSauPhanLoai = tk.ThongTinChungHoGa_TenHoGaSauPhanLoai,
-                                ThongTinChungHoGa_TenHoGaSauPhanLoai_Name = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                                ThongTinTamDanHoGa2_PhanLoaiDayHoGa = tk.ThongTinTamDanHoGa2_PhanLoaiDayHoGa,
+                                ThongTinTamDanHoGa2_PhanLoaiDayHoGa_Name = plTDHG.ThongTinTamDanHoGa2_PhanLoaiDayHoGa,
                                 TenCongTac = tk.TenCongTac,
                                 VTLayKhoiLuong = tk.VTLayKhoiLuong,
                                 LoaiThep = tk.LoaiThep,
@@ -78,9 +76,9 @@ namespace DucAnhERP.Services
                                 CreateBy = tk.CreateBy,
                                 IsActive = tk.IsActive,
                             };
-                if (!string.IsNullOrEmpty(mModel.ThongTinChungHoGa_TenHoGaSauPhanLoai))
+                if (!string.IsNullOrEmpty(mModel.ThongTinTamDanHoGa2_PhanLoaiDayHoGa))
                 {
-                    query = query.Where(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai == mModel.ThongTinChungHoGa_TenHoGaSauPhanLoai);
+                    query = query.Where(x => x.ThongTinTamDanHoGa2_PhanLoaiDayHoGa == mModel.ThongTinTamDanHoGa2_PhanLoaiDayHoGa);
                 }
                 if (!string.IsNullOrEmpty(mModel.LoaiThep))
                 {
@@ -96,14 +94,14 @@ namespace DucAnhERP.Services
             }
 
         }
-        public async Task<List<TKThepHoGa>> GetExist(TKThepHoGa searchData)
+        public async Task<List<TKThepTamDan>> GetExist(TKThepTamDan searchData)
         {
             try
             {
                 using var context = _context.CreateDbContext();
 
                 // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
-                var query = context.TKThepHoGas
+                var query = context.TKThepTamDans
                              .Where(item => (
                                     item.VTLayKhoiLuong == searchData.VTLayKhoiLuong &&
                                     item.LoaiThep == searchData.LoaiThep &&
@@ -126,27 +124,27 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-        public async Task Update(TKThepHoGa TKThepHoGa)
+        public async Task Update(TKThepTamDan TKThepTamDan)
         {
             using var context = _context.CreateDbContext();
-            var entity = GetById(TKThepHoGa.Id);
+            var entity = GetById(TKThepTamDan.Id);
 
             if (entity == null)
             {
-                throw new Exception($"Không tìm thấy bản ghi theo ID: {TKThepHoGa.Id}");
+                throw new Exception($"Không tìm thấy bản ghi theo ID: {TKThepTamDan.Id}");
             }
 
-            context.TKThepHoGas.Update(TKThepHoGa);
+            context.TKThepTamDans.Update(TKThepTamDan);
             await context.SaveChangesAsync();
         }
-        public async Task UpdateMulti(TKThepHoGa[] TKThepHoGa)
+        public async Task UpdateMulti(TKThepTamDan[] TKThepTamDan)
         {
             using var context = _context.CreateDbContext();
-            string[] ids = TKThepHoGa.Select(x => x.Id).ToArray();
-            var listEntities = await context.TKThepHoGas.Where(x => ids.Contains(x.Id)).ToListAsync();
+            string[] ids = TKThepTamDan.Select(x => x.Id).ToArray();
+            var listEntities = await context.TKThepTamDans.Where(x => ids.Contains(x.Id)).ToListAsync();
             foreach (var entity in listEntities)
             {
-                context.TKThepHoGas.Update(entity);
+                context.TKThepTamDans.Update(entity);
             }
             await context.SaveChangesAsync();
         }
@@ -160,7 +158,7 @@ namespace DucAnhERP.Services
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
             }
 
-            context.Set<TKThepHoGa>().Remove(entity);
+            context.Set<TKThepTamDan>().Remove(entity);
             await context.SaveChangesAsync();
         }
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
@@ -175,7 +173,7 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-        public async Task Insert(TKThepHoGa entity)
+        public async Task Insert(TKThepTamDan entity)
         {
             try
             {
@@ -186,8 +184,8 @@ namespace DucAnhERP.Services
                 }
 
                 // Lấy tất cả các bản ghi phù hợp và thực hiện xử lý trên client-side
-                var maxFlagValue = await context.TKThepHoGas
-                    .Where(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai == entity.ThongTinChungHoGa_TenHoGaSauPhanLoai)
+                var maxFlagValue = await context.TKThepTamDans
+                    .Where(x => x.ThongTinTamDanHoGa2_PhanLoaiDayHoGa == entity.ThongTinTamDanHoGa2_PhanLoaiDayHoGa)
                     .Select(x => x.Flag)
                     .ToListAsync(); // Lấy danh sách các giá trị Flag
 
@@ -196,10 +194,10 @@ namespace DucAnhERP.Services
 
 
                 // Tăng giá trị Flag lên 1
-                entity.Flag = maxFlag + 1; 
+                entity.Flag = maxFlag + 1;
 
                 // Chèn bản ghi mới vào bảng
-                context.TKThepHoGas.Add(entity);
+                context.TKThepTamDans.Add(entity);
                 await context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -207,7 +205,7 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
             }
         }
-        public async Task<string> InsertLaterFlag(TKThepHoGa entity, int FlagLast)
+        public async Task<string> InsertLaterFlag(TKThepTamDan entity, int FlagLast)
         {
             string id = "";
             try
@@ -220,8 +218,8 @@ namespace DucAnhERP.Services
                 }
 
                 // Bước 1: Lấy danh sách các bản ghi có flag > FlagLast
-                var recordsToUpdate = await context.TKThepHoGas
-                    .Where(x => x.Flag > FlagLast && x.ThongTinChungHoGa_TenHoGaSauPhanLoai == entity.ThongTinChungHoGa_TenHoGaSauPhanLoai)
+                var recordsToUpdate = await context.TKThepTamDans
+                    .Where(x => x.Flag > FlagLast && x.ThongTinTamDanHoGa2_PhanLoaiDayHoGa == entity.ThongTinTamDanHoGa2_PhanLoaiDayHoGa)
                     .ToListAsync();
 
                 // Bước 2: Tăng giá trị flag của các bản ghi đó thêm 1
@@ -237,8 +235,8 @@ namespace DucAnhERP.Services
                 if (recordsToUpdate.Count() == 0)
                 {
                     // Kiểm tra xem bảng có bản ghi nào không
-                    var maxFlag = await context.TKThepHoGas.AnyAsync()
-                                  ? await context.TKThepHoGas.MaxAsync(x => x.Flag)
+                    var maxFlag = await context.TKThepTamDans.AnyAsync()
+                                  ? await context.TKThepTamDans.MaxAsync(x => x.Flag)
                                   : 0;
 
                     // Tăng giá trị Flag lên 1
@@ -250,7 +248,7 @@ namespace DucAnhERP.Services
                 }
 
                 // Bước 4: Chèn bản ghi mới vào bảng
-                context.TKThepHoGas.Add(entity);
+                context.TKThepTamDans.Add(entity);
 
                 // Lưu bản ghi mới vào cơ sở dữ liệu
                 await context.SaveChangesAsync();
@@ -264,7 +262,5 @@ namespace DucAnhERP.Services
                 return id;
             }
         }
-
-       
     }
 }

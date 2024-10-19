@@ -1,18 +1,19 @@
-﻿using DucAnhERP.SeedWork;
+﻿
+using DucAnhERP.SeedWork;
 using System.ComponentModel.DataAnnotations;
 
 namespace DucAnhERP.ViewModel
 {
-    public class TKThepHGaModel: PagingParameters
+    public class TKThepTamDanModel : PagingParameters
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public int Flag { get; set; } = 0;
-        public string? ThongTinChungHoGa_TenHoGaSauPhanLoai { get; set; } = "";
-        public string? ThongTinChungHoGa_TenHoGaSauPhanLoai_Name { get; set; } = "";
+        public string? ThongTinTamDanHoGa2_PhanLoaiDayHoGa { get; set; } = "";
+        public string? ThongTinTamDanHoGa2_PhanLoaiDayHoGa_Name { get; set; } = "";
         public string? TenCongTac { get; set; } = "";
         public string? VTLayKhoiLuong { get; set; } = "";
         public string? LoaiThep { get; set; } = "";
-        public Double? ThongTinDeCong_R { get; set; } = 0;
+        public string? LoaiThep_Name { get; set; } = "";
         public Double? DKCD { get; set; } = 0;
         public int? SoThanh { get; set; } = 0;
         public int? SoCK { get; set; } = 0;

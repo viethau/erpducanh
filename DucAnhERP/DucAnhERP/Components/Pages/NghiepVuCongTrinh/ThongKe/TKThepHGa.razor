@@ -6,6 +6,7 @@
 @using DucAnhERP.SeedWork
 @using DucAnhERP.Helpers
 @inject NavigationManager navigation
+@inject ITKThepHoGaRepository TKThepHoGaRepository
 @inject IPhanLoaiHoGaRepository PhanLoaiHoGaRepository
 @inject IDanhMucRepository DanhMucRepository
 
@@ -30,23 +31,71 @@
                     <DataAnnotationsValidator />
                     <ValidationSummary />
                     <div class="row">
-                        @* <div class="col-3">
-                            <div class="form-group">
-                                <label for="Table">Nhóm danh mục</label>
-                                <Select2 Id="mySelect3" Items="@selectNhomDM" OnChange="@OnSelectChangeNhomDMAdd"></Select2>
-                                <ValidationMessage For="()=>Input.IdNhomDanhMuc"></ValidationMessage>
-                            </div>
+                        <div class="form-floating col-sm-6 col-md-3">
+                            <label for="Table">Loại cấu kiện</label>
+                            <Select2 Id="select1" Items="@selectPLHG" OnChange="@OnSelectChangePLHG"></Select2>
+                            <ValidationMessage For="()=>Input.ThongTinChungHoGa_TenHoGaSauPhanLoai"></ValidationMessage>
                         </div>
-                        <div class="col-3">
-                            <div class="form-group">
-                                <label for="Ten">Tên <span class="text-danger">*</span></label>
-                                <InputText id="Ten" class="form-control" @bind-Value="Input.Ten" />
-                                <ValidationMessage For="() => Input.Ten" class="text-danger" />
-                            </div>
-                        </div> *@
+                        <div class="form-floating col-sm-6 col-md-3">
+                           <label for="TenCongTac">Tên công tác<span class="text-danger">*</span></label>
+                            <InputText  @bind-Value="Input.TenCongTac" class="form-control" id="TenCongTac" placeholder="Tên công tác"  disabled/>
+                            <ValidationMessage For="() => Input.TenCongTac" class="text-danger" />
+                         </div>
+                          <div class="form-floating col-sm-6 col-md-3">
+                           <label for="VTLayKhoiLuong">Vị trí lấy khối lượng<span class="text-danger">*</span></label>
+                            <InputText @oninput="OnInputChange" @bind-Value="Input.VTLayKhoiLuong" class="form-control" id="VTLayKhoiLuong" placeholder="Vị trí lấy khối lượng" />
+                            <ValidationMessage For="() => Input.VTLayKhoiLuong" class="text-danger" />
+                         </div>
+                          <div class="form-floating col-sm-6 col-md-3">
+                            <label for="Table">Loại thép</label>
+                            <Select2 Id="select2" Items="@selectLoaiThep" OnChange="@OnSelectChangeLoaiThep"></Select2>
+                            <ValidationMessage For="()=>Input.LoaiThep"></ValidationMessage>
+                        </div>
+                          <div class="form-floating col-sm-6 col-md-3">
+                           <label for="DKCD">Đường kính/chiều dầy(mm,mm2)<span class="text-danger">*</span></label>
+                            <InputNumber @oninput="OnInputChange"  @bind-Value="Input.DKCD" class="form-control" id="DKCD" placeholder="Đường kính/chiều dầy" />
+                            <ValidationMessage For="() => Input.DKCD" class="text-danger" />
+                         </div>
+                          <div class="form-floating col-sm-6 col-md-3">
+                           <label for="SoThanh">Số thanh/01 cấu kiện<span class="text-danger">*</span></label>
+                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.SoThanh" class="form-control" id="SoThanh" placeholder="Số thanh/01 cấu kiện" />
+                            <ValidationMessage For="() => Input.SoThanh" class="text-danger" />
+                         </div>
+                          <div class="form-floating col-sm-6 col-md-3">
+                           <label for="SoCK">Số cấu kiện<span class="text-danger">*</span></label>
+                            <InputNumber @oninput="OnInputChange"  @bind-Value="Input.SoCK" class="form-control" id="SoCK" placeholder="Số cấu kiện" />
+                            <ValidationMessage For="() => Input.SoCK" class="text-danger" />
+                         </div>
+                          <div class="form-floating col-sm-6 col-md-3">
+                           <label for="TongSoThanh">Tổng số thanh<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value="Input.TongSoThanh" class="form-control" id="TongSoThanh" placeholder="Tổng số thanh" disabled />
+                            <ValidationMessage For="() => Input.TongSoThanh" class="text-danger" />
+                         </div>
 
+                         <div class="form-floating col-sm-6 col-md-3">
+                           <label for="ChieuDai1Thanh">Chiều dài 01 thanh (mm)/diện tích (mm2)<span class="text-danger">*</span></label>
+                            <InputNumber @oninput="OnInputChange"  @bind-Value="Input.ChieuDai1Thanh" class="form-control" id="ChieuDai1Thanh" placeholder="Chiều dài 01 thanh" />
+                            <ValidationMessage For="() => Input.ChieuDai1Thanh" class="text-danger" />
+                         </div>
+                         <div class="form-floating col-sm-6 col-md-3">
+                           <label for="TongChieuDai">Tổng chiều dài (m,m2)<span class="text-danger">*</span></label>
+                            <InputNumber @oninput="OnInputChange"  @bind-Value="Input.TongChieuDai" class="form-control" id="TongChieuDai" placeholder="Tổng chiều dài (m,m2)" disabled/>
+                            <ValidationMessage For="() => Input.TongChieuDai" class="text-danger" />
+                         </div>
+                          <div class="form-floating col-sm-6 col-md-3">
+                           <label for="TrongLuong">Trọng lượng thép/(kg/m,m3)<span class="text-danger">*</span></label>
+                            <InputNumber @oninput="OnInputChange"  @bind-Value="Input.TrongLuong" class="form-control" id="TrongLuong" placeholder="Trọng lượng thép/(kg/m,m3)" />
+                            <ValidationMessage For="() => Input.TrongLuong" class="text-danger" />
+                         </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                           <label for="TongTrongLuong">Tổng trọng lượng (kg)<span class="text-danger">*</span></label>
+                           <InputNumber @bind-Value="Input.TongTrongLuong" class="form-control" id="TongTrongLuong" placeholder="Tổng trọng lượng (kg)" disabled />
+
+                            <ValidationMessage For="() => Input.TongTrongLuong" class="text-danger" />
+                         </div>
                     </div>
-                    <div class="row justify-content-end">
+                    
+                    <div class="row justify-content-end m-2">
                         <button class="btn btn-primary mr-2" type="submit">Save</button>
                         <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
                     </div>
@@ -56,18 +105,27 @@
     </div>
     <div class="row m-3 ">
         <div class="col-md-9 col-sm-12">
-            <EditForm Model="Input" FormName="Search" OnValidSubmit="@Search">
+            <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
                 <DataAnnotationsValidator />
                 <div class="row">
                     <div class="col-sm-4 col-md-3 mb-2">
-                        <label for="Table">Kết cấu móng</label>
-                        <Select2 Id="select3" Items="@selectKCMM" OnChange="@OnSelectChangeKCMM"></Select2>
-                        <ValidationMessage For="()=>Input.ThongTinChungHoGa_KetCauMong"></ValidationMessage>
+                        <label for="Table">Loại cấu kiện</label>
+                        <Select2 Id="select3" Items="@selectSearchPLHG" OnChange="@OnSelectChangeSearchPLHG"></Select2>
+                        <ValidationMessage For="()=>InputMD.ThongTinChungHoGa_TenHoGaSauPhanLoai"></ValidationMessage>
                     </div>
+                    <div class="form-floating col-sm-4 col-md-3">
+                            <label for="Table">Loại thép</label>
+                            <Select2 Id="select2" Items="@selectSearchLoaiThep" OnChange="@OnSelectChangeSearchLoaiThep"></Select2>
+                            <ValidationMessage For="()=>InputMD.LoaiThep"></ValidationMessage>
+                        </div>
                     <!-- Search Button -->
                     <div class="col-sm-4 col-md-2 mb-2">
                         <label>&nbsp;</label>
                         <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+                    </div>
+                     <div class="col-sm-4 col-md-1 mb-1">
+                        <label>&nbsp;</label>
+                        <button type="button" @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
                     </div>
                 </div>
             </EditForm>
@@ -88,6 +146,7 @@
                     <table id="tb-left" class="table table-hover table-bordered mt-3">
                         <thead class="bg-info @thumbtack">
                             <tr>
+                                <th></th>
                                 <th>STT</th>
                                 <th onclick="@(() => SortTable("ThongTinChungHoGa_TenHoGaSauPhanLoai"))" class="text-center sortable">
                                     <div class="mr-3">
@@ -170,26 +229,35 @@
                             </tr>
 
                         </thead>
-                        @if (listPhanLoaiHoGaModel.Any())
+                        @if (listTKThepHGaModel.Any())
                         {
                             <tbody>
                                 @{
                                     int stt = 0;
                                 }
-                                @foreach (var item in listPhanLoaiHoGaModel)
+                                @foreach (var item in listTKThepHGaModel)
                                 {
                                     stt++;
                                     <tr>
-                                        <td class="text-center"> @stt</td>
-                                        <td class="text-center"> @item.ThongTinChungHoGa_TenHoGaSauPhanLoai</td>
-                                        <td class="text-center"> @item.ThongTinChungHoGa_KetCauMuMo_Name</td>
-                                        <td class="text-center"> @item.ThongTinChungHoGa_KetCauTuong_Name</td>
-                                        <td class="text-center"> @item.ThongTinChungHoGa_KetCauMong_Name</td>
-                                         @* <td class="text-center"> @item.ThongTinChungHoGa_TenHoGaSauPhanLoai</td>
-                                         <td class="text-center"> @item.TenCongTac                          </td>
-                                         <td class="text-center"> @item.VTLayKhoiLuong                      </td>
-                                         <td class="text-center"> @item.LoaiThep                            </td>
-                                         <td class="text-center"> @item.SoHieu                              </td>
+                                        <td class="d-flex nowrap">
+                                                <div class="d-inline-block">
+                                                    <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                         </td>
+                                        <td>@stt</td>
+                                         <td class="text-center"> @item.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name</td>
+                                         <td class="text-center"> @item.TenCongTac</td>
+                                         <td class="text-center"> @item.VTLayKhoiLuong  </td>
+                                         <td class="text-center"> @item.LoaiThep_Name </td>
+                                         <td class="text-center"> @item.Flag    </td>
                                          <td class="text-center"> @item.DKCD                                </td>
                                          <td class="text-center"> @item.SoThanh                             </td>
                                          <td class="text-center"> @item.SoCK                                </td>
@@ -197,7 +265,7 @@
                                          <td class="text-center"> @item.ChieuDai1Thanh                      </td>
                                          <td class="text-center"> @item.TongChieuDai                        </td>
                                          <td class="text-center"> @item.TrongLuong                          </td>
-                                         <td class="text-center"> @item.TongTrongLuong                      </td> *@
+                                         <td class="text-center"> @item.TongTrongLuong                      </td> 
                                     </tr>
                                 }
                             </tbody>
@@ -215,7 +283,7 @@
                     </table>
                 </div>
                 <div class="mt-4">
-                    @if (listPhanLoaiHoGaModel.Any())
+                    @if (listTKThepHGaModel.Any())
                     {
                         <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
                     }
@@ -223,6 +291,7 @@
             </div>
         </div>
     </div>
+   <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
     <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
 </div>
 
@@ -234,23 +303,81 @@
     private string TitleModal = "Thêm mới ";
     bool isEdit = false;
     string thumbtack = "";
+    private DateTime baseTime;
 
     [Parameter]
     public ConfirmModal confirmModal { get; set; }
 
-    private PhanLoaiHoGaModel Input = new PhanLoaiHoGaModel();
+    private TKThepHoGa Input = new ();
+    private TKThepHoGaModel InputMD = new TKThepHoGaModel();
 
-    private List<SelectedItem> selectKCMM = new();
-    private void OnSelectChangeKCMM(SelectedItem selectedItem)
+    private List<SelectedItem> selectPLHG = new();
+    private void OnSelectChangePLHG(SelectedItem selectedItem)
     {
-        Input.ThongTinChungHoGa_KetCauMuMo = selectedItem.Value;
+        Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = selectedItem.Value;
+    }
+    private List<SelectedItem> selectSearchPLHG = new();
+    private void OnSelectChangeSearchPLHG(SelectedItem selectedItem)
+    {
+        InputMD.ThongTinChungHoGa_TenHoGaSauPhanLoai = selectedItem.Value;
     }
 
-    public List<PhanLoaiHoGaModel> listPhanLoaiHoGaModel { get; set; } = new();
-    public List<PhanLoaiHoGaModel> listModel { get; set; } = new();
-    public MetaData MetaData { get; set; }
-    public PhanLoaiHoGaModel phanLoaiHoGaModel { get; set; }
+    public string LoaiThep = "";
+    private List<SelectedItem> selectLoaiThep = new();
+    private void OnSelectChangeLoaiThep(SelectedItem selectedItem)
+    {
+        Input.LoaiThep = selectedItem.Value;
+        LoaiThep = selectedItem.Text;
+    }
+    private List<SelectedItem> selectSearchLoaiThep = new();
+    private void OnSelectChangeSearchLoaiThep(SelectedItem selectedItem)
+    {
+        InputMD.LoaiThep = selectedItem.Value;
+    }
 
+    public List<TKThepHoGaModel> listTKThepHGaModel { get; set; } = new();
+    public List<TKThepHoGaModel> listModel { get; set; } = new();
+    public MetaData MetaData { get; set; }
+    public TKThepHoGaModel tKThepHoGaModel { get; set; }
+
+    //bắt sự kiện khi thay đổi
+    private System.Timers.Timer _typingTimer;
+    private int _delay = 2000; // Thời gian chờ (2000ms)
+    private void OnInputChange(ChangeEventArgs e)
+    {
+        // Dừng timer nếu đang chạy
+        _typingTimer?.Stop();
+
+        // Khởi động lại timer
+        _typingTimer = new System.Timers.Timer(_delay);
+        _typingTimer.Elapsed += OnTypingStopped;
+        _typingTimer.AutoReset = false;
+        _typingTimer.Start();
+    }
+
+
+    private async void OnTypingStopped(object sender, System.Timers.ElapsedEventArgs e)
+    {
+
+        Input.TenCongTac = ($"Gia công lắp dựng thép {Input.VTLayKhoiLuong} {LoaiThep} D{Input.DKCD}");
+        Input.TongSoThanh = (Input.SoThanh * Input.SoCK);
+        Input.TongChieuDai = (Input.TongSoThanh * Input.ChieuDai1Thanh) / 1000;
+        if(LoaiThep.Trim().ToUpper() == "THÉP BẢN")
+        {
+            Input.TongTrongLuong =  (Input.DKCD * Input.TongChieuDai * Input.TrongLuong) / 1000000;
+
+        }
+        else
+        {
+            Input.TongTrongLuong = Input.TongChieuDai * Input.TrongLuong;
+        }
+        Input.TongChieuDai = Math.Round(Input.TongChieuDai??0, 4);
+        Input.TongTrongLuong = Math.Round(Input.TongTrongLuong??0, 4);
+        await InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+    }
 
 
     private void ShowModal()
@@ -275,7 +402,7 @@
         // Logic for canceling
         isModalVisible = false;
         isEdit = false;
-     
+
     }
 
     // Khởi tạo màn hình
@@ -283,28 +410,39 @@
     {
         try
         {
-            phanLoaiHoGaModel = new();
 
             await LoadData();
-
-            selectKCMM = new();
-            foreach (var item in listModel)
+            var repository = await PhanLoaiHoGaRepository.GetAll();
+            selectPLHG = new();
+            foreach (var item in repository)
             {
                 // Kiểm tra và thêm item
-                if (!string.IsNullOrEmpty(item.ThongTinChungHoGa_KetCauMuMo) && !selectKCMM.Any(x => x.Value == item.ThongTinChungHoGa_KetCauMuMo))
+                if (!string.IsNullOrEmpty(item.Id) && !selectPLHG.Any(x => x.Value == item.Id))
                 {
-                    selectKCMM.Add(new SelectedItem
+                    selectPLHG.Add(new SelectedItem
                         {
-                            Value = item.ThongTinChungHoGa_KetCauMuMo,
-                            Text = item.ThongTinChungHoGa_KetCauMuMo_Name ?? ""
+                            Value = item.Id,
+                            Text = item.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? ""
                         });
                 }
-               
-
             }
-
-            selectKCMM.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
-           
+            selectPLHG.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            selectSearchPLHG = selectPLHG;
+            var dm = await DanhMucRepository.GetDMByIdNhomDanhMuc("DMThep");
+            foreach (var item in dm)
+            {
+                // Kiểm tra và thêm item
+                if (!string.IsNullOrEmpty(item.Id) && !selectLoaiThep.Any(x => x.Value == item.Id))
+                {
+                    selectLoaiThep.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.Ten ?? ""
+                        });
+                }
+            }
+            selectLoaiThep.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            selectSearchLoaiThep = selectLoaiThep;
         }
         catch (Exception ex)
         {
@@ -314,17 +452,28 @@
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
     {
-        isLoading = true;
-        var repository = await PhanLoaiHoGaRepository.GetBaoCaoHGaSDThep(Input);
-        listModel = repository;
-        listPhanLoaiHoGaModel = Paging(listModel);
+        try
+        {
+            isLoading = true;
+            tKThepHoGaModel = new();
+            var repository = await TKThepHoGaRepository.GetAllByVM(InputMD);
+            listModel = repository;
+            listTKThepHGaModel = Paging(listModel);
+
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
         isLoading = false;
     }
 
     public async Task Search()
     {
-        phanLoaiHoGaModel.PageNumber = 1;
+        tKThepHoGaModel.PageNumber = 1;
         await LoadData();
+
     }
 
     private async Task HandleValidSubmit()
@@ -332,14 +481,113 @@
 
         try
         {
-            if (isEdit)
+            string[] ids = { Input.ThongTinChungHoGa_TenHoGaSauPhanLoai??"" };
+            var isValidTenPL = await PhanLoaiHoGaRepository.CheckExclusive(ids,baseTime);
+            var listExist = await TKThepHoGaRepository.GetExist(Input);
+            if (isValidTenPL)
             {
-               
+                if (isEdit)
+                {
+                    string[] idss = { Input.Id }; 
+
+
+                    if(listExist == null )
+                    {
+                        bool isValid = await TKThepHoGaRepository.CheckExclusive(idss,baseTime);
+                        if (isValid)
+                        {
+                            await TKThepHoGaRepository.Update(Input);
+                            isModalVisible = false;
+                            Input = new TKThepHoGa();
+                            isEdit = false;
+                            ToastService.ShowToast(
+                                "Thông báo",
+                                "Cập nhật thành công.",
+                                cssClass: "toast-success",
+                                iconClass: "fa fa-check-circle",
+                                progressBarClass: "bg-info",
+                                duration: 5000
+                            );
+                            await LoadData();
+                        }
+                    }else if(listExist.Count >1 && listExist[0].Id == Input.Id)
+                    {
+                        await TKThepHoGaRepository.Update(Input);
+                        isModalVisible = false;
+                        Input = new TKThepHoGa();
+                        isEdit = false;
+                        ToastService.ShowToast(
+                            "Thông báo",
+                            "Cập nhật thành công.",
+                            cssClass: "toast-success",
+                            iconClass: "fa fa-check-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
+                        await LoadData();
+                    } else
+                    {
+                        ToastService.ShowToast(
+                        "Thông báo",
+                         "Đã tồn tại.",
+                         cssClass: "toast-danger",
+                         iconClass: "fa fa-exclamation-circle",
+                         progressBarClass: "bg-info",
+                         duration: 5000);
+                    }
+
+                }
+                else
+                {
+                    if( listExist== null||listExist.Count == 0)
+                    {
+                        if (Flag > 0)
+                        {
+                            // Thêm mới thông tin
+                            var id = await TKThepHoGaRepository.InsertLaterFlag(Input, Flag);
+                            isModalVisible = false;
+                            Input = new TKThepHoGa();
+                            ToastService.ShowToast(
+                                "Thông báo",
+                                "Chèn thành công.",
+                                cssClass: "toast-success",
+                                iconClass: "fa fa-check-circle",
+                                progressBarClass: "bg-info",
+                                duration: 5000
+                            );
+                            await LoadData();
+                            Flag = 0;
+                        }
+                        else
+                        {
+                            // Thêm mới thông tin
+                            await TKThepHoGaRepository.Insert(Input);
+                            isModalVisible = false;
+                            Input = new TKThepHoGa();
+                            ToastService.ShowToast(
+                                "Thông báo",
+                                "Thêm thành công.",
+                                cssClass: "toast-success",
+                                iconClass: "fa fa-check-circle",
+                                progressBarClass: "bg-info",
+                                duration: 5000
+                            );
+                            await LoadData();
+                        }
+                    }else
+                    {
+                        ToastService.ShowToast(
+                        "Thông báo",
+                         "Đã tồn tại.",
+                         cssClass: "toast-danger",
+                         iconClass: "fa fa-exclamation-circle",
+                         progressBarClass: "bg-info",
+                         duration: 5000);
+                    }
+
+                }
             }
-            else
-            {
-                
-            }
+
         }
         catch (Exception ex)
         {
@@ -348,11 +596,78 @@
 
     }
 
+    private string deleteId;
+
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        deleteId = id;
+        confirmModal.Title = "Xác nhận xóa";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.openModal();
+
+    }
+
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        if (confirmed)
+        {
+            if (!string.IsNullOrEmpty(deleteId))
+            {
+                string[] ids = { deleteId };
+                var result = await TKThepHoGaRepository.CheckExclusive(ids,baseTime);
+                if (result)
+                {
+                     // Thực hiện hành động xóa
+                    await TKThepHoGaRepository.DeleteById(deleteId);
+                    ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success",iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                    await LoadData();
+                }
+               
+                deleteId = "";
+            }
+        }
+    }
+
+
+    private async Task HandleEdit(string id)
+    {
+        try
+        {
+            TitleModal = "Cập nhật loại TĐan TDẫn !";
+            Input = await TKThepHoGaRepository.GetById(id);
+            isEdit = true;
+            isModalVisible = true;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                 "Thông báo",
+                ex.Message,
+                 cssClass: "toast-danger",
+               iconClass: "fa fa-exclamation-circle",
+                 progressBarClass: "bg-info",
+                 duration: 5000
+             );
+       }
+
+    }
+
+
+      int Flag = 0;
+    //thêm vào sau
+    private void InsertLaterFlag(int flag)
+    {
+        Flag = flag;
+        TitleModal = "Chèn loại cống !";
+        isModalVisible = true;
+    }
+
+
     // Sắp xếp data
     private void SortTable(string columnName)
     {
         listModel = SortService.SortTable(listModel, columnName);
-        phanLoaiHoGaModel.PageNumber = 1;
+        tKThepHoGaModel.PageNumber = 1;
         Paging(listModel);
     }
 
@@ -366,40 +681,40 @@
     // Xử lý trường hợp đổi page hiển thị
     private void SelectedPage(int page)
     {
-        phanLoaiHoGaModel.PageNumber = page;
+        tKThepHoGaModel.PageNumber = page;
         Paging(listModel);
     }
 
     // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
     private void ChangePageSize(int pageSize)
     {
-        phanLoaiHoGaModel.PageNumber = 1;
-        phanLoaiHoGaModel.pageSize = pageSize;
+        tKThepHoGaModel.PageNumber = 1;
+        tKThepHoGaModel.pageSize = pageSize;
         Paging(listModel);
     }
 
 
     // Xử lý paging
-    private List<PhanLoaiHoGaModel> Paging(List<PhanLoaiHoGaModel> listModels)
+    private List<TKThepHoGaModel> Paging(List<TKThepHoGaModel> listModels)
     {
         // Đếm số bản ghi thỏa mãn
         var count = listModels.Count();
 
         // Lọc bản ghi theo page hiện tại và page size
-        listModels = listModels.Skip((phanLoaiHoGaModel.PageNumber - 1) * phanLoaiHoGaModel.PageSize).Take(phanLoaiHoGaModel.PageSize).ToList();
+        listModels = listModels.Skip((tKThepHoGaModel.PageNumber - 1) * tKThepHoGaModel.PageSize).Take(tKThepHoGaModel.PageSize).ToList();
 
         // Xóa danh sách đang hiển thị trên màn hình
-        listPhanLoaiHoGaModel.Clear();
+        listTKThepHGaModel.Clear();
 
         // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
         foreach (var major in listModels)
         {
-            listPhanLoaiHoGaModel.Add(major);
+            listTKThepHGaModel.Add(major);
         }
 
         // Tạo pagelist mới
 
-        var pagelist = new PageList<PhanLoaiHoGaModel>(listPhanLoaiHoGaModel, count, phanLoaiHoGaModel.PageNumber, phanLoaiHoGaModel.PageSize);
+        var pagelist = new PageList<TKThepHoGaModel>(listTKThepHGaModel, count, tKThepHoGaModel.PageNumber, tKThepHoGaModel.PageSize);
         MetaData = pagelist.MetaData;
         return listModels;
     }

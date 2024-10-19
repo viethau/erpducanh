@@ -39,5 +39,4 @@ namespace DucAnhERP.Models
         public int? IsActive { get; set; } = 1;
     }
 
-    
 }
