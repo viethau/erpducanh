@@ -14,6 +14,10 @@ namespace DucAnhERP.Models
         [Required(ErrorMessage = "Loại thép")]
         public string? LoaiThep { get; set; } = "";
 
+        [Required(ErrorMessage = "Bạn phải nhập số hiệu")]
+        [Range(0, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
+        public int? SoHieu { get; set; } = 0;
+
         [Required(ErrorMessage = "Bạn phải nhập Đường kính/chiều dầy")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
         [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]

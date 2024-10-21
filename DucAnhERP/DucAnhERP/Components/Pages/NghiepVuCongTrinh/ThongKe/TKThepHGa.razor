@@ -9,6 +9,7 @@
 @inject ITKThepHoGaRepository TKThepHoGaRepository
 @inject IPhanLoaiHoGaRepository PhanLoaiHoGaRepository
 @inject IDanhMucRepository DanhMucRepository
+@inject IDMTLThepRepository DMTLThepRepository
 
 @inject DucAnhERP.Services.ToastService ToastService
 <style>
@@ -51,6 +52,11 @@
                             <Select2 Id="select2" Items="@selectLoaiThep" OnChange="@OnSelectChangeLoaiThep"></Select2>
                             <ValidationMessage For="()=>Input.LoaiThep"></ValidationMessage>
                         </div>
+                         <div class="form-floating col-sm-6 col-md-3">
+                           <label for="DKCD">Số hiệu<span class="text-danger">*</span></label>
+                            <InputNumber @oninput="OnInputChange"  @bind-Value="Input.SoHieu" class="form-control" id="SoHieu" placeholder="Số hiệu" />
+                            <ValidationMessage For="() => Input.SoHieu" class="text-danger" />
+                         </div>
                           <div class="form-floating col-sm-6 col-md-3">
                            <label for="DKCD">Đường kính/chiều dầy(mm,mm2)<span class="text-danger">*</span></label>
                             <InputNumber @oninput="OnInputChange"  @bind-Value="Input.DKCD" class="form-control" id="DKCD" placeholder="Đường kính/chiều dầy" />
@@ -84,7 +90,7 @@
                          </div>
                           <div class="form-floating col-sm-6 col-md-3">
                            <label for="TrongLuong">Trọng lượng thép/(kg/m,m3)<span class="text-danger">*</span></label>
-                            <InputNumber @oninput="OnInputChange"  @bind-Value="Input.TrongLuong" class="form-control" id="TrongLuong" placeholder="Trọng lượng thép/(kg/m,m3)" />
+                            <InputNumber @bind-Value="Input.TrongLuong" class="form-control" id="TrongLuong" placeholder="Trọng lượng thép/(kg/m,m3)"  disabled/>
                             <ValidationMessage For="() => Input.TrongLuong" class="text-danger" />
                          </div>
                             <div class="form-floating col-sm-6 col-md-3">
@@ -257,7 +263,7 @@
                                          <td class="text-center"> @item.TenCongTac</td>
                                          <td class="text-center"> @item.VTLayKhoiLuong  </td>
                                          <td class="text-center"> @item.LoaiThep_Name </td>
-                                         <td class="text-center"> @item.Flag    </td>
+                                         <td class="text-center"> @item.SoHieu    </td>
                                          <td class="text-center"> @item.DKCD                                </td>
                                          <td class="text-center"> @item.SoThanh                             </td>
                                          <td class="text-center"> @item.SoCK                                </td>
@@ -362,6 +368,20 @@
         Input.TenCongTac = ($"Gia công lắp dựng thép {Input.VTLayKhoiLuong} {LoaiThep} D{Input.DKCD}");
         Input.TongSoThanh = (Input.SoThanh * Input.SoCK);
         Input.TongChieuDai = (Input.TongSoThanh * Input.ChieuDai1Thanh) / 1000;
+
+
+        if(!string.IsNullOrEmpty(Input.LoaiThep) && Input.DKCD >0)
+        {
+            var DMTLThep = await DMTLThepRepository.GetTrongLuong(Input.LoaiThep,Input.DKCD.ToString());
+            if(DMTLThep !=null)
+            {
+                Input.TrongLuong = DMTLThep.TrongLuong;
+            }
+            else
+            {
+                Input.TrongLuong = 0;
+            }
+        }
         if(LoaiThep.Trim().ToUpper() == "THÉP BẢN")
         {
             Input.TongTrongLuong =  (Input.DKCD * Input.TongChieuDai * Input.TrongLuong) / 1000000;
@@ -374,9 +394,9 @@
         Input.TongChieuDai = Math.Round(Input.TongChieuDai??0, 4);
         Input.TongTrongLuong = Math.Round(Input.TongTrongLuong??0, 4);
         await InvokeAsync(() =>
-            {
-                StateHasChanged();
-            });
+          {
+              StateHasChanged();
+          });
     }
 
 
@@ -458,6 +478,21 @@
             tKThepHoGaModel = new();
             var repository = await TKThepHoGaRepository.GetAllByVM(InputMD);
             listModel = repository;
+            if (listModel!= null &&  listModel.Count >0)
+            {
+                foreach(var item  in listModel)
+                {
+                    if(item.LoaiThep.Trim().ToUpper() == "THÉP BẢN")
+                    {
+                        item.TongTrongLuong =  (item.DKCD * item.TongChieuDai * item.TrongLuong) / 1000000;
+                    }
+                    else
+                    {
+                        item.TongTrongLuong = item.TongChieuDai * item.TrongLuong;
+                    }
+                     item.TongTrongLuong = Math.Round(item.TongTrongLuong ?? 0, 4);
+                }
+            }
             listTKThepHGaModel = Paging(listModel);
 
         }
@@ -491,7 +526,7 @@
                     string[] idss = { Input.Id }; 
 
 
-                    if(listExist == null )
+                    if(listExist == null || listExist.Count ==0 )
                     {
                         bool isValid = await TKThepHoGaRepository.CheckExclusive(idss,baseTime);
                         if (isValid)
@@ -510,7 +545,7 @@
                             );
                             await LoadData();
                         }
-                    }else if(listExist.Count >1 && listExist[0].Id == Input.Id)
+                    }else if(listExist.Count >0 && listExist[0].Id == Input.Id)
                     {
                         await TKThepHoGaRepository.Update(Input);
                         isModalVisible = false;
@@ -637,6 +672,14 @@
             Input = await TKThepHoGaRepository.GetById(id);
             isEdit = true;
             isModalVisible = true;
+             foreach (var item in selectLoaiThep)
+            {
+                item.IsSelected = item.Value == Input.LoaiThep;
+            }
+            foreach (var item in selectPLHG)
+            {
+                item.IsSelected = item.Value == Input.ThongTinChungHoGa_TenHoGaSauPhanLoai;
+            }
         }
         catch (Exception ex)
         {

@@ -212,7 +212,7 @@
 @code {
     private List<PhanLoaiMongCTron> listPhanLoaiMongCTron = new List<PhanLoaiMongCTron>();
     private PhanLoaiMongCTron Input = new();
-    public List<DanhMuc> listDanhMuc = new();
+    public List<DanhMuc1> listDanhMuc = new();
     public DateTime baseTime;
 
     private bool isModalVisible = false;
@@ -279,7 +279,7 @@
 
 
 
-    public List<DanhMuc> FindByIdNhomDanhMuc(string idNhomDanhMuc)
+    public List<DanhMuc1> FindByIdNhomDanhMuc(string idNhomDanhMuc)
     {
         return listDanhMuc.Where(dm => dm.IdNhomDanhMuc == idNhomDanhMuc).ToList();
     }

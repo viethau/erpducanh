@@ -38,7 +38,7 @@
     private List<ExcelData> excelDataList;
     private List<NuocMua> listNuocMua ;
     private List<NuocMua> listNuocMuaRight ;
-    public List<DanhMuc> listDanhMuc = new();
+    public List<DanhMuc1> listDanhMuc = new();
     private bool isLoading = false;
 
     protected override async Task OnInitializedAsync()
@@ -1148,7 +1148,7 @@
     }
 
     //Thêm tên theo bảng phân loại tấm đan hố ga
-    public async Task<string> ThemTenTheoPLTDHoGa(NuocMua Input, List<DanhMuc> listDanhMuc)
+    public async Task<string> ThemTenTheoPLTDHoGa(NuocMua Input, List<DanhMuc1> listDanhMuc)
     {
         var id = "";
         PhanLoaiTDHoGa searchData = new PhanLoaiTDHoGa
@@ -1198,7 +1198,7 @@
     }
 
     //Thêm tên theo bảng phân loại cống hộp cống tròn nhựa
-    public async Task<string> ThemTenTheoPLCTronHopNhua(NuocMua Input, List<DanhMuc> listDanhMuc)
+    public async Task<string> ThemTenTheoPLCTronHopNhua(NuocMua Input, List<DanhMuc1> listDanhMuc)
     {
         PhanLoaiCTronHopNhua searchData = new PhanLoaiCTronHopNhua
             {
@@ -1273,7 +1273,7 @@
     }
 
     //Thêm tên theo bảng phân loại cống hộp cống tròn nhựa
-    public async Task<string> ThemTenTheoPLMongCTron(NuocMua Input, List<DanhMuc> listDanhMuc)
+    public async Task<string> ThemTenTheoPLMongCTron(NuocMua Input, List<DanhMuc1> listDanhMuc)
     {
         PhanLoaiMongCTron searchData = new PhanLoaiMongCTron
             {
@@ -1325,7 +1325,7 @@
     }
 
     //Thêm tên theo bảng phân loại đế cống
-    public async Task<string> ThemTenTheoPLDeCong(NuocMua Input, List<DanhMuc> listDanhMuc)
+    public async Task<string> ThemTenTheoPLDeCong(NuocMua Input, List<DanhMuc1> listDanhMuc)
     {
         PhanLoaiDeCong searchData = new PhanLoaiDeCong
             {
@@ -1369,7 +1369,7 @@
     }
 
     //Thêm tên theo bảng phân loại thanh chống
-    public async Task<string> ThemTenTheoPLThanhChong(NuocMua Input, List<DanhMuc> listDanhMuc)
+    public async Task<string> ThemTenTheoPLThanhChong(NuocMua Input, List<DanhMuc1> listDanhMuc)
     {
         PhanLoaiThanhChong searchData = new PhanLoaiThanhChong
             {
@@ -1413,7 +1413,7 @@
     }
 
     //Thêm tên theo bảng phân loại tấm đan tryền dẫn
-    public async Task<string> ThemTenTheoPLTDanTDan(NuocMua Input, List<DanhMuc> listDanhMuc)
+    public async Task<string> ThemTenTheoPLTDanTDan(NuocMua Input, List<DanhMuc1> listDanhMuc)
     {
         PhanLoaiTDanTDan searchData = new PhanLoaiTDanTDan
             {
@@ -1438,7 +1438,7 @@
         return id;
     }
 
-    public async Task<string> ThemTenTheoPLTDanTDan02(NuocMua Input, List<DanhMuc> listDanhMuc)
+    public async Task<string> ThemTenTheoPLTDanTDan02(NuocMua Input, List<DanhMuc1> listDanhMuc)
     {
         PhanLoaiTDanTDan searchData = new PhanLoaiTDanTDan
             {

@@ -70,6 +70,7 @@ builder.Services.AddScoped<IPhanLoaiTDanTDanRepository, PhanLoaiTDanTDanReposito
 builder.Services.AddScoped<IMangThuRepository, MangThuRepository>();
 builder.Services.AddScoped<ITKThepHoGaRepository, TKThepHoGaRepository>();
 builder.Services.AddScoped<ITKThepTamDanRepository, TKThepTamDanRepository>();
+builder.Services.AddScoped<IDMTLThepRepository, DMTLThepRepository>();
 
 
 

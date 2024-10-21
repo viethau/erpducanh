@@ -1,4 +1,5 @@
 ﻿
+using DucAnhERP.Components.Pages.NghiepVuCongTrinh.BaoCao;
 using DucAnhERP.Data;
 using DucAnhERP.Models;
 using DucAnhERP.Repository;
@@ -48,36 +49,43 @@ namespace DucAnhERP.Services
             try
             {
                 using var context = _context.CreateDbContext();
-                var query = from tk in context.TKThepHoGas
-                            join plHoGa in context.PhanLoaiHoGas
-                            on tk.ThongTinChungHoGa_TenHoGaSauPhanLoai equals plHoGa.Id
+                var query = from a in context.TKThepHoGas
+                            join b in context.PhanLoaiHoGas
+                            on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id into plHoGaGroup
+                            from b in plHoGaGroup.DefaultIfEmpty()
                             join dm in context.DSDanhMuc
-                            on tk.LoaiThep equals dm.Id
-                            orderby tk.CreateAt
+                            on a.LoaiThep equals dm.Id
+                            join c in context.DMTLTheps
+                            on new { a.LoaiThep, DKCD = a.DKCD.ToString() } equals new { LoaiThep = c.ChungLoaiThep, DKCD = c.DuongKinh } into dmThepGroup
+                            from c in dmThepGroup.DefaultIfEmpty()
                             select new TKThepHoGaModel
                             {
-                                Id = tk.Id,
-                                Flag = tk.Flag,
+                                Id = a.Id,
+                                Flag = a.Flag,
 
-                                ThongTinChungHoGa_TenHoGaSauPhanLoai = tk.ThongTinChungHoGa_TenHoGaSauPhanLoai,
-                                ThongTinChungHoGa_TenHoGaSauPhanLoai_Name = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai,
-                                TenCongTac = tk.TenCongTac,
-                                VTLayKhoiLuong = tk.VTLayKhoiLuong,
-                                LoaiThep = tk.LoaiThep,
+                                ThongTinChungHoGa_TenHoGaSauPhanLoai = a.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                                ThongTinChungHoGa_TenHoGaSauPhanLoai_Name = b.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+
+                                TenCongTac = a.TenCongTac,
+                                VTLayKhoiLuong = a.VTLayKhoiLuong,
+                                LoaiThep = a.LoaiThep,
                                 LoaiThep_Name = dm.Ten,
-                                DKCD = tk.DKCD,
-                                SoThanh = tk.SoThanh,
-                                SoCK = tk.SoCK,
-                                TongSoThanh = tk.TongSoThanh,
-                                ChieuDai1Thanh = tk.ChieuDai1Thanh,
-                                TongChieuDai = tk.TongChieuDai,
-                                TrongLuong = tk.TrongLuong,
-                                TongTrongLuong = tk.TongTrongLuong,
 
-                                CreateAt = tk.CreateAt,
-                                CreateBy = tk.CreateBy,
-                                IsActive = tk.IsActive,
+                                SoHieu = a.SoHieu,
+                                DKCD = a.DKCD,
+                                SoThanh = a.SoThanh,
+                                SoCK = a.SoCK,
+                                TongSoThanh = a.TongSoThanh,
+                                ChieuDai1Thanh = a.ChieuDai1Thanh,
+                                TongChieuDai = a.TongChieuDai,
+                                TrongLuong = c.TrongLuong,
+                                TongTrongLuong = a.TongTrongLuong,
+
+                                CreateAt = a.CreateAt,
+                                CreateBy = a.CreateBy,
+                                IsActive = a.IsActive,
                             };
+
                 if (!string.IsNullOrEmpty(mModel.ThongTinChungHoGa_TenHoGaSauPhanLoai))
                 {
                     query = query.Where(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai == mModel.ThongTinChungHoGa_TenHoGaSauPhanLoai);
@@ -196,7 +204,7 @@ namespace DucAnhERP.Services
 
 
                 // Tăng giá trị Flag lên 1
-                entity.Flag = maxFlag + 1; 
+                entity.Flag = maxFlag + 1;
 
                 // Chèn bản ghi mới vào bảng
                 context.TKThepHoGas.Add(entity);
@@ -265,6 +273,5 @@ namespace DucAnhERP.Services
             }
         }
 
-       
     }
 }

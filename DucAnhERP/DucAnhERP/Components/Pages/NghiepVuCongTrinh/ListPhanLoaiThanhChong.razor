@@ -149,7 +149,7 @@
 @code {
     private List<PhanLoaiThanhChong> listPhanLoaiThanhChong = new List<PhanLoaiThanhChong>();
     private PhanLoaiThanhChong Input = new();
-    public List<DanhMuc> listDanhMuc = new();
+    public List<DanhMuc1> listDanhMuc = new();
     private DateTime baseTime;
 
     private bool isModalVisible = false;
@@ -214,7 +214,7 @@
 
 
 
-    public List<DanhMuc> FindByIdNhomDanhMuc(string idNhomDanhMuc)
+    public List<DanhMuc1> FindByIdNhomDanhMuc(string idNhomDanhMuc)
     {
         return listDanhMuc.Where(dm => dm.IdNhomDanhMuc == idNhomDanhMuc).ToList();
     }

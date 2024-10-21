@@ -4331,7 +4331,7 @@
 @code{
     [SupplyParameterFromForm]
     private MangThu Input { get; set; } = new();
-    public List<DanhMuc> listDanhMuc = new();
+    public List<DanhMuc1> listDanhMuc = new();
     private bool isEdit = false;
     private bool isLoading = false;
     //modal
@@ -4489,7 +4489,7 @@
         Console.WriteLine("Người dùng đã ngừng nhập.");
     }
 
-    public List<DanhMuc> FindByIdNhomDanhMuc(string idNhomDanhMuc)
+    public List<DanhMuc1> FindByIdNhomDanhMuc(string idNhomDanhMuc)
     {
         return listDanhMuc.Where(dm => dm.IdNhomDanhMuc == idNhomDanhMuc).ToList();
     }

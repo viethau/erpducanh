@@ -6,14 +6,14 @@ namespace DucAnhERP.Helpers
 {
     public class DataConversionHelper
     {
-        public List<DanhMuc> listDanhMuc = new();
+        public List<DanhMuc1> listDanhMuc = new();
         public string GetTenDanhMucById(string id = "")
         {
 
             var danhMuc = listDanhMuc.FirstOrDefault(dm => dm.Id == id);
             return danhMuc != null ? danhMuc.Ten : "";
         }
-        public async Task<List<HopRanhThangModel>> ConvertDataHopRanhThang(List<HopRanhThangModel> list, List<DanhMuc> listDM)
+        public async Task<List<HopRanhThangModel>> ConvertDataHopRanhThang(List<HopRanhThangModel> list, List<DanhMuc1> listDM)
         {
             listDanhMuc = listDM;
             if (list == null || list.Count == 0)

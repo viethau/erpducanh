@@ -9642,7 +9642,7 @@
 @code {
     [SupplyParameterFromForm]
     private NuocMua Input { get; set; } = new();
-    public List<DanhMuc> listDanhMuc = new();
+    public List<DanhMuc1> listDanhMuc = new();
     private bool isEdit = false;
     private NuocMuaModel nuocMuaVM;
     private bool isLoading = false;
@@ -10716,7 +10716,7 @@
         }
     }
 
-    public List<DanhMuc> FindByIdNhomDanhMuc(string idNhomDanhMuc)
+    public List<DanhMuc1> FindByIdNhomDanhMuc(string idNhomDanhMuc)
     {
         return listDanhMuc.Where(dm => dm.IdNhomDanhMuc == idNhomDanhMuc).ToList();
     }

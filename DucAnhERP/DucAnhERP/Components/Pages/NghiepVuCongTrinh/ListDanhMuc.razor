@@ -150,7 +150,7 @@
 
 @code {
     private List<NhomDanhMuc> nhomDanhMucs = new List<NhomDanhMuc>();
-    private DanhMuc Input = new DanhMuc();
+    private DanhMuc1 Input = new DanhMuc1();
 
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới nhóm danh mục";
@@ -237,7 +237,7 @@
         {
             if (isEdit)
             {
-                List<DanhMuc> DMisExistEdit = new();
+                List<DanhMuc1> DMisExistEdit = new();
                 DMisExistEdit = await DanhMucRepository.GetDMisExist(Input.IdNhomDanhMuc, Input.Ten);
                 if (DMisExistEdit.Count() > 0)
                 {
@@ -247,7 +247,7 @@
                         ToastService.ShowToast("Thông báo", "Cập nhật danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                         await LoadDanhMuc();
                         isModalVisible = false;
-                        Input = new DanhMuc();
+                        Input = new();
                         isEdit = false;
                     }
                     else
@@ -268,7 +268,7 @@
                     ToastService.ShowToast("Thông báo", "Cập nhật danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                     await LoadDanhMuc();
                     isModalVisible = false;
-                    Input = new DanhMuc();
+                    Input = new ();
                     isEdit = false;
                 }
             }
@@ -292,7 +292,7 @@
                     ToastService.ShowToast("Thông báo", "Thêm danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                     await LoadDanhMuc();
                     isModalVisible = false;
-                    Input = new DanhMuc();
+                    Input = new ();
                 }
             }
         }
@@ -387,7 +387,7 @@
         // Logic for canceling
         isModalVisible = false;
         isEdit = false;
-        Input = new DanhMuc();
+        Input = new ();
     }
 
     // Sắp xếp data

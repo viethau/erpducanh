@@ -9,7 +9,7 @@ namespace DucAnhERP.Helpers
 {
     public class DSNuocMuaConversionHelper
     {
-        public List<DanhMuc> listDanhMuc = new();
+        public List<DanhMuc1> listDanhMuc = new();
         public string GetTenDanhMucById(string id = "")
         {
 
@@ -17,7 +17,7 @@ namespace DucAnhERP.Helpers
             return danhMuc != null ? danhMuc.Ten : "";
         }
 
-        public async Task<List<NuocMua>> ConvertDSNuocMua(List<NuocMua> list, List<DanhMuc> listDM)
+        public async Task<List<NuocMua>> ConvertDSNuocMua(List<NuocMua> list, List<DanhMuc1> listDM)
         {
             listDanhMuc = listDM;
             List<NuocMua> listNuocMua = new List<NuocMua>();
@@ -77,7 +77,7 @@ namespace DucAnhERP.Helpers
             return listNuocMua;
         }
 
-        public async Task<NuocMua> ConvertNuocMua(NuocMua item, List<DanhMuc> listDM)
+        public async Task<NuocMua> ConvertNuocMua(NuocMua item, List<DanhMuc1> listDM)
         {
 
             listDanhMuc = listDM;

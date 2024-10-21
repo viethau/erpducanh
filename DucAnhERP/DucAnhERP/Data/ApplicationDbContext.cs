@@ -41,7 +41,7 @@ namespace DucAnhERP.Data
         public DbSet<ApprovalStepSetting> ApprovalStepSettings { get; set; }
         public DbSet<ApprovalStaffSetting> ApprovalStaffSettings { get; set; }
         public DbSet<NhomDanhMuc> DSNhomDanhMuc { get; set; }
-        public DbSet<DanhMuc> DSDanhMuc { get; set; }
+        public DbSet<DanhMuc1> DSDanhMuc { get; set; }
         public DbSet<MHopRanhThang> DSHopRanhThang { get; set; }
         public DbSet<NuocMua> DSNuocMua { get; set; }
         public DbSet<PhanLoaiHoGa> PhanLoaiHoGas { get; set; }
@@ -54,6 +54,7 @@ namespace DucAnhERP.Data
         public DbSet<MangThu> MangThus { get; set; }
         public DbSet<TKThepHoGa> TKThepHoGas { get; set; }
         public DbSet<TKThepTamDan> TKThepTamDans { get; set; }
+        public DbSet<DMThep> DMTLTheps { get; set; }
 
 
 

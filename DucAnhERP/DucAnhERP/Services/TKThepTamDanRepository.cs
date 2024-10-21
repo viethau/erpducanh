@@ -51,7 +51,10 @@ namespace DucAnhERP.Services
                             on tk.ThongTinTamDanHoGa2_PhanLoaiDayHoGa equals plTDHG.Id
                             join dm in context.DSDanhMuc
                             on tk.LoaiThep equals dm.Id
-                            orderby tk.CreateAt
+                            join c in context.DMTLTheps
+                            on new { tk.LoaiThep, DKCD = tk.DKCD.ToString() } equals new { LoaiThep = c.ChungLoaiThep, DKCD = c.DuongKinh } into dmThepGroup
+                            from c in dmThepGroup.DefaultIfEmpty()
+                            orderby tk.SoHieu
                             select new TKThepTamDanModel
                             {
                                 Id = tk.Id,
@@ -63,13 +66,14 @@ namespace DucAnhERP.Services
                                 VTLayKhoiLuong = tk.VTLayKhoiLuong,
                                 LoaiThep = tk.LoaiThep,
                                 LoaiThep_Name = dm.Ten,
+                                SoHieu = tk.SoHieu,
                                 DKCD = tk.DKCD,
                                 SoThanh = tk.SoThanh,
                                 SoCK = tk.SoCK,
                                 TongSoThanh = tk.TongSoThanh,
                                 ChieuDai1Thanh = tk.ChieuDai1Thanh,
                                 TongChieuDai = tk.TongChieuDai,
-                                TrongLuong = tk.TrongLuong,
+                                TrongLuong = c.TrongLuong,
                                 TongTrongLuong = tk.TongTrongLuong,
 
                                 CreateAt = tk.CreateAt,
