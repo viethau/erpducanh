@@ -1,0 +1,336 @@
+﻿@page "/NghiepVuCongTrinh/NhomDanhMuc"
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using System.Linq
+@using DucAnhERP.SeedWork
+@* @using Microsoft.AspNetCore.Authorization *@
+@inject INhomDanhMucRepository NhomDanhMucRepository
+@inject DucAnhERP.Services.ToastService ToastService
+
+<div class="m-5">
+    <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
+        <BodyTemplate>
+            <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="row">
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="Ten">Tên nhóm danh mục <span class="text-danger">*</span></label>
+                            <InputText id="Ten" class="form-control" @bind-Value="Input.Ten" />
+                            <ValidationMessage For="() => Input.Ten" class="text-danger" />
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row justify-content-end">
+                    <button class="btn btn-primary mr-2" type="submit">Save</button>
+                    <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+                </div>
+            </EditForm>
+        </BodyTemplate>
+    </CustomModal>
+
+    <button class="btn btn-primary" @onclick="ShowModal">Thêm nhóm danh mục</button>
+    <h3 class="mt-2">Danh sách nhóm danh mục</h3>
+
+    <div class="row mt-3">
+        <table class="table table-hover table-bordered">
+            <thead class="bg-info">
+                <tr>
+                    <th class="text-center" scope="col">
+                        <div class="pb-3">STT  </div>
+                    </th>
+                    <th onclick="@(() => SortTable("Ten"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Tên  <span class="arrow @(GetSortStyle("Ten"))"></span></div>
+                    </th>
+                    <th class="text-center" colspan="2">
+
+                    </th>
+                </tr>
+
+            </thead>
+            @if (listNhomDanhMuc.Any())
+            {
+
+                <tbody>
+                    @{
+                        int stt = 1;
+                    }
+                    @foreach (var ndm in listNhomDanhMuc)
+                    {
+
+                        <tr>
+                            <td class="text-center">@stt</td>
+                            <td class="text-center">@ndm.Ten</td>
+                            <td class="text-center">
+                                <button class="btn btn-primary" @onclick="()=>Edit(ndm.Id)">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </td>
+                            <td class="text-center">
+
+                                <button class="btn btn-danger" @onclick="()=>ConfirmDelete(ndm.Id,ndm.Ten)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+
+                            </td>
+                        </tr>
+                        stt++;
+                    }
+
+                </tbody>
+            }
+            else
+            {
+                <tbody>
+                    <tr>
+                        <td colspan="4"> Không có dữ liệu</td>
+                    </tr>
+                </tbody>
+            }
+
+        </table>
+
+    </div>
+
+    @if (listNhomDanhMuc.Any())
+    {
+        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+    }
+    <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+</div>
+
+@code {
+    private List<NhomDanhMuc> Inputs = new List<NhomDanhMuc>();
+    private NhomDanhMuc Input = new();
+    private DateTime baseTime;
+
+    private bool isModalVisible = false;
+    private string TitleModal = "Thêm mới nhóm danh mục";
+    bool isEdit = false;
+
+    private void ShowModal()
+    {
+        isModalVisible = true;
+    }
+
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+
+    }
+
+    private void HandleSave()
+    {
+        // Logic for saving
+        isModalVisible = false;
+    }
+
+    private void HandleCancel()
+    {
+        // Logic for canceling
+        isModalVisible = false;
+        Input = new();
+    }
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+
+    public List<NhomDanhMucModel> listNhomDanhMuc
+    {
+        get;
+        set;
+    } = new();
+
+    public List<NhomDanhMucModel> listModel
+    {
+        get;
+        set;
+    } = new();
+
+    public MetaData MetaData
+    {
+        get;
+        set;
+    }
+
+    public NhomDanhMucModel dmModel
+    {
+        get;
+        set;
+    }
+
+
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        baseTime = DateTime.Now;
+        dmModel = new();
+        Inputs = await NhomDanhMucRepository.GetAll();
+        await LoadNhomDanhMuc();
+    }
+
+
+    // Truy vấn data theo điều kiện tìm kiếm
+    private async Task LoadNhomDanhMuc()
+    {
+        var nhomdanhmucs = await NhomDanhMucRepository.GetAllNDM();
+        listModel = nhomdanhmucs;
+        listNhomDanhMuc = Paging(nhomdanhmucs);
+        Console.WriteLine(listNhomDanhMuc);
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            var isExistTen = await NhomDanhMucRepository.GetNDMByTen(Input.Ten);
+            if (isExistTen)
+            {
+                ToastService.ShowToast(
+                   "Thông báo",
+                    "Tên nhóm danh mục đã tồn tại.",
+                    cssClass: "toast-danger",
+                    iconClass: "fa fa-exclamation-circle",
+                    progressBarClass: "bg-info",
+                    duration: 5000);
+            }
+            else
+            {
+                if (isEdit)
+                {
+                    string[] ids= { Input.Id };
+                    bool isValid = await NhomDanhMucRepository.CheckExclusive(ids,baseTime);
+                    if (isValid)
+                    {
+                        await NhomDanhMucRepository.Update(Input);
+                        ToastService.ShowToast("Thông báo", "Cập nhật nhóm danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                        await LoadNhomDanhMuc();
+                        isModalVisible = false;
+                        Input = new NhomDanhMuc();
+                    }
+                }
+                else
+                {
+                    await NhomDanhMucRepository.Insert(Input);
+                    ToastService.ShowToast("Thông báo", "Thêm nhóm danh mục thành công.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+                    await LoadNhomDanhMuc();
+                    isModalVisible = false;
+                    Input = new NhomDanhMuc();
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+
+    }
+
+    private string deleteId;
+
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        deleteId = id;
+        confirmModal.Title = "Xác nhận xóa";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.openModal();
+
+    }
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        if (confirmed)
+        {
+            if (!string.IsNullOrEmpty(deleteId))
+            {
+
+                bool isSuccess = await NhomDanhMucRepository.DeleteByIdResult(deleteId);
+                if (isSuccess)
+                {
+                    ToastService.ShowToast("Thông báo", "Xóa nhóm danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                }
+                else
+                {
+                    ToastService.ShowToast("Thông báo", "Không thể xóa nhóm danh mục đang được sử dụng!", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+                }
+
+                await LoadNhomDanhMuc();
+
+                deleteId = "";
+            }
+        }
+    }
+    private async Task Edit(string id)
+    {
+        try
+        {
+            TitleModal = "Cập nhật nhóm danh mục !";
+            Input = await NhomDanhMucRepository.GetById(id);
+            isEdit = true;
+            isModalVisible = true;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+    }
+
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        dmModel.PageNumber = 1;
+        Paging(listModel);
+    }
+
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        dmModel.PageNumber = page;
+        Paging(listModel);
+    }
+
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+
+        dmModel.PageNumber = 1;
+        dmModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+    // Xử lý paging
+    private List<NhomDanhMucModel> Paging(List<NhomDanhMucModel> nhomdanhmucs)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = nhomdanhmucs.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        nhomdanhmucs = nhomdanhmucs.Skip((dmModel.PageNumber - 1) * dmModel.PageSize).Take(dmModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listNhomDanhMuc.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var ndm in nhomdanhmucs)
+        {
+            listNhomDanhMuc.Add(ndm);
+        }
+
+        // Tạo pagelist mới
+        var pagelist = new PageList<NhomDanhMucModel>(listNhomDanhMuc, count, dmModel.PageNumber, dmModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return nhomdanhmucs;
+    }
+
+}

@@ -112,19 +112,48 @@
             for (int i = 0; i < listData.Count; i++)
             {
                 NuocMua nuocMua = listData[i];
-
+                nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = "";
+                if (nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe == "M1C.7")
+                {
+                    Console.WriteLine("ac");
+                }
                 //load phân loại
+                List<PhanLoaiHoGa> loadTenHoGaSauPhanLoai = new();
+                loadTenHoGaSauPhanLoai = await LoadTenHoGaSauPhanLoai(nuocMua);
+                if (loadTenHoGaSauPhanLoai != null && loadTenHoGaSauPhanLoai.Count > 0)
+                {
+                    foreach (var item in loadTenHoGaSauPhanLoai)
+                    {
+                        // Kiểm tra xem tên hố ga theo bản vẽ có kết thúc bằng "=G"
+                        if (!string.IsNullOrEmpty(nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe) &&
+                            nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
+                        {
+                            if (item.G == "=G")
+                            {
+                                nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
+                                break; 
+                            }
+                        }
+                        else
+                        {
+                            // Nếu G là null hoặc rỗng, gán giá trị Id
+                            if (string.IsNullOrEmpty(item.G))
+                            {
+                                nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
+                                break; 
+                            }
+                        }
+                    }
+                }
 
-                var loadTenHoGaSauPhanLoai = await LoadTenHoGaSauPhanLoai(nuocMua);
-                if (string.IsNullOrEmpty(loadTenHoGaSauPhanLoai.Id))
+                // Nếu vẫn chưa gán được giá trị, tạo mới tên hố ga theo phân loại
+                if (string.IsNullOrEmpty(nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai))
                 {
-                    var id = await ThemTenTheoPL(nuocMua);
-                    nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
+                    nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = ""; // Gán giá trị mặc định
+                    var id = await ThemTenTheoPL(nuocMua); // Gọi hàm tạo tên theo phân loại
+                    nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = id; // Gán lại giá trị sau khi thêm
                 }
-                else
-                {
-                    nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = loadTenHoGaSauPhanLoai.Id;
-                }
+
                 //load phân loại LoadTenHoGaSauPhanLoaiTDHoGa
 
                 var loadTenHoGaSauPhanLoaiTDHoGa = await LoadTenHoGaSauPhanLoaiTDHoGa(nuocMua);
@@ -911,7 +940,7 @@
 
         // Nếu tất cả các thuộc tính đều là null, rỗng hoặc bằng 0, trả về false
         return false;
-    
+
     }
 
     public static double ParseDoubleOrDefault(object input, double defaultValue = 0)
@@ -1041,14 +1070,14 @@
         if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
         {
             string HoGa_KetCauTuong = GetTenDanhMucById(searchData.ThongTinChungHoGa_KetCauTuong);
-            id = await PhanLoaiHoGaRepository.InsertId(searchData, HoGa_KetCauTuong);
+            id = await PhanLoaiHoGaRepository.InsertId(searchData, HoGa_KetCauTuong, Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
             Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
         }
         return id;
     }
 
     //Load tên theo phân loại hố ga
-    public async Task<PhanLoai> LoadTenHoGaSauPhanLoai(NuocMua Input)
+    public async Task<List<PhanLoaiHoGa>> LoadTenHoGaSauPhanLoai(NuocMua Input)
     {
         PhanLoaiHoGa searchData = new PhanLoaiHoGa
             {
@@ -1129,22 +1158,22 @@
                 HinhThucDauNoi8_CanhCheo = Input.HinhThucDauNoi8_CanhCheo
             };
 
-        PhanLoaiHoGa plHoGa = new();
-        phanloai = new();
-        if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
-        {
-            searchData.G = "=G";
-        }
-        plHoGa = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaByDetail(searchData);
-      
-        if (plHoGa != null)
-        {
-            phanloai.Name = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai;
-            phanloai.Id = plHoGa.Id;
-        }
+        // PhanLoaiHoGa plHoGa = new();
+        // phanloai = new();
+        // if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
+        // {
+        //     searchData.G = "=G";
+        // }
+        // plHoGa = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaByDetail(searchData);
 
-
-        return phanloai;
+        // if (plHoGa != null)
+        // {
+        //     phanloai.Name = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai;
+        //     phanloai.Id = plHoGa.Id;
+        // }
+        List<PhanLoaiHoGa> plHoGas = new();
+        plHoGas = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaByDetails(searchData);
+        return plHoGas;
     }
 
     //Thêm tên theo bảng phân loại tấm đan hố ga

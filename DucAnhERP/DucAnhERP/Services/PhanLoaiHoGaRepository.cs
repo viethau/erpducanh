@@ -296,6 +296,103 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
+
+        public async Task<List<PhanLoaiHoGa>> GetPhanLoaiHoGaByDetails(PhanLoaiHoGa searchData)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
+                var query = context.PhanLoaiHoGas
+                             .Where(plhg => (
+                                        plhg.ThongTinChungHoGa_HinhThucHoGa == searchData.ThongTinChungHoGa_HinhThucHoGa &&
+                                        plhg.ThongTinChungHoGa_KetCauMuMo == searchData.ThongTinChungHoGa_KetCauMuMo &&
+                                        plhg.ThongTinChungHoGa_KetCauTuong == searchData.ThongTinChungHoGa_KetCauTuong &&
+                                        plhg.ThongTinChungHoGa_HinhThucMongHoGa == searchData.ThongTinChungHoGa_HinhThucMongHoGa &&
+                                        plhg.ThongTinChungHoGa_KetCauMong == searchData.ThongTinChungHoGa_KetCauMong &&
+                                        plhg.ThongTinChungHoGa_ChatMatTrong == searchData.ThongTinChungHoGa_ChatMatTrong &&
+                                        plhg.ThongTinChungHoGa_ChatMatNgoai == searchData.ThongTinChungHoGa_ChatMatNgoai &&
+                                        plhg.PhuBiHoGa_CDai == searchData.PhuBiHoGa_CDai &&
+                                        plhg.PhuBiHoGa_CRong == searchData.PhuBiHoGa_CRong &&
+                                        plhg.BeTongLotMong_D == searchData.BeTongLotMong_D &&
+                                        plhg.BeTongLotMong_R == searchData.BeTongLotMong_R &&
+                                        plhg.BeTongLotMong_C == searchData.BeTongLotMong_C &&
+                                        plhg.BeTongMongHoGa_D == searchData.BeTongMongHoGa_D &&
+                                        plhg.BeTongMongHoGa_R == searchData.BeTongMongHoGa_R &&
+                                        plhg.BeTongMongHoGa_C == searchData.BeTongMongHoGa_C &&
+                                        plhg.DeHoGa_D == searchData.DeHoGa_D &&
+                                        plhg.DeHoGa_R == searchData.DeHoGa_R &&
+                                        plhg.DeHoGa_C == searchData.DeHoGa_C &&
+                                        plhg.TuongHoGa_D == searchData.TuongHoGa_D &&
+                                        plhg.TuongHoGa_R == searchData.TuongHoGa_R &&
+                                        plhg.TuongHoGa_C == searchData.TuongHoGa_C &&
+                                        plhg.TuongHoGa_CdTuong == searchData.TuongHoGa_CdTuong &&
+                                        plhg.DamGiuaHoGa_D == searchData.DamGiuaHoGa_D &&
+                                        plhg.DamGiuaHoGa_R == searchData.DamGiuaHoGa_R &&
+                                        plhg.DamGiuaHoGa_C == searchData.DamGiuaHoGa_C &&
+                                        plhg.DamGiuaHoGa_CdDam == searchData.DamGiuaHoGa_CdDam &&
+                                        plhg.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa == searchData.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa &&
+                                        plhg.ChatMatTrong_D == searchData.ChatMatTrong_D &&
+                                        plhg.ChatMatTrong_R == searchData.ChatMatTrong_R &&
+                                        plhg.ChatMatTrong_C == searchData.ChatMatTrong_C &&
+                                        plhg.ChatMatNgoaiCanh_D == searchData.ChatMatNgoaiCanh_D &&
+                                        plhg.ChatMatNgoaiCanh_R == searchData.ChatMatNgoaiCanh_R &&
+                                        plhg.ChatMatNgoaiCanh_C == searchData.ChatMatNgoaiCanh_C &&
+                                        plhg.MuMoThotDuoi_D == searchData.MuMoThotDuoi_D &&
+                                        plhg.MuMoThotDuoi_R == searchData.MuMoThotDuoi_R &&
+                                        plhg.MuMoThotDuoi_C == searchData.MuMoThotDuoi_C &&
+                                        plhg.MuMoThotDuoi_CdTuong == searchData.MuMoThotDuoi_CdTuong &&
+                                        plhg.MuMoThotTren_D == searchData.MuMoThotTren_D &&
+                                        plhg.MuMoThotTren_R == searchData.MuMoThotTren_R &&
+                                        plhg.MuMoThotTren_C == searchData.MuMoThotTren_C &&
+                                        plhg.MuMoThotTren_CdTuong == searchData.MuMoThotTren_CdTuong &&
+                                        plhg.HinhThucDauNoi1_Loai == searchData.HinhThucDauNoi1_Loai &&
+                                        plhg.HinhThucDauNoi1_CanhDai == searchData.HinhThucDauNoi1_CanhDai &&
+                                        plhg.HinhThucDauNoi1_CanhRong == searchData.HinhThucDauNoi1_CanhRong &&
+                                        plhg.HinhThucDauNoi1_CanhCheo == searchData.HinhThucDauNoi1_CanhCheo &&
+                                        plhg.HinhThucDauNoi2_Loai == searchData.HinhThucDauNoi2_Loai &&
+                                        plhg.HinhThucDauNoi2_CanhDai == searchData.HinhThucDauNoi2_CanhDai &&
+                                        plhg.HinhThucDauNoi2_CanhRong == searchData.HinhThucDauNoi2_CanhRong &&
+                                        plhg.HinhThucDauNoi2_CanhCheo == searchData.HinhThucDauNoi2_CanhCheo &&
+                                        plhg.HinhThucDauNoi3_Loai == searchData.HinhThucDauNoi3_Loai &&
+                                        plhg.HinhThucDauNoi3_CanhDai == searchData.HinhThucDauNoi3_CanhDai &&
+                                        plhg.HinhThucDauNoi3_CanhRong == searchData.HinhThucDauNoi3_CanhRong &&
+                                        plhg.HinhThucDauNoi3_CanhCheo == searchData.HinhThucDauNoi3_CanhCheo &&
+                                        plhg.HinhThucDauNoi4_Loai == searchData.HinhThucDauNoi4_Loai &&
+                                        plhg.HinhThucDauNoi4_CanhDai == searchData.HinhThucDauNoi4_CanhDai &&
+                                        plhg.HinhThucDauNoi4_CanhRong == searchData.HinhThucDauNoi4_CanhRong &&
+                                        plhg.HinhThucDauNoi4_CanhCheo == searchData.HinhThucDauNoi4_CanhCheo &&
+                                        plhg.HinhThucDauNoi5_Loai == searchData.HinhThucDauNoi5_Loai &&
+                                        plhg.HinhThucDauNoi5_CanhDai == searchData.HinhThucDauNoi5_CanhDai &&
+                                        plhg.HinhThucDauNoi5_CanhRong == searchData.HinhThucDauNoi5_CanhRong &&
+                                        plhg.HinhThucDauNoi5_CanhCheo == searchData.HinhThucDauNoi5_CanhCheo &&
+                                        plhg.HinhThucDauNoi6_Loai == searchData.HinhThucDauNoi6_Loai &&
+                                        plhg.HinhThucDauNoi6_CanhDai == searchData.HinhThucDauNoi6_CanhDai &&
+                                        plhg.HinhThucDauNoi6_CanhRong == searchData.HinhThucDauNoi6_CanhRong &&
+                                        plhg.HinhThucDauNoi6_CanhCheo == searchData.HinhThucDauNoi6_CanhCheo &&
+                                        plhg.HinhThucDauNoi7_Loai == searchData.HinhThucDauNoi7_Loai &&
+                                        plhg.HinhThucDauNoi7_CanhDai == searchData.HinhThucDauNoi7_CanhDai &&
+                                        plhg.HinhThucDauNoi7_CanhRong == searchData.HinhThucDauNoi7_CanhRong &&
+                                        plhg.HinhThucDauNoi7_CanhCheo == searchData.HinhThucDauNoi7_CanhCheo &&
+                                        plhg.HinhThucDauNoi8_Loai == searchData.HinhThucDauNoi8_Loai &&
+                                        plhg.HinhThucDauNoi8_CanhDai == searchData.HinhThucDauNoi8_CanhDai &&
+                                        plhg.HinhThucDauNoi8_CanhRong == searchData.HinhThucDauNoi8_CanhRong &&
+                                        plhg.HinhThucDauNoi8_CanhCheo == searchData.HinhThucDauNoi8_CanhCheo
+
+                                          ));
+                var sqlQuery = query.ToQueryString();
+                var result = await query.ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
+        }
+
         public async Task<PhanLoaiHoGa> GetPhanLoaiHoGaExist(PhanLoaiHoGa searchData)
         {
             try
@@ -492,7 +589,7 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
             }
         }
-        public async Task<string> InsertId(PhanLoaiHoGa entity, string ThongTinChungHoGa_KetCauTuong)
+        public async Task<string> InsertId(PhanLoaiHoGa entity, string ThongTinChungHoGa_KetCauTuong ,string TenPL)
         {
             try
             {
@@ -513,14 +610,22 @@ namespace DucAnhERP.Services
                 ThongTinChungHoGa_KetCauTuong = ThongTinChungHoGa_KetCauTuong.ToUpper().Trim();
                 if (entity.G == "=G")
                 {
-                    if (ThongTinChungHoGa_KetCauTuong == "Tường bê tông".ToUpper().Trim() || ThongTinChungHoGa_KetCauTuong == "Tường bê tông cốt thép".ToUpper().Trim())
+                    if (string.IsNullOrEmpty(TenPL))
                     {
-                        entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag + "(BT)" + "=G";
+                        if (ThongTinChungHoGa_KetCauTuong == "Tường bê tông".ToUpper().Trim() || ThongTinChungHoGa_KetCauTuong == "Tường bê tông cốt thép".ToUpper().Trim())
+                        {
+                            entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag + "(BT)" + "=G";
+                        }
+                        else
+                        {
+                            entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag + "=G";
+                        }
                     }
                     else
                     {
-                        entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag + "=G";
+                        entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = TenPL + "=G";
                     }
+                    
                 }
                 else
                 {

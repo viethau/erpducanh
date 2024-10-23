@@ -8,7 +8,8 @@ namespace DucAnhERP.Repository
         Task<string> InsertLaterFlag(DMThep entity, int FlagLast);
         Task<List<DMTLThepModel>> GetAllByVM(DMTLThepModel mModel);
         Task<List<DMThep>> GetExist(DMThep searchData);
-        Task<bool> CheckUsingId(string id);
+        Task<bool> CheckUsingId(string LoaiThep, string KichThuoc);
         Task<DMThep> GetTrongLuong(string LoaiThep, string DKCD);
+        
     }
 }

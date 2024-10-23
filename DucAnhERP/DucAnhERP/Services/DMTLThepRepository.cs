@@ -11,7 +11,6 @@ namespace DucAnhERP.Services
     public class DMTLThepRepository : IDMTLThepRepository
     {
         private readonly IDbContextFactory<ApplicationDbContext> _context;
-
         public DMTLThepRepository(IDbContextFactory<ApplicationDbContext> context)
         {
             _context = context;
@@ -114,21 +113,29 @@ namespace DucAnhERP.Services
                 .FirstOrDefaultAsync(x => x.ChungLoaiThep == LoaiThep && x.DuongKinh == DKCD);
             return result;
         }
-
-        public async Task<bool> CheckUsingId(string id)
+        public async Task<bool> CheckUsingId(string LoaiThep, string KichThuoc)
         {
-            //bool isSuccess = false;
-            //using var context = _context.CreateDbContext();
-            //var query = context.TKThepHoGas
-            //             .Where(item => (item.LoaiThep == id));
+            bool isSuccess = false;
+            using var context = _context.CreateDbContext();
+            var query = context.TKThepHoGas
+                         .Where(x => (x.LoaiThep == LoaiThep && x.DKCD.ToString() == KichThuoc));
 
-            //var data = await query.ToListAsync();
-
-            //// Kiểm tra nếu danh sách kết quả rỗng hoặc không có dữ liệu khớp
-            //isSuccess = data.Any();
-            //return (isSuccess);
-            return true;
+            var data = await query.ToListAsync();
+            isSuccess = data.Any();
+            if (isSuccess) {
+                return (isSuccess);
+            }
+            else
+            {
+                var query1 = context.TKThepTamDans
+                      .Where(x => (x.LoaiThep == LoaiThep && x.DKCD.ToString() == KichThuoc));
+                var data1 = await query.ToListAsync();
+                // Kiểm tra nếu danh sách kết quả rỗng hoặc không có dữ liệu khớp
+                isSuccess = data1.Any();
+                return (isSuccess);
+            }
         }
+
         public async Task Update(DMThep DMThep)
         {
             using var context = _context.CreateDbContext();
@@ -267,7 +274,6 @@ namespace DucAnhERP.Services
                 return id;
             }
         }
-
 
     }
 }

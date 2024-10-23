@@ -55,6 +55,7 @@ namespace DucAnhERP.Data
         public DbSet<TKThepHoGa> TKThepHoGas { get; set; }
         public DbSet<TKThepTamDan> TKThepTamDans { get; set; }
         public DbSet<DMThep> DMTLTheps { get; set; }
+        public DbSet<PKKLHoGa> PKKLHoGas { get; set; }
 
 
 

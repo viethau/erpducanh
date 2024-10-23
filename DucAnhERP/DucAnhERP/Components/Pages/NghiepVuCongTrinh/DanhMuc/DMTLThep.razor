@@ -27,7 +27,7 @@
                     <div class="col-3">
                         <div class="form-group">
                             <label for="Ten">Đường kính <span class="text-danger">*</span></label>
-                            <InputNumber id="DuongKinh" class="form-control" @bind-Value="Input.DuongKinh" />
+                            <InputText id="DuongKinh" class="form-control" @bind-Value="Input.DuongKinh" />
                             <ValidationMessage For="() => Input.DuongKinh" class="text-danger" />
                         </div>
                     </div>
@@ -259,7 +259,7 @@
                         if (isValid)
                         {
                             await DMTLThepRepository.Update(Input);
-                           
+                            isModalVisible = false;
                             Input = new();
                             isEdit = false;
                             ToastService.ShowToast(
@@ -276,7 +276,7 @@
                     else if (listExist.Count > 0 && listExist[0].Id == Input.Id)
                     {
                         await DMTLThepRepository.Update(Input);
-                       
+                        isModalVisible = false;
                         Input = new();
                         isEdit = false;
                         ToastService.ShowToast(
@@ -309,7 +309,7 @@
 
                         // Thêm mới thông tin
                         await DMTLThepRepository.Insert(Input);
-                      
+                        isModalVisible = false;
                         Input = new();
                         ToastService.ShowToast(
                             "Thông báo",
@@ -371,8 +371,9 @@
                 if (!string.IsNullOrEmpty(deleteId))
                 {
                     //đợi
-                    var result = await DMTLThepRepository.CheckUsingId(deleteId);
-                    if (!result)
+                    Input = await DMTLThepRepository.GetById(deleteId);
+                    var result = await DMTLThepRepository.CheckUsingId(Input.ChungLoaiThep, Input.DuongKinh);
+                    if (result)
                     {
                         ToastService.ShowToast("Thông báo", "Không thể xóa danh mục đang được sử dụng.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
                     }

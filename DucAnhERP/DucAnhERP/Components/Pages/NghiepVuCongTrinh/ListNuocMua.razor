@@ -9974,6 +9974,7 @@
                 HinhThucDauNoi8_CanhCheo = Input.HinhThucDauNoi8_CanhCheo
             };
 
+        //load phân loại
         CheckObjHelper checkObjhelper = new();
         if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
         {
@@ -9981,11 +9982,42 @@
         }
         if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
         {
-            string HoGa_KetCauTuong = GetTenDanhMucById(searchData.ThongTinChungHoGa_KetCauTuong);
-            var id = await PhanLoaiHoGaRepository.InsertId(searchData, HoGa_KetCauTuong);
-            Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
-        }
+             Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = "";
+            List<PhanLoaiHoGa> loadTenHoGaSauPhanLoai = new();
+            loadTenHoGaSauPhanLoai = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaByDetails(searchData);
+            if (loadTenHoGaSauPhanLoai !=null && loadTenHoGaSauPhanLoai.Count>0)
+            {
+                foreach(var item in loadTenHoGaSauPhanLoai)
+                {
+                    // Kiểm tra xem tên hố ga theo bản vẽ có kết thúc bằng "=G"
+                        if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaTheoBanVe) &&
+                            Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
+                        {
+                            if (item.G == "=G")
+                            {
+                                Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
+                                break; 
+                            }
+                        }
+                        else
+                        {
+                            // Nếu G là null hoặc rỗng, gán giá trị Id
+                            if (string.IsNullOrEmpty(item.G))
+                            {
+                            Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
+                                break; 
+                            }
+                        }
+                }
 
+            }
+            if(string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai)){
+                Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = "";
+                string HoGa_KetCauTuong = GetTenDanhMucById(searchData.ThongTinChungHoGa_KetCauTuong);
+                var id = await PhanLoaiHoGaRepository.InsertId(searchData, HoGa_KetCauTuong,Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
+                Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
+            }
+        }
     }
 
     //Load tên theo phân loại hố ga

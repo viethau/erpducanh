@@ -58,6 +58,7 @@ namespace DucAnhERP.Services
                             join c in context.DMTLTheps
                             on new { a.LoaiThep, DKCD = a.DKCD.ToString() } equals new { LoaiThep = c.ChungLoaiThep, DKCD = c.DuongKinh } into dmThepGroup
                             from c in dmThepGroup.DefaultIfEmpty()
+                            orderby a.SoHieu
                             select new TKThepHoGaModel
                             {
                                 Id = a.Id,
