@@ -1,0 +1,688 @@
+﻿@page "/PKKL/ChatMaTuong"
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using System.Linq
+@using DucAnhERP.SeedWork
+@using DucAnhERP.Helpers
+@inject NavigationManager navigation
+@inject ITKThepHoGaRepository TKThepHoGaRepository
+@inject IPhanLoaiHoGaRepository PhanLoaiHoGaRepository
+@inject IDanhMucRepository DanhMucRepository
+@inject IDMTLThepRepository DMTLThepRepository
+
+@inject DucAnhERP.Services.ToastService ToastService
+<style>
+    table {
+        position: relative;
+    }
+
+        table thead tr td {
+            /*   white-space: nowrap; */
+            text-align: center;
+            padding: 2px 5px;
+        }
+
+</style>
+<div class="container-fluid">
+    <div class="mt-3">
+        <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
+            <BodyTemplate>
+               
+            </BodyTemplate>
+        </CustomModal>
+    </div>
+    <div class="row m-3 ">
+        <div class="col-md-9 col-sm-12">
+          @*   <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
+                <DataAnnotationsValidator />
+                <div class="row">
+                    <div class="col-sm-4 col-md-3 mb-2">
+                        <label for="Table">Loại cấu kiện</label>
+                        <Select2 Id="select3" Items="@selectSearchPLHG" OnChange="@OnSelectChangeSearchPLHG"></Select2>
+                        <ValidationMessage For="()=>InputMD.ThongTinChungHoGaTenHoGaSauPhanLoai"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-4 col-md-3">
+                            <label for="Table">Loại thép</label>
+                            <Select2 Id="select2" Items="@selectSearchLoaiThep" OnChange="@OnSelectChangeSearchLoaiThep"></Select2>
+                            <ValidationMessage For="()=>InputMD.LoaiThep"></ValidationMessage>
+                        </div>
+                    <!-- Search Button -->
+                    <div class="col-sm-4 col-md-2 mb-2">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+                    </div>
+                     <div class="col-sm-4 col-md-1 mb-1">
+                        <label>&nbsp;</label>
+                        <button type="button" @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
+                    </div>
+                </div>
+            </EditForm> *@
+        </div>
+        <div class="col-md-3 col-sm-6 text-end">
+            <button class="btn btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
+                <i class="fas fa-thumbtack"></i>
+            </button>
+        </div>
+    </div>
+    <div id="tableContainer ">
+        <div class="table-report ">
+            <div>
+                <div class=" mt-1">
+                    <h5 class="mt-2">BẢNG PHÂN KHAI KHỐI LƯỢNG CHIẾM CHỖ HỐ GA VÀ KHỐI LƯỢNG TĂNG THÊM DO CHIẾM CHỖ HỐ GA</h5>
+                </div>
+                <div class=" mt-2">
+                    <table id="tb-left" class="table table-hover table-bordered mt-3">
+                        <thead class="bg-info @thumbtack">
+                            <tr>
+                                <th class="text-center" rowspan="3"></th>
+                                <th class="text-center" rowspan="3">STT</th>
+                                <th class="text-center" colspan="8">Kl chiếm chỗ</th>
+                                <th class="text-center" colspan="4" rowspan="2">KL sinh ra do chiếm chỗ</th>
+                                <th class="text-center" rowspan="3">Tên hố ga sau phân loại</th>
+                                <th  class="text-center" colspan="112">Hạng mục chiếm chỗ hố ga</th
+                            </tr>
+                            <tr>
+                                <th class="text-center" colspan="2">KL gạch xây chiếm chỗ</th>
+                                <th class="text-center" colspan="2">KL chát chiếm chỗ</th>
+                                <th class="text-center" colspan="2">KL bê tông chiếm chỗ</th>
+                                <th class="text-center" colspan="2">KL ván khuân chiếm chỗ</th>
+                                <th class="text-center" colspan="14">Hình thức đấu nối</th>
+                                <th class="text-center" colspan="14">Hình thức đấu nối</th>
+                                <th class="text-center" colspan="14">Hình thức đấu nối</th>
+                                <th class="text-center" colspan="14">Hình thức đấu nối</th>
+                                <th class="text-center" colspan="14">Hình thức đấu nối</th>
+                                <th class="text-center" colspan="14">Hình thức đấu nối</th>
+                                <th class="text-center" colspan="14">Hình thức đấu nối</th>
+                                <th class="text-center" colspan="14">Hình thức đấu nối</th>
+                            </tr>
+                            <tr>
+                                <th class="text-center">Tên công tác</th>
+                                <th class="text-center">KL</th>
+                                <th class="text-center">Tên công tác</th>
+                                <th class="text-center">KL</th>
+                                <th class="text-center">Tên công tác</th>
+                                <th class="text-center">KL</th>
+                                <th class="text-center">Tên công tác</th>
+                                <th class="text-center">KL</th>
+                                <th class="text-center">Tên công tác</th>
+                                <th class="text-center">KL</th>
+                                <th class="text-center">Tên công tác</th>
+                                <th class="text-center">KL</th>
+
+                                 <th class="text-center align-middle">Máng thu</th>
+                                <th class="text-center align-middle">KL bổ sung</th>
+                                <th class="text-center align-middle">Cạnh dài</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">Cạnh rộng</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">Cạnh chéo</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">D1500</th>
+                                <th class="text-center align-middle">KL bổ sung</th>
+                                <th class="text-center align-middle">Cạnh dài</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">Cạnh rộng</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">Cạnh chéo</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">D1000</th>
+                                <th class="text-center align-middle">KL bổ sung</th>
+                                <th class="text-center align-middle">Cạnhdài</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">Cạnh rộng</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">Cạnh chéo</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">Rãnh B1000</th>
+                                <th class="text-center align-middle">KL bổsung</th>
+                                <th class="text-center align-middle">Cạnh dài</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">Cạnh rộng</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">Cạnh chéo</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">B1000CL</th>
+                                <th class="text-center align-middle">KL bổ sung</th>
+                                <th class="text-center align-middle">Cạnh dài</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">Cạnhrộng</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">Cạnhchéo</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">D600</th>
+                                <th class="text-center align-middle">KL bổ sung</th>
+                                <th class="text-center align-middle">Cạnhdài</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">Cạnhrộng</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">Cạnh chéo</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">Rãnh B800</th>
+                                <th class="text-center align-middle">KL bổ sung</th>
+                                <th class="text-center align-middle">Cạnh dài</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">Cạnh rộng</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">Cạnh chéo</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">B2000</th>
+                                <th class="text-center align-middle">KL bổ sung</th>
+                                <th class="text-center align-middle">Cạnh dài</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">Cạnh rộng</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                                <th class="text-center align-middle">Cạnh chéo</th>
+                                <th class="text-center align-middle">D</th>
+                                <th class="text-center align-middle">R</th>
+                                <th class="text-center align-middle">C</th>
+                            </tr>
+                        </thead>
+                        @if (listTKThepHGaModel.Any())
+                        {
+                            <tbody>
+                                @{
+                                    int stt = 0;
+                                }
+                                @foreach (var item in listTKThepHGaModel)
+                                {
+                                    stt++;
+                                    <tr>
+                                        <td class="d-flex nowrap">
+                                                <div class="d-inline-block">
+                                                    <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                         </td>
+                                        
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+                        else
+                        {
+                            <tbody>
+                                <tr>
+                                    <td colspan="5"> Không có dữ liệu</td>
+                                </tr>
+                            </tbody>
+                        }
+
+
+                    </table>
+                </div>
+                <div class="mt-4">
+                    @if (listTKThepHGaModel.Any())
+                    {
+                        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+   <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+    <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
+</div>
+
+
+@code {
+
+    private bool isLoading = false;
+    private bool isModalVisible = false;
+    private string TitleModal = "Thêm mới ";
+    bool isEdit = false;
+    string thumbtack = "";
+    private DateTime baseTime;
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+
+    private ChatMaTuong Input = new();
+    private TKThepHoGaModel InputMD = new TKThepHoGaModel();
+
+    private List<SelectedItem> selectPLHG = new();
+    private void OnSelectChangePLHG(SelectedItem selectedItem)
+    {
+        Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = selectedItem.Value;
+    }
+    private List<SelectedItem> selectSearchPLHG = new();
+    private void OnSelectChangeSearchPLHG(SelectedItem selectedItem)
+    {
+        InputMD.ThongTinChungHoGa_TenHoGaSauPhanLoai = selectedItem.Value;
+    }
+
+    public string LoaiThep = "";
+    private List<SelectedItem> selectLoaiThep = new();
+    private void OnSelectChangeLoaiThep(SelectedItem selectedItem)
+    {
+        Input.LoaiThep = selectedItem.Value;
+        LoaiThep = selectedItem.Text;
+    }
+    private List<SelectedItem> selectSearchLoaiThep = new();
+    private void OnSelectChangeSearchLoaiThep(SelectedItem selectedItem)
+    {
+        InputMD.LoaiThep = selectedItem.Value;
+    }
+
+    public List<TKThepHoGaModel> listTKThepHGaModel { get; set; } = new();
+    public List<TKThepHoGaModel> listModel { get; set; } = new();
+    public MetaData MetaData { get; set; }
+    public TKThepHoGaModel tKThepHoGaModel { get; set; }
+
+    //bắt sự kiện khi thay đổi
+    private System.Timers.Timer typingTimer;
+    private int delay = 2000; // Thời gian chờ (2000ms)
+    private void OnInputChange(ChangeEventArgs e)
+    {
+        // Dừng timer nếu đang chạy
+        typingTimer?.Stop();
+
+        // Khởi động lại timer
+        typingTimer = new System.Timers.Timer(delay);
+        typingTimer.Elapsed += OnTypingStopped;
+        typingTimer.AutoReset = false;
+        typingTimer.Start();
+    }
+
+
+    private async void OnTypingStopped(object sender, System.Timers.ElapsedEventArgs e)
+    {
+
+       
+        await InvokeAsync(() =>
+          {
+              StateHasChanged();
+          });
+    }
+
+
+    private void ShowModal()
+    {
+        isModalVisible = true;
+    }
+
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+        isEdit = false;
+    }
+
+    private void HandleSave()
+    {
+        // Logic for saving
+        isModalVisible = false;
+    }
+
+    private void HandleCancel()
+    {
+        // Logic for canceling
+        isModalVisible = false;
+        isEdit = false;
+
+    }
+
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+
+            await LoadData();
+            
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+    // Truy vấn data theo điều kiện tìm kiếm
+    private async Task LoadData()
+    {
+        try
+        {
+            isLoading = true;
+            tKThepHoGaModel = new();
+            var repository = await TKThepHoGaRepository.GetAllByVM(InputMD);
+            listModel = repository;
+            if (listModel!= null &&  listModel.Count >0)
+            {
+                foreach(var item  in listModel)
+                {
+                    if(item.LoaiThep.Trim().ToUpper() == "THÉP BẢN")
+                    {
+                        item.TongTrongLuong =  (item.DKCD * item.TongChieuDai * item.TrongLuong) / 1000000;
+                    }
+                    else
+                    {
+                        item.TongTrongLuong = item.TongChieuDai * item.TrongLuong;
+                    }
+                     item.TongTrongLuong = Math.Round(item.TongTrongLuong ?? 0, 4);
+                }
+            }
+            listTKThepHGaModel = Paging(listModel);
+
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+        isLoading = false;
+    }
+
+    public async Task Search()
+    {
+        tKThepHoGaModel.PageNumber = 1;
+        await LoadData();
+
+    }
+
+    private async Task HandleValidSubmit()
+    {
+
+        try
+        {
+            string[] ids = { Input.ThongTinChungHoGaTenHoGaSauPhanLoai??"" };
+            var isValidTenPL = await PhanLoaiHoGaRepository.CheckExclusive(ids,baseTime);
+            var listExist = await TKThepHoGaRepository.GetExist(Input);
+            if (isValidTenPL)
+            {
+                if (isEdit)
+                {
+                    string[] idss = { Input.Id }; 
+
+
+                    if(listExist == null || listExist.Count ==0 )
+                    {
+                        bool isValid = await TKThepHoGaRepository.CheckExclusive(idss,baseTime);
+                        if (isValid)
+                        {
+                            await TKThepHoGaRepository.Update(Input);
+                            isModalVisible = false;
+                            Input = new TKThepHoGa();
+                            isEdit = false;
+                            ToastService.ShowToast(
+                                "Thông báo",
+                                "Cập nhật thành công.",
+                                cssClass: "toast-success",
+                                iconClass: "fa fa-check-circle",
+                                progressBarClass: "bg-info",
+                                duration: 5000
+                            );
+                            await LoadData();
+                        }
+                    }else if(listExist.Count >0 && listExist[0].Id == Input.Id)
+                    {
+                        await TKThepHoGaRepository.Update(Input);
+                        isModalVisible = false;
+                        Input = new TKThepHoGa();
+                        isEdit = false;
+                        ToastService.ShowToast(
+                            "Thông báo",
+                            "Cập nhật thành công.",
+                            cssClass: "toast-success",
+                            iconClass: "fa fa-check-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
+                        await LoadData();
+                    } else
+                    {
+                        ToastService.ShowToast(
+                        "Thông báo",
+                         "Đã tồn tại.",
+                         cssClass: "toast-danger",
+                         iconClass: "fa fa-exclamation-circle",
+                         progressBarClass: "bg-info",
+                         duration: 5000);
+                    }
+
+                }
+                else
+                {
+                    if( listExist== null||listExist.Count == 0)
+                    {
+                        if (Flag > 0)
+                        {
+                            // Thêm mới thông tin
+                            var id = await TKThepHoGaRepository.InsertLaterFlag(Input, Flag);
+                            isModalVisible = false;
+                            Input = new TKThepHoGa();
+                            ToastService.ShowToast(
+                                "Thông báo",
+                                "Chèn thành công.",
+                                cssClass: "toast-success",
+                                iconClass: "fa fa-check-circle",
+                                progressBarClass: "bg-info",
+                                duration: 5000
+                            );
+                            await LoadData();
+                            Flag = 0;
+                        }
+                        else
+                        {
+                            // Thêm mới thông tin
+                            await TKThepHoGaRepository.Insert(Input);
+                            isModalVisible = false;
+                            Input = new TKThepHoGa();
+                            ToastService.ShowToast(
+                                "Thông báo",
+                                "Thêm thành công.",
+                                cssClass: "toast-success",
+                                iconClass: "fa fa-check-circle",
+                                progressBarClass: "bg-info",
+                                duration: 5000
+                            );
+                            await LoadData();
+                        }
+                    }else
+                    {
+                        ToastService.ShowToast(
+                        "Thông báo",
+                         "Đã tồn tại.",
+                         cssClass: "toast-danger",
+                         iconClass: "fa fa-exclamation-circle",
+                         progressBarClass: "bg-info",
+                         duration: 5000);
+                    }
+
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+
+    }
+
+    private string deleteId;
+
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        deleteId = id;
+        confirmModal.Title = "Xác nhận xóa";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.openModal();
+
+    }
+
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        if (confirmed)
+        {
+            if (!string.IsNullOrEmpty(deleteId))
+            {
+                string[] ids = { deleteId };
+                var result = await TKThepHoGaRepository.CheckExclusive(ids,baseTime);
+                if (result)
+                {
+                     // Thực hiện hành động xóa
+                    await TKThepHoGaRepository.DeleteById(deleteId);
+                    ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success",iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                    await LoadData();
+                }
+               
+                deleteId = "";
+            }
+        }
+    }
+
+
+    private async Task HandleEdit(string id)
+    {
+        try
+        {
+            TitleModal = "Cập nhật loại TĐan TDẫn !";
+            Input = await TKThepHoGaRepository.GetById(id);
+            isEdit = true;
+            isModalVisible = true;
+             foreach (var item in selectLoaiThep)
+            {
+                item.IsSelected = item.Value == Input.LoaiThep;
+            }
+            foreach (var item in selectPLHG)
+            {
+                item.IsSelected = item.Value == Input.ThongTinChungHoGaTenHoGaSauPhanLoai;
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                 "Thông báo",
+                ex.Message,
+                 cssClass: "toast-danger",
+               iconClass: "fa fa-exclamation-circle",
+                 progressBarClass: "bg-info",
+                 duration: 5000
+             );
+       }
+
+    }
+
+
+      int Flag = 0;
+    //thêm vào sau
+    private void InsertLaterFlag(int flag)
+    {
+        Flag = flag;
+        TitleModal = "Chèn loại cống !";
+        isModalVisible = true;
+    }
+
+
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        tKThepHoGaModel.PageNumber = 1;
+        Paging(listModel);
+    }
+
+
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        tKThepHoGaModel.PageNumber = page;
+        Paging(listModel);
+    }
+
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+        tKThepHoGaModel.PageNumber = 1;
+        tKThepHoGaModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+
+
+    // Xử lý paging
+    private List<TKThepHoGaModel> Paging(List<TKThepHoGaModel> listModels)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = listModels.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        listModels = listModels.Skip((tKThepHoGaModel.PageNumber - 1) * tKThepHoGaModel.PageSize).Take(tKThepHoGaModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listTKThepHGaModel.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var major in listModels)
+        {
+            listTKThepHGaModel.Add(major);
+        }
+
+        // Tạo pagelist mới
+
+        var pagelist = new PageList<TKThepHoGaModel>(listTKThepHGaModel, count, tKThepHoGaModel.PageNumber, tKThepHoGaModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return listModels;
+    }
+
+    private void ThumbtackHeader()
+    {
+        thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
+    }
+}

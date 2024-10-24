@@ -16,5 +16,6 @@ namespace DucAnhERP.Repository
         Task<List<PhanLoaiHoGaModel>> GetBaoCaoKTHHHGa(PhanLoaiHoGaModel plhgMode);
         Task<List<PhanLoaiHoGaModel>> GetBaoCaoHGaSDThep(PhanLoaiHoGaModel plhgMode);
         Task<List<PhanLoaiHoGa>> GetPhanLoaiHoGaByDetails(PhanLoaiHoGa searchData);
+        Task<PhanLoaiHoGaModel> GetIdByVM(PhanLoaiHoGaModel Input);
     }
 }

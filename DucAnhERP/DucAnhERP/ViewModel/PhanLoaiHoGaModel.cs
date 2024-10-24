@@ -5,7 +5,7 @@ namespace DucAnhERP.ViewModel
 {
     public class PhanLoaiHoGaModel : PagingParameters
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string Id { get; set; }
         public int Flag { get; set; } = 0;
         public string? ThongTinChungHoGa_TenHoGaSauPhanLoai { get; set; } = "";
         public string? ThongTinChungHoGa_HinhThucHoGa { get; set; } = "";

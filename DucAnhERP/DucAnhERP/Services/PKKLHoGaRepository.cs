@@ -52,7 +52,12 @@ namespace DucAnhERP.Services
                             join b in context.PhanLoaiHoGas
                             on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id into plHoGaGroup
                             from b in plHoGaGroup.DefaultIfEmpty()
-                            
+                            join dm in context.DSDanhMuc
+                            on a.ThongTinChungHoGa_HinhThucHoGa equals dm.Id into dmgroup
+                            from dm in dmgroup.DefaultIfEmpty()
+                            join dm1 in context.DSDanhMuc
+                            on a.ThongTinChungHoGa_KetCauMuMo equals dm1.Id into dm1group
+                            from dm1 in dm1group.DefaultIfEmpty()
                             orderby a.CreateAt
                             select new PKKLHoGaModel
                             {
@@ -63,9 +68,12 @@ namespace DucAnhERP.Services
                                 ThongTinChungHoGa_TenHoGaSauPhanLoai_Name = b.ThongTinChungHoGa_TenHoGaSauPhanLoai,
                                 
                                 ThongTinChungHoGa_HinhThucHoGa = a.ThongTinChungHoGa_HinhThucHoGa,
+                                ThongTinChungHoGa_HinhThucHoGa_Name = dm.Ten,
                                 ThongTinChungHoGa_KetCauMuMo = a.ThongTinChungHoGa_KetCauMuMo,
+                                ThongTinChungHoGa_KetCauMuMo_Name = dm1.Ten,
                                 LoaiBeTong = a.LoaiBeTong,
-                                HangMucThiCong = a.HangMucThiCong,
+                                HangMuc = a.HangMuc,
+                                HangMucCongTac = a.HangMucCongTac,
                                 TenCongTac = a.TenCongTac,
                                 DonVi = a.DonVi,
                                 BeTongLotMong_D = a.BeTongLotMong_D,
@@ -120,7 +128,8 @@ namespace DucAnhERP.Services
                                     item.ThongTinChungHoGa_HinhThucHoGa == searchData.ThongTinChungHoGa_HinhThucHoGa &&
                                     item.ThongTinChungHoGa_KetCauMuMo == searchData.ThongTinChungHoGa_KetCauMuMo &&
                                     item.LoaiBeTong == searchData.LoaiBeTong &&
-                                    item.HangMucThiCong == searchData.HangMucThiCong &&
+                                    item.HangMuc == searchData.HangMuc &&
+                                    item.HangMucCongTac == searchData.HangMucCongTac &&
                                     item.TenCongTac == searchData.TenCongTac &&
                                     item.DonVi == searchData.DonVi &&
                                     item.BeTongLotMong_D == searchData.BeTongLotMong_D &&
@@ -214,7 +223,7 @@ namespace DucAnhERP.Services
 
                 // Lấy tất cả các bản ghi phù hợp và thực hiện xử lý trên client-side
                 var maxFlagValue = await context.PKKLHoGas
-                    .Where(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai == entity.ThongTinChungHoGa_TenHoGaSauPhanLoai)
+                    .Where(x => (x.ThongTinChungHoGa_TenHoGaSauPhanLoai == entity.ThongTinChungHoGa_TenHoGaSauPhanLoai) &&( x.HangMuc == entity.HangMuc))
                     .Select(x => x.Flag)
                     .ToListAsync(); // Lấy danh sách các giá trị Flag
 

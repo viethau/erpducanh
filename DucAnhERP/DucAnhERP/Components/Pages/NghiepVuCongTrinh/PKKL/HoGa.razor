@@ -27,170 +27,168 @@
 <div class="container-fluid">
     <div class="mt-3">
         <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
-            <bodytemplate>
-                <editform model="Input" onvalidsubmit="handlevalidsubmit">
-                    <dataannotationsvalidator />
-                    <validationsummary />
-                   
+            <BodyTemplate>
+                <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
                     <h5>Thông tin cấu kiện</h5>
                     <div class="row">
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="table">loại cấu kiện</label>
-                            <select2 id="select1" items="@selectPLHG" onchange="@OnSelectChangePLHG"></select2>
+                            <Select2 Id="select1" Items="@selectPLHG" OnChange="@OnSelectChangePLHG"></Select2>
                             <validationmessage for="()=>Input.thongtinchunghoga_tenhogasauphanloai"></validationmessage>
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
-                            <label for="ThongTinChungHoGa_HinhThucHoGa">Hình thức thi công<span class="text-danger">*</span></label>
-                            <InputText @bind-value="Input.ThongTinChungHoGa_HinhThucHoGa" class="form-control" id="ThongTinChungHoGa_HinhThucHoGa" disabled />
-                            <validationmessage for="() => Input.ThongTinChungHoGa_HinhThucHoGa" class="text-danger" />
+                            <label for="ThongTinChungHoGa_HinhThucHoGa">Hình thức thi công <span class="text-danger"></span></label>
+                            <InputText @bind-Value="Input.ThongTinChungHoGa_HinhThucHoGa" class="form-control" id="ThongTinChungHoGa_HinhThucHoGa" disabled />
+                            <ValidationMessage For="() => Input.ThongTinChungHoGa_HinhThucHoGa" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
-                            <label for="ThongTinChungHoGa_KetCauMuMo">Kiểu mũ mố<span class="text-danger"></span></label>
-                            <InputText @bind-value="Input.ThongTinChungHoGa_KetCauMuMo" class="form-control" id="ThongTinChungHoGa_KetCauMuMo" disabled />
-                            <validationmessage for="() => Input.ThongTinChungHoGa_KetCauMuMo" class="text-danger" />
+                            <label for="ThongTinChungHoGa_KetCauMuMo">Kiểu mũ mố <span class="text-danger"></span></label>
+                            <InputText @bind-Value="Input.ThongTinChungHoGa_KetCauMuMo" class="form-control" id="ThongTinChungHoGa_KetCauMuMo" disabled />
+                            <ValidationMessage For="() => Input.ThongTinChungHoGa_KetCauMuMo" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
-                            <label for="ThongTinChungHoGa_KetCauMuMo">Kiểu mũ mố<span class="text-danger"></span></label>
-                            <InputText @bind-value="Input.ThongTinChungHoGa_KetCauMuMo" class="form-control" id="ThongTinChungHoGa_KetCauMuMo" disabled />
-                            <validationmessage for="() => Input.ThongTinChungHoGa_KetCauMuMo" class="text-danger" />
+                            <label for="table">loại bê tông</label>
+                            <Select2 Id="select3" Items="@selectLBT" OnChange="@OnSelectChangeLBT"></Select2>
+                            <validationmessage for="()=>Input.LoaiBeTong"></validationmessage>
                         </div>
+                      
                     </div>
                     <h5>Thông tin tên công tác thực tế</h5>
                     <div class="row">
                         <div class="form-floating col-sm-6 col-md-3">
-                            <label for="vtlaykhoiluong">Loại bê tông<span class="text-danger"></span></label>
-                            <InputText @oninput="OnInputChange" @bind-value="Input.LoaiBeTong" class="form-control" id="LoaiBeTonI" />
-                            <validationmessage for="() => Input.vtlaykhoiluong" class="text-danger" />
+                            <label for="table">Hạng mục <span class="text-danger">*</span></label>
+                            <Select2 Id="select2" Items="@selectHMTC" OnChange="@OnSelectChangeHMTC"></Select2>
+                            <validationmessage for="()=>Input.HangMuc"></validationmessage>
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
-                            <label for="HangMucThiCong">Hạng mục công tác <span class="text-danger"></span></label>
-                            <InputText @oninput="OnInputChange" @bind-value="Input.HangMucThiCong" class="form-control" id="HangMucThiCong" />
-                            <validationmessage for="() => Input.HangMucThiCong" class="text-danger" />
+                            <label for="HangMucCongTac">Hạng mục công tác <span class="text-danger"></span></label>
+                            <InputText @oninput="OnInputChange" @bind-Value="Input.HangMucCongTac" class="form-control" id="HangMucCongTac" />
+                            <ValidationMessage For="() => Input.HangMucCongTac" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="TenCongTac">Tên công tác thực tế <span class="text-danger"></span></label>
-                            <InputText @oninput="OnInputChange" @bind-value="Input.TenCongTac" class="form-control" id="TenCongTac" />
-                            <validationmessage for="() => Input.TenCongTac" class="text-danger" />
+                            <InputText @oninput="OnInputChange" @bind-Value="Input.TenCongTac" class="form-control" id="TenCongTac" />
+                            <ValidationMessage For="() => Input.TenCongTac" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="DonVi">Đơn vị <span class="text-danger"></span></label>
-                            <InputText @oninput="OnInputChange" @bind-value="Input.DonVi" class="form-control" id="DonVi" />
-                            <validationmessage for="() => Input.DonVi" class="text-danger" />
+                            <InputText @oninput="OnInputChange" @bind-Value="Input.DonVi" class="form-control" id="DonVi" />
+                            <ValidationMessage For="() => Input.DonVi" class="text-danger" />
                         </div>
+
                     </div>
                     <h5>Thông tin KTHH tính khối lượng (m3)</h5>
                     <div class="row">
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="BeTongLotMong_D">D <span class="text-danger"></span></label>
-                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.BeTongLotMong_D" id="BeTongLotMong_D" />
-                            <validationmessage for="() => Input.BeTongLotMong_D" class="text-danger" />
+                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.BeTongLotMong_D" class="form-control" id="BeTongLotMong_D" disabled />
+                            <ValidationMessage For="() => Input.BeTongLotMong_D" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="BeTongLotMong_R">R <span class="text-danger"></span></label>
-                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.BeTongLotMong_R" class="form-control" id="BeTongLotMong_R" />
-                            <validationmessage for="() => Input.BeTongLotMong_R" class="text-danger" />
+                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.BeTongLotMong_R" class="form-control" id="BeTongLotMong_R" disabled />
+                            <ValidationMessage For="() => Input.BeTongLotMong_R" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="BeTongLotMong_C">C <span class="text-danger"></span></label>
-                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.BeTongLotMong_C" class="form-control" id="BeTongLotMong_C" />
-                            <validationmessage for="() => Input.BeTongLotMong_C" class="text-danger" />
+                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.BeTongLotMong_C" class="form-control" id="BeTongLotMong_C" disabled />
+                            <ValidationMessage For="() => Input.BeTongLotMong_C" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
-                            <label for="KTHH_DienTich">Diện tích<span class="text-danger"></span></label>
+                            <label for="KTHH_DienTich">Diện tích <span class="text-danger"></span></label>
                             <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_DienTich" class="form-control" id="KTHH_DienTich" />
-                            <validationmessage for="() => Input.KTHH_DienTich" class="text-danger" />
+                            <ValidationMessage For="() => Input.KTHH_DienTich" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
-                            <label for="GhiChu">Ghi chú<span class="text-danger"></span></label>
-                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.GhiChu" class="form-control" id="GhiChu" />
-                            <validationmessage for="() => Input.GhiChu" class="text-danger" />
+                            <label for="table">Ghi chú</label>
+                            <Select2 Id="select4" Items="@selectGhiChu" OnChange="@OnSelectChangeGhiChu"></Select2>
+                            <validationmessage for="()=>Input.GhiChu"></validationmessage>
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
-                            <label for="SLCauKien">Số lượng cấu kiện<span class="text-danger"></span></label>
+                            <label for="SLCauKien">Số lượng cấu kiện <span class="text-danger"></span></label>
                             <InputNumber @oninput="OnInputChange" @bind-Value="Input.SLCauKien" class="form-control" id="SLCauKien" />
-                            <validationmessage for="() => Input.SLCauKien" class="text-danger" />
-                        </div>
+                            <ValidationMessage For="() => Input.SLCauKien" class="text-danger" />
+                        </div> 
+                        
                         <div class="form-floating col-sm-6 col-md-3">
-                            <label for="SLCauKien">KL 01 CK<span class="text-danger"></span></label>
-                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.SLCauKien" class="form-control" id="SLCauKien" />
-                            <validationmessage for="() => Input.SLCauKien" class="text-danger" />
+                            <label for="KL1CK">KL 01 CK<span class="text-danger"></span></label>
+                            <InputNumber @bind-Value="Input.KL1CK" class="form-control" id="KL1CK" disabled />
+                            <ValidationMessage For="() => Input.KL1CK" class="text-danger" />
                         </div>
                     </div>
                     <h5>Thông tin cạnh tính diện tích (m2)</h5>
                     <div class="row">
                         <div class="form-floating col-sm-6 col-md-3">
-                            <label for="CDai">Cạnh dài<span class="text-danger"></span></label>
-                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.BeTongLotMong_D" id="CDai" />
-                            <validationmessage for="() => Input.CDai" class="text-danger" />
+                            <label for="TTCDT_CDai">Cạnh dài<span class="text-danger"></span></label>
+                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_CDai" class="form-control" id="TTCDT_CDai" />
+                            <ValidationMessage For="() => Input.TTCDT_CDai" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
-                            <label for="TTCDT_Crong">Cạnh rộng <span class="text-danger"></span></label>
+                            <label for="TTCDT_Crong">Cạnh rộng<span class="text-danger"></span></label>
                             <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_Crong" class="form-control" id="TTCDT_Crong" />
-                            <validationmessage for="() => Input.TTCDT_Crong" class="text-danger" />
+                            <ValidationMessage For="() => Input.TTCDT_Crong" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
-                            <label for="TTCDT_Cday">Cạnh đáy <span class="text-danger"></span></label>
+                            <label for="TTCDT_Cday">Cạnh đáy<span class="text-danger"></span></label>
                             <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_Cday" class="form-control" id="TTCDT_Cday" />
-                            <validationmessage for="() => Input.TTCDT_Cday" class="text-danger" />
+                            <ValidationMessage For="() => Input.TTCDT_Cday" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="TTCDT_DT">Diện tích<span class="text-danger"></span></label>
                             <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_DT" class="form-control" id="TTCDT_DT" />
-                            <validationmessage for="() => Input.TTCDT_DT" class="text-danger" />
-                        </div>
-                        <div class="form-floating col-sm-6 col-md-3">
-                            <label for="GhiChu">Ghi chú<span class="text-danger"></span></label>
-                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.GhiChu" class="form-control" id="GhiChu" />
-                            <validationmessage for="() => Input.GhiChu" class="text-danger" />
+                            <ValidationMessage For="() => Input.TTCDT_DT" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="TTCDT_SLCK">Số lượng cấu kiện<span class="text-danger"></span></label>
                             <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_SLCK" class="form-control" id="TTCDT_SLCK" />
-                            <validationmessage for="() => Input.TTCDT_SLCK" class="text-danger" />
+                            <ValidationMessage For="() => Input.TTCDT_SLCK" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
-                            <label for="TTCDT_KL">KL<span class="text-danger"></span></label>
-                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_KL" class="form-control" id="TTCDT_KL" />
-                            <validationmessage for="() => Input.TTCDT_KL" class="text-danger" />
+                            <label for="TTCDT_KL">KL <span class="text-danger"></span></label>
+                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_KL" class="form-control" id="TTCDT_KL" disabled />
+                            <ValidationMessage For="() => Input.TTCDT_KL" class="text-danger" />
                         </div>
                     </div>
                     <h5>Thông tin KL không phải M2,M3</h5>
                     <div class="row">
                         <div class="form-floating col-sm-6 col-md-3">
-                            <label for="KLKP_KL">Khối lượng<span class="text-danger"></span></label>
-                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.KLKP_KL" class="form-control" id="KLKP_KL" />
-                            <validationmessage for="() => Input.KLKP_KL" class="text-danger" />
+                            <label for="KLKP_KL">Khối lượng <span class="text-danger"></span></label>
+                            <InputNumber @bind-Value="Input.KLKP_KL" class="form-control" id="KLKP_KL" disabled />
+                            <ValidationMessage For="() => Input.KLKP_KL" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="KLKP_Sl">Số lượng<span class="text-danger"></span></label>
                             <InputNumber @oninput="OnInputChange" @bind-Value="Input.KLKP_Sl" class="form-control" id="KLKP_Sl" />
-                            <validationmessage for="() => Input.KLKP_Sl" class="text-danger" />
+                            <ValidationMessage For="() => Input.KLKP_Sl" class="text-danger" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="KL1CK_ChuaTruCC">KL 01CK Chưa trừ chiếm chỗ<span class="text-danger"></span></label>
-                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.KL1CK_ChuaTruCC" class="form-control" id="KL1CK_ChuaTruCC" />
-                            <validationmessage for="() => Input.KL1CK_ChuaTruCC" class="text-danger" />
+                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.KL1CK_ChuaTruCC" class="form-control" id="KL1CK_ChuaTruCC" disabled />
+                            <ValidationMessage For="() => Input.KL1CK_ChuaTruCC" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="KLCC1CK">KL chiếm chỗ/01CK<span class="text-danger"></span></label>
                             <InputNumber @oninput="OnInputChange" @bind-Value="Input.KLCC1CK" class="form-control" id="KLCC1CK" />
-                            <validationmessage for="() => Input.KLCC1CK" class="text-danger" />
+                            <ValidationMessage For="() => Input.KLCC1CK" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="TKLCK_SauCC">Tổng KLCK sau chiếm chỗ<span class="text-danger"></span></label>
-                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.TKLCK_SauCC" class="form-control" id="TKLCK_SauCC" />
-                            <validationmessage for="() => Input.TKLCK_SauCC" class="text-danger" />
+                            <InputNumber @bind-Value="Input.TKLCK_SauCC" class="form-control" id="TKLCK_SauCC" disabled />
+                            <ValidationMessage For="() => Input.TKLCK_SauCC" class="text-danger" />
                         </div>
+
                     </div>
 
-                    <div class="row justify-content-end m-2">
-                        <button class="btn btn-primary mr-2" type="submit">save</button>
-                        <button class="btn btn-secondary" @onclick="HandleCancel">cancel</button>
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div class="row mt-5 justify-content-end">
+                        <button class="btn btn-primary mr-2" type="submit">Save</button>
+                        <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
                     </div>
-                </editform>
-            </bodytemplate>
+                </EditForm>
+            </BodyTemplate>
         </CustomModal>
     </div>
     <div class="row m-3 ">
@@ -198,22 +196,22 @@
             <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
                 <DataAnnotationsValidator />
                 <div class="row">
-                   @*  <div class="col-sm-4 col-md-3 mb-2">
-                        <label for="Table">Loại cấu kiện</label>
-                        <Select2 Id="select3" Items="@selectSearchPLHG" OnChange="@OnSelectChangeSearchPLHG"></Select2>
-                        <ValidationMessage For="()=>InputMD.ThongTinChungHoGa_TenHoGaSauPhanLoai"></ValidationMessage>
+                    @*  <div class="col-sm-4 col-md-3 mb-2">
+                    <label for="Table">Loại cấu kiện</label>
+                    <Select2 Id="select3" Items="@selectSearchPLHG" OnChange="@OnSelectChangeSearchPLHG"></Select2>
+                    <ValidationMessage For="()=>InputMD.ThongTinChungHoGa_TenHoGaSauPhanLoai"></ValidationMessage>
                     </div>
                     <div class="form-floating col-sm-4 col-md-3">
-                            <label for="Table">Loại thép</label>
-                            <Select2 Id="select2" Items="@selectSearchLoaiThep" OnChange="@OnSelectChangeSearchLoaiThep"></Select2>
-                            <ValidationMessage For="()=>InputMD.LoaiThep"></ValidationMessage>
-                        </div> *@
+                    <label for="Table">Loại thép</label>
+                    <Select2 Id="select2" Items="@selectSearchLoaiThep" OnChange="@OnSelectChangeSearchLoaiThep"></Select2>
+                    <ValidationMessage For="()=>InputMD.LoaiThep"></ValidationMessage>
+                    </div> *@
                     <!-- Search Button -->
                     <div class="col-sm-4 col-md-2 mb-2">
                         <label>&nbsp;</label>
                         <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
                     </div>
-                     <div class="col-sm-4 col-md-1 mb-1">
+                    <div class="col-sm-4 col-md-1 mb-1">
                         <label>&nbsp;</label>
                         <button type="button" @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
                     </div>
@@ -235,7 +233,7 @@
                 <div class=" mt-2">
                     <table id="tb-left" class="table table-hover table-bordered mt-3">
                         <thead class="bg-info @thumbtack">
-                            <tr >
+                            <tr>
                                 <th rowspan="2"></th>
                                 <th rowspan="2">STT</th>
                                 <th colspan="4">Thông tin cấu kiện</th>
@@ -245,12 +243,12 @@
                                 <th colspan="2">Thông tin KL không phải M2,M3</th>
                                 <th rowspan="2">KL 01CK Chưa trừ chiếm chỗ</th>
                                 <th rowspan="2">KL chiếm chỗ/01CK </th>
-                                <th rowspan="2">Tổng KLCK sau chiếm chỗ</th>
+                                <th rowspan="2" class="text-warning"> Tổng KLCK sau chiếm chỗ</th>
                             </tr>
                             <tr>
-                                
-                                <th class="text-center">Loại cấu kiện			</th>
-                                <th class="text-center">Hình thức thi công      </th>
+
+                                <th class="text-center">Loại cấu kiện	</th>
+                                <th class="text-center">Hình thức thi công   </th>
                                 <th class="text-center">Kiểu mũ mố              </th>
                                 <th class="text-center">Loại bê tông            </th>
                                 <th class="text-center">Hạng mục công tác       </th>
@@ -262,69 +260,600 @@
                                 <th class="text-center">Diện tích               </th>
                                 <th class="text-center">Ghi chú diện tích       </th>
                                 <th class="text-center">Số lượng cấu kiện       </th>
-                                <th class="text-center">KL 01 CK                </th>
+                                <th class="text-center  text-warning">KL 01 CK </th>
                                 <th class="text-center">Cạnh dài                </th>
                                 <th class="text-center">Cạnh rộng               </th>
                                 <th class="text-center">Cạnh đáy                </th>
                                 <th class="text-center">Diện tích               </th>
                                 <th class="text-center">Số lượng cấu kiện       </th>
-                                <th class="text-center">KL                      </th>
+                                <th class="text-center text-warning">KL  </th>
                                 <th class="text-center">Khối lượng              </th>
                                 <th class="text-center">Số lượng                </th>
 
                             </tr>
 
                         </thead>
-                        @if (listTKThepHGaModel.Any())
+                        @if (listPKKLHoGaModel.Any())
                         {
                             <tbody>
                                 @{
-                                    int stt = 0;
+                                    var tenHoGa = "";
+                                    var idHoGa = "";
                                 }
-                                @foreach (var item in listTKThepHGaModel)
-                                {
-                                    stt++;
-                                    <tr>
-                                        <td class="d-flex nowrap">
-                                                <div class="d-inline-block">
-                                                    <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
-                                                        <i class="fas fa-plus"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,stt.ToString())">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </div>
-                                         </td>
-                                        <td>@stt</td>
-                                        <td class="text-center"> @item.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name</td>
-                                        <td class="text-center"> @item.ThongTinChungHoGa_HinhThucHoGa      </td>
-                                        <td class="text-center"> @item.ThongTinChungHoGa_KetCauMuMo        </td>
-                                        <td class="text-center"> @item.LoaiBeTong                          </td>
-                                        <td class="text-center"> @item.HangMucThiCong                      </td>
-                                        <td class="text-center"> @item.TenCongTac                          </td>
-                                        <td class="text-center"> @item.DonVi                               </td>
-                                        <td class="text-center"> @item.BeTongLotMong_D                     </td>
-                                        <td class="text-center"> @item.BeTongLotMong_R                     </td>
-                                        <td class="text-center"> @item.BeTongLotMong_C                     </td>
-                                        <td class="text-center"> @item.KTHH_DienTich                       </td>
-                                        <td class="text-center"> @item.GhiChu                              </td>
-                                        <td class="text-center"> @item.SLCauKien                           </td>
-                                        <td class="text-center"> @item.KL1CK                               </td>
-                                        <td class="text-center"> @item.TTCDT_CDai                          </td>
-                                        <td class="text-center"> @item.TTCDT_Crong                         </td>
-                                        <td class="text-center"> @item.TTCDT_Cday                          </td>
-                                        <td class="text-center"> @item.TTCDT_DT                            </td>
-                                        <td class="text-center"> @item.TTCDT_SLCK                          </td>
-                                        <td class="text-center"> @item.TTCDT_KL                            </td>
-                                        <td class="text-center"> @item.KLKP_KL                             </td>
-                                        <td class="text-center"> @item.KLKP_Sl                             </td>
-                                        <td class="text-center"> @item.KL1CK_ChuaTruCC                     </td>
-                                        <td class="text-center"> @item.KLCC1CK                             </td>
-                                        <td class="text-center"> @item.TKLCK_SauCC                         </td>
+                                @foreach(var pl in listPLHGModel){
+                                     tenHoGa = pl.ThongTinChungHoGa_TenHoGaSauPhanLoai;
+                                     idHoGa = pl.Id;
+
+                                    <tr class="bg-warning">
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-center"> @tenHoGa</td>
+                                        <td class="text-center"> @pl.ThongTinChungHoGa_HinhThucHoGa_Name      </td>
+                                        <td class="text-center"> @pl.ThongTinChungHoGa_KetCauMuMo_Name      </td>
+                                        <td class="text-center " colspan="23"> </td>
                                     </tr>
+                                    <tr class="bg-warning">
+                                        <td></td>
+                                        <td class="text-bold">I</td>
+                                        <td class="text-center"> </td>
+                                        <td class="text-center">   </td>
+                                        <td class="text-center">    </td>
+                                        <td class="text-center">  </td>
+                                        <td class="text-center">  Móng hố ga, hố ga @tenHoGa  </td>
+                                        <td class="text-center">    Móng hố ga, hố ga @tenHoGa   </td>
+                                        <td class="text-center " colspan="19"> </td>
+                                    </tr>
+                                        int stt = 0;
+                                        @foreach (var item in listPKKLHoGaModel)
+                                        {
+                                            if(item.HangMuc=="1MongHoGa" && item.ThongTinChungHoGa_TenHoGaSauPhanLoai == idHoGa)
+                                            {
+                                                stt++;
+                                                <tr>
+                                                    <td class="d-flex nowrap">
+                                                        <div class="d-inline-block">
+                                                            <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
+                                                            <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                            <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,stt.ToString())">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                    <td>@stt</td>
+                                                    <td class="text-center"> @item.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name</td>
+                                                    <td class="text-center"> @item.ThongTinChungHoGa_HinhThucHoGa_Name      </td>
+                                                    <td class="text-center"> @item.ThongTinChungHoGa_KetCauMuMo_Name      </td>
+                                                    <td class="text-center"> @item.LoaiBeTong                          </td>
+                                                    <td class="text-center"> @item.HangMucCongTac                      </td>
+                                                    <td class="text-center"> @item.TenCongTac                          </td>
+                                                    <td class="text-center"> @item.DonVi                               </td>
+                                                    <td class="text-center"> @item.BeTongLotMong_D                     </td>
+                                                    <td class="text-center"> @item.BeTongLotMong_R                     </td>
+                                                    <td class="text-center"> @item.BeTongLotMong_C                     </td>
+                                                    <td class="text-center"> @item.KTHH_DienTich                       </td>
+                                                    <td class="text-center"> @item.GhiChu                              </td>
+                                                    <td class="text-center"> @item.SLCauKien                           </td>
+                                                    <td class="text-center"> @item.KL1CK                               </td>
+                                                    <td class="text-center"> @item.TTCDT_CDai                          </td>
+                                                    <td class="text-center"> @item.TTCDT_Crong                         </td>
+                                                    <td class="text-center"> @item.TTCDT_Cday                          </td>
+                                                    <td class="text-center"> @item.TTCDT_DT                            </td>
+                                                    <td class="text-center"> @item.TTCDT_SLCK                          </td>
+                                                    <td class="text-center"> @item.TTCDT_KL                            </td>
+                                                    <td class="text-center"> @item.KLKP_KL                             </td>
+                                                    <td class="text-center"> @item.KLKP_Sl                             </td>
+                                                    <td class="text-center"> @item.KL1CK_ChuaTruCC                     </td>
+                                                    <td class="text-center"> @item.KLCC1CK                             </td>
+                                                    <td class="text-center"> @item.TKLCK_SauCC                         </td>
+                                                </tr>
+                                             }
+                                        }
+                                    <tr class="bg-warning">
+                                        <td></td>
+                                        <td class="text-bold">II</td>
+                                        <td class="text-center"> </td>
+                                        <td class="text-center">   </td>
+                                        <td class="text-center">    </td>
+                                        <td class="text-center">  </td>
+                                        <td class="text-center"> Hố ga lắp đặt, hố ga  @tenHoGa  </td>
+                                        <td class="text-center"> Hố ga lắp đặt, hố ga  @tenHoGa   </td>
+                                        <td class="text-center " colspan="19"> </td>
+                                    </tr>
+                                    stt = 0;
+                                    @foreach (var item in listPKKLHoGaModel)
+                                    {
+                                        if (item.HangMuc == "2LapDatHoGa" && item.ThongTinChungHoGa_TenHoGaSauPhanLoai == idHoGa)
+                                        {
+                                            stt++;
+                                            <tr>
+                                                <td class="d-flex nowrap">
+                                                    <div class="d-inline-block">
+                                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,stt.ToString())">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td>@stt</td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name</td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_HinhThucHoGa_Name      </td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_KetCauMuMo_Name      </td>
+                                                <td class="text-center"> @item.LoaiBeTong                          </td>
+                                                <td class="text-center"> @item.HangMucCongTac                      </td>
+                                                <td class="text-center"> @item.TenCongTac                          </td>
+                                                <td class="text-center"> @item.DonVi                               </td>
+                                                <td class="text-center"> @item.BeTongLotMong_D                     </td>
+                                                <td class="text-center"> @item.BeTongLotMong_R                     </td>
+                                                <td class="text-center"> @item.BeTongLotMong_C                     </td>
+                                                <td class="text-center"> @item.KTHH_DienTich                       </td>
+                                                <td class="text-center"> @item.GhiChu                              </td>
+                                                <td class="text-center"> @item.SLCauKien                           </td>
+                                                <td class="text-center"> @item.KL1CK                               </td>
+                                                <td class="text-center"> @item.TTCDT_CDai                          </td>
+                                                <td class="text-center"> @item.TTCDT_Crong                         </td>
+                                                <td class="text-center"> @item.TTCDT_Cday                          </td>
+                                                <td class="text-center"> @item.TTCDT_DT                            </td>
+                                                <td class="text-center"> @item.TTCDT_SLCK                          </td>
+                                                <td class="text-center"> @item.TTCDT_KL                            </td>
+                                                <td class="text-center"> @item.KLKP_KL                             </td>
+                                                <td class="text-center"> @item.KLKP_Sl                             </td>
+                                                <td class="text-center"> @item.KL1CK_ChuaTruCC                     </td>
+                                                <td class="text-center"> @item.KLCC1CK                             </td>
+                                                <td class="text-center"> @item.TKLCK_SauCC                         </td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr class="bg-warning">
+                                        <td></td>
+                                        <td class="text-bold">III</td>
+                                        <td class="text-center"> </td>
+                                        <td class="text-center">   </td>
+                                        <td class="text-center">    </td>
+                                        <td class="text-center">  </td>
+                                        <td class="text-center"> Tường hố ga xây gạch, hố ga  @tenHoGa  </td>
+                                        <td class="text-center"> Tường hố ga xây gạch, hố ga  @tenHoGa   </td>
+                                        <td class="text-center " colspan="19"> </td>
+                                    </tr>
+                                    <tr class="bg-warning">
+                                        <td></td>
+                                        <td class="text-bold">III.1</td>
+                                        <td class="text-center"> </td>
+                                        <td class="text-center">   </td>
+                                        <td class="text-center">    </td>
+                                        <td class="text-center">  </td>
+                                        <td class="text-center"> Tường hố ga xây gạch, hố ga   </td>
+                                        <td class="text-center"> Tường hố ga xây gạch, hố ga   </td>
+                                        <td class="text-center " colspan="19"> </td>
+                                    </tr>
+                                    stt = 0;
+                                    @foreach (var item in listPKKLHoGaModel)
+                                    {
+                                        if (item.HangMuc == "3.1TuongHoGaXayGach" && item.ThongTinChungHoGa_TenHoGaSauPhanLoai == idHoGa)
+                                        {
+                                            stt++;
+                                            <tr>
+                                                <td class="d-flex nowrap">
+                                                    <div class="d-inline-block">
+                                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,stt.ToString())">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td>@stt</td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name</td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_HinhThucHoGa_Name      </td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_KetCauMuMo_Name      </td>
+                                                <td class="text-center"> @item.LoaiBeTong                          </td>
+                                                <td class="text-center"> @item.HangMucCongTac                      </td>
+                                                <td class="text-center"> @item.TenCongTac                          </td>
+                                                <td class="text-center"> @item.DonVi                               </td>
+                                                <td class="text-center"> @item.BeTongLotMong_D                     </td>
+                                                <td class="text-center"> @item.BeTongLotMong_R                     </td>
+                                                <td class="text-center"> @item.BeTongLotMong_C                     </td>
+                                                <td class="text-center"> @item.KTHH_DienTich                       </td>
+                                                <td class="text-center"> @item.GhiChu                              </td>
+                                                <td class="text-center"> @item.SLCauKien                           </td>
+                                                <td class="text-center"> @item.KL1CK                               </td>
+                                                <td class="text-center"> @item.TTCDT_CDai                          </td>
+                                                <td class="text-center"> @item.TTCDT_Crong                         </td>
+                                                <td class="text-center"> @item.TTCDT_Cday                          </td>
+                                                <td class="text-center"> @item.TTCDT_DT                            </td>
+                                                <td class="text-center"> @item.TTCDT_SLCK                          </td>
+                                                <td class="text-center"> @item.TTCDT_KL                            </td>
+                                                <td class="text-center"> @item.KLKP_KL                             </td>
+                                                <td class="text-center"> @item.KLKP_Sl                             </td>
+                                                <td class="text-center"> @item.KL1CK_ChuaTruCC                     </td>
+                                                <td class="text-center"> @item.KLCC1CK                             </td>
+                                                <td class="text-center"> @item.TKLCK_SauCC                         </td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr class="bg-warning">
+                                        <td></td>
+                                        <td class="text-bold">III.2</td>
+                                        <td class="text-center"> </td>
+                                        <td class="text-center">   </td>
+                                        <td class="text-center">    </td>
+                                        <td class="text-center">  </td>
+                                        <td class="text-center"> Chát tường hố ga xây gạch   </td>
+                                        <td class="text-center"> Chát tường hố ga xây gạch   </td>
+                                        <td class="text-center " colspan="19"> </td>
+                                    </tr>
+                                    stt = 0;
+                                    @foreach (var item in listPKKLHoGaModel)
+                                    {
+                                        if (item.HangMuc == "3.2ChatTuongHoGaXayGach" && item.ThongTinChungHoGa_TenHoGaSauPhanLoai == idHoGa)
+                                        {
+                                            stt++;
+                                            <tr>
+                                                <td class="d-flex nowrap">
+                                                    <div class="d-inline-block">
+                                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,stt.ToString())">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td>@stt</td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name</td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_HinhThucHoGa_Name      </td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_KetCauMuMo_Name      </td>
+                                                <td class="text-center"> @item.LoaiBeTong                          </td>
+                                                <td class="text-center"> @item.HangMucCongTac                      </td>
+                                                <td class="text-center"> @item.TenCongTac                          </td>
+                                                <td class="text-center"> @item.DonVi                               </td>
+                                                <td class="text-center"> @item.BeTongLotMong_D                     </td>
+                                                <td class="text-center"> @item.BeTongLotMong_R                     </td>
+                                                <td class="text-center"> @item.BeTongLotMong_C                     </td>
+                                                <td class="text-center"> @item.KTHH_DienTich                       </td>
+                                                <td class="text-center"> @item.GhiChu                              </td>
+                                                <td class="text-center"> @item.SLCauKien                           </td>
+                                                <td class="text-center"> @item.KL1CK                               </td>
+                                                <td class="text-center"> @item.TTCDT_CDai                          </td>
+                                                <td class="text-center"> @item.TTCDT_Crong                         </td>
+                                                <td class="text-center"> @item.TTCDT_Cday                          </td>
+                                                <td class="text-center"> @item.TTCDT_DT                            </td>
+                                                <td class="text-center"> @item.TTCDT_SLCK                          </td>
+                                                <td class="text-center"> @item.TTCDT_KL                            </td>
+                                                <td class="text-center"> @item.KLKP_KL                             </td>
+                                                <td class="text-center"> @item.KLKP_Sl                             </td>
+                                                <td class="text-center"> @item.KL1CK_ChuaTruCC                     </td>
+                                                <td class="text-center"> @item.KLCC1CK                             </td>
+                                                <td class="text-center"> @item.TKLCK_SauCC                         </td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr class="bg-warning">
+                                        <td></td>
+                                        <td class="text-bold">IV</td>
+                                        <td class="text-center"> </td>
+                                        <td class="text-center">   </td>
+                                        <td class="text-center">    </td>
+                                        <td class="text-center">  </td>
+                                        <td class="text-center"> Tường hố ga bê tông, hố ga @tenHoGa </td>
+                                        <td class="text-center"> Tường hố ga bê tông, hố ga @tenHoGa  </td>
+                                        <td class="text-center " colspan="19"> </td>
+                                    </tr>
+                                    <tr class="bg-warning">
+                                        <td></td>
+                                        <td class="text-bold">IV.1</td>
+                                        <td class="text-center"> </td>
+                                        <td class="text-center">   </td>
+                                        <td class="text-center">    </td>
+                                        <td class="text-center">  </td>
+                                        <td class="text-center"> Tường hố ga bê tông, hố ga</td>
+                                        <td class="text-center"> Tường hố ga bê tông, hố ga </td>
+                                        <td class="text-center " colspan="19"> </td>
+                                    </tr>
+                                    stt = 0;
+                                    @foreach (var item in listPKKLHoGaModel)
+                                    {
+                                        if (item.HangMuc == "4.1TuongHoGaBeTong" && item.ThongTinChungHoGa_TenHoGaSauPhanLoai == idHoGa)
+                                        {
+                                            stt++;
+                                            <tr>
+                                                <td class="d-flex nowrap">
+                                                    <div class="d-inline-block">
+                                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,stt.ToString())">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td>@stt</td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name</td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_HinhThucHoGa_Name      </td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_KetCauMuMo_Name      </td>
+                                                <td class="text-center"> @item.LoaiBeTong                          </td>
+                                                <td class="text-center"> @item.HangMucCongTac                      </td>
+                                                <td class="text-center"> @item.TenCongTac                          </td>
+                                                <td class="text-center"> @item.DonVi                               </td>
+                                                <td class="text-center"> @item.BeTongLotMong_D                     </td>
+                                                <td class="text-center"> @item.BeTongLotMong_R                     </td>
+                                                <td class="text-center"> @item.BeTongLotMong_C                     </td>
+                                                <td class="text-center"> @item.KTHH_DienTich                       </td>
+                                                <td class="text-center"> @item.GhiChu                              </td>
+                                                <td class="text-center"> @item.SLCauKien                           </td>
+                                                <td class="text-center"> @item.KL1CK                               </td>
+                                                <td class="text-center"> @item.TTCDT_CDai                          </td>
+                                                <td class="text-center"> @item.TTCDT_Crong                         </td>
+                                                <td class="text-center"> @item.TTCDT_Cday                          </td>
+                                                <td class="text-center"> @item.TTCDT_DT                            </td>
+                                                <td class="text-center"> @item.TTCDT_SLCK                          </td>
+                                                <td class="text-center"> @item.TTCDT_KL                            </td>
+                                                <td class="text-center"> @item.KLKP_KL                             </td>
+                                                <td class="text-center"> @item.KLKP_Sl                             </td>
+                                                <td class="text-center"> @item.KL1CK_ChuaTruCC                     </td>
+                                                <td class="text-center"> @item.KLCC1CK                             </td>
+                                                <td class="text-center"> @item.TKLCK_SauCC                         </td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr class="bg-warning">
+                                        <td></td>
+                                        <td class="text-bold">IV.2</td>
+                                        <td class="text-center"> </td>
+                                        <td class="text-center">   </td>
+                                        <td class="text-center">    </td>
+                                        <td class="text-center">  </td>
+                                        <td class="text-center"> Tường hố ga bê tông, hố ga</td>
+                                        <td class="text-center"> Tường hố ga bê tông, hố ga </td>
+                                        <td class="text-center " colspan="19"> </td>
+                                    </tr>
+                                    stt = 0;
+                                    @foreach (var item in listPKKLHoGaModel)
+                                    {
+                                        if (item.HangMuc == "4.2VanKhuanTuongHoGaBeTong" && item.ThongTinChungHoGa_TenHoGaSauPhanLoai == idHoGa)
+                                        {
+                                            stt++;
+                                            <tr>
+                                                <td class="d-flex nowrap">
+                                                    <div class="d-inline-block">
+                                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,stt.ToString())">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td>@stt</td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name</td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_HinhThucHoGa_Name      </td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_KetCauMuMo_Name      </td>
+                                                <td class="text-center"> @item.LoaiBeTong                          </td>
+                                                <td class="text-center"> @item.HangMucCongTac                      </td>
+                                                <td class="text-center"> @item.TenCongTac                          </td>
+                                                <td class="text-center"> @item.DonVi                               </td>
+                                                <td class="text-center"> @item.BeTongLotMong_D                     </td>
+                                                <td class="text-center"> @item.BeTongLotMong_R                     </td>
+                                                <td class="text-center"> @item.BeTongLotMong_C                     </td>
+                                                <td class="text-center"> @item.KTHH_DienTich                       </td>
+                                                <td class="text-center"> @item.GhiChu                              </td>
+                                                <td class="text-center"> @item.SLCauKien                           </td>
+                                                <td class="text-center"> @item.KL1CK                               </td>
+                                                <td class="text-center"> @item.TTCDT_CDai                          </td>
+                                                <td class="text-center"> @item.TTCDT_Crong                         </td>
+                                                <td class="text-center"> @item.TTCDT_Cday                          </td>
+                                                <td class="text-center"> @item.TTCDT_DT                            </td>
+                                                <td class="text-center"> @item.TTCDT_SLCK                          </td>
+                                                <td class="text-center"> @item.TTCDT_KL                            </td>
+                                                <td class="text-center"> @item.KLKP_KL                             </td>
+                                                <td class="text-center"> @item.KLKP_Sl                             </td>
+                                                <td class="text-center"> @item.KL1CK_ChuaTruCC                     </td>
+                                                <td class="text-center"> @item.KLCC1CK                             </td>
+                                                <td class="text-center"> @item.TKLCK_SauCC                         </td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr class="bg-warning">
+                                        <td></td>
+                                        <td class="text-bold">V</td>
+                                        <td class="text-center"> </td>
+                                        <td class="text-center">   </td>
+                                        <td class="text-center">    </td>
+                                        <td class="text-center">  </td>
+                                        <td class="text-center">Mũ mố hố ga, hố ga @tenHoGa</td>
+                                        <td class="text-center"> Mũ mố hố ga, hố ga @tenHoGa</td>
+                                        <td class="text-center " colspan="19"> </td>
+                                    </tr>
+                                    stt = 0;
+                                    @foreach (var item in listPKKLHoGaModel)
+                                    {
+                                        if (item.HangMuc == "5MuMoHoGa" && item.ThongTinChungHoGa_TenHoGaSauPhanLoai == idHoGa)
+                                        {
+                                            stt++;
+                                            <tr>
+                                                <td class="d-flex nowrap">
+                                                    <div class="d-inline-block">
+                                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,stt.ToString())">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td>@stt</td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name</td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_HinhThucHoGa_Name      </td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_KetCauMuMo_Name      </td>
+                                                <td class="text-center"> @item.LoaiBeTong                          </td>
+                                                <td class="text-center"> @item.HangMucCongTac                      </td>
+                                                <td class="text-center"> @item.TenCongTac                          </td>
+                                                <td class="text-center"> @item.DonVi                               </td>
+                                                <td class="text-center"> @item.BeTongLotMong_D                     </td>
+                                                <td class="text-center"> @item.BeTongLotMong_R                     </td>
+                                                <td class="text-center"> @item.BeTongLotMong_C                     </td>
+                                                <td class="text-center"> @item.KTHH_DienTich                       </td>
+                                                <td class="text-center"> @item.GhiChu                              </td>
+                                                <td class="text-center"> @item.SLCauKien                           </td>
+                                                <td class="text-center"> @item.KL1CK                               </td>
+                                                <td class="text-center"> @item.TTCDT_CDai                          </td>
+                                                <td class="text-center"> @item.TTCDT_Crong                         </td>
+                                                <td class="text-center"> @item.TTCDT_Cday                          </td>
+                                                <td class="text-center"> @item.TTCDT_DT                            </td>
+                                                <td class="text-center"> @item.TTCDT_SLCK                          </td>
+                                                <td class="text-center"> @item.TTCDT_KL                            </td>
+                                                <td class="text-center"> @item.KLKP_KL                             </td>
+                                                <td class="text-center"> @item.KLKP_Sl                             </td>
+                                                <td class="text-center"> @item.KL1CK_ChuaTruCC                     </td>
+                                                <td class="text-center"> @item.KLCC1CK                             </td>
+                                                <td class="text-center"> @item.TKLCK_SauCC                         </td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr class="bg-warning">
+                                        <td></td>
+                                        <td class="text-bold">VI</td>
+                                        <td class="text-center"> </td>
+                                        <td class="text-center">   </td>
+                                        <td class="text-center">    </td>
+                                        <td class="text-center">  </td>
+                                        <td class="text-center">Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga @tenHoGa</td>
+                                        <td class="text-center"> Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga  @tenHoGa</td>
+                                        <td class="text-center " colspan="19"> </td>
+                                    </tr>
+                                    stt = 0;
+                                    @foreach (var item in listPKKLHoGaModel)
+                                    {
+                                        if (item.HangMuc == "6SanXuatVanCHuyenBtongTPhamHGa" && item.ThongTinChungHoGa_TenHoGaSauPhanLoai == idHoGa)
+                                        {
+                                            stt++;
+                                            <tr>
+                                                <td class="d-flex nowrap">
+                                                    <div class="d-inline-block">
+                                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,stt.ToString())">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td>@stt</td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name</td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_HinhThucHoGa_Name      </td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_KetCauMuMo_Name      </td>
+                                                <td class="text-center"> @item.LoaiBeTong                          </td>
+                                                <td class="text-center"> @item.HangMucCongTac                      </td>
+                                                <td class="text-center"> @item.TenCongTac                          </td>
+                                                <td class="text-center"> @item.DonVi                               </td>
+                                                <td class="text-center"> @item.BeTongLotMong_D                     </td>
+                                                <td class="text-center"> @item.BeTongLotMong_R                     </td>
+                                                <td class="text-center"> @item.BeTongLotMong_C                     </td>
+                                                <td class="text-center"> @item.KTHH_DienTich                       </td>
+                                                <td class="text-center"> @item.GhiChu                              </td>
+                                                <td class="text-center"> @item.SLCauKien                           </td>
+                                                <td class="text-center"> @item.KL1CK                               </td>
+                                                <td class="text-center"> @item.TTCDT_CDai                          </td>
+                                                <td class="text-center"> @item.TTCDT_Crong                         </td>
+                                                <td class="text-center"> @item.TTCDT_Cday                          </td>
+                                                <td class="text-center"> @item.TTCDT_DT                            </td>
+                                                <td class="text-center"> @item.TTCDT_SLCK                          </td>
+                                                <td class="text-center"> @item.TTCDT_KL                            </td>
+                                                <td class="text-center"> @item.KLKP_KL                             </td>
+                                                <td class="text-center"> @item.KLKP_Sl                             </td>
+                                                <td class="text-center"> @item.KL1CK_ChuaTruCC                     </td>
+                                                <td class="text-center"> @item.KLCC1CK                             </td>
+                                                <td class="text-center"> @item.TKLCK_SauCC                         </td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr class="bg-warning">
+                                        <td></td>
+                                        <td class="text-bold"> VI</td>
+                                        <td class="text-center"> </td>
+                                        <td class="text-center">   </td>
+                                        <td class="text-center">    </td>
+                                        <td class="text-center">  </td>
+                                        <td class="text-center">Gia công, lắp dựng cốt thép hố ga  @tenHoGa</td>
+                                        <td class="text-center">Gia công, lắp dựng cốt thép hố ga  @tenHoGa</td>
+                                        <td class="text-center " colspan="19"> </td>
+                                    </tr>
+                                    stt = 0;
+                                    @foreach (var item in listPKKLHoGaModel)
+                                    {
+                                        if (item.HangMuc == "7GiaCongLapDungCotThepHoGa" && item.ThongTinChungHoGa_TenHoGaSauPhanLoai == idHoGa)
+                                        {
+                                            stt++;
+                                            <tr>
+                                                <td class="d-flex nowrap">
+                                                    <div class="d-inline-block">
+                                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,stt.ToString())">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td>@stt</td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name</td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_HinhThucHoGa_Name      </td>
+                                                <td class="text-center"> @item.ThongTinChungHoGa_KetCauMuMo_Name      </td>
+                                                <td class="text-center"> @item.LoaiBeTong                          </td>
+                                                <td class="text-center"> @item.HangMucCongTac                      </td>
+                                                <td class="text-center"> @item.TenCongTac                          </td>
+                                                <td class="text-center"> @item.DonVi                               </td>
+                                                <td class="text-center"> @item.BeTongLotMong_D                     </td>
+                                                <td class="text-center"> @item.BeTongLotMong_R                     </td>
+                                                <td class="text-center"> @item.BeTongLotMong_C                     </td>
+                                                <td class="text-center"> @item.KTHH_DienTich                       </td>
+                                                <td class="text-center"> @item.GhiChu                              </td>
+                                                <td class="text-center"> @item.SLCauKien                           </td>
+                                                <td class="text-center"> @item.KL1CK                               </td>
+                                                <td class="text-center"> @item.TTCDT_CDai                          </td>
+                                                <td class="text-center"> @item.TTCDT_Crong                         </td>
+                                                <td class="text-center"> @item.TTCDT_Cday                          </td>
+                                                <td class="text-center"> @item.TTCDT_DT                            </td>
+                                                <td class="text-center"> @item.TTCDT_SLCK                          </td>
+                                                <td class="text-center"> @item.TTCDT_KL                            </td>
+                                                <td class="text-center"> @item.KLKP_KL                             </td>
+                                                <td class="text-center"> @item.KLKP_Sl                             </td>
+                                                <td class="text-center"> @item.KL1CK_ChuaTruCC                     </td>
+                                                <td class="text-center"> @item.KLCC1CK                             </td>
+                                                <td class="text-center"> @item.TKLCK_SauCC                         </td>
+                                            </tr>
+                                        }
+                                    }
                                 }
                             </tbody>
                         }
@@ -341,7 +870,7 @@
                     </table>
                 </div>
                 <div class="mt-4">
-                    @if (listTKThepHGaModel.Any())
+                    @if (listPKKLHoGaModel.Any())
                     {
                         <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
                     }
@@ -349,13 +878,13 @@
             </div>
         </div>
     </div>
-   <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+    <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
     <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
 </div>
 
 
 @code {
-
+    PhanLoaiHoGaModel plhgDetail = new();
     private bool isLoading = false;
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới ";
@@ -369,10 +898,88 @@
     private PKKLHoGa Input = new PKKLHoGa();
     private PKKLHoGaModel InputMD = new PKKLHoGaModel();
 
-    private List<SelectedItem> selectPLHG = new();
-    private void OnSelectChangePLHG(SelectedItem selectedItem)
+    private List<SelectedItem> selectHMTC = new List<SelectedItem>
     {
-        Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = selectedItem.Value;
+        new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true },
+        new SelectedItem { Value = "1MongHoGa", Text = "I.Móng hố ga, hố ga" },
+        new SelectedItem { Value = "2LapDatHoGa", Text = "II.Hố ga lắp đặt, hố ga "},
+        new SelectedItem { Value = "3.1TuongHoGaXayGach", Text = "III.1Tường hố ga xây gạch"},
+        new SelectedItem { Value = "3.2ChatTuongHoGaXayGach", Text = "III.2Chát tường hố ga xây gạch"},
+        new SelectedItem { Value = "4.1TuongHoGaBeTong", Text = "IV.1Tường hố ga bê tông"},
+        new SelectedItem { Value = "4.2VanKhuanTuongHoGaBeTong", Text = "IV.2Ván khuân tường hố ga bê tông"},
+        new SelectedItem { Value = "5MuMoHoGa", Text = "V.Mũ mố hố ga, hố ga "},
+        new SelectedItem { Value = "6SanXuatVanCHuyenBtongTPhamHGa", Text = "VI.Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga "},
+        new SelectedItem { Value = "7GiaCongLapDungCotThepHoGa", Text = "VII.Gia công, lắp dựng cốt thép hố ga "},
+    };
+    private void OnSelectChangeHMTC(SelectedItem selectedItem)
+    {
+        Input.HangMuc = selectedItem.Value;
+    }
+
+    private List<SelectedItem> selectGhiChu = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true },
+        new SelectedItem { Value = "Rộng*Cao", Text = "Rộng*Cao" },
+        new SelectedItem { Value = "Dài*Cao", Text = "Dài*Cao"},
+        new SelectedItem { Value = "Dài*Rộng", Text = "Dài*Rộng"},
+    };
+    private void OnSelectChangeGhiChu(SelectedItem selectedItem)
+    {
+        Input.GhiChu = selectedItem.Value;
+    }
+
+    private List<SelectedItem> selectLBT = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true },
+        new SelectedItem { Value = "Bê tông thương phẩm", Text = "Bê tông thương phẩm" },
+    };
+    private void OnSelectChangeLBT(SelectedItem selectedItem)
+    {
+        Input.LoaiBeTong = selectedItem.Value;
+    }
+
+    private List<SelectedItem> selectPLHG = new();
+    private async void OnSelectChangePLHG(SelectedItem selectedItem)
+    {
+
+        try
+        {
+            Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = selectedItem.Value;
+            InputMD.ThongTinChungHoGa_TenHoGaSauPhanLoai = selectedItem.Value;
+            InputMD.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name = selectedItem.Text;
+            PhanLoaiHoGaModel plhgModel = new PhanLoaiHoGaModel();
+            if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai))
+            {
+                plhgModel.Id = Input.ThongTinChungHoGa_TenHoGaSauPhanLoai;
+
+                plhgDetail = await PhanLoaiHoGaRepository.GetIdByVM(plhgModel);
+                Input.ThongTinChungHoGa_HinhThucHoGa = plhgDetail.ThongTinChungHoGa_HinhThucHoGa_Name ?? "";
+                Input.ThongTinChungHoGa_KetCauMuMo = plhgDetail.ThongTinChungHoGa_KetCauMuMo_Name ?? "";
+                Input.ThongTinChungHoGa_HinhThucHoGa = plhgDetail.ThongTinChungHoGa_HinhThucHoGa_Name ?? "";
+                if (Input.ThongTinChungHoGa_HinhThucHoGa.ToUpper().Trim() == "Thi công trực tiếp".ToUpper().Trim())
+                {
+                    Input.BeTongLotMong_D = (double)plhgDetail.BeTongLotMong_D;
+                    Input.BeTongLotMong_R = (double)plhgDetail.BeTongLotMong_R;
+                    Input.BeTongLotMong_C = (double)plhgDetail.BeTongLotMong_C;
+
+                }
+
+                await InvokeAsync(() =>
+                  {
+                      StateHasChanged();
+                  });
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                       "Thông báo",
+                        ex.Message,
+                        cssClass: "toast-danger",
+                        iconClass: "fa fa-exclamation-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000);
+        }
     }
     private List<SelectedItem> selectSearchPLHG = new();
     private void OnSelectChangeSearchPLHG(SelectedItem selectedItem)
@@ -382,11 +989,11 @@
 
     public string LoaiThep = "";
 
-
-    public List<PKKLHoGaModel> listTKThepHGaModel { get; set; } = new();
+    public List<PhanLoaiHoGaModel> listPLHGModel = new();
+    public List<PKKLHoGaModel> listPKKLHoGaModel { get; set; } = new();
     public List<PKKLHoGaModel> listModel { get; set; } = new();
     public MetaData MetaData { get; set; }
-    public PKKLHoGaModel tKThepHoGaModel { get; set; }
+    public PKKLHoGaModel pKKLHoGaModel { get; set; }
 
     //bắt sự kiện khi thay đổi
     private System.Timers.Timer _typingTimer;
@@ -403,15 +1010,30 @@
         _typingTimer.Start();
     }
 
-
     private async void OnTypingStopped(object sender, System.Timers.ElapsedEventArgs e)
     {
+        try
+        {
+            Input.KL1CK = KL1CK(Input.DonVi, Input.GhiChu, Input.BeTongLotMong_D, Input.BeTongLotMong_R, Input.BeTongLotMong_C, Input.KTHH_DienTich);
+            Input.TTCDT_KL = TTCDT_KL(Input.DonVi, Input.BeTongLotMong_D, Input.BeTongLotMong_R, Input.BeTongLotMong_C, Input.TTCDT_CDai, Input.TTCDT_Crong, Input.TTCDT_Cday, Input.TTCDT_DT);
+            Input.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(Input.KL1CK, Input.SLCauKien, Input.TTCDT_KL, Input.TTCDT_SLCK, Input.KLKP_KL, Input.KLKP_Sl);
+            Input.TKLCK_SauCC = TKLCK_SauCC(InputMD.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name, Input.KL1CK_ChuaTruCC, Input.KLCC1CK);
 
-
-        await InvokeAsync(() =>
-          {
-              StateHasChanged();
-          });
+            await InvokeAsync(() =>
+              {
+                  StateHasChanged();
+              });
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                       "Thông báo",
+                        ex.Message,
+                        cssClass: "toast-danger",
+                        iconClass: "fa fa-exclamation-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000);
+        }
     }
 
 
@@ -446,9 +1068,10 @@
         {
 
             await LoadData();
-            var repository = await PhanLoaiHoGaRepository.GetAll();
+            PhanLoaiHoGaModel plhg = new();
+            listPLHGModel = await PhanLoaiHoGaRepository.GetAllByVM(plhg);
             selectPLHG = new();
-            foreach (var item in repository)
+            foreach (var item in listPLHGModel)
             {
                 // Kiểm tra và thêm item
                 if (!string.IsNullOrEmpty(item.Id) && !selectPLHG.Any(x => x.Value == item.Id))
@@ -461,8 +1084,6 @@
                 }
             }
             selectPLHG.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
-            selectSearchPLHG = selectPLHG;
-
         }
         catch (Exception ex)
         {
@@ -475,9 +1096,10 @@
         try
         {
             isLoading = true;
-            tKThepHoGaModel = new();
+            pKKLHoGaModel = new();
             var repository = await PKKLHoGaRepository.GetAllByVM(InputMD);
             listModel = repository;
+            listPKKLHoGaModel = Paging(repository);
             isLoading = false;
 
         }
@@ -491,7 +1113,7 @@
 
     public async Task Search()
     {
-        tKThepHoGaModel.PageNumber = 1;
+        pKKLHoGaModel.PageNumber = 1;
         await LoadData();
 
     }
@@ -501,19 +1123,19 @@
 
         try
         {
-            string[] ids = { Input.ThongTinChungHoGa_TenHoGaSauPhanLoai??"" };
-            var isValidTenPL = await PhanLoaiHoGaRepository.CheckExclusive(ids,baseTime);
+            string[] ids = { Input.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "" };
+            var isValidTenPL = await PhanLoaiHoGaRepository.CheckExclusive(ids, baseTime);
             var listExist = await PKKLHoGaRepository.GetExist(Input);
             if (isValidTenPL)
             {
                 if (isEdit)
                 {
-                    string[] idss = { Input.Id }; 
+                    string[] idss = { Input.Id };
 
 
-                    if(listExist == null || listExist.Count ==0 )
+                    if (listExist == null || listExist.Count == 0)
                     {
-                        bool isValid = await PKKLHoGaRepository.CheckExclusive(idss,baseTime);
+                        bool isValid = await PKKLHoGaRepository.CheckExclusive(idss, baseTime);
                         if (isValid)
                         {
                             await PKKLHoGaRepository.Update(Input);
@@ -530,8 +1152,10 @@
                             );
                             await LoadData();
                         }
-                    }else if(listExist.Count >0 && listExist[0].Id == Input.Id)
+                    }
+                    else if (listExist.Count > 0 && listExist[0].Id == Input.Id)
                     {
+
                         await PKKLHoGaRepository.Update(Input);
                         isModalVisible = false;
                         Input = new PKKLHoGa();
@@ -545,7 +1169,8 @@
                             duration: 5000
                         );
                         await LoadData();
-                    } else
+                    }
+                    else
                     {
                         ToastService.ShowToast(
                         "Thông báo",
@@ -559,8 +1184,11 @@
                 }
                 else
                 {
-                    if( listExist== null||listExist.Count == 0)
+                    if (listExist == null || listExist.Count == 0)
                     {
+                        Input.ThongTinChungHoGa_HinhThucHoGa = plhgDetail.ThongTinChungHoGa_HinhThucHoGa ?? "";
+                        Input.ThongTinChungHoGa_KetCauMuMo = plhgDetail.ThongTinChungHoGa_KetCauMuMo ?? "";
+                        Input.ThongTinChungHoGa_HinhThucHoGa = plhgDetail.ThongTinChungHoGa_HinhThucHoGa ?? "";
                         if (Flag > 0)
                         {
                             // Thêm mới thông tin
@@ -594,7 +1222,9 @@
                             );
                             await LoadData();
                         }
-                    }else
+                        InputMD = new();
+                    }
+                    else
                     {
                         ToastService.ShowToast(
                         "Thông báo",
@@ -634,15 +1264,15 @@
             if (!string.IsNullOrEmpty(deleteId))
             {
                 string[] ids = { deleteId };
-                var result = await PKKLHoGaRepository.CheckExclusive(ids,baseTime);
+                var result = await PKKLHoGaRepository.CheckExclusive(ids, baseTime);
                 if (result)
                 {
-                     // Thực hiện hành động xóa
+                    // Thực hiện hành động xóa
                     await PKKLHoGaRepository.DeleteById(deleteId);
-                    ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success",iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                    ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                     await LoadData();
                 }
-               
+
                 deleteId = "";
             }
         }
@@ -657,7 +1287,7 @@
             Input = await PKKLHoGaRepository.GetById(id);
             isEdit = true;
             isModalVisible = true;
-            
+
             foreach (var item in selectPLHG)
             {
                 item.IsSelected = item.Value == Input.ThongTinChungHoGa_TenHoGaSauPhanLoai;
@@ -673,12 +1303,12 @@
                  progressBarClass: "bg-info",
                  duration: 5000
              );
-       }
+        }
 
     }
 
 
-      int Flag = 0;
+    int Flag = 0;
     //thêm vào sau
     private void InsertLaterFlag(int flag)
     {
@@ -692,7 +1322,7 @@
     private void SortTable(string columnName)
     {
         listModel = SortService.SortTable(listModel, columnName);
-        tKThepHoGaModel.PageNumber = 1;
+        pKKLHoGaModel.PageNumber = 1;
         Paging(listModel);
     }
 
@@ -706,15 +1336,15 @@
     // Xử lý trường hợp đổi page hiển thị
     private void SelectedPage(int page)
     {
-        tKThepHoGaModel.PageNumber = page;
+        pKKLHoGaModel.PageNumber = page;
         Paging(listModel);
     }
 
     // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
     private void ChangePageSize(int pageSize)
     {
-        tKThepHoGaModel.PageNumber = 1;
-        tKThepHoGaModel.pageSize = pageSize;
+        pKKLHoGaModel.PageNumber = 1;
+        pKKLHoGaModel.pageSize = pageSize;
         Paging(listModel);
     }
 
@@ -726,20 +1356,20 @@
         var count = listModels.Count();
 
         // Lọc bản ghi theo page hiện tại và page size
-        listModels = listModels.Skip((tKThepHoGaModel.PageNumber - 1) * tKThepHoGaModel.PageSize).Take(tKThepHoGaModel.PageSize).ToList();
+        listModels = listModels.Skip((pKKLHoGaModel.PageNumber - 1) * pKKLHoGaModel.PageSize).Take(pKKLHoGaModel.PageSize).ToList();
 
         // Xóa danh sách đang hiển thị trên màn hình
-        listTKThepHGaModel.Clear();
+        listPKKLHoGaModel.Clear();
 
         // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
         foreach (var major in listModels)
         {
-            listTKThepHGaModel.Add(major);
+            listPKKLHoGaModel.Add(major);
         }
 
         // Tạo pagelist mới
 
-        var pagelist = new PageList<PKKLHoGaModel>(listTKThepHGaModel, count, tKThepHoGaModel.PageNumber, tKThepHoGaModel.PageSize);
+        var pagelist = new PageList<PKKLHoGaModel>(listPKKLHoGaModel, count, pKKLHoGaModel.PageNumber, pKKLHoGaModel.PageSize);
         MetaData = pagelist.MetaData;
         return listModels;
     }
@@ -747,5 +1377,108 @@
     private void ThumbtackHeader()
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
+    }
+
+    public double KL1CK(string DonVi, string GhiChu, double BeTongLotMong_D, double BeTongLotMong_R, double BeTongLotMong_C, double KTHH_DienTich)
+    {
+        double result = 0;
+
+        // Kiểm tra nếu DonVi là "M3"
+        if (DonVi == "M3")
+        {
+            // Nếu GhiChu rỗng hoặc bằng "0"
+            if (string.IsNullOrEmpty(GhiChu) || GhiChu == "0")
+            {
+                result = BeTongLotMong_D * BeTongLotMong_R * BeTongLotMong_C;
+            }
+            else if (GhiChu == "Rộng*Cao")
+            {
+                result = KTHH_DienTich * BeTongLotMong_D;
+            }
+            else if (GhiChu == "Dài*Cao")
+            {
+                result = KTHH_DienTich * BeTongLotMong_R;
+            }
+            else if (GhiChu == "Dài*Rộng")
+            {
+                result = KTHH_DienTich * BeTongLotMong_C;
+            }
+            else
+            {
+                result = 0;
+            }
+        }
+        else
+        {
+            result = 0;
+        }
+        result = Math.Round(result, 4);
+        result = Math.Round(result, 3);
+        return result;
+    }
+
+    public double TTCDT_KL(string DonVi, double BeTongLotMong_D, double BeTongLotMong_R, double BeTongLotMong_C, double TTCDT_CDai, double TTCDT_Crong, double TTCDT_Cday, double TTCDT_DT)
+    {
+        double result = 0;
+
+        // Kiểm tra nếu DonVi là "M2"
+        if (DonVi == "M2")
+        {
+            // Nếu TTCDT_DT rỗng hoặc bằng 0
+            if (TTCDT_DT == 0)
+            {
+                result = (BeTongLotMong_D * BeTongLotMong_C * TTCDT_CDai) + (BeTongLotMong_R * BeTongLotMong_C * TTCDT_Crong) + (BeTongLotMong_D * BeTongLotMong_R * TTCDT_Cday);
+            }
+            else
+            {
+                result = TTCDT_DT;
+            }
+        }
+        else
+        {
+            result = 0;
+        }
+
+        return result;
+    }
+
+    public double KL1CK_ChuaTruCC(double KL1CK, double SLCauKien, double TTCDT_KL, double TTCDT_SLCK, double KLKP_KL, double KLKP_Sl)
+    {
+        double result = 0;
+
+        // Kiểm tra nếu KL1CK > 0
+        if (KL1CK > 0)
+        {
+            result = KL1CK * SLCauKien;
+        }
+        // Kiểm tra nếu TTCDT_KL > 0
+        else if (TTCDT_KL > 0)
+        {
+            result = TTCDT_KL * TTCDT_SLCK;
+        }
+        // Nếu không, sử dụng KLKP_KL * KLKP_Sl
+        else
+        {
+            result = KLKP_KL * KLKP_Sl;
+        }
+
+        return result;
+    }
+
+    public double TKLCK_SauCC(string ThongTinChungHoGa_TenHoGaSauPhanLoai, double KL1CK_ChuaTruCC, double KLCC1CK)
+    {
+        double result = 0;
+
+        // Kiểm tra nếu 2 ký tự cuối cùng của ThongTinChungHoGa_TenHoGaSauPhanLoai là "=G"
+        if (ThongTinChungHoGa_TenHoGaSauPhanLoai.EndsWith("=G"))
+        {
+            result = 0;
+        }
+        else
+        {
+            result = KL1CK_ChuaTruCC - KLCC1CK;
+        }
+
+        return result;
     }
 }
