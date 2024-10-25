@@ -72,6 +72,7 @@ builder.Services.AddScoped<ITKThepHoGaRepository, TKThepHoGaRepository>();
 builder.Services.AddScoped<ITKThepTamDanRepository, TKThepTamDanRepository>();
 builder.Services.AddScoped<IDMTLThepRepository, DMTLThepRepository>();
 builder.Services.AddScoped<IPKKLHoGaRepository, PKKLHoGaRepository>();
+builder.Services.AddScoped<IChatMaTuongRepository, ChatMaTuongRepository>();
 
 
 
