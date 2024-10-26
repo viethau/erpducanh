@@ -278,10 +278,15 @@ namespace DucAnhERP.Services
                 using var context = _context.CreateDbContext();
 
                 var query = from nuocMua in context.DSNuocMua
+                            join plhg in context.PhanLoaiHoGas
+                            on nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai equals plhg.Id into plhgGroup
+                            from plhg in plhgGroup.DefaultIfEmpty()
                             where nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai == id
                             orderby nuocMua.CreateAt 
                             select new MaTuongModel
                             {
+                                ThongTinChungHoGa_TenHoGaSauPhanLoai = nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                                ThongTinChungHoGa_TenHoGaSauPhanLoai_Name = plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai,
                                 HinhThucDauNoi1_Loai = nuocMua.HinhThucDauNoi1_Loai ?? 0,
                                 HinhThucDauNoi1_KLBoSung = nuocMua.HinhThucDauNoi1_KLBoSung ?? "",
                                 HinhThucDauNoi1_KLBoSung_Name = "",

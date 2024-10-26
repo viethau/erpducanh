@@ -9,6 +9,9 @@
     public string Title { get; set; }
 
     [Parameter]
+    public string zIndex { get; set; }
+
+    [Parameter]
     public RenderFragment BodyTemplate { get; set; }
 
     [Parameter]
@@ -50,7 +53,7 @@
 
 @if (IsVisible)
 {
-    <div class="modal" style="display:block;" tabindex="-1" @onkeydown="HandleKeyDown">
+    <div class="modal @zIndex" style="display:block;" tabindex="-1" @onkeydown="HandleKeyDown">
         <div class="@Size @DialogCssClass @(IsVerticallyCentered ? "modal-dialog-centered" : "")">
             <div class="modal-content">
                 <div class="modal-header @HeaderCssClass">
