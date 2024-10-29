@@ -10,40 +10,30 @@ namespace DucAnhERP.Models
         public string KLGX_TenCongTac        { get; set; } = "";
 
         [Required(ErrorMessage = "Bạn phải nhập khối lượng !")]
-        [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
-        [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
         public Double? KLGX_KL { get; set; } = 0;
 
         [Required(ErrorMessage = "Bạn phải nhập tên công tác !")]
         public string KLC_TenCongTac { get; set; } = "";
 
         [Required(ErrorMessage = "Bạn phải nhập khối lượng !")]
-        [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
-        [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
         public Double? KLC_KL { get; set; } = 0;
 
         [Required(ErrorMessage = "Bạn phải nhập tên công tác !")]
         public string? KLBT_TenCongTac { get; set; } = "";
 
         [Required(ErrorMessage = "Bạn phải nhập khối lượng !")]
-        [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
-        [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
         public double KLBT_KL { get; set; } = 0;
         
         [Required(ErrorMessage = "Bạn phải nhập tên công tác !")]
         public string? KLVK_TenCongTac { get; set; } = "";
 
         [Required(ErrorMessage = "Bạn phải nhập khối lượng !")]
-        [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
-        [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
         public double KLVK_KL { get; set; } = 0;
 
         [Required(ErrorMessage = "Bạn phải nhập tên công tác !")]
         public string? KLS_TenCongTac { get; set; } = "";
 
         [Required(ErrorMessage = "Bạn phải nhập khối lượng !")]
-        [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
-        [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
         public double KLS_KL { get; set; } = 0;
 
         
@@ -51,8 +41,6 @@ namespace DucAnhERP.Models
         public string KLS_TenCongTac1 { get; set; } = "";
 
         [Required(ErrorMessage = "Bạn phải nhập khối lượng !")]
-        [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
-        [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
         public Double? KLS_KL1 { get; set; } = 0;
                
         public string ThongTinChungHoGa_TenHoGaSauPhanLoai { get; set; } = "";
