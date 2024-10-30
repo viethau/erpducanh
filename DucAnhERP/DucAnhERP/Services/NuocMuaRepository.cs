@@ -4,6 +4,7 @@ using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
 
 namespace DucAnhERP.Services
 {
@@ -31,7 +32,6 @@ namespace DucAnhERP.Services
         }
         public async Task<List<NuocMuaModel>> GetAllByVM(NuocMuaModel nuocMuaModel)
         {
-
             try
             {
                 using var context = _context.CreateDbContext();
@@ -1318,6 +1318,59 @@ namespace DucAnhERP.Services
                 .ToList();
 
                 var data = await query.ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi tải dữ liệu :" + ex.Message);
+            }
+        }
+
+        public async Task<List<NuocMuaModel>> GetBaoCaoKTHHMDC(string loai)
+        {
+            try
+            {
+                List<NuocMuaModel> data = new();
+                using var context = _context.CreateDbContext();
+                switch (loai)
+                {
+                    case "Thông tin cống tròn, ống nhựa":
+                         data = (from a in context.DSNuocMua
+                                    join b in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals b.Id
+                                    where b.Ten == "Cống tròn" && !string.IsNullOrEmpty(a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
+                                    join d in context.PhanLoaiCTronHopNhuas on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals d.Id into dGroup
+                                    from d in dGroup.DefaultIfEmpty()
+                                    group new
+                                    {
+                                        TenDanhMuc = b.Ten, // Tên khác cho thuộc tính
+                                        TenLoaiTruyenDanSauPhanLoai = a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                        ChieuDaiCauKien = a.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien,
+                                        CDayPhuBi = a.ThongTinCauTaoCongTron_CDayPhuBi,
+                                        LongSuDung = a.ThongTinCauTaoCongTron_LongSuDung,
+                                        TenLoaiTruyenDanSau = (d != null) ? d.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai : null
+                                    } by new
+                                    {
+                                        DanhMucTen = b.Ten, // Đặt tên khác cho thuộc tính trong group
+                                        LoaiTruyenDan = a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                        ChieuDai = a.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien,
+                                        PhuBi = a.ThongTinCauTaoCongTron_CDayPhuBi,
+                                        SuDung = a.ThongTinCauTaoCongTron_LongSuDung,
+                                        TenLoaiTruyenDan = (d != null) ? d.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai : null
+                                    } into g
+                                    orderby g.Key.DanhMucTen // Sử dụng tên duy nhất ở đây
+                                    select new NuocMuaModel
+                                    {
+                                        PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = g.Key.LoaiTruyenDan ?? "",
+                                        TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien = g.Key.ChieuDai??0,
+                                        ThongTinCauTaoCongTron_CDayPhuBi = g.Key.PhuBi??0,
+                                        ThongTinCauTaoCongTron_LongSuDung = g.Key.SuDung??0,
+                                        ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = g.Key.TenLoaiTruyenDan ??""// Đặt tên duy nhất cho thuộc tính
+                                    }).ToList();
+
+                        break;
+                }
+
+               
                 return data;
             }
             catch (Exception ex)
