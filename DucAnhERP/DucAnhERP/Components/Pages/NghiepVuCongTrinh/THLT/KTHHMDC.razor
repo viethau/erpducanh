@@ -38,92 +38,87 @@
             </button>
         </div>
     </div>
+    <h5 class="mt-2">BẢNG THÔNG TIN CẤU TẠO VÀ KÍCH THƯỚC HÌNH HỌC CỐNG TRÒN, MÓNG CỐNG TRÒN, MÓNG CỐNG HỘP, ĐẾ CỐNG TRÒN</h5>
     <div id="tableContainer ">
-        <div class="our-table">
-                <div class=" mt-1">
-                    <h5 class="mt-2">BẢNG THÔNG TIN CẤU TẠO VÀ KÍCH THƯỚC HÌNH HỌC CỐNG TRÒN, MÓNG CỐNG TRÒN, MÓNG CỐNG HỘP, ĐẾ CỐNG TRÒN</h5>
-                </div>
-                <div class="mt-2">
-                    <table id="tb-left" class="table table-bordered table-hover" cellpadding="1" cellspacing="2">
-                        <thead class="bg-info @thumbtack">
-                            <tr>
-                                <th class="text-center" rowspan="2">STT</th>
-                                <th class="text-center" colspan="4">Thông tin cống tròn, ống nhựa </th>
-                                <th class="text-center" colspan="5">Thông tin móng cống tròn </th>
-                                <th class="text-center" colspan="5">Thông tin móng cống hộp </th>
-                                <th class="text-center" colspan="4">KTHH đế cống</th>
-                            </tr>
-                            <tr>
-                                <th>Loại cống tròn</th>
-                                <th>Chiều dài</th>
-                                <th>C.Dầy phủ bì</th>
-                                <th>Lòng sử dụng</th>
-                                <th>Loại móng</th>
-                                <th> C.Cao lót móng (m) </th>
-                                <th> C.Rộng lót móng </th>
-                                <th> C.Cao móng (m) </th>
-                                <th> C.Rộng móng (m) </th>
-                                <th>Loại móng</th>
-                                <th> C.Cao lót móng (m) </th>
-                                <th> C.Rộng lót móng </th>
-                                <th> C.Cao móng (m) </th>
-                                <th> C.Rộng móng (m) </th>
-                                <th> Loại đế cống </th>
-                                <th> D </th>
-                                <th> R </th>
-                                <th> C </th>
-
-                            </tr>
-                        </thead>
-                        @if (listNuocMuaModel.Any())
-                        {
-                            <tbody>
-                                @{
-                                    int stt = 0;
-                                }
-                                @foreach (var item in listNuocMuaModel)
-                                {
-                                    stt++;
-                                    <tr>
-                                        <td class="text-center">@stt</td>
-                                        <td class="text-center">@item.ThongTinLyTrinh_TuyenDuong</td>
-                                        <td class="text-center">@item.ThongTinLyTrinhTruyenDan_TuLyTrinh</td>
-                                        <td class="text-center">@item.ThongTinLyTrinhTruyenDan_DenLyTrinh</td>
-                                        <td class="text-center">@item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
-                                        <td class="text-center">@item.TTCDSLCauKienDuongTruyenDan_TongChieuDai</td>
-                                        <td class="text-center"> @item.TTMDRanhOngThang_ChieuRongDayDaoNho </td>
-                                        <td class="text-center"> @item.TTMDRanhOngThang_TyLeMoMai</td>
-                                        <td class="text-center"> @item.TTMDRanhOngThang_SoCanhMaiTrai</td>
-                                        <td class="text-center"> @item.TTMDRanhOngThang_SoCanhMaiPhai</td>
-                                        <td class="text-center"> @item.DTTB_CSDap</td>
-                                        <td class="text-center"> @item.DTTB_CRDapDayLon</td>
-                                        <td class="text-center"> @item.DTTB_DTichDap</td>
-                                        <td class="text-center"> @item.TTKLDC_KlDapCatTruocChiemCho </td>
-                                        <td class="text-center"> @item.TTKLDC_KlChiemCho </td>
-                                        <td class="text-center"> @item.TTKLDC_KlDapCatSauChiemCho </td>
-
-                                    </tr>
-                                }
-                            </tbody>
+        <div class="row mt-3 p-2 our-table">
+            <table id="tb1" class="table table-bordered table-hover" cellpadding="1" cellspacing="2">
+                <thead class="bg-info @thumbtack">
+                    <tr>
+                        <th class="text-center" rowspan="2">STT</th>
+                        <th class="text-center" colspan="4">Thông tin cống tròn, ống nhựa </th>
+                        <th class="text-center" colspan="5">Thông tin móng cống tròn </th>
+                        <th class="text-center" colspan="5">Thông tin móng cống hộp </th>
+                        <th class="text-center" colspan="4">KTHH đế cống </th>
+                    </tr>
+                    <tr>
+                        <th class="text-center">Loại cống tròn   		</th>
+                        <th class="text-center">Chiều dài               </th>
+                        <th class="text-center">C.Dầy phủ bì            </th>
+                        <th class="text-center">Lòng sử dụng            </th>
+                        <th class="text-center">Loại móng               </th>
+                        <th class="text-center"> C.Cao lót móng (m)     </th>
+                        <th class="text-center"> C.Rộng lót móng        </th>
+                        <th class="text-center"> C.Cao móng (m)         </th>
+                        <th class="text-center"> C.Rộng móng (m)        </th>
+                        <th class="text-center">Loại móng               </th>
+                        <th class="text-center"> C.Cao lót móng (m)     </th>
+                        <th class="text-center"> C.Rộng lót móng        </th>
+                        <th class="text-center"> C.Cao móng (m)         </th>
+                        <th class="text-center"> C.Rộng móng (m)        </th>
+                        <th class="text-center"> Loại đế cống           </th>
+                        <th class="text-center"> D                      </th>
+                        <th class="text-center"> R                      </th>
+                        <th class="text-center"> C                      </th>
+                    </tr>
+                </thead>
+                @if (listKTHHMDCModel.Any())
+                {
+                    <tbody>
+                        @{
+                            int stt = 0;
                         }
-                        else
+                        @foreach (var item in listKTHHMDCModel)
                         {
-                            <tbody>
-                                <tr>
-                                    <td colspan="16"> Không có dữ liệu</td>
-                                </tr>
-                            </tbody>
+                            stt++;
+                            <tr>
+                                <td class="text-center">@stt</td>
+                                <td>@item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai		  </td>
+                                <td>@item.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien               </td>
+                                <td>@item.ThongTinCauTaoCongTron_CDayPhuBi                           </td>
+                                <td>@item.ThongTinCauTaoCongTron_LongSuDung                          </td>
+                                <td>@item.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop     </td>
+                                <td>@item.ThongTinCauTaoCongTron_CCaoLotMong                         </td>
+                                <td>@item.ThongTinCauTaoCongTron_CRongLotMong                        </td>
+                                <td>@item.ThongTinCauTaoCongTron_CCaoMong                            </td>
+                                <td>@item.ThongTinCauTaoCongTron_CRongMong                           </td>
+                                <td>@item.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop1      </td>
+                                <td>@item.TTKTHHCongHopRanh_CCaoLotMong                              </td>
+                                <td>@item.TTKTHHCongHopRanh_CRongLotMong                             </td>
+                                <td>@item.TTKTHHCongHopRanh_CCaoMong                                 </td>
+                                <td>@item.TTKTHHCongHopRanh_CRongMong                                </td>
+                                <td>@item.PhanLoaiDeCong_TenLoaiDeCong                               </td>
+                                <td>@item.ThongTinDeCong_D                                           </td>
+                                <td>@item.ThongTinDeCong_R                                           </td>
+                                <td>@item.ThongTinDeCong_C                                           </td>
+                            </tr>
                         }
-                    </table>
-                </div>
-                <div class="mt-4">
-                    @if (listNuocMuaModel.Any())
-                    {
-                        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
-                    }
-                </div>
-         
-        
+                    </tbody>
+                }
+                else
+                {
+                    <tbody>
+                        <tr>
+                            <td colspan="4"> Không có dữ liệu</td>
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        </div>
+        <div class="mt-4">
+            @if (listKTHHMDCModel.Any())
+            {
+                <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+            }
         </div>
     </div>
 
@@ -136,7 +131,6 @@
     private NuocMua Input { get; set; } = new();
     public List<DanhMuc1> listDanhMuc = new();
     private bool isEdit = false;
-    private NuocMuaModel nuocMuaVM;
     private bool isLoading = false;
     private DateTime baseTime;
 
@@ -144,11 +138,12 @@
     private string space = "ml-5";
     private string thumbtack = "";
 
-    public List<NuocMuaModel> listNuocMuaModel { get; set; } = new();
-    public List<NuocMuaModel> listModel { get; set; } = new();
+    public List<KTHHMDCModel> listKTHHMDCModel { get; set; } = new();
+    public List<KTHHMDCModel> listModel { get; set; } = new();
+
 
     public MetaData MetaData { get; set; }
-    public NuocMuaModel nuocMuaModel { get; set; }
+    public KTHHMDCModel nuocMuaModel { get; set; }
 
     [Parameter]
     public ConfirmModal confirmModal { get; set; }
@@ -167,53 +162,27 @@
         isLoading = true;
         var helper = new DataConversionHelper();
         listDanhMuc = await DanhMucRepository.GetAll();
-        NuocMuaModel nuocMuaModelSearch = new();
+        KTHHMDCModel nuocMuaModelSearch = new();
 
-        nuocMuaModelSearch.TraiPhai = 0;
-        var nuocMuaRepositoryLeft = await NuocMuaRepository.GetAllByVM(nuocMuaModelSearch);
-        List<NuocMuaModel> nuocmuasLeft;
-        nuocmuasLeft = await ConvertDanhMuc(nuocMuaRepositoryLeft);
-        listModel = nuocmuasLeft;
-        listNuocMuaModel = Paging(nuocmuasLeft);
-
-        nuocMuaModelSearch.TraiPhai = 1;
-        var nuocMuaRepositoryRight = await NuocMuaRepository.GetAllByVM(nuocMuaModelSearch);
+        var nuocMuaRepository = await NuocMuaRepository.GetBaoCaoKTHHMDC();
+        
+        listModel = nuocMuaRepository;
+        listKTHHMDCModel = PagingLeft(nuocMuaRepository);
 
         isLoading = false;
         baseTime = DateTime.Now;
     }
 
-    public async Task<List<NuocMuaModel>> ConvertDanhMuc(List<NuocMuaModel> listNuocMua)
-    {
-        List<NuocMuaModel> newList = new();
-        if (listNuocMua.Count() > 0)
-        {
-            foreach (var item in listNuocMua)
-            {
-                item.ThongTinMongDuongTruyenDan_LoaiMong_Name = GetTenDanhMucById(item.ThongTinMongDuongTruyenDan_LoaiMong);
-                if (item.ThongTinMongDuongTruyenDan_LoaiMong_Name.ToUpper().Trim() == "ĐẮP CÁT")
-                {
-                    newList.Add(item);
-                }
-            }
-        }
-        return newList;
-    }
 
-    public string GetTenDanhMucById(string id)
-    {
-        var danhMuc = listDanhMuc.FirstOrDefault(dm => dm.Id == id);
-        return danhMuc != null ? danhMuc.Ten : "";
-    }
 
     // Sắp xếp data
     private void SortTableLeft(string columnName)
     {
         listModel = SortService.SortTable(listModel, columnName);
         nuocMuaModel.PageNumber = 1;
-        Paging(listModel);
+        PagingLeft(listModel);
     }
-    
+
 
     // Get css cho chức năng sắp xếp
     private string GetSortStyle(string columnName)
@@ -225,8 +194,8 @@
     private void SelectedPage(int page)
     {
         nuocMuaModel.PageNumber = page;
-        Paging(listModel);
- 
+        PagingLeft(listModel);
+      
     }
 
     // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
@@ -234,12 +203,12 @@
     {
         nuocMuaModel.PageNumber = 1;
         nuocMuaModel.pageSize = pageSize;
-        Paging(listModel);
-
+        PagingLeft(listModel);
+        
     }
 
     // Xử lý paging left
-    private List<NuocMuaModel> Paging(List<NuocMuaModel> nuocMuaModels)
+    private List<KTHHMDCModel> PagingLeft(List<KTHHMDCModel> nuocMuaModels)
     {
         // Đếm số bản ghi thỏa mãn
         var count = nuocMuaModels.Count();
@@ -248,21 +217,21 @@
         nuocMuaModels = nuocMuaModels.Skip((nuocMuaModel.PageNumber - 1) * nuocMuaModel.PageSize).Take(nuocMuaModel.PageSize).ToList();
 
         // Xóa danh sách đang hiển thị trên màn hình
-        listNuocMuaModel.Clear();
+        listKTHHMDCModel.Clear();
 
         // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
         foreach (var major in nuocMuaModels)
         {
-            listNuocMuaModel.Add(major);
+            listKTHHMDCModel.Add(major);
         }
 
         // Tạo pagelist mới
 
-        var pagelist = new PageList<NuocMuaModel>(listNuocMuaModel, count, nuocMuaModel.PageNumber, nuocMuaModel.PageSize);
+        var pagelist = new PageList<KTHHMDCModel>(listKTHHMDCModel, count, nuocMuaModel.PageNumber, nuocMuaModel.PageSize);
         MetaData = pagelist.MetaData;
         return nuocMuaModels;
     }
-
+    
     private void ThumbtackHeader()
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
