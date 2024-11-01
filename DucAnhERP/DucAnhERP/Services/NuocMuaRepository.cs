@@ -1325,7 +1325,6 @@ namespace DucAnhERP.Services
                 throw new Exception("Lỗi tải dữ liệu :" + ex.Message);
             }
         }
-
         public async Task<List<KTHHMDCModel>> GetBaoCaoKTHHMDC()
         {
             try
@@ -1520,7 +1519,6 @@ namespace DucAnhERP.Services
                 throw new Exception("Lỗi tải dữ liệu :" + ex.Message);
             }
         }
-
         public async Task<List<NuocMuaModel>> GetBaoCaoKTHHRX()
         {
             try
@@ -1618,7 +1616,6 @@ namespace DucAnhERP.Services
                 throw new Exception("Lỗi tải dữ liệu :" + ex.Message);
             }
         }
-
         public async Task<List<NuocMuaModel>> GetBaoCaoKTHHTC()
         {
             try
@@ -1647,7 +1644,6 @@ namespace DucAnhERP.Services
                 throw new Exception("Lỗi khi tải dữ liệu");
             }
         }
-        
         public async Task<List<NuocMuaModel>> GetBaoCaoKTHHTDRX()
         {
             try
@@ -1694,7 +1690,6 @@ namespace DucAnhERP.Services
                 throw new Exception("Lỗi khi tải dữ liệu");
             }
         }
-
         public async Task<List<NuocMuaModel>> GetBaoCaoKTHHRBT()
         {
             try
@@ -1792,7 +1787,6 @@ namespace DucAnhERP.Services
                 throw new Exception("Lỗi tải dữ liệu :" + ex.Message);
             }
         }
-
         public async Task<List<NuocMuaModel>> GetBaoCaoKTHHTDRBT()
         {
             try
@@ -1837,6 +1831,409 @@ namespace DucAnhERP.Services
             {
 
                 throw new Exception("Lỗi khi tải dữ liệu");
+            }
+        }
+        public async Task<List<SLCKModel>> GetBaoCaoSLCKCT(string HinhThucTruyenDan)
+        {
+            using var context = _context.CreateDbContext();
+            List<SLCKModel> result = new();
+
+            result = (from a in context.DSNuocMua
+                      join b in context.PhanLoaiCTronHopNhuas on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals b.Id
+                      join c in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id
+                      where c.Ten == HinhThucTruyenDan
+                      group a by new
+                      {
+                          c.Ten,
+                          c.Id,
+                          PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                          a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                          a.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien
+                      } into g
+                      orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai ascending
+                      select new SLCKModel
+                      {
+                          ThongTinDuongTruyenDan_HinhThucTruyenDan_Name = g.Key.Ten,
+                          ThongTinDuongTruyenDan_HinhThucTruyenDan = g.Key.Id,
+                          PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai,
+                          ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = g.Key.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                          TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien = g.Key.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien??0,
+                          Trai = g.Where(x => x.TraiPhai == 0).Sum(x => x.TTCDSLCauKienDuongTruyenDan_TongChieuDai) ?? 0,
+                          Phai = g.Where(x => x.TraiPhai == 1).Sum(x => x.TTCDSLCauKienDuongTruyenDan_TongChieuDai) ?? 0,
+                          Tong = g.Sum(x => x.TTCDSLCauKienDuongTruyenDan_TongChieuDai) ?? 0,
+                          DonVi = (g.Key.Ten == "Cống tròn" || g.Key.Ten == "Cống hộp") ? "Cấu kiện" : "M"
+                      }).ToList();
+
+            return result;
+        }
+        public async Task<List<SLTDanTTuyenModel>> GetBaoCaoSLTDTT()
+        {
+            using var context = _context.CreateDbContext();
+            List<SLTDanTTuyenModel> result = new();
+
+            result = (from a in context.DSNuocMua
+                      join b in context.PhanLoaiCTronHopNhuas on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals b.Id
+                      join c in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id
+                      group a by new
+                      {
+                          c.Ten,
+                          c.Id,
+                          PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                          a.ThongTinLyTrinh_TuyenDuong,
+                          a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                          a.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien
+                      } into g
+                      orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai ascending
+                      select new SLTDanTTuyenModel
+                      {
+                          ThongTinDuongTruyenDan_HinhThucTruyenDan_Name = g.Key.Ten,
+                          ThongTinDuongTruyenDan_HinhThucTruyenDan = g.Key.Id,
+                          ThongTinLyTrinh_TuyenDuong = g.Key.ThongTinLyTrinh_TuyenDuong,
+                          PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai,
+                          ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = g.Key.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                          TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien = g.Key.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien ?? 0,
+                          Trai = g.Where(x => x.TraiPhai == 0).Sum(x => x.TTCDSLCauKienDuongTruyenDan_TongChieuDai) ?? 0,
+                          Phai = g.Where(x => x.TraiPhai == 1).Sum(x => x.TTCDSLCauKienDuongTruyenDan_TongChieuDai) ?? 0,
+                          Tong = g.Sum(x => x.TTCDSLCauKienDuongTruyenDan_TongChieuDai) ?? 0,
+                          DonVi = (g.Key.Ten == "Cống tròn" || g.Key.Ten == "Cống hộp") ? "Cấu kiện" : "M"
+                      }).ToList();
+
+            return result;
+        }
+
+        public async Task<List<TKSLModel>> GetBaoCaoSLMong(string HinhThucTruyenDan)
+        {
+            using var context = _context.CreateDbContext();
+            List<TKSLModel> result = new();
+             result = (from a in context.DSNuocMua
+                          join b in context.PhanLoaiMongCTrons on a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop equals b.Id
+                          join c in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id
+                          where c.Ten == HinhThucTruyenDan
+                       group a by new
+                          {
+                              PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop= b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                              a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                      
+                          } into g
+                          orderby g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop ascending
+                          select new TKSLModel
+                          {
+                              PhanLoai = g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop,
+                              IdPhanLoai = g.Key.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                              Trai = g.Where(x => x.TraiPhai == 0).Sum(x => x.TTCDSLCauKienDuongTruyenDan_TongChieuDai) ?? 0,
+                              Phai = g.Where(x => x.TraiPhai == 1).Sum(x => x.TTCDSLCauKienDuongTruyenDan_TongChieuDai) ?? 0,
+                              Tong = g.Sum(x => x.TTCDSLCauKienDuongTruyenDan_TongChieuDai) ?? 0,
+                              DonVi = (g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop.Length >= 4 &&
+                                     g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop.Substring(0, 4) == "Móng") ? "M" : ""
+                          }).ToList();
+
+
+            return result;
+        }
+        public async Task<List<TKSLTTModel>> GetBaoCaoSLMongTH()
+        {
+            using var context = _context.CreateDbContext();
+            List<TKSLTTModel> result = new();
+            result = (from a in context.DSNuocMua
+                      join b in context.PhanLoaiMongCTrons on a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop equals b.Id
+                      join c in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id
+                   
+                      group a by new
+                      {
+                          PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                          a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                          a.ThongTinLyTrinh_TuyenDuong,
+
+                      } into g
+                      orderby g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop ascending
+                      select new TKSLTTModel
+                      {
+                          ThongTinLyTrinh_TuyenDuong = g.Key.ThongTinLyTrinh_TuyenDuong,
+                          PhanLoai = g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop,
+                          IdPhanLoai = g.Key.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                          Trai = g.Where(x => x.TraiPhai == 0).Sum(x => x.TTCDSLCauKienDuongTruyenDan_TongChieuDai) ?? 0,
+                          Phai = g.Where(x => x.TraiPhai == 1).Sum(x => x.TTCDSLCauKienDuongTruyenDan_TongChieuDai) ?? 0,
+                          Tong = g.Sum(x => x.TTCDSLCauKienDuongTruyenDan_TongChieuDai) ?? 0,
+                          DonVi = (g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop.Length >= 4 &&
+                                 g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop.Substring(0, 4) == "Móng") ? "M" : ""
+                      }).ToList();
+
+
+            return result;
+        }
+
+        public async Task<List<TKSLModel>> GetBaoCaoSLDe()
+        {
+            using var context = _context.CreateDbContext();
+            List<TKSLModel> result = new();
+           
+             result = (from a in context.DSNuocMua
+                          join b in context.PhanLoaiDeCongs on a.ThongTinDeCong_TenLoaiDeCong equals b.Id
+                          where a.ThongTinDeCong_D > 0
+                          group a by new
+                          {
+                              PhanLoaiDeCong_TenLoaiDeCong = b.ThongTinDeCong_TenLoaiDeCong,
+                              a.ThongTinDeCong_TenLoaiDeCong,
+                          } into g
+                          orderby g.Key.PhanLoaiDeCong_TenLoaiDeCong ascending
+                          select new TKSLModel
+                          {
+                              PhanLoai = g.Key.PhanLoaiDeCong_TenLoaiDeCong,
+                              IdPhanLoai = g.Key.ThongTinDeCong_TenLoaiDeCong,
+                              Trai = g.Sum(x => x.TraiPhai == 0 ? x.ThongTinDeCong_SlDeCong01CauKienTruyenDan : 0)??0,
+                              Phai = g.Sum(x => x.TraiPhai == 1 ? x.ThongTinDeCong_SlDeCong01CauKienTruyenDan : 0)??0,
+                              Tong = g.Sum(x => x.ThongTinDeCong_SlDeCong01CauKienTruyenDan)??0,
+                              DonVi = (g.Key.PhanLoaiDeCong_TenLoaiDeCong.Length >= 2 &&
+                                 g.Key.PhanLoaiDeCong_TenLoaiDeCong.Substring(0, 2) == "Đế") ? "Cấu kiện" : ""
+                          }).ToList();
+
+
+            return result;
+        }
+        public async Task<List<TKSLTTModel>> GetBaoCaoSLDeTT()
+        {
+            using var context = _context.CreateDbContext();
+            List<TKSLTTModel> result = new();
+
+            result = (from a in context.DSNuocMua
+                      join b in context.PhanLoaiDeCongs on a.ThongTinDeCong_TenLoaiDeCong equals b.Id
+                      where a.ThongTinDeCong_D > 0
+                      group a by new
+                      {
+                          PhanLoaiDeCong_TenLoaiDeCong = b.ThongTinDeCong_TenLoaiDeCong,
+                          a.ThongTinDeCong_TenLoaiDeCong,
+                          a.ThongTinLyTrinh_TuyenDuong
+                      } into g
+                      orderby g.Key.PhanLoaiDeCong_TenLoaiDeCong ascending
+                      select new TKSLTTModel
+                      {
+                          ThongTinLyTrinh_TuyenDuong = g.Key.ThongTinLyTrinh_TuyenDuong,
+                          PhanLoai = g.Key.PhanLoaiDeCong_TenLoaiDeCong,
+                          IdPhanLoai = g.Key.ThongTinDeCong_TenLoaiDeCong,
+                          Trai = g.Sum(x => x.TraiPhai == 0 ? x.ThongTinDeCong_SlDeCong01CauKienTruyenDan : 0) ?? 0,
+                          Phai = g.Sum(x => x.TraiPhai == 1 ? x.ThongTinDeCong_SlDeCong01CauKienTruyenDan : 0) ?? 0,
+                          Tong = g.Sum(x => x.ThongTinDeCong_SlDeCong01CauKienTruyenDan) ?? 0,
+                          DonVi = (g.Key.PhanLoaiDeCong_TenLoaiDeCong.Length >= 2 &&
+                             g.Key.PhanLoaiDeCong_TenLoaiDeCong.Substring(0, 2) == "Đế") ? "Cấu kiện" : ""
+                      }).ToList();
+
+
+            return result;
+        }
+
+        public async Task<List<TKSLModel>> GetBaoCaoSLTT()
+        {
+            using var context = _context.CreateDbContext();
+            List<TKSLModel> result = new();
+
+            result = (from a in context.DSNuocMua
+                      join b in context.PhanLoaiThanhChongs on a.TTKTHHCongHopRanh_LoaiThanhChong equals b.Id
+                      where a.TTKTHHCongHopRanh_CCaoThanhChong > 0
+                      group a by new
+                      {
+                          PhanLoai = b.TTKTHHCongHopRanh_LoaiThanhChong,
+                          a.TTKTHHCongHopRanh_LoaiThanhChong,
+                      } into g
+                      orderby g.Key.PhanLoai ascending
+                      select new TKSLModel
+                      {
+                          PhanLoai = g.Key.PhanLoai,
+                          IdPhanLoai = g.Key.TTKTHHCongHopRanh_LoaiThanhChong,
+                          Trai = g.Sum(x => x.TraiPhai == 0 ? x.TTKTHHCongHopRanh_SoLuongThanhChong : 0) ?? 0,
+                          Phai = g.Sum(x => x.TraiPhai == 1 ? x.TTKTHHCongHopRanh_SoLuongThanhChong : 0) ?? 0,
+                          Tong = g.Sum(x => x.TTKTHHCongHopRanh_SoLuongThanhChong) ?? 0,
+                          DonVi = (g.Key.PhanLoai.Length >= 2 &&
+                             g.Key.PhanLoai.Substring(0, 11) == "Thanh chống") ? "Cấu kiện" : ""
+                      }).ToList();
+
+
+            return result;
+        }
+        public async Task<List<TKSLTTModel>> GetBaoCaoSLTTTT()
+        {
+            using var context = _context.CreateDbContext();
+            List<TKSLTTModel> result = new();
+
+            result = (from a in context.DSNuocMua
+                      join b in context.PhanLoaiThanhChongs on a.TTKTHHCongHopRanh_LoaiThanhChong equals b.Id
+                      where a.TTKTHHCongHopRanh_CCaoThanhChong > 0
+                      group a by new
+                      {
+                          PhanLoai = b.TTKTHHCongHopRanh_LoaiThanhChong,
+                          a.TTKTHHCongHopRanh_LoaiThanhChong,
+                          a.ThongTinLyTrinh_TuyenDuong
+                      } into g
+                      orderby g.Key.PhanLoai ascending
+                      select new TKSLTTModel
+                      {
+                          ThongTinLyTrinh_TuyenDuong = g.Key.ThongTinLyTrinh_TuyenDuong,
+                          PhanLoai = g.Key.PhanLoai,
+                          IdPhanLoai = g.Key.TTKTHHCongHopRanh_LoaiThanhChong,
+                          Trai = g.Sum(x => x.TraiPhai == 0 ? x.TTKTHHCongHopRanh_SoLuongThanhChong : 0) ?? 0,
+                          Phai = g.Sum(x => x.TraiPhai == 1 ? x.TTKTHHCongHopRanh_SoLuongThanhChong : 0) ?? 0,
+                          Tong = g.Sum(x => x.TTKTHHCongHopRanh_SoLuongThanhChong) ?? 0,
+                          DonVi = (g.Key.PhanLoai.Length >= 2 &&
+                             g.Key.PhanLoai.Substring(0, 2) == "Đế") ? "Cấu kiện" : ""
+                      }).ToList();
+
+
+            return result;
+        }
+
+        public async Task<List<TKSLModel>> GetBaoCaoSLTDan(string HinhThucTruyenDan)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                List<TKSLModel> result = new List<TKSLModel>();
+
+                var result1 = (from a in context.DSNuocMua
+                               join b in context.PhanLoaiTDanTDans
+                               on a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan equals b.Id
+                               join c in context.DSDanhMuc
+                               on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id
+                               where c.Ten == HinhThucTruyenDan && a.TTTDCongHoRanh_SoLuong > 0
+                               group a by new
+                               {
+                                   PhanLoai = b.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
+                                   a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan
+                               } into g
+                               orderby g.Key.PhanLoai ascending
+                               select new TKSLModel
+                               {
+                                   IdPhanLoai = g.Key.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
+                                   PhanLoai = g.Key.PhanLoai ?? "",
+                                   Trai = g.Sum(x => x.TraiPhai == 0 ? x.TTTDCongHoRanh_SoLuong : 0)??0,
+                                   Phai = g.Sum(x => x.TraiPhai == 1 ? x.TTTDCongHoRanh_SoLuong : 0)??0,
+                                   Tong = g.Sum(x => x.TTTDCongHoRanh_SoLuong)??0,
+                                   DonVi = (g.Key.PhanLoai != null && g.Key.PhanLoai.StartsWith("Tấm đan")) ? "Cấu kiện" : ""
+                               }).ToList();
+
+                var result2 = (from a in context.DSNuocMua
+                               join b in context.PhanLoaiTDanTDans
+                               on a.TTTDCongHoRanh_TenLoaiTamDanLoai02 equals b.Id
+                               join c in context.DSDanhMuc
+                               on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id
+                               where c.Ten == HinhThucTruyenDan && a.TTTDCongHoRanh_SoLuong1 > 0
+                               group a by new
+                               {
+                                   PhanLoai = b.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
+                                   a.TTTDCongHoRanh_TenLoaiTamDanLoai02
+                               } into g
+                               orderby g.Key.PhanLoai ascending
+                               select new TKSLModel
+                               {
+                                   IdPhanLoai = g.Key.TTTDCongHoRanh_TenLoaiTamDanLoai02,
+                                   PhanLoai = g.Key.PhanLoai ,
+                                   Trai = g.Sum(x => x.TraiPhai == 0 ? x.TTTDCongHoRanh_SoLuong1 : 0) ?? 0,
+                                   Phai = g.Sum(x => x.TraiPhai == 1 ? x.TTTDCongHoRanh_SoLuong1 : 0) ?? 0,
+                                   Tong = g.Sum(x => x.TTTDCongHoRanh_SoLuong1) ?? 0,
+                                   DonVi = (g.Key.PhanLoai.Length >= 2 && g.Key.PhanLoai.Substring(0, 7) == "Tấm đan") ? "Cấu kiện" : ""
+                               });
+
+                result = result1.Concat(result2).Distinct().OrderBy(x => x.PhanLoai).ToList();
+
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw new Exception("Lỗi khi tải dữ liệu");
+            }
+        }
+        public async Task<List<TKSLTTModel>> GetBaoCaoSLTDanTT()
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                List<TKSLTTModel> result = new List<TKSLTTModel>();
+
+                var result1 = (from a in context.DSNuocMua
+                               join b in context.PhanLoaiTDanTDans
+                               on a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan equals b.Id
+                               where  a.TTTDCongHoRanh_SoLuong > 0
+                               group a by new
+                               {
+                                   PhanLoai = b.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
+                                   a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
+                                   a.ThongTinLyTrinh_TuyenDuong
+                               } into g
+                               orderby g.Key.PhanLoai ascending
+                               select new TKSLTTModel
+                               {
+                                   ThongTinLyTrinh_TuyenDuong = g.Key.ThongTinLyTrinh_TuyenDuong,
+                                   IdPhanLoai = g.Key.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
+                                   PhanLoai = g.Key.PhanLoai ?? "",
+                                   Trai = g.Sum(x => x.TraiPhai == 0 ? x.TTTDCongHoRanh_SoLuong : 0) ?? 0,
+                                   Phai = g.Sum(x => x.TraiPhai == 1 ? x.TTTDCongHoRanh_SoLuong : 0) ?? 0,
+                                   Tong = g.Sum(x => x.TTTDCongHoRanh_SoLuong) ?? 0,
+                                   DonVi = (g.Key.PhanLoai != null && g.Key.PhanLoai.StartsWith("Tấm đan")) ? "Cấu kiện" : ""
+                               }).ToList();
+
+                var result2 = (from a in context.DSNuocMua
+                               join b in context.PhanLoaiTDanTDans
+                               on a.TTTDCongHoRanh_TenLoaiTamDanLoai02 equals b.Id
+                               where a.TTTDCongHoRanh_SoLuong1 > 0
+                               group a by new
+                               {
+                                   PhanLoai = b.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
+                                   a.TTTDCongHoRanh_TenLoaiTamDanLoai02,
+                                   a.ThongTinLyTrinh_TuyenDuong
+                               } into g
+                               orderby g.Key.PhanLoai ascending
+                               select new TKSLTTModel
+                               {
+                                   IdPhanLoai = g.Key.TTTDCongHoRanh_TenLoaiTamDanLoai02,
+                                   ThongTinLyTrinh_TuyenDuong = g.Key.ThongTinLyTrinh_TuyenDuong,
+                                   PhanLoai = g.Key.PhanLoai,
+                                   Trai = g.Sum(x => x.TraiPhai == 0 ? x.TTTDCongHoRanh_SoLuong1 : 0) ?? 0,
+                                   Phai = g.Sum(x => x.TraiPhai == 1 ? x.TTTDCongHoRanh_SoLuong1 : 0) ?? 0,
+                                   Tong = g.Sum(x => x.TTTDCongHoRanh_SoLuong1) ?? 0,
+                                   DonVi = (g.Key.PhanLoai.Length >= 2 && g.Key.PhanLoai.Substring(0, 7) == "Tấm đan") ? "Cấu kiện" : ""
+                               });
+
+                result = result1.Concat(result2).Distinct().OrderBy(x => x.PhanLoai).ToList();
+
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw new Exception("Lỗi khi tải dữ liệu");
+            }
+        }
+
+        public async Task<List<NuocMuaModel>> GetBaoCaoMongCTSDThep()
+        {
+            try
+            {
+                List<NuocMuaModel> result = new();
+                using var context = _context.CreateDbContext();
+
+                 result = (from a in context.DSNuocMua
+                             join c in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id
+                             join d in context.DSDanhMuc on a.ThongTinMongDuongTruyenDan_HinhThucMong equals d.Id
+                             join b in context.PhanLoaiMongCTrons on a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop equals b.Id into bJoin
+                             from b in bJoin.DefaultIfEmpty()
+                             where c.Ten == "Cống tròn" && d.Ten == "Có cốt thép"
+                             select new NuocMuaModel
+                             {
+                                 ThongTinDuongTruyenDan_HinhThucTruyenDan = a.ThongTinDuongTruyenDan_HinhThucTruyenDan??"",
+                                 ThongTinDuongTruyenDan_HinhThucTruyenDan_Name = c.Ten,
+                                 ThongTinMongDuongTruyenDan_HinhThucMong = a.ThongTinMongDuongTruyenDan_HinhThucMong??"",
+                                 ThongTinMongDuongTruyenDan_HinhThucMong_Name = d.Ten,
+                                 ThongTinLyTrinh_TuyenDuong = a.ThongTinLyTrinh_TuyenDuong ?? "",
+                                 ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop??"",
+                                 PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop??"",
+                                 ThongTinLyTrinhTruyenDan_TuLyTrinh = a.ThongTinLyTrinhTruyenDan_TuLyTrinh??0,
+                                 ThongTinLyTrinhTruyenDan_DenLyTrinh = a.ThongTinLyTrinhTruyenDan_DenLyTrinh??0,
+                             }).ToList();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi tải dữ liệu :" + ex.Message);
             }
         }
     }
