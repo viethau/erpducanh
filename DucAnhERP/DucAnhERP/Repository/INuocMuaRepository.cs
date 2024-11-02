@@ -34,5 +34,8 @@ namespace DucAnhERP.Repository
         Task<List<TKSLModel>> GetBaoCaoSLTDan(string HinhThucTruyenDan);
         Task<List<TKSLTTModel>> GetBaoCaoSLTDanTT();
         Task<List<NuocMuaModel>> GetBaoCaoMongCTSDThep();
+        Task<List<NuocMuaModel>> GetBaoCaoCongTronSDThep();
+        Task<List<NuocMuaModel>> GetBaoCaoDeCongSDThep();
+        Task<List<NuocMuaModel>> GetBaoCaoCongHopSDThep()
     }
 }

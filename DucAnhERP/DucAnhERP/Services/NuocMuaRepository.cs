@@ -2236,5 +2236,98 @@ namespace DucAnhERP.Services
                 throw new Exception("Lỗi tải dữ liệu :" + ex.Message);
             }
         }
+        public async Task<List<NuocMuaModel>> GetBaoCaoCongTronSDThep()
+        {
+            try
+            {
+                List<NuocMuaModel> result = new();
+                using var context = _context.CreateDbContext();
+
+                 result = (from a in context.DSNuocMua
+                              join b in context.PhanLoaiCTronHopNhuas on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals b.Id
+                              join c in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id
+                              where c.Ten == "Cống tròn"
+                              orderby b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai
+                              select new NuocMuaModel
+                              {
+                                  ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai??"",
+                                  PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai =  b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                  ThongTinDuongTruyenDan_HinhThucTruyenDan = a.ThongTinDuongTruyenDan_HinhThucTruyenDan??"",
+                                  ThongTinDuongTruyenDan_HinhThucTruyenDan_Name = c.Ten
+                              }).Distinct().ToList();
+
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi tải dữ liệu :" + ex.Message);
+            }
+        }
+
+        public async Task<List<NuocMuaModel>> GetBaoCaoDeCongSDThep()
+        {
+            try
+            {
+                List<NuocMuaModel> result = new();
+                using var context = _context.CreateDbContext();
+
+                result = (from a in context.DSNuocMua
+                              join b in context.PhanLoaiDeCongs on a.ThongTinDeCong_TenLoaiDeCong equals b.Id
+                              join c in context.DSDanhMuc on a.ThongTinDeCong_CauTaoDeCong equals c.Id
+                              where c.Ten == "Có cốt thép"
+                              orderby b.ThongTinDeCong_TenLoaiDeCong
+                              select new NuocMuaModel
+                              {
+                                  ThongTinDeCong_TenLoaiDeCong = a.ThongTinDeCong_TenLoaiDeCong ?? "",
+                                  PhanLoaiDeCong_TenLoaiDeCong = b.ThongTinDeCong_TenLoaiDeCong??"",
+                                  ThongTinDeCong_CauTaoDeCong =  a.ThongTinDeCong_CauTaoDeCong??"",
+                                  ThongTinDeCong_CauTaoDeCong_Name =  c.Ten,
+                              }).Distinct().ToList();
+
+
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi tải dữ liệu :" + ex.Message);
+            }
+        }
+
+        public async Task<List<NuocMuaModel>> GetBaoCaoCongHopSDThep()
+        {
+            try
+            {
+                List<NuocMuaModel> result = new();
+                using var context = _context.CreateDbContext();
+
+                 result = (from a in context.DSNuocMua
+                             join b in context.PhanLoaiCTronHopNhuas on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals b.Id
+                             join c in context.DSDanhMuc on a.TTKTHHCongHopRanh_CauTaoTuong equals c.Id
+                             join e in context.DSDanhMuc on a.TTKTHHCongHopRanh_CauTaoMuMo equals e.Id
+                             join f in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals f.Id
+                             where f.Ten == "Cống hộp" &&
+                                   (c.Ten == "Tường bê tông cốt thép" || e.Ten == "Mũ mố bê tông cốt thép")
+                             select new NuocMuaModel
+                             {
+                             
+                                 ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai??"",
+                                 TTKTHHCongHopRanh_CauTaoTuong = a.TTKTHHCongHopRanh_CauTaoTuong??"",
+                                 TTKTHHCongHopRanh_CauTaoTuong_Name = c.Ten,
+                                 TTKTHHCongHopRanh_CauTaoMuMo = a.TTKTHHCongHopRanh_CauTaoMuMo??"",
+                                 TTKTHHCongHopRanh_CauTaoMuMo_Name = e.Ten,
+                                 ThongTinDuongTruyenDan_HinhThucTruyenDan = a.ThongTinDuongTruyenDan_HinhThucTruyenDan??"",
+                                 ThongTinDuongTruyenDan_HinhThucTruyenDan_Name = f.Ten
+                             }).ToList();
+
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi tải dữ liệu :" + ex.Message);
+            }
+        }
     }
 }
