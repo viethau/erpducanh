@@ -291,7 +291,7 @@ namespace DucAnhERP.Services
             }
         }
 
-        public async Task<string> InsertId(PhanLoaiTDanTDan entity, string HTTD , string LTD,string CTTDTC)
+        public async Task<string> InsertId(PhanLoaiTDanTDan entity, string HTTD , string LTD,string CTTDTC, string PhanLoai)
         {
             try
             {
@@ -319,7 +319,15 @@ namespace DucAnhERP.Services
                 {
                     entity.Loai = 1;
                 }
-                entity.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = "Tấm đan tiêu chuẩn loại " + entity.Loai +" "+ HTTD +" "+ LTD+" "+ CTTDTC;
+                if (PhanLoai == "Tấm đan tiêu chuẩn")
+                {
+                    entity.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = "Tấm đan tiêu chuẩn loại " + entity.Loai + " " + HTTD + " " + LTD + " " + CTTDTC;
+                }
+                else
+                {
+                    entity.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = "Tấm đan bổ sung loại " + entity.Loai + " " + HTTD + " " + LTD + " " + CTTDTC;
+                }
+                
 
                 // Chèn bản ghi mới vào bảng
                 context.PhanLoaiTDanTDans.Add(entity);

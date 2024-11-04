@@ -1366,7 +1366,7 @@ namespace DucAnhERP.Services
                             ThongTinCauTaoCongTron_CDayPhuBi = g.Key.PhuBi ?? 0,
                             ThongTinCauTaoCongTron_LongSuDung = g.Key.SuDung ?? 0,
                             ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = g.Key.LoaiTruyenDan ?? ""// Đặt tên duy nhất cho thuộc tính
-                        }).ToList();
+                        }).Distinct().ToList();
                 count = data1.Count > count ? data1.Count : count;
 
                 data2 = (from a in context.DSNuocMua
@@ -1400,7 +1400,7 @@ namespace DucAnhERP.Services
                              ThongTinCauTaoCongTron_CRongLotMong = g.Key.CCaoLotMong ?? 0,
                              ThongTinCauTaoCongTron_CCaoMong = g.Key.CCaoMong ?? 0,
                              ThongTinCauTaoCongTron_CRongMong = g.Key.CRongMong ?? 0
-                         }).ToList();
+                         }).Distinct().ToList();
                 count = data2.Count > count ? data2.Count : count;
                 data3 = (from a in context.DSNuocMua
                          join b in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals b.Id
@@ -1433,7 +1433,7 @@ namespace DucAnhERP.Services
                              ThongTinCauTaoCongTron_CRongLotMong = g.Key.CCaoLotMong ?? 0,
                              ThongTinCauTaoCongTron_CCaoMong = g.Key.CCaoMong ?? 0,
                              ThongTinCauTaoCongTron_CRongMong = g.Key.CRongMong ?? 0
-                         }).ToList();
+                         }).Distinct().ToList();
                 count = data3.Count > count ? data3.Count : count;
 
                 data4 = (from a in context.DSNuocMua
@@ -1463,7 +1463,7 @@ namespace DucAnhERP.Services
                              ThongTinDeCong_R =  g.Key.ThongTinDeCong_R ?? 0,
                              ThongTinDeCong_C = g.Key.ThongTinDeCong_C ?? 0,
                              PhanLoaiDeCong_TenLoaiDeCong = g.Key.TenLoaiDeCong
-                         }).ToList();
+                         }).Distinct().ToList();
                 count = data4.Count > count ? data4.Count : count;
                 if(count> 0)
                 {
@@ -1518,6 +1518,80 @@ namespace DucAnhERP.Services
             {
                 throw new Exception("Lỗi tải dữ liệu :" + ex.Message);
             }
+        }
+        public async Task<List<NuocMuaModel>> GetBaoCaoKTHHONhua()
+        {
+            List<NuocMuaModel> result = new();
+            using var context = _context.CreateDbContext();
+            result = (from a in context.DSNuocMua
+                         join b in context.PhanLoaiCTronHopNhuas on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals b.Id into bGroup
+                         from b in bGroup.DefaultIfEmpty()
+                         join c in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id into cGroup
+                         from c in cGroup.DefaultIfEmpty()
+                         where c.Ten == "Ống nhựa"
+                         select new NuocMuaModel
+                         {
+                             ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai??"",
+                             PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai =  b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "",
+                             ThongTinKichThuocHinhHocOngNhua_CDayPhuBi = a.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi??0,
+                             ThongTinKichThuocHinhHocOngNhua_LongSuDung = a.ThongTinKichThuocHinhHocOngNhua_LongSuDung ?? 0
+                         }).Distinct().ToList();
+
+            return result;
+        }
+        public async Task<List<NuocMuaModel>> GetBaoCaoKTHHCHop()
+        {
+            List<NuocMuaModel> result = new();
+            using var context = _context.CreateDbContext();
+            result = (from a in context.DSNuocMua
+                                   join c in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id
+                                  join f in context.PhanLoaiCTronHopNhuas on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals f.Id into fGroup
+                                  from f in fGroup.DefaultIfEmpty()
+                                  join d in context.DSDanhMuc on a.TTKTHHCongHopRanh_CauTaoTuong equals d.Id into dGroup
+                                   from d in dGroup.DefaultIfEmpty()
+                                   join e in context.DSDanhMuc on a.TTKTHHCongHopRanh_CauTaoMuMo equals e.Id into eGroup
+                                   from e in eGroup.DefaultIfEmpty()
+                                   where c.Ten == "Cống hộp"
+                                   select new NuocMuaModel
+                                   {
+                                      
+                                       ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ??"",
+                                       PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = f.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                       TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien = a.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien ?? 0,
+                                       TTKTHHCongHopRanh_CauTaoTuong_Name = d.Ten,
+                                       TTKTHHCongHopRanh_CauTaoMuMo_Name = e.Ten,
+                                       TTKTHHCongHopRanh_CCaoDe = a.TTKTHHCongHopRanh_CCaoDe ??0,
+                                       TTKTHHCongHopRanh_CRongDe = a.TTKTHHCongHopRanh_CRongDe ?? 0,
+                                       TTKTHHCongHopRanh_CDayTuong01Ben = a.TTKTHHCongHopRanh_CDayTuong01Ben ?? 0,
+                                       TTKTHHCongHopRanh_SoLuongTuong = a.TTKTHHCongHopRanh_SoLuongTuong ?? 0,
+                                       TTKTHHCongHopRanh_CRongLongSuDung = a.TTKTHHCongHopRanh_CRongLongSuDung ?? 0,
+                                       TTKTHHCongHopRanh_CCaoTuongGop = a.TTKTHHCongHopRanh_CCaoTuongGop ?? 0,
+                                       TTKTHHCongHopRanh_CCaoMuMoThotDuoi = a.TTKTHHCongHopRanh_CCaoMuMoThotDuoi ?? 0,
+                                       TTKTHHCongHopRanh_CRongMuMoDuoi = a.TTKTHHCongHopRanh_CRongMuMoDuoi ?? 0,
+                                       TTKTHHCongHopRanh_CCaoMuMoThotTren = a.TTKTHHCongHopRanh_CCaoMuMoThotTren ?? 0,
+                                       TTKTHHCongHopRanh_CRongMuMoTren = a.TTKTHHCongHopRanh_CRongMuMoTren ?? 0
+                                   }).Distinct().ToList();
+
+            return result;
+        }
+        public async Task<List<NuocMuaModel>> GetBaoCaoKTHHTDCH()
+        {
+            List<NuocMuaModel> result = new();
+            using var context = _context.CreateDbContext();
+            result = ( from a in context.DSNuocMua
+                                   join c in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id
+                                   join f in context.PhanLoaiTDanTDans on a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan equals f.Id
+                                   where c.Ten == "Cống hộp" && a.TTTDCongHoRanh_SoLuong > 0
+                                   select new NuocMuaModel
+                                   {
+                                       PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = f.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ??"",
+                                       TTTDCongHoRanh_TenLoaiTamDanTieuChuan = a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
+                                       TTTDCongHoRanh_CDai = a.TTTDCongHoRanh_CDai ??0,
+                                       TTTDCongHoRanh_CRong = a.TTTDCongHoRanh_CRong ??0,
+                                       TTTDCongHoRanh_CCao = a.TTTDCongHoRanh_CCao ??0
+                                   }).Distinct().ToList();
+
+            return result;
         }
         public async Task<List<NuocMuaModel>> GetBaoCaoKTHHRX()
         {
@@ -1606,7 +1680,7 @@ namespace DucAnhERP.Services
                                     TTKTHHCongHopRanh_CCaoChatmatNgoai  = g.Key.TTKTHHCongHopRanh_CCaoChatmatNgoai  ??0 ,
                                     ThongTinMongDuongTruyenDan_LoaiMong = g.Key.ThongTinMongDuongTruyenDan_LoaiMong,
                                     ThongTinMongDuongTruyenDan_HinhThucMong = g.Key.ThongTinMongDuongTruyenDan_HinhThucMong
-                              }).ToList();
+                              }).Distinct().ToList();
 
 
                 return result;
@@ -1632,9 +1706,7 @@ namespace DucAnhERP.Services
                                   TTKTHHCongHopRanh_CCaoThanhChong = a.TTKTHHCongHopRanh_CCaoThanhChong ?? 0,
                                   TTKTHHCongHopRanh_CRongThanhChong = a.TTKTHHCongHopRanh_CRongThanhChong ?? 0,
                                   TTKTHHCongHopRanh_CDai = a.TTKTHHCongHopRanh_CDai ?? 0
-                              })
-              .Distinct()
-              .ToList();
+                              }).Distinct().ToList();
                 return result;
 
             }
@@ -1777,7 +1849,7 @@ namespace DucAnhERP.Services
                               TTKTHHCongHopRanh_CCaoChatmatNgoai = g.Key.TTKTHHCongHopRanh_CCaoChatmatNgoai ?? 0,
                               ThongTinMongDuongTruyenDan_LoaiMong = g.Key.ThongTinMongDuongTruyenDan_LoaiMong,
                               ThongTinMongDuongTruyenDan_HinhThucMong = g.Key.ThongTinMongDuongTruyenDan_HinhThucMong
-                          }).ToList();
+                          }).Distinct().ToList();
 
 
                 return result;
@@ -1862,7 +1934,7 @@ namespace DucAnhERP.Services
                           Phai = g.Where(x => x.TraiPhai == 1).Sum(x => x.TTCDSLCauKienDuongTruyenDan_TongChieuDai) ?? 0,
                           Tong = g.Sum(x => x.TTCDSLCauKienDuongTruyenDan_TongChieuDai) ?? 0,
                           DonVi = (g.Key.Ten == "Cống tròn" || g.Key.Ten == "Cống hộp") ? "Cấu kiện" : "M"
-                      }).ToList();
+                      }).Distinct().ToList();
 
             return result;
         }
@@ -1896,7 +1968,7 @@ namespace DucAnhERP.Services
                           Phai = g.Where(x => x.TraiPhai == 1).Sum(x => x.TTCDSLCauKienDuongTruyenDan_TongChieuDai) ?? 0,
                           Tong = g.Sum(x => x.TTCDSLCauKienDuongTruyenDan_TongChieuDai) ?? 0,
                           DonVi = (g.Key.Ten == "Cống tròn" || g.Key.Ten == "Cống hộp") ? "Cấu kiện" : "M"
-                      }).ToList();
+                      }).Distinct().ToList();
 
             return result;
         }
@@ -1925,7 +1997,7 @@ namespace DucAnhERP.Services
                               Tong = g.Sum(x => x.TTCDSLCauKienDuongTruyenDan_TongChieuDai) ?? 0,
                               DonVi = (g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop.Length >= 4 &&
                                      g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop.Substring(0, 4) == "Móng") ? "M" : ""
-                          }).ToList();
+                          }).Distinct().ToList();
 
 
             return result;
@@ -1956,7 +2028,7 @@ namespace DucAnhERP.Services
                           Tong = g.Sum(x => x.TTCDSLCauKienDuongTruyenDan_TongChieuDai) ?? 0,
                           DonVi = (g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop.Length >= 4 &&
                                  g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop.Substring(0, 4) == "Móng") ? "M" : ""
-                      }).ToList();
+                      }).Distinct().ToList();
 
 
             return result;
@@ -1985,7 +2057,7 @@ namespace DucAnhERP.Services
                               Tong = g.Sum(x => x.ThongTinDeCong_SlDeCong01CauKienTruyenDan)??0,
                               DonVi = (g.Key.PhanLoaiDeCong_TenLoaiDeCong.Length >= 2 &&
                                  g.Key.PhanLoaiDeCong_TenLoaiDeCong.Substring(0, 2) == "Đế") ? "Cấu kiện" : ""
-                          }).ToList();
+                          }).Distinct().ToList();
 
 
             return result;
@@ -2015,7 +2087,7 @@ namespace DucAnhERP.Services
                           Tong = g.Sum(x => x.ThongTinDeCong_SlDeCong01CauKienTruyenDan) ?? 0,
                           DonVi = (g.Key.PhanLoaiDeCong_TenLoaiDeCong.Length >= 2 &&
                              g.Key.PhanLoaiDeCong_TenLoaiDeCong.Substring(0, 2) == "Đế") ? "Cấu kiện" : ""
-                      }).ToList();
+                      }).Distinct().ToList();
 
 
             return result;
@@ -2044,7 +2116,7 @@ namespace DucAnhERP.Services
                           Tong = g.Sum(x => x.TTKTHHCongHopRanh_SoLuongThanhChong) ?? 0,
                           DonVi = (g.Key.PhanLoai.Length >= 2 &&
                              g.Key.PhanLoai.Substring(0, 11) == "Thanh chống") ? "Cấu kiện" : ""
-                      }).ToList();
+                      }).Distinct().ToList();
 
 
             return result;
@@ -2074,7 +2146,7 @@ namespace DucAnhERP.Services
                           Tong = g.Sum(x => x.TTKTHHCongHopRanh_SoLuongThanhChong) ?? 0,
                           DonVi = (g.Key.PhanLoai.Length >= 2 &&
                              g.Key.PhanLoai.Substring(0, 2) == "Đế") ? "Cấu kiện" : ""
-                      }).ToList();
+                      }).Distinct().ToList();
 
 
             return result;
@@ -2227,7 +2299,7 @@ namespace DucAnhERP.Services
                                  PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop??"",
                                  ThongTinLyTrinhTruyenDan_TuLyTrinh = a.ThongTinLyTrinhTruyenDan_TuLyTrinh??0,
                                  ThongTinLyTrinhTruyenDan_DenLyTrinh = a.ThongTinLyTrinhTruyenDan_DenLyTrinh??0,
-                             }).ToList();
+                             }).Distinct().ToList();
 
                 return result;
             }
@@ -2305,28 +2377,346 @@ namespace DucAnhERP.Services
                  result = (from a in context.DSNuocMua
                              join b in context.PhanLoaiCTronHopNhuas on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals b.Id
                              join c in context.DSDanhMuc on a.TTKTHHCongHopRanh_CauTaoTuong equals c.Id
-                             join e in context.DSDanhMuc on a.TTKTHHCongHopRanh_CauTaoMuMo equals e.Id
-                             join f in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals f.Id
-                             where f.Ten == "Cống hộp" &&
+                           join e in context.DSDanhMuc on a.TTKTHHCongHopRanh_CauTaoMuMo equals e.Id into eGroup
+                           from e in eGroup.DefaultIfEmpty()
+                           join f in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals f.Id into fGroup
+                           from f in fGroup.DefaultIfEmpty()
+                           where f.Ten == "Cống hộp" &&
                                    (c.Ten == "Tường bê tông cốt thép" || e.Ten == "Mũ mố bê tông cốt thép")
                              select new NuocMuaModel
                              {
                              
                                  ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai??"",
+                                 PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
                                  TTKTHHCongHopRanh_CauTaoTuong = a.TTKTHHCongHopRanh_CauTaoTuong??"",
                                  TTKTHHCongHopRanh_CauTaoTuong_Name = c.Ten,
                                  TTKTHHCongHopRanh_CauTaoMuMo = a.TTKTHHCongHopRanh_CauTaoMuMo??"",
                                  TTKTHHCongHopRanh_CauTaoMuMo_Name = e.Ten,
                                  ThongTinDuongTruyenDan_HinhThucTruyenDan = a.ThongTinDuongTruyenDan_HinhThucTruyenDan??"",
                                  ThongTinDuongTruyenDan_HinhThucTruyenDan_Name = f.Ten
-                             }).ToList();
-
-
+                             }).Distinct().ToList();
+ 
                 return result;
             }
             catch (Exception ex)
             {
                 throw new Exception("Lỗi tải dữ liệu :" + ex.Message);
+            }
+        }
+        public async Task<List<NuocMuaModel>> GetBaoCaoMongCongHopSDThep()
+        {
+            try
+            {
+                List<NuocMuaModel> result = new();
+                using var context = _context.CreateDbContext();
+
+                 result = ( from a in context.DSNuocMua
+                                        join b in context.PhanLoaiMongCTrons on a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop equals b.Id
+                                        join c in context.DSDanhMuc on a.ThongTinMongDuongTruyenDan_HinhThucMong equals c.Id
+                                        join f in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals f.Id into fGroup
+                                        from f in fGroup.DefaultIfEmpty()
+                                        where f.Ten == "Cống hộp" && c.Ten == "Có cốt thép"
+                                        select new NuocMuaModel
+                                        {
+                                            ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ??"",
+                                            PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ??"",
+                                            ThongTinLyTrinh_TuyenDuong = a.ThongTinLyTrinh_TuyenDuong??"",
+                                            ThongTinLyTrinhTruyenDan_TuLyTrinh = a.ThongTinLyTrinhTruyenDan_TuLyTrinh??0,
+                                            ThongTinLyTrinhTruyenDan_DenLyTrinh = a.ThongTinLyTrinhTruyenDan_DenLyTrinh??0,
+                                            
+                                            }
+                                        ).Distinct().ToList();
+ 
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi tải dữ liệu :" + ex.Message);
+            }
+        }
+        public async Task<List<NuocMuaModel>> GetBaoCaoTDCHSDThep()
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                List<NuocMuaModel> result = new List<NuocMuaModel>();
+
+                var result1 = (from a in context.DSNuocMua
+                                            join c in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id into cGroup
+                                            from c in cGroup.DefaultIfEmpty()
+                                            join d in context.DSDanhMuc on a.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan equals d.Id
+                                            join f in context.PhanLoaiTDanTDans on a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan equals f.Id
+                                            where c.Ten == "Cống hộp" && d.Ten == "Có cốt thép" && a.TTTDCongHoRanh_SoLuong > 0
+                                            select new NuocMuaModel
+                                            {
+                                                PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = f.TTTDCongHoRanh_TenLoaiTamDanTieuChuan??"",
+                                                TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = a.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan,
+                                                TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name = d.Ten,
+                                                TTTDCongHoRanh_CDai = a.TTTDCongHoRanh_CDai??0,
+                                                TTTDCongHoRanh_CRong = a.TTTDCongHoRanh_CRong ?? 0,
+                                                TTTDCongHoRanh_CCao = a.TTTDCongHoRanh_CCao ?? 0
+                                            }).ToList();
+
+                var result2 = (from a in context.DSNuocMua
+                               join c in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id into cGroup
+                               from c in cGroup.DefaultIfEmpty()
+                               join d in context.DSDanhMuc on a.TTTDCongHoRanh_CauTaoTamDanTruyenDan equals d.Id
+                               join f in context.PhanLoaiTDanTDans on a.TTTDCongHoRanh_TenLoaiTamDanLoai02 equals f.Id
+                               where c.Ten == "Cống hộp" && d.Ten == "Có cốt thép" && a.TTTDCongHoRanh_SoLuong1 > 0
+                               select new NuocMuaModel
+                               {
+                                   PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = f.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ?? "",
+                                   TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = a.TTTDCongHoRanh_CauTaoTamDanTruyenDan,
+                                   TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name = d.Ten,
+                                   TTTDCongHoRanh_CDai = a.TTTDCongHoRanh_CDai1 ?? 0,
+                                   TTTDCongHoRanh_CRong = a.TTTDCongHoRanh_CRong1 ?? 0,
+                                   TTTDCongHoRanh_CCao = a.TTTDCongHoRanh_CCao1 ?? 0
+                               }).ToList();
+
+                result = result1.Concat(result2).Distinct().OrderBy(x => x.PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan).ToList();
+
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw new Exception("Lỗi khi tải dữ liệu");
+            }
+        }
+        public async Task<List<NuocMuaModel>> GetBaoCaoRXSDThep()
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                var result = await (from a in context.DSNuocMua.AsNoTracking()
+                                    join f in context.PhanLoaiCTronHopNhuas.AsNoTracking()
+                                        on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals f.Id into fGroup
+                                    from f in fGroup.DefaultIfEmpty()
+                                    join g in context.PhanLoaiMongCTrons.AsNoTracking()
+                                        on a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop equals g.Id into gGroup
+                                    from g in gGroup.DefaultIfEmpty()
+                                    join b in context.DSDanhMuc.AsNoTracking()
+                                        on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals b.Id into bGroup
+                                    from b in bGroup.DefaultIfEmpty()
+                                    join c in context.DSDanhMuc.AsNoTracking()
+                                        on a.TTKTHHCongHopRanh_CauTaoTuong equals c.Id into cGroup
+                                    from c in cGroup.DefaultIfEmpty()
+                                    join d in context.DSDanhMuc.AsNoTracking()
+                                        on a.TTKTHHCongHopRanh_CauTaoMuMo equals d.Id into dGroup
+                                    from d in dGroup.DefaultIfEmpty()
+                                    join e in context.DSDanhMuc.AsNoTracking()
+                                        on a.ThongTinMongDuongTruyenDan_HinhThucMong equals e.Id into eGroup
+                                    from e in eGroup.DefaultIfEmpty()
+                                    join h in context.DSDanhMuc.AsNoTracking()
+                                       on a.ThongTinMongDuongTruyenDan_LoaiMong equals h.Id into hGroup
+                                    from h in hGroup.DefaultIfEmpty()
+                                    where b.Ten == "Rãnh xây" &&
+                                          (c.Ten == "Tường bê tông cốt thép" ||
+                                           d.Ten == "Mũ mố bê tông cốt thép" ||
+                                           e.Ten == "Có cốt thép")
+                                    select new NuocMuaModel
+                                    {
+                                        ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai??"",
+                                        PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = f.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "",
+                                        ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ?? "",
+                                        PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = !string.IsNullOrEmpty(g.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop)? g.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop: (h.Ten+" , " + e.Ten)??"",
+                                        ThongTinDuongTruyenDan_HinhThucTruyenDan = a.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "",
+                                        ThongTinDuongTruyenDan_HinhThucTruyenDan_Name = b.Ten ?? "",
+                                        TTKTHHCongHopRanh_CauTaoTuong = a.TTKTHHCongHopRanh_CauTaoTuong ?? "",
+                                        TTKTHHCongHopRanh_CauTaoTuong_Name = c.Ten ?? "",
+                                        TTKTHHCongHopRanh_CauTaoMuMo = a.TTKTHHCongHopRanh_CauTaoMuMo ?? "",
+                                        TTKTHHCongHopRanh_CauTaoMuMo_Name = d.Ten ?? "",
+                                        ThongTinMongDuongTruyenDan_HinhThucMong = a.ThongTinMongDuongTruyenDan_HinhThucMong ?? "",
+                                        ThongTinMongDuongTruyenDan_HinhThucMong_Name = e.Ten ?? ""
+                                    }).Distinct().ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi tải dữ liệu: " + ex.Message);
+            }
+        }
+        public async Task<List<NuocMuaModel>> GetBaoCaoTDRXSDThep()
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                List<NuocMuaModel> result = new List<NuocMuaModel>();
+
+                var result1 = (from a in context.DSNuocMua
+                               join c in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id into cGroup
+                               from c in cGroup.DefaultIfEmpty()
+                               join d in context.DSDanhMuc on a.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan equals d.Id
+                               join f in context.PhanLoaiTDanTDans on a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan equals f.Id
+                               where c.Ten == "Rãnh xây" && d.Ten == "Có cốt thép" && a.TTTDCongHoRanh_SoLuong > 0
+                               select new NuocMuaModel
+                               {
+                                   PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = f.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ?? "",
+                                   TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = a.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan,
+                                   TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name = d.Ten,
+                                   TTTDCongHoRanh_CDai = a.TTTDCongHoRanh_CDai ?? 0,
+                                   TTTDCongHoRanh_CRong = a.TTTDCongHoRanh_CRong ?? 0,
+                                   TTTDCongHoRanh_CCao = a.TTTDCongHoRanh_CCao ?? 0
+                               }).ToList();
+
+                var result2 = (from a in context.DSNuocMua
+                               join c in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id into cGroup
+                               from c in cGroup.DefaultIfEmpty()
+                               join d in context.DSDanhMuc on a.TTTDCongHoRanh_CauTaoTamDanTruyenDan equals d.Id
+                               join f in context.PhanLoaiTDanTDans on a.TTTDCongHoRanh_TenLoaiTamDanLoai02 equals f.Id
+                               where c.Ten == "Rãnh xây" && d.Ten == "Có cốt thép" && a.TTTDCongHoRanh_SoLuong1 > 0
+                               select new NuocMuaModel
+                               {
+                                   PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = f.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ?? "",
+                                   TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = a.TTTDCongHoRanh_CauTaoTamDanTruyenDan,
+                                   TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name = d.Ten,
+                                   TTTDCongHoRanh_CDai = a.TTTDCongHoRanh_CDai1 ?? 0,
+                                   TTTDCongHoRanh_CRong = a.TTTDCongHoRanh_CRong1 ?? 0,
+                                   TTTDCongHoRanh_CCao = a.TTTDCongHoRanh_CCao1 ?? 0
+                               }).ToList();
+
+                result = result1.Concat(result2).Distinct().OrderBy(x => x.PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan).ToList();
+
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw new Exception("Lỗi khi tải dữ liệu");
+            }
+        }
+        public async Task<List<NuocMuaModel>> GetBaoCaoTCSDThep()
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                List<NuocMuaModel> result = new List<NuocMuaModel>();
+                result = await (from a in context.DSNuocMua.AsNoTracking()
+                                    join b in context.DSDanhMuc.AsNoTracking()
+                                        on a.TTKTHHCongHopRanh_CauTaoThanhChong equals b.Id into bGroup
+                                    from b in bGroup.DefaultIfEmpty()
+                                    join c in context.PhanLoaiThanhChongs.AsNoTracking()
+                                        on a.TTKTHHCongHopRanh_LoaiThanhChong equals c.Id
+                                    where b.Ten == "Có cốt thép"
+                                    select new NuocMuaModel
+                                    {
+                                        PhanLoaiThanhChong_LoaiThanhChong = c.TTKTHHCongHopRanh_LoaiThanhChong??"",
+                                        TTKTHHCongHopRanh_LoaiThanhChong = a.TTKTHHCongHopRanh_LoaiThanhChong,
+                                        TTKTHHCongHopRanh_CauTaoThanhChong_Name = b.Ten,
+                                        TTKTHHCongHopRanh_CauTaoThanhChong = a.TTKTHHCongHopRanh_CauTaoThanhChong
+                                    }).Distinct().ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi tải dữ liệu: " + ex.Message);
+            }
+        }
+        public async Task<List<NuocMuaModel>> GetBaoCaoRBTSDThep()
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                var result = await (from a in context.DSNuocMua.AsNoTracking()
+                                    join f in context.PhanLoaiCTronHopNhuas.AsNoTracking()
+                                        on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals f.Id into fGroup
+                                    from f in fGroup.DefaultIfEmpty()
+                                    join g in context.PhanLoaiMongCTrons.AsNoTracking()
+                                        on a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop equals g.Id into gGroup
+                                    from g in gGroup.DefaultIfEmpty()
+                                    join b in context.DSDanhMuc.AsNoTracking()
+                                        on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals b.Id into bGroup
+                                    from b in bGroup.DefaultIfEmpty()
+                                    join c in context.DSDanhMuc.AsNoTracking()
+                                        on a.TTKTHHCongHopRanh_CauTaoTuong equals c.Id into cGroup
+                                    from c in cGroup.DefaultIfEmpty()
+                                    join d in context.DSDanhMuc.AsNoTracking()
+                                        on a.TTKTHHCongHopRanh_CauTaoMuMo equals d.Id into dGroup
+                                    from d in dGroup.DefaultIfEmpty()
+                                    join e in context.DSDanhMuc.AsNoTracking()
+                                        on a.ThongTinMongDuongTruyenDan_HinhThucMong equals e.Id into eGroup
+                                    from e in eGroup.DefaultIfEmpty()
+                                    join h in context.DSDanhMuc.AsNoTracking()
+                                       on a.ThongTinMongDuongTruyenDan_LoaiMong equals h.Id into hGroup
+                                    from h in hGroup.DefaultIfEmpty()
+                                    where b.Ten == "Rãnh bê tông" &&
+                                          (c.Ten == "Tường bê tông cốt thép" ||
+                                           d.Ten == "Mũ mố bê tông cốt thép" ||
+                                           e.Ten == "Có cốt thép")
+                                    select new NuocMuaModel
+                                    {
+                                        ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "",
+                                        PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = f.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "",
+                                        ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ?? "",
+                                        PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = !string.IsNullOrEmpty(g.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop) ? g.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop : (h.Ten + " , " + e.Ten) ?? "",
+                                        ThongTinDuongTruyenDan_HinhThucTruyenDan = a.ThongTinDuongTruyenDan_HinhThucTruyenDan ?? "",
+                                        ThongTinDuongTruyenDan_HinhThucTruyenDan_Name = b.Ten ?? "",
+                                        TTKTHHCongHopRanh_CauTaoTuong = a.TTKTHHCongHopRanh_CauTaoTuong ?? "",
+                                        TTKTHHCongHopRanh_CauTaoTuong_Name = c.Ten ?? "",
+                                        TTKTHHCongHopRanh_CauTaoMuMo = a.TTKTHHCongHopRanh_CauTaoMuMo ?? "",
+                                        TTKTHHCongHopRanh_CauTaoMuMo_Name = d.Ten ?? "",
+                                        ThongTinMongDuongTruyenDan_HinhThucMong = a.ThongTinMongDuongTruyenDan_HinhThucMong ?? "",
+                                        ThongTinMongDuongTruyenDan_HinhThucMong_Name = e.Ten ?? ""
+                                    }).Distinct().ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi tải dữ liệu: " + ex.Message);
+            }
+        }
+        public async Task<List<NuocMuaModel>> GetBaoCaoTDRBTSDThep()
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                List<NuocMuaModel> result = new List<NuocMuaModel>();
+
+                var result1 = (from a in context.DSNuocMua
+                               join c in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id into cGroup
+                               from c in cGroup.DefaultIfEmpty()
+                               join d in context.DSDanhMuc on a.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan equals d.Id
+                               join f in context.PhanLoaiTDanTDans on a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan equals f.Id
+                               where c.Ten == "Rãnh bê tông" && d.Ten == "Có cốt thép" && a.TTTDCongHoRanh_SoLuong > 0
+                               select new NuocMuaModel
+                               {
+                                   PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = f.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ?? "",
+                                   TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = a.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan,
+                                   TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name = d.Ten,
+                                   TTTDCongHoRanh_CDai = a.TTTDCongHoRanh_CDai ?? 0,
+                                   TTTDCongHoRanh_CRong = a.TTTDCongHoRanh_CRong ?? 0,
+                                   TTTDCongHoRanh_CCao = a.TTTDCongHoRanh_CCao ?? 0
+                               }).Distinct().ToList();
+
+                var result2 = (from a in context.DSNuocMua
+                               join c in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id into cGroup
+                               from c in cGroup.DefaultIfEmpty()
+                               join d in context.DSDanhMuc on a.TTTDCongHoRanh_CauTaoTamDanTruyenDan equals d.Id
+                               join f in context.PhanLoaiTDanTDans on a.TTTDCongHoRanh_TenLoaiTamDanLoai02 equals f.Id
+                               where c.Ten == "Rãnh bê tông" && d.Ten == "Có cốt thép" && a.TTTDCongHoRanh_SoLuong1 > 0
+                               select new NuocMuaModel
+                               {
+                                   PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = f.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ?? "",
+                                   TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = a.TTTDCongHoRanh_CauTaoTamDanTruyenDan,
+                                   TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name = d.Ten,
+                                   TTTDCongHoRanh_CDai = a.TTTDCongHoRanh_CDai1 ?? 0,
+                                   TTTDCongHoRanh_CRong = a.TTTDCongHoRanh_CRong1 ?? 0,
+                                   TTTDCongHoRanh_CCao = a.TTTDCongHoRanh_CCao1 ?? 0
+                               }).Distinct().ToList();
+
+                result = result1.Concat(result2).Distinct().OrderBy(x => x.PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan).ToList();
+
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw new Exception("Lỗi khi tải dữ liệu");
             }
         }
     }

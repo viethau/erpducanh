@@ -17,6 +17,9 @@ namespace DucAnhERP.Repository
         Task<List<PLTDHGBaoCaoTSLTDHGModel>> GetBaoCaoTongSLTDanHGa();
         Task<List<PLTDHGBaoCaoTSLTDHGTTModel>> GetBaoCaoSLTDanHGaTTuyen();
         Task<List<KTHHMDCModel>> GetBaoCaoKTHHMDC();
+        Task<List<NuocMuaModel>> GetBaoCaoKTHHONhua();
+        Task<List<NuocMuaModel>> GetBaoCaoKTHHCHop();
+        Task<List<NuocMuaModel>> GetBaoCaoKTHHTDCH();
         Task<List<NuocMuaModel>> GetBaoCaoKTHHRX();
         Task<List<NuocMuaModel>> GetBaoCaoKTHHTC();
         Task<List<NuocMuaModel>> GetBaoCaoKTHHTDRX();
@@ -30,12 +33,18 @@ namespace DucAnhERP.Repository
         Task<List<TKSLTTModel>> GetBaoCaoSLDeTT();
         Task<List<TKSLModel>> GetBaoCaoSLTT();
         Task<List<TKSLTTModel>> GetBaoCaoSLTTTT();
-
         Task<List<TKSLModel>> GetBaoCaoSLTDan(string HinhThucTruyenDan);
         Task<List<TKSLTTModel>> GetBaoCaoSLTDanTT();
         Task<List<NuocMuaModel>> GetBaoCaoMongCTSDThep();
         Task<List<NuocMuaModel>> GetBaoCaoCongTronSDThep();
         Task<List<NuocMuaModel>> GetBaoCaoDeCongSDThep();
-        Task<List<NuocMuaModel>> GetBaoCaoCongHopSDThep()
+        Task<List<NuocMuaModel>> GetBaoCaoCongHopSDThep();
+        Task<List<NuocMuaModel>> GetBaoCaoMongCongHopSDThep();
+        Task<List<NuocMuaModel>> GetBaoCaoTDCHSDThep();
+        Task<List<NuocMuaModel>> GetBaoCaoRXSDThep();
+        Task<List<NuocMuaModel>> GetBaoCaoTDRXSDThep();
+        Task<List<NuocMuaModel>> GetBaoCaoTCSDThep();
+        Task<List<NuocMuaModel>> GetBaoCaoRBTSDThep();
+        Task<List<NuocMuaModel>> GetBaoCaoTDRBTSDThep();
     }
 }

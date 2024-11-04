@@ -10,7 +10,7 @@ namespace DucAnhERP.Repository
         Task<bool> CheckUsingName(string name);
         Task<PhanLoaiTDanTDan> GetPhanLoaiTDanTDanByDetail(PhanLoaiTDanTDan pltdtd);
         Task<PhanLoaiTDanTDan> GetPhanLoaiTDanTDanExist(PhanLoaiTDanTDan searchData);
-        Task<string> InsertId(PhanLoaiTDanTDan entity, string HTTD, string LTD, string CTTDTC);
+        Task<string> InsertId(PhanLoaiTDanTDan entity, string HTTD, string LTD, string CTTDTC, string PhanLoai);
         Task<string> InsertLaterFlag(PhanLoaiTDanTDan entity, int FlagLast);
     }
 }

@@ -1461,7 +1461,7 @@
         {
             if (searchData.TTTDCongHoRanh_CDai > 0 || searchData.TTTDCongHoRanh_CRong > 0 || searchData.TTTDCongHoRanh_CCao > 0)
             {
-                id = await PhanLoaiTDanTDanRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan));
+                id = await PhanLoaiTDanTDanRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan), "Tấm đan tiêu chuẩn");
             }
         }
         return id;
@@ -1486,7 +1486,7 @@
         {
             if (searchData.TTTDCongHoRanh_CDai > 0 || searchData.TTTDCongHoRanh_CRong > 0 || searchData.TTTDCongHoRanh_CCao > 0)
             {
-                id = await PhanLoaiTDanTDanRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan));
+                id = await PhanLoaiTDanTDanRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan),"Tấm đan bổ sung");
             }
         }
         return id;
