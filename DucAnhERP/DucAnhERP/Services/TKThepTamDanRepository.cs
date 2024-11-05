@@ -88,7 +88,7 @@ namespace DucAnhERP.Services
                 {
                     query = query.Where(x => x.LoaiThep == mModel.LoaiThep);
                 }
-                var data = await query.ToListAsync();
+                var data = await query.Distinct().OrderBy(x=>x.ThongTinTamDanHoGa2_PhanLoaiDayHoGa_Name).ThenBy(x=>x.SoHieu).ToListAsync();
                 return data;
             }
             catch (Exception ex)

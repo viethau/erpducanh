@@ -134,7 +134,7 @@
 
         var nuocMuaRepository = await NuocMuaRepository.GetBaoCaoMongCTSDThep();
         listModel = nuocMuaRepository;
-        listNuocMuaModel = PagingLeft(nuocMuaRepository);
+        listNuocMuaModel = Paging(nuocMuaRepository);
 
         isLoading = false;
         baseTime = DateTime.Now;
@@ -151,7 +151,7 @@
     {
         listModel = SortService.SortTable(listModel, columnName);
         nuocMuaModel.PageNumber = 1;
-        PagingLeft(listModel);
+        Paging(listModel);
     }
 
 
@@ -165,7 +165,7 @@
     private void SelectedPage(int page)
     {
         nuocMuaModel.PageNumber = page;
-        PagingLeft(listModel);
+        Paging(listModel);
 
     }
 
@@ -174,12 +174,12 @@
     {
         nuocMuaModel.PageNumber = 1;
         nuocMuaModel.pageSize = pageSize;
-        PagingLeft(listModel);
+        Paging(listModel);
 
     }
 
     // Xử lý paging left
-    private List<NuocMuaModel> PagingLeft(List<NuocMuaModel> nuocMuaModels)
+    private List<NuocMuaModel> Paging(List<NuocMuaModel> nuocMuaModels)
     {
         // Đếm số bản ghi thỏa mãn
         var count = nuocMuaModels.Count();

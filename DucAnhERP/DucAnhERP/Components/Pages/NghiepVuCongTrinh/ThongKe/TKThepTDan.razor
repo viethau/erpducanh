@@ -90,7 +90,7 @@
                          </div>
                           <div class="form-floating col-sm-6 col-md-3">
                            <label for="TrongLuong">Trọng lượng thép/(kg/m,m3)<span class="text-danger">*</span></label>
-                            <InputNumber  @bind-Value="Input.TrongLuong" class="form-control" id="TrongLuong" placeholder="Trọng lượng thép/(kg/m,m3)" disable/>
+                            <InputNumber  @bind-Value="Input.TrongLuong" class="form-control" id="TrongLuong" placeholder="Trọng lượng thép/(kg/m,m3)" disabled/>
                             <ValidationMessage For="() => Input.TrongLuong" class="text-danger" />
                          </div>
                             <div class="form-floating col-sm-6 col-md-3">
@@ -154,10 +154,10 @@
                             <tr>
                                 <th></th>
                                 <th>STT</th>
-                                <th onclick="@(() => SortTable("ThongTinChungHoGa_TenHoGaSauPhanLoai"))" class="text-center sortable">
+                                <th onclick="@(() => SortTable("ThongTinTamDanHoGa2_PhanLoaiDayHoGa_Name"))" class="text-center sortable">
                                     <div class="mr-3">
                                         Loại cấu kiện
-                                        <span class="arrow @(GetSortStyle("ThongTinChungHoGa_TenHoGaSauPhanLoai"))"></span>
+                                        <span class="arrow @(GetSortStyle("ThongTinTamDanHoGa2_PhanLoaiDayHoGa_Name"))"></span>
                                     </div>
                                 </th>
                                 <th onclick="@(() => SortTable("TenCongTac"))" class="text-center sortable">
@@ -240,10 +240,19 @@
                             <tbody>
                                 @{
                                     int stt = 0;
+                                    string LoaiCK = "";
                                 }
                                 @foreach (var item in listTKThepHGaModel)
                                 {
                                     stt++;
+                                    if (string.IsNullOrEmpty(LoaiCK) || LoaiCK.ToUpper().Trim() !=  @item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa_Name.ToUpper().Trim())
+                                    {
+                                        LoaiCK = @item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa_Name;
+                                        <tr class="bg-warning">
+                                            <td colspan="2"></td>
+                                            <td colspan="13">@LoaiCK</td>
+                                        </tr>
+                                    }
                                     <tr>
                                         <td class="d-flex nowrap">
                                                 <div class="d-inline-block">
@@ -321,7 +330,7 @@
     private void OnSelectChangePLD(SelectedItem selectedItem)
     {
         Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = selectedItem.Value;
-       
+
     }
     private List<SelectedItem> selectSearchPLD = new();
     private void OnSelectChangeSearchPLD(SelectedItem selectedItem)
@@ -366,11 +375,15 @@
 
     private async void OnTypingStopped(object sender, System.Timers.ElapsedEventArgs e)
     {
+        Caculate();
 
+    }
+    public async void Caculate()
+    {
         Input.TenCongTac = ($"Gia công lắp dựng thép {Input.VTLayKhoiLuong} {LoaiThep} D{Input.DKCD}");
         Input.TongSoThanh = (Input.SoThanh * Input.SoCK);
         Input.TongChieuDai = (Input.TongSoThanh * Input.ChieuDai1Thanh) / 1000;
-         if(!string.IsNullOrEmpty(Input.LoaiThep) && Input.DKCD >0)
+        if(!string.IsNullOrEmpty(Input.LoaiThep) && Input.DKCD >0)
         {
             var DMTLThep = await DMTLThepRepository.GetTrongLuong(Input.LoaiThep,Input.DKCD.ToString());
             if(DMTLThep !=null)
@@ -490,7 +503,7 @@
                     {
                         item.TongTrongLuong = item.TongChieuDai * item.TrongLuong;
                     }
-                     item.TongTrongLuong = Math.Round(item.TongTrongLuong ?? 0, 4);
+                    item.TongTrongLuong = Math.Round(item.TongTrongLuong ?? 0, 4);
                 }
             }
             listTKThepHGaModel = Paging(listModel);
@@ -516,6 +529,7 @@
 
         try
         {
+            Caculate();
             string[] ids = { Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa??"" };
             var isValidTenPL = await PhanLoaiTDHoGaRepository.CheckExclusive(ids,baseTime);
             var listExist = await TKThepTamDanRepository.GetExist(Input);

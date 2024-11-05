@@ -49,7 +49,7 @@ namespace DucAnhERP.Services
             try
             {
                 using var context = _context.CreateDbContext();
-                var query = from a in context.TKThepHoGas
+                var query = (from a in context.TKThepHoGas
                             join b in context.PhanLoaiHoGas
                             on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id into plHoGaGroup
                             from b in plHoGaGroup.DefaultIfEmpty()
@@ -85,7 +85,7 @@ namespace DucAnhERP.Services
                                 CreateAt = a.CreateAt,
                                 CreateBy = a.CreateBy,
                                 IsActive = a.IsActive,
-                            };
+                            });
 
                 if (!string.IsNullOrEmpty(mModel.ThongTinChungHoGa_TenHoGaSauPhanLoai))
                 {
@@ -95,7 +95,7 @@ namespace DucAnhERP.Services
                 {
                     query = query.Where(x => x.LoaiThep == mModel.LoaiThep);
                 }
-                var data = await query.ToListAsync();
+                var data = await query.Distinct().OrderBy(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name).ThenBy(x => x.SoHieu).ToListAsync();
                 return data;
             }
             catch (Exception ex)

@@ -154,10 +154,10 @@
                             <tr>
                                 <th></th>
                                 <th>STT</th>
-                                <th onclick="@(() => SortTable("ThongTinChungHoGa_TenHoGaSauPhanLoai"))" class="text-center sortable">
+                                <th onclick="@(() => SortTable("ThongTinChungHoGa_TenHoGaSauPhanLoai_Name"))" class="text-center sortable">
                                     <div class="mr-3">
                                         Loại cấu kiện
-                                        <span class="arrow @(GetSortStyle("ThongTinChungHoGa_TenHoGaSauPhanLoai"))"></span>
+                                        <span class="arrow @(GetSortStyle("ThongTinChungHoGa_TenHoGaSauPhanLoai_Name"))"></span>
                                     </div>
                                 </th>
                                 <th onclick="@(() => SortTable("TenCongTac"))" class="text-center sortable">
@@ -240,11 +240,21 @@
                             <tbody>
                                 @{
                                     int stt = 0;
+                                    string LoaiCK = "";
                                 }
                                 @foreach (var item in listTKThepHGaModel)
                                 {
-                                    stt++;
-                                    <tr>
+                                     stt++;
+                                    if (string.IsNullOrEmpty(LoaiCK) || LoaiCK.ToUpper().Trim() !=  @item.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name.ToUpper().Trim())
+                                    {
+                                        LoaiCK = @item.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name;
+                                        <tr class="bg-warning">
+                                            <td colspan="2"></td>
+                                            <td colspan="13">@LoaiCK</td>
+                                        </tr>
+                                    }
+                                    
+                                        <tr>
                                         <td class="d-flex nowrap">
                                                 <div class="d-inline-block">
                                                     <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
@@ -273,6 +283,9 @@
                                          <td class="text-center"> @item.TrongLuong                          </td>
                                          <td class="text-center"> @item.TongTrongLuong                      </td> 
                                     </tr>
+                                    
+
+                                    
                                 }
                             </tbody>
                         }
@@ -364,6 +377,11 @@
 
     private async void OnTypingStopped(object sender, System.Timers.ElapsedEventArgs e)
     {
+        Caculate();
+    }
+
+    public async void Caculate()
+    {
 
         Input.TenCongTac = ($"Gia công lắp dựng thép {Input.VTLayKhoiLuong} {LoaiThep} D{Input.DKCD}");
         Input.TongSoThanh = (Input.SoThanh * Input.SoCK);
@@ -398,7 +416,6 @@
               StateHasChanged();
           });
     }
-
 
     private void ShowModal()
     {
@@ -490,7 +507,7 @@
                     {
                         item.TongTrongLuong = item.TongChieuDai * item.TrongLuong;
                     }
-                     item.TongTrongLuong = Math.Round(item.TongTrongLuong ?? 0, 4);
+                    item.TongTrongLuong = Math.Round(item.TongTrongLuong ?? 0, 4);
                 }
             }
             listTKThepHGaModel = Paging(listModel);
@@ -516,6 +533,7 @@
 
         try
         {
+            Caculate();
             string[] ids = { Input.ThongTinChungHoGa_TenHoGaSauPhanLoai??"" };
             var isValidTenPL = await PhanLoaiHoGaRepository.CheckExclusive(ids,baseTime);
             var listExist = await TKThepHoGaRepository.GetExist(Input);
