@@ -5,7 +5,7 @@ namespace DucAnhERP.Models
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public int Flag { get; set; } = 0;
-        [Required(ErrorMessage = "Bạn phải chọn phân loại đậy")]
+        [Required(ErrorMessage = "Bạn phải chọn loại cấu kiện")]
         public string? ThongTinTamDanHoGa2_PhanLoaiDayHoGa { get; set; } = "";
         [Required(ErrorMessage = "Tên công tác!")]
         public string? TenCongTac { get; set; } = "";
@@ -20,12 +20,12 @@ namespace DucAnhERP.Models
 
         [Required(ErrorMessage = "Bạn phải nhập Đường kính/chiều dầy")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
-        [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
+        [RegularExpression(@"^\d+(\.\d{1,4})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
         public Double? DKCD { get; set; } = 0;
 
         [Required(ErrorMessage = "Bạn phải nhập Số thanh/01 cấu kiện")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
-        [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
+        [RegularExpression(@"^\d+(\.\d{1,4})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
         public int? SoThanh { get; set; } = 0;
 
         [Required(ErrorMessage = "Bạn phải nhập Số cấu kiện")]
@@ -37,14 +37,14 @@ namespace DucAnhERP.Models
 
         [Required(ErrorMessage = "Bạn phải nhập Chiều dài 01 thanh")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
-        [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
+        [RegularExpression(@"^\d+(\.\d{1,4})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
         public Double? ChieuDai1Thanh { get; set; } = 0;
 
         public Double? TongChieuDai { get; set; } = 0;
 
         [Required(ErrorMessage = "Bạn phải nhập Trọng lượng thép")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
-        [RegularExpression(@"^\d+(\.\d{1,3})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
+        [RegularExpression(@"^\d+(\.\d{1,4})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
         public Double? TrongLuong { get; set; } = 0;
 
         public Double? TongTrongLuong { get; set; } = 0;

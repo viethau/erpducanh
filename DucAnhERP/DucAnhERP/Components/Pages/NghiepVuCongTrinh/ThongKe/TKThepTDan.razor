@@ -330,6 +330,7 @@
     private void OnSelectChangePLD(SelectedItem selectedItem)
     {
         Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = selectedItem.Value;
+        Caculate();
 
     }
     private List<SelectedItem> selectSearchPLD = new();
@@ -344,6 +345,7 @@
     {
         Input.LoaiThep = selectedItem.Value;
         LoaiThep = selectedItem.Text;
+        Caculate();
     }
     private List<SelectedItem> selectSearchLoaiThep = new();
     private void OnSelectChangeSearchLoaiThep(SelectedItem selectedItem)
@@ -416,6 +418,7 @@
     private void ShowModal()
     {
         isModalVisible = true;
+        Input = new();
     }
 
     private void HandleModalClose(bool isVisible)

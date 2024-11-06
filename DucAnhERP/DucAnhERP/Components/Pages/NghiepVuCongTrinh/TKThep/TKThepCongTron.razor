@@ -329,6 +329,7 @@
     private void OnSelectChangeLCK(SelectedItem selectedItem)
     {
         Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = selectedItem.Value;
+        Caculate();
     }
     private List<SelectedItem> selectSearchLCK = new();
     private void OnSelectChangeSearchLCK(SelectedItem selectedItem)
@@ -372,7 +373,7 @@
 
     private async void OnTypingStopped(object sender, System.Timers.ElapsedEventArgs e)
     {
-         Caculate();
+        Caculate();
     }
 
     public async void Caculate()
@@ -414,6 +415,7 @@
     private void ShowModal()
     {
         isModalVisible = true;
+        Input = new();
     }
 
     private void HandleModalClose(bool isVisible)

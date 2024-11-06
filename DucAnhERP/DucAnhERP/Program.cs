@@ -75,6 +75,11 @@ builder.Services.AddScoped<IPKKLHoGaRepository, PKKLHoGaRepository>();
 builder.Services.AddScoped<IChatMaTuongRepository, ChatMaTuongRepository>();
 builder.Services.AddScoped<ITKThepCTronRepository, TKThepCTronRepository>();
 builder.Services.AddScoped<ITKThepMongCTronRepository, TKThepMongCTronRepository>();
+builder.Services.AddScoped<ITKThepDeCongRepository, TKThepDeCongRepository>();
+builder.Services.AddScoped<ITKThepCHopRepository, TKThepCHopRepository>();
+builder.Services.AddScoped<ITKThepMongCHopRepository, TKThepMongCHopRepository>();
+builder.Services.AddScoped<ITKThepTDanCHopRepository, TKThepTDanCHopRepository>();
+builder.Services.AddScoped<ITKThepRXayRepository, TKThepRXayRepository>();
 
 
 

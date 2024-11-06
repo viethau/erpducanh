@@ -213,7 +213,7 @@
                                         Chiều dài 01 thanh (mm)/diện tích (mm2)
                                         <span class="arrow @(GetSortStyle("ChieuDai1Thanh"))"></span>
                                     </div>
-                                </th
+                                </th>
                                  <th onclick="@(() => SortTable("TongChieuDai"))" class="text-center sortable">
                                     <div class="mr-3">
                                         Tổng chiều dài (m,m2)
@@ -334,6 +334,7 @@
     private void OnSelectChangePLHG(SelectedItem selectedItem)
     {
         Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = selectedItem.Value;
+        Caculate();
     }
     private List<SelectedItem> selectSearchPLHG = new();
     private void OnSelectChangeSearchPLHG(SelectedItem selectedItem)
@@ -347,6 +348,7 @@
     {
         Input.LoaiThep = selectedItem.Value;
         LoaiThep = selectedItem.Text;
+        Caculate();
     }
     private List<SelectedItem> selectSearchLoaiThep = new();
     private void OnSelectChangeSearchLoaiThep(SelectedItem selectedItem)
@@ -420,6 +422,7 @@
     private void ShowModal()
     {
         isModalVisible = true;
+        Input = new();
     }
 
     private void HandleModalClose(bool isVisible)

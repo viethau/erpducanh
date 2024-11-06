@@ -2274,7 +2274,6 @@ namespace DucAnhERP.Services
                 throw new Exception("Lỗi khi tải dữ liệu");
             }
         }
-
         public async Task<List<NuocMuaModel>> GetBaoCaoMongCTSDThep()
         {
             try
@@ -2336,7 +2335,6 @@ namespace DucAnhERP.Services
                 throw new Exception("Lỗi tải dữ liệu :" + ex.Message);
             }
         }
-
         public async Task<List<NuocMuaModel>> GetBaoCaoDeCongSDThep()
         {
             try
@@ -2366,7 +2364,6 @@ namespace DucAnhERP.Services
                 throw new Exception("Lỗi tải dữ liệu :" + ex.Message);
             }
         }
-
         public async Task<List<NuocMuaModel>> GetBaoCaoCongHopSDThep()
         {
             try

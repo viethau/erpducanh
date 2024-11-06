@@ -10,7 +10,7 @@
 @inject INuocMuaRepository NuocMuaRepository
 @inject IDanhMucRepository DanhMucRepository
 @inject IDMTLThepRepository DMTLThepRepository
-@inject IPhanLoaiCTronHopNhuaRepository PhanLoaiCTronHopNhuaRepository
+@inject IPhanLoaiMongCTronRepository PhanLoaiMongCTronRepository
 
 @inject DucAnhERP.Services.ToastService ToastService
 <style>
@@ -116,8 +116,9 @@
 
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="Table">Loại cấu kiện</label>
-                          @*   <Select2 Id="select1" Items="@selectLCK" OnChange="@OnSelectChangeLCK"></Select2>
-                            <ValidationMessage For="()=>Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop"></ValidationMessage> *@
+                             <InputText  @bind-Value="PhanLoaiMongCongTronCongHop" class="form-control" id="PhanLoaiMongCongTronCongHop" placeholder="Loại cấu kiện"  disabled/>
+                            <ValidationMessage For="() => Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop" class="text-danger" />
+                          
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
                            <label for="TenCongTac">Tên công tác<span class="text-danger">*</span></label>
@@ -314,7 +315,7 @@
                                         Chiều dài 01 thanh (mm)/diện tích (mm2)
                                         <span class="arrow @(GetSortStyle("ChieuDai1Thanh"))"></span>
                                     </div>
-                                </th
+                                </th>
                                  <th onclick="@(() => SortTable("TongChieuDai"))" class="text-center sortable">
                                     <div class="mr-3">
                                         Tổng chiều dài (m,m2)
@@ -351,7 +352,8 @@
                                         LoaiCK = @item.ThongTinLyTrinh_TuyenDuong;
                                         <tr class="bg-warning">
                                             <td colspan="2"></td>
-                                            <td colspan="16">@LoaiCK</td>
+                                            <td class="text-center">@LoaiCK</td>
+                                            <td colspan="16"></td>
                                         </tr>
                                     }
                                     <tr>
@@ -369,22 +371,22 @@
                                                 </div>
                                          </td>
                                         <td>@stt</td>
-                                         <td class="text-center"> @item.ThongTinLyTrinh_TuyenDuong</td>
-                                         <td class="text-center"> @item.ThongTinLyTrinhTruyenDan_TuLyTrinh</td>
-                                         <td class="text-center"> @item.ThongTinLyTrinhTruyenDan_DenLyTrinh</td>
-                                         <td class="text-center"> @item.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop</td>
-                                         <td class="text-center"> @item.TenCongTac</td>
-                                         <td class="text-center"> @item.VTLayKhoiLuong  </td>
-                                         <td class="text-center"> @item.LoaiThep_Name </td>
-                                         <td class="text-center"> @item.SoHieu    </td>
-                                         <td class="text-center"> @item.DKCD                                </td>
-                                         <td class="text-center"> @item.SoThanh                             </td>
-                                         <td class="text-center"> @item.SoCK                                </td>
-                                         <td class="text-center"> @item.TongSoThanh                         </td>
-                                         <td class="text-center"> @item.ChieuDai1Thanh                      </td>
-                                         <td class="text-center"> @item.TongChieuDai                        </td>
-                                         <td class="text-center"> @item.TrongLuong                          </td>
-                                         <td class="text-center"> @item.TongTrongLuong                      </td> 
+                                        <td> @item.ThongTinLyTrinh_TuyenDuong</td>
+                                        <td> @item.ThongTinLyTrinhTruyenDan_TuLyTrinh</td>
+                                        <td> @item.ThongTinLyTrinhTruyenDan_DenLyTrinh</td>
+                                        <td> @item.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop</td>
+                                        <td> @item.TenCongTac</td>
+                                        <td> @item.VTLayKhoiLuong  </td>
+                                        <td> @item.LoaiThep_Name </td>
+                                        <td> @item.SoHieu    </td>
+                                        <td> @item.DKCD</td>
+                                        <td> @item.SoThanh</td>
+                                        <td> @item.SoCK</td>
+                                        <td> @item.TongSoThanh</td>
+                                        <td> @item.ChieuDai1Thanh</td>
+                                        <td> @item.TongChieuDai</td>
+                                        <td> @item.TrongLuong</td>
+                                        <td> @item.TongTrongLuong</td> 
                                     </tr>
                                 }
                             </tbody>
@@ -422,6 +424,7 @@
     bool isEdit = false;
     string thumbtack = "";
     private DateTime baseTime;
+    private string PhanLoaiMongCongTronCongHop = "";
 
     [Parameter]
     public ConfirmModal confirmModal { get; set; }
@@ -446,6 +449,7 @@
     {
         Input.LoaiThep = selectedItem.Value;
         LoaiThep = selectedItem.Text;
+        Caculate();
     }
     private List<SelectedItem> selectSearchLoaiThep = new();
     private void OnSelectChangeSearchLoaiThep(SelectedItem selectedItem)
@@ -521,14 +525,17 @@
           });
     }
 
-      private async Task HandleChooseId(NuocMuaModel item)
+
+    private async Task HandleChooseId(NuocMuaModel item)
     {
         try
         {
-            
+
             Input.ThongTinLyTrinh_TuyenDuong = item.ThongTinLyTrinh_TuyenDuong;
             Input.ThongTinLyTrinhTruyenDan_TuLyTrinh = item.ThongTinLyTrinhTruyenDan_TuLyTrinh;
             Input.ThongTinLyTrinhTruyenDan_DenLyTrinh = item.ThongTinLyTrinhTruyenDan_DenLyTrinh;
+            Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = item.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop;
+            PhanLoaiMongCongTronCongHop = item.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop;
             isModalVisibleS = false;
 
         }
@@ -548,6 +555,7 @@
     private void ShowModal()
     {
         isModalVisible = true;
+        Input = new();
     }
     private void ShowModalS()
     {
@@ -688,7 +696,7 @@
         {
             Caculate();
             string[] ids = { Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop??"" };
-            var isValidTenPL = await PhanLoaiCTronHopNhuaRepository.CheckExclusive(ids,baseTime);
+            var isValidTenPL = await PhanLoaiMongCTronRepository.CheckExclusive(ids,baseTime);
             var listExist = await TKThepMongCTronRepository.GetExist(Input);
             if (isValidTenPL)
             {
