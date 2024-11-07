@@ -2550,6 +2550,7 @@ namespace DucAnhERP.Services
                                where c.Ten == "Rãnh xây" && d.Ten == "Có cốt thép" && a.TTTDCongHoRanh_SoLuong > 0
                                select new NuocMuaModel
                                {
+                                   TTTDCongHoRanh_TenLoaiTamDanTieuChuan =a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan??"",
                                    PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = f.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ?? "",
                                    TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = a.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan,
                                    TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name = d.Ten,
@@ -2566,6 +2567,7 @@ namespace DucAnhERP.Services
                                where c.Ten == "Rãnh xây" && d.Ten == "Có cốt thép" && a.TTTDCongHoRanh_SoLuong1 > 0
                                select new NuocMuaModel
                                {
+                                   TTTDCongHoRanh_TenLoaiTamDanTieuChuan = a.TTTDCongHoRanh_TenLoaiTamDanLoai02??"",
                                    PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = f.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ?? "",
                                    TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = a.TTTDCongHoRanh_CauTaoTamDanTruyenDan,
                                    TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name = d.Ten,
@@ -2682,6 +2684,7 @@ namespace DucAnhERP.Services
                                where c.Ten == "Rãnh bê tông" && d.Ten == "Có cốt thép" && a.TTTDCongHoRanh_SoLuong > 0
                                select new NuocMuaModel
                                {
+                                   TTTDCongHoRanh_TenLoaiTamDanTieuChuan = a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
                                    PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = f.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ?? "",
                                    TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = a.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan,
                                    TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name = d.Ten,
@@ -2698,6 +2701,7 @@ namespace DucAnhERP.Services
                                where c.Ten == "Rãnh bê tông" && d.Ten == "Có cốt thép" && a.TTTDCongHoRanh_SoLuong1 > 0
                                select new NuocMuaModel
                                {
+                                   TTTDCongHoRanh_TenLoaiTamDanTieuChuan = a.TTTDCongHoRanh_TenLoaiTamDanLoai02,
                                    PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = f.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ?? "",
                                    TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = a.TTTDCongHoRanh_CauTaoTamDanTruyenDan,
                                    TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name = d.Ten,

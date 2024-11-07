@@ -114,7 +114,7 @@ namespace DucAnhERP.Services
                 // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
                 var query = context.TKThepHoGas
                              .Where(item => (
-                                    item.VTLayKhoiLuong == searchData.VTLayKhoiLuong &&
+                                    item.ThongTinChungHoGa_TenHoGaSauPhanLoai == searchData.ThongTinChungHoGa_TenHoGaSauPhanLoai &&
                                     item.LoaiThep == searchData.LoaiThep &&
                                     item.DKCD == searchData.DKCD &&
                                     item.SoThanh == searchData.SoThanh &&

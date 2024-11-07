@@ -556,6 +556,15 @@
     {
         isModalVisible = true;
         Input = new();
+        foreach (var item in selectLoaiThep)
+        {
+            item.IsSelected = string.IsNullOrEmpty(item.Value);
+        }
+
+        foreach (var item in selectLCK)
+        {
+            item.IsSelected = string.IsNullOrEmpty(item.Value);
+        }
     }
     private void ShowModalS()
     {

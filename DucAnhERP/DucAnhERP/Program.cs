@@ -80,6 +80,10 @@ builder.Services.AddScoped<ITKThepCHopRepository, TKThepCHopRepository>();
 builder.Services.AddScoped<ITKThepMongCHopRepository, TKThepMongCHopRepository>();
 builder.Services.AddScoped<ITKThepTDanCHopRepository, TKThepTDanCHopRepository>();
 builder.Services.AddScoped<ITKThepRXayRepository, TKThepRXayRepository>();
+builder.Services.AddScoped<ITKThepTDanRXayRepository, TKThepTDanRXayRepository>();
+builder.Services.AddScoped<ITKThepTChongRepository, TKThepTChongRepository>();
+builder.Services.AddScoped<ITKThepRBTongRepository, TKThepRBTongRepository>();
+builder.Services.AddScoped<ITKThepTDRBTongRepository, TKThepTDRBTongRepository>();
 
 
 

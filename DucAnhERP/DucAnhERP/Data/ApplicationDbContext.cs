@@ -64,6 +64,10 @@ namespace DucAnhERP.Data
         public DbSet<TKThepMongCHop> TKThepMongCHops { get; set; }
         public DbSet<TKThepTDanCHop> TKThepTDanCHops { get; set; }
         public DbSet<TKThepRXay> TKThepRXays { get; set; }
+        public DbSet<TKThepTDanRXay> TKThepTDanRXays { get; set; }
+        public DbSet<TKThepTChong> TKThepTChongs { get; set; }
+        public DbSet<TKThepRBTong> TKThepRBTongs { get; set; }
+        public DbSet<TKThepTDRBTong> TKThepTDRBTongs { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
