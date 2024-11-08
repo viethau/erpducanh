@@ -6,7 +6,7 @@
 @using DucAnhERP.SeedWork
 @using DucAnhERP.Helpers
 @inject NavigationManager navigation
-@inject ITKThepCTronRepository TKThepCTronRepository
+@inject IPKKLCTronRepository PKKLCTronRepository
 @inject INuocMuaRepository NuocMuaRepository
 @inject IDanhMucRepository DanhMucRepository
 @inject IDMTLThepRepository DMTLThepRepository
@@ -19,7 +19,7 @@
     }
 
         table thead tr td {
-            /*   white-space: nowrap; */
+            /   white-space: nowrap; /
             text-align: center;
             padding: 2px 5px;
         }
@@ -32,76 +32,148 @@
                 <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
-                    <div class="row">
-                        <div class="form-floating col-sm-6 col-md-3">
-                            <label for="Table">Loại cấu kiện</label>
-                            <Select2 Id="select1" Items="@selectLCK" OnChange="@OnSelectChangeLCK"></Select2>
-                            <ValidationMessage For="()=>Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai"></ValidationMessage>
-                        </div>
-                        <div class="form-floating col-sm-6 col-md-3">
-                           <label for="TenCongTac">Tên công tác<span class="text-danger">*</span></label>
-                            <InputText  @bind-Value="Input.TenCongTac" class="form-control" id="TenCongTac" placeholder="Tên công tác"  disabled/>
-                            <ValidationMessage For="() => Input.TenCongTac" class="text-danger" />
-                         </div>
-                          <div class="form-floating col-sm-6 col-md-3">
-                           <label for="VTLayKhoiLuong">Vị trí lấy khối lượng<span class="text-danger">*</span></label>
-                            <InputText @oninput="OnInputChange" @bind-Value="Input.VTLayKhoiLuong" class="form-control" id="VTLayKhoiLuong" placeholder="Vị trí lấy khối lượng" />
-                            <ValidationMessage For="() => Input.VTLayKhoiLuong" class="text-danger" />
-                         </div>
-                          <div class="form-floating col-sm-6 col-md-3">
-                            <label for="Table">Loại thép</label>
-                            <Select2 Id="select2" Items="@selectLoaiThep" OnChange="@OnSelectChangeLoaiThep"></Select2>
-                            <ValidationMessage For="()=>Input.LoaiThep"></ValidationMessage>
-                        </div>
-                         <div class="form-floating col-sm-6 col-md-3">
-                           <label for="DKCD">Số hiệu<span class="text-danger">*</span></label>
-                            <InputText @oninput="OnInputChange"  @bind-Value="Input.SoHieu" class="form-control" id="SoHieu" placeholder="Số hiệu" />
-                            <ValidationMessage For="() => Input.SoHieu" class="text-danger" />
-                         </div>
-                          <div class="form-floating col-sm-6 col-md-3">
-                           <label for="DKCD">Đường kính/chiều dầy(mm,mm2)<span class="text-danger">*</span></label>
-                            <InputNumber @oninput="OnInputChange"  @bind-Value="Input.DKCD" class="form-control" id="DKCD" placeholder="Đường kính/chiều dầy" />
-                            <ValidationMessage For="() => Input.DKCD" class="text-danger" />
-                         </div>
-                          <div class="form-floating col-sm-6 col-md-3">
-                           <label for="SoThanh">Số thanh/01 cấu kiện<span class="text-danger">*</span></label>
-                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.SoThanh" class="form-control" id="SoThanh" placeholder="Số thanh/01 cấu kiện" />
-                            <ValidationMessage For="() => Input.SoThanh" class="text-danger" />
-                         </div>
-                          <div class="form-floating col-sm-6 col-md-3">
-                           <label for="SoCK">Số cấu kiện<span class="text-danger">*</span></label>
-                            <InputNumber @oninput="OnInputChange"  @bind-Value="Input.SoCK" class="form-control" id="SoCK" placeholder="Số cấu kiện" />
-                            <ValidationMessage For="() => Input.SoCK" class="text-danger" />
-                         </div>
-                          <div class="form-floating col-sm-6 col-md-3">
-                           <label for="TongSoThanh">Tổng số thanh<span class="text-danger">*</span></label>
-                            <InputNumber @bind-Value="Input.TongSoThanh" class="form-control" id="TongSoThanh" placeholder="Tổng số thanh" disabled />
-                            <ValidationMessage For="() => Input.TongSoThanh" class="text-danger" />
-                         </div>
-
-                         <div class="form-floating col-sm-6 col-md-3">
-                           <label for="ChieuDai1Thanh">Chiều dài 01 thanh (mm)/diện tích (mm2)<span class="text-danger">*</span></label>
-                            <InputNumber @oninput="OnInputChange"  @bind-Value="Input.ChieuDai1Thanh" class="form-control" id="ChieuDai1Thanh" placeholder="Chiều dài 01 thanh" />
-                            <ValidationMessage For="() => Input.ChieuDai1Thanh" class="text-danger" />
-                         </div>
-                         <div class="form-floating col-sm-6 col-md-3">
-                           <label for="TongChieuDai">Tổng chiều dài (m,m2)<span class="text-danger">*</span></label>
-                            <InputNumber @oninput="OnInputChange"  @bind-Value="Input.TongChieuDai" class="form-control" id="TongChieuDai" placeholder="Tổng chiều dài (m,m2)" disabled/>
-                            <ValidationMessage For="() => Input.TongChieuDai" class="text-danger" />
-                         </div>
-                          <div class="form-floating col-sm-6 col-md-3">
-                           <label for="TrongLuong">Trọng lượng thép/(kg/m,m3)<span class="text-danger">*</span></label>
-                            <InputNumber @bind-Value="Input.TrongLuong" class="form-control" id="TrongLuong" placeholder="Trọng lượng thép/(kg/m,m3)"  disabled/>
-                            <ValidationMessage For="() => Input.TrongLuong" class="text-danger" />
-                         </div>
-                            <div class="form-floating col-sm-6 col-md-3">
-                           <label for="TongTrongLuong">Tổng trọng lượng (kg)<span class="text-danger">*</span></label>
-                           <InputNumber @bind-Value="Input.TongTrongLuong" class="form-control" id="TongTrongLuong" placeholder="Tổng trọng lượng (kg)" disabled />
-
-                            <ValidationMessage For="() => Input.TongTrongLuong" class="text-danger" />
-                         </div>
-                    </div>
                     
+                    <div>
+                        <h5>Thông tin cấu kiện</h5>
+                        <div class="row">
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="Table">Loại cấu kiện</label>
+                                <Select2 Id="select1" Items="@selectLCK" OnChange="@OnSelectChangeLCK"></Select2>
+                                <ValidationMessage For="()=>Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai"></ValidationMessage>
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="table">loại bê tông</label>
+                                <Select2 Id="select2" Items="@selectLBT" OnChange="@OnSelectChangeLBT"></Select2>
+                                <validationmessage for="()=>Input.LoaiBeTong"></validationmessage>
+                            </div>
+                        </div>
+                        <h5>Thông tin tên công tác thực tế</h5>
+                        <div class="row">
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="table">Hạng mục <span ></span></label>
+                                 <Select2 Id="select3" Items="@selectHMTC" OnChange="@OnSelectChangeHMTC"></Select2>
+                                <validationmessage for="()=>Input.HangMuc"></validationmessage>
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="table">Hạng mục công tác <span></span></label>
+                                <InputText @bind-Value="Input.HangMucCongTac" class="form-control" id="HangMucCongTac" placeholder="Hạng mục công tác" />
+                                <validationmessage for="()=>Input.HangMucCongTac"></validationmessage>
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="TenCongTac">Tên công tác<span ></span></label>
+                                <InputText @bind-Value="Input.TenCongTac" class="form-control" id="TenCongTac" placeholder="Tên công tác"  />
+                                <ValidationMessage For="() => Input.TenCongTac"  />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="VTLayKhoiLuong">Đơn vị<span ></span></label>
+                                <InputText @oninput="OnInputChange" @bind-Value="Input.DonVi" class="form-control" id="DonVi" placeholder="Đơn vị" />
+                                <ValidationMessage For="() => Input.DonVi"  />
+                            </div>
+                        </div>
+                        <h5>Thông tin KTHH tính khối lượng (m3)</h5>
+                        <div class="row">
+                            <div class="form-floating col-sm-6 col-md-3" title="Bắt buộc phải nhập giá trị vào đây. Giá trị là chiều dài thực tế của 01 cấu kiện">
+                                <label for="KTHH_D">D<span></span></label>
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_D" class="form-control" id="KTHH_D"  />
+                                <ValidationMessage For="() => Input.KTHH_D" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="KTHH_R">R<span></span></label>
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_R" class="form-control" id="KTHH_R" />
+                                <ValidationMessage For="() => Input.KTHH_R" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="KTHH_C">C<span></span></label>
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_C" class="form-control" id="KTHH_C" />
+                                <ValidationMessage For="() => Input.KTHH_C" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3" title="Bắt buộc phải nhập giá trị tương ứng vào đây. Giá trị là kết quả của của chiều rộng  chiều cao của 01 cấu kiện cống tròn">
+                                <label for="KTHH_DienTich">Diện tích<span></span></label>
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_DienTich" class="form-control" id="KTHH_DienTich" />
+                                <ValidationMessage For="() => Input.KTHH_DienTich" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3" title="Để cố định. Thông tin cố định là 'Rộng*Cao' ">
+                                <label for="KTHH_GhiChu">Ghi chú<span></span></label>
+                                 <Select2 Id="select4" Items="@selectGhiChu" OnChange="@OnSelectChangeGhiChu"></Select2>
+                                <validationmessage for="()=>Input.KTHH_GhiChu"></validationmessage>
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3" title="Bắt buộc phải nhập giá trị vào đây. Giá trị mặc định là 01">
+                                <label for="KTHH_SLCauKien">Số lượng cấu kiện<span></span></label>
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_SLCauKien" class="form-control" id="KTHH_SLCauKien" />
+                                <ValidationMessage For="() => Input.KTHH_SLCauKien" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="KTHH_KL1CK">KL 01 CK<span></span></label>
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_KL1CK" class="form-control" id="KTHH_KL1CK" disabled />
+                                <ValidationMessage For="() => Input.KTHH_KL1CK  " />
+                            </div>
+                        </div>
+                        <h5>Thông tin cạnh tính diện tích (m2)</h5>
+                        <div class="row">
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="TTCDT_CDai">Cạnh dài<span></span></label>
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_CDai" class="form-control" id="TTCDT_CDai" />
+                                <ValidationMessage For="() => Input.TTCDT_CDai"  />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="TTCDT_CRong">Cạnh rộng<span></span></label>
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_CRong" class="form-control" id="TTCDT_CRong" />
+                                <ValidationMessage For="() => Input.TTCDT_CRong" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="TTCDT_CDay">Cạnh đáy<span></span></label>
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_CDay" class="form-control" id="TTCDT_CDay" />
+                                <ValidationMessage For="() => Input.TTCDT_CDay" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="TTCDT_DienTich">Diện tích<span></span></label>
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_DienTich" class="form-control" id="TTCDT_DienTich" />
+                                <ValidationMessage For="() => Input.TTCDT_DienTich" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="TTCDT_SLCK">Số lượng cấu kiện<span></span></label>
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_SLCK" class="form-control" id="TTCDT_SLCK" />
+                                <ValidationMessage For="() => Input.TTCDT_SLCK" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="TTCDT_KL">KL<span></span></label>
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_KL" class="form-control" id="TTCDT_KL" disabled />
+                                <ValidationMessage For="() => Input.TTCDT_KL" />
+                            </div>
+
+                        </div>
+                        <h5>Thông tin KL không phải M2,M3</h5>
+                        <div class="row">
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="KLKP_KL">Khối lượng<span></span></label>
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KLKP_KL" class="form-control" id="KLKP_KL" disabled="@isEdit" />
+                                <ValidationMessage For="() => Input.KLKP_KL" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="KLKP_Sl">Số lượng<span></span></label>
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KLKP_Sl" class="form-control" id="KLKP_Sl" />
+                                <ValidationMessage For="() => Input.KLKP_Sl" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="KL1CK_ChuaTruCC">KL 01CK Chưa trừ chiếm chỗ<span></span></label>
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KL1CK_ChuaTruCC" class="form-control" id="KL1CK_ChuaTruCC" disabled />
+                                <ValidationMessage For="() => Input.KL1CK_ChuaTruCC" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="KLCC1CK">KL chiếm chỗ/01CK<span></span></label>
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KLCC1CK" class="form-control" id="KLCC1CK" />
+                                <ValidationMessage For="() => Input.KLCC1CK" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="TKLCK_SauCC">Tổng KLCK sau chiếm chỗ<span></span></label>
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.TKLCK_SauCC" class="form-control" id="TKLCK_SauCC" disabled />
+                                <ValidationMessage For="() => Input.TKLCK_SauCC" />
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row justify-content-end m-2">
                         <button class="btn btn-primary mr-2" type="submit">Save</button>
                         <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
@@ -120,11 +192,7 @@
                         <Select2 Id="select3" Items="@selectSearchLCK" OnChange="@OnSelectChangeSearchLCK"></Select2>
                         <ValidationMessage For="()=>InputMD.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai"></ValidationMessage>
                     </div>
-                    <div class="form-floating col-sm-4 col-md-3">
-                            <label for="Table">Loại thép</label>
-                            <Select2 Id="select2" Items="@selectSearchLoaiThep" OnChange="@OnSelectChangeSearchLoaiThep"></Select2>
-                            <ValidationMessage For="()=>InputMD.LoaiThep"></ValidationMessage>
-                        </div>
+                    
                     <!-- Search Button -->
                     <div class="col-sm-4 col-md-2 mb-2">
                         <label>&nbsp;</label>
@@ -187,10 +255,63 @@
                             </tr>
 
                         </thead>
-                        @if (listTKThepCTronModel.Any())
+                        @if (listPKKLCTronModel.Any())
                         {
                             <tbody>
-                               
+                                @{
+                                    int stt = 0;
+                                    string HangMuc = "";
+                                    string ChiMuc = "I";
+                                }
+                                @foreach (var item in listPKKLCTronModel)
+                                {
+                                    stt++;
+
+                                    if (string.IsNullOrEmpty(HangMuc) || HangMuc.ToUpper().Trim() != @item.HangMuc.ToUpper().Trim())
+                                    {
+                                        HangMuc = @item.HangMuc ;
+                                        <tr class="bg-warning text-bold">
+                                            <td>@getChiMuc(HangMuc)</td>
+                                            <td colspan="2">@item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
+                                            <td>@HangMuc &nbsp; @item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
+                                            <td>@HangMuc &nbsp; @item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
+                                            <td colspan="19"></td>
+                                        </tr>
+                                    }
+                                   <tr>
+                                        <td class="d-flex nowrap">
+                                            <div class="d-inline-block">
+                                                <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td>@stt</td>
+                                        <td>@item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
+                                        <td>@item.LoaiBeTong</td> 
+                                        <td>@item.HangMucCongTac</td> 
+                                        <td>@item.TenCongTac</td> 
+                                        <td>@item.DonVi</td> 
+                                        <td>@item.KTHH_D</td> 
+                                        <td>@item.KTHH_R</td> 
+                                        <td>@item.KTHH_C</td> 
+                                        <td>@item.KTHH_DienTich</td> 
+                                        <td>@item.KTHH_GhiChu</td> 
+                                        <td>@item.KTHH_SLCauKien</td> 
+                                        <td>@item.KTHH_KL1CK</td> 
+                                        <td>@item.TTCDT_CDai</td> 
+                                        <td>@item.TTCDT_CRong</td> 
+                                        <td>@item.TTCDT_CDay</td> 
+                                        <td>@item.TTCDT_DienTich</td> 
+                                        <td>@item.TTCDT_SLCK</td> 
+                                        <td>@item.TTCDT_KL</td> 
+                                        <td>@item.KLKP_KL</td> 
+                                        <td>@item.KLKP_Sl</td> 
+                                        <td>@item.KL1CK_ChuaTruCC </td> 
+                                        <td>@item.KLCC1CK </td> 
+                                        <td>@item.TKLCK_SauCC </td> 
+                                   </tr>
+                                   }
                             </tbody>
                         }
                         else
@@ -204,7 +325,7 @@
                     </table>
                 </div>
                 <div class="mt-4">
-                    @if (listTKThepCTronModel.Any())
+                    @if (listPKKLCTronModel.Any())
                     {
                         <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
                     }
@@ -229,8 +350,42 @@
     [Parameter]
     public ConfirmModal confirmModal { get; set; }
 
-    private TKThepCTron Input = new ();
-    private TKThepCTronModel InputMD = new TKThepCTronModel();
+    private PKKLCTron Input = new ();
+    private PKKLCTronModel InputMD = new PKKLCTronModel();
+
+    private List<SelectedItem> selectHMTC = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true },
+        new SelectedItem { Value = "I.Sản xuất, vận chuyển, lắp đặt", Text = "I.Sản xuất, vận chuyển, lắp đặt " },
+        new SelectedItem { Value = "II.Sản xuất + V.Chuyển B.Tông T.Phẩm", Text = "II.Sản xuất + V.Chuyển B.Tông T.Phẩm  "},
+        new SelectedItem { Value = "III.Gia công, lắp dựng cốt thép", Text = "II.Gia công, lắp dựng cốt thép "},
+    };
+    private void OnSelectChangeHMTC(SelectedItem selectedItem)
+    {
+        Input.HangMuc = selectedItem.Value;
+    }
+
+    private List<SelectedItem> selectGhiChu = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true },
+        new SelectedItem { Value = "Rộng*Cao", Text = "Rộng*Cao" },
+        new SelectedItem { Value = "Dài*Cao", Text = "Dài*Cao"},
+        new SelectedItem { Value = "Dài*Rộng", Text = "Dài*Rộng"},
+    };
+    private void OnSelectChangeGhiChu(SelectedItem selectedItem)
+    {
+        Input.KTHH_GhiChu = selectedItem.Value;
+    }
+
+    private List<SelectedItem> selectLBT = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true },
+        new SelectedItem { Value = "Bê tông thương phẩm", Text = "Bê tông thương phẩm" },
+    };
+    private void OnSelectChangeLBT(SelectedItem selectedItem)
+    {
+        Input.LoaiBeTong = selectedItem.Value;
+    }
 
     private List<SelectedItem> selectLCK = new();
     private void OnSelectChangeLCK(SelectedItem selectedItem)
@@ -244,23 +399,10 @@
         InputMD.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = selectedItem.Value;
     }
 
-    public string LoaiThep = "";
-    private List<SelectedItem> selectLoaiThep = new();
-    private void OnSelectChangeLoaiThep(SelectedItem selectedItem)
-    {
-        Input.LoaiThep = selectedItem.Value;
-        LoaiThep = selectedItem.Text;
-    }
-    private List<SelectedItem> selectSearchLoaiThep = new();
-    private void OnSelectChangeSearchLoaiThep(SelectedItem selectedItem)
-    {
-        InputMD.LoaiThep = selectedItem.Value;
-    }
-
-    public List<TKThepCTronModel> listTKThepCTronModel { get; set; } = new();
-    public List<TKThepCTronModel> listModel { get; set; } = new();
+    public List<PKKLCTronModel> listPKKLCTronModel { get; set; } = new();
+    public List<PKKLCTronModel> listModel { get; set; } = new();
     public MetaData MetaData { get; set; }
-    public TKThepCTronModel tKThepHoGaModel { get; set; }
+    public PKKLCTronModel tKThepHoGaModel { get; set; }
 
     //bắt sự kiện khi thay đổi
     private System.Timers.Timer _typingTimer;
@@ -283,54 +425,57 @@
         Caculate();
     }
 
+    private bool disInput { get; set; } = false;
     public async void Caculate()
     {
-        Input.TenCongTac = ($"Gia công lắp dựng thép {Input.VTLayKhoiLuong} {LoaiThep} D{Input.DKCD}");
-        Input.TongSoThanh = (Input.SoThanh * Input.SoCK);
-        Input.TongChieuDai = (Input.TongSoThanh * Input.ChieuDai1Thanh) / 1000;
-
-
-        if(!string.IsNullOrEmpty(Input.LoaiThep) && Input.DKCD >0)
+        if (Input.HangMuc == "II.Sản xuất + V.Chuyển B.Tông T.Phẩm")
         {
-            var DMTLThep = await DMTLThepRepository.GetTrongLuong(Input.LoaiThep,Input.DKCD.ToString());
-            if(DMTLThep !=null)
-            {
-                Input.TrongLuong = DMTLThep.TrongLuong;
+            if (!string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)){
+                var TKLCK_SauCC = await PKKLCTronRepository.GetTKLCK_SauCCByLCK(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
+                if (TKLCK_SauCC != null)
+                {
+                    Input.TKLCK_SauCC = TKLCK_SauCC.TKLCK_SauCC ;
+                }
             }
-            else
-            {
-                Input.TrongLuong = 0;
-            }
-        }
-        if(LoaiThep.Trim().ToUpper() == "THÉP BẢN")
-        {
-            Input.TongTrongLuong =  (Input.DKCD * Input.TongChieuDai * Input.TrongLuong) / 1000000;
-
         }
         else
         {
-            Input.TongTrongLuong = Input.TongChieuDai * Input.TrongLuong;
+            if (!string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
+            && Input.HangMucCongTac.ToUpper().Trim() == "Vận chuyển từ bãi đúc đến công trường".ToUpper()
+            && Input.DonVi.ToUpper().Trim() == "Tấn/km".ToUpper())
+            {
+                disInput = true;
+                var KLKP_KL = await PKKLCTronRepository.GetTKLCK_SauCCByLCK(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
+                if (KLKP_KL != null)
+                {
+                    Input.KLKP_KL = KLKP_KL.KLKP_KL * 2.4;
+                }
+
+            }
+            Input.KTHH_KL1CK = KTHH_KL1CK(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.KTHH_DienTich, Input.KTHH_GhiChu);
+            Input.TTCDT_KL = TTCDT_KL(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.TTCDT_CDai, Input.TTCDT_CRong, Input.TTCDT_CDay, Input.TTCDT_DienTich);
+            Input.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(Input.KTHH_KL1CK, Input.KTHH_SLCauKien, Input.TTCDT_KL, Input.TTCDT_SLCK, Input.KLKP_KL, Input.KLKP_Sl);
+            Input.TKLCK_SauCC = Input.KL1CK_ChuaTruCC - Input.KLCC1CK;
         }
-        Input.TongChieuDai = Math.Round(Input.TongChieuDai??0, 4);
-        Input.TongTrongLuong = Math.Round(Input.TongTrongLuong??0, 4);
+
         await InvokeAsync(() =>
           {
               StateHasChanged();
           });
     }
 
+
+
+
     private void ShowModal()
     {
         isModalVisible = true;
         Input = new();
-         foreach (var item in selectLoaiThep)
-        {
-            item.IsSelected = string.IsNullOrEmpty(item.Value);
-        }
+
 
         foreach (var item in selectLCK)
         {
-           item.IsSelected = string.IsNullOrEmpty(item.Value);
+            item.IsSelected = string.IsNullOrEmpty(item.Value);
         }
     }
 
@@ -359,14 +504,13 @@
     {
         try
         {
-
             await LoadData();
-            var repository = await NuocMuaRepository.GetBaoCaoCongTronSDThep();
+            var repository = await NuocMuaRepository.GetBaoCaoKTHHMDC();
             selectLCK = new();
             foreach (var item in repository)
             {
                 // Kiểm tra và thêm item
-                if (!string.IsNullOrEmpty(item.Id) && !selectLCK.Any(x => x.Value == item.Id))
+                if (!string.IsNullOrEmpty(item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai) && !selectLCK.Any(x => x.Value == item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
                 {
                     selectLCK.Add(new SelectedItem
                         {
@@ -377,21 +521,7 @@
             }
             selectLCK.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
             selectSearchLCK = selectLCK;
-            var dm = await DanhMucRepository.GetDMByIdNhomDanhMuc("DMThep");
-            foreach (var item in dm)
-            {
-                // Kiểm tra và thêm item
-                if (!string.IsNullOrEmpty(item.Id) && !selectLoaiThep.Any(x => x.Value == item.Id))
-                {
-                    selectLoaiThep.Add(new SelectedItem
-                        {
-                            Value = item.Id,
-                            Text = item.Ten ?? ""
-                        });
-                }
-            }
-            selectLoaiThep.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
-            selectSearchLoaiThep = selectLoaiThep;
+
         }
         catch (Exception ex)
         {
@@ -405,24 +535,10 @@
         {
             isLoading = true;
             tKThepHoGaModel = new();
-            var repository = await TKThepCTronRepository.GetAllByVM(InputMD);
+            var repository = await PKKLCTronRepository.GetAllByVM(InputMD);
             listModel = repository;
-            if (listModel!= null &&  listModel.Count >0)
-            {
-                foreach(var item  in listModel)
-                {
-                    if(item.LoaiThep.Trim().ToUpper() == "THÉP BẢN")
-                    {
-                        item.TongTrongLuong =  (item.DKCD * item.TongChieuDai * item.TrongLuong) / 1000000;
-                    }
-                    else
-                    {
-                        item.TongTrongLuong = item.TongChieuDai * item.TrongLuong;
-                    }
-                     item.TongTrongLuong = Math.Round(item.TongTrongLuong ?? 0, 4);
-                }
-            }
-            listTKThepCTronModel = Paging(listModel);
+
+            listPKKLCTronModel = Paging(listModel);
 
         }
         catch (Exception)
@@ -448,22 +564,21 @@
             Caculate();
             string[] ids = { Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai??"" };
             var isValidTenPL = await PhanLoaiCTronHopNhuaRepository.CheckExclusive(ids,baseTime);
-            var listExist = await TKThepCTronRepository.GetExist(Input);
+            var listExist = await PKKLCTronRepository.GetExist(Input);
             if (isValidTenPL)
             {
                 if (isEdit)
                 {
                     string[] idss = { Input.Id }; 
 
-
                     if(listExist == null || listExist.Count ==0 )
                     {
-                        bool isValid = await TKThepCTronRepository.CheckExclusive(idss,baseTime);
+                        bool isValid = await PKKLCTronRepository.CheckExclusive(idss,baseTime);
                         if (isValid)
                         {
-                            await TKThepCTronRepository.Update(Input);
+                            await PKKLCTronRepository.Update(Input);
                             isModalVisible = false;
-                            Input = new TKThepCTron();
+                            Input = new PKKLCTron();
                             isEdit = false;
                             ToastService.ShowToast(
                                 "Thông báo",
@@ -477,9 +592,9 @@
                         }
                     }else if(listExist.Count >0 && listExist[0].Id == Input.Id)
                     {
-                        await TKThepCTronRepository.Update(Input);
+                        await PKKLCTronRepository.Update(Input);
                         isModalVisible = false;
-                        Input = new TKThepCTron();
+                        Input = new PKKLCTron();
                         isEdit = false;
                         ToastService.ShowToast(
                             "Thông báo",
@@ -509,9 +624,9 @@
                         if (Flag > 0)
                         {
                             // Thêm mới thông tin
-                            var id = await TKThepCTronRepository.InsertLaterFlag(Input, Flag);
+                            var id = await PKKLCTronRepository.InsertLaterFlag(Input, Flag);
                             isModalVisible = false;
-                            Input = new TKThepCTron();
+                            Input = new PKKLCTron();
                             ToastService.ShowToast(
                                 "Thông báo",
                                 "Chèn thành công.",
@@ -526,9 +641,9 @@
                         else
                         {
                             // Thêm mới thông tin
-                            await TKThepCTronRepository.Insert(Input);
+                            await PKKLCTronRepository.Insert(Input);
                             isModalVisible = false;
-                            Input = new TKThepCTron();
+                            Input = new PKKLCTron();
                             ToastService.ShowToast(
                                 "Thông báo",
                                 "Thêm thành công.",
@@ -574,22 +689,37 @@
 
     private async Task HandleResponseClick(bool confirmed)
     {
-        if (confirmed)
+        try
         {
-            if (!string.IsNullOrEmpty(deleteId))
+            if (confirmed)
             {
-                string[] ids = { deleteId };
-                var result = await TKThepCTronRepository.CheckExclusive(ids,baseTime);
-                if (result)
+                if (!string.IsNullOrEmpty(deleteId))
                 {
-                     // Thực hiện hành động xóa
-                    await TKThepCTronRepository.DeleteById(deleteId);
-                    ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success",iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
-                    await LoadData();
+                    string[] ids = { deleteId };
+                    var result = await PKKLCTronRepository.CheckExclusive(ids, baseTime);
+                    if (result)
+                    {
+                        // Thực hiện hành động xóa
+                        await PKKLCTronRepository.DeleteById(deleteId);
+                        ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                        await LoadData();
+                    }
+
+                    deleteId = "";
                 }
-               
-                deleteId = "";
             }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                 "Thông báo",
+                ex.Message,
+                 cssClass: "toast-danger",
+               iconClass: "fa fa-exclamation-circle",
+                 progressBarClass: "bg-info",
+                 duration: 5000
+             );
+           
         }
     }
 
@@ -599,13 +729,10 @@
         try
         {
             TitleModal = "Cập nhật loại TĐan TDẫn !";
-            Input = await TKThepCTronRepository.GetById(id);
+            Input = await PKKLCTronRepository.GetById(id);
             isEdit = true;
             isModalVisible = true;
-             foreach (var item in selectLoaiThep)
-            {
-                item.IsSelected = item.Value == Input.LoaiThep;
-            }
+
             foreach (var item in selectLCK)
             {
                 item.IsSelected = item.Value == Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai;
@@ -621,12 +748,12 @@
                  progressBarClass: "bg-info",
                  duration: 5000
              );
-       }
+        }
 
     }
 
 
-      int Flag = 0;
+    int Flag = 0;
     //thêm vào sau
     private void InsertLaterFlag(int flag)
     {
@@ -668,7 +795,7 @@
 
 
     // Xử lý paging
-    private List<TKThepCTronModel> Paging(List<TKThepCTronModel> listModels)
+    private List<PKKLCTronModel> Paging(List<PKKLCTronModel> listModels)
     {
         // Đếm số bản ghi thỏa mãn
         var count = listModels.Count();
@@ -677,17 +804,17 @@
         listModels = listModels.Skip((tKThepHoGaModel.PageNumber - 1) * tKThepHoGaModel.PageSize).Take(tKThepHoGaModel.PageSize).ToList();
 
         // Xóa danh sách đang hiển thị trên màn hình
-        listTKThepCTronModel.Clear();
+        listPKKLCTronModel.Clear();
 
         // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
         foreach (var major in listModels)
         {
-            listTKThepCTronModel.Add(major);
+            listPKKLCTronModel.Add(major);
         }
 
         // Tạo pagelist mới
 
-        var pagelist = new PageList<TKThepCTronModel>(listTKThepCTronModel, count, tKThepHoGaModel.PageNumber, tKThepHoGaModel.PageSize);
+        var pagelist = new PageList<PKKLCTronModel>(listPKKLCTronModel, count, tKThepHoGaModel.PageNumber, tKThepHoGaModel.PageSize);
         MetaData = pagelist.MetaData;
         return listModels;
     }
@@ -695,5 +822,83 @@
     private void ThumbtackHeader()
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
+    }
+
+    public static double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
+    {
+        if (DonVi == "M3")
+        {
+            if (string.IsNullOrEmpty(KTHH_GhiChu) || KTHH_GhiChu == "0")
+            {
+                return KTHH_D * KTHH_R * KTHH_C;
+            }
+            else if (KTHH_GhiChu == "Rộng*Cao")
+            {
+                return KTHH_DienTich * KTHH_D;
+            }
+            else if (KTHH_GhiChu == "Dài*Cao")
+            {
+                return KTHH_DienTich * KTHH_R;
+            }
+            else if (KTHH_GhiChu == "Dài*Rộng")
+            {
+                return KTHH_DienTich * KTHH_C;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        return 0;
+    }
+
+    public static double TTCDT_KL(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double TTCDT_CDai, double TTCDT_CRong, double TTCDT_CDay, double TTCDT_DienTich)
+    {
+        if (DonVi.ToUpper().Trim() == "M2")
+        {
+            if (string.IsNullOrEmpty(TTCDT_DienTich.ToString()) || TTCDT_DienTich == 0)
+            {
+                return (KTHH_D * KTHH_C * TTCDT_CDai) + (KTHH_R * KTHH_C * TTCDT_CRong) + (KTHH_D * KTHH_R * TTCDT_CDay);
+            }
+            else
+            {
+                return TTCDT_DienTich;
+            }
+        }
+        return 0;
+    }
+
+    public static double KL1CK_ChuaTruCC(double KTHH_KL1CK, double KTHH_SLCauKien, double TTCDT_KL, double TTCDT_SLCK, double KLKP_KL, double KLKP_Sl)
+    {
+        if (KTHH_KL1CK > 0)
+        {
+            return KTHH_KL1CK * KTHH_SLCauKien;
+        }
+        else if (TTCDT_KL > 0)
+        {
+            return TTCDT_KL * TTCDT_SLCK;
+        }
+        else
+        {
+            return KLKP_KL * KLKP_Sl;
+        }
+    }
+
+    public static string getChiMuc(string DK)
+    {
+        string ChiMuc = "I";
+        switch (DK)
+        {
+            case "I.Sản xuất, vận chuyển, lắp đặt":
+                ChiMuc = "I";
+                break;
+            case "II.Sản xuất + V.Chuyển B.Tông T.Phẩm":
+                ChiMuc = "II";
+                break;
+            case "II.Gia công, lắp dựng cốt thép":
+                ChiMuc = "III";
+                break;
+        }
+        return ChiMuc;
     }
 }
