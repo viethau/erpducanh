@@ -54,6 +54,7 @@ namespace DucAnhERP.Services
                             orderby a.HangMuc ascending, a.CreateAt ascending
                             select new PKKLCTronModel
                             {
+                                Id= a.Id,
                                 PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
                                 ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
                                 LoaiBeTong = a.LoaiBeTong,
@@ -87,6 +88,42 @@ namespace DucAnhERP.Services
             {
                 Console.WriteLine(ex.ToString());
                 throw;
+            }
+
+        }
+
+        public async Task<List<THKLModel>> GetTHKLCongTron()
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var query = (from a in context.PKKLCTrons
+                             join b in context.PhanLoaiCTronHopNhuas
+                             on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals b.Id
+                             let kl1Dv = context.PKKLCTrons
+                                 .Where(x => x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai
+                                          && x.LoaiBeTong == a.LoaiBeTong
+                                          && x.HangMuc == a.HangMuc
+                                          && x.HangMucCongTac == a.HangMucCongTac
+                                          && x.TenCongTac == a.TenCongTac)
+                                 .Sum(x => x.TKLCK_SauCC)
+                             orderby a.HangMuc, a.CreateAt
+                             select new THKLModel
+                             {
+                                 ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                 HangMucCongTac = a.HangMucCongTac,
+                                 TenCongTac = a.TenCongTac,
+                                 DonVi = a.DonVi,
+                                 KL1DonVi = kl1Dv,
+
+                             }).ToList();
+                return query;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
             }
 
         }
@@ -241,7 +278,7 @@ namespace DucAnhERP.Services
 
                 // Bước 1: Lấy danh sách các bản ghi có flag > FlagLast
                 var recordsToUpdate = await context.PKKLCTrons
-                    .Where(x => x.Flag > FlagLast && x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
+                    .Where(x => x.Flag > FlagLast && x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai && x.HangMuc == entity.HangMuc)
                     .ToListAsync();
 
                 // Bước 2: Tăng giá trị flag của các bản ghi đó thêm 1

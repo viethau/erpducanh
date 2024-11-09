@@ -748,6 +748,7 @@ namespace DucAnhERP.Services
                 throw;
             }
         }
+        
         public async Task Update(NuocMua nuocMua)
         {
             using var context = _context.CreateDbContext();

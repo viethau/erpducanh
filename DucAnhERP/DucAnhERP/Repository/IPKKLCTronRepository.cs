@@ -9,5 +9,6 @@ namespace DucAnhERP.Repository
         Task<List<PKKLCTronModel>> GetAllByVM(PKKLCTronModel mModel);
         Task<List<PKKLCTron>> GetExist(PKKLCTron searchData);
         Task<PKKLCTron> GetTKLCK_SauCCByLCK(string id);
+        Task<List<THKLModel>> GetTHKLCongTron();
     }
 }

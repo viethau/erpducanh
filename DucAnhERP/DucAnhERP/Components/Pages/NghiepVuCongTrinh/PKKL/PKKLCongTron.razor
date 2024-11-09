@@ -221,6 +221,7 @@
                     <table id="tb-left" class="table table-hover table-bordered mt-3">
                         <thead class="bg-info @thumbtack">
                             <tr>
+                                <th></th>
                                 <th class="text-center" rowspan="2">STT</th>
                                 <th class="text-center" colspan="2">Thông tin cấu kiện</th>
                                 <th class="text-center" colspan="3">Thông tin tên công tác thực tế</th>
@@ -283,6 +284,9 @@
                                             <div class="d-inline-block">
                                                 <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
                                                     <i class="fas fa-trash"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                                    <i class="fas fa-plus"></i>
                                                 </button>
                                             </div>
                                         </td>
