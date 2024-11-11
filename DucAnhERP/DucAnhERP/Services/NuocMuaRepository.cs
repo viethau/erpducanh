@@ -947,6 +947,32 @@ namespace DucAnhERP.Services
             }
         }
 
+        //Lấy tất cả tuyến đường 
+        public async Task<List<NuocMuaModel>> GetDSTuyenDuong()
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var data = await context.DSNuocMua
+                    .Where(ds => !string.IsNullOrEmpty(ds.ThongTinLyTrinh_TuyenDuong))
+                    .Select(ds => ds.ThongTinLyTrinh_TuyenDuong)
+                    .Distinct()
+                    .OrderBy(tuyenDuong => tuyenDuong)
+                    .Select(tuyenDuong => new NuocMuaModel
+                    {
+                        ThongTinLyTrinh_TuyenDuong = tuyenDuong ??""
+                    })
+                    .ToListAsync();
+
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Lỗi dữ liệu {ex.Message}!");
+            }
+        }
+
+
         //báo cáo 
         public async Task<List<NuocMuaModel>> GetBaoCaoTTHoGa(NuocMuaModel nuocMuaModel)
         {
@@ -1973,7 +1999,6 @@ namespace DucAnhERP.Services
 
             return result;
         }
-
         public async Task<List<TKSLModel>> GetBaoCaoSLMong(string HinhThucTruyenDan)
         {
             using var context = _context.CreateDbContext();
@@ -2034,7 +2059,6 @@ namespace DucAnhERP.Services
 
             return result;
         }
-
         public async Task<List<TKSLModel>> GetBaoCaoSLDe()
         {
             using var context = _context.CreateDbContext();
@@ -2093,7 +2117,6 @@ namespace DucAnhERP.Services
 
             return result;
         }
-
         public async Task<List<TKSLModel>> GetBaoCaoSLTT()
         {
             using var context = _context.CreateDbContext();
@@ -2152,7 +2175,6 @@ namespace DucAnhERP.Services
 
             return result;
         }
-
         public async Task<List<TKSLModel>> GetBaoCaoSLTDan(string HinhThucTruyenDan)
         {
             try

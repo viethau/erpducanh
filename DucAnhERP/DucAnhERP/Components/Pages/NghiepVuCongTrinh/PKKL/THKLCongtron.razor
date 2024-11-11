@@ -57,12 +57,10 @@
         </div>
     </div> *@
     <div id="tableContainer ">
-        <div class="table-report ">
+        <div style="white-space:nowrap">
+            
             <div>
-                <div class=" mt-1">
-                    <h5 class="mt-2">BẢNG THỐNG KÊ THÉP HỐ GA THEO LOẠI HỐ GA</h5>
-                </div>
-                <div class=" mt-2">
+                <div class="row flex-nowrap overflow-auto">
                     <table id="tb-left" class="table table-hover table-bordered mt-3">
                         <thead class="bg-info @thumbtack">
 
@@ -96,18 +94,18 @@
                                     stt++;
                                     <tr>
                                         <td>@stt</td>
-                                        <td>@item.HangMucCongTac</td>
+                                        <td>@item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
                                         <td>@item.TenCongTac</td>
                                         <td>@item.DonVi</td>
                                         <td>@item.KL1DonVi</td>
                                         <td>@item.TenCongTacTheoDM  </td>
                                         <td>@item.MaDinhMuc</td>
-                                        <td>@item.SLTrai </td>
-                                        <td>@item.SLPhai </td>
-                                        <td>@item.SLTong </td>
-                                        <td>@item.KLTrai </td>
-                                        <td>@item.KLPhai </td>
-                                        <td>@item.KLTong </td>
+                                        <td>@Format.FormatCurrency(item.SLTrai) </td>
+                                        <td>@Format.FormatCurrency(item.SLPhai) </td>
+                                        <td>@Format.FormatCurrency(item.SLTong) </td>
+                                        <td>@Format.FormatCurrency(item.KLTrai) </td>
+                                        <td>@Format.FormatCurrency(item.KLPhai) </td>
+                                        <td>@Format.FormatCurrency(item.KLTong) </td>
                                     </tr>
                                 }
                             </tbody>
@@ -121,6 +119,60 @@
                             </tbody>
                         }
                     </table>
+
+                    @{
+                        bool isFirstGroup = true;
+                    }
+                    @foreach (var group in THKLByTuyenDuongs.GroupBy(item => item.ThongTinLyTrinh_TuyenDuong))
+                    {
+                        <table class="table table-hover table-bordered mt-3 ml-3">
+                            <thead class="bg-info">
+                                <tr>
+                                    <th>Tuyến đường</th>
+                                    <th>SL trái</th>
+                                    <th>SL phải</th>
+                                    <th>SL tổng</th>
+                                    <th>KL trái</th>
+                                    <th>KL phải</th>
+                                    <th>KL tổng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (isFirstGroup)
+                                {
+                                    <tr>
+                                        <td class="text-bold">
+                                            <Select2 Id="tuyenduong" Items="@selectTuyenDuong" OnChange="@OnSelectChangeTuyenDuong"></Select2>
+                                        </td>
+                                        <td colspan="6"></td>
+                                    </tr>
+                                    isFirstGroup = false;
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td class="text-bold">@group.Key</td>
+                                        <td colspan="6"></td>
+                                    </tr>
+                                }
+                                
+                                @foreach (var item in group)
+                                {
+                                   
+                                        <tr>
+                                            <td></td>
+                                            <td>@item.SLTrai</td>
+                                            <td>@item.SLPhai</td>
+                                            <td>@item.SLTong</td>
+                                            <td>@Format.FormatCurrency(@Math.Round(item.KLTrai, 4))</td>
+                                            <td>@Format.FormatCurrency(@Math.Round(@item.KLPhai,4))</td>
+                                            <td>@Format.FormatCurrency( @Math.Round(@item.KLTong,4)) </td>
+                                        </tr>
+                                    
+                                }
+                            </tbody>
+                        </table>
+                    }
                 </div>
                 <div class="mt-4">
                     @if (listTHKLModel.Any())
@@ -145,17 +197,32 @@
     string thumbtack = "";
     private DateTime baseTime;
 
+    public List<NuocMuaModel> listTuyenDuong { get; set; } = new();
+    public List<NuocMuaModel> listTuyenDuongSelect { get; set; } = new();
+
     [Parameter]
     public ConfirmModal confirmModal { get; set; }
 
-    
+    public List<THKLModel> THKLByTuyenDuongs = new();
 
     public List<THKLModel> listTHKLModel { get; set; } = new();
     public List<THKLModel> listModel { get; set; } = new();
     public MetaData MetaData { get; set; }
     public THKLModel tKThepHoGaModel { get; set; }
 
-    
+    string ThongTinLyTrinh_TuyenDuong = "";
+    private List<SelectedItem> selectTuyenDuong = new();
+
+    private void OnSelectChangeTuyenDuong(SelectedItem selectedItem)
+    {
+        int index = listTuyenDuong.FindIndex(item => item.Value == selectedItem);
+        if (index >= 0)
+        {
+            listTuyenDuong.RemoveRange(0, index );
+        }
+
+        LoadData();
+    }
 
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
@@ -163,8 +230,6 @@
         try
         {
             await LoadData();
-          
-
         }
         catch (Exception ex)
         {
@@ -181,6 +246,69 @@
             var repository = await PKKLCTronRepository.GetTHKLCongTron();
             listModel = repository;
 
+
+            listTuyenDuong = await NuocMuaRepository.GetDSTuyenDuong();
+            foreach (var item in listTuyenDuong)
+            {
+                // Kiểm tra và thêm item
+                if (!string.IsNullOrEmpty(item.ThongTinLyTrinh_TuyenDuong) && !selectTuyenDuong.Any(x => x.Value == item.ThongTinLyTrinh_TuyenDuong))
+                {
+                    selectTuyenDuong.Add(new SelectedItem
+                        {
+                            Value = item.ThongTinLyTrinh_TuyenDuong,
+                            Text = item.ThongTinLyTrinh_TuyenDuong ?? ""
+                        });
+                }
+            }
+            if (selectTuyenDuong.Any())
+            {
+                selectTuyenDuong.First().IsSelected = true;
+            }
+
+            // Lấy dữ liệu từ repository
+            if (listTuyenDuongSelect.Count > 0)
+            {
+                THKLByTuyenDuongs = await PKKLCTronRepository.GetTHKLByTuyenDuong(listTuyenDuongSelect);
+            }
+            else
+            {
+                THKLByTuyenDuongs = await PKKLCTronRepository.GetTHKLByTuyenDuong(listTuyenDuong);
+            }
+
+
+            // Group dữ liệu và tính tổng các trường
+            var groupedData = THKLByTuyenDuongs
+                .GroupBy(item => new { item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai, item.TenCongTac })
+                .Select(group => new
+                {
+                    TenLoaiTruyenDan = group.Key.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                    TenCongTac = group.Key.TenCongTac,
+                    SLTrai = group.Sum(item => item.SLTrai),
+                    SLPhai = group.Sum(item => item.SLPhai),
+                    SLTong = group.Sum(item => item.SLTrai) + group.Sum(item => item.SLPhai),
+                    KLTrai = group.Sum(item => item.KLTrai),
+                    KLPhai = group.Sum(item => item.KLPhai),
+                    KLTong = group.Sum(item => item.KLTrai) + group.Sum(item => item.KLPhai),
+                })
+                .ToList();
+
+            // Lấy tất cả các giá trị tổng từ nhóm và gán vào listModel
+            foreach (var group in groupedData)
+            {
+                // Tìm và cập nhật các mục trong listModel với dữ liệu đã nhóm
+                var model = listModel.FirstOrDefault(m => m.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == group.TenLoaiTruyenDan && m.TenCongTac == group.TenCongTac);
+                if (model != null)
+                {
+                    model.SLTrai = Math.Round(group.SLTrai,4);
+                    model.SLPhai = Math.Round(group.SLPhai, 4);
+                    model.SLTong = Math.Round(group.SLTong, 4);
+                    model.KLTrai = Math.Round(group.KLTrai, 4);
+                    model.KLPhai = Math.Round(group.KLPhai, 4);
+                    model.KLTong = Math.Round(group.KLTong, 4);
+                }
+            }
+
+            // Phân trang nếu cần
             listTHKLModel = Paging(listModel);
 
         }

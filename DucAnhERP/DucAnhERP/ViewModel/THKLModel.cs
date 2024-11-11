@@ -6,6 +6,7 @@ namespace DucAnhERP.ViewModel
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public int Flag { get; set; } = 0;
+        public string ThongTinLyTrinh_TuyenDuong { get; set; } = "";
         public string ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai { get; set; } = "";
         public string PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai { get; set; } = "";
         public string LoaiBeTong { get; set; } = "";

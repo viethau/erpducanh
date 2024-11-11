@@ -3,6 +3,7 @@ using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections.Generic;
 
 namespace DucAnhERP.Services
@@ -110,7 +111,8 @@ namespace DucAnhERP.Services
                              orderby a.HangMuc, a.CreateAt
                              select new THKLModel
                              {
-                                 ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                 PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                 ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
                                  HangMucCongTac = a.HangMucCongTac,
                                  TenCongTac = a.TenCongTac,
                                  DonVi = a.DonVi,
@@ -127,6 +129,123 @@ namespace DucAnhERP.Services
             }
 
         }
+
+        public async Task<List<THKLModel>> GetTHKLByTuyenDuong(string TuyenDuong)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var query = (from a in context.PKKLCTrons
+                             join b in context.PhanLoaiCTronHopNhuas on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals b.Id
+                             join c in context.DSNuocMua on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai 
+                             equals c.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai into cGroup
+                             from c in cGroup.DefaultIfEmpty()
+                             where c.ThongTinLyTrinh_TuyenDuong == TuyenDuong
+                             group new { a, c } by new
+                             {
+                                 a.Id,
+                                 b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                 PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = c.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                 a.TenCongTac,
+                                 a.DonVi,
+                                 a.TKLCK_SauCC,
+                                 a.HangMuc,
+                                 a.CreateAt
+                             } into g
+                             orderby g.Key.HangMuc, g.Key.CreateAt
+                             select new THKLModel
+                             {
+                                 Id = g.Key.Id,
+                                 ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = g.Key.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                 PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai,
+                                 TenCongTac = g.Key.TenCongTac,
+                                 DonVi = g.Key.DonVi,
+                                 KL1DonVi = g.Key.TKLCK_SauCC,
+                                 SLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0)??0,
+                                 SLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
+                                 SLTong = g.Sum(x => x.c != null && (x.c.TraiPhai == 0 || x.c.TraiPhai == 1) ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
+                                 KLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0,
+                                 KLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0,
+                                 KLTong = g.Sum(x => x.c != null && (x.c.TraiPhai == 0 || x.c.TraiPhai == 1) ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0
+                             }).ToList();
+                return query;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
+
+        }
+
+        public async Task<List<THKLModel>> GetTHKLByTuyenDuong(List<NuocMuaModel> nuocMua)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                // Khởi tạo một danh sách để lưu kết quả
+                List<THKLModel> finalResult = new List<THKLModel>();
+
+                // Duyệt qua từng tuyến đường trong danh sách `nuocMua`
+                foreach (var item in nuocMua)
+                {
+                    
+                    var query = await (from a in context.PKKLCTrons
+                                       join b in context.PhanLoaiCTronHopNhuas
+                                           on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals b.Id
+                                       join c in context.DSNuocMua
+                                           on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals c.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai into cGroup
+                                       from c in cGroup.Where(c => c.ThongTinLyTrinh_TuyenDuong == item.ThongTinLyTrinh_TuyenDuong).DefaultIfEmpty()
+
+                                       group new { a, b, c } by new
+                                       {
+                                           a.Id,
+                                           a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                           PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai =c.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                           a.TenCongTac,
+                                           a.DonVi,
+                                           a.TKLCK_SauCC,
+                                           a.HangMuc,
+                                           a.CreateAt
+                                       } into g
+                                       orderby g.Key.HangMuc, g.Key.CreateAt
+                                       select new THKLModel
+                                       {
+                                           Id = g.Key.Id,
+                                           ThongTinLyTrinh_TuyenDuong = item.ThongTinLyTrinh_TuyenDuong,  // Thông tin cố định từ SQL
+                                           ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = g.Key.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                           PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = g.Key.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai, // Cố định tên loại từ SQL
+                                           TenCongTac = g.Key.TenCongTac,
+                                           DonVi = g.Key.DonVi,
+                                           KL1DonVi = g.Key.TKLCK_SauCC,
+                                           SLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ??0,
+                                           SLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
+                                           SLTong = g.Sum(x => x.c != null ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
+                                           KLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0,
+                                           KLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0,
+                                           KLTong = g.Sum(x => x.c != null ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0
+                                       }).ToListAsync();
+
+
+
+                    // Thêm kết quả của truy vấn vào danh sách `finalResult`
+                    finalResult.AddRange(query);
+                }
+
+                // Trả về danh sách kết quả cuối cùng
+                return finalResult;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
+        }
+
+
 
         public async Task<PKKLCTron> GetTKLCK_SauCCByLCK(string id)
         {

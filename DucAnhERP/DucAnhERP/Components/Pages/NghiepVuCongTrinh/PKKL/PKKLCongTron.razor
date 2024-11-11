@@ -146,7 +146,7 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="KLKP_KL">Khối lượng<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KLKP_KL" class="form-control" id="KLKP_KL" disabled="@isEdit" />
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KLKP_KL" class="form-control" id="KLKP_KL" disabled="@disInput" />
                                 <ValidationMessage For="() => Input.KLKP_KL" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
@@ -221,7 +221,7 @@
                     <table id="tb-left" class="table table-hover table-bordered mt-3">
                         <thead class="bg-info @thumbtack">
                             <tr>
-                                <th></th>
+                                <th rowspan="2"></th>
                                 <th class="text-center" rowspan="2">STT</th>
                                 <th class="text-center" colspan="2">Thông tin cấu kiện</th>
                                 <th class="text-center" colspan="3">Thông tin tên công tác thực tế</th>
@@ -272,6 +272,7 @@
                                     {
                                         HangMuc = @item.HangMuc ;
                                         <tr class="bg-warning text-bold">
+                                            <td></td>
                                             <td>@getChiMuc(HangMuc)</td>
                                             <td colspan="2">@item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
                                             <td>@HangMuc &nbsp; @item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
@@ -410,7 +411,7 @@
 
     //bắt sự kiện khi thay đổi
     private System.Timers.Timer _typingTimer;
-    private int _delay = 2000; // Thời gian chờ (2000ms)
+    private int _delay = 1000; // Thời gian chờ (2000ms)
     private void OnInputChange(ChangeEventArgs e)
     {
         // Dừng timer nếu đang chạy
@@ -444,6 +445,7 @@
         }
         else
         {
+            if (disInput) { Input.KLKP_KL = 0; }
             if (!string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
             && Input.HangMucCongTac.ToUpper().Trim() == "Vận chuyển từ bãi đúc đến công trường".ToUpper()
             && Input.DonVi.ToUpper().Trim() == "Tấn/km".ToUpper())
@@ -452,9 +454,13 @@
                 var KLKP_KL = await PKKLCTronRepository.GetTKLCK_SauCCByLCK(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
                 if (KLKP_KL != null)
                 {
-                    Input.KLKP_KL = KLKP_KL.KLKP_KL * 2.4;
+                    Input.KLKP_KL = KLKP_KL.TKLCK_SauCC * 2.4;
                 }
 
+            }
+            else
+            {
+                disInput = false;
             }
             Input.KTHH_KL1CK = KTHH_KL1CK(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.KTHH_DienTich, Input.KTHH_GhiChu);
             Input.TTCDT_KL = TTCDT_KL(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.TTCDT_CDai, Input.TTCDT_CRong, Input.TTCDT_CDay, Input.TTCDT_DienTich);
@@ -475,7 +481,6 @@
     {
         isModalVisible = true;
         Input = new();
-
 
         foreach (var item in selectLCK)
         {
