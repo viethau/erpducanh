@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Components\Pages\NghiepVuCongTrinh\PKKL\PKKLMongCongTron.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Components\Pages\NghiepVuCongTrinh\Test.razor~RF29bcef.TMP" />
     <None Remove="ViewModel\PKKLCTronModel.cs~RF14fdfb70.TMP" />
   </ItemGroup>
@@ -28,6 +32,18 @@
     <Folder Include="Components\Pages\PhanQuyen\" />
     <Folder Include="Data\Migrations\" />
     <Folder Include="Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\Pages\NghiepVuCongTrinh\PKKL\PKKLMongCongTron.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\Pages\NghiepVuCongTrinh\PKKL\PKKLMongCongTron.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\Pages\NghiepVuCongTrinh\PKKL\PKKLMongCongTron.razor" />
   </ItemGroup>
 
 </Project>

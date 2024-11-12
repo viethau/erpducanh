@@ -24,6 +24,9 @@
             padding: 2px 5px;
         }
 
+    .selection .select2-selection{
+        height: 25px !important;
+    }
 </style>
 <div class="container-fluid">
 
@@ -56,9 +59,9 @@
             </button>
         </div>
     </div> *@
-    <div id="tableContainer ">
+    <div id="tableContainer m-2 mt-3">
+        <h5>BẢNG TỔNG HỢP KHỐI LƯỢNG CỐNG TRÒN THEO LOẠI CỐNG TRÒN THEO TUYẾN</h5>
         <div style="white-space:nowrap">
-            
             <div>
                 <div class="row flex-nowrap overflow-auto">
                     <table id="tb-left" class="table table-hover table-bordered mt-3">
@@ -85,6 +88,9 @@
                         @if (listTHKLModel.Any())
                         {
                             <tbody>
+                                <tr>
+                                    <td colspan="13">&nbsp;</td>
+                                </tr>
                                 @{
                                     int stt = 0;
 
@@ -141,7 +147,7 @@
                                 @if (isFirstGroup)
                                 {
                                     <tr>
-                                        <td class="text-bold">
+                                        <td class="text-bold" style="padding: 3px !important;">
                                             <Select2 Id="tuyenduong" Items="@selectTuyenDuong" OnChange="@OnSelectChangeTuyenDuong"></Select2>
                                         </td>
                                         <td colspan="6"></td>
@@ -155,11 +161,10 @@
                                         <td colspan="6"></td>
                                     </tr>
                                 }
-                                
-                                @foreach (var item in group)
+
+                                @foreach (var item in group.Skip((tKThepHoGaModel.PageNumber - 1) * tKThepHoGaModel.PageSize).Take(tKThepHoGaModel.PageSize))
                                 {
-                                   
-                                        <tr>
+                                    <tr>
                                             <td></td>
                                             <td>@item.SLTrai</td>
                                             <td>@item.SLPhai</td>
@@ -168,7 +173,6 @@
                                             <td>@Format.FormatCurrency(@Math.Round(@item.KLPhai,4))</td>
                                             <td>@Format.FormatCurrency( @Math.Round(@item.KLTong,4)) </td>
                                         </tr>
-                                    
                                 }
                             </tbody>
                         </table>
@@ -213,15 +217,16 @@
     string ThongTinLyTrinh_TuyenDuong = "";
     private List<SelectedItem> selectTuyenDuong = new();
 
-    private void OnSelectChangeTuyenDuong(SelectedItem selectedItem)
+    private async void OnSelectChangeTuyenDuong(SelectedItem selectedItem)
     {
-        int index = listTuyenDuong.FindIndex(item => item.Value == selectedItem);
+        int index = listTuyenDuongSelect.FindIndex(item => item.ThongTinLyTrinh_TuyenDuong == selectedItem.Value);
         if (index >= 0)
         {
-            listTuyenDuong.RemoveRange(0, index );
+            listTuyenDuongSelect.RemoveRange(0, index);
         }
 
-        LoadData();
+        await LoadData();
+        listTuyenDuongSelect = listTuyenDuong;
     }
 
     // Khởi tạo màn hình
@@ -230,6 +235,7 @@
         try
         {
             await LoadData();
+            listTuyenDuongSelect = listTuyenDuong;
         }
         catch (Exception ex)
         {
@@ -248,6 +254,7 @@
 
 
             listTuyenDuong = await NuocMuaRepository.GetDSTuyenDuong();
+
             foreach (var item in listTuyenDuong)
             {
                 // Kiểm tra và thêm item
@@ -310,14 +317,19 @@
 
             // Phân trang nếu cần
             listTHKLModel = Paging(listModel);
-
+            isLoading = false;
+            await InvokeAsync(() =>
+             {
+                 StateHasChanged();
+             });
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-
-            throw;
+            isLoading = false;
+            ToastService.ShowToast("Thông báo", ex.Message, cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
         }
-        isLoading = false;
+
+        
     }
 
     public async Task Search()

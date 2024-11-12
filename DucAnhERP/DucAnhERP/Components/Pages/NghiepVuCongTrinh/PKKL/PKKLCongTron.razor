@@ -7,6 +7,7 @@
 @using DucAnhERP.Helpers
 @inject NavigationManager navigation
 @inject IPKKLCTronRepository PKKLCTronRepository
+@inject ITKThepCTronRepository TKThepCTronRepository
 @inject INuocMuaRepository NuocMuaRepository
 @inject IDanhMucRepository DanhMucRepository
 @inject IDMTLThepRepository DMTLThepRepository
@@ -50,20 +51,31 @@
                         <h5>Thông tin tên công tác thực tế</h5>
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
-                                <label for="table">Hạng mục <span ></span></label>
+                                <label for="HangMuc">Hạng mục <span></span></label>
                                  <Select2 Id="select3" Items="@selectHMTC" OnChange="@OnSelectChangeHMTC"></Select2>
                                 <validationmessage for="()=>Input.HangMuc"></validationmessage>
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
-                                <label for="table">Hạng mục công tác <span></span></label>
+                                <label for="HangMucCongTac">Hạng mục công tác <span></span></label>
                                 <InputText @bind-Value="Input.HangMucCongTac" class="form-control" id="HangMucCongTac" placeholder="Hạng mục công tác" />
                                 <validationmessage for="()=>Input.HangMucCongTac"></validationmessage>
                             </div>
-                            <div class="form-floating col-sm-6 col-md-3">
-                                <label for="TenCongTac">Tên công tác<span ></span></label>
-                                <InputText @bind-Value="Input.TenCongTac" class="form-control" id="TenCongTac" placeholder="Tên công tác"  />
-                                <ValidationMessage For="() => Input.TenCongTac"  />
-                            </div>
+                            @if (disTenCongTac)
+                            {
+                                <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="TenCongTac">Tên công tác<span></span></label>
+                                    <Select2 Id="select6" Items="@selectTenCongTac" OnChange="@OnSelectChangeTenCongTac"></Select2>
+                                    <ValidationMessage For="() => Input.TenCongTac" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="TenCongTac">Tên công tác<span></span></label>
+                                    <InputText @bind-Value="Input.TenCongTac" class="form-control" id="TenCongTac" placeholder="Tên công tác" />
+                                    <ValidationMessage For="() => Input.TenCongTac" />
+                                </div>
+                            }
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="VTLayKhoiLuong">Đơn vị<span ></span></label>
                                 <InputText @oninput="OnInputChange" @bind-Value="Input.DonVi" class="form-control" id="DonVi" placeholder="Đơn vị" />
@@ -363,11 +375,12 @@
         new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true },
         new SelectedItem { Value = "I.Sản xuất, vận chuyển, lắp đặt", Text = "I.Sản xuất, vận chuyển, lắp đặt " },
         new SelectedItem { Value = "II.Sản xuất + V.Chuyển B.Tông T.Phẩm", Text = "II.Sản xuất + V.Chuyển B.Tông T.Phẩm  "},
-        new SelectedItem { Value = "III.Gia công, lắp dựng cốt thép", Text = "II.Gia công, lắp dựng cốt thép "},
+        new SelectedItem { Value = "III.Gia công, lắp dựng cốt thép", Text = "III.Gia công, lắp dựng cốt thép "},
     };
     private void OnSelectChangeHMTC(SelectedItem selectedItem)
     {
         Input.HangMuc = selectedItem.Value;
+        Caculate();
     }
 
     private List<SelectedItem> selectGhiChu = new List<SelectedItem>
@@ -377,9 +390,27 @@
         new SelectedItem { Value = "Dài*Cao", Text = "Dài*Cao"},
         new SelectedItem { Value = "Dài*Rộng", Text = "Dài*Rộng"},
     };
+
+    private List<SelectedItem> selectTenCongTac = new();  
+
+    private void OnSelectChangeTenCongTac(SelectedItem selectedItem)
+    {
+        if (double.TryParse(selectedItem.Value, out double result))
+        {
+            Input.KLKP_KL = result;
+        }
+        else
+        {
+            Input.KLKP_KL = 0;
+        }
+        Input.TenCongTac = selectedItem.Text;
+        Caculate();
+    }
+
     private void OnSelectChangeGhiChu(SelectedItem selectedItem)
     {
         Input.KTHH_GhiChu = selectedItem.Value;
+        Caculate();
     }
 
     private List<SelectedItem> selectLBT = new List<SelectedItem>
@@ -390,6 +421,7 @@
     private void OnSelectChangeLBT(SelectedItem selectedItem)
     {
         Input.LoaiBeTong = selectedItem.Value;
+        Caculate();
     }
 
     private List<SelectedItem> selectLCK = new();
@@ -431,6 +463,7 @@
     }
 
     private bool disInput { get; set; } = false;
+    private bool disTenCongTac { get; set; } = false;
     public async void Caculate()
     {
         if (Input.HangMuc == "II.Sản xuất + V.Chuyển B.Tông T.Phẩm")
@@ -445,23 +478,35 @@
         }
         else
         {
-            if (disInput) { Input.KLKP_KL = 0; }
             if (!string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
-            && Input.HangMucCongTac.ToUpper().Trim() == "Vận chuyển từ bãi đúc đến công trường".ToUpper()
-            && Input.DonVi.ToUpper().Trim() == "Tấn/km".ToUpper())
+           && Input.HangMuc.ToUpper().Trim() == "III.Gia công, lắp dựng cốt thép".ToUpper())
             {
                 disInput = true;
-                var KLKP_KL = await PKKLCTronRepository.GetTKLCK_SauCCByLCK(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
-                if (KLKP_KL != null)
-                {
-                    Input.KLKP_KL = KLKP_KL.TKLCK_SauCC * 2.4;
-                }
-
+                disTenCongTac = true;
+                selectTenCongTac = await TKThepCTronRepository.GetDistinctTenCongTacByPL(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
+                selectTenCongTac.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
             }
             else
             {
-                disInput = false;
+                if (disInput) { Input.KLKP_KL = 0; }
+                if (!string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
+                && Input.HangMucCongTac.ToUpper().Trim() == "Vận chuyển từ bãi đúc đến công trường".ToUpper()
+                && Input.DonVi.ToUpper().Trim() == "Tấn/km".ToUpper())
+                {
+                    disInput = true;
+                    var KLKP_KL = await PKKLCTronRepository.GetTKLCK_SauCCByLCK(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
+                    if (KLKP_KL != null)
+                    {
+                        Input.KLKP_KL = KLKP_KL.TKLCK_SauCC * 2.4;
+                    }
+                }
+                else
+                {
+                    disInput = false;
+                }
+                disTenCongTac = false;
             }
+
             Input.KTHH_KL1CK = KTHH_KL1CK(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.KTHH_DienTich, Input.KTHH_GhiChu);
             Input.TTCDT_KL = TTCDT_KL(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.TTCDT_CDai, Input.TTCDT_CRong, Input.TTCDT_CDay, Input.TTCDT_DienTich);
             Input.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(Input.KTHH_KL1CK, Input.KTHH_SLCauKien, Input.TTCDT_KL, Input.TTCDT_SLCK, Input.KLKP_KL, Input.KLKP_Sl);
@@ -904,7 +949,7 @@
             case "II.Sản xuất + V.Chuyển B.Tông T.Phẩm":
                 ChiMuc = "II";
                 break;
-            case "II.Gia công, lắp dựng cốt thép":
+            case "III.Gia công, lắp dựng cốt thép":
                 ChiMuc = "III";
                 break;
         }
