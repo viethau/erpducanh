@@ -6,12 +6,12 @@
 @using DucAnhERP.SeedWork
 @using DucAnhERP.Helpers
 @inject NavigationManager navigation
-@inject IPKKLCTronRepository PKKLCTronRepository
-@inject ITKThepCTronRepository TKThepCTronRepository
+@inject IPKKLMongCTronRepository PKKLMongCTronRepository
+@inject ITKThepMongCTronRepository TKThepMongCTronRepository
 @inject INuocMuaRepository NuocMuaRepository
 @inject IDanhMucRepository DanhMucRepository
 @inject IDMTLThepRepository DMTLThepRepository
-@inject IPhanLoaiCTronHopNhuaRepository PhanLoaiCTronHopNhuaRepository
+@inject IPhanLoaiMongCTronRepository PhanLoaiMongCTronRepository
 
 @inject DucAnhERP.Services.ToastService ToastService
 <style>
@@ -40,7 +40,7 @@
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="Table">Loại cấu kiện</label>
                                 <Select2 Id="select1" Items="@selectLCK" OnChange="@OnSelectChangeLCK"></Select2>
-                                <ValidationMessage For="()=>Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai"></ValidationMessage>
+                                <ValidationMessage For="()=>Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop"></ValidationMessage>
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="table">loại bê tông</label>
@@ -91,12 +91,12 @@
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="KTHH_R">R<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_R" class="form-control" id="KTHH_R" />
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_R" class="form-control" id="KTHH_R" disabled="@disKTHH_R" />
                                 <ValidationMessage For="() => Input.KTHH_R" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="KTHH_C">C<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_C" class="form-control" id="KTHH_C" />
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_C" class="form-control" id="KTHH_C" disabled="@disKTHH_C" />
                                 <ValidationMessage For="() => Input.KTHH_C" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3" title="Bắt buộc phải nhập giá trị tương ứng vào đây. Giá trị là kết quả của của chiều rộng  chiều cao của 01 cấu kiện cống tròn">
@@ -202,7 +202,7 @@
                     <div class="col-sm-4 col-md-3 mb-2">
                         <label for="Table">Loại cấu kiện</label>
                         <Select2 Id="select3" Items="@selectSearchLCK" OnChange="@OnSelectChangeSearchLCK"></Select2>
-                        <ValidationMessage For="()=>InputMD.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai"></ValidationMessage>
+                        <ValidationMessage For="()=>InputMD.LoaiCauKienId"></ValidationMessage>
                     </div>
 
                     <!-- Search Button -->
@@ -227,7 +227,7 @@
         <div class="table-report ">
             <div>
                 <div class=" mt-1">
-                    <h5 class="mt-2">BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01M MÓNG CỐNG TRÒN</h5>
+                    <h5 class="mt-2">BẢNG THỐNG KÊ THÉP HỐ GA THEO LOẠI HỐ GA</h5>
                 </div>
                 <div class=" mt-2">
                     <table id="tb-left" class="table table-hover table-bordered mt-3">
@@ -268,15 +268,14 @@
                             </tr>
 
                         </thead>
-                        @if (listPKKLCTronModel.Any())
+                        @if (listPKKLMongCTronModel.Any())
                         {
                             <tbody>
                                 @{
                                     int stt = 0;
                                     string HangMuc = "";
-                                    string ChiMuc = "I";
                                 }
-                                @foreach (var item in listPKKLCTronModel)
+                                @foreach (var item in listPKKLMongCTronModel)
                                 {
                                     stt++;
 
@@ -286,9 +285,9 @@
                                         <tr class="bg-warning text-bold">
                                             <td></td>
                                             <td>@getChiMuc(HangMuc)</td>
-                                            <td colspan="2">@item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
-                                            <td>@HangMuc &nbsp; @item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
-                                            <td>@HangMuc &nbsp; @item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
+                                            <td colspan="2">@item.LoaiCauKien</td>
+                                            <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
+                                            <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
                                             <td colspan="19"></td>
                                         </tr>
                                     }
@@ -304,7 +303,7 @@
                                             </div>
                                         </td>
                                         <td>@stt</td>
-                                        <td>@item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
+                                        <td>@item.LoaiCauKien</td>
                                         <td>@item.LoaiBeTong</td>
                                         <td>@item.HangMucCongTac</td>
                                         <td>@item.TenCongTac</td>
@@ -342,7 +341,7 @@
                     </table>
                 </div>
                 <div class="mt-4">
-                    @if (listPKKLCTronModel.Any())
+                    @if (listPKKLMongCTronModel.Any())
                     {
                         <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
                     }
@@ -367,15 +366,15 @@
     [Parameter]
     public ConfirmModal confirmModal { get; set; }
 
-    private PKKLCTron Input = new();
-    private PKKLCTronModel InputMD = new PKKLCTronModel();
+    private PKKLMongCTron Input = new();
+    private PKKLModel InputMD = new PKKLModel();
 
     private List<SelectedItem> selectHMTC = new List<SelectedItem>
     {
         new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true },
-        new SelectedItem { Value = "I.Sản xuất, vận chuyển, lắp đặt", Text = "I.Sản xuất, vận chuyển, lắp đặt " },
-        new SelectedItem { Value = "II.Sản xuất + V.Chuyển B.Tông T.Phẩm", Text = "II.Sản xuất + V.Chuyển B.Tông T.Phẩm  "},
-        new SelectedItem { Value = "III.Gia công, lắp dựng cốt thép", Text = "III.Gia công, lắp dựng cốt thép "},
+        new SelectedItem { Value = "I.Móng cống tròn", Text = "I.Móng cống tròn" },
+        new SelectedItem { Value = "II.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn", Text = "II.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn "},
+        new SelectedItem { Value = "III.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn", Text = "III.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn "},
     };
     private void OnSelectChangeHMTC(SelectedItem selectedItem)
     {
@@ -427,19 +426,19 @@
     private List<SelectedItem> selectLCK = new();
     private void OnSelectChangeLCK(SelectedItem selectedItem)
     {
-        Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = selectedItem.Value;
+        Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = selectedItem.Value;
         Caculate();
     }
     private List<SelectedItem> selectSearchLCK = new();
     private void OnSelectChangeSearchLCK(SelectedItem selectedItem)
     {
-        InputMD.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = selectedItem.Value;
+        InputMD.LoaiCauKienId = selectedItem.Value;
     }
 
-    public List<PKKLCTronModel> listPKKLCTronModel { get; set; } = new();
-    public List<PKKLCTronModel> listModel { get; set; } = new();
+    public List<PKKLModel> listPKKLMongCTronModel { get; set; } = new();
+    public List<PKKLModel> listModel { get; set; } = new();
     public MetaData MetaData { get; set; }
-    public PKKLCTronModel tKThepHoGaModel { get; set; }
+    public PKKLModel tKThepHoGaModel { get; set; }
 
     //bắt sự kiện khi thay đổi
     private System.Timers.Timer _typingTimer;
@@ -464,54 +463,73 @@
 
     private bool disInput { get; set; } = false;
     private bool disTenCongTac { get; set; } = false;
+    private bool disKTHH_R { get; set; } = false;
+    private bool disKTHH_C { get; set; } = false;
     public async void Caculate()
     {
-        if (Input.HangMuc == "II.Sản xuất + V.Chuyển B.Tông T.Phẩm")
-        {
-            if (!string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
-            {
-                var TKLCK_SauCC = await PKKLCTronRepository.GetTKLCK_SauCCByLCK(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
-                if (TKLCK_SauCC != null)
+
+        switch(Input.HangMuc){
+            case "I.Móng cống tròn":
+                var GetBaoCaoKTHHMDC = await NuocMuaRepository.GetBaoCaoKTHHMDC();
+
+
+                if (Input.HangMucCongTac.Trim().ToUpper() == "Lót móng".ToUpper() 
+                || Input.HangMucCongTac.Trim().ToUpper() == "Ván khuân lót móng".ToUpper())
                 {
-                    Input.TKLCK_SauCC = TKLCK_SauCC.TKLCK_SauCC;
-                }
-            }
-        }
-        else
-        {
-            if (!string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
-           && Input.HangMuc.ToUpper().Trim() == "III.Gia công, lắp dựng cốt thép".ToUpper())
-            {
-                disInput = true;
-                disTenCongTac = true;
-                selectTenCongTac = await TKThepCTronRepository.GetDistinctTenCongTacByPL(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
-                selectTenCongTac.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
-            }
-            else
-            {
-                if (disInput) { Input.KLKP_KL = 0; }
-                if (!string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
-                && Input.HangMucCongTac.ToUpper().Trim() == "Vận chuyển từ bãi đúc đến công trường".ToUpper()
-                && Input.DonVi.ToUpper().Trim() == "Tấn/km".ToUpper())
-                {
-                    disInput = true;
-                    var KLKP_KL = await PKKLCTronRepository.GetTKLCK_SauCCByLCK(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
-                    if (KLKP_KL != null)
+                    if (GetBaoCaoKTHHMDC != null)
                     {
-                        Input.KLKP_KL = KLKP_KL.TKLCK_SauCC * 2.4;
+                        var findPL = GetBaoCaoKTHHMDC.Where(item => item.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop == Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop).FirstOrDefault();
+                        if (findPL != null)
+                        {
+                            Input.KTHH_R = findPL.ThongTinCauTaoCongTron_CRongLotMong;
+                            Input.KTHH_C = findPL.ThongTinCauTaoCongTron_CCaoLotMong;
+                        }
                     }
                 }
-                else
+                else if (Input.HangMucCongTac.Trim().ToUpper() == "Móng bê tông".ToUpper()
+                || Input.HangMucCongTac.Trim().ToUpper() == "Ván khuân móng".ToUpper())
                 {
-                    disInput = false;
+                    if (GetBaoCaoKTHHMDC != null)
+                    {
+                        var findPL = GetBaoCaoKTHHMDC.Where(item => item.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop == Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop).FirstOrDefault();
+                        if (findPL != null)
+                        {
+                            Input.KTHH_R = findPL.ThongTinCauTaoCongTron_CRongMong;
+                            Input.KTHH_C = findPL.ThongTinCauTaoCongTron_CCaoMong;
+                        }
+                    }
                 }
+                Input.KTHH_KL1CK = KTHH_KL1CK(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.KTHH_DienTich, Input.KTHH_GhiChu);
+                Input.TTCDT_KL = TTCDT_KL(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.TTCDT_CDai, Input.TTCDT_CRong, Input.TTCDT_CDay, Input.TTCDT_DienTich);
+                Input.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(Input.KTHH_KL1CK, Input.KTHH_SLCauKien, Input.TTCDT_KL, Input.TTCDT_SLCK, Input.KLKP_KL, Input.KLKP_Sl);
+                Input.TKLCK_SauCC = Input.KL1CK_ChuaTruCC - Input.KLCC1CK;
+                disKTHH_R = true;
+                disKTHH_C = true;
+                break;
+            case "II.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn":
+                if(!string.IsNullOrEmpty(Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop))
+                {
+                    Input.TKLCK_SauCC = await PKKLMongCTronRepository.GetSumTKLCK_SauCC(Input);
+                }
+               
+                break;
+            case "III.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn":
+                disInput = true;
+                disTenCongTac = true;
+                selectTenCongTac = await TKThepMongCTronRepository.GetDistinctTenCongTacByPL(Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop);
+                selectTenCongTac.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+                Input.KTHH_KL1CK = KTHH_KL1CK(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.KTHH_DienTich, Input.KTHH_GhiChu);
+                Input.TTCDT_KL = TTCDT_KL(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.TTCDT_CDai, Input.TTCDT_CRong, Input.TTCDT_CDay, Input.TTCDT_DienTich);
+                Input.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(Input.KTHH_KL1CK, Input.KTHH_SLCauKien, Input.TTCDT_KL, Input.TTCDT_SLCK, Input.KLKP_KL, Input.KLKP_Sl);
+                Input.TKLCK_SauCC = Input.KL1CK_ChuaTruCC - Input.KLCC1CK;
+                break;
+            default:
+                disKTHH_R = false;
+                disKTHH_C = false;
+                disInput = false;
                 disTenCongTac = false;
-            }
+                break;
 
-            Input.KTHH_KL1CK = KTHH_KL1CK(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.KTHH_DienTich, Input.KTHH_GhiChu);
-            Input.TTCDT_KL = TTCDT_KL(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.TTCDT_CDai, Input.TTCDT_CRong, Input.TTCDT_CDay, Input.TTCDT_DienTich);
-            Input.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(Input.KTHH_KL1CK, Input.KTHH_SLCauKien, Input.TTCDT_KL, Input.TTCDT_SLCK, Input.KLKP_KL, Input.KLKP_Sl);
-            Input.TKLCK_SauCC = Input.KL1CK_ChuaTruCC - Input.KLCC1CK;
         }
 
         await InvokeAsync(() =>
@@ -560,17 +578,17 @@
         try
         {
             await LoadData();
-            var repository = await NuocMuaRepository.GetBaoCaoKTHHMDC();
+            var repository = await  NuocMuaRepository.GetBaoCaoSLMong("Cống tròn"); ;
             selectLCK = new();
             foreach (var item in repository)
             {
                 // Kiểm tra và thêm item
-                if (!string.IsNullOrEmpty(item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai) && !selectLCK.Any(x => x.Value == item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
+                if (!string.IsNullOrEmpty(item.IdPhanLoai) && !selectLCK.Any(x => x.Value == item.IdPhanLoai))
                 {
                     selectLCK.Add(new SelectedItem
                         {
-                            Value = item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
-                            Text = item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai ?? ""
+                            Value = item.IdPhanLoai,
+                            Text = item.PhanLoai ?? ""
                         });
                 }
             }
@@ -590,10 +608,10 @@
         {
             isLoading = true;
             tKThepHoGaModel = new();
-            var repository = await PKKLCTronRepository.GetAllByVM(InputMD);
+            var repository = await PKKLMongCTronRepository.GetAllByVM(InputMD);
             listModel = repository;
 
-            listPKKLCTronModel = Paging(listModel);
+            listPKKLMongCTronModel = Paging(listModel);
 
         }
         catch (Exception)
@@ -617,9 +635,9 @@
         try
         {
             Caculate();
-            string[] ids = { Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "" };
-            var isValidTenPL = await PhanLoaiCTronHopNhuaRepository.CheckExclusive(ids, baseTime);
-            var listExist = await PKKLCTronRepository.GetExist(Input);
+            string[] ids = { Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ?? "" };
+            var isValidTenPL = await PhanLoaiMongCTronRepository.CheckExclusive(ids, baseTime);
+            var listExist = await PKKLMongCTronRepository.GetExist(Input);
             if (isValidTenPL)
             {
                 if (isEdit)
@@ -628,12 +646,12 @@
 
                     if (listExist == null || listExist.Count == 0)
                     {
-                        bool isValid = await PKKLCTronRepository.CheckExclusive(idss, baseTime);
+                        bool isValid = await PKKLMongCTronRepository.CheckExclusive(idss, baseTime);
                         if (isValid)
                         {
-                            await PKKLCTronRepository.Update(Input);
+                            await PKKLMongCTronRepository.Update(Input);
                             isModalVisible = false;
-                            Input = new PKKLCTron();
+                            Input = new PKKLMongCTron();
                             isEdit = false;
                             ToastService.ShowToast(
                                 "Thông báo",
@@ -648,9 +666,9 @@
                     }
                     else if (listExist.Count > 0 && listExist[0].Id == Input.Id)
                     {
-                        await PKKLCTronRepository.Update(Input);
+                        await PKKLMongCTronRepository.Update(Input);
                         isModalVisible = false;
-                        Input = new PKKLCTron();
+                        Input = new PKKLMongCTron();
                         isEdit = false;
                         ToastService.ShowToast(
                             "Thông báo",
@@ -681,9 +699,9 @@
                         if (Flag > 0)
                         {
                             // Thêm mới thông tin
-                            var id = await PKKLCTronRepository.InsertLaterFlag(Input, Flag);
+                            var id = await PKKLMongCTronRepository.InsertLaterFlag(Input, Flag);
                             isModalVisible = false;
-                            Input = new PKKLCTron();
+                            Input = new PKKLMongCTron();
                             ToastService.ShowToast(
                                 "Thông báo",
                                 "Chèn thành công.",
@@ -698,9 +716,9 @@
                         else
                         {
                             // Thêm mới thông tin
-                            await PKKLCTronRepository.Insert(Input);
+                            await PKKLMongCTronRepository.Insert(Input);
                             isModalVisible = false;
-                            Input = new PKKLCTron();
+                            Input = new PKKLMongCTron();
                             ToastService.ShowToast(
                                 "Thông báo",
                                 "Thêm thành công.",
@@ -754,11 +772,11 @@
                 if (!string.IsNullOrEmpty(deleteId))
                 {
                     string[] ids = { deleteId };
-                    var result = await PKKLCTronRepository.CheckExclusive(ids, baseTime);
+                    var result = await PKKLMongCTronRepository.CheckExclusive(ids, baseTime);
                     if (result)
                     {
                         // Thực hiện hành động xóa
-                        await PKKLCTronRepository.DeleteById(deleteId);
+                        await PKKLMongCTronRepository.DeleteById(deleteId);
                         ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                         await LoadData();
                     }
@@ -787,13 +805,13 @@
         try
         {
             TitleModal = "Cập nhật loại TĐan TDẫn !";
-            Input = await PKKLCTronRepository.GetById(id);
+            Input = await PKKLMongCTronRepository.GetById(id);
             isEdit = true;
             isModalVisible = true;
 
             foreach (var item in selectLCK)
             {
-                item.IsSelected = item.Value == Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai;
+                item.IsSelected = item.Value == Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop;
             }
         }
         catch (Exception ex)
@@ -853,7 +871,7 @@
 
 
     // Xử lý paging
-    private List<PKKLCTronModel> Paging(List<PKKLCTronModel> listModels)
+    private List<PKKLModel> Paging(List<PKKLModel> listModels)
     {
         // Đếm số bản ghi thỏa mãn
         var count = listModels.Count();
@@ -862,17 +880,17 @@
         listModels = listModels.Skip((tKThepHoGaModel.PageNumber - 1) * tKThepHoGaModel.PageSize).Take(tKThepHoGaModel.PageSize).ToList();
 
         // Xóa danh sách đang hiển thị trên màn hình
-        listPKKLCTronModel.Clear();
+        listPKKLMongCTronModel.Clear();
 
         // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
         foreach (var major in listModels)
         {
-            listPKKLCTronModel.Add(major);
+            listPKKLMongCTronModel.Add(major);
         }
 
         // Tạo pagelist mới
 
-        var pagelist = new PageList<PKKLCTronModel>(listPKKLCTronModel, count, tKThepHoGaModel.PageNumber, tKThepHoGaModel.PageSize);
+        var pagelist = new PageList<PKKLModel>(listPKKLMongCTronModel, count, tKThepHoGaModel.PageNumber, tKThepHoGaModel.PageSize);
         MetaData = pagelist.MetaData;
         return listModels;
     }
@@ -884,62 +902,63 @@
 
     public static double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
     {
+        double result = 0;
         if (DonVi == "M3")
         {
             if (string.IsNullOrEmpty(KTHH_GhiChu) || KTHH_GhiChu == "0")
             {
-                return KTHH_D * KTHH_R * KTHH_C;
+                result = KTHH_D * KTHH_R * KTHH_C;
             }
             else if (KTHH_GhiChu == "Rộng*Cao")
             {
-                return KTHH_DienTich * KTHH_D;
+                result = KTHH_DienTich * KTHH_D;
             }
             else if (KTHH_GhiChu == "Dài*Cao")
             {
-                return KTHH_DienTich * KTHH_R;
+                result = KTHH_DienTich * KTHH_R;
             }
             else if (KTHH_GhiChu == "Dài*Rộng")
             {
-                return KTHH_DienTich * KTHH_C;
+                result = KTHH_DienTich * KTHH_C;
             }
-            else
-            {
-                return 0;
-            }
+            
         }
-        return 0;
+        return Math.Round(result, 4);
     }
 
     public static double TTCDT_KL(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double TTCDT_CDai, double TTCDT_CRong, double TTCDT_CDay, double TTCDT_DienTich)
     {
+        double result = 0;
         if (DonVi.ToUpper().Trim() == "M2")
         {
             if (string.IsNullOrEmpty(TTCDT_DienTich.ToString()) || TTCDT_DienTich == 0)
             {
-                return (KTHH_D * KTHH_C * TTCDT_CDai) + (KTHH_R * KTHH_C * TTCDT_CRong) + (KTHH_D * KTHH_R * TTCDT_CDay);
+                result = (KTHH_D * KTHH_C * TTCDT_CDai) + (KTHH_R * KTHH_C * TTCDT_CRong) + (KTHH_D * KTHH_R * TTCDT_CDay);
             }
             else
             {
-                return TTCDT_DienTich;
+                result = TTCDT_DienTich;
             }
         }
-        return 0;
+        return Math.Round(result, 4);
     }
 
     public static double KL1CK_ChuaTruCC(double KTHH_KL1CK, double KTHH_SLCauKien, double TTCDT_KL, double TTCDT_SLCK, double KLKP_KL, double KLKP_Sl)
     {
+        double result = 0;
         if (KTHH_KL1CK > 0)
         {
-            return KTHH_KL1CK * KTHH_SLCauKien;
+            result = KTHH_KL1CK *KTHH_SLCauKien;
         }
         else if (TTCDT_KL > 0)
         {
-            return TTCDT_KL * TTCDT_SLCK;
+            result = TTCDT_KL * TTCDT_SLCK;
         }
         else
         {
-            return KLKP_KL * KLKP_Sl;
+            result = KLKP_KL * KLKP_Sl;
         }
+        return Math.Round(result, 4);
     }
 
     public static string getChiMuc(string DK)
@@ -947,16 +966,17 @@
         string ChiMuc = "I";
         switch (DK)
         {
-            case "I.Sản xuất, vận chuyển, lắp đặt":
+            case "I.Móng cống tròn":
                 ChiMuc = "I";
                 break;
-            case "II.Sản xuất + V.Chuyển B.Tông T.Phẩm":
+            case "II.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn":
                 ChiMuc = "II";
                 break;
-            case "III.Gia công, lắp dựng cốt thép":
+            case "III.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn":
                 ChiMuc = "III";
                 break;
         }
         return ChiMuc;
     }
 }
+

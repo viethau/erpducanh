@@ -1,4 +1,5 @@
 ﻿using DucAnhERP.Data;
+using DucAnhERP.Helpers;
 using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
@@ -138,6 +139,32 @@ namespace DucAnhERP.Services
                 Console.Error.WriteLine($"An error occurred: {ex.Message}");
                 throw; // Optionally rethrow the exception
             }
+        }
+
+        public async Task<List<SelectedItem>> GetDistinctTenCongTacByPL(string ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var data = context.TKThepMongCTrons
+                 .Where(item => item.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop == ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop)
+                 .GroupBy(item => item.TenCongTac)
+                 .Select(group => new SelectedItem
+                 {
+                     Text = group.Key,
+                     Value = group.Sum(item => item.TongTrongLuong).ToString()
+                 })
+                 .Distinct()
+                 .ToList();
+
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+
         }
         public async Task Update(TKThepMongCTron TKThepMongCTron)
         {

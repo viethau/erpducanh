@@ -43,21 +43,21 @@ namespace DucAnhERP.Services
 
             return entity;
         }
-        public async Task<List<PKKLCTronModel>> GetAllByVM(PKKLCTronModel mModel)
+        public async Task<List<PKKLModel>> GetAllByVM(PKKLModel mModel)
         {
             try
             {
                 using var context = _context.CreateDbContext();
-                List<PKKLCTronModel> data = new();
+                List<PKKLModel> data = new();
                 var query = from a in context.PKKLCTrons
                             join b in context.PhanLoaiCTronHopNhuas
                             on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals b.Id
                             orderby a.HangMuc ascending, a.CreateAt ascending
-                            select new PKKLCTronModel
+                            select new PKKLModel
                             {
                                 Id= a.Id,
-                                PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
-                                ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                LoaiCauKien = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                LoaiCauKienId = a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
                                 LoaiBeTong = a.LoaiBeTong,
                                 HangMuc = a.HangMuc,
                                 HangMucCongTac = a.HangMucCongTac,

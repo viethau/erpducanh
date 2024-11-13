@@ -85,7 +85,7 @@ builder.Services.AddScoped<ITKThepTChongRepository, TKThepTChongRepository>();
 builder.Services.AddScoped<ITKThepRBTongRepository, TKThepRBTongRepository>();
 builder.Services.AddScoped<ITKThepTDRBTongRepository, TKThepTDRBTongRepository>();
 builder.Services.AddScoped<IPKKLCTronRepository, PKKLCTronRepository>();
-
+builder.Services.AddScoped<IPKKLMongCTronRepository, PKKLMongCTronRepository>();
 
 
 builder.Services.AddAuthentication(options =>

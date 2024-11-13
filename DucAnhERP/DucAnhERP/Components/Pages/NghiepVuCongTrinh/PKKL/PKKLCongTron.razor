@@ -202,7 +202,7 @@
                     <div class="col-sm-4 col-md-3 mb-2">
                         <label for="Table">Loại cấu kiện</label>
                         <Select2 Id="select3" Items="@selectSearchLCK" OnChange="@OnSelectChangeSearchLCK"></Select2>
-                        <ValidationMessage For="()=>InputMD.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai"></ValidationMessage>
+                        <ValidationMessage For="()=>InputMD.LoaiCauKienId"></ValidationMessage>
                     </div>
                     
                     <!-- Search Button -->
@@ -274,7 +274,7 @@
                                 @{
                                     int stt = 0;
                                     string HangMuc = "";
-                                    string ChiMuc = "I";
+                         
                                 }
                                 @foreach (var item in listPKKLCTronModel)
                                 {
@@ -286,9 +286,9 @@
                                         <tr class="bg-warning text-bold">
                                             <td></td>
                                             <td>@getChiMuc(HangMuc)</td>
-                                            <td colspan="2">@item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
-                                            <td>@HangMuc &nbsp; @item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
-                                            <td>@HangMuc &nbsp; @item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
+                                            <td colspan="2">@item.LoaiCauKien</td>
+                                            <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
+                                            <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
                                             <td colspan="19"></td>
                                         </tr>
                                     }
@@ -304,7 +304,7 @@
                                             </div>
                                         </td>
                                         <td>@stt</td>
-                                        <td>@item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
+                                        <td>@item.LoaiCauKien</td>
                                         <td>@item.LoaiBeTong</td> 
                                         <td>@item.HangMucCongTac</td> 
                                         <td>@item.TenCongTac</td> 
@@ -368,7 +368,7 @@
     public ConfirmModal confirmModal { get; set; }
 
     private PKKLCTron Input = new ();
-    private PKKLCTronModel InputMD = new PKKLCTronModel();
+    private PKKLModel InputMD = new PKKLModel();
 
     private List<SelectedItem> selectHMTC = new List<SelectedItem>
     {
@@ -433,13 +433,13 @@
     private List<SelectedItem> selectSearchLCK = new();
     private void OnSelectChangeSearchLCK(SelectedItem selectedItem)
     {
-        InputMD.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = selectedItem.Value;
+        InputMD.LoaiCauKienId = selectedItem.Value;
     }
 
-    public List<PKKLCTronModel> listPKKLCTronModel { get; set; } = new();
-    public List<PKKLCTronModel> listModel { get; set; } = new();
+    public List<PKKLModel> listPKKLCTronModel { get; set; } = new();
+    public List<PKKLModel> listModel { get; set; } = new();
     public MetaData MetaData { get; set; }
-    public PKKLCTronModel tKThepHoGaModel { get; set; }
+    public PKKLModel tKThepHoGaModel { get; set; }
 
     //bắt sự kiện khi thay đổi
     private System.Timers.Timer _typingTimer;
@@ -849,7 +849,7 @@
 
 
     // Xử lý paging
-    private List<PKKLCTronModel> Paging(List<PKKLCTronModel> listModels)
+    private List<PKKLModel> Paging(List<PKKLModel> listModels)
     {
         // Đếm số bản ghi thỏa mãn
         var count = listModels.Count();
@@ -868,7 +868,7 @@
 
         // Tạo pagelist mới
 
-        var pagelist = new PageList<PKKLCTronModel>(listPKKLCTronModel, count, tKThepHoGaModel.PageNumber, tKThepHoGaModel.PageSize);
+        var pagelist = new PageList<PKKLModel>(listPKKLCTronModel, count, tKThepHoGaModel.PageNumber, tKThepHoGaModel.PageSize);
         MetaData = pagelist.MetaData;
         return listModels;
     }
