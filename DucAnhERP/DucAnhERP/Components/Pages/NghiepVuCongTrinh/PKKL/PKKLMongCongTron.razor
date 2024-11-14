@@ -325,7 +325,7 @@
                                         <td>@item.KLKP_Sl</td>
                                         <td>@item.KL1CK_ChuaTruCC </td>
                                         <td>@item.KLCC1CK </td>
-                                        <td>@item.TKLCK_SauCC </td>
+                                        <td>@Math.Round(item.TKLCK_SauCC,4) </td>
                                     </tr>
                                 }
                             </tbody>
@@ -598,7 +598,7 @@
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            ToastService.ShowToast("Thông báo", ex.Message, cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
         }
     }
     // Truy vấn data theo điều kiện tìm kiếm
@@ -610,14 +610,17 @@
             tKThepHoGaModel = new();
             var repository = await PKKLMongCTronRepository.GetAllByVM(InputMD);
             listModel = repository;
-
             listPKKLMongCTronModel = Paging(listModel);
 
+            await InvokeAsync(() =>
+             {
+                 StateHasChanged();
+             });
         }
-        catch (Exception)
+        catch (Exception ex)
         {
 
-            throw;
+            ToastService.ShowToast("Thông báo", ex.Message, cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
         }
         isLoading = false;
     }
@@ -728,6 +731,7 @@
                                 duration: 5000
                             );
                             await LoadData();
+                            
                         }
                     }
                     else
