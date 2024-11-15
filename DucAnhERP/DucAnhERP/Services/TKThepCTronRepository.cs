@@ -4,17 +4,19 @@ using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
 using Microsoft.EntityFrameworkCore;
-using static OfficeOpenXml.ExcelErrorValue;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace DucAnhERP.Services
 {
     public class TKThepCTronRepository : ITKThepCTronRepository
     {
+        private readonly PKKLCTronRepository _pKKLCTronRepository;
         private readonly IDbContextFactory<ApplicationDbContext> _context;
 
         public TKThepCTronRepository(IDbContextFactory<ApplicationDbContext> context)
         {
             _context = context;
+            _pKKLCTronRepository = new PKKLCTronRepository(context);
         }
         public async Task<List<TKThepCTron>> GetAll()
         {
@@ -172,7 +174,7 @@ namespace DucAnhERP.Services
             }
 
             context.TKThepCTrons.Update(TKThepCTron);
-            await context.SaveChangesAsync();
+            await SaveChanges(context);
         }
         public async Task UpdateMulti(TKThepCTron[] TKThepCTron)
         {
@@ -297,6 +299,108 @@ namespace DucAnhERP.Services
             {
                 Console.WriteLine(ex.ToString());
                 return id;
+            }
+        }
+
+
+        public async Task SaveChanges(ApplicationDbContext context)
+        {
+            try
+            {
+                // Kiểm tra và xử lý các thay đổi trong DbContext
+                var addedEntities = context.ChangeTracker.Entries()
+                    .Where(e => e.State == EntityState.Added)
+                    .ToList();
+
+                var modifiedEntities = context.ChangeTracker.Entries()
+                    .Where(e => e.State == EntityState.Modified)
+                    .ToList();
+
+                var deletedEntities = context.ChangeTracker.Entries()
+                    .Where(e => e.State == EntityState.Deleted)
+                    .ToList();
+
+                // Xử lý thay đổi khi thêm
+                if (addedEntities.Any())
+                {
+                    foreach (var addedEntity in addedEntities)
+                    {
+                        
+                    }
+                }
+
+                // Xử lý thay đổi khi sửa
+                if (modifiedEntities.Any())
+                {
+                    foreach (var modifiedEntity in modifiedEntities)
+                    {
+                        await HandleEntityUpdate(modifiedEntity);
+                    }
+                }
+
+                // Xử lý thay đổi khi xóa
+                if (deletedEntities.Any())
+                {
+                    foreach (var deletedEntity in deletedEntities)
+                    {
+                        await HandleEntityDelete(deletedEntity);
+                    }
+                }
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"An error occurred while saving changes: {ex.Message}");
+                throw;
+            }
+        }
+
+        private async Task HandleEntityDelete(EntityEntry entityEntry)
+        {
+            var deletedEntity = entityEntry.Entity as PKKLCTron;
+            if (deletedEntity != null)
+            {
+                
+            }
+        }
+        private async Task HandleEntityUpdate(EntityEntry entityEntry)
+        {
+            try
+            {
+
+                var modifiedEntity = entityEntry.Entity as TKThepCTron;
+
+                if (modifiedEntity != null)
+                {
+                    TKThepCTron entity = await GetById(modifiedEntity.Id);
+
+                    if (entity == null)
+                    {
+                        throw new Exception($"Không tìm thấy bản ghi theo ID: {modifiedEntity.Id}");
+                    }
+                    PKKLModel pkklModel = new PKKLModel{ HangMuc= "III.Gia công, lắp dựng cốt thép",TenCongTac = entity.TenCongTac??"" };
+                    List<PKKLModel> result = await _pKKLCTronRepository.GetAllByVM(pkklModel);
+                    if(result != null)
+                    {
+                        foreach (var record in result)
+                        {
+
+                            if (!string.IsNullOrEmpty(record.TenCongTac))
+                            {
+                                var TKLCK_SauCC1 = await _pKKLCTronRepository.GetTKLCK_SauCCByLCK(record.TenCongTac);
+                               
+                            }
+
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
             }
         }
     }

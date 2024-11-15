@@ -13,12 +13,12 @@ namespace DucAnhERP.Services
     {
 
         private readonly IDbContextFactory<ApplicationDbContext> _context;
-        private readonly EntityChangeService _entityChangeService;
+      
 
-        public PKKLMongCTronRepository(IDbContextFactory<ApplicationDbContext> context, EntityChangeService entityChangeService)
+        public PKKLMongCTronRepository(IDbContextFactory<ApplicationDbContext> context)
         {
             _context = context;
-            _entityChangeService = entityChangeService;
+            
         }
         public async Task<List<PKKLMongCTron>> GetAll()
         {
@@ -180,7 +180,7 @@ namespace DucAnhERP.Services
 
             context.PKKLMongCTrons.Update(TKThepDeCong);
             await SaveChanges(context);
-            await context.SaveChangesAsync();
+           
         }
 
         public async Task UpdateMulti(PKKLMongCTron[] PKKLMongCTron)
@@ -226,7 +226,6 @@ namespace DucAnhERP.Services
 
             context.Set<PKKLMongCTron>().Remove(entity);
             await SaveChanges(context);
-            await context.SaveChangesAsync();
         }
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
         {
@@ -265,8 +264,8 @@ namespace DucAnhERP.Services
 
                 // Chèn bản ghi mới vào bảng
                 context.PKKLMongCTrons.Add(entity);
-                
-                await _entityChangeService.SaveChangesAsync();
+
+                await SaveChanges(context);
             }
             catch (Exception ex)
             {
@@ -319,8 +318,7 @@ namespace DucAnhERP.Services
                 context.PKKLMongCTrons.Add(entity);
 
                 await SaveChanges(context);
-                // Lưu bản ghi mới vào cơ sở dữ liệu
-                await context.SaveChangesAsync();
+                
                 // Trả về Id của bản ghi mới được thêm
                 id = entity.Id ?? "";
                 return id;
@@ -364,7 +362,7 @@ namespace DucAnhERP.Services
                 {
                     foreach (var modifiedEntity in modifiedEntities)
                     {
-                       await HandleEntityUpdate(modifiedEntity);
+                        await HandleEntityUpdate(modifiedEntity);
                     }
                 }
 
@@ -394,33 +392,32 @@ namespace DucAnhERP.Services
             if (addedEntity != null)
             {
                 // Kiểm tra điều kiện HangMuc và PhanLoaiMongCongTronCongHop
-                if (addedEntity.HangMuc == "I.Móng cống tròn" )
+                if (addedEntity.HangMuc == "I.Móng cống tròn")
                 {
                     using var context = _context.CreateDbContext();
 
                     // Lọc tất cả các bản ghi có ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop giống với addedEntity
                     var recordsToUpdate = await context.PKKLMongCTrons
-                        .Where(x => x.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop == addedEntity.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop 
+                        .Where(x => x.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop == addedEntity.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop
                         && x.HangMuc == "II.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn")
                         .ToListAsync();
-                   
+
 
                     // Cập nhật các cột TKLCK_SauCC cho từng bản ghi
                     foreach (var record in recordsToUpdate)
                     {
-                        record.TKLCK_SauCC = await GetSumTKLCK_SauCC(addedEntity) + addedEntity.TKLCK_SauCC; 
+                        record.TKLCK_SauCC = await GetSumTKLCK_SauCC(addedEntity) + addedEntity.TKLCK_SauCC;
                     }
 
                     // Gọi phương thức UpdateMulti để cập nhật nhiều bản ghi
                     await UpdateMulti(recordsToUpdate.ToArray());
+                    
 
                     // In thông tin của entity mới
                     Console.WriteLine($"Entity added: {addedEntity}");
                 }
             }
         }
-
-
         // Xử lý khi sửa entity
         private async Task HandleEntityUpdate(EntityEntry entityEntry)
         {
