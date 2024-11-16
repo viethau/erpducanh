@@ -124,6 +124,156 @@ namespace DucAnhERP.Services
 
             return result;
         }
+        public async Task<List<THKLModel>> GetTHKLMongCongTron()
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var query = (from a in context.PKKLMongCTrons
+                             join b in context.PhanLoaiMongCTrons
+                             on a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop equals b.Id
+                             let kl1Dv = context.PKKLMongCTrons
+                                 .Where(x => x.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop == a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop
+                                          && x.LoaiBeTong == a.LoaiBeTong
+                                          && x.HangMuc == a.HangMuc
+                                          && x.HangMucCongTac == a.HangMucCongTac
+                                          && x.TenCongTac == a.TenCongTac)
+                                 .Sum(x => x.TKLCK_SauCC)
+                             orderby a.HangMuc, a.CreateAt
+                             select new THKLModel
+                             {
+                                 PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                                 ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                                 HangMucCongTac = a.HangMucCongTac,
+                                 TenCongTac = a.TenCongTac,
+                                 DonVi = a.DonVi,
+                                 KL1DonVi = kl1Dv,
+
+                             }).ToList();
+                return query;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
+
+        }
+        public async Task<List<THKLModel>> GetTHKLByTuyenDuong(string TuyenDuong)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var query = (from a in context.PKKLMongCTrons
+                             join b in context.PhanLoaiMongCTrons on a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop equals b.Id
+                             join c in context.DSNuocMua on a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop
+                             equals c.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop into cGroup
+                             from c in cGroup.DefaultIfEmpty()
+                             where c.ThongTinLyTrinh_TuyenDuong == TuyenDuong
+                             group new { a, c } by new
+                             {
+                                 a.Id,
+                                 b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                                 PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = c.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                                 a.TenCongTac,
+                                 a.DonVi,
+                                 a.TKLCK_SauCC,
+                                 a.HangMuc,
+                                 a.CreateAt
+                             } into g
+                             orderby g.Key.HangMuc, g.Key.CreateAt
+                             select new THKLModel
+                             {
+                                 Id = g.Key.Id,
+                                 ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = g.Key.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                                 PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop,
+                                 TenCongTac = g.Key.TenCongTac,
+                                 DonVi = g.Key.DonVi,
+                                 KL1DonVi = g.Key.TKLCK_SauCC,
+                                 SLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) ?? 0,
+                                 SLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) ?? 0,
+                                 SLTong = g.Sum(x => x.c != null && (x.c.TraiPhai == 0 || x.c.TraiPhai == 1) ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) ?? 0,
+                                 KLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) * g.Key.TKLCK_SauCC ?? 0,
+                                 KLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) * g.Key.TKLCK_SauCC ?? 0,
+                                 KLTong = g.Sum(x => x.c != null && (x.c.TraiPhai == 0 || x.c.TraiPhai == 1) ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) * g.Key.TKLCK_SauCC ?? 0
+                             }).ToList();
+                return query;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
+
+        }
+        public async Task<List<THKLModel>> GetTHKLByTuyenDuong(List<NuocMuaModel> nuocMua)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                // Khởi tạo một danh sách để lưu kết quả
+                List<THKLModel> finalResult = new List<THKLModel>();
+
+                // Duyệt qua từng tuyến đường trong danh sách `nuocMua`
+                foreach (var item in nuocMua)
+                {
+
+                    var query = await (from a in context.PKKLMongCTrons
+                                       join b in context.PhanLoaiMongCTrons
+                                           on a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop equals b.Id
+                                       join c in context.DSNuocMua
+                                           on a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop equals c.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop into cGroup
+                                       from c in cGroup.Where(c => c.ThongTinLyTrinh_TuyenDuong == item.ThongTinLyTrinh_TuyenDuong).DefaultIfEmpty()
+
+                                       group new { a, b, c } by new
+                                       {
+                                           a.Id,
+                                           a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                                           PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = c.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                                           a.TenCongTac,
+                                           a.DonVi,
+                                           a.TKLCK_SauCC,
+                                           a.HangMuc,
+                                           a.CreateAt
+                                       } into g
+                                       orderby g.Key.HangMuc, g.Key.CreateAt
+                                       select new THKLModel
+                                       {
+                                           Id = g.Key.Id,
+                                           ThongTinLyTrinh_TuyenDuong = item.ThongTinLyTrinh_TuyenDuong,  // Thông tin cố định từ SQL
+                                           ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = g.Key.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                                           PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop, // Cố định tên loại từ SQL
+                                           TenCongTac = g.Key.TenCongTac,
+                                           DonVi = g.Key.DonVi,
+                                           KL1DonVi = g.Key.TKLCK_SauCC,
+                                           SLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) ?? 0,
+                                           SLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) ?? 0,
+                                           SLTong = g.Sum(x => x.c != null ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) ?? 0,
+                                           KLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) * g.Key.TKLCK_SauCC ?? 0,
+                                           KLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) * g.Key.TKLCK_SauCC ?? 0,
+                                           KLTong = g.Sum(x => x.c != null ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) * g.Key.TKLCK_SauCC ?? 0
+                                       }).ToListAsync();
+
+
+
+                    // Thêm kết quả của truy vấn vào danh sách `finalResult`
+                    finalResult.AddRange(query);
+                }
+
+                // Trả về danh sách kết quả cuối cùng
+                return finalResult;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
+        }
+
         public async Task<List<PKKLMongCTron>> GetExist(PKKLMongCTron searchData)
         {
             try
@@ -484,6 +634,68 @@ namespace DucAnhERP.Services
             }
         }
 
+        public  double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
+        {
+            double result = 0;
+            if (DonVi == "M3")
+            {
+                if (string.IsNullOrEmpty(KTHH_GhiChu) || KTHH_GhiChu == "0")
+                {
+                    result = KTHH_D * KTHH_R * KTHH_C;
+                }
+                else if (KTHH_GhiChu == "Rộng*Cao")
+                {
+                    result = KTHH_DienTich * KTHH_D;
+                }
+                else if (KTHH_GhiChu == "Dài*Cao")
+                {
+                    result = KTHH_DienTich * KTHH_R;
+                }
+                else if (KTHH_GhiChu == "Dài*Rộng")
+                {
+                    result = KTHH_DienTich * KTHH_C;
+                }
+
+            }
+            return Math.Round(result, 4);
+        }
+
+        public  double TTCDT_KL(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double TTCDT_CDai, double TTCDT_CRong, double TTCDT_CDay, double TTCDT_DienTich)
+        {
+            double result = 0;
+            if (DonVi.ToUpper().Trim() == "M2")
+            {
+                if (string.IsNullOrEmpty(TTCDT_DienTich.ToString()) || TTCDT_DienTich == 0)
+                {
+                    result = (KTHH_D * KTHH_C * TTCDT_CDai) + (KTHH_R * KTHH_C * TTCDT_CRong) + (KTHH_D * KTHH_R * TTCDT_CDay);
+                }
+                else
+                {
+                    result = TTCDT_DienTich;
+                }
+            }
+            return Math.Round(result, 4);
+        }
+
+        public  double KL1CK_ChuaTruCC(double KTHH_KL1CK, double KTHH_SLCauKien, double TTCDT_KL, double TTCDT_SLCK, double KLKP_KL, double KLKP_Sl)
+        {
+            double result = 0;
+            if (KTHH_KL1CK > 0)
+            {
+                result = KTHH_KL1CK * KTHH_SLCauKien;
+            }
+            else if (TTCDT_KL > 0)
+            {
+                result = TTCDT_KL * TTCDT_SLCK;
+            }
+            else
+            {
+                result = KLKP_KL * KLKP_Sl;
+            }
+            return Math.Round(result, 4);
+        }
+
+        
     }
 
 }

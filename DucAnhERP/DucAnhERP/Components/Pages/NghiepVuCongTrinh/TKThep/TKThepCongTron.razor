@@ -417,14 +417,14 @@
     {
         isModalVisible = true;
         Input = new();
-         foreach (var item in selectLoaiThep)
+        foreach (var item in selectLoaiThep)
         {
             item.IsSelected = string.IsNullOrEmpty(item.Value);
         }
 
         foreach (var item in selectLCK)
         {
-           item.IsSelected = string.IsNullOrEmpty(item.Value);
+            item.IsSelected = string.IsNullOrEmpty(item.Value);
         }
     }
 
@@ -513,7 +513,7 @@
                     {
                         item.TongTrongLuong = item.TongChieuDai * item.TrongLuong;
                     }
-                     item.TongTrongLuong = Math.Round(item.TongTrongLuong ?? 0, 4);
+                    item.TongTrongLuong = Math.Round(item.TongTrongLuong ?? 0, 4);
                 }
             }
             listTKThepCTronModel = Paging(listModel);
@@ -676,12 +676,12 @@
                 var result = await TKThepCTronRepository.CheckExclusive(ids,baseTime);
                 if (result)
                 {
-                     // Thực hiện hành động xóa
+                    // Thực hiện hành động xóa
                     await TKThepCTronRepository.DeleteById(deleteId);
                     ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success",iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                     await LoadData();
                 }
-               
+
                 deleteId = "";
             }
         }
@@ -696,9 +696,14 @@
             Input = await TKThepCTronRepository.GetById(id);
             isEdit = true;
             isModalVisible = true;
-             foreach (var item in selectLoaiThep)
+            foreach (var item in selectLoaiThep)
             {
                 item.IsSelected = item.Value == Input.LoaiThep;
+                if (item.IsSelected == true)
+                {
+                    LoaiThep = item.Text;
+                }
+                
             }
             foreach (var item in selectLCK)
             {

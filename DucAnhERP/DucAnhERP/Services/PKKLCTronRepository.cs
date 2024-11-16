@@ -672,7 +672,7 @@ namespace DucAnhERP.Services
             }
         }
 
-        public static double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
+        public double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
         {
             if (DonVi == "M3")
             {
@@ -700,7 +700,7 @@ namespace DucAnhERP.Services
             return 0;
         }
 
-        public static double TTCDT_KL(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double TTCDT_CDai, double TTCDT_CRong, double TTCDT_CDay, double TTCDT_DienTich)
+        public double TTCDT_KL(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double TTCDT_CDai, double TTCDT_CRong, double TTCDT_CDay, double TTCDT_DienTich)
         {
             if (DonVi.ToUpper().Trim() == "M2")
             {
@@ -716,7 +716,7 @@ namespace DucAnhERP.Services
             return 0;
         }
 
-        public static double KL1CK_ChuaTruCC(double KTHH_KL1CK, double KTHH_SLCauKien, double TTCDT_KL, double TTCDT_SLCK, double KLKP_KL, double KLKP_Sl)
+        public  double KL1CK_ChuaTruCC(double KTHH_KL1CK, double KTHH_SLCauKien, double TTCDT_KL, double TTCDT_SLCK, double KLKP_KL, double KLKP_Sl)
         {
             if (KTHH_KL1CK > 0)
             {

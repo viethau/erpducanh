@@ -10,6 +10,9 @@ namespace DucAnhERP.Repository
         Task<List<PKKLMongCTron>> GetExist(PKKLMongCTron searchData);
         Task<Double> GetSumTKLCK_SauCC(PKKLMongCTron input);
 
+        Task<List<THKLModel>> GetTHKLMongCongTron();
+        Task<List<THKLModel>> GetTHKLByTuyenDuong(List<NuocMuaModel> nuocMua);
+
         //Task<PKKLMongCTron> GetTKLCK_SauCCByLCK(string id);
         //Task<List<THKLModel>> GetTHKLCongTron();
         //Task<List<THKLModel>> GetTHKLByTuyenDuong(List<NuocMuaModel> nuocMua);

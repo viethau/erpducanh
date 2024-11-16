@@ -472,7 +472,6 @@
             case "I.Móng cống tròn":
                 var GetBaoCaoKTHHMDC = await NuocMuaRepository.GetBaoCaoKTHHMDC();
 
-
                 if (Input.HangMucCongTac.Trim().ToUpper() == "Lót móng".ToUpper() 
                 || Input.HangMucCongTac.Trim().ToUpper() == "Ván khuân lót móng".ToUpper())
                 {
@@ -511,7 +510,8 @@
                 {
                     Input.TKLCK_SauCC = await PKKLMongCTronRepository.GetSumTKLCK_SauCC(Input);
                 }
-               
+                disKTHH_R = true;
+                disKTHH_C = true;
                 break;
             case "III.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn":
                 disInput = true;
