@@ -444,7 +444,6 @@ namespace DucAnhERP.Services
                 }
             }
         }
-
         private async Task HandleEntityDelete(EntityEntry entityEntry)
         {
             var deletedEntity = entityEntry.Entity as TKThepCTron;

@@ -867,6 +867,10 @@
             foreach (var item in selectLoaiThep)
             {
                 item.IsSelected = item.Value == Input.LoaiThep;
+                if (item.IsSelected == true)
+                {
+                    LoaiThep = item.Text;
+                }
             }
             foreach (var item in selectLCK)
             {

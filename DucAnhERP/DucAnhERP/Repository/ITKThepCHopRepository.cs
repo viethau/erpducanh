@@ -1,4 +1,5 @@
-﻿using DucAnhERP.Models;
+﻿using DucAnhERP.Helpers;
+using DucAnhERP.Models;
 using DucAnhERP.ViewModel;
 
 namespace DucAnhERP.Repository
@@ -8,5 +9,6 @@ namespace DucAnhERP.Repository
         Task<string> InsertLaterFlag(TKThepCHop entity, int FlagLast);
         Task<List<TKThepCHopModel>> GetAllByVM(TKThepCHopModel mModel);
         Task<List<TKThepCHop>> GetExist(TKThepCHop searchData);
+        Task<List<SelectedItem>> GetDistinctTenCongTacByPL(string ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
     }
 }

@@ -139,6 +139,7 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
+
         public async Task Update(TKThepMongCHop TKThepMongCHop)
         {
             using var context = _context.CreateDbContext();
