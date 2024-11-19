@@ -90,6 +90,10 @@ namespace DucAnhERP.Services
                 {
                     query = query.Where(x => x.TenCongTac == mModel.TenCongTac);
                 }
+                if (!string.IsNullOrEmpty(mModel.LoaiCauKienId))
+                {
+                    query = query.Where(x => x.LoaiCauKienId == mModel.LoaiCauKienId);
+                }
 
                 data = await query.ToListAsync();
 
@@ -318,7 +322,7 @@ namespace DucAnhERP.Services
             }
 
             context.PKKLCHops.Update(TKThepDeCong);
-            await context.SaveChangesAsync();
+            await SaveChanges(context);
         }
         public async Task UpdateMulti(PKKLCHop[] PKKLCHop)
         {
@@ -455,7 +459,7 @@ namespace DucAnhERP.Services
                 context.PKKLCHops.Add(entity);
 
                 // Lưu bản ghi mới vào cơ sở dữ liệu
-                await context.SaveChangesAsync();
+                await SaveChanges(context);
                 // Trả về Id của bản ghi mới được thêm
                 id = entity.Id ?? "";
                 return id;
@@ -531,7 +535,7 @@ namespace DucAnhERP.Services
                 // Kiểm tra điều kiện HangMuc và PhanLoaiMongCongTronCongHop
                 if (addedEntity.HangMuc == "I.Sản xuất, vận chuyển, lắp đặt"
                     && addedEntity.KTHH_GhiChu == "Rộng*Cao"
-                    && addedEntity.HangMucCongTac.Trim().ToLower() == "Bê tông cống tròn".Trim().ToLower())
+                    && addedEntity.HangMucCongTac.Trim().ToLower() == "Bê tông cống hộp".Trim().ToLower())
                 {
                     using var context = _context.CreateDbContext();
                     var TKLCK_SauCC = addedEntity.TKLCK_SauCC;
@@ -612,7 +616,7 @@ namespace DucAnhERP.Services
                     using var context = _context.CreateDbContext();
                     var TKLCK_SauCC = 0;
                     if (deletedEntity.KTHH_GhiChu == "Rộng*Cao"
-                    && deletedEntity.HangMucCongTac.Trim().ToLower() == "Bê tông cống tròn".Trim().ToLower())
+                    && deletedEntity.HangMucCongTac.Trim().ToLower() == "Bê tông cống hộp".Trim().ToLower())
                     {
                         // Lọc tất cả các bản ghi có ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai giống với addedEntity
                         var recordsToUpdate = await context.PKKLCHops
@@ -667,64 +671,65 @@ namespace DucAnhERP.Services
             }
         }
 
-        public double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
+        public  double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
         {
+            double result = 0;
             if (DonVi == "M3")
             {
                 if (string.IsNullOrEmpty(KTHH_GhiChu) || KTHH_GhiChu == "0")
                 {
-                    return KTHH_D * KTHH_R * KTHH_C;
+                    result = KTHH_D * KTHH_R * KTHH_C;
                 }
                 else if (KTHH_GhiChu == "Rộng*Cao")
                 {
-                    return KTHH_DienTich * KTHH_D;
+                    result = KTHH_DienTich * KTHH_D;
                 }
                 else if (KTHH_GhiChu == "Dài*Cao")
                 {
-                    return KTHH_DienTich * KTHH_R;
+                    result = KTHH_DienTich * KTHH_R;
                 }
                 else if (KTHH_GhiChu == "Dài*Rộng")
                 {
-                    return KTHH_DienTich * KTHH_C;
+                    result = KTHH_DienTich * KTHH_C;
                 }
-                else
-                {
-                    return 0;
-                }
+
             }
-            return 0;
+            return Math.Round(result, 4);
         }
 
-        public double TTCDT_KL(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double TTCDT_CDai, double TTCDT_CRong, double TTCDT_CDay, double TTCDT_DienTich)
+        public  double TTCDT_KL(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double TTCDT_CDai, double TTCDT_CRong, double TTCDT_CDay, double TTCDT_DienTich)
         {
+            double result = 0;
             if (DonVi.ToUpper().Trim() == "M2")
             {
                 if (string.IsNullOrEmpty(TTCDT_DienTich.ToString()) || TTCDT_DienTich == 0)
                 {
-                    return (KTHH_D * KTHH_C * TTCDT_CDai) + (KTHH_R * KTHH_C * TTCDT_CRong) + (KTHH_D * KTHH_R * TTCDT_CDay);
+                    result = (KTHH_D * KTHH_C * TTCDT_CDai) + (KTHH_R * KTHH_C * TTCDT_CRong) + (KTHH_D * KTHH_R * TTCDT_CDay);
                 }
                 else
                 {
-                    return TTCDT_DienTich;
+                    result = TTCDT_DienTich;
                 }
             }
-            return 0;
+            return Math.Round(result, 4);
         }
 
-        public double KL1CK_ChuaTruCC(double KTHH_KL1CK, double KTHH_SLCauKien, double TTCDT_KL, double TTCDT_SLCK, double KLKP_KL, double KLKP_Sl)
+        public  double KL1CK_ChuaTruCC(double KTHH_KL1CK, double KTHH_SLCauKien, double TTCDT_KL, double TTCDT_SLCK, double KLKP_KL, double KLKP_Sl)
         {
+            double result = 0;
             if (KTHH_KL1CK > 0)
             {
-                return KTHH_KL1CK * KTHH_SLCauKien;
+                result = KTHH_KL1CK * KTHH_SLCauKien;
             }
             else if (TTCDT_KL > 0)
             {
-                return TTCDT_KL * TTCDT_SLCK;
+                result = TTCDT_KL * TTCDT_SLCK;
             }
             else
             {
-                return KLKP_KL * KLKP_Sl;
+                result = KLKP_KL * KLKP_Sl;
             }
+            return Math.Round(result, 4);
         }
 
 

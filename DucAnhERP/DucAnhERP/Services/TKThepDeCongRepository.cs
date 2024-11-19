@@ -175,7 +175,7 @@ namespace DucAnhERP.Services
                 {
                     Text = group.Key,
                     Value = group.Sum(item => item.TongTrongLuong).ToString()
-                }).FirstAsync();
+                }).FirstOrDefaultAsync();
                 return data;
             }
             catch (Exception ex)
@@ -415,6 +415,8 @@ namespace DucAnhERP.Services
                             pKKLDeCTron.KLCC1CK = record.KLCC1CK;
                             pKKLDeCTron.CreateAt = record.CreateAt;
                             pKKLDeCTron.CreateBy = record.CreateBy;
+                            // Xử lý khi giá trị không thể chuyển đổi thành số
+                            pKKLDeCTron.KLKP_KL = addedEntity.TongTrongLuong ?? 0;
 
                             var SumTenCongTacByPL = await GetSumTenCongTacByPL(addedEntity.ThongTinDeCong_TenLoaiDeCong, addedEntity.TenCongTac ?? "");
                             if (SumTenCongTacByPL != null && SumTenCongTacByPL.Value != null)
@@ -423,11 +425,7 @@ namespace DucAnhERP.Services
                                 {
                                     pKKLDeCTron.KLKP_KL = parsedValue + addedEntity.TongTrongLuong ?? 0;
                                 }
-                                else
-                                {
-                                    // Xử lý khi giá trị không thể chuyển đổi thành số
-                                    pKKLDeCTron.KLKP_KL = addedEntity.TongTrongLuong ?? 0;
-                                }
+                                
                             }
                             pKKLDeCTron.KTHH_KL1CK = _pKKLDeCTronRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
                             pKKLDeCTron.TTCDT_KL = _pKKLDeCTronRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
@@ -485,6 +483,9 @@ namespace DucAnhERP.Services
                             pKKLDeCTron.KLCC1CK = record.KLCC1CK;
                             pKKLDeCTron.CreateAt = record.CreateAt;
                             pKKLDeCTron.CreateBy = record.CreateBy;
+                            // Xử lý khi giá trị không thể chuyển đổi thành số
+                            pKKLDeCTron.KLKP_KL = deletedEntity.TongTrongLuong - entity.TongTrongLuong ?? 0;
+                            pKKLDeCTron.TenCongTac = "";
 
                             var SumTenCongTacByPL = await GetSumTenCongTacByPL(entity.ThongTinDeCong_TenLoaiDeCong, entity.TenCongTac ?? "");
                             if (SumTenCongTacByPL != null && SumTenCongTacByPL.Value != null)
@@ -494,13 +495,7 @@ namespace DucAnhERP.Services
                                     pKKLDeCTron.KLKP_KL = parsedValue - deletedEntity.TongTrongLuong ?? 0;
                                     pKKLDeCTron.TenCongTac = record.TenCongTac;
                                 }
-                                else
-                                {
-                                    // Xử lý khi giá trị không thể chuyển đổi thành số
-                                    pKKLDeCTron.KLKP_KL = deletedEntity.TongTrongLuong - entity.TongTrongLuong ?? 0;
-                                    pKKLDeCTron.TenCongTac = "";
-
-                                }
+                               
                             }
                             pKKLDeCTron.KTHH_KL1CK = _pKKLDeCTronRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
                             pKKLDeCTron.TTCDT_KL = _pKKLDeCTronRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
@@ -562,6 +557,8 @@ namespace DucAnhERP.Services
                                 pKKLDeCTron.KLCC1CK = record.KLCC1CK;
                                 pKKLDeCTron.CreateAt = record.CreateAt;
                                 pKKLDeCTron.CreateBy = record.CreateBy;
+                                // Xử lý khi giá trị không thể chuyển đổi thành số
+                                pKKLDeCTron.KLKP_KL = modifiedEntity.TongTrongLuong - entity.TongTrongLuong ?? 0;
 
                                 var SumTenCongTacByPL = await GetSumTenCongTacByPL(entity.ThongTinDeCong_TenLoaiDeCong, entity.TenCongTac ?? "");
                                 if (SumTenCongTacByPL != null && SumTenCongTacByPL.Value != null)
@@ -570,12 +567,8 @@ namespace DucAnhERP.Services
                                     {
                                         pKKLDeCTron.KLKP_KL = (parsedValue - entity.TongTrongLuong) + modifiedEntity.TongTrongLuong ?? 0;
                                     }
-                                    else
-                                    {
-                                        // Xử lý khi giá trị không thể chuyển đổi thành số
-                                        pKKLDeCTron.KLKP_KL = modifiedEntity.TongTrongLuong - entity.TongTrongLuong ?? 0;
+                                    
 
-                                    }
                                 }
 
                                 pKKLDeCTron.KTHH_KL1CK = _pKKLDeCTronRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);

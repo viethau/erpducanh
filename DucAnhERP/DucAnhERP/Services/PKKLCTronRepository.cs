@@ -92,7 +92,11 @@ namespace DucAnhERP.Services
                 {
                     query = query.Where(x => x.TenCongTac == mModel.TenCongTac);
                 }
-               
+                if (!string.IsNullOrEmpty(mModel.LoaiCauKienId))
+                {
+                    query = query.Where(x => x.LoaiCauKienId == mModel.LoaiCauKienId);
+                }
+
                 data = await query.ToListAsync();
 
                 return data;
@@ -674,6 +678,7 @@ namespace DucAnhERP.Services
 
         public double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
         {
+
             if (DonVi == "M3")
             {
                 if (string.IsNullOrEmpty(KTHH_GhiChu) || KTHH_GhiChu == "0")

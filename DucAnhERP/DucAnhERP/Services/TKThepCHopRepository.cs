@@ -177,7 +177,7 @@ namespace DucAnhERP.Services
                 {
                     Text = group.Key,
                     Value = group.Sum(item => item.TongTrongLuong).ToString()
-                }).FirstAsync();
+                }).FirstOrDefaultAsync();
                 return data;
             }
             catch (Exception ex)
@@ -198,7 +198,7 @@ namespace DucAnhERP.Services
             }
 
             context.TKThepCHops.Update(TKThepDeCong);
-            await context.SaveChangesAsync();
+            await SaveChanges(context);
         }
         public async Task UpdateMulti(TKThepCHop[] TKThepDeCong)
         {
@@ -222,7 +222,7 @@ namespace DucAnhERP.Services
             }
 
             context.Set<TKThepCHop>().Remove(entity);
-            await context.SaveChangesAsync();
+            await SaveChanges(context);
         }
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
         {
@@ -261,7 +261,7 @@ namespace DucAnhERP.Services
 
                 // Chèn bản ghi mới vào bảng
                 context.TKThepCHops.Add(entity);
-                await context.SaveChangesAsync();
+                await SaveChanges(context);
             }
             catch (Exception ex)
             {
@@ -314,7 +314,7 @@ namespace DucAnhERP.Services
                 context.TKThepCHops.Add(entity);
 
                 // Lưu bản ghi mới vào cơ sở dữ liệu
-                await context.SaveChangesAsync();
+                await SaveChanges(context);
                 // Trả về Id của bản ghi mới được thêm
                 id = entity.Id ?? "";
                 return id;
@@ -417,6 +417,7 @@ namespace DucAnhERP.Services
                             pKKLCTron.KLCC1CK = record.KLCC1CK;
                             pKKLCTron.CreateAt = record.CreateAt;
                             pKKLCTron.CreateBy = record.CreateBy;
+                            pKKLCTron.KLKP_KL = addedEntity.TongTrongLuong ?? 0;
 
                             var SumTenCongTacByPL = await GetSumTenCongTacByPL(addedEntity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai, addedEntity.TenCongTac ?? "");
                             if (SumTenCongTacByPL != null && SumTenCongTacByPL.Value != null)
@@ -425,11 +426,7 @@ namespace DucAnhERP.Services
                                 {
                                     pKKLCTron.KLKP_KL = parsedValue + addedEntity.TongTrongLuong ?? 0;
                                 }
-                                else
-                                {
-                                    // Xử lý khi giá trị không thể chuyển đổi thành số
-                                    pKKLCTron.KLKP_KL = addedEntity.TongTrongLuong ?? 0;
-                                }
+                                
                             }
                             pKKLCTron.KTHH_KL1CK = _pKKLCHopRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
                             pKKLCTron.TTCDT_KL = _pKKLCHopRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
@@ -486,6 +483,9 @@ namespace DucAnhERP.Services
                             pKKLCTron.KLCC1CK = record.KLCC1CK;
                             pKKLCTron.CreateAt = record.CreateAt;
                             pKKLCTron.CreateBy = record.CreateBy;
+                            // Xử lý khi giá trị không thể chuyển đổi thành số
+                            pKKLCTron.KLKP_KL = deletedEntity.TongTrongLuong - entity.TongTrongLuong ?? 0;
+                            pKKLCTron.TenCongTac = "";
 
                             var SumTenCongTacByPL = await GetSumTenCongTacByPL(entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai, entity.TenCongTac ?? "");
                             if (SumTenCongTacByPL != null && SumTenCongTacByPL.Value != null)
@@ -495,13 +495,7 @@ namespace DucAnhERP.Services
                                     pKKLCTron.KLKP_KL = parsedValue - deletedEntity.TongTrongLuong ?? 0;
                                     pKKLCTron.TenCongTac = record.TenCongTac;
                                 }
-                                else
-                                {
-                                    // Xử lý khi giá trị không thể chuyển đổi thành số
-                                    pKKLCTron.KLKP_KL = deletedEntity.TongTrongLuong - entity.TongTrongLuong ?? 0;
-                                    pKKLCTron.TenCongTac = "";
-
-                                }
+                                
                             }
                             pKKLCTron.KTHH_KL1CK = _pKKLCHopRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
                             pKKLCTron.TTCDT_KL = _pKKLCHopRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
@@ -563,6 +557,8 @@ namespace DucAnhERP.Services
                                 pKKLCTron.KLCC1CK = record.KLCC1CK;
                                 pKKLCTron.CreateAt = record.CreateAt;
                                 pKKLCTron.CreateBy = record.CreateBy;
+                                // Xử lý khi giá trị không thể chuyển đổi thành số
+                                pKKLCTron.KLKP_KL = modifiedEntity.TongTrongLuong - entity.TongTrongLuong ?? 0;
 
                                 var SumTenCongTacByPL = await GetSumTenCongTacByPL(entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai, entity.TenCongTac ?? "");
                                 if (SumTenCongTacByPL != null && SumTenCongTacByPL.Value != null)
@@ -571,12 +567,7 @@ namespace DucAnhERP.Services
                                     {
                                         pKKLCTron.KLKP_KL = (parsedValue - entity.TongTrongLuong) + modifiedEntity.TongTrongLuong ?? 0;
                                     }
-                                    else
-                                    {
-                                        // Xử lý khi giá trị không thể chuyển đổi thành số
-                                        pKKLCTron.KLKP_KL = modifiedEntity.TongTrongLuong - entity.TongTrongLuong ?? 0;
-
-                                    }
+                                    
                                 }
 
                                 pKKLCTron.KTHH_KL1CK = _pKKLCHopRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
