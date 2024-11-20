@@ -30,35 +30,6 @@
 </style>
 <div class="container-fluid">
 
-   @*  <div class="row m-3 ">
-        <div class="col-md-9 col-sm-12">
-            <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
-                <DataAnnotationsValidator />
-                <div class="row">
-                    <div class="col-sm-4 col-md-3 mb-2">
-                        <label for="Table">Loại cấu kiện</label>
-                        <Select2 Id="select3" Items="@selectSearchLCK" OnChange="@OnSelectChangeSearchLCK"></Select2>
-                        <ValidationMessage For="()=>InputMD.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai"></ValidationMessage>
-                    </div>
-
-                    <!-- Search Button -->
-                    <div class="col-sm-4 col-md-2 mb-2">
-                        <label>&nbsp;</label>
-                        <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
-                    </div>
-                    <div class="col-sm-4 col-md-2 mb-2">
-                        <label>&nbsp;</label>
-                        <button type="button" @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
-                    </div>
-                </div>
-            </EditForm>
-        </div>
-        <div class="col-md-3 col-sm-6 text-end">
-            <button class="btn btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
-                <i class="fas fa-thumbtack"></i>
-            </button>
-        </div>
-    </div> *@
     <div id="tableContainer m-2 mt-3">
         <h5>BẢNG TỔNG HỢP KHỐI LƯỢNG CỐNG TRÒN THEO LOẠI CỐNG TRÒN THEO TUYẾN</h5>
         <div style="white-space:nowrap">

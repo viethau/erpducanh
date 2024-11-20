@@ -9696,7 +9696,7 @@
         Helpers.DSNuocMuaConversionHelper helpers = new();
         nuocMuaConvert = Input;
         nuocMuaConvert = await helpers.ConvertNuocMua(Input, listDanhMuc);
-        if (listModelLeft.Count > 0 && string.IsNullOrEmpty(nuocMuaConvert.TTTDCongHoRanh_XacDinhOngCongCanThem) && string.IsNullOrEmpty(nuocMuaConvert.ThongTinDuongTruyenDan_HinhThucTruyenDan))
+        if (listModelLeft.Count > 0 && !string.IsNullOrEmpty(nuocMuaConvert.TTTDCongHoRanh_XacDinhOngCongCanThem) && !string.IsNullOrEmpty(nuocMuaConvert.ThongTinDuongTruyenDan_HinhThucTruyenDan))
         {
             double[] ChieuDaiThucTes = { };
             string[] HinhThucTruyenDans = { };

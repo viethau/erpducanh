@@ -10,7 +10,7 @@
 @inject INuocMuaRepository NuocMuaRepository
 @inject IDanhMucRepository DanhMucRepository
 @inject IDMTLThepRepository DMTLThepRepository
-@inject IPhanLoaiCTronHopNhuaRepository PhanLoaiCTronHopNhuaRepository
+@inject IPhanLoaiTDanTDanRepository PhanLoaiTDanTDanRepository
 
 @inject DucAnhERP.Services.ToastService ToastService
 <style>
@@ -329,6 +329,7 @@
     private void OnSelectChangeLCK(SelectedItem selectedItem)
     {
         Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = selectedItem.Value;
+
         Caculate();
     }
     private List<SelectedItem> selectSearchLCK = new();
@@ -455,12 +456,13 @@
         {
 
             await LoadData();
-            var repository = await NuocMuaRepository.GetBaoCaoCongHopSDThep();
+            var repository = await NuocMuaRepository.GetBaoCaoTDCHSDThep();
+     
             selectLCK = new();
             foreach (var item in repository)
             {
                 // Kiểm tra và thêm item
-                if (!string.IsNullOrEmpty(item.Id) && !selectLCK.Any(x => x.Value == item.Id))
+                if (!string.IsNullOrEmpty(item.Id) && !selectLCK.Any(x => x.Value == item.TTTDCongHoRanh_TenLoaiTamDanTieuChuan))
                 {
                     selectLCK.Add(new SelectedItem
                         {
@@ -541,7 +543,7 @@
         {
             Caculate();
             string[] ids = { Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan??"" };
-            var isValidTenPL = await PhanLoaiCTronHopNhuaRepository.CheckExclusive(ids,baseTime);
+            var isValidTenPL = await PhanLoaiTDanTDanRepository.CheckExclusive(ids,baseTime);
             var listExist = await TKThepTDanCHopRepository.GetExist(Input);
             if (isValidTenPL)
             {

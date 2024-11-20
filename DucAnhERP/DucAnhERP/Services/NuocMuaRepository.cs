@@ -1605,7 +1605,7 @@ namespace DucAnhERP.Services
         {
             List<NuocMuaModel> result = new();
             using var context = _context.CreateDbContext();
-            result = ( from a in context.DSNuocMua
+            var result1 = ( from a in context.DSNuocMua
                                    join c in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id
                                    join f in context.PhanLoaiTDanTDans on a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan equals f.Id
                                    where c.Ten == "Cống hộp" && a.TTTDCongHoRanh_SoLuong > 0
@@ -1613,10 +1613,23 @@ namespace DucAnhERP.Services
                                    {
                                        PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = f.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ??"",
                                        TTTDCongHoRanh_TenLoaiTamDanTieuChuan = a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
-                                       TTTDCongHoRanh_CDai = a.TTTDCongHoRanh_CDai ??0,
-                                       TTTDCongHoRanh_CRong = a.TTTDCongHoRanh_CRong ??0,
-                                       TTTDCongHoRanh_CCao = a.TTTDCongHoRanh_CCao ??0
+                                       TTTDCongHoRanh_CDai = f.TTTDCongHoRanh_CDai ??0,
+                                       TTTDCongHoRanh_CRong = f.TTTDCongHoRanh_CRong ??0,
+                                       TTTDCongHoRanh_CCao = f.TTTDCongHoRanh_CCao ??0
                                    }).Distinct().ToList();
+            var result2 = (from a in context.DSNuocMua
+                           join c in context.DSDanhMuc on a.ThongTinDuongTruyenDan_HinhThucTruyenDan equals c.Id
+                           join f in context.PhanLoaiTDanTDans on a.TTTDCongHoRanh_TenLoaiTamDanLoai02 equals f.Id
+                           where c.Ten == "Cống hộp" && a.TTTDCongHoRanh_SoLuong > 0
+                           select new NuocMuaModel
+                           {
+                               PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = f.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ?? "",
+                               TTTDCongHoRanh_TenLoaiTamDanTieuChuan = a.TTTDCongHoRanh_TenLoaiTamDanLoai02,
+                               TTTDCongHoRanh_CDai = f.TTTDCongHoRanh_CDai ?? 0,
+                               TTTDCongHoRanh_CRong = f.TTTDCongHoRanh_CRong ?? 0,
+                               TTTDCongHoRanh_CCao = f.TTTDCongHoRanh_CCao ?? 0
+                           }).Distinct().ToList();
+            result = result1.Concat(result2).Distinct().ToList();
 
             return result;
         }
@@ -2469,6 +2482,7 @@ namespace DucAnhERP.Services
                                             where c.Ten == "Cống hộp" && d.Ten == "Có cốt thép" && a.TTTDCongHoRanh_SoLuong > 0
                                             select new NuocMuaModel
                                             {
+                                                TTTDCongHoRanh_TenLoaiTamDanTieuChuan = f.Id,
                                                 PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = f.TTTDCongHoRanh_TenLoaiTamDanTieuChuan??"",
                                                 TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = a.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan,
                                                 TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name = d.Ten,
@@ -2485,6 +2499,7 @@ namespace DucAnhERP.Services
                                where c.Ten == "Cống hộp" && d.Ten == "Có cốt thép" && a.TTTDCongHoRanh_SoLuong1 > 0
                                select new NuocMuaModel
                                {
+                                   TTTDCongHoRanh_TenLoaiTamDanTieuChuan = f.Id,
                                    PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan = f.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ?? "",
                                    TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = a.TTTDCongHoRanh_CauTaoTamDanTruyenDan,
                                    TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan_Name = d.Ten,

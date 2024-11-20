@@ -72,6 +72,8 @@ namespace DucAnhERP.Data
         public DbSet<PKKLMongCTron> PKKLMongCTrons { get; set; }
         public DbSet<PKKLDeCTron> PKKLDeCTrons { get; set; }
         public DbSet<PKKLCHop> PKKLCHops { get; set; }
+        public DbSet<PKKLMongCHop> PKKLMongCHops { get; set; }
+        public DbSet<PKKLTDanCHop> PKKLTDanCHops { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

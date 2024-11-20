@@ -88,6 +88,8 @@ builder.Services.AddScoped<IPKKLCTronRepository, PKKLCTronRepository>();
 builder.Services.AddScoped<IPKKLMongCTronRepository, PKKLMongCTronRepository>();
 builder.Services.AddScoped<IPKKLDeCTronRepository, PKKLDeCTronRepository>();
 builder.Services.AddScoped<IPKKLCHopRepository, PKKLCHopRepository>();
+builder.Services.AddScoped<IPKKLMongCHopRepository, PKKLMongCHopRepository>();
+builder.Services.AddScoped<IPKKLTDanCHopRepository, PKKLTDanCHopRepository>();
 
 
 builder.Services.AddAuthentication(options =>

@@ -1,0 +1,525 @@
+﻿@page "/PKKL/THKLMongCongHop"
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using System.Linq
+@using DucAnhERP.SeedWork
+@using DucAnhERP.Helpers
+@inject NavigationManager navigation
+@inject IPKKLMongCHopRepository PKKLMongCHopRepository
+@inject INuocMuaRepository NuocMuaRepository
+@inject IDanhMucRepository DanhMucRepository
+@inject IDMTLThepRepository DMTLThepRepository
+@inject IPhanLoaiCTronHopNhuaRepository PhanLoaiCTronHopNhuaRepository
+
+@inject DucAnhERP.Services.ToastService ToastService
+<style>
+    table {
+        position: relative;
+    }
+
+        table thead tr td {
+            / white-space: nowrap;
+            / text-align: center;
+            padding: 2px 5px;
+        }
+
+    .selection .select2-selection {
+        height: 25px !important;
+    }
+</style>
+<div class="container-fluid">
+
+
+    <div id="tableContainer m-2 mt-3">
+        <h5>BẢNG TỔNG HỢP KHỐI LƯỢNG MÓNG CỐNG HỘP LẮP ĐẶT THEO LOẠI MÓNG CỐNG HỘP LẮP ĐẶT THEO TUYẾN</h5>
+        <div style="white-space:nowrap">
+            <div>
+                <div class="row flex-nowrap overflow-auto">
+                    <table id="tb-left" class="table table-hover table-bordered mt-3">
+                        <thead class="bg-info @thumbtack">
+
+                            <tr>
+                                <th>STT</th>
+                                <th>Hạng mục</th>
+                                <th>Tên công tác thực tế</th>
+                                <th>Đơn vị</th>
+                                <th>KL 01 đơn vị</th>
+                                <th>Tên công tác theo định mức</th>
+                                <th> Mã định mức</th>
+                                <th> SL trái</th>
+                                <th> SL phải</th>
+                                <th> SL tổng</th>
+                                <th> KL trái</th>
+                                <th> KL phải</th>
+                                <th> KL tổng</th>
+
+                            </tr>
+
+                        </thead>
+                        @if (listTHKLModel.Any())
+                        {
+                            <tbody>
+                                <tr>
+                                    <td colspan="13">&nbsp;</td>
+                                </tr>
+                                @{
+                                    int stt = 0;
+
+                                }
+                                @foreach (var item in listTHKLModel)
+                                {
+                                    stt++;
+                                    <tr>
+                                        <td>@stt</td>
+                                        <td>@item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
+                                        <td>@item.TenCongTac</td>
+                                        <td>@item.DonVi</td>
+                                        <td>@item.KL1DonVi</td>
+                                        <td>@item.TenCongTacTheoDM  </td>
+                                        <td>@item.MaDinhMuc</td>
+                                        <td>@Format.FormatCurrency(item.SLTrai) </td>
+                                        <td>@Format.FormatCurrency(item.SLPhai) </td>
+                                        <td>@Format.FormatCurrency(item.SLTong) </td>
+                                        <td>@Format.FormatCurrency(item.KLTrai) </td>
+                                        <td>@Format.FormatCurrency(item.KLPhai) </td>
+                                        <td>@Format.FormatCurrency(item.KLTong) </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+                        else
+                        {
+                            <tbody>
+                                <tr>
+                                    <td colspan="13"> Không có dữ liệu</td>
+                                </tr>
+                            </tbody>
+                        }
+                    </table>
+
+                    @{
+                        bool isFirstGroup = true;
+                    }
+                    @foreach (var group in THKLByTuyenDuongs.GroupBy(item => item.ThongTinLyTrinh_TuyenDuong))
+                    {
+                        <table class="table table-hover table-bordered mt-3 ml-3">
+                            <thead class="bg-info">
+                                <tr>
+                                    <th>Tuyến đường</th>
+                                    <th>SL trái</th>
+                                    <th>SL phải</th>
+                                    <th>SL tổng</th>
+                                    <th>KL trái</th>
+                                    <th>KL phải</th>
+                                    <th>KL tổng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (isFirstGroup)
+                                {
+                                    <tr>
+                                        <td class="text-bold" style="padding: 3px !important;">
+                                            <Select2 Id="tuyenduong" Items="@selectTuyenDuong" OnChange="@OnSelectChangeTuyenDuong"></Select2>
+                                        </td>
+                                        <td colspan="6"></td>
+                                    </tr>
+                                    isFirstGroup = false;
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td class="text-bold">@group.Key</td>
+                                        <td colspan="6"></td>
+                                    </tr>
+                                }
+
+                                @foreach (var item in group.Skip((tKThepHoGaModel.PageNumber - 1) * tKThepHoGaModel.PageSize).Take(tKThepHoGaModel.PageSize))
+                                {
+                                    <tr>
+                                        <td></td>
+                                        <td>@item.SLTrai</td>
+                                        <td>@item.SLPhai</td>
+                                        <td>@item.SLTong</td>
+                                        <td>@Format.FormatCurrency(@Math.Round(item.KLTrai, 4))</td>
+                                        <td>@Format.FormatCurrency(@Math.Round(@item.KLPhai, 4))</td>
+                                        <td>@Format.FormatCurrency(@Math.Round(@item.KLTong, 4)) </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+                <div class="mt-4">
+                    @if (listTHKLModel.Any())
+                    {
+                        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+    <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
+</div>
+
+
+@code {
+
+    private bool isLoading = false;
+    private bool isModalVisible = false;
+    private string TitleModal = "Thêm mới ";
+    bool isEdit = false;
+    string thumbtack = "";
+    private DateTime baseTime;
+
+    public List<NuocMuaModel> listTuyenDuong { get; set; } = new();
+    public List<NuocMuaModel> listTuyenDuongSelect { get; set; } = new();
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+
+    public List<THKLModel> THKLByTuyenDuongs = new();
+
+    public List<THKLModel> listTHKLModel { get; set; } = new();
+    public List<THKLModel> listModel { get; set; } = new();
+    public MetaData MetaData { get; set; }
+    public THKLModel tKThepHoGaModel { get; set; }
+
+    string ThongTinLyTrinh_TuyenDuong = "";
+    private List<SelectedItem> selectTuyenDuong = new();
+
+    private async void OnSelectChangeTuyenDuong(SelectedItem selectedItem)
+    {
+        int index = listTuyenDuongSelect.FindIndex(item => item.ThongTinLyTrinh_TuyenDuong == selectedItem.Value);
+        if (index >= 0)
+        {
+            listTuyenDuongSelect.RemoveRange(0, index);
+        }
+
+        await LoadData();
+        listTuyenDuongSelect = listTuyenDuong;
+    }
+
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await LoadData();
+            listTuyenDuongSelect = listTuyenDuong;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+    // Truy vấn data theo điều kiện tìm kiếm
+    private async Task LoadData()
+    {
+        try
+        {
+            isLoading = true;
+            tKThepHoGaModel = new();
+            var repository = await PKKLMongCHopRepository.GetTHKLMongCongHop();
+            listModel = repository;
+
+
+            listTuyenDuong = await NuocMuaRepository.GetDSTuyenDuong();
+
+            foreach (var item in listTuyenDuong)
+            {
+                // Kiểm tra và thêm item
+                if (!string.IsNullOrEmpty(item.ThongTinLyTrinh_TuyenDuong) && !selectTuyenDuong.Any(x => x.Value == item.ThongTinLyTrinh_TuyenDuong))
+                {
+                    selectTuyenDuong.Add(new SelectedItem
+                        {
+                            Value = item.ThongTinLyTrinh_TuyenDuong,
+                            Text = item.ThongTinLyTrinh_TuyenDuong ?? ""
+                        });
+                }
+            }
+            if (selectTuyenDuong.Any())
+            {
+                selectTuyenDuong.First().IsSelected = true;
+            }
+
+            // Lấy dữ liệu từ repository
+            if (listTuyenDuongSelect.Count > 0)
+            {
+                THKLByTuyenDuongs = await PKKLMongCHopRepository.GetTHKLByTuyenDuong(listTuyenDuongSelect);
+            }
+            else
+            {
+                THKLByTuyenDuongs = await PKKLMongCHopRepository.GetTHKLByTuyenDuong(listTuyenDuong);
+            }
+
+
+            // Group dữ liệu và tính tổng các trường
+            var groupedData = THKLByTuyenDuongs
+                .GroupBy(item => new { item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai, item.TenCongTac })
+                .Select(group => new
+                {
+                    TenLoaiTruyenDan = group.Key.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                    TenCongTac = group.Key.TenCongTac,
+                    SLTrai = group.Sum(item => item.SLTrai),
+                    SLPhai = group.Sum(item => item.SLPhai),
+                    SLTong = group.Sum(item => item.SLTrai) + group.Sum(item => item.SLPhai),
+                    KLTrai = group.Sum(item => item.KLTrai),
+                    KLPhai = group.Sum(item => item.KLPhai),
+                    KLTong = group.Sum(item => item.KLTrai) + group.Sum(item => item.KLPhai),
+                })
+                .ToList();
+
+            // Lấy tất cả các giá trị tổng từ nhóm và gán vào listModel
+            foreach (var group in groupedData)
+            {
+                // Tìm và cập nhật các mục trong listModel với dữ liệu đã nhóm
+                var model = listModel.FirstOrDefault(m => m.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == group.TenLoaiTruyenDan && m.TenCongTac == group.TenCongTac);
+                if (model != null)
+                {
+                    model.SLTrai = Math.Round(group.SLTrai, 4);
+                    model.SLPhai = Math.Round(group.SLPhai, 4);
+                    model.SLTong = Math.Round(group.SLTong, 4);
+                    model.KLTrai = Math.Round(group.KLTrai, 4);
+                    model.KLPhai = Math.Round(group.KLPhai, 4);
+                    model.KLTong = Math.Round(group.KLTong, 4);
+                }
+            }
+
+            // Phân trang nếu cần
+            listTHKLModel = Paging(listModel);
+            isLoading = false;
+            await InvokeAsync(() =>
+             {
+                 StateHasChanged();
+             });
+        }
+        catch (Exception ex)
+        {
+            isLoading = false;
+            ToastService.ShowToast("Thông báo", ex.Message, cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+
+
+    }
+
+    public async Task Search()
+    {
+        tKThepHoGaModel.PageNumber = 1;
+        await LoadData();
+
+    }
+
+    private async Task HandleValidSubmit()
+    {
+
+        try
+        {
+
+
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+
+    }
+
+    private string deleteId;
+
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        deleteId = id;
+        confirmModal.Title = "Xác nhận xóa";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.openModal();
+
+    }
+
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        try
+        {
+            if (confirmed)
+            {
+                if (!string.IsNullOrEmpty(deleteId))
+                {
+                    string[] ids = { deleteId };
+                    var result = await PKKLMongCHopRepository.CheckExclusive(ids, baseTime);
+                    if (result)
+                    {
+                        // Thực hiện hành động xóa
+                        await PKKLMongCHopRepository.DeleteById(deleteId);
+                        ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                        await LoadData();
+                    }
+
+                    deleteId = "";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                 "Thông báo",
+                ex.Message,
+                 cssClass: "toast-danger",
+               iconClass: "fa fa-exclamation-circle",
+                 progressBarClass: "bg-info",
+                 duration: 5000
+             );
+
+        }
+    }
+
+    int Flag = 0;
+    //thêm vào sau
+    private void InsertLaterFlag(int flag)
+    {
+        Flag = flag;
+        TitleModal = "Chèn loại cống !";
+        isModalVisible = true;
+    }
+
+
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        tKThepHoGaModel.PageNumber = 1;
+        Paging(listModel);
+    }
+
+
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        tKThepHoGaModel.PageNumber = page;
+        Paging(listModel);
+    }
+
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+        tKThepHoGaModel.PageNumber = 1;
+        tKThepHoGaModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+
+
+    // Xử lý paging
+    private List<THKLModel> Paging(List<THKLModel> listModels)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = listModels.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        listModels = listModels.Skip((tKThepHoGaModel.PageNumber - 1) * tKThepHoGaModel.PageSize).Take(tKThepHoGaModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listTHKLModel.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var major in listModels)
+        {
+            listTHKLModel.Add(major);
+        }
+
+        // Tạo pagelist mới
+
+        var pagelist = new PageList<THKLModel>(listTHKLModel, count, tKThepHoGaModel.PageNumber, tKThepHoGaModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return listModels;
+    }
+
+    private void ThumbtackHeader()
+    {
+        thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
+    }
+
+    public static double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
+    {
+        if (DonVi == "M3")
+        {
+            if (string.IsNullOrEmpty(KTHH_GhiChu) || KTHH_GhiChu == "0")
+            {
+                return KTHH_D * KTHH_R * KTHH_C;
+            }
+            else if (KTHH_GhiChu == "Rộng*Cao")
+            {
+                return KTHH_DienTich * KTHH_D;
+            }
+            else if (KTHH_GhiChu == "Dài*Cao")
+            {
+                return KTHH_DienTich * KTHH_R;
+            }
+            else if (KTHH_GhiChu == "Dài*Rộng")
+            {
+                return KTHH_DienTich * KTHH_C;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        return 0;
+    }
+
+    public static double TTCDT_KL(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double TTCDT_CDai, double TTCDT_CRong, double TTCDT_CDay, double TTCDT_DienTich)
+    {
+        if (DonVi.ToUpper().Trim() == "M2")
+        {
+            if (string.IsNullOrEmpty(TTCDT_DienTich.ToString()) || TTCDT_DienTich == 0)
+            {
+                return (KTHH_D * KTHH_C * TTCDT_CDai) + (KTHH_R * KTHH_C * TTCDT_CRong) + (KTHH_D * KTHH_R * TTCDT_CDay);
+            }
+            else
+            {
+                return TTCDT_DienTich;
+            }
+        }
+        return 0;
+    }
+
+    public static double KL1CK_ChuaTruCC(double KTHH_KL1CK, double KTHH_SLCauKien, double TTCDT_KL, double TTCDT_SLCK, double KLKP_KL, double KLKP_Sl)
+    {
+        if (KTHH_KL1CK > 0)
+        {
+            return KTHH_KL1CK * KTHH_SLCauKien;
+        }
+        else if (TTCDT_KL > 0)
+        {
+            return TTCDT_KL * TTCDT_SLCK;
+        }
+        else
+        {
+            return KLKP_KL * KLKP_Sl;
+        }
+    }
+
+    public static string getChiMuc(string DK)
+    {
+        string ChiMuc = "I";
+        switch (DK)
+        {
+            case "I.Sản xuất, vận chuyển, lắp đặt":
+                ChiMuc = "I";
+                break;
+            case "II.Sản xuất + V.Chuyển B.Tông T.Phẩm":
+                ChiMuc = "II";
+                break;
+            case "II.Gia công, lắp dựng cốt thép":
+                ChiMuc = "III";
+                break;
+        }
+        return ChiMuc;
+    }
+}
+

@@ -12,8 +12,7 @@ namespace DucAnhERP.Repository
 
         Task<List<THKLModel>> GetTHKLMongCongTron();
         Task<List<THKLModel>> GetTHKLByTuyenDuong(List<NuocMuaModel> nuocMua);
-
-        //Task<PKKLMongCTron> GetTKLCK_SauCCByLCK(string id);
+        Task<PKKLMongCTron> GetTKLCK_SauCCByLCK(string id);
         //Task<List<THKLModel>> GetTHKLCongTron();
         //Task<List<THKLModel>> GetTHKLByTuyenDuong(List<NuocMuaModel> nuocMua);
     }
