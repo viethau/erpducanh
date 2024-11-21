@@ -10,8 +10,6 @@ namespace DucAnhERP.Services
     public class PKKLMongCHopRepository :IPKKLMongCHopRepository
     {
         private readonly IDbContextFactory<ApplicationDbContext> _context;
-
-
         public PKKLMongCHopRepository(IDbContextFactory<ApplicationDbContext> context)
         {
             _context = context;
@@ -136,7 +134,7 @@ namespace DucAnhERP.Services
                                           && x.HangMucCongTac == a.HangMucCongTac
                                           && x.TenCongTac == a.TenCongTac)
                                  .Sum(x => x.TKLCK_SauCC)
-                             orderby a.HangMuc, a.CreateAt
+                             orderby b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ,a.HangMuc, a.CreateAt
                              select new THKLModel
                              {
                                  PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop??"",
@@ -179,7 +177,7 @@ namespace DucAnhERP.Services
                                  a.HangMuc,
                                  a.CreateAt
                              } into g
-                             orderby g.Key.HangMuc, g.Key.CreateAt
+                             orderby g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop, g.Key.HangMuc, g.Key.CreateAt
                              select new THKLModel
                              {
                                  Id = g.Key.Id,
@@ -236,7 +234,7 @@ namespace DucAnhERP.Services
                                            a.HangMuc,
                                            a.CreateAt
                                        } into g
-                                       orderby g.Key.HangMuc, g.Key.CreateAt
+                                       orderby g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop, g.Key.HangMuc, g.Key.CreateAt
                                        select new THKLModel
                                        {
                                            Id = g.Key.Id,

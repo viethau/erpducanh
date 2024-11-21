@@ -53,7 +53,7 @@ namespace DucAnhERP.Services
                 var query = from a in context.PKKLCTrons
                             join b in context.PhanLoaiCTronHopNhuas
                             on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals b.Id
-                            orderby a.HangMuc ascending, a.LoaiBeTong descending, a.CreateAt ascending
+                            orderby b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ascending, a.HangMuc ascending, a.LoaiBeTong descending, a.CreateAt ascending
                             select new PKKLModel
                             {
                                 Id= a.Id,
@@ -123,7 +123,7 @@ namespace DucAnhERP.Services
                                           && x.HangMucCongTac == a.HangMucCongTac
                                           && x.TenCongTac == a.TenCongTac)
                                  .Sum(x => x.TKLCK_SauCC)
-                             orderby a.HangMuc, a.CreateAt
+                             orderby b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,a.HangMuc, a.CreateAt
                              select new THKLModel
                              {
                                  PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
@@ -166,7 +166,7 @@ namespace DucAnhERP.Services
                                  a.HangMuc,
                                  a.CreateAt
                              } into g
-                             orderby g.Key.HangMuc, g.Key.CreateAt
+                             orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai,  g.Key.HangMuc, g.Key.CreateAt
                              select new THKLModel
                              {
                                  Id = g.Key.Id,
@@ -216,14 +216,14 @@ namespace DucAnhERP.Services
                                        {
                                            a.Id,
                                            a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
-                                           PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai =c.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                           PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = c.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ??"",
                                            a.TenCongTac,
                                            a.DonVi,
                                            a.TKLCK_SauCC,
                                            a.HangMuc,
                                            a.CreateAt
                                        } into g
-                                       orderby g.Key.HangMuc, g.Key.CreateAt
+                                       orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, g.Key.HangMuc, g.Key.CreateAt
                                        select new THKLModel
                                        {
                                            Id = g.Key.Id,
@@ -240,8 +240,7 @@ namespace DucAnhERP.Services
                                            KLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0,
                                            KLTong = g.Sum(x => x.c != null ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0
                                        }).ToListAsync();
-
-
+                   
 
                     // Thêm kết quả của truy vấn vào danh sách `finalResult`
                     finalResult.AddRange(query);
@@ -676,65 +675,65 @@ namespace DucAnhERP.Services
             }
         }
 
-        public double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
+        public  double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
         {
-
+            double result = 0;
             if (DonVi == "M3")
             {
                 if (string.IsNullOrEmpty(KTHH_GhiChu) || KTHH_GhiChu == "0")
                 {
-                    return KTHH_D * KTHH_R * KTHH_C;
+                    result = KTHH_D * KTHH_R * KTHH_C;
                 }
                 else if (KTHH_GhiChu == "Rộng*Cao")
                 {
-                    return KTHH_DienTich * KTHH_D;
+                    result = KTHH_DienTich * KTHH_D;
                 }
                 else if (KTHH_GhiChu == "Dài*Cao")
                 {
-                    return KTHH_DienTich * KTHH_R;
+                    result = KTHH_DienTich * KTHH_R;
                 }
                 else if (KTHH_GhiChu == "Dài*Rộng")
                 {
-                    return KTHH_DienTich * KTHH_C;
+                    result = KTHH_DienTich * KTHH_C;
                 }
-                else
-                {
-                    return 0;
-                }
+
             }
-            return 0;
+            return Math.Round(result, 4);
         }
 
-        public double TTCDT_KL(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double TTCDT_CDai, double TTCDT_CRong, double TTCDT_CDay, double TTCDT_DienTich)
+        public  double TTCDT_KL(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double TTCDT_CDai, double TTCDT_CRong, double TTCDT_CDay, double TTCDT_DienTich)
         {
+            double result = 0;
             if (DonVi.ToUpper().Trim() == "M2")
             {
                 if (string.IsNullOrEmpty(TTCDT_DienTich.ToString()) || TTCDT_DienTich == 0)
                 {
-                    return (KTHH_D * KTHH_C * TTCDT_CDai) + (KTHH_R * KTHH_C * TTCDT_CRong) + (KTHH_D * KTHH_R * TTCDT_CDay);
+                    result = (KTHH_D * KTHH_C * TTCDT_CDai) + (KTHH_R * KTHH_C * TTCDT_CRong) + (KTHH_D * KTHH_R * TTCDT_CDay);
                 }
                 else
                 {
-                    return TTCDT_DienTich;
+                    result = TTCDT_DienTich;
                 }
             }
-            return 0;
+            return Math.Round(result, 4);
         }
 
         public  double KL1CK_ChuaTruCC(double KTHH_KL1CK, double KTHH_SLCauKien, double TTCDT_KL, double TTCDT_SLCK, double KLKP_KL, double KLKP_Sl)
         {
+            double result = 0;
             if (KTHH_KL1CK > 0)
             {
-                return KTHH_KL1CK * KTHH_SLCauKien;
+                result = KTHH_KL1CK * KTHH_SLCauKien;
             }
             else if (TTCDT_KL > 0)
             {
-                return TTCDT_KL * TTCDT_SLCK;
+                result = TTCDT_KL * TTCDT_SLCK;
             }
             else
             {
-                return KLKP_KL * KLKP_Sl;
+                result = KLKP_KL * KLKP_Sl;
             }
+            return Math.Round(result, 4);
         }
 
 

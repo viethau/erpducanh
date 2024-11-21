@@ -398,6 +398,102 @@ h1:focus {
     line-height: 1.2rem;
 }
 
+
+/* Màu cơ bản */
+.text-primary {
+    color: #007bff; /* Xanh dương */
+}
+
+.text-secondary {
+    color: #6c757d; /* Xám nhạt */
+}
+
+.text-success {
+    color: #28a745; /* Xanh lá */
+}
+
+.text-danger {
+    color: #dc3545 !important; /* Đỏ */
+}
+
+.text-warning {
+    color: #ffc107 !important; /* Vàng */
+}
+
+.text-info {
+    color: #17a2b8 !important; /* Xanh ngọc */
+}
+
+.text-light {
+    color: #f8f9fa !important; /* Trắng nhạt */
+}
+
+.text-dark {
+    color: #343a40 !important; /* Xám đậm */
+}
+
+.text-white {
+    color: #ffffff !important; /* Trắng */
+}
+
+.text-black {
+    color: #000000 !important; /* Đen */
+}
+
+/* Màu gradient hoặc sắc thái khác */
+.text-blue {
+    color: #1e90ff !important; /* Xanh dương đậm */
+}
+
+.text-sky {
+    color: #87ceeb !important; /* Xanh da trời nhạt */
+}
+
+.text-green {
+    color: #32cd32 !important; /* Xanh lá cây đậm */
+}
+
+.text-teal {
+    color: #20c997 !important; /* Xanh lam nhạt */
+}
+
+.text-yellow {
+    color: #ffd700 !important; /* Vàng óng */
+}
+
+.text-orange {
+    color: #ff8c00 !important; /* Cam đậm */
+}
+
+.text-red {
+    color: #ff4500 !important; /* Đỏ cam */
+}
+
+.text-pink {
+    color: #ff69b4 !important; /* Hồng nhạt */
+}
+
+.text-purple {
+    color: #800080 !important; /* Tím đậm */
+}
+
+.text-brown {
+    color: #a52a2a !important; /* Nâu */
+}
+
+.text-gray {
+    color: #808080 !important; /* Xám trung tính */
+}
+
+.text-silver {
+    color: #c0c0c0 !important; /* Bạc */
+}
+
+.text-gold {
+    color: #ffd700 !important; /* Vàng kim */
+}
+
+
 @keyframes fadeOut {
     0% {
         opacity: 1;

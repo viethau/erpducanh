@@ -1,4 +1,5 @@
-﻿using DucAnhERP.Models;
+﻿using DucAnhERP.Components.Pages.NghiepVuCongTrinh.PKKL;
+using DucAnhERP.Models;
 using DucAnhERP.Services.SignalR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -74,6 +75,7 @@ namespace DucAnhERP.Data
         public DbSet<PKKLCHop> PKKLCHops { get; set; }
         public DbSet<PKKLMongCHop> PKKLMongCHops { get; set; }
         public DbSet<PKKLTDanCHop> PKKLTDanCHops { get; set; }
+        public DbSet<PKKLRanhBT> PKKLRanhBTs { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -11,14 +11,10 @@ namespace DucAnhERP.Services
 {
     public class PKKLMongCTronRepository : IPKKLMongCTronRepository
     {
-
         private readonly IDbContextFactory<ApplicationDbContext> _context;
-      
-
         public PKKLMongCTronRepository(IDbContextFactory<ApplicationDbContext> context)
         {
             _context = context;
-            
         }
         public async Task<List<PKKLMongCTron>> GetAll()
         {
@@ -139,7 +135,7 @@ namespace DucAnhERP.Services
                                           && x.HangMucCongTac == a.HangMucCongTac
                                           && x.TenCongTac == a.TenCongTac)
                                  .Sum(x => x.TKLCK_SauCC)
-                             orderby a.HangMuc, a.CreateAt
+                             orderby b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop, a.HangMuc, a.CreateAt
                              select new THKLModel
                              {
                                  PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
@@ -182,7 +178,7 @@ namespace DucAnhERP.Services
                                  a.HangMuc,
                                  a.CreateAt
                              } into g
-                             orderby g.Key.HangMuc, g.Key.CreateAt
+                             orderby g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop, g.Key.HangMuc, g.Key.CreateAt
                              select new THKLModel
                              {
                                  Id = g.Key.Id,
@@ -239,7 +235,7 @@ namespace DucAnhERP.Services
                                            a.HangMuc,
                                            a.CreateAt
                                        } into g
-                                       orderby g.Key.HangMuc, g.Key.CreateAt
+                                       orderby g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop, g.Key.HangMuc, g.Key.CreateAt
                                        select new THKLModel
                                        {
                                            Id = g.Key.Id,
@@ -256,8 +252,6 @@ namespace DucAnhERP.Services
                                            KLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) * g.Key.TKLCK_SauCC ?? 0,
                                            KLTong = g.Sum(x => x.c != null ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) * g.Key.TKLCK_SauCC ?? 0
                                        }).ToListAsync();
-
-
 
                     // Thêm kết quả của truy vấn vào danh sách `finalResult`
                     finalResult.AddRange(query);

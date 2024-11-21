@@ -121,7 +121,7 @@ namespace DucAnhERP.Services
                                           && x.HangMucCongTac == a.HangMucCongTac
                                           && x.TenCongTac == a.TenCongTac)
                                  .Sum(x => x.TKLCK_SauCC)
-                             orderby a.HangMuc, a.CreateAt
+                             orderby b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai, a.HangMuc, a.CreateAt
                              select new THKLModel
                              {
                                  PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
@@ -164,7 +164,7 @@ namespace DucAnhERP.Services
                                  a.HangMuc,
                                  a.CreateAt
                              } into g
-                             orderby g.Key.HangMuc, g.Key.CreateAt
+                             orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, g.Key.HangMuc, g.Key.CreateAt
                              select new THKLModel
                              {
                                  Id = g.Key.Id,
@@ -221,7 +221,7 @@ namespace DucAnhERP.Services
                                            a.HangMuc,
                                            a.CreateAt
                                        } into g
-                                       orderby g.Key.HangMuc, g.Key.CreateAt
+                                       orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, g.Key.HangMuc, g.Key.CreateAt
                                        select new THKLModel
                                        {
                                            Id = g.Key.Id,

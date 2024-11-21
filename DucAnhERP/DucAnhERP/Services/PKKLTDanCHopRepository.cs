@@ -51,7 +51,7 @@ namespace DucAnhERP.Services
                 var query = from a in context.PKKLTDanCHops
                             join b in context.PhanLoaiTDanTDans
                             on a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan equals b.Id
-                            orderby a.HangMuc ascending, a.LoaiBeTong descending, a.CreateAt ascending
+                            orderby b.TTTDCongHoRanh_TenLoaiTamDanTieuChuan ascending , a.HangMuc ascending, a.LoaiBeTong descending, a.CreateAt ascending
                             select new PKKLModel
                             {
                                 Id = a.Id,
@@ -121,7 +121,7 @@ namespace DucAnhERP.Services
                                           && x.HangMucCongTac == a.HangMucCongTac
                                           && x.TenCongTac == a.TenCongTac)
                                  .Sum(x => x.TKLCK_SauCC)
-                             orderby a.HangMuc, a.CreateAt
+                             orderby b.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,a.HangMuc, a.CreateAt
                              select new THKLModel
                              {
                                  PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.TTTDCongHoRanh_TenLoaiTamDanTieuChuan??"",
@@ -164,7 +164,7 @@ namespace DucAnhERP.Services
                                  a.HangMuc,
                                  a.CreateAt
                              } into g
-                             orderby g.Key.HangMuc, g.Key.CreateAt
+                             orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, g.Key.HangMuc, g.Key.CreateAt
                              select new THKLModel
                              {
                                  Id = g.Key.Id,
@@ -207,42 +207,108 @@ namespace DucAnhERP.Services
                                        join b in context.PhanLoaiTDanTDans
                                            on a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan equals b.Id
                                        join c in context.DSNuocMua
-                                           on a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan equals c.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai into cGroup
+                                           on a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan equals c.TTTDCongHoRanh_TenLoaiTamDanTieuChuan into cGroup
                                        from c in cGroup.Where(c => c.ThongTinLyTrinh_TuyenDuong == item.ThongTinLyTrinh_TuyenDuong).DefaultIfEmpty()
 
                                        group new { a, b, c } by new
                                        {
                                            a.Id,
                                            a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
-                                           PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = c.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
+                                           PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
                                            a.TenCongTac,
                                            a.DonVi,
                                            a.TKLCK_SauCC,
                                            a.HangMuc,
                                            a.CreateAt
                                        } into g
-                                       orderby g.Key.HangMuc, g.Key.CreateAt
+                                       orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, g.Key.HangMuc, g.Key.CreateAt
                                        select new THKLModel
                                        {
                                            Id = g.Key.Id,
                                            ThongTinLyTrinh_TuyenDuong = item.ThongTinLyTrinh_TuyenDuong,  // Thông tin cố định từ SQL
                                            ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = g.Key.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
-                                           PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = g.Key.TTTDCongHoRanh_TenLoaiTamDanTieuChuan, // Cố định tên loại từ SQL
+                                           PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, // Cố định tên loại từ SQL
                                            TenCongTac = g.Key.TenCongTac,
                                            DonVi = g.Key.DonVi,
                                            KL1DonVi = g.Key.TKLCK_SauCC,
-                                           SLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
-                                           SLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
-                                           SLTong = g.Sum(x => x.c != null ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
-                                           KLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0,
-                                           KLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0,
-                                           KLTong = g.Sum(x => x.c != null ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0
+                                           SLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTTDCongHoRanh_SoLuong : 0) ?? 0,
+                                           SLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTTDCongHoRanh_SoLuong : 0) ?? 0,
+                                           SLTong = g.Sum(x => x.c != null ? x.c.TTTDCongHoRanh_SoLuong : 0) ?? 0,
+                                           KLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTTDCongHoRanh_SoLuong : 0) * g.Key.TKLCK_SauCC ?? 0,
+                                           KLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTTDCongHoRanh_SoLuong : 0) * g.Key.TKLCK_SauCC ?? 0,
+                                           KLTong = g.Sum(x => x.c != null ? x.c.TTTDCongHoRanh_SoLuong : 0) * g.Key.TKLCK_SauCC ?? 0
                                        }).ToListAsync();
 
+                    var query1 = await (from a in context.PKKLTDanCHops
+                                        join b in context.PhanLoaiTDanTDans
+                                            on a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan equals b.Id
+                                        join c in context.DSNuocMua
+                                            on a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan equals c.TTTDCongHoRanh_TenLoaiTamDanLoai02 into cGroup
+                                        from c in cGroup.Where(c => c.ThongTinLyTrinh_TuyenDuong == item.ThongTinLyTrinh_TuyenDuong).DefaultIfEmpty()
 
+                                        group new { a, b, c } by new
+                                        {
+                                            a.Id,
+                                            a.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
+                                            PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
+                                            a.TenCongTac,
+                                            a.DonVi,
+                                            a.TKLCK_SauCC,
+                                            a.HangMuc,
+                                            a.CreateAt
+                                        } into g
+                                        orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai,g.Key.HangMuc, g.Key.CreateAt
+                                        select new THKLModel
+                                        {
+                                            Id = g.Key.Id,
+                                            ThongTinLyTrinh_TuyenDuong = item.ThongTinLyTrinh_TuyenDuong,  // Thông tin cố định từ SQL
+                                            ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = g.Key.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
+                                            PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, // Cố định tên loại từ SQL
+                                            TenCongTac = g.Key.TenCongTac,
+                                            DonVi = g.Key.DonVi,
+                                            KL1DonVi = g.Key.TKLCK_SauCC,
+                                            SLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTTDCongHoRanh_SoLuong1 : 0) ?? 0,
+                                            SLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTTDCongHoRanh_SoLuong1 : 0) ?? 0,
+                                            SLTong = g.Sum(x => x.c != null ? x.c.TTTDCongHoRanh_SoLuong1 : 0) ?? 0,
+                                            KLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTTDCongHoRanh_SoLuong1 : 0) * g.Key.TKLCK_SauCC ?? 0,
+                                            KLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTTDCongHoRanh_SoLuong1 : 0) * g.Key.TKLCK_SauCC ?? 0,
+                                            KLTong = g.Sum(x => x.c != null ? x.c.TTTDCongHoRanh_SoLuong1 : 0) * g.Key.TKLCK_SauCC ?? 0
+                                        }).ToListAsync();
 
-                    // Thêm kết quả của truy vấn vào danh sách `finalResult`
-                    finalResult.AddRange(query);
+                    if (query != null)
+                    {
+                        if (query1 != null)
+                        {
+                           
+                            foreach (var obj in query)
+                            {
+                                var matchingItem = query1.FirstOrDefault(x => x.Id == item.Id);
+
+                                if (matchingItem != null)
+                                {
+                                    obj.SLTrai += matchingItem.SLTrai;
+                                    obj.SLPhai += matchingItem.SLPhai;
+                                    obj.SLTong += matchingItem.SLTong;
+                                    obj.KLTrai += matchingItem.KLTrai;
+                                    obj.KLPhai += matchingItem.KLPhai;
+                                    obj.KLTong += matchingItem.KLTong;
+                                }
+                            }
+                            finalResult.AddRange(query);
+                        }
+                        else
+                        {
+                           
+                            finalResult.AddRange(query);
+                        }
+                        
+                    }
+                    else
+                    {
+                       
+                        finalResult.AddRange(query1);
+                    }
+                    
                 }
 
                 // Trả về danh sách kết quả cuối cùng
@@ -255,7 +321,6 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-
         public async Task<PKKLTDanCHop> GetTKLCK_SauCCByLCK(string id)
         {
             using var context = _context.CreateDbContext();
@@ -357,8 +422,6 @@ namespace DucAnhERP.Services
                 throw;
             }
         }
-
-
         public async Task DeleteById(string id)
         {
             using var context = _context.CreateDbContext();
@@ -473,8 +536,6 @@ namespace DucAnhERP.Services
                 return id;
             }
         }
-
-
         public async Task SaveChanges(ApplicationDbContext context)
         {
             try
@@ -528,7 +589,6 @@ namespace DucAnhERP.Services
                 throw;
             }
         }
-
         // Xử lý khi thêm mới entity
         private async Task HandleEntityAdd(EntityEntry entityEntry)
         {
@@ -606,7 +666,6 @@ namespace DucAnhERP.Services
 
             }
         }
-
         // Xử lý khi xóa entity
         private async Task HandleEntityDelete(EntityEntry entityEntry)
         {
@@ -673,66 +732,63 @@ namespace DucAnhERP.Services
                 }
             }
         }
-
-        public double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
+        public  double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
         {
-
+            double result = 0;
             if (DonVi == "M3")
             {
                 if (string.IsNullOrEmpty(KTHH_GhiChu) || KTHH_GhiChu == "0")
                 {
-                    return KTHH_D * KTHH_R * KTHH_C;
+                    result = KTHH_D * KTHH_R * KTHH_C;
                 }
                 else if (KTHH_GhiChu == "Rộng*Cao")
                 {
-                    return KTHH_DienTich * KTHH_D;
+                    result = KTHH_DienTich * KTHH_D;
                 }
                 else if (KTHH_GhiChu == "Dài*Cao")
                 {
-                    return KTHH_DienTich * KTHH_R;
+                    result = KTHH_DienTich * KTHH_R;
                 }
                 else if (KTHH_GhiChu == "Dài*Rộng")
                 {
-                    return KTHH_DienTich * KTHH_C;
+                    result = KTHH_DienTich * KTHH_C;
                 }
-                else
-                {
-                    return 0;
-                }
-            }
-            return 0;
-        }
 
+            }
+            return Math.Round(result, 4);
+        }
         public double TTCDT_KL(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double TTCDT_CDai, double TTCDT_CRong, double TTCDT_CDay, double TTCDT_DienTich)
         {
+            double result = 0;
             if (DonVi.ToUpper().Trim() == "M2")
             {
                 if (string.IsNullOrEmpty(TTCDT_DienTich.ToString()) || TTCDT_DienTich == 0)
                 {
-                    return (KTHH_D * KTHH_C * TTCDT_CDai) + (KTHH_R * KTHH_C * TTCDT_CRong) + (KTHH_D * KTHH_R * TTCDT_CDay);
+                    result = (KTHH_D * KTHH_C * TTCDT_CDai) + (KTHH_R * KTHH_C * TTCDT_CRong) + (KTHH_D * KTHH_R * TTCDT_CDay);
                 }
                 else
                 {
-                    return TTCDT_DienTich;
+                    result = TTCDT_DienTich;
                 }
             }
-            return 0;
+            return Math.Round(result, 4);
         }
-
         public double KL1CK_ChuaTruCC(double KTHH_KL1CK, double KTHH_SLCauKien, double TTCDT_KL, double TTCDT_SLCK, double KLKP_KL, double KLKP_Sl)
         {
+            double result = 0;
             if (KTHH_KL1CK > 0)
             {
-                return KTHH_KL1CK * KTHH_SLCauKien;
+                result = KTHH_KL1CK * KTHH_SLCauKien;
             }
             else if (TTCDT_KL > 0)
             {
-                return TTCDT_KL * TTCDT_SLCK;
+                result = TTCDT_KL * TTCDT_SLCK;
             }
             else
             {
-                return KLKP_KL * KLKP_Sl;
+                result = KLKP_KL * KLKP_Sl;
             }
+            return Math.Round(result, 4);
         }
 
     }

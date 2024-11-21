@@ -121,7 +121,7 @@ namespace DucAnhERP.Services
                                           && x.HangMucCongTac == a.HangMucCongTac
                                           && x.TenCongTac == a.TenCongTac)
                                  .Sum(x => x.TKLCK_SauCC)
-                             orderby a.HangMuc, a.CreateAt
+                             orderby b.ThongTinDeCong_TenLoaiDeCong ,a.HangMuc, a.CreateAt
                              select new THKLModel
                              {
                                  PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDeCong_TenLoaiDeCong??"",
@@ -164,7 +164,7 @@ namespace DucAnhERP.Services
                                  a.HangMuc,
                                  a.CreateAt
                              } into g
-                             orderby g.Key.HangMuc, g.Key.CreateAt
+                             orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, g.Key.HangMuc, g.Key.CreateAt
                              select new THKLModel
                              {
                                  Id = g.Key.Id,
@@ -221,7 +221,7 @@ namespace DucAnhERP.Services
                                            a.HangMuc,
                                            a.CreateAt
                                        } into g
-                                       orderby g.Key.HangMuc, g.Key.CreateAt
+                                       orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, g.Key.HangMuc, g.Key.CreateAt
                                        select new THKLModel
                                        {
                                            Id = g.Key.Id,
@@ -238,9 +238,6 @@ namespace DucAnhERP.Services
                                            KLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.ThongTinDeCong_SlDeCong01CauKienTruyenDan : 0) * g.Key.TKLCK_SauCC ?? 0,
                                            KLTong = g.Sum(x => x.c != null ? x.c.ThongTinDeCong_SlDeCong01CauKienTruyenDan : 0) * g.Key.TKLCK_SauCC ?? 0
                                        }).ToListAsync();
-
-
-
                     // Thêm kết quả của truy vấn vào danh sách `finalResult`
                     finalResult.AddRange(query);
                 }

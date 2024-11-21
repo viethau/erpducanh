@@ -271,62 +271,64 @@
                         @if (listPKKLMongCTronModel.Any())
                         {
                             <tbody>
-                                @{
+                                @foreach (var group in listPKKLMongCTronModel.GroupBy(item => item.LoaiCauKienId))
+                                {
+
                                     int stt = 0;
                                     string HangMuc = "";
-                                }
-                                @foreach (var item in listPKKLMongCTronModel)
-                                {
-                                    stt++;
-
-                                    if (string.IsNullOrEmpty(HangMuc) || HangMuc.ToUpper().Trim() != @item.HangMuc.ToUpper().Trim())
+                                    @foreach (var item in group)
                                     {
-                                        HangMuc = @item.HangMuc;
-                                        <tr class="bg-warning text-bold">
-                                            <td></td>
-                                            <td>@getChiMuc(HangMuc)</td>
-                                            <td colspan="2">@item.LoaiCauKien</td>
-                                            <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
-                                            <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
-                                            <td colspan="19"></td>
+                                        stt++;
+
+                                        if (string.IsNullOrEmpty(HangMuc) || HangMuc.ToUpper().Trim() != @item.HangMuc.ToUpper().Trim())
+                                        {
+                                            HangMuc = @item.HangMuc;
+                                            <tr class="bg-warning text-bold">
+                                                <td></td>
+                                                <td>@getChiMuc(HangMuc)</td>
+                                                <td colspan="2">@item.LoaiCauKien</td>
+                                                <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
+                                                <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
+                                                <td colspan="19"></td>
+                                            </tr>
+                                        }
+                                        <tr>
+                                            <td class="d-flex nowrap">
+                                                <div class="d-inline-block">
+                                                    <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td>@stt</td>
+                                            <td>@item.LoaiCauKien</td>
+                                            <td>@item.LoaiBeTong</td>
+                                            <td>@item.HangMucCongTac</td>
+                                            <td>@item.TenCongTac</td>
+                                            <td>@item.DonVi</td>
+                                            <td>@item.KTHH_D</td>
+                                            <td>@item.KTHH_R</td>
+                                            <td>@item.KTHH_C</td>
+                                            <td>@item.KTHH_DienTich</td>
+                                            <td>@item.KTHH_GhiChu</td>
+                                            <td>@item.KTHH_SLCauKien</td>
+                                            <td>@item.KTHH_KL1CK</td>
+                                            <td>@item.TTCDT_CDai</td>
+                                            <td>@item.TTCDT_CRong</td>
+                                            <td>@item.TTCDT_CDay</td>
+                                            <td>@item.TTCDT_DienTich</td>
+                                            <td>@item.TTCDT_SLCK</td>
+                                            <td>@item.TTCDT_KL</td>
+                                            <td>@item.KLKP_KL</td>
+                                            <td>@item.KLKP_Sl</td>
+                                            <td>@item.KL1CK_ChuaTruCC </td>
+                                            <td>@item.KLCC1CK </td>
+                                            <td>@item.TKLCK_SauCC </td>
                                         </tr>
                                     }
-                                    <tr>
-                                        <td class="d-flex nowrap">
-                                            <div class="d-inline-block">
-                                                <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                                <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
-                                                    <i class="fas fa-plus"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td>@stt</td>
-                                        <td>@item.LoaiCauKien</td>
-                                        <td>@item.LoaiBeTong</td>
-                                        <td>@item.HangMucCongTac</td>
-                                        <td>@item.TenCongTac</td>
-                                        <td>@item.DonVi</td>
-                                        <td>@item.KTHH_D</td>
-                                        <td>@item.KTHH_R</td>
-                                        <td>@item.KTHH_C</td>
-                                        <td>@item.KTHH_DienTich</td>
-                                        <td>@item.KTHH_GhiChu</td>
-                                        <td>@item.KTHH_SLCauKien</td>
-                                        <td>@item.KTHH_KL1CK</td>
-                                        <td>@item.TTCDT_CDai</td>
-                                        <td>@item.TTCDT_CRong</td>
-                                        <td>@item.TTCDT_CDay</td>
-                                        <td>@item.TTCDT_DienTich</td>
-                                        <td>@item.TTCDT_SLCK</td>
-                                        <td>@item.TTCDT_KL</td>
-                                        <td>@item.KLKP_KL</td>
-                                        <td>@item.KLKP_Sl</td>
-                                        <td>@item.KL1CK_ChuaTruCC </td>
-                                        <td>@item.KLCC1CK </td>
-                                        <td>@Math.Round(item.TKLCK_SauCC,4) </td>
-                                    </tr>
                                 }
                             </tbody>
                         }
