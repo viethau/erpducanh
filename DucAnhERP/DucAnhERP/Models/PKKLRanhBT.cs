@@ -16,7 +16,7 @@ namespace DucAnhERP.Models
         [Required(ErrorMessage = "Bạn phải nhập tên công tác ")]
         public string TenCongTac { get; set; } = "";
         public string DonVi { get; set; } = "";
-        public double KTHH_D { get; set; } = 0;
+        public double KTHH_D { get; set; } = 1;
         public double KTHH_R { get; set; } = 0;
         public double KTHH_C { get; set; } = 0;
         public double KTHH_DienTich { get; set; } = 0;

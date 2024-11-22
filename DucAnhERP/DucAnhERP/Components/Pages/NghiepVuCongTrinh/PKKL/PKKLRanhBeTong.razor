@@ -7,11 +7,11 @@
 @using DucAnhERP.Helpers
 @inject NavigationManager navigation
 @inject IPKKLRanhBTRepository PKKLRanhBTRepository
-@inject ITKThepTDanCHopRepository TKThepTDanCHopRepository
+@inject ITKThepRBTongRepository TKThepRBTongRepository
 @inject INuocMuaRepository NuocMuaRepository
 @inject IDanhMucRepository DanhMucRepository
 @inject IDMTLThepRepository DMTLThepRepository
-@inject IPhanLoaiTDanTDanRepository PhanLoaiTDanTDanRepository
+@inject IPhanLoaiCTronHopNhuaRepository PhanLoaiCTronHopNhuaRepository
 
 @inject DucAnhERP.Services.ToastService ToastService
 <style>
@@ -85,17 +85,17 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3" title="Bắt buộc phải nhập giá trị vào đây. Giá trị là chiều dài thực tế của 01 cấu kiện">
                                 <label for="KTHH_D">D<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_D" class="form-control" id="KTHH_D" disabled="@disKTHH" />
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_D" class="form-control" id="KTHH_D"  />
                                 <ValidationMessage For="() => Input.KTHH_D" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="KTHH_R">R<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_R" class="form-control" id="KTHH_R" disabled="@disKTHH" />
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_R" class="form-control" id="KTHH_R" disabled="@disKTHH_R" />
                                 <ValidationMessage For="() => Input.KTHH_R" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="KTHH_C">C<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_C" class="form-control" id="KTHH_C" disabled="@disKTHH" />
+                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_C" class="form-control" id="KTHH_C" disabled="@disKTHH_C" />
                                 <ValidationMessage For="() => Input.KTHH_C" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3" title="Bắt buộc phải nhập giá trị tương ứng vào đây. Giá trị là kết quả của của chiều rộng  chiều cao của 01 cấu kiện cống tròn">
@@ -374,9 +374,11 @@
     private List<SelectedItem> selectHMTC = new List<SelectedItem>
     {
         new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true },
-        new SelectedItem { Value = "I.Sản xuất, vận chuyển, lắp đặt", Text = "I.Sản xuất, vận chuyển, lắp đặt " },
-        new SelectedItem { Value = "II.Sản xuất + V.Chuyển B.Tông T.Phẩm", Text = "II.Sản xuất + V.Chuyển B.Tông T.Phẩm  "},
-        new SelectedItem { Value = "III.Gia công, lắp dựng cốt thép", Text = "III.Gia công, lắp dựng cốt thép "},
+        new SelectedItem { Value = "I.Móng", Text = "I.Móng " },
+        new SelectedItem { Value = "II.Tường", Text = "II.Tường "},
+        new SelectedItem { Value = "III.Mũ mố", Text = "III.Mũ mố "},
+        new SelectedItem { Value = "IV.Sản xuất + V.Chuyển B.Tông T.Phẩm", Text = "IV.Sản xuất + V.Chuyển B.Tông T.Phẩm "},
+        new SelectedItem { Value = "V.Gia công, lắp dựng cốt thép", Text = "V.Gia công, lắp dựng cốt thép "},
     };
     private void OnSelectChangeHMTC(SelectedItem selectedItem)
     {
@@ -465,129 +467,170 @@
 
     private bool disInput { get; set; } = false;
     private bool disTenCongTac { get; set; } = false;
-    private bool disKTHH { get; set; } = false;
+    private bool disKTHH_R { get; set; } = false;
+    private bool disKTHH_C { get; set; } = false;
 
     public async void Caculate()
     {
         switch (Input.HangMuc)
         {
-            case "I.Sản xuất, vận chuyển, lắp đặt":
+            case "I.Móng":
                 if (disInput) { Input.KLKP_KL = 0; }
                 if (!string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai) )
                 {
-                    Input.KTHH_D = 0;
                     Input.KTHH_R = 0;
                     Input.KTHH_C = 0;
                     var results = repository.Where(obj => obj.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai).FirstOrDefault();
                     if (results != null)
                     {
-                        if (Input.HangMucCongTac.ToUpper().Trim() == "Lót móng".ToUpper().Trim())
+                        if (Input.HangMucCongTac.ToUpper().Trim() == "Lót móng".ToUpper().Trim() && Input.LoaiBeTong.ToUpper().Trim() == "Bê tông thương phẩm".ToUpper())
                         {
                             Input.KTHH_R = results.TTKTHHCongHopRanh_CRongLotMong;
                             Input.KTHH_C = results.TTKTHHCongHopRanh_CCaoLotMong;
+                            disKTHH_R = true;
+                            disKTHH_C = true;
                         }
                         if (Input.HangMucCongTac.ToUpper().Trim() == "Ván khuân lót móng".ToUpper().Trim())
                         {
                             Input.KTHH_C = results.TTKTHHCongHopRanh_CCaoLotMong;
+                            disKTHH_R = false;
+                            disKTHH_C = true;
                         }
 
-                        if (Input.HangMucCongTac.ToUpper().Trim() == "Móng bê tông".ToUpper().Trim())
+                        if (Input.HangMucCongTac.ToUpper().Trim() == "Móng bê tông".ToUpper().Trim() && Input.LoaiBeTong.ToUpper().Trim() == "Bê tông thương phẩm".ToUpper())
                         {
                             Input.KTHH_R = results.TTKTHHCongHopRanh_CRongMong;
                             Input.KTHH_C = results.TTKTHHCongHopRanh_CCaoMong;
+                            disKTHH_R = true;
+                            disKTHH_C = true;
                         }
                         if (Input.HangMucCongTac.ToUpper().Trim() == "Ván khuân móng".ToUpper().Trim())
                         {
                             Input.KTHH_C = results.TTKTHHCongHopRanh_CCaoMong;
+                            disKTHH_R = false;
+                            disKTHH_C = true;
                         }
                     }
-
-                    disKTHH = true;
                 }
                 else
                 {
-                    Input.KTHH_D = 0;
                     Input.KTHH_R = 0;
                     Input.KTHH_C = 0;
-                    disKTHH = false;
+                    disKTHH_R = false;
+                    disKTHH_C = false;
                 }
-                if (!string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
-                && Input.HangMucCongTac.ToUpper().Trim() == "Vận chuyển từ bãi đúc đến công trường".ToUpper())
+
+                disTenCongTac = false;
+                TinhToan(Input);
+                break;
+            case "II.Tường":
+                if (!string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
                 {
-                    disInput = true;
-                    var KLKP_KL = await PKKLRanhBTRepository.GetTKLCK_SauCCByLCK(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
-                    if (KLKP_KL != null)
+                    Input.KTHH_R = 0;
+                    Input.KTHH_C = 0;
+                    var results = repository.Where(obj => obj.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai).FirstOrDefault();
+                    if (results != null)
                     {
-                        Input.KLKP_KL = KLKP_KL.TKLCK_SauCC * 2.4;
+                        if (Input.HangMucCongTac.ToUpper().Trim() == "Tường rãnh bê tông".ToUpper().Trim() && Input.LoaiBeTong.ToUpper().Trim() == "Bê tông thương phẩm".ToUpper())
+                        {
+                            Input.KTHH_R = results.TTKTHHCongHopRanh_CDayTuong01Ben;
+                            Input.KTHH_C = results.TTKTHHCongHopRanh_CCaoTuongGop;
+                            disKTHH_R = true;
+                            disKTHH_C = true;
+                        }
+                        else
+                        {
+                            Input.KTHH_C = results.TTKTHHCongHopRanh_CCaoTuongGop;
+                            disKTHH_R = false;
+                            disKTHH_C = true;
+                        }
                     }
                 }
-                else
-                {
-                    disInput = false;
-                }
-                disTenCongTac = false;
-                Input.KTHH_KL1CK = KTHH_KL1CK(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.KTHH_DienTich, Input.KTHH_GhiChu);
-                Input.TTCDT_KL = TTCDT_KL(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.TTCDT_CDai, Input.TTCDT_CRong, Input.TTCDT_CDay, Input.TTCDT_DienTich);
-                Input.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(Input.KTHH_KL1CK, Input.KTHH_SLCauKien, Input.TTCDT_KL, Input.TTCDT_SLCK, Input.KLKP_KL, Input.KLKP_Sl);
-                Input.TKLCK_SauCC = Input.KL1CK_ChuaTruCC - Input.KLCC1CK;
+                TinhToan(Input);
                 break;
-            case "II.Sản xuất + V.Chuyển B.Tông T.Phẩm":
+            case "III.Mũ mố":
+                if (!string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
+                {
+                    Input.KTHH_R = 0;
+                    Input.KTHH_C = 0;
+                    var results = repository.Where(obj => obj.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai).FirstOrDefault();
+                    if (results != null)
+                    {
+                        if (Input.HangMucCongTac.ToUpper().Trim().Contains("THỚT DƯỚI"))
+                        {
+                            if (Input.LoaiBeTong.ToUpper().Trim() == "Bê tông thương phẩm".ToUpper())
+                            {
+                                Input.KTHH_R = results.TTKTHHCongHopRanh_CRongMuMoDuoi;
+                                Input.KTHH_C = results.TTKTHHCongHopRanh_CCaoMuMoThotDuoi;
+                                disKTHH_R = true;
+                                disKTHH_C = true;
+                            }
+                            else
+                            {
+                                Input.KTHH_C = results.TTKTHHCongHopRanh_CCaoMuMoThotDuoi;
+                                disKTHH_R = false;
+                                disKTHH_C = true;
+                            }
+                        }
+                        else
+                        {
+                            if (Input.LoaiBeTong.ToUpper().Trim() == "Bê tông thương phẩm".ToUpper())
+                            {
+                                Input.KTHH_R = results.TTKTHHCongHopRanh_CRongMuMoTren;
+                                Input.KTHH_C = results.TTKTHHCongHopRanh_CCaoMuMoThotTren;
+                                disKTHH_R = true;
+                                disKTHH_C = true;
+                            }
+                            else
+                            {
+                                Input.KTHH_C = results.TTKTHHCongHopRanh_CCaoMuMoThotTren;
+                                disKTHH_R = false;
+                                disKTHH_C = true;
+                            }
+                        }
+                    }
+                }
+                TinhToan(Input);
+                break;
+            case "IV.Sản xuất + V.Chuyển B.Tông T.Phẩm":
+                Input.KTHH_D = 0;
                 if (!string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
                 {
                     var TKLCK_SauCC = await PKKLRanhBTRepository.GetTKLCK_SauCCByLCK(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
                     if (TKLCK_SauCC != null)
                     {
-                        Input.TKLCK_SauCC = TKLCK_SauCC.TKLCK_SauCC;
+                        Input.TKLCK_SauCC = Math.Round(TKLCK_SauCC,4);
                     }
                 }
-                if (disKTHH)
+                if (disKTHH_C || disKTHH_R)
                 {
-                    Input.KTHH_D = 0;
                     Input.KTHH_R = 0;
                     Input.KTHH_C = 0;
-                    disKTHH = false;
+                    disKTHH_R = false;
+                    disKTHH_C = false;
                 }
                 break;
-            case "III.Gia công, lắp dựng cốt thép":
-                if (disKTHH)
+            case "V.Gia công, lắp dựng cốt thép":
+                if (disKTHH_C)
                 {
-                    Input.KTHH_D = 0;
+                
                     Input.KTHH_R = 0;
                     Input.KTHH_C = 0;
-                    disKTHH = false;
+                    disKTHH_C = false;
                 }
                 if (!string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
                 {
                     disInput = true;
                     disTenCongTac = true;
-                    selectTenCongTac = await TKThepTDanCHopRepository.GetDistinctTenCongTacByPL(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
+                    selectTenCongTac = await TKThepRBTongRepository.GetDistinctTenCongTacByPL(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
                     selectTenCongTac.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
                 }
                 else
                 {
                     if (disInput) { Input.KLKP_KL = 0; }
-                    if (!string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
-                    && Input.HangMucCongTac.ToUpper().Trim() == "Vận chuyển từ bãi đúc đến công trường".ToUpper()
-                    && Input.DonVi.ToUpper().Trim() == "Tấn/km".ToUpper())
-                    {
-                        disInput = true;
-                        var KLKP_KL = await PKKLRanhBTRepository.GetTKLCK_SauCCByLCK(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
-                        if (KLKP_KL != null)
-                        {
-                            Input.KLKP_KL = KLKP_KL.TKLCK_SauCC * 2.4;
-                        }
-                    }
-                    else
-                    {
-
-                        disInput = false;
-                    }
                     disTenCongTac = false;
                 }
-                Input.KTHH_KL1CK = KTHH_KL1CK(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.KTHH_DienTich, Input.KTHH_GhiChu);
-                Input.TTCDT_KL = TTCDT_KL(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.TTCDT_CDai, Input.TTCDT_CRong, Input.TTCDT_CDay, Input.TTCDT_DienTich);
-                Input.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(Input.KTHH_KL1CK, Input.KTHH_SLCauKien, Input.TTCDT_KL, Input.TTCDT_SLCK, Input.KLKP_KL, Input.KLKP_Sl);
-                Input.TKLCK_SauCC = Input.KL1CK_ChuaTruCC - Input.KLCC1CK;
+                TinhToan(Input);
                 break;
             default:
                 break;
@@ -600,8 +643,13 @@
           });
     }
 
-
-
+    public void TinhToan(PKKLRanhBT Input)
+    {
+        Input.KTHH_KL1CK = KTHH_KL1CK(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.KTHH_DienTich, Input.KTHH_GhiChu);
+        Input.TTCDT_KL = TTCDT_KL(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.TTCDT_CDai, Input.TTCDT_CRong, Input.TTCDT_CDay, Input.TTCDT_DienTich);
+        Input.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(Input.KTHH_KL1CK, Input.KTHH_SLCauKien, Input.TTCDT_KL, Input.TTCDT_SLCK, Input.KLKP_KL, Input.KLKP_Sl);
+        Input.TKLCK_SauCC = Input.KL1CK_ChuaTruCC - Input.KLCC1CK;
+    }
 
     private void ShowModal()
     {
@@ -698,7 +746,7 @@
         {
             Caculate();
             string[] ids = { Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "" };
-            var isValidTenPL = await PhanLoaiTDanTDanRepository.CheckExclusive(ids, baseTime);
+            var isValidTenPL = await PhanLoaiCTronHopNhuaRepository.CheckExclusive(ids, baseTime);
             var listExist = await PKKLRanhBTRepository.GetExist(Input);
             if (isValidTenPL)
             {
@@ -1028,14 +1076,20 @@
         string ChiMuc = "I";
         switch (DK)
         {
-            case "I.Sản xuất, vận chuyển, lắp đặt":
+            case "I.Móng":
                 ChiMuc = "I";
                 break;
-            case "II.Sản xuất + V.Chuyển B.Tông T.Phẩm":
+            case "II.Tường":
                 ChiMuc = "II";
                 break;
-            case "III.Gia công, lắp dựng cốt thép":
+            case "III.Mũ mố":
                 ChiMuc = "III";
+                break;
+            case "IV.Sản xuất + V.Chuyển B.Tông T.Phẩm":
+                ChiMuc = "IV";
+                break;
+            case "V.Gia công, lắp dựng cốt thép":
+                ChiMuc = "V";
                 break;
         }
         return ChiMuc;

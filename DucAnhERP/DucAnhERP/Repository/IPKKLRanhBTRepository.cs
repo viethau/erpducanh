@@ -8,7 +8,7 @@ namespace DucAnhERP.Repository
         Task<string> InsertLaterFlag(PKKLRanhBT entity, int FlagLast);
         Task<List<PKKLModel>> GetAllByVM(PKKLModel mModel);
         Task<List<PKKLRanhBT>> GetExist(PKKLRanhBT searchData);
-        Task<PKKLRanhBT> GetTKLCK_SauCCByLCK(string id);
+        Task<Double> GetTKLCK_SauCCByLCK(string id);
         Task<List<THKLModel>> GetTHKLRanhBT();
         Task<List<THKLModel>> GetTHKLByTuyenDuong(List<NuocMuaModel> nuocMua);
     }

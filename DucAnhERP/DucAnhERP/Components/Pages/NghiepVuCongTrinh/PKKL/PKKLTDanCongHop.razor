@@ -547,22 +547,6 @@
                 else
                 {
                     if (disInput) { Input.KLKP_KL = 0; }
-                    if (!string.IsNullOrEmpty(Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan)
-                    && Input.HangMucCongTac.ToUpper().Trim() == "Vận chuyển từ bãi đúc đến công trường".ToUpper()
-                    && Input.DonVi.ToUpper().Trim() == "Tấn/km".ToUpper())
-                    {
-                        disInput = true;
-                        var KLKP_KL = await PKKLTDanCHopRepository.GetTKLCK_SauCCByLCK(Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan);
-                        if (KLKP_KL != null)
-                        {
-                            Input.KLKP_KL = KLKP_KL.TKLCK_SauCC * 2.4;
-                        }
-                    }
-                    else
-                    {
-
-                        disInput = false;
-                    }
                     disTenCongTac = false;
                 }
                 Input.KTHH_KL1CK = KTHH_KL1CK(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.KTHH_DienTich, Input.KTHH_GhiChu);
@@ -573,56 +557,6 @@
             default:
                 break;
         }
-
-
-        // if (Input.HangMuc == "II.Sản xuất + V.Chuyển B.Tông T.Phẩm")
-        // {
-        //     if (!string.IsNullOrEmpty(Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan))
-        //     {
-        //         var TKLCK_SauCC = await PKKLTDanCHopRepository.GetTKLCK_SauCCByLCK(Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan);
-        //         if (TKLCK_SauCC != null)
-        //         {
-        //             Input.TKLCK_SauCC = TKLCK_SauCC.TKLCK_SauCC;
-        //         }
-        //     }
-        // }
-        // else
-        // {
-        //     if (!string.IsNullOrEmpty(Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan)
-        //    && Input.HangMuc.ToUpper().Trim() == "III.Gia công, lắp dựng cốt thép".ToUpper())
-        //     {
-        //         disInput = true;
-        //         disTenCongTac = true;
-        //         selectTenCongTac = await TKThepTDanCHopRepository.GetDistinctTenCongTacByPL(Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan);
-        //         selectTenCongTac.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
-        //     }
-        //     else
-        //     {
-        //         if (disInput) { Input.KLKP_KL = 0; }
-        //         if (!string.IsNullOrEmpty(Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan)
-        //         && Input.HangMucCongTac.ToUpper().Trim() == "Vận chuyển từ bãi đúc đến công trường".ToUpper()
-        //         && Input.DonVi.ToUpper().Trim() == "Tấn/km".ToUpper())
-        //         {
-        //             disInput = true;
-        //             var KLKP_KL = await PKKLTDanCHopRepository.GetTKLCK_SauCCByLCK(Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan);
-        //             if (KLKP_KL != null)
-        //             {
-        //                 Input.KLKP_KL = KLKP_KL.TKLCK_SauCC * 2.4;
-        //             }
-        //         }
-        //         else
-        //         {
-
-        //             disInput = false;
-        //         }
-        //         disTenCongTac = false;
-        //     }
-
-        //     Input.KTHH_KL1CK = KTHH_KL1CK(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.KTHH_DienTich, Input.KTHH_GhiChu);
-        //     Input.TTCDT_KL = TTCDT_KL(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.TTCDT_CDai, Input.TTCDT_CRong, Input.TTCDT_CDay, Input.TTCDT_DienTich);
-        //     Input.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(Input.KTHH_KL1CK, Input.KTHH_SLCauKien, Input.TTCDT_KL, Input.TTCDT_SLCK, Input.KLKP_KL, Input.KLKP_Sl);
-        //     Input.TKLCK_SauCC = Input.KL1CK_ChuaTruCC - Input.KLCC1CK;
-        // }
 
         await InvokeAsync(() =>
           {

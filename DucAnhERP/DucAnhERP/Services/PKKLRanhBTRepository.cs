@@ -147,7 +147,7 @@ namespace DucAnhERP.Services
             try
             {
                 using var context = _context.CreateDbContext();
-                var query = (from a in context.PKKLCTrons
+                var query = (from a in context.PKKLRanhBTs
                              join b in context.PhanLoaiCTronHopNhuas on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals b.Id
                              join c in context.DSNuocMua on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai
                              equals c.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai into cGroup
@@ -173,12 +173,12 @@ namespace DucAnhERP.Services
                                  TenCongTac = g.Key.TenCongTac,
                                  DonVi = g.Key.DonVi,
                                  KL1DonVi = g.Key.TKLCK_SauCC,
-                                 SLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
-                                 SLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
-                                 SLTong = g.Sum(x => x.c != null && (x.c.TraiPhai == 0 || x.c.TraiPhai == 1) ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
-                                 KLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0,
-                                 KLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0,
-                                 KLTong = g.Sum(x => x.c != null && (x.c.TraiPhai == 0 || x.c.TraiPhai == 1) ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0
+                                 SLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) ?? 0,
+                                 SLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) ?? 0,
+                                 SLTong = g.Sum(x => x.c != null && (x.c.TraiPhai == 0 || x.c.TraiPhai == 1) ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) ?? 0,
+                                 KLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) * g.Key.TKLCK_SauCC ?? 0,
+                                 KLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) * g.Key.TKLCK_SauCC ?? 0,
+                                 KLTong = g.Sum(x => x.c != null && (x.c.TraiPhai == 0 || x.c.TraiPhai == 1) ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) * g.Key.TKLCK_SauCC ?? 0
                              }).ToList();
                 return query;
             }
@@ -203,7 +203,7 @@ namespace DucAnhERP.Services
                 foreach (var item in nuocMua)
                 {
 
-                    var query = await (from a in context.PKKLCTrons
+                    var query = await (from a in context.PKKLRanhBTs
                                        join b in context.PhanLoaiCTronHopNhuas
                                            on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals b.Id
                                        join c in context.DSNuocMua
@@ -231,12 +231,12 @@ namespace DucAnhERP.Services
                                            TenCongTac = g.Key.TenCongTac,
                                            DonVi = g.Key.DonVi,
                                            KL1DonVi = g.Key.TKLCK_SauCC,
-                                           SLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
-                                           SLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
-                                           SLTong = g.Sum(x => x.c != null ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
-                                           KLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0,
-                                           KLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0,
-                                           KLTong = g.Sum(x => x.c != null ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0
+                                           SLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) ?? 0,
+                                           SLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) ?? 0,
+                                           SLTong = g.Sum(x => x.c != null ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) ?? 0,
+                                           KLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) * g.Key.TKLCK_SauCC ?? 0,
+                                           KLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) * g.Key.TKLCK_SauCC ?? 0,
+                                           KLTong = g.Sum(x => x.c != null ? x.c.TTCDSLCauKienDuongTruyenDan_TongChieuDai : 0) * g.Key.TKLCK_SauCC ?? 0
                                        }).ToListAsync();
 
 
@@ -254,17 +254,16 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-        public async Task<PKKLRanhBT> GetTKLCK_SauCCByLCK(string id)
+        public async Task<Double> GetTKLCK_SauCCByLCK(string id)
         {
             using var context = _context.CreateDbContext();
-            var result = context.PKKLRanhBTs
-                .Where(a => a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == id &&
-                 a.HangMuc == "I.Sản xuất, vận chuyển, lắp đặt" &&
-                 a.LoaiBeTong == "Bê tông thương phẩm" &&
-                 a.KTHH_GhiChu == "Rộng*Cao")
-                 .FirstOrDefault();
+           
+            var sumTKLCK_SauCC = context.PKKLRanhBTs.Where(x => new[] { "I.Móng", "II.Tường", "III.Mũ mố" }.Contains(x.HangMuc) &&
+                x.LoaiBeTong == "Bê tông thương phẩm" &&
+                x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == id)
+                .Sum(x => x.TKLCK_SauCC);
 
-            return result;
+            return sumTKLCK_SauCC;
         }
         public async Task<List<PKKLRanhBT>> GetExist(PKKLRanhBT searchData)
         {
@@ -529,36 +528,15 @@ namespace DucAnhERP.Services
             if (addedEntity != null)
             {
                 // Kiểm tra điều kiện HangMuc và PhanLoaiMongCongTronCongHop
-                if (addedEntity.HangMuc == "I.Sản xuất, vận chuyển, lắp đặt"
-                    && addedEntity.KTHH_GhiChu == "Rộng*Cao"
+                if (addedEntity.HangMuc == "I.Móng" || addedEntity.HangMuc == "II.Tường" || addedEntity.HangMuc == "III.Mũ mố" || addedEntity.HangMuc==""
                     && addedEntity.HangMucCongTac.Trim().ToLower() == "Bê tông cống tròn".Trim().ToLower())
                 {
                     using var context = _context.CreateDbContext();
                     var TKLCK_SauCC = addedEntity.TKLCK_SauCC;
-                    // Lọc tất cả các bản ghi có ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai giống với addedEntity
-                    var recordsToUpdate = await context.PKKLRanhBTs
-                        .Where(x => x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == addedEntity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai
-                        && x.HangMuc == "I.Sản xuất, vận chuyển, lắp đặt" && x.HangMucCongTac == "Vận chuyển từ bãi đúc đến công trường")
-                        .ToListAsync();
-
-
-                    // Cập nhật các cột KLKP_KL cho từng bản ghi
-                    foreach (var record in recordsToUpdate)
-                    {
-
-                        record.KTHH_KL1CK = KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
-                        record.TTCDT_KL = TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
-                        record.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(record.KTHH_KL1CK, record.KTHH_SLCauKien, record.TTCDT_KL, record.TTCDT_SLCK, record.KLKP_KL, record.KLKP_Sl);
-                        record.KLKP_KL = TKLCK_SauCC * 2.4;
-                        record.TKLCK_SauCC = record.KL1CK_ChuaTruCC - record.KLCC1CK;
-                    }
-
-                    // Gọi phương thức UpdateMulti để cập nhật nhiều bản ghi
-                    await UpdateMulti(recordsToUpdate.ToArray());
-
+                   
                     var recordsToUpdate1 = await context.PKKLRanhBTs
                         .Where(x => x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == addedEntity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai
-                        && x.HangMuc == "II.Sản xuất + V.Chuyển B.Tông T.Phẩm" && x.LoaiBeTong == "Bê tông thương phẩm")
+                        && x.HangMuc == "IV.Sản xuất + V.Chuyển B.Tông T.Phẩm" && x.LoaiBeTong == "Bê tông thương phẩm")
                         .ToListAsync();
 
 
@@ -569,9 +547,9 @@ namespace DucAnhERP.Services
                         if (!string.IsNullOrEmpty(record.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
                         {
                             var TKLCK_SauCC1 = await GetTKLCK_SauCCByLCK(record.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
-                            if (TKLCK_SauCC1 != null)
+                            if (TKLCK_SauCC1 >0)
                             {
-                                record.TKLCK_SauCC = TKLCK_SauCC1.TKLCK_SauCC + TKLCK_SauCC;
+                                record.TKLCK_SauCC = TKLCK_SauCC1 + TKLCK_SauCC;
                             }
                             else
                             {
@@ -606,39 +584,16 @@ namespace DucAnhERP.Services
             if (deletedEntity != null)
             {
                 // Kiểm tra điều kiện HangMuc và PhanLoaiMongCongTronCongHop
-                if (deletedEntity.HangMuc == "I.Sản xuất, vận chuyển, lắp đặt")
+                if (deletedEntity.HangMuc == "I.Móng" || deletedEntity.HangMuc == "II.Tường" || deletedEntity.HangMuc == "III.Mũ mố" || deletedEntity.HangMuc == ""
+                   && deletedEntity.HangMucCongTac.Trim().ToLower() == "Bê tông cống tròn".Trim().ToLower())
                 {
                     using var context = _context.CreateDbContext();
-                    var TKLCK_SauCC = 0;
-                    if (deletedEntity.KTHH_GhiChu == "Rộng*Cao"
-                    && deletedEntity.HangMucCongTac.Trim().ToLower() == "Bê tông cống tròn".Trim().ToLower())
-                    {
-                        // Lọc tất cả các bản ghi có ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai giống với addedEntity
-                        var recordsToUpdate = await context.PKKLRanhBTs
-                            .Where(x => x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == deletedEntity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai
-                            && x.HangMuc == "I.Sản xuất, vận chuyển, lắp đặt" && x.HangMucCongTac == "Vận chuyển từ bãi đúc đến công trường")
-                            .ToListAsync();
-
-
-                        // Cập nhật các cột TKLCK_SauCC cho từng bản ghi
-                        foreach (var record in recordsToUpdate)
-                        {
-                            record.KLKP_KL = TKLCK_SauCC * 2.4;
-                            record.KTHH_KL1CK = KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
-                            record.TTCDT_KL = TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
-                            record.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(record.KTHH_KL1CK, record.KTHH_SLCauKien, record.TTCDT_KL, record.TTCDT_SLCK, record.KLKP_KL, record.KLKP_Sl);
-                            record.TKLCK_SauCC = record.KL1CK_ChuaTruCC - record.KLCC1CK;
-                        }
-                        // Gọi phương thức UpdateMulti để cập nhật nhiều bản ghi
-                        await UpdateMulti(recordsToUpdate.ToArray());
-                    }
-
+                    var TKLCK_SauCC = deletedEntity.TKLCK_SauCC;
 
                     var recordsToUpdate1 = await context.PKKLRanhBTs
                         .Where(x => x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == deletedEntity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai
-                        && x.HangMuc == "II.Sản xuất + V.Chuyển B.Tông T.Phẩm" && x.LoaiBeTong == "Bê tông thương phẩm")
+                        && x.HangMuc == "IV.Sản xuất + V.Chuyển B.Tông T.Phẩm" && x.LoaiBeTong == "Bê tông thương phẩm")
                         .ToListAsync();
-
 
                     // Cập nhật các cột TKLCK_SauCC cho từng bản ghi
                     foreach (var record in recordsToUpdate1)
@@ -647,9 +602,9 @@ namespace DucAnhERP.Services
                         if (!string.IsNullOrEmpty(record.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
                         {
                             var TKLCK_SauCC1 = await GetTKLCK_SauCCByLCK(record.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
-                            if (TKLCK_SauCC1 != null)
+                            if (TKLCK_SauCC1 >0 )
                             {
-                                record.TKLCK_SauCC = TKLCK_SauCC1.TKLCK_SauCC - deletedEntity.TKLCK_SauCC;
+                                record.TKLCK_SauCC = TKLCK_SauCC1 - deletedEntity.TKLCK_SauCC;
                             }
                             else
                             {

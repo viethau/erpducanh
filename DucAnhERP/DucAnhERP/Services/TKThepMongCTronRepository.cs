@@ -143,7 +143,6 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-
         public async Task<List<SelectedItem>> GetDistinctTenCongTacByPL(string ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop)
         {
             try
@@ -169,7 +168,6 @@ namespace DucAnhERP.Services
             }
 
         }
-
         public async Task<SelectedItem> GetSumTenCongTacByPL(string ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop, string TenCongTac)
         {
             try

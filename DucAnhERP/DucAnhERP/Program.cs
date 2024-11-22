@@ -91,6 +91,7 @@ builder.Services.AddScoped<IPKKLCHopRepository, PKKLCHopRepository>();
 builder.Services.AddScoped<IPKKLMongCHopRepository, PKKLMongCHopRepository>();
 builder.Services.AddScoped<IPKKLTDanCHopRepository, PKKLTDanCHopRepository>();
 builder.Services.AddScoped<IPKKLRanhBTRepository, PKKLRanhBTRepository>();
+builder.Services.AddScoped<IPKKLTDanRBTRepository, PKKLTDanRBTRepository>();
 
 
 builder.Services.AddAuthentication(options =>
