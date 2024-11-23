@@ -4,16 +4,19 @@ using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace DucAnhERP.Services
 {
     public class TKThepTDRBTongRepository : ITKThepTDRBTongRepository
     {
         private readonly IDbContextFactory<ApplicationDbContext> _context;
+        private readonly PKKLTDanRBTRepository _pKKLTDanRBTRepository;
 
         public TKThepTDRBTongRepository(IDbContextFactory<ApplicationDbContext> context)
         {
             _context = context;
+            _pKKLTDanRBTRepository= new PKKLTDanRBTRepository(context);
         }
         public async Task<List<TKThepTDRBTong>> GetAll()
         {
@@ -195,7 +198,7 @@ namespace DucAnhERP.Services
             }
 
             context.TKThepTDRBTongs.Update(TKThepTDRBTong);
-            await context.SaveChangesAsync();
+            await SaveChanges(context);
         }
         public async Task UpdateMulti(TKThepTDRBTong[] TKThepTDRBTong)
         {
@@ -219,7 +222,7 @@ namespace DucAnhERP.Services
             }
 
             context.Set<TKThepTDRBTong>().Remove(entity);
-            await context.SaveChangesAsync();
+            await SaveChanges(context);
         }
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
         {
@@ -258,7 +261,7 @@ namespace DucAnhERP.Services
 
                 // Chèn bản ghi mới vào bảng
                 context.TKThepTDRBTongs.Add(entity);
-                await context.SaveChangesAsync();
+                await SaveChanges(context);
             }
             catch (Exception ex)
             {
@@ -311,7 +314,7 @@ namespace DucAnhERP.Services
                 context.TKThepTDRBTongs.Add(entity);
 
                 // Lưu bản ghi mới vào cơ sở dữ liệu
-                await context.SaveChangesAsync();
+                await SaveChanges(context);
                 // Trả về Id của bản ghi mới được thêm
                 id = entity.Id ?? "";
                 return id;
@@ -320,6 +323,268 @@ namespace DucAnhERP.Services
             {
                 Console.WriteLine(ex.ToString());
                 return id;
+            }
+        }
+
+
+        public async Task SaveChanges(ApplicationDbContext context)
+        {
+            try
+            {
+                // Kiểm tra và xử lý các thay đổi trong DbContext
+                var addedEntities = context.ChangeTracker.Entries()
+                    .Where(e => e.State == EntityState.Added)
+                    .ToList();
+
+                var modifiedEntities = context.ChangeTracker.Entries()
+                    .Where(e => e.State == EntityState.Modified)
+                    .ToList();
+
+                var deletedEntities = context.ChangeTracker.Entries()
+                    .Where(e => e.State == EntityState.Deleted)
+                    .ToList();
+
+                // Xử lý thay đổi khi thêm
+                if (addedEntities.Any())
+                {
+                    foreach (var addedEntity in addedEntities)
+                    {
+                        await HandleEntityAdd(addedEntity);
+                    }
+                }
+
+                // Xử lý thay đổi khi sửa
+                if (modifiedEntities.Any())
+                {
+                    foreach (var modifiedEntity in modifiedEntities)
+                    {
+                        await HandleEntityUpdate(modifiedEntity);
+                    }
+                }
+
+                // Xử lý thay đổi khi xóa
+                if (deletedEntities.Any())
+                {
+                    foreach (var deletedEntity in deletedEntities)
+                    {
+                        await HandleEntityDelete(deletedEntity);
+                    }
+                }
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"An error occurred while saving changes: {ex.Message}");
+                throw;
+            }
+        }
+        private async Task HandleEntityAdd(EntityEntry entityEntry)
+        {
+            var addedEntity = entityEntry.Entity as TKThepTDRBTong;
+            if (addedEntity != null)
+            {
+                PKKLModel pkklModel = new PKKLModel { HangMuc = "III.Gia công, lắp dựng cốt thép", TenCongTac = addedEntity.TenCongTac ?? "", LoaiCauKienId = addedEntity.TTTDCongHoRanh_TenLoaiTamDanTieuChuan };
+                List<PKKLModel> result = await _pKKLTDanRBTRepository.GetAllByVM(pkklModel);
+                if (result != null)
+                {
+                    List<PKKLTDanRBT> pKKLRanhBTs = new List<PKKLTDanRBT>();
+                    foreach (var record in result)
+                    {
+                        PKKLTDanRBT pKKLRanhBT = new PKKLTDanRBT();
+                        if (!string.IsNullOrEmpty(record.TenCongTac))
+                        {
+                            pKKLRanhBT.Id = record.Id;
+                            pKKLRanhBT.Flag = record.Flag;
+                            pKKLRanhBT.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = record.LoaiCauKienId;
+                            pKKLRanhBT.LoaiBeTong = record.LoaiBeTong;
+                            pKKLRanhBT.HangMuc = record.HangMuc;
+                            pKKLRanhBT.HangMucCongTac = record.HangMucCongTac;
+                            pKKLRanhBT.TenCongTac = record.TenCongTac;
+                            pKKLRanhBT.DonVi = record.DonVi;
+                            pKKLRanhBT.KTHH_D = record.KTHH_D;
+                            pKKLRanhBT.KTHH_R = record.KTHH_R;
+                            pKKLRanhBT.KTHH_C = record.KTHH_C;
+                            pKKLRanhBT.KTHH_DienTich = record.KTHH_DienTich;
+                            pKKLRanhBT.KTHH_GhiChu = record.KTHH_GhiChu;
+                            pKKLRanhBT.KTHH_SLCauKien = record.KTHH_SLCauKien;
+                            pKKLRanhBT.TTCDT_CDai = record.TTCDT_CDai;
+                            pKKLRanhBT.TTCDT_CRong = record.TTCDT_CRong;
+                            pKKLRanhBT.TTCDT_CDay = record.TTCDT_CDay;
+                            pKKLRanhBT.TTCDT_DienTich = record.TTCDT_DienTich;
+                            pKKLRanhBT.TTCDT_SLCK = record.TTCDT_SLCK;
+                            pKKLRanhBT.KLKP_Sl = record.KLKP_Sl;
+                            pKKLRanhBT.KLCC1CK = record.KLCC1CK;
+                            pKKLRanhBT.CreateAt = record.CreateAt;
+                            pKKLRanhBT.CreateBy = record.CreateBy;
+                            pKKLRanhBT.KLKP_KL = addedEntity.TongTrongLuong ?? 0;
+
+                            var SumTenCongTacByPL = await GetSumTenCongTacByPL(addedEntity.TTTDCongHoRanh_TenLoaiTamDanTieuChuan??"", addedEntity.TenCongTac ?? "");
+                            if (SumTenCongTacByPL != null && SumTenCongTacByPL.Value != null)
+                            {
+                                if (double.TryParse(SumTenCongTacByPL.Value, out double parsedValue))
+                                {
+                                    pKKLRanhBT.KLKP_KL = parsedValue + addedEntity.TongTrongLuong ?? 0;
+                                }
+
+                            }
+                            pKKLRanhBT.KTHH_KL1CK = _pKKLTDanRBTRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
+                            pKKLRanhBT.TTCDT_KL = _pKKLTDanRBTRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
+                            pKKLRanhBT.KL1CK_ChuaTruCC = _pKKLTDanRBTRepository.KL1CK_ChuaTruCC(record.KTHH_KL1CK, record.KTHH_SLCauKien, record.TTCDT_KL, record.TTCDT_SLCK, pKKLRanhBT.KLKP_KL, record.KLKP_Sl);
+                            pKKLRanhBT.TKLCK_SauCC = pKKLRanhBT.KL1CK_ChuaTruCC - pKKLRanhBT.KLCC1CK;
+                            pKKLRanhBTs.Add(pKKLRanhBT);
+                        }
+
+                    }
+                    await _pKKLTDanRBTRepository.UpdateMulti(pKKLRanhBTs.ToArray());
+                }
+            }
+        }
+        private async Task HandleEntityDelete(EntityEntry entityEntry)
+        {
+            var deletedEntity = entityEntry.Entity as TKThepTDRBTong;
+            if (deletedEntity != null)
+            {
+                TKThepTDRBTong entity = await GetById(deletedEntity.Id);
+
+                if (entity == null)
+                {
+                    throw new Exception($"Không tìm thấy bản ghi theo ID: {deletedEntity.Id}");
+                }
+                PKKLModel pkklModel = new PKKLModel { HangMuc = "III.Gia công, lắp dựng cốt thép", TenCongTac = entity.TenCongTac ?? "", LoaiCauKienId = entity.TTTDCongHoRanh_TenLoaiTamDanTieuChuan };
+                List<PKKLModel> result = await _pKKLTDanRBTRepository.GetAllByVM(pkklModel);
+                if (result != null)
+                {
+                    List<PKKLTDanRBT> pKKLRanhBTs = new List<PKKLTDanRBT>();
+                    foreach (var record in result)
+                    {
+                        PKKLTDanRBT pKKLRanhBT = new PKKLTDanRBT();
+                        if (!string.IsNullOrEmpty(record.TenCongTac))
+                        {
+                            pKKLRanhBT.Id = record.Id;
+                            pKKLRanhBT.Flag = record.Flag;
+                            pKKLRanhBT.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = record.LoaiCauKienId;
+                            pKKLRanhBT.LoaiBeTong = record.LoaiBeTong;
+                            pKKLRanhBT.HangMuc = record.HangMuc;
+                            pKKLRanhBT.HangMucCongTac = record.HangMucCongTac;
+                            pKKLRanhBT.DonVi = record.DonVi;
+                            pKKLRanhBT.KTHH_D = record.KTHH_D;
+                            pKKLRanhBT.KTHH_R = record.KTHH_R;
+                            pKKLRanhBT.KTHH_C = record.KTHH_C;
+                            pKKLRanhBT.KTHH_DienTich = record.KTHH_DienTich;
+                            pKKLRanhBT.KTHH_GhiChu = record.KTHH_GhiChu;
+                            pKKLRanhBT.KTHH_SLCauKien = record.KTHH_SLCauKien;
+                            pKKLRanhBT.TTCDT_CDai = record.TTCDT_CDai;
+                            pKKLRanhBT.TTCDT_CRong = record.TTCDT_CRong;
+                            pKKLRanhBT.TTCDT_CDay = record.TTCDT_CDay;
+                            pKKLRanhBT.TTCDT_DienTich = record.TTCDT_DienTich;
+                            pKKLRanhBT.TTCDT_SLCK = record.TTCDT_SLCK;
+                            pKKLRanhBT.KLKP_Sl = record.KLKP_Sl;
+                            pKKLRanhBT.KLCC1CK = record.KLCC1CK;
+                            pKKLRanhBT.CreateAt = record.CreateAt;
+                            pKKLRanhBT.CreateBy = record.CreateBy;
+                            pKKLRanhBT.KLKP_KL = deletedEntity.TongTrongLuong - entity.TongTrongLuong ?? 0;
+                            pKKLRanhBT.TenCongTac = "";
+
+                            var SumTenCongTacByPL = await GetSumTenCongTacByPL(entity.TTTDCongHoRanh_TenLoaiTamDanTieuChuan, entity.TenCongTac ?? "");
+                            if (SumTenCongTacByPL != null && SumTenCongTacByPL.Value != null)
+                            {
+                                if (double.TryParse(SumTenCongTacByPL.Value, out double parsedValue))
+                                {
+                                    pKKLRanhBT.KLKP_KL = parsedValue - deletedEntity.TongTrongLuong ?? 0;
+                                    pKKLRanhBT.TenCongTac = record.TenCongTac;
+                                }
+
+                            }
+                            pKKLRanhBT.KTHH_KL1CK = _pKKLTDanRBTRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
+                            pKKLRanhBT.TTCDT_KL = _pKKLTDanRBTRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
+                            pKKLRanhBT.KL1CK_ChuaTruCC = _pKKLTDanRBTRepository.KL1CK_ChuaTruCC(record.KTHH_KL1CK, record.KTHH_SLCauKien, record.TTCDT_KL, record.TTCDT_SLCK, pKKLRanhBT.KLKP_KL, record.KLKP_Sl);
+                            pKKLRanhBT.TKLCK_SauCC = pKKLRanhBT.KL1CK_ChuaTruCC - pKKLRanhBT.KLCC1CK;
+                            pKKLRanhBTs.Add(pKKLRanhBT);
+                        }
+
+                    }
+                    await _pKKLTDanRBTRepository.UpdateMulti(pKKLRanhBTs.ToArray());
+                }
+            }
+        }
+        private async Task HandleEntityUpdate(EntityEntry entityEntry)
+        {
+            try
+            {
+
+                var modifiedEntity = entityEntry.Entity as TKThepTDRBTong;
+
+                if (modifiedEntity != null)
+                {
+                    TKThepTDRBTong entity = await GetById(modifiedEntity.Id);
+
+                    if (entity == null)
+                    {
+                        throw new Exception($"Không tìm thấy bản ghi theo ID: {modifiedEntity.Id}");
+                    }
+                    PKKLModel pkklModel = new PKKLModel { HangMuc = "III.Gia công, lắp dựng cốt thép", TenCongTac = entity.TenCongTac ?? "", LoaiCauKienId = entity.TTTDCongHoRanh_TenLoaiTamDanTieuChuan };
+                    List<PKKLModel> result = await _pKKLTDanRBTRepository.GetAllByVM(pkklModel);
+                    if (result != null)
+                    {
+                        List<PKKLTDanRBT> pKKLRanhBTs = new List<PKKLTDanRBT>();
+                        foreach (var record in result)
+                        {
+                            PKKLTDanRBT pKKLRanhBT = new PKKLTDanRBT();
+                            if (!string.IsNullOrEmpty(record.TenCongTac))
+                            {
+                                pKKLRanhBT.Id = record.Id;
+                                pKKLRanhBT.Flag = record.Flag;
+                                pKKLRanhBT.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = record.LoaiCauKienId;
+                                pKKLRanhBT.LoaiBeTong = record.LoaiBeTong;
+                                pKKLRanhBT.HangMuc = record.HangMuc;
+                                pKKLRanhBT.HangMucCongTac = record.HangMucCongTac;
+                                pKKLRanhBT.TenCongTac = record.TenCongTac;
+                                pKKLRanhBT.DonVi = record.DonVi;
+                                pKKLRanhBT.KTHH_D = record.KTHH_D;
+                                pKKLRanhBT.KTHH_R = record.KTHH_R;
+                                pKKLRanhBT.KTHH_C = record.KTHH_C;
+                                pKKLRanhBT.KTHH_DienTich = record.KTHH_DienTich;
+                                pKKLRanhBT.KTHH_GhiChu = record.KTHH_GhiChu;
+                                pKKLRanhBT.KTHH_SLCauKien = record.KTHH_SLCauKien;
+                                pKKLRanhBT.TTCDT_CDai = record.TTCDT_CDai;
+                                pKKLRanhBT.TTCDT_CRong = record.TTCDT_CRong;
+                                pKKLRanhBT.TTCDT_CDay = record.TTCDT_CDay;
+                                pKKLRanhBT.TTCDT_DienTich = record.TTCDT_DienTich;
+                                pKKLRanhBT.TTCDT_SLCK = record.TTCDT_SLCK;
+                                pKKLRanhBT.KLKP_Sl = record.KLKP_Sl;
+                                pKKLRanhBT.KLCC1CK = record.KLCC1CK;
+                                pKKLRanhBT.CreateAt = record.CreateAt;
+                                pKKLRanhBT.CreateBy = record.CreateBy;
+                                pKKLRanhBT.KLKP_KL = modifiedEntity.TongTrongLuong - entity.TongTrongLuong ?? 0;
+
+                                var SumTenCongTacByPL = await GetSumTenCongTacByPL(entity.TTTDCongHoRanh_TenLoaiTamDanTieuChuan, entity.TenCongTac ?? "");
+                                if (SumTenCongTacByPL != null && SumTenCongTacByPL.Value != null)
+                                {
+                                    if (double.TryParse(SumTenCongTacByPL.Value, out double parsedValue))
+                                    {
+                                        pKKLRanhBT.KLKP_KL = (parsedValue - entity.TongTrongLuong) + modifiedEntity.TongTrongLuong ?? 0;
+                                    }
+
+                                }
+
+                                pKKLRanhBT.KTHH_KL1CK = _pKKLTDanRBTRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
+                                pKKLRanhBT.TTCDT_KL = _pKKLTDanRBTRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
+                                pKKLRanhBT.KL1CK_ChuaTruCC = _pKKLTDanRBTRepository.KL1CK_ChuaTruCC(record.KTHH_KL1CK, record.KTHH_SLCauKien, record.TTCDT_KL, record.TTCDT_SLCK, pKKLRanhBT.KLKP_KL, record.KLKP_Sl);
+                                pKKLRanhBT.TKLCK_SauCC = pKKLRanhBT.KL1CK_ChuaTruCC - pKKLRanhBT.KLCC1CK;
+                                pKKLRanhBTs.Add(pKKLRanhBT);
+                            }
+
+                        }
+                        await _pKKLTDanRBTRepository.UpdateMulti(pKKLRanhBTs.ToArray());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
             }
         }
     }

@@ -473,14 +473,14 @@
         {
             case "I.Sản xuất, vận chuyển, lắp đặt":
                 if (disInput) { Input.KLKP_KL = 0; }
-                if (!string.IsNullOrEmpty(Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan) && Input.HangMucCongTac.ToUpper().Trim() == "Tấm đan cống hộp".ToUpper().Trim())
+                if (!string.IsNullOrEmpty(Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan) && Input.HangMucCongTac.ToUpper().Trim() == "Tấm đan rãnh bê tông".ToUpper().Trim())
                 {
                     var results = repository.Where(obj => obj.TTTDCongHoRanh_TenLoaiTamDanTieuChuan == Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan).FirstOrDefault();
                     if (results != null)
                     {
                         Input.KTHH_D = results.TTTDCongHoRanh_CDai;
                         Input.KTHH_R = results.TTTDCongHoRanh_CRong;
-                        Input.KTHH_C = results.TTTDCongHoRanh_CCao;
+                        Input.KTHH_C = results.TTTDCongHoRanh_CCao;     
                     }
 
                     disKTHH = true;
@@ -604,7 +604,7 @@
         try
         {
             await LoadData();
-            repository = await NuocMuaRepository.GetBaoCaoKTHHTDCH();
+            repository = await NuocMuaRepository.GetBaoCaoKTHHTDRBT();
             selectLCK = new();
             foreach (var item in repository)
             {
