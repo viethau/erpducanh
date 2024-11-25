@@ -1,18 +1,21 @@
 ﻿using DucAnhERP.Data;
+using DucAnhERP.Helpers;
 using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace DucAnhERP.Services
 {
     public class TKThepTChongRepository : ITKThepTChongRepository
     {
         private readonly IDbContextFactory<ApplicationDbContext> _context;
-
+        private readonly PKKLTChongRepository _pPKKLTChongRepository;
         public TKThepTChongRepository(IDbContextFactory<ApplicationDbContext> context)
         {
             _context = context;
+            _pPKKLTChongRepository =  new PKKLTChongRepository(context);
         }
         public async Task<List<TKThepTChong>> GetAll()
         {
@@ -133,6 +136,55 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
+        public async Task<List<SelectedItem>> GetDistinctTenCongTacByPL(string TTKTHHCongHopRanh_LoaiThanhChong)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var data = context.TKThepTChongs
+                 .Where(item => item.TTKTHHCongHopRanh_LoaiThanhChong == TTKTHHCongHopRanh_LoaiThanhChong)
+                 .GroupBy(item => item.TenCongTac)
+                 .Select(group => new SelectedItem
+                 {
+                     Text = group.Key,
+                     Value = group.Sum(item => item.TongTrongLuong).ToString()
+                 })
+                 .Distinct()
+                 .ToList();
+
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+
+        }
+        public async Task<SelectedItem> GetSumTenCongTacByPL(string TTKTHHCongHopRanh_LoaiThanhChong, string TenCongTac)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var data = await context.TKThepTChongs
+                .Where(item =>
+                    item.TTKTHHCongHopRanh_LoaiThanhChong == TTKTHHCongHopRanh_LoaiThanhChong &&
+                    item.TenCongTac == TenCongTac)
+                .GroupBy(item => item.TenCongTac)
+                .Select(group => new SelectedItem
+                {
+                    Text = group.Key,
+                    Value = group.Sum(item => item.TongTrongLuong).ToString()
+                }).FirstOrDefaultAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+
+        }
         public async Task Update(TKThepTChong TKThepDeCong)
         {
             using var context = _context.CreateDbContext();
@@ -144,7 +196,7 @@ namespace DucAnhERP.Services
             }
 
             context.TKThepTChongs.Update(TKThepDeCong);
-            await context.SaveChangesAsync();
+            await SaveChanges(context);
         }
         public async Task UpdateMulti(TKThepTChong[] TKThepDeCong)
         {
@@ -168,7 +220,7 @@ namespace DucAnhERP.Services
             }
 
             context.Set<TKThepTChong>().Remove(entity);
-            await context.SaveChangesAsync();
+            await SaveChanges(context);
         }
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
         {
@@ -207,7 +259,7 @@ namespace DucAnhERP.Services
 
                 // Chèn bản ghi mới vào bảng
                 context.TKThepTChongs.Add(entity);
-                await context.SaveChangesAsync();
+                await SaveChanges(context);
             }
             catch (Exception ex)
             {
@@ -260,7 +312,7 @@ namespace DucAnhERP.Services
                 context.TKThepTChongs.Add(entity);
 
                 // Lưu bản ghi mới vào cơ sở dữ liệu
-                await context.SaveChangesAsync();
+                await SaveChanges(context);
                 // Trả về Id của bản ghi mới được thêm
                 id = entity.Id ?? "";
                 return id;
@@ -269,6 +321,268 @@ namespace DucAnhERP.Services
             {
                 Console.WriteLine(ex.ToString());
                 return id;
+            }
+        }
+
+
+        public async Task SaveChanges(ApplicationDbContext context)
+        {
+            try
+            {
+                // Kiểm tra và xử lý các thay đổi trong DbContext
+                var addedEntities = context.ChangeTracker.Entries()
+                    .Where(e => e.State == EntityState.Added)
+                    .ToList();
+
+                var modifiedEntities = context.ChangeTracker.Entries()
+                    .Where(e => e.State == EntityState.Modified)
+                    .ToList();
+
+                var deletedEntities = context.ChangeTracker.Entries()
+                    .Where(e => e.State == EntityState.Deleted)
+                    .ToList();
+
+                // Xử lý thay đổi khi thêm
+                if (addedEntities.Any())
+                {
+                    foreach (var addedEntity in addedEntities)
+                    {
+                        await HandleEntityAdd(addedEntity);
+                    }
+                }
+
+                // Xử lý thay đổi khi sửa
+                if (modifiedEntities.Any())
+                {
+                    foreach (var modifiedEntity in modifiedEntities)
+                    {
+                        await HandleEntityUpdate(modifiedEntity);
+                    }
+                }
+
+                // Xử lý thay đổi khi xóa
+                if (deletedEntities.Any())
+                {
+                    foreach (var deletedEntity in deletedEntities)
+                    {
+                        await HandleEntityDelete(deletedEntity);
+                    }
+                }
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"An error occurred while saving changes: {ex.Message}");
+                throw;
+            }
+        }
+        private async Task HandleEntityAdd(EntityEntry entityEntry)
+        {
+            var addedEntity = entityEntry.Entity as TKThepTChong;
+            if (addedEntity != null)
+            {
+                PKKLModel pkklModel = new PKKLModel { HangMuc = "III.Gia công, lắp dựng cốt thép", TenCongTac = addedEntity.TenCongTac ?? "", LoaiCauKienId = addedEntity.TTKTHHCongHopRanh_LoaiThanhChong };
+                List<PKKLModel> result = await _pPKKLTChongRepository.GetAllByVM(pkklModel);
+                if (result != null)
+                {
+                    List<PKKLTChong> PKKLTChongs = new List<PKKLTChong>();
+                    foreach (var record in result)
+                    {
+                        PKKLTChong PKKLTChong = new PKKLTChong();
+                        if (!string.IsNullOrEmpty(record.TenCongTac))
+                        {
+                            PKKLTChong.Id = record.Id;
+                            PKKLTChong.Flag = record.Flag;
+                            PKKLTChong.TTKTHHCongHopRanh_LoaiThanhChong = record.LoaiCauKienId;
+                            PKKLTChong.LoaiBeTong = record.LoaiBeTong;
+                            PKKLTChong.HangMuc = record.HangMuc;
+                            PKKLTChong.HangMucCongTac = record.HangMucCongTac;
+                            PKKLTChong.TenCongTac = record.TenCongTac;
+                            PKKLTChong.DonVi = record.DonVi;
+                            PKKLTChong.KTHH_D = record.KTHH_D;
+                            PKKLTChong.KTHH_R = record.KTHH_R;
+                            PKKLTChong.KTHH_C = record.KTHH_C;
+                            PKKLTChong.KTHH_DienTich = record.KTHH_DienTich;
+                            PKKLTChong.KTHH_GhiChu = record.KTHH_GhiChu;
+                            PKKLTChong.KTHH_SLCauKien = record.KTHH_SLCauKien;
+                            PKKLTChong.TTCDT_CDai = record.TTCDT_CDai;
+                            PKKLTChong.TTCDT_CRong = record.TTCDT_CRong;
+                            PKKLTChong.TTCDT_CDay = record.TTCDT_CDay;
+                            PKKLTChong.TTCDT_DienTich = record.TTCDT_DienTich;
+                            PKKLTChong.TTCDT_SLCK = record.TTCDT_SLCK;
+                            PKKLTChong.KLKP_Sl = record.KLKP_Sl;
+                            PKKLTChong.KLCC1CK = record.KLCC1CK;
+                            PKKLTChong.CreateAt = record.CreateAt;
+                            PKKLTChong.CreateBy = record.CreateBy;
+                            PKKLTChong.KLKP_KL = addedEntity.TongTrongLuong ?? 0;
+
+                            var SumTenCongTacByPL = await GetSumTenCongTacByPL(addedEntity.TTKTHHCongHopRanh_LoaiThanhChong, addedEntity.TenCongTac ?? "");
+                            if (SumTenCongTacByPL != null && SumTenCongTacByPL.Value != null)
+                            {
+                                if (double.TryParse(SumTenCongTacByPL.Value, out double parsedValue))
+                                {
+                                    PKKLTChong.KLKP_KL = parsedValue + addedEntity.TongTrongLuong ?? 0;
+                                }
+
+                            }
+                            PKKLTChong.KTHH_KL1CK = _pPKKLTChongRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
+                            PKKLTChong.TTCDT_KL = _pPKKLTChongRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
+                            PKKLTChong.KL1CK_ChuaTruCC = _pPKKLTChongRepository.KL1CK_ChuaTruCC(record.KTHH_KL1CK, record.KTHH_SLCauKien, record.TTCDT_KL, record.TTCDT_SLCK, PKKLTChong.KLKP_KL, record.KLKP_Sl);
+                            PKKLTChong.TKLCK_SauCC = PKKLTChong.KL1CK_ChuaTruCC - PKKLTChong.KLCC1CK;
+                            PKKLTChongs.Add(PKKLTChong);
+                        }
+
+                    }
+                    await _pPKKLTChongRepository.UpdateMulti(PKKLTChongs.ToArray());
+                }
+            }
+        }
+        private async Task HandleEntityDelete(EntityEntry entityEntry)
+        {
+            var deletedEntity = entityEntry.Entity as TKThepTChong;
+            if (deletedEntity != null)
+            {
+                TKThepTChong entity = await GetById(deletedEntity.Id);
+
+                if (entity == null)
+                {
+                    throw new Exception($"Không tìm thấy bản ghi theo ID: {deletedEntity.Id}");
+                }
+                PKKLModel pkklModel = new PKKLModel { HangMuc = "III.Gia công, lắp dựng cốt thép", TenCongTac = entity.TenCongTac ?? "", LoaiCauKienId = entity.TTKTHHCongHopRanh_LoaiThanhChong };
+                List<PKKLModel> result = await _pPKKLTChongRepository.GetAllByVM(pkklModel);
+                if (result != null)
+                {
+                    List<PKKLTChong> PKKLTChongs = new List<PKKLTChong>();
+                    foreach (var record in result)
+                    {
+                        PKKLTChong PKKLTChong = new PKKLTChong();
+                        if (!string.IsNullOrEmpty(record.TenCongTac))
+                        {
+                            PKKLTChong.Id = record.Id;
+                            PKKLTChong.Flag = record.Flag;
+                            PKKLTChong.TTKTHHCongHopRanh_LoaiThanhChong = record.LoaiCauKienId;
+                            PKKLTChong.LoaiBeTong = record.LoaiBeTong;
+                            PKKLTChong.HangMuc = record.HangMuc;
+                            PKKLTChong.HangMucCongTac = record.HangMucCongTac;
+                            PKKLTChong.DonVi = record.DonVi;
+                            PKKLTChong.KTHH_D = record.KTHH_D;
+                            PKKLTChong.KTHH_R = record.KTHH_R;
+                            PKKLTChong.KTHH_C = record.KTHH_C;
+                            PKKLTChong.KTHH_DienTich = record.KTHH_DienTich;
+                            PKKLTChong.KTHH_GhiChu = record.KTHH_GhiChu;
+                            PKKLTChong.KTHH_SLCauKien = record.KTHH_SLCauKien;
+                            PKKLTChong.TTCDT_CDai = record.TTCDT_CDai;
+                            PKKLTChong.TTCDT_CRong = record.TTCDT_CRong;
+                            PKKLTChong.TTCDT_CDay = record.TTCDT_CDay;
+                            PKKLTChong.TTCDT_DienTich = record.TTCDT_DienTich;
+                            PKKLTChong.TTCDT_SLCK = record.TTCDT_SLCK;
+                            PKKLTChong.KLKP_Sl = record.KLKP_Sl;
+                            PKKLTChong.KLCC1CK = record.KLCC1CK;
+                            PKKLTChong.CreateAt = record.CreateAt;
+                            PKKLTChong.CreateBy = record.CreateBy;
+                            PKKLTChong.KLKP_KL = deletedEntity.TongTrongLuong - entity.TongTrongLuong ?? 0;
+                            PKKLTChong.TenCongTac = "";
+
+                            var SumTenCongTacByPL = await GetSumTenCongTacByPL(entity.TTKTHHCongHopRanh_LoaiThanhChong, entity.TenCongTac ?? "");
+                            if (SumTenCongTacByPL != null && SumTenCongTacByPL.Value != null)
+                            {
+                                if (double.TryParse(SumTenCongTacByPL.Value, out double parsedValue))
+                                {
+                                    PKKLTChong.KLKP_KL = parsedValue - deletedEntity.TongTrongLuong ?? 0;
+                                    PKKLTChong.TenCongTac = record.TenCongTac;
+                                }
+
+                            }
+                            PKKLTChong.KTHH_KL1CK = _pPKKLTChongRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
+                            PKKLTChong.TTCDT_KL = _pPKKLTChongRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
+                            PKKLTChong.KL1CK_ChuaTruCC = _pPKKLTChongRepository.KL1CK_ChuaTruCC(record.KTHH_KL1CK, record.KTHH_SLCauKien, record.TTCDT_KL, record.TTCDT_SLCK, PKKLTChong.KLKP_KL, record.KLKP_Sl);
+                            PKKLTChong.TKLCK_SauCC = PKKLTChong.KL1CK_ChuaTruCC - PKKLTChong.KLCC1CK;
+                            PKKLTChongs.Add(PKKLTChong);
+                        }
+
+                    }
+                    await _pPKKLTChongRepository.UpdateMulti(PKKLTChongs.ToArray());
+                }
+            }
+        }
+        private async Task HandleEntityUpdate(EntityEntry entityEntry)
+        {
+            try
+            {
+
+                var modifiedEntity = entityEntry.Entity as TKThepTChong;
+
+                if (modifiedEntity != null)
+                {
+                    TKThepTChong entity = await GetById(modifiedEntity.Id);
+
+                    if (entity == null)
+                    {
+                        throw new Exception($"Không tìm thấy bản ghi theo ID: {modifiedEntity.Id}");
+                    }
+                    PKKLModel pkklModel = new PKKLModel { HangMuc = "III.Gia công, lắp dựng cốt thép", TenCongTac = entity.TenCongTac ?? "", LoaiCauKienId = entity.TTKTHHCongHopRanh_LoaiThanhChong };
+                    List<PKKLModel> result = await _pPKKLTChongRepository.GetAllByVM(pkklModel);
+                    if (result != null)
+                    {
+                        List<PKKLTChong> PKKLTChongs = new List<PKKLTChong>();
+                        foreach (var record in result)
+                        {
+                            PKKLTChong PKKLTChong = new PKKLTChong();
+                            if (!string.IsNullOrEmpty(record.TenCongTac))
+                            {
+                                PKKLTChong.Id = record.Id;
+                                PKKLTChong.Flag = record.Flag;
+                                PKKLTChong.TTKTHHCongHopRanh_LoaiThanhChong = record.LoaiCauKienId;
+                                PKKLTChong.LoaiBeTong = record.LoaiBeTong;
+                                PKKLTChong.HangMuc = record.HangMuc;
+                                PKKLTChong.HangMucCongTac = record.HangMucCongTac;
+                                PKKLTChong.TenCongTac = record.TenCongTac;
+                                PKKLTChong.DonVi = record.DonVi;
+                                PKKLTChong.KTHH_D = record.KTHH_D;
+                                PKKLTChong.KTHH_R = record.KTHH_R;
+                                PKKLTChong.KTHH_C = record.KTHH_C;
+                                PKKLTChong.KTHH_DienTich = record.KTHH_DienTich;
+                                PKKLTChong.KTHH_GhiChu = record.KTHH_GhiChu;
+                                PKKLTChong.KTHH_SLCauKien = record.KTHH_SLCauKien;
+                                PKKLTChong.TTCDT_CDai = record.TTCDT_CDai;
+                                PKKLTChong.TTCDT_CRong = record.TTCDT_CRong;
+                                PKKLTChong.TTCDT_CDay = record.TTCDT_CDay;
+                                PKKLTChong.TTCDT_DienTich = record.TTCDT_DienTich;
+                                PKKLTChong.TTCDT_SLCK = record.TTCDT_SLCK;
+                                PKKLTChong.KLKP_Sl = record.KLKP_Sl;
+                                PKKLTChong.KLCC1CK = record.KLCC1CK;
+                                PKKLTChong.CreateAt = record.CreateAt;
+                                PKKLTChong.CreateBy = record.CreateBy;
+                                PKKLTChong.KLKP_KL = modifiedEntity.TongTrongLuong - entity.TongTrongLuong ?? 0;
+
+                                var SumTenCongTacByPL = await GetSumTenCongTacByPL(entity.TTKTHHCongHopRanh_LoaiThanhChong, entity.TenCongTac ?? "");
+                                if (SumTenCongTacByPL != null && SumTenCongTacByPL.Value != null)
+                                {
+                                    if (double.TryParse(SumTenCongTacByPL.Value, out double parsedValue))
+                                    {
+                                        PKKLTChong.KLKP_KL = (parsedValue - entity.TongTrongLuong) + modifiedEntity.TongTrongLuong ?? 0;
+                                    }
+
+                                }
+
+                                PKKLTChong.KTHH_KL1CK = _pPKKLTChongRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
+                                PKKLTChong.TTCDT_KL = _pPKKLTChongRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
+                                PKKLTChong.KL1CK_ChuaTruCC = _pPKKLTChongRepository.KL1CK_ChuaTruCC(record.KTHH_KL1CK, record.KTHH_SLCauKien, record.TTCDT_KL, record.TTCDT_SLCK, PKKLTChong.KLKP_KL, record.KLKP_Sl);
+                                PKKLTChong.TKLCK_SauCC = PKKLTChong.KL1CK_ChuaTruCC - PKKLTChong.KLCC1CK;
+                                PKKLTChongs.Add(PKKLTChong);
+                            }
+
+                        }
+                        await _pPKKLTChongRepository.UpdateMulti(PKKLTChongs.ToArray());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
             }
         }
     }

@@ -282,7 +282,7 @@ namespace DucAnhERP.Services
                            
                             foreach (var obj in query)
                             {
-                                var matchingItem = query1.FirstOrDefault(x => x.Id == item.Id);
+                                var matchingItem = query1.FirstOrDefault(x => x.Id == obj.Id);
 
                                 if (matchingItem != null)
                                 {

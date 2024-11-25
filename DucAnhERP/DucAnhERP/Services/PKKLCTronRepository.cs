@@ -159,7 +159,7 @@ namespace DucAnhERP.Services
                              {
                                  a.Id,
                                  b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
-                                 PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = c.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                 PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
                                  a.TenCongTac,
                                  a.DonVi,
                                  a.TKLCK_SauCC,
@@ -216,7 +216,7 @@ namespace DucAnhERP.Services
                                        {
                                            a.Id,
                                            a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
-                                           PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = c.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ??"",
+                                           PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ??"",
                                            a.TenCongTac,
                                            a.DonVi,
                                            a.TKLCK_SauCC,
