@@ -321,7 +321,7 @@ namespace DucAnhERP.Services
         }
 
         context.PKKLRXays.Update(TKThepDeCong);
-        await context.SaveChangesAsync();
+        await SaveChanges(context);
     }
     public async Task UpdateMulti(PKKLRXay[] PKKLRXay)
     {
@@ -599,11 +599,11 @@ namespace DucAnhERP.Services
     private async Task HandleEntityUpdate(EntityEntry entityEntry)
     {
         var modifiedEntity = entityEntry.Entity as PKKLRXay;
-        if (modifiedEntity != null)
-        {
-
+            if (modifiedEntity != null)
+            {
+                
+            }
         }
-    }
 
     // Xử lý khi xóa entity
     private async Task HandleEntityDelete(EntityEntry entityEntry)

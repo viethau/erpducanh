@@ -56,7 +56,7 @@ namespace DucAnhERP.Services
                             orderby b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ascending, a.HangMuc ascending, a.LoaiBeTong descending, a.CreateAt ascending
                             select new PKKLModel
                             {
-                                Id= a.Id,
+                                Id = a.Id,
                                 LoaiCauKien = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
                                 LoaiCauKienId = a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
                                 LoaiBeTong = a.LoaiBeTong,
@@ -123,7 +123,7 @@ namespace DucAnhERP.Services
                                           && x.HangMucCongTac == a.HangMucCongTac
                                           && x.TenCongTac == a.TenCongTac)
                                  .Sum(x => x.TKLCK_SauCC)
-                             orderby b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,a.HangMuc, a.CreateAt
+                             orderby b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai, a.HangMuc, a.CreateAt
                              select new THKLModel
                              {
                                  PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
@@ -151,7 +151,7 @@ namespace DucAnhERP.Services
                 using var context = _context.CreateDbContext();
                 var query = (from a in context.PKKLCTrons
                              join b in context.PhanLoaiCTronHopNhuas on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals b.Id
-                             join c in context.DSNuocMua on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai 
+                             join c in context.DSNuocMua on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai
                              equals c.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai into cGroup
                              from c in cGroup.DefaultIfEmpty()
                              where c.ThongTinLyTrinh_TuyenDuong == TuyenDuong
@@ -166,7 +166,7 @@ namespace DucAnhERP.Services
                                  a.HangMuc,
                                  a.CreateAt
                              } into g
-                             orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai,  g.Key.HangMuc, g.Key.CreateAt
+                             orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, g.Key.HangMuc, g.Key.CreateAt
                              select new THKLModel
                              {
                                  Id = g.Key.Id,
@@ -175,7 +175,7 @@ namespace DucAnhERP.Services
                                  TenCongTac = g.Key.TenCongTac,
                                  DonVi = g.Key.DonVi,
                                  KL1DonVi = g.Key.TKLCK_SauCC,
-                                 SLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0)??0,
+                                 SLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
                                  SLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
                                  SLTong = g.Sum(x => x.c != null && (x.c.TraiPhai == 0 || x.c.TraiPhai == 1) ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
                                  KLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0,
@@ -204,7 +204,7 @@ namespace DucAnhERP.Services
                 // Duyệt qua từng tuyến đường trong danh sách `nuocMua`
                 foreach (var item in nuocMua)
                 {
-                    
+
                     var query = await (from a in context.PKKLCTrons
                                        join b in context.PhanLoaiCTronHopNhuas
                                            on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals b.Id
@@ -216,7 +216,7 @@ namespace DucAnhERP.Services
                                        {
                                            a.Id,
                                            a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
-                                           PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ??"",
+                                           PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "",
                                            a.TenCongTac,
                                            a.DonVi,
                                            a.TKLCK_SauCC,
@@ -233,14 +233,14 @@ namespace DucAnhERP.Services
                                            TenCongTac = g.Key.TenCongTac,
                                            DonVi = g.Key.DonVi,
                                            KL1DonVi = g.Key.TKLCK_SauCC,
-                                           SLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ??0,
+                                           SLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
                                            SLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
                                            SLTong = g.Sum(x => x.c != null ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) ?? 0,
                                            KLTrai = g.Sum(x => x.c != null && x.c.TraiPhai == 0 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0,
                                            KLPhai = g.Sum(x => x.c != null && x.c.TraiPhai == 1 ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0,
                                            KLTong = g.Sum(x => x.c != null ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0
                                        }).ToListAsync();
-                   
+
 
                     // Thêm kết quả của truy vấn vào danh sách `finalResult`
                     finalResult.AddRange(query);
@@ -263,7 +263,7 @@ namespace DucAnhERP.Services
             var result = context.PKKLCTrons
                 .Where(a => a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == id &&
                  a.HangMuc == "I.Sản xuất, vận chuyển, lắp đặt" &&
-                 a.LoaiBeTong == "Bê tông thương phẩm" && 
+                 a.LoaiBeTong == "Bê tông thương phẩm" &&
                  a.KTHH_GhiChu == "Rộng*Cao")
                  .FirstOrDefault();
 
@@ -328,7 +328,7 @@ namespace DucAnhERP.Services
         }
         public async Task UpdateMulti(PKKLCTron[] PKKLCTron)
         {
-           
+
 
             try
             {
@@ -348,7 +348,7 @@ namespace DucAnhERP.Services
                         context.Entry(entity).CurrentValues.SetValues(updatedEntity);
                     }
                 }
-               
+
                 // Lưu các thay đổi vào database
                 await context.SaveChangesAsync();
             }
@@ -537,8 +537,8 @@ namespace DucAnhERP.Services
             if (addedEntity != null)
             {
                 // Kiểm tra điều kiện HangMuc và PhanLoaiMongCongTronCongHop
-                if (addedEntity.HangMuc == "I.Sản xuất, vận chuyển, lắp đặt" 
-                    && addedEntity.KTHH_GhiChu == "Rộng*Cao" 
+                if (addedEntity.HangMuc == "I.Sản xuất, vận chuyển, lắp đặt"
+                    && addedEntity.KTHH_GhiChu == "Rộng*Cao"
                     && addedEntity.HangMucCongTac.Trim().ToLower() == "Bê tông cống tròn".Trim().ToLower())
                 {
                     using var context = _context.CreateDbContext();
@@ -586,7 +586,7 @@ namespace DucAnhERP.Services
                                 record.TKLCK_SauCC = TKLCK_SauCC;
                             }
                         }
-                        
+
                     }
 
                     // Gọi phương thức UpdateMulti để cập nhật nhiều bản ghi
@@ -604,7 +604,7 @@ namespace DucAnhERP.Services
             var modifiedEntity = entityEntry.Entity as PKKLCTron;
             if (modifiedEntity != null)
             {
-                
+
             }
         }
 
@@ -641,7 +641,7 @@ namespace DucAnhERP.Services
                         // Gọi phương thức UpdateMulti để cập nhật nhiều bản ghi
                         await UpdateMulti(recordsToUpdate.ToArray());
                     }
-                    
+
 
                     var recordsToUpdate1 = await context.PKKLCTrons
                         .Where(x => x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == deletedEntity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai
@@ -675,7 +675,7 @@ namespace DucAnhERP.Services
             }
         }
 
-        public  double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
+        public double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
         {
             double result = 0;
             if (DonVi == "M3")
@@ -701,7 +701,7 @@ namespace DucAnhERP.Services
             return Math.Round(result, 4);
         }
 
-        public  double TTCDT_KL(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double TTCDT_CDai, double TTCDT_CRong, double TTCDT_CDay, double TTCDT_DienTich)
+        public double TTCDT_KL(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double TTCDT_CDai, double TTCDT_CRong, double TTCDT_CDay, double TTCDT_DienTich)
         {
             double result = 0;
             if (DonVi.ToUpper().Trim() == "M2")
@@ -718,7 +718,7 @@ namespace DucAnhERP.Services
             return Math.Round(result, 4);
         }
 
-        public  double KL1CK_ChuaTruCC(double KTHH_KL1CK, double KTHH_SLCauKien, double TTCDT_KL, double TTCDT_SLCK, double KLKP_KL, double KLKP_Sl)
+        public double KL1CK_ChuaTruCC(double KTHH_KL1CK, double KTHH_SLCauKien, double TTCDT_KL, double TTCDT_SLCK, double KLKP_KL, double KLKP_Sl)
         {
             double result = 0;
             if (KTHH_KL1CK > 0)
