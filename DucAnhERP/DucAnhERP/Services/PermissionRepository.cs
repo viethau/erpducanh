@@ -121,6 +121,11 @@ namespace DucAnhERP.Services
                         };
 
 
+            if (!string.IsNullOrEmpty(permissionModel.ParentMajorId))
+            {
+                query = query.Where(m => m.ParentMajorId == permissionModel.ParentMajorId);
+            }
+            
             if (!string.IsNullOrEmpty(permissionModel.MajorId))
             {
                 query = query.Where(m => m.MajorId == permissionModel.MajorId);

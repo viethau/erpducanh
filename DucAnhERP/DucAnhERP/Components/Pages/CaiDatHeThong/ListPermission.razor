@@ -19,11 +19,11 @@
                 <div class="row">
                     <div class="form-floating col-sm-3 col-md-3">
                         <label for="Table">Nghiệp vụ cha</label>
-                        <Select2 Id="selectParentMajor" Items="@selectParentMajors" OnChange="@OnSelectParentMajor"></Select2>    
+                        <Select2 disabled="@isEdit" Id="selectParentMajor" Items="@selectParentMajors" OnChange="@OnSelectParentMajor"></Select2>    
                     </div>         
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="MajorId">Nghiệp vụ</label>
-                        <Select2 Id="MajorId" Items="@selectMajors" OnChange="@OnSelectMajor"></Select2>
+                        <Select2 disabled="@isEdit" Id="MajorId" Items="@selectMajors" OnChange="@OnSelectMajor"></Select2>
                         <ValidationMessage For="()=>Input.MajorId"></ValidationMessage>
                     </div>
                    
@@ -54,9 +54,14 @@
             <DataAnnotationsValidator />
             <div class="d-flex row">
               
+                <div class="form-floating col-sm-3 col-md-2">
+                    <label for="MajorId">Nghiệp vụ cha</label>
+                    <Select2 Id="selectParentMajorsSear" Items="@selectParentMajorsSear" OnChange="@OnSelectParentMajorsSear"></Select2>
+                    <ValidationMessage For="()=>permissionModel.ParentMajorId"></ValidationMessage>
+                </div>
                 <div class="form-floating col-sm-3 col-md-3">
                     <label for="MajorId">Nghiệp vụ</label>
-                    <Select2 Id="MajorId1" Items="@selectMajors" OnChange="@OnSelectMajor1"></Select2>
+                    <Select2 Id="MajorId1" Items="@selectMajorsSear" OnChange="@OnSelectMajorSear"></Select2>
                     <ValidationMessage For="()=>permissionModel.MajorId"></ValidationMessage>
                 </div>
                 <div class="form-group ml-5">
@@ -124,7 +129,7 @@
                             <tr>
                                 <td class="d-flex flex-column text-center nowrap">
                                     <div class="d-inline-block">
-                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item)">
                                             <i class="fas fa-edit"></i>
                                         </button>
 
@@ -202,6 +207,15 @@
         new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
     };
 
+    private List<SelectedItem> selectParentMajorsSear = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
+    };
+    private List<SelectedItem> selectMajorsSear = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
+    };
+
     private async void OnSelectParentMajor(SelectedItem selectedItem)
     {
         try
@@ -257,7 +271,58 @@
     {
         Input.MajorId = selectedItem.Value;
     }
-    private void OnSelectMajor1(SelectedItem selectedItem)
+
+    private async void OnSelectParentMajorsSear(SelectedItem selectedItem)
+    {
+        try
+        {
+            permissionModel.ParentMajorId = selectedItem.Value;
+            selectMajorsSear = new List<SelectedItem>
+                    {
+                        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
+                    };
+            if (!string.IsNullOrEmpty(selectedItem.Value))
+            {
+
+                listMajor = await MajorRepository.GetMajorByParentId(selectedItem.Value);
+                if (listMajor.Count() > 0)
+                {
+                    selectMajorsSear = listMajor.Select(major => new SelectedItem
+                        {
+                            Value = major.Id,
+                            Text = major.MajorName
+                        }).ToList();
+                    selectMajorsSear.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+                }
+                else
+                {
+
+                    ToastService.ShowToast(
+                         "Thông báo",
+                         "Nghiệp vụ cha:" + selectedItem.Text + ", chưa tồn tại nghiệp vụ nào !",
+                         cssClass: "toast-danger",
+                        iconClass: "fa fa-exclamation-circle",
+                         progressBarClass: "bg-info",
+                         duration: 7000
+                     );
+                }
+                await InvokeAsync(() => { StateHasChanged(); });
+            }
+
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                     "Thông báo",
+                     ex.Message,
+                     cssClass: "toast-danger",
+                    iconClass: "fa fa-exclamation-circle",
+                     progressBarClass: "bg-info",
+                     duration: 7000
+                 );
+        }
+    }
+    private void OnSelectMajorSear(SelectedItem selectedItem)
     {
         permissionModel.MajorId = selectedItem.Value;
     }
@@ -337,6 +402,7 @@
     {
         try
         {    
+            listMajor = await MajorRepository.GetAll();
             listModel = await PermissionService.GetAllByVM(permissionModel);
             if (listModel != null)
             {
@@ -362,7 +428,7 @@
 
             // Thêm phần tử mặc định "chọn..."
             selectParentMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
-           
+            selectParentMajorsSear = selectParentMajors;
             listPermisson = Paging(listModel);
             baseTime = DateTime.Now;
         }
@@ -379,15 +445,39 @@
         }
     }
 
-    private async Task HandleEdit(string id)
+    private async Task HandleEdit(PermissionModel itemModel)
     {
         try
         {
             TitleModal = "Cập nhật!";
-            Input = await PermissionService.GetById(id);
+            selectParentMajors = listMajor
+               .Where(major => major.ParentId == null)
+               .Select(major => new SelectedItem
+                   {
+                       Value = major.Id,
+                       Text = major.MajorName,
+                       IsSelected = major.Id == itemModel.ParentMajorId
+                   })
+               .ToList();
+
+            selectMajors = listMajor
+                .Where(major => major.ParentId == itemModel.ParentMajorId)
+                .Select(major => new SelectedItem
+                    {
+                        Value = major.Id,
+                        Text = major.MajorName,
+                        IsSelected = major.Id == itemModel.MajorId
+                    })
+                .ToList();
+
+
+            Input = await PermissionService.GetById(itemModel.Id);
             isEdit = true;
             isModalVisible = true;
-          
+            foreach (var item in selectParentMajors)
+            {
+                item.IsSelected = item.Value == itemModel.ParentMajorId;
+            }
             foreach (var item in selectMajors)
             {
                 item.IsSelected = item.Value == Input.MajorId;

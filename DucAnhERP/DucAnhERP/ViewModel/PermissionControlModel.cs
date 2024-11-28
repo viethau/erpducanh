@@ -7,6 +7,8 @@ namespace DucAnhERP.ViewModel
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string CompanyId { get; set; } = "";
         public string CompanyName { get; set; } = "";
+        public string ParentMajorId { get; set; } = "";
+        public string ParentMajorName { get; set; } = "";
         public string MajorId { get; set; } = "";
         public string MajorName { get; set; } = "";
         public string UserId { get; set; } = "";

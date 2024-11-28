@@ -3,7 +3,7 @@
 @rendermode InteractiveServer
 
 
-<select id="@Id" class="form-control" >
+<select id="@Id" class="form-control" disabled="@disabled">
     @if (Items != null && Items.Any())
     {
         @foreach (var item in Items)
@@ -17,6 +17,7 @@
     [Parameter] public string Id { get; set; }
     [Parameter] public List<SelectedItem> Items { get; set; } = new List<SelectedItem>();
     [Parameter] public EventCallback<SelectedItem> OnChange { get; set; }
+    [Parameter] public bool disabled { get; set; } = false;
 
     private DotNetObjectReference<Select2> objRef;
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -32,12 +33,16 @@
     [JSInvokable]
     public async Task OnChangeHandlerFromJS(string value)
     {
-        SelectedItem selectedItem = Items.FirstOrDefault(item => item.Value == value);
-
-        if (selectedItem != null)
+        if (!disabled)
         {
-            await OnChange.InvokeAsync(selectedItem);
+            SelectedItem selectedItem = Items.FirstOrDefault(item => item.Value == value);
+
+            if (selectedItem != null)
+            {
+                await OnChange.InvokeAsync(selectedItem);
+            }
         }
+        
     }
 
     public void Dispose()

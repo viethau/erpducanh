@@ -167,37 +167,7 @@ namespace DucAnhERP.Services
         public async Task<List<MajorUserPermissionModel>> GetAllByVM(MajorUserPermissionModel majorUserPermissionModel)
         {
             using var context = _context.CreateDbContext();
-            //var query = from perContr in context.MMajorUserPermissions
-            //            join company in context.MCompanies
-            //            on perContr.CompanyId equals company.Id into gr1
-            //            from company in gr1.DefaultIfEmpty()
-            //            join major in context.MMajors
-            //           on perContr.MajorId equals major.Id into gr2
-            //            from major in gr2.DefaultIfEmpty()
-            //            join user in context.ApplicationUsers
-            //          on perContr.UserId equals user.Id into gr3
-            //            from user in gr3.DefaultIfEmpty()
-
-
-            //            orderby perContr.CreateAt descending
-            //            select new MajorUserPermissionModel
-            //            {
-            //                Id = perContr.Id,
-            //                CompanyId = perContr.CompanyId,
-            //                CompanyName = company.CompanyName,
-            //                ParentMajorId = perContr.ParentMajorId,
-            //                ParentMajorName = perContr.ParentMajorId,
-            //                MajorId = perContr.MajorId,
-            //                MajorName = major.MajorName,
-            //                PermissionId = perContr.PermissionId,
-            //                PermissionName = "",
-            //                UserId = user.Id,
-            //                UserName = user.UserName,
-            //                DayinWeek = perContr.DayinWeek,
-            //                CreateAt = perContr.CreateAt,
-            //                CreateBy = perContr.CreateBy,
-            //                IsActive = perContr.IsActive
-            //            };
+            
             var query = from perContr in context.MMajorUserPermissions
                         join company in context.MCompanies
                             on perContr.CompanyId equals company.Id into gr1
@@ -294,49 +264,70 @@ namespace DucAnhERP.Services
         public async Task Update(MMajorUserPermission mMajorUserPermission)
         {
             using var context = _context.CreateDbContext();
-            var entity = await GetById(mMajorUserPermission.Id);
+            using var transaction = await context.Database.BeginTransactionAsync();
 
-            if (entity == null)
+            try
             {
-                throw new Exception($"Không tìm thấy bản ghi theo ID: {mMajorUserPermission.Id}");
-            }
-            await DeleteByIdDetail(entity.Id);
-            context.MMajorUserPermissions.Update(mMajorUserPermission);
-            if (!string.IsNullOrEmpty(mMajorUserPermission.PermissionId))
-            {
-                // Chuyển đổi PermissionId từ JSON thành danh sách SelectedItem
-                List<SelectedItem> list = JsonSerializer.Deserialize<List<SelectedItem>>(mMajorUserPermission.PermissionId);
-                List<SelectedItem> listDay = JsonSerializer.Deserialize<List<SelectedItem>>(mMajorUserPermission.DayinWeek);
-                List<MMajorUserPermissionDetail> listDetails = new();
+                var entity = await GetById(mMajorUserPermission.Id);
 
-                // Duyệt qua danh sách SelectedItem và tạo danh sách MMajorUserPermissionDetail
-                foreach (var item in list)
+                if (entity == null)
                 {
-                    foreach (var day in listDay)
-                    {
-                        listDetails.Add(new MMajorUserPermissionDetail
-                        {
-                            Id = Guid.NewGuid().ToString(),
-                            CompanyId = entity.CompanyId,
-                            MajorId = entity.MajorId,
-                            UserId = entity.UserId,
-                            PermissionId = item.Value,
-                            Id_MMajorUserPermission = entity.Id,
-                            DayinWeek = int.Parse(day.Value),
-                            CreateAt = entity.CreateAt,
-                            CreateBy = entity.CreateBy,
-                            IsActive = entity.IsActive
-                        });
-                    }
-                       
+                    throw new Exception($"Không tìm thấy bản ghi theo ID: {mMajorUserPermission.Id}");
                 }
 
-                // Gọi hàm InsertMultiple để thêm các chi tiết quyền
-                await InsertMultiple(listDetails);
+                // Xóa chi tiết quyền theo Id
+                await DeleteByIdDetail(entity.Id);
+
+                // Cập nhật quyền người dùng
+                context.MMajorUserPermissions.Update(mMajorUserPermission);
+
+                if (!string.IsNullOrEmpty(mMajorUserPermission.PermissionId))
+                {
+                    // Chuyển đổi PermissionId từ JSON thành danh sách SelectedItem
+                    List<SelectedItem> list = JsonSerializer.Deserialize<List<SelectedItem>>(mMajorUserPermission.PermissionId);
+                    List<SelectedItem> listDay = JsonSerializer.Deserialize<List<SelectedItem>>(mMajorUserPermission.DayinWeek);
+                    List<MMajorUserPermissionDetail> listDetails = new();
+
+                    // Duyệt qua danh sách SelectedItem và tạo danh sách MMajorUserPermissionDetail
+                    foreach (var item in list)
+                    {
+                        foreach (var day in listDay)
+                        {
+                            listDetails.Add(new MMajorUserPermissionDetail
+                            {
+                                Id = Guid.NewGuid().ToString(),
+                                CompanyId = entity.CompanyId,
+                                ParentMajorId = entity.ParentMajorId,
+                                MajorId = entity.MajorId,
+                                UserId = entity.UserId,
+                                PermissionId = item.Value,
+                                Id_MMajorUserPermission = entity.Id,
+                                DayinWeek = int.Parse(day.Value),
+                                CreateAt = entity.CreateAt,
+                                CreateBy = entity.CreateBy,
+                                IsActive = entity.IsActive
+                            });
+                        }
+                    }
+
+                    // Gọi hàm InsertMultiple để thêm các chi tiết quyền
+                    await InsertMultiple(listDetails);
+                }
+
+                // Lưu thay đổi
+                await context.SaveChangesAsync();
+
+                // Commit transaction
+                await transaction.CommitAsync();
             }
-            
-            await context.SaveChangesAsync();
+            catch (Exception ex)
+            {
+                // Rollback transaction nếu có lỗi
+                await transaction.RollbackAsync();
+                throw new Exception($"Lỗi trong quá trình cập nhật: {ex.Message}", ex);
+            }
         }
+
 
         public async Task UpdateMulti(MMajorUserPermission[] entities)
         {

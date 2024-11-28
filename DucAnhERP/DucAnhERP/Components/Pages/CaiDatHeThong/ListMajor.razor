@@ -20,7 +20,7 @@
 
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="Table">Nghiệp vụ cha</label>
-                        <Select2 Id="ParentId" Items="@selectItems" OnChange="@OnSelectChange1"></Select2>
+                        <Select2 disabled="isEdit" Id="ParentId" Items="@selectItems" OnChange="@OnSelectParentMajor"></Select2>
                         <ValidationMessage For="()=>Input.ParentId"></ValidationMessage>
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
@@ -55,10 +55,9 @@
         <EditForm Model="majorModel" FormName="SearchNghiepVu" OnValidSubmit="@Search">
             <DataAnnotationsValidator />
             <div class="d-flex row">
-
                 <div class="form-floating col-sm-3 col-md-3">
                     <label for="Table">Nghiệp vụ cha</label>
-                    <Select2 Id="mySelect2" Items="@selectItems" OnChange="@OnSelectChange"></Select2>
+                    <Select2 Id="mySelect2" Items="@selectItems" OnChange="@OnSelectParentMajorSear"></Select2>
                     <ValidationMessage For="()=>majorModel.ParentId"></ValidationMessage>
                 </div>
                 <div class="form-floating col-sm-3 col-md-3">
@@ -188,12 +187,12 @@
     {    new SelectedItem { Value = "", Text = "chọn...",IsSelected=true },
     };
 
-    private void OnSelectChange(SelectedItem selectedItem)
+    private void OnSelectParentMajorSear(SelectedItem selectedItem)
     {
         majorModel.ParentId = selectedItem.Value;
     }
 
-    private void OnSelectChange1(SelectedItem selectedItem)
+    private void OnSelectParentMajor(SelectedItem selectedItem)
     {
         Input.ParentId = selectedItem.Value;
     }

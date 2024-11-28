@@ -101,6 +101,9 @@ namespace DucAnhERP.Services
                         join user in context.ApplicationUsers
                       on perContr.UserId equals user.Id into gr3
                         from user in gr3.DefaultIfEmpty()
+                        join parentM in context.MMajors
+                      on major.ParentId equals parentM.Id into gr4
+                        from parentM in gr4.DefaultIfEmpty()
 
                         orderby perContr.CreateAt descending
                         select new PermissionControlModel
@@ -108,18 +111,24 @@ namespace DucAnhERP.Services
                             Id = perContr.Id,
                             CompanyId = perContr.CompanyId,
                             CompanyName = company.CompanyName,
+                            ParentMajorId = major.ParentId??"",
+                            ParentMajorName =parentM.MajorName,
                             MajorId = perContr.MajorId,
                             MajorName = major.MajorName,
-                            UserId = perContr.Id,
+                            UserId = perContr.UserId,
                             UserName = user.UserName,
                             CreateAt = perContr.CreateAt,
                             CreateBy = perContr.CreateBy,
                             IsActive = perContr.IsActive
                         };
-
             if (!string.IsNullOrEmpty(permissionControlModel.CompanyId))
             {
                 query = query.Where(m => m.CompanyId == permissionControlModel.CompanyId);
+            }
+
+            if (!string.IsNullOrEmpty(permissionControlModel.ParentMajorId))
+            {
+                query = query.Where(m => m.ParentMajorId == permissionControlModel.ParentMajorId);
             }
 
             if (!string.IsNullOrEmpty(permissionControlModel.MajorId))
