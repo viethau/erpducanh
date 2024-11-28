@@ -82,16 +82,35 @@ namespace DucAnhERP.Services
         public async Task<List<PermissionModel>> GetAllByVM(PermissionModel permissionModel)
         {
             using var context = _context.CreateDbContext();
+            //var query = from permission in context.MPermissions
+            //            join major in context.MMajors
+            //            on permission.MajorId equals major.Id into majorGroup
+            //            from major in majorGroup.DefaultIfEmpty()
+
+
+            //            orderby permission.CreateAt descending
+            //            select new PermissionModel
+            //            {
+            //                Id = permission.Id,
+            //                MajorId = permission.MajorId,
+            //                MajorName = major.MajorName,
+            //                PermissionType = permission.PermissionType,
+            //                PermissionName = permission.PermissionName,
+            //                CreateAt = permission.CreateAt,
+            //                CreateBy = permission.CreateBy,
+            //                IsActive = permission.IsActive
+            //            };
             var query = from permission in context.MPermissions
-                        join major in context.MMajors
-                        on permission.MajorId equals major.Id into majorGroup
+                        join major in context.MMajors on permission.MajorId equals major.Id into majorGroup
                         from major in majorGroup.DefaultIfEmpty()
-
-
+                        join parent in context.MMajors on major.ParentId equals parent.Id into parentGroup
+                        from parent in parentGroup.DefaultIfEmpty()
                         orderby permission.CreateAt descending
                         select new PermissionModel
                         {
                             Id = permission.Id,
+                            ParentMajorId = major.ParentId??"", // ParentId from MMajors
+                            ParentMajorName = parent.MajorName, // Parent MajorName from MMajors
                             MajorId = permission.MajorId,
                             MajorName = major.MajorName,
                             PermissionType = permission.PermissionType,
@@ -100,6 +119,7 @@ namespace DucAnhERP.Services
                             CreateBy = permission.CreateBy,
                             IsActive = permission.IsActive
                         };
+
 
             if (!string.IsNullOrEmpty(permissionModel.MajorId))
             {

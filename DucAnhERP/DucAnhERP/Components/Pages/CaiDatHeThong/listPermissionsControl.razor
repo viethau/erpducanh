@@ -23,7 +23,10 @@
                         <Select2 Id="CompanyId" Items="@selectCompanys" OnChange="@OnSelectCompany"></Select2>
                         <ValidationMessage For="()=>Input.CompanyId"></ValidationMessage>
                     </div>
-                   
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="Table">Nghiệp vụ cha</label>
+                        <Select2 Id="selectParentMajor" Items="@selectParentMajors" OnChange="@OnSelectParentMajor"></Select2>    
+                    </div>  
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="MajorId">Nghiệp vụ</label>
                         <Select2 Id="MajorId" Items="@selectMajors" OnChange="@OnSelectMajor"></Select2>
@@ -179,6 +182,10 @@
     private string TitleModal = "Thêm";
     private bool isEdit = false;
 
+    private List<SelectedItem> selectParentMajors = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
+    };
     private List<SelectedItem> selectMajors = new List<SelectedItem>
     {
         new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
@@ -201,7 +208,54 @@
     {
         permissionsControlModel.CompanyId = selectedItem.Value;
     }
+    private async void OnSelectParentMajor(SelectedItem selectedItem)
+    {
+        try
+        {
+            selectMajors = new List<SelectedItem>
+                    {
+                        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
+                    };
+            if (!string.IsNullOrEmpty(selectedItem.Value))
+            {
+                listMajor = await MajorRepository.GetMajorByParentId(selectedItem.Value);
+                if (listMajor.Count() > 0)
+                {
+                    selectMajors = listMajor.Select(major => new SelectedItem
+                        {
+                            Value = major.Id,
+                            Text = major.MajorName
+                        }).ToList();
+                    selectMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+                }
+                else
+                {
 
+                    ToastService.ShowToast(
+                         "Thông báo",
+                         "Nghiệp vụ cha:" + selectedItem.Text + ", chưa tồn tại nghiệp vụ nào !",
+                         cssClass: "toast-danger",
+                        iconClass: "fa fa-exclamation-circle",
+                         progressBarClass: "bg-info",
+                         duration: 7000
+                     );
+                }
+                await InvokeAsync(() => { StateHasChanged(); });
+            }
+            
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                     "Thông báo",
+                     ex.Message,
+                     cssClass: "toast-danger",
+                    iconClass: "fa fa-exclamation-circle",
+                     progressBarClass: "bg-info",
+                     duration: 7000
+                 );
+        }
+    }
     private void OnSelectMajor(SelectedItem selectedItem)
     {
         Input.MajorId = selectedItem.Value;
@@ -300,14 +354,6 @@
         listModel = await PermissionControlService.GetAllByVM(permissionsControlModel);
         listPermissionsControl = Paging(listModel);
 
-        selectMajors = listMajor.Select(major => new SelectedItem
-            {
-                Value = major.Id,
-                Text = major.MajorName
-            }).ToList();
-
-        // Thêm phần tử mặc định "chọn..."
-        selectMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
         selectCompanys = listCompany.Select(major => new SelectedItem
             {
                 Value = major.Id,
@@ -316,6 +362,16 @@
 
         // Thêm phần tử mặc định "chọn..."
         selectCompanys.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+
+        var listParentMajor = await MajorRepository.GetAllParentMajor();
+        selectParentMajors = listParentMajor.Select(major => new SelectedItem
+            {
+                Value = major.Id,
+                Text = major.MajorName
+            }).ToList();
+
+        // Thêm phần tử mặc định "chọn..."
+        selectParentMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
 
         selectUsers = listApplicationUser.Select(major => new SelectedItem
             {

@@ -8,6 +8,8 @@ namespace DucAnhERP.Models
         public string Id { get; set; } = Guid.NewGuid().ToString();
         [Required(ErrorMessage = "Bạn phải chọn chi nhánh!")]
         public string CompanyId { get; set; }
+        [Required(ErrorMessage = "Bạn phải chọn nghiệp cha!")]
+        public string ParentMajorId { get; set; }
         [Required(ErrorMessage = "Bạn phải chọn nghiệp vụ!")]
         public string MajorId { get; set; }
         [Required(ErrorMessage = "Bạn phải chọn người dùng!")]
@@ -28,6 +30,7 @@ namespace DucAnhERP.Models
         [Key]
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string CompanyId { get; set; }
+        public string ParentMajorId { get; set; }
         public string MajorId { get; set; }
         public string UserId { get; set; }
         public string PermissionId { get; set; }

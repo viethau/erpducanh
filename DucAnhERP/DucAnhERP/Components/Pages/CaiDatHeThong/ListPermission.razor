@@ -17,7 +17,10 @@
         <BodyTemplate>
             <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
                 <div class="row">
-                  
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="Table">Nghiệp vụ cha</label>
+                        <Select2 Id="selectParentMajor" Items="@selectParentMajors" OnChange="@OnSelectParentMajor"></Select2>    
+                    </div>         
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="MajorId">Nghiệp vụ</label>
                         <Select2 Id="MajorId" Items="@selectMajors" OnChange="@OnSelectMajor"></Select2>
@@ -82,6 +85,12 @@
                         <th class="text-center" rowspan="2" scope="col">
                             <div class="pb-3">No.</div>
                         </th>
+                        <th onclick="@(() => SortTable("ParentMajorName"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">
+                                Nghiệp vụ cha
+                                <span class="arrow @(GetSortStyle("ParentMajorName"))"></span>
+                            </div>
+                        </th>
                         <th onclick="@(() => SortTable("MajorName"))" rowspan="2" class="text-center sortable" scope="col">
                             <div class="pb-3">
                                 Nghiệp vụ
@@ -125,6 +134,7 @@
                                     </div>
                                 </td>
                                 <td class="text-center" scope="row">@stt</td>
+                                <td class="text-left">@item.ParentMajorName</td>
                                 <td class="text-left">@item.MajorName</td>
                                 <td class="text-center">@item.PermissionTypeName</td>
                                 <td class="text-left">@item.PermissionName</td>
@@ -166,6 +176,7 @@
 
     private MPermission Input = new();
     private List<MMajor> listMajor = new();
+    private List<MMajor> listParentMajor = new();
     private bool isModalVisible = false;
     private bool isLoading = false;
     private string TitleModal = "Thêm";
@@ -182,10 +193,60 @@
         new SelectedItem { Value = "5", Text = "Xóa" },
         new SelectedItem { Value = "6", Text = "Khác" },
     };
+    private List<SelectedItem> selectParentMajors = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
+    };
     private List<SelectedItem> selectMajors = new List<SelectedItem>
     {
         new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
     };
+
+    private async void OnSelectParentMajor(SelectedItem selectedItem)
+    {
+        try
+        {
+            selectMajors = new List<SelectedItem>
+                    {
+                        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
+                    };
+            permissionModel.ParentMajorId = selectedItem.Value;
+            listMajor = await MajorRepository.GetMajorByParentId(selectedItem.Value);
+            if (listMajor.Count() > 0)
+            {
+                selectMajors = listMajor.Select(major => new SelectedItem
+                    {
+                        Value = major.Id,
+                        Text = major.MajorName
+                    }).ToList();
+                selectMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            }
+            else
+            {
+               
+                ToastService.ShowToast(
+                     "Thông báo",
+                     "Nghiệp vụ cha:" + selectedItem.Text + ", chưa tồn tại nghiệp vụ nào !",
+                     cssClass: "toast-danger",
+                    iconClass: "fa fa-exclamation-circle",
+                     progressBarClass: "bg-info",
+                     duration: 7000
+                 );
+            }
+            await InvokeAsync(() => { StateHasChanged(); });
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                     "Thông báo",
+                     ex.Message,
+                     cssClass: "toast-danger",
+                    iconClass: "fa fa-exclamation-circle",
+                     progressBarClass: "bg-info",
+                     duration: 7000
+                 );
+        }
+    }
 
     private void OnSelectPermission(SelectedItem selectedItem)
     {
@@ -274,11 +335,8 @@
 
     private async Task LoadData()
     {
-
         try
-        {
-
-            listMajor = await MajorRepository.GetAll();
+        {    
             listModel = await PermissionService.GetAllByVM(permissionModel);
             if (listModel != null)
             {
@@ -295,16 +353,16 @@
                     }
                 }
             }
-
-            selectMajors = listMajor.Select(major => new SelectedItem
+            listParentMajor = await MajorRepository.GetAllParentMajor();
+            selectParentMajors = listParentMajor.Select(major => new SelectedItem
                 {
                     Value = major.Id,
                     Text = major.MajorName
                 }).ToList();
 
             // Thêm phần tử mặc định "chọn..."
-            selectMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
-
+            selectParentMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+           
             listPermisson = Paging(listModel);
             baseTime = DateTime.Now;
         }
@@ -329,6 +387,7 @@
             Input = await PermissionService.GetById(id);
             isEdit = true;
             isModalVisible = true;
+          
             foreach (var item in selectMajors)
             {
                 item.IsSelected = item.Value == Input.MajorId;

@@ -93,6 +93,23 @@ namespace DucAnhERP.Services
             return data;
         }
 
+        public async Task<List<MMajor>> GetAllChildMajor()
+        {
+            using var context = _context.CreateDbContext();
+            return await context.MMajors
+                .Where(major => major.ParentId != null)
+                .Select(major => new MMajor
+                {
+                    Id = major.Id,
+                    ParentId = major.ParentId,
+                    MajorName = major.MajorName,
+                    Order = major.Order,
+                    Table = major.Table
+                })
+                .ToListAsync();
+        }
+
+
         public async Task<MMajor> GetMajorByName(string majorName)
         {
             using var context = _context.CreateDbContext();

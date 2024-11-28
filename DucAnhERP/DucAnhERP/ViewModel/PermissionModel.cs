@@ -3,6 +3,8 @@ namespace DucAnhERP.ViewModel;
 public partial class PermissionModel : PagingParameters
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
+    public string ParentMajorId { get; set; } = "";
+    public string ParentMajorName { get; set; } = "";
     public string MajorId { get; set; } = "";
     public string MajorName { get; set; } = "";
     public int PermissionType { get; set; } = 0;

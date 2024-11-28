@@ -27,7 +27,11 @@
                         <Select2 Id="CompanyId" Items="@selectCompanys" OnChange="@OnSelectCompany"></Select2>
                         <ValidationMessage For="()=>Input.CompanyId"></ValidationMessage>
                     </div>
-
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="Table">Nghiệp vụ cha</label>
+                        <Select2 Id="selectParentMajor" Items="@selectParentMajors" OnChange="@OnSelectParentMajor"></Select2>
+                        <ValidationMessage For="()=>Input.ParentMajorId"></ValidationMessage>
+                    </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="MajorId">Nghiệp vụ</label>
                         <Select2 Id="MajorId" Items="@selectMajors" OnChange="@OnSelectMajor"></Select2>
@@ -39,7 +43,7 @@
                         <Select2 Id="UserId" Items="@selectUsers" OnChange="@OnSelectUser"></Select2>
                         <ValidationMessage For="()=>Input.UserId"></ValidationMessage>
                     </div>
-                    <div class="form-floating col-sm-6 col-md-3">
+                    <div class="form-floating col mt-2">
                         <p>Loại quyền: @string.Join(", ", selectedItems.Select(item => item.Text))</p>
                         <MultiSelect Items="listPer" ItemsChanged="OnItemsChanged" />
                         <ValidationMessage For="()=>Input.PermissionId"></ValidationMessage>
@@ -113,6 +117,10 @@
                                 <span class="arrow @(GetSortStyle("CompanyName"))"></span>
                             </div>
                         </th>
+                        <th onclick="@(() => SortTable("ParentMajorName"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Nghiệp vụ cha</div>
+                            <span class="arrow @(GetSortStyle("ParentMajorName"))"></span>
+                        </th>
                         <th onclick="@(() => SortTable("MajorName"))" rowspan="2" class="text-center sortable" scope="col">
                             <div class="pb-3">Nghiệp vụ</div>
                             <span class="arrow @(GetSortStyle("MajorName"))"></span>
@@ -150,7 +158,7 @@
                             <tr>
                                 <td class="d-flex flex-column text-center nowrap">
                                     <div class="d-inline-block">
-                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item)">
                                             <i class="fas fa-edit"></i>
                                         </button>
 
@@ -161,6 +169,7 @@
                                 </td>
                                 <td class="text-center" scope="row">@stt</td>
                                 <td class="text-left">@item.CompanyName</td>
+                                <td class="text-center">@item.ParentMajorName</td>
                                 <td class="text-center">@item.MajorName</td>
                                 <td class="text-left">@item.UserName</td>
                                 <td class="text-left">@string.Join(", ", selectedItemstemp.Select(item => item.Text))</td>
@@ -213,6 +222,10 @@
     private bool isEdit = false;
     private DateTime baseTime;
 
+    private List<SelectedItem> selectParentMajors = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
+    };
     private List<SelectedItem> selectMajors = new List<SelectedItem>
     {
         new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
@@ -236,6 +249,50 @@
         majorUserPermissionModel.CompanyId = selectedItem.Value;
     }
 
+    private async void OnSelectParentMajor(SelectedItem selectedItem)
+    {
+        try
+        {
+            selectMajors = new List<SelectedItem>{ new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true }};
+            selectedItems = new();
+            Input.ParentMajorId = selectedItem.Value;
+            permissionModel.ParentMajorId = selectedItem.Value;
+            var listMajor = await MajorRepository.GetMajorByParentId(selectedItem.Value);
+            if (listMajor.Count() > 0)
+            {
+                selectMajors = listMajor.Select(major => new SelectedItem
+                    {
+                        Value = major.Id,
+                        Text = major.MajorName
+                    }).ToList();
+                selectMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            }
+            else
+            {
+                ToastService.ShowToast(
+                     "Thông báo",
+                     "Nghiệp vụ cha:"+selectedItem.Text +", chưa tồn tại nghiệp vụ nào !",
+                     cssClass: "toast-danger",
+                    iconClass: "fa fa-exclamation-circle",
+                     progressBarClass: "bg-info",
+                     duration: 7000
+                 );
+            }
+            await InvokeAsync(() =>{ StateHasChanged(); });
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                     "Thông báo",
+                     ex.Message,
+                     cssClass: "toast-danger",
+                    iconClass: "fa fa-exclamation-circle",
+                     progressBarClass: "bg-info",
+                     duration: 7000
+                 );
+        }
+    }
+
     private async void OnSelectMajor(SelectedItem selectedItem)
     {
         try
@@ -243,23 +300,38 @@
             Input.MajorId = selectedItem.Value;
             permissionModel.MajorId = selectedItem.Value;
             var list = await PermissionService.GetAllByVM(permissionModel);
-            selectedItems = new();
-            Input.PermissionId = "[]";
-            listPer = new MultiSelectList(
-                    list.Select(permission => new SelectListItem
-                        {
-                            Value = permission.Id,
-                            Text = permission.PermissionName,
-                            Selected = false
-                        }).ToList(),
-                    "Value",
-                    "Text"
-                    );
-          
+            if (list.Count() > 0)
+            {
+                selectedItems = new();
+                Input.PermissionId = "[]";
+                listPer = new MultiSelectList(
+                        list.Select(permission => new SelectListItem
+                            {
+                                Value = permission.Id,
+                                Text = permission.PermissionName,
+                                Selected = false
+                            }).ToList(),
+                        "Value",
+                        "Text"
+                        );
+            }
+            else
+            {
+                ToastService.ShowToast(
+                     "Thông báo",
+                     "Nghiệp vụ :"+selectedItem.Text +", chưa được khởi tạo loại quyền !",
+                     cssClass: "toast-danger",
+                    iconClass: "fa fa-exclamation-circle",
+                     progressBarClass: "bg-info",
+                     duration: 7000
+                 );
+            }
+
+
             MMajorUserPermission InputTemp = new();
 
-            InputTemp = await MajorUserPermissionService.GetById(Input.Id);
-            if (!string.IsNullOrEmpty(InputTemp.PermissionId))
+            InputTemp = await MajorUserPermissionService.GetMUPById(Input.Id);
+            if (InputTemp!=null && !string.IsNullOrEmpty(InputTemp.PermissionId))
             {
                 selectedItemstemp = JsonSerializer.Deserialize<List<SelectedItem>>(InputTemp.PermissionId);
 
@@ -282,11 +354,10 @@
                   StateHasChanged();
               });
 
-            
+
         }
         catch (Exception ex)
         {
-            
             ToastService.ShowToast(
                      "Thông báo",
                      ex.Message,
@@ -296,7 +367,6 @@
                      duration: 7000
                  );
         }
-
     }
     private void OnSelectMajor1(SelectedItem selectedItem)
     {
@@ -391,6 +461,10 @@
             new SelectListItem { Value = "0", Text = "Chủ nhật" }
                                                }, "Value", "Text");
 
+        foreach (var item in listPer)
+        {
+            item.Selected = item.Value == "";
+        }
         foreach (var item in selectCompanys)
         {
             item.IsSelected = item.Value == "";
@@ -488,6 +562,7 @@
         try
         {
             listMajor = await MajorRepository.GetAll();
+            var listParentMajor = await MajorRepository.GetAllParentMajor();
             listCompany = await CompanyService.GetAll();
             listApplicationUser = await UserService.GetAll();
 
@@ -496,14 +571,14 @@
 
             listMajorUserPermissionModel = Paging(listModel);
 
-            selectMajors = listMajor.Select(major => new SelectedItem
+            selectParentMajors = listParentMajor.Select(major => new SelectedItem
                 {
                     Value = major.Id,
                     Text = major.MajorName
                 }).ToList();
 
             // Thêm phần tử mặc định "chọn..."
-            selectMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            selectParentMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
             selectCompanys = listCompany.Select(major => new SelectedItem
                 {
                     Value = major.Id,
@@ -537,14 +612,36 @@
 
     }
 
-    private async Task HandleEdit(string id)
+    private async Task HandleEdit(MajorUserPermissionModel itemModel)
     {
         try
         {
             TitleModal = "Cập nhật!";
-            Input = await MajorUserPermissionService.GetById(id);
+            Input = await MajorUserPermissionService.GetById(itemModel.Id);
             isEdit = true;
             isModalVisible = true;
+            
+
+            selectParentMajors = listMajor
+                .Where(major => major.ParentId == null) 
+                .Select(major => new SelectedItem
+                    {
+                        Value = major.Id,
+                        Text = major.MajorName,
+                        IsSelected = major.Id == itemModel.ParentMajorId
+                    })
+                .ToList();
+
+            selectMajors = listMajor
+                .Where(major => major.ParentId == itemModel.ParentMajorId)  
+                .Select(major => new SelectedItem
+                    {
+                        Value = major.Id,
+                        Text = major.MajorName,
+                        IsSelected = major.Id == itemModel.MajorId
+                    })
+                .ToList();
+
             if (!string.IsNullOrEmpty(Input.PermissionId))
             {
                 permissionModel.MajorId = Input.MajorId;
@@ -637,15 +734,10 @@
             {
                 if (!string.IsNullOrEmpty(deleteId))
                 {
-                    string[] ids = { deleteId };
-                    var isValid = await MajorUserPermissionService.CheckExclusive(ids, baseTime);
-                    if (isValid)
-                    {
-                        await MajorUserPermissionService.DeleteById(deleteId);
-                        ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
-                        await LoadData();
-                        deleteId = "";
-                    }
+                    await MajorUserPermissionService.DeleteById(deleteId);
+                    ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                    await LoadData();
+                    deleteId = "";
 
                 }
             }

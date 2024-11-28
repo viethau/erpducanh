@@ -167,30 +167,64 @@ namespace DucAnhERP.Services
         public async Task<List<MajorUserPermissionModel>> GetAllByVM(MajorUserPermissionModel majorUserPermissionModel)
         {
             using var context = _context.CreateDbContext();
+            //var query = from perContr in context.MMajorUserPermissions
+            //            join company in context.MCompanies
+            //            on perContr.CompanyId equals company.Id into gr1
+            //            from company in gr1.DefaultIfEmpty()
+            //            join major in context.MMajors
+            //           on perContr.MajorId equals major.Id into gr2
+            //            from major in gr2.DefaultIfEmpty()
+            //            join user in context.ApplicationUsers
+            //          on perContr.UserId equals user.Id into gr3
+            //            from user in gr3.DefaultIfEmpty()
+
+
+            //            orderby perContr.CreateAt descending
+            //            select new MajorUserPermissionModel
+            //            {
+            //                Id = perContr.Id,
+            //                CompanyId = perContr.CompanyId,
+            //                CompanyName = company.CompanyName,
+            //                ParentMajorId = perContr.ParentMajorId,
+            //                ParentMajorName = perContr.ParentMajorId,
+            //                MajorId = perContr.MajorId,
+            //                MajorName = major.MajorName,
+            //                PermissionId = perContr.PermissionId,
+            //                PermissionName = "",
+            //                UserId = user.Id,
+            //                UserName = user.UserName,
+            //                DayinWeek = perContr.DayinWeek,
+            //                CreateAt = perContr.CreateAt,
+            //                CreateBy = perContr.CreateBy,
+            //                IsActive = perContr.IsActive
+            //            };
             var query = from perContr in context.MMajorUserPermissions
                         join company in context.MCompanies
-                        on perContr.CompanyId equals company.Id into gr1
+                            on perContr.CompanyId equals company.Id into gr1
                         from company in gr1.DefaultIfEmpty()
                         join major in context.MMajors
-                       on perContr.MajorId equals major.Id into gr2
+                            on perContr.MajorId equals major.Id into gr2
                         from major in gr2.DefaultIfEmpty()
-                        join user in context.ApplicationUsers
-                      on perContr.UserId equals user.Id into gr3
-                        from user in gr3.DefaultIfEmpty()
-
-
+                        join user1 in context.ApplicationUsers
+                            on perContr.UserId equals user1.Id into gr3
+                        from user1 in gr3.DefaultIfEmpty()
+                        join parentMajor in context.MMajors
+                            on major.ParentId equals parentMajor.Id into gr4
+                        from parentMajor in gr4.DefaultIfEmpty()
                         orderby perContr.CreateAt descending
                         select new MajorUserPermissionModel
                         {
                             Id = perContr.Id,
                             CompanyId = perContr.CompanyId,
                             CompanyName = company.CompanyName,
+                            ParentMajorId = major.ParentId ??"",
+                            ParentMajorName = parentMajor.MajorName,
                             MajorId = perContr.MajorId,
                             MajorName = major.MajorName,
                             PermissionId = perContr.PermissionId,
                             PermissionName = "",
-                            UserId = user.Id,
-                            UserName = user.UserName,
+                            UserId = user1.Id,
+                            UserName = user1.UserName,
                             DayinWeek = perContr.DayinWeek,
                             CreateAt = perContr.CreateAt,
                             CreateBy = perContr.CreateBy,
@@ -234,6 +268,14 @@ namespace DucAnhERP.Services
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
             }
 
+            return entity;
+        }
+
+        public async Task<MMajorUserPermission> GetMUPById(string id)
+        {
+            using var context = _context.CreateDbContext();
+            MMajorUserPermission entity = new MMajorUserPermission();
+            entity = await context.MMajorUserPermissions.Where(x => x.Id.Equals(id) && x.IsActive == 1).FirstOrDefaultAsync();
             return entity;
         }
 
@@ -341,6 +383,7 @@ namespace DucAnhERP.Services
                         {
                             Id = Guid.NewGuid().ToString(),
                             CompanyId = entity.CompanyId,
+                            ParentMajorId = entity.ParentMajorId,
                             MajorId = entity.MajorId,
                             UserId = entity.UserId,
                             PermissionId = item.Value,

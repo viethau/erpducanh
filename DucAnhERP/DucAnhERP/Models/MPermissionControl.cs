@@ -9,6 +9,7 @@ namespace DucAnhERP.Models
         [Required(ErrorMessage = "Bạn phải chọn chi nhánh!")]
         public string CompanyId { get; set; }
         [Required(ErrorMessage = "Bạn phải chọn nghiệp vụ!")]
+        [StringLength(255, MinimumLength = 1, ErrorMessage = "Bạn phải chọn nghiệp vụ!")]
         public string MajorId { get; set; }
         [Required(ErrorMessage = "Bạn phải chọn người dùng!")]
         public string UserId { get; set; }

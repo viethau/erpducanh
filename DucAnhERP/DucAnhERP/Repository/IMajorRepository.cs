@@ -6,6 +6,7 @@ namespace DucAnhERP.Repository
     public interface IMajorRepository : IBaseRepository<MMajor>
     {
         Task<List<MMajor>> GetAllParentMajor();
+        Task<List<MMajor>> GetAllChildMajor();
 
         Task<MMajor> AddMajor(MMajor mMajor);
 
