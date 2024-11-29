@@ -71,23 +71,25 @@
     <div>
         <EditForm Model="majorUserPermissionModel" FormName="SearchNghiepVu" OnValidSubmit="@Search">
             <DataAnnotationsValidator />
-            <div class="d-flex">
-
-
-                <div class="form-floating col-sm-6 col-md-3">
+            <div class="row">
+                <div class="form-floating col-sm-3 col-md-2">
                     <label for="CompanyId">Công ty</label>
-                    <Select2 Id="CompanyId1" Items="@selectCompanys" OnChange="@OnSelectCompany1"></Select2>
+                    <Select2 Id="CompanyId1" Items="@selectCompanys" OnChange="@OnSelectCompanySear"></Select2>
                     <ValidationMessage For="()=>majorUserPermissionModel.CompanyId"></ValidationMessage>
                 </div>
-
-                <div class="form-floating col-sm-3 col-md-3">
+                <div class="form-floating col-sm-3 col-md-2">
+                    <label for="MajorId">Nghiệp vụ cha</label>
+                    <Select2 Id="selectParentMajorsSear" Items="@selectParentMajorsSear" OnChange="@OnSelectParentMajorsSear"></Select2>
+                    <ValidationMessage For="()=>majorUserPermissionModel.ParentMajorId"></ValidationMessage>
+                </div>
+                <div class="form-floating col-sm-3 col-md-2">
                     <label for="MajorId">Nghiệp vụ</label>
-                    <Select2 Id="MajorId1" Items="@selectMajors" OnChange="@OnSelectMajor1"></Select2>
+                    <Select2 Id="selectMajorsSear" Items="@selectMajorsSear" OnChange="@OnSelectMajorSear"></Select2>
                     <ValidationMessage For="()=>majorUserPermissionModel.MajorId"></ValidationMessage>
                 </div>
-                <div class="form-floating col-sm-3 col-md-3">
+                <div class="form-floating col-sm-3 col-md-2">
                     <label for="UserId1">Người dùng</label>
-                    <Select2 Id="UserId1" Items="@selectUsers" OnChange="@OnSelectUser1"></Select2>
+                    <Select2 Id="UserId1" Items="@selectUsers" OnChange="@OnSelectUserSear"></Select2>
                     <ValidationMessage For="()=>majorUserPermissionModel.UserId"></ValidationMessage>
                 </div>
 
@@ -239,16 +241,19 @@
         new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
     };
 
+    private List<SelectedItem> selectMajorsSear = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
+    };
+    private List<SelectedItem> selectParentMajorsSear = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
+    };
 
     private void OnSelectCompany(SelectedItem selectedItem)
     {
         Input.CompanyId = selectedItem.Value;
     }
-    private void OnSelectCompany1(SelectedItem selectedItem)
-    {
-        majorUserPermissionModel.CompanyId = selectedItem.Value;
-    }
-
     private async void OnSelectParentMajor(SelectedItem selectedItem)
     {
         try
@@ -292,7 +297,6 @@
                  );
         }
     }
-
     private async void OnSelectMajor(SelectedItem selectedItem)
     {
         try
@@ -368,15 +372,71 @@
                  );
         }
     }
-    private void OnSelectMajor1(SelectedItem selectedItem)
-    {
-        majorUserPermissionModel.MajorId = selectedItem.Value;
-    }
     private void OnSelectUser(SelectedItem selectedItem)
     {
         Input.UserId = selectedItem.Value;
     }
-    private void OnSelectUser1(SelectedItem selectedItem)
+    
+
+    private void OnSelectCompanySear(SelectedItem selectedItem)
+    {
+        majorUserPermissionModel.CompanyId = selectedItem.Value;
+    }
+    private async void OnSelectParentMajorsSear(SelectedItem selectedItem)
+    {
+        try
+        {
+            majorUserPermissionModel.ParentMajorId = selectedItem.Value;
+            selectMajorsSear = new List<SelectedItem>
+                    {
+                        new SelectedItem { Value = "", Text = "Chọn...",IsSelected=true },
+                    };
+            if (!string.IsNullOrEmpty(selectedItem.Value))
+            {
+
+                listMajor = await MajorRepository.GetMajorByParentId(selectedItem.Value);
+                if (listMajor.Count() > 0)
+                {
+                    selectMajorsSear = listMajor.Select(major => new SelectedItem
+                        {
+                            Value = major.Id,
+                            Text = major.MajorName
+                        }).ToList();
+                    selectMajorsSear.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+                }
+                else
+                {
+
+                    ToastService.ShowToast(
+                         "Thông báo",
+                         "Nghiệp vụ cha:" + selectedItem.Text + ", chưa tồn tại nghiệp vụ nào !",
+                         cssClass: "toast-danger",
+                        iconClass: "fa fa-exclamation-circle",
+                         progressBarClass: "bg-info",
+                         duration: 7000
+                     );
+                }
+                await InvokeAsync(() => { StateHasChanged(); });
+            }
+
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                     "Thông báo",
+                     ex.Message,
+                     cssClass: "toast-danger",
+                    iconClass: "fa fa-exclamation-circle",
+                     progressBarClass: "bg-info",
+                     duration: 7000
+                 );
+        }
+    }
+    private void OnSelectMajorSear(SelectedItem selectedItem)
+    {
+        majorUserPermissionModel.MajorId = selectedItem.Value;
+    }
+    private void OnSelectUserSear(SelectedItem selectedItem)
     {
         majorUserPermissionModel.UserId = selectedItem.Value;
     }
@@ -579,6 +639,7 @@
 
             // Thêm phần tử mặc định "chọn..."
             selectParentMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            selectParentMajorsSear = selectParentMajors;
             selectCompanys = listCompany.Select(major => new SelectedItem
                 {
                     Value = major.Id,

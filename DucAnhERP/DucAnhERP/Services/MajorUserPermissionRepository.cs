@@ -200,6 +200,10 @@ namespace DucAnhERP.Services
                             CreateBy = perContr.CreateBy,
                             IsActive = perContr.IsActive
                         };
+            if (!string.IsNullOrEmpty(majorUserPermissionModel.ParentMajorId))
+            {
+                query = query.Where(m => m.ParentMajorId == majorUserPermissionModel.ParentMajorId);
+            }
 
             if (!string.IsNullOrEmpty(majorUserPermissionModel.CompanyId))
             {
