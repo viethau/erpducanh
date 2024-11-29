@@ -8,6 +8,10 @@ namespace DucAnhERP.Models
         public int Flag { get; set; } = 0;
         [Required(ErrorMessage = "Bạn phải chọn loại cấu kiện")]
         public string ThongTinChungHoGa_TenHoGaSauPhanLoai { get; set; } = "";
+        [Required(ErrorMessage = "Hình thức thi công")]
+        public string ThongTinChungHoGa_HinhThucHoGa { get; set; } = "";
+        [Required(ErrorMessage = "Kiểu mũ mố")]
+        public string ThongTinChungHoGa_KetCauMuMo { get; set; } = "";
         public string LoaiBeTong { get; set; } = "";
         [Required(ErrorMessage = "Bạn phải chọn hạng mục ")]
         public string HangMuc { get; set; } = "";

@@ -1,4 +1,5 @@
-﻿using DucAnhERP.Models;
+﻿using DucAnhERP.Helpers;
+using DucAnhERP.Models;
 using DucAnhERP.ViewModel;
 
 namespace DucAnhERP.Repository
@@ -17,5 +18,6 @@ namespace DucAnhERP.Repository
         Task<List<PhanLoaiHoGaModel>> GetBaoCaoHGaSDThep(PhanLoaiHoGaModel plhgMode);
         Task<List<PhanLoaiHoGa>> GetPhanLoaiHoGaByDetails(PhanLoaiHoGa searchData);
         Task<PhanLoaiHoGaModel> GetIdByVM(PhanLoaiHoGaModel Input);
+        Task<List<SelectedItem>> GetDSPhanLoaiHoGa();
     }
 }

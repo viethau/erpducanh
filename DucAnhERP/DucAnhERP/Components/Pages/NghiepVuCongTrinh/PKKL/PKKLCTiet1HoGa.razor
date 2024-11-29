@@ -8,7 +8,7 @@
 @inject NavigationManager navigation
 @inject IPKKLCTietHoGaRepository PKKLCTietHoGaRepository
 @inject ITKThepTChongRepository TKThepTChongRepository
-@inject INuocMuaRepository NuocMuaRepository
+@inject IPhanLoaiHoGaRepository PhanLoaiHoGaRepository
 @inject IDanhMucRepository DanhMucRepository
 @inject IDMTLThepRepository DMTLThepRepository
 @inject IPhanLoaiThanhChongRepository PhanLoaiThanhChongRepository
@@ -28,6 +28,331 @@
 </style>
 <div class="container-fluid">
     <div class="mt-3">
+        <CustomModal zIndex="1055" IsVisible="isModalVisibleS" OnClose="HandleModalCloseS" Title="Chọn Phân loại hố ga" Size="modal-lg">
+            <BodyTemplate>
+                <EditForm Model="InputMDS" FormName="SearchS" OnValidSubmit="@SearchS">
+                    <DataAnnotationsValidator />
+                    <div class="row ">
+                        <!-- Select for nhóm danh mục-->
+                        <div class="col-sm-4 col-md-2 mb-2">
+                            <label for="Table">Hình thức hố ga</label>
+                            <Select2 Id="mySelect1S" Items="@selectHTHG" OnChange="@OnSelectChangeHTHG"></Select2>
+                            <ValidationMessage For="()=>InputMDS.ThongTinChungHoGa_HinhThucHoGa"></ValidationMessage>
+                        </div>
+                        <div class="col-sm-4 col-md-2 mb-2">
+                            <label for="Table">Kết cấu mũ mỗ</label>
+                            <Select2 Id="mySelect2S" Items="@selectKCMM" OnChange="@OnSelectChangeKCMM"></Select2>
+                            <ValidationMessage For="()=>InputMDS.ThongTinChungHoGa_KetCauMuMo"></ValidationMessage>
+                        </div>
+                        <div class="col-sm-4 col-md-2 mb-2">
+                            <label for="Table">Kết cấu tường</label>
+                            <Select2 Id="mySelect3S" Items="@selectKCT" OnChange="@OnSelectChangeKCT"></Select2>
+                            <ValidationMessage For="()=>InputMDS.ThongTinChungHoGa_KetCauTuong"></ValidationMessage>
+                        </div>
+                        <div class="col-sm-4 col-md-2 mb-2">
+                            <label for="Table">Hình thức móng hố ga</label>
+                            <Select2 Id="mySelect4S" Items="@selectHTMHG" OnChange="@OnSelectChangeHTMHG"></Select2>
+                            <ValidationMessage For="()=>InputMDS.ThongTinChungHoGa_HinhThucMongHoGa"></ValidationMessage>
+                        </div>
+                        <div class="col-sm-4 col-md-2 mb-2">
+                            <label for="Table">Kết cấu móng</label>
+                            <Select2 Id="mySelect5S" Items="@selectKCM" OnChange="@OnSelectChangeKCM"></Select2>
+                            <ValidationMessage For="()=>InputMDS.ThongTinChungHoGa_KetCauMong"></ValidationMessage>
+                        </div>
+                        <!-- Search Button -->
+                        <div class="col-sm-4 col-md-1 mb-1">
+                            <label>&nbsp;</label>
+                            <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+                        </div>
+                    </div>
+                </EditForm>
+                <div class="row mt-2 our-table">
+                    <table class="table table-hover table-bordered">
+                        <thead class="bg-info flex-header">
+                            <tr class="nowrap">
+                                <th class="text-center" rowspan="3"></th>
+                                <th class="text-center" rowspan="3">STT</th>
+                                <th class="text-center align-middle" colspan="8" rowspan="2">Thông tin chung hố ga</th>
+                                <th class="text-center" colspan="34">Thông tin kích thước hình học hố ga</th>
+                                <th class="text-center" colspan="32">Hạng mục chiếm chỗ hố ga</th>
+                            </tr>
+                            <tr>
+                                <th class="text-center" colspan="2">Thông tin phủ bì hố ga (m)</th>
+                                <th class="text-center" colspan="3">Kích thước hình học bê tông lót móng hố ga (m)</th>
+                                <th class="text-center" colspan="3">Kích thước hình học bê tông móng hố ga (m)</th>
+                                <th class="text-center" colspan="3">KTHH đế hố ga</th>
+                                <th class="text-center" colspan="4">Kích thước hình học tường hố ga (m)</th>
+                                <th class="text-center" colspan="5">KTHH dầm giữa hố ga</th>
+                                <th class="text-center" colspan="3">Chất hố ga mặt trong</th>
+                                <th class="text-center" colspan="3">Chất hố ga mặt ngoài, cạnh 01 +02 (m)</th>
+                                <th class="text-center" colspan="4">Kích thước hình học tường mũ mố thép dưới (m)</th>
+                                <th class="text-center" colspan="4">Kích thước hình học tường mũ mố thép trên (m)</th>
+
+                                <th class="text-center" colspan="4">Hình thức đấu nối</th>
+                                <th class="text-center" colspan="4">Hình thức đấu nối</th>
+                                <th class="text-center" colspan="4">Hình thức đấu nối</th>
+                                <th class="text-center" colspan="4">Hình thức đấu nối</th>
+                                <th class="text-center" colspan="4">Hình thức đấu nối</th>
+                                <th class="text-center" colspan="4">Hình thức đấu nối</th>
+                                <th class="text-center" colspan="4">Hình thức đấu nối</th>
+                                <th class="text-center" colspan="4">Hình thức đấu nối</th>
+                            </tr>
+                            <tr>
+                                <th onclick="@(() => SortTable("ThongTinChungHoGa_TenHoGaSauPhanLoai"))" class="text-center sortable" rowspan="2">
+                                    <div class="mr-3">
+                                        Tên hố ga sau phân loại
+                                        <span class="arrow @(GetSortStyle("ThongTinChungHoGa_TenHoGaSauPhanLoai"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("ThongTinChungHoGa_HinhThucHoGa_Name"))" class="text-center sortable" rowspan="2">
+                                    <div class="mr-3">
+                                        Hình thức hố ga
+                                        <span class="arrow @(GetSortStyle("ThongTinChungHoGa_HinhThucHoGa_Name"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("ThongTinChungHoGa_KetCauMuMo_Name"))" class="text-center sortable" rowspan="2">
+                                    <div class="mr-3">
+                                        Kết cấu mũ mố
+                                        <span class="arrow @(GetSortStyle("ThongTinChungHoGa_KetCauMuMo_Name"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("ThongTinChungHoGa_KetCauTuong_Name"))" class="text-center sortable" rowspan="2">
+                                    <div class="mr-3">
+                                        Kết cấu tường
+                                        <span class="arrow @(GetSortStyle("ThongTinChungHoGa_KetCauTuong_Name"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("ThongTinChungHoGa_HinhThucMongHoGa_Name"))" class="text-center sortable" rowspan="2">
+                                    <div class="mr-3">
+                                        Hình thức móng hố ga
+                                        <span class="arrow @(GetSortStyle("ThongTinChungHoGa_HinhThucMongHoGa_Name"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("ThongTinChungHoGa_KetCauMong_Name"))" class="text-center sortable" rowspan="2">
+                                    <div class="mr-3">
+                                        Kết cấu móng
+                                        <span class="arrow @(GetSortStyle("ThongTinChungHoGa_KetCauMong_Name"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("ThongTinChungHoGa_ChatMatTrong_Name"))" class="text-center sortable" rowspan="2">
+                                    <div class="mr-3">
+                                        Chát mặt trong
+                                        <span class="arrow @(GetSortStyle("ThongTinChungHoGa_ChatMatTrong_Name"))"></span>
+                                    </div>
+                                </th>
+                                <th onclick="@(() => SortTable("ThongTinChungHoGa_ChatMatNgoai_Name"))" class="text-center sortable" rowspan="2">
+                                    <div class="mr-3">
+                                        Chát mặt ngoài
+                                        <span class="arrow @(GetSortStyle("ThongTinChungHoGa_ChatMatNgoai_Name"))"></span>
+                                    </div>
+                                </th>
+
+                                @* Thông tin kích thước hình học hố ga *@
+                                <th>C.D dài (m)</th>
+                                <th>C.rộng (m)</th>
+
+                                <th>D (m)</th>
+                                <th>R (m)</th>
+                                <th>C (m)</th>
+
+                                <th>D (m)</th>
+                                <th>R (m)</th>
+                                <th>C (m)</th>
+
+                                <th>D (m)</th>
+                                <th>R (m)</th>
+                                <th>C (m)</th>
+
+                                <th>D (m)</th>
+                                <th>R (m)</th>
+                                <th>C (m)</th>
+                                <th>CD tường (m)</th>
+
+                                <th>D (m)</th>
+                                <th>R (m)</th>
+                                <th>C (m)</th>
+                                <th>CD dầm (m)</th>
+                                <th>C.Cao dầm giữa tường so với đáy hố ga (m)</th>
+
+                                <th>D (m)</th>
+                                <th>R (m)</th>
+                                <th>C (m)</th>
+
+                                <th>D (m)</th>
+                                <th>R (m)</th>
+                                <th>C (m)</th>
+
+                                <th>D (m)</th>
+                                <th>R (m)</th>
+                                <th>C (m)</th>
+                                <th>CD tường (m)</th>
+
+                                <th>D (m)</th>
+                                <th>R (m)</th>
+                                <th>C (m)</th>
+                                <th>CD tường (m)</th>
+
+                                @* Hạng mục chiếm chỗ hố ga *@
+                                <th>Loại</th>
+                                <th>Cạnh dài</th>
+                                <th>Cạnh rộng</th>
+                                <th>Cạnh chéo</th>
+
+                                <th>Loại</th>
+                                <th>Cạnh dài</th>
+                                <th>Cạnh rộng</th>
+                                <th>Cạnh chéo</th>
+
+                                <th>Loại</th>
+                                <th>Cạnh dài</th>
+                                <th>Cạnh rộng</th>
+                                <th>Cạnh chéo</th>
+
+                                <th>Loại</th>
+                                <th>Cạnh dài</th>
+                                <th>Cạnh rộng</th>
+                                <th>Cạnh chéo</th>
+
+                                <th>Loại</th>
+                                <th>Cạnh dài</th>
+                                <th>Cạnh rộng</th>
+                                <th>Cạnh chéo</th>
+
+                                <th>Loại</th>
+                                <th>Cạnh dài</th>
+                                <th>Cạnh rộng</th>
+                                <th>Cạnh chéo</th>
+
+                                <th>Loại</th>
+                                <th>Cạnh dài</th>
+                                <th>Cạnh rộng</th>
+                                <th>Cạnh chéo</th>
+
+                                <th>Loại</th>
+                                <th>Cạnh dài</th>
+                                <th>Cạnh rộng</th>
+                                <th>Cạnh chéo</th>
+                            </tr>
+                        </thead>
+                        @if (listPLHGModelS.Any())
+                        {
+
+                            <tbody>
+                                @{
+                                    int stt = 1;
+                                }
+                                @foreach (var item in listPLHGModelS)
+                                {
+
+                                    <tr>
+                                        <td class="d-flex nowrap">
+                                            <div class="d-inline-block">
+                                                <button type="button" class="btn btn-sm btn-info m-1" title="Lựa chọn" @onclick="()=>HandleChooseId(item)">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+
+                                            </div>
+                                        </td>
+                                        <td class="text-center">@stt</td>
+                                        <td class="text-center">@item.ThongTinChungHoGa_TenHoGaSauPhanLoai </td>
+                                        <td class="text-center">@item.ThongTinChungHoGa_HinhThucHoGa_Name </td>
+                                        <td class="text-center">@item.ThongTinChungHoGa_KetCauMuMo_Name </td>
+                                        <td class="text-center">@item.ThongTinChungHoGa_KetCauTuong_Name </td>
+                                        <td class="text-center">@item.ThongTinChungHoGa_HinhThucMongHoGa_Name </td>
+                                        <td class="text-center">@item.ThongTinChungHoGa_KetCauMong_Name </td>
+                                        <td class="text-center">@item.ThongTinChungHoGa_ChatMatTrong_Name </td>
+                                        <td class="text-center">@item.ThongTinChungHoGa_ChatMatNgoai_Name  </td>
+                                        <td class="text-center">@item.PhuBiHoGa_CDai  </td>
+                                        <td class="text-center">@item.PhuBiHoGa_CRong</td>
+                                        <td class="text-center">@item.BeTongLotMong_D</td>
+                                        <td class="text-center">@item.BeTongLotMong_R</td>
+                                        <td class="text-center">@item.BeTongLotMong_C</td>
+                                        <td class="text-center">@item.BeTongMongHoGa_D  </td>
+                                        <td class="text-center">@item.BeTongMongHoGa_R  </td>
+                                        <td class="text-center">@item.BeTongMongHoGa_C</td>
+                                        <td class="text-center">@item.DeHoGa_D</td>
+                                        <td class="text-center">@item.DeHoGa_R</td>
+                                        <td class="text-center">@item.DeHoGa_C</td>
+                                        <td class="text-center">@item.TuongHoGa_D</td>
+                                        <td class="text-center">@item.TuongHoGa_R  </td>
+                                        <td class="text-center">@item.TuongHoGa_C</td>
+                                        <td class="text-center">@item.TuongHoGa_CdTuong</td>
+                                        <td class="text-center">@item.DamGiuaHoGa_D  </td>
+                                        <td class="text-center">@item.DamGiuaHoGa_R</td>
+                                        <td class="text-center">@item.DamGiuaHoGa_C</td>
+                                        <td class="text-center">@item.DamGiuaHoGa_CdDam</td>
+                                        <td class="text-center">@item.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa</td>
+                                        <td class="text-center">@item.ChatMatTrong_D  </td>
+                                        <td class="text-center">@item.ChatMatTrong_R  </td>
+                                        <td class="text-center">@item.ChatMatTrong_C</td>
+                                        <td class="text-center">@item.ChatMatNgoaiCanh_D</td>
+                                        <td class="text-center">@item.ChatMatNgoaiCanh_R  </td>
+                                        <td class="text-center">@item.ChatMatNgoaiCanh_C</td>
+                                        <td class="text-center">@item.MuMoThotDuoi_D</td>
+                                        <td class="text-center">@item.MuMoThotDuoi_R</td>
+                                        <td class="text-center">@item.MuMoThotDuoi_C</td>
+                                        <td class="text-center">@item.MuMoThotDuoi_CdTuong</td>
+                                        <td class="text-center">@item.MuMoThotTren_D  </td>
+                                        <td class="text-center">@item.MuMoThotTren_R</td>
+                                        <td class="text-center">@item.MuMoThotTren_C</td>
+                                        <td class="text-center">@item.MuMoThotTren_CdTuong</td>
+                                        <td class="text-center">@item.HinhThucDauNoi1_Loai</td>
+                                        <td class="text-center">@item.HinhThucDauNoi1_CanhDai</td>
+                                        <td class="text-center">@item.HinhThucDauNoi1_CanhRong</td>
+                                        <td class="text-center">@item.HinhThucDauNoi1_CanhCheo</td>
+                                        <td class="text-center">@item.HinhThucDauNoi2_Loai</td>
+                                        <td class="text-center">@item.HinhThucDauNoi2_CanhDai</td>
+                                        <td class="text-center">@item.HinhThucDauNoi2_CanhRong</td>
+                                        <td class="text-center">@item.HinhThucDauNoi2_CanhCheo  </td>
+                                        <td class="text-center">@item.HinhThucDauNoi3_Loai</td>
+                                        <td class="text-center">@item.HinhThucDauNoi3_CanhDai</td>
+                                        <td class="text-center">@item.HinhThucDauNoi3_CanhRong  </td>
+                                        <td class="text-center">@item.HinhThucDauNoi3_CanhCheo</td>
+                                        <td class="text-center">@item.HinhThucDauNoi4_Loai</td>
+                                        <td class="text-center">@item.HinhThucDauNoi4_CanhDai</td>
+                                        <td class="text-center">@item.HinhThucDauNoi4_CanhRong  </td>
+                                        <td class="text-center">@item.HinhThucDauNoi4_CanhCheo</td>
+                                        <td class="text-center">@item.HinhThucDauNoi5_Loai</td>
+                                        <td class="text-center">@item.HinhThucDauNoi5_CanhDai</td>
+                                        <td class="text-center">@item.HinhThucDauNoi5_CanhRong</td>
+                                        <td class="text-center">@item.HinhThucDauNoi5_CanhCheo</td>
+                                        <td class="text-center">@item.HinhThucDauNoi6_Loai</td>
+                                        <td class="text-center">@item.HinhThucDauNoi6_CanhDai</td>
+                                        <td class="text-center">@item.HinhThucDauNoi6_CanhRong</td>
+                                        <td class="text-center">@item.HinhThucDauNoi6_CanhCheo  </td>
+                                        <td class="text-center">@item.HinhThucDauNoi7_Loai  </td>
+                                        <td class="text-center">@item.HinhThucDauNoi7_CanhDai</td>
+                                        <td class="text-center">@item.HinhThucDauNoi7_CanhRong </td>
+                                        <td class="text-center">@item.HinhThucDauNoi7_CanhCheo</td>
+                                        <td class="text-center">@item.HinhThucDauNoi8_Loai</td>
+                                        <td class="text-center">@item.HinhThucDauNoi8_CanhDai</td>
+                                        <td class="text-center">@item.HinhThucDauNoi8_CanhRong</td>
+                                        <td class="text-center">@item.HinhThucDauNoi8_CanhCheo </td>
+                                    </tr>
+                                    stt++;
+                                }
+
+                            </tbody>
+                        }
+                        else
+                        {
+                            <tbody>
+                                <tr>
+                                    <td colspan="76"> Không có dữ liệu</td>
+                                </tr>
+                            </tbody>
+                        }
+
+                    </table>
+                </div>
+
+                @if (listPLHGModelS.Any())
+                {
+                    <Pagination MetaData="MetaDataS" Spread="2" SelectedPage="SelectedPageS" ChangePageSize="ChangePageSizeS"></Pagination>
+                }
+
+            </BodyTemplate>
+        </CustomModal>
         <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
             <BodyTemplate>
                 <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
@@ -38,9 +363,20 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="Table">Loại cấu kiện</label>
-                                <Select2 Id="select1" Items="@selectLCK" OnChange="@OnSelectChangeLCK"></Select2>
+                                <button @onclick="ShowModalS" class="btn btn-outline-info form-control">Chọn @InputMD.LoaiCauKien</button>
                                 <ValidationMessage For="()=>Input.ThongTinChungHoGa_TenHoGaSauPhanLoai"></ValidationMessage>
                             </div>
+                            
+                             <div class="form-floating col-sm-6 col-md-3">
+                                <label for="TenCongTac"><span>Hình thức thi công</span></label>
+                                <InputText @bind-Value="plHoGaModel.ThongTinChungHoGa_HinhThucHoGa_Name" class="form-control" readonly="readonly" />
+                                <ValidationMessage For="() => Input.ThongTinChungHoGa_HinhThucHoGa" />
+                             </div>
+                             <div class="form-floating col-sm-6 col-md-3">
+                                <label for="TenCongTac"><span>Kiểu mũ mố</span></label>
+                                <InputText @bind-Value="plHoGaModel.ThongTinChungHoGa_KetCauMuMo_Name" class="form-control" readonly="readonly" />
+                                 <ValidationMessage For="() => Input.TenCongTac" />
+                              </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="table">loại bê tông</label>
                                 <Select2 Id="select2" Items="@selectLBT" OnChange="@OnSelectChangeLBT"></Select2>
@@ -212,7 +548,7 @@
                 <div class="row">
                     <div class="col-sm-4 col-md-3 mb-2">
                         <label for="Table">Loại cấu kiện</label>
-                        <Select2 Id="select3" Items="@selectSearchLCK" OnChange="@OnSelectChangeSearchLCK"></Select2>
+                        <Select2 Id="selectSearchLCK" Items="@selectSearchLCK" OnChange="@OnSelectChangeSearchLCK"></Select2>
                         <ValidationMessage For="()=>InputMD.LoaiCauKienId"></ValidationMessage>
                     </div>
 
@@ -371,15 +707,17 @@
 
 
 @code {
-
+    List<DanhMuc1> listDanhMuc = new();
     private bool isLoadingCaculate = false;
     private bool isLoading = false;
     private bool isModalVisible = false;
+    private bool isModalVisibleS = false;
     private string TitleModal = "Thêm mới ";
     bool isEdit = false;
     string thumbtack = "";
     private DateTime baseTime;
-    List<NuocMuaModel> repository;
+    List<NuocMuaModel> repository = new();
+    PhanLoaiHoGaModel plHoGaModel = new();
 
     [Parameter]
     public ConfirmModal confirmModal { get; set; }
@@ -392,16 +730,48 @@
         new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true },
         new SelectedItem { Value = "I.Móng hố ga, hố ga", Text = "I.Móng hố ga, hố ga " },
         new SelectedItem { Value = "II.Hố ga lắp đặt, hố ga", Text = "II.Hố ga lắp đặt, hố ga  "},
-        new SelectedItem { Value = "III.Tường hố ga xây gạch, hố ga", Text = "III.Tường hố ga xây gạch, hố ga "},
-        new SelectedItem { Value = "III.Tường hố ga xây gạch, hố ga", Text = "III.Tường hố ga xây gạch, hố ga "},
-        new SelectedItem { Value = "III.Tường hố ga xây gạch, hố ga", Text = "III.Tường hố ga xây gạch, hố ga "},
-        new SelectedItem { Value = "III.Tường hố ga xây gạch, hố ga", Text = "III.Tường hố ga xây gạch, hố ga "},
+        new SelectedItem { Value = "III.1 Tường hố ga xây gạch", Text = "III.1 Tường hố ga xây gạch "},
+        new SelectedItem { Value = "III.2 Chát tường hố ga xây gạch", Text = "III.2 Chát tường hố ga xây gạch "},
+        new SelectedItem { Value = "IV.1 Tường hố ga bê tông", Text = "IV.1 Tường hố ga bê tông "},
+        new SelectedItem { Value = "IV.2 Ván khuân tường hố ga bê tông", Text = "IV.2 Ván khuân tường hố ga bê tông "},
+        new SelectedItem { Value = "V.Mũ mố hố ga, hố ga", Text = "V.Mũ mố hố ga, hố ga "},
+        new SelectedItem { Value = "VI.Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga", Text = "VI.Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga "},
+        new SelectedItem { Value = "VII.Gia công, lắp dựng cốt thép hố ga", Text = "VII.Gia công, lắp dựng cốt thép hố ga "},
     };
     private async void OnSelectChangeHMTC(SelectedItem selectedItem)
     {
-        Input.HangMuc = selectedItem.Value;
-        Input.TenCongTac = "";
-        await Caculate();
+        if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai))
+        {
+            Input.HangMuc = selectedItem.Value;
+            if (Input.HangMuc.Trim().ToUpper() == "I.Móng hố ga, hố ga".Trim().ToUpper())
+            {
+                Input.TenCongTac = "";
+                if (!string.IsNullOrEmpty(plHoGaModel.ThongTinChungHoGa_HinhThucHoGa) && plHoGaModel.ThongTinChungHoGa_HinhThucHoGa_Name.ToUpper().Trim() == "Thi công trực tiếp".ToUpper().Trim())
+                {
+                    Input.KTHH_D = (double)plHoGaModel.BeTongLotMong_D;
+                    Input.KTHH_R = (double)plHoGaModel.BeTongLotMong_R;
+                    Input.KTHH_C = (double)plHoGaModel.BeTongLotMong_C;
+
+                }
+            }else{
+                Input.KTHH_D = 0;
+                Input.KTHH_R = 0;
+                Input.KTHH_C = 0;
+            }
+            disKTHH = true;
+            await Caculate();
+        }
+        else
+        {
+            ToastService.ShowToast(
+                      "Thông báo",
+                       "Vui lòng chọn loại cấu kiện!",
+                       cssClass: "toast-danger",
+                       iconClass: "fa fa-exclamation-circle",
+                       progressBarClass: "bg-info",
+                       duration: 5000);
+        }
+        
     }
 
     private List<SelectedItem> selectGhiChu = new List<SelectedItem>
@@ -457,11 +827,39 @@
         InputMD.LoaiCauKienId = selectedItem.Value;
     }
 
+    //search
+
+    private List<SelectedItem> selectHTHG = new();
+    private List<SelectedItem> selectKCMM = new();
+    private List<SelectedItem> selectKCT = new();
+    private List<SelectedItem> selectHTMHG = new();
+    private List<SelectedItem> selectKCM = new();
+    private void OnSelectChangeHTHG(SelectedItem selectedItem)
+    {
+        InputMDS.ThongTinChungHoGa_HinhThucHoGa = selectedItem.Value;
+    }
+    private void OnSelectChangeKCMM(SelectedItem selectedItem)
+    {
+        InputMDS.ThongTinChungHoGa_KetCauMuMo = selectedItem.Value;
+    }
+    private void OnSelectChangeKCT(SelectedItem selectedItem)
+    {
+        InputMDS.ThongTinChungHoGa_KetCauTuong = selectedItem.Value;
+    }
+    private void OnSelectChangeHTMHG(SelectedItem selectedItem)
+    {
+        InputMDS.ThongTinChungHoGa_HinhThucMongHoGa = selectedItem.Value;
+    }
+    private void OnSelectChangeKCM(SelectedItem selectedItem)
+    {
+        InputMDS.ThongTinChungHoGa_KetCauMong = selectedItem.Value;
+    }
+
     public List<PKKLModel> listPKKLCTietHoGaModel { get; set; } = new();
     public List<PKKLModel> listModel { get; set; } = new();
     public MetaData MetaData { get; set; }
     public PKKLModel tKThepHoGaModel { get; set; }
-
+    public PhanLoaiHoGaModel InputMDS = new();
 
     private System.Timers.Timer _typingTimer;
     private int _debounceDelay = 5; // Thời gian đợi sau khi người dùng dừng nhập (ms)
@@ -629,24 +1027,83 @@
     {
         try
         {
+
             await LoadData();
-            repository = await NuocMuaRepository.GetBaoCaoKTHHTC();
-            selectLCK = new();
-            foreach (var item in repository)
+            await LoadDataPLHG();
+            PhanLoaiHoGaModel plhg = new();
+            listPLHGModelS = await PhanLoaiHoGaRepository.GetAllByVM(plhg);
+            listDanhMuc = await DanhMucRepository.GetAll();
+
+            foreach (var item in listDanhMuc)
             {
-                // Kiểm tra và thêm item
-                if (!string.IsNullOrEmpty(item.ThongTinChungHoGa_TenHoGaSauPhanLoai) && !selectLCK.Any(x => x.Value == item.ThongTinChungHoGa_TenHoGaSauPhanLoai))
+                // Kiểm tra xem item đã tồn tại trong danh sách hay chưa
+                if (!selectHTHG.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "HG_HTHGa")
                 {
-                    selectLCK.Add(new SelectedItem
-                        {
-                            Value = item.ThongTinChungHoGa_TenHoGaSauPhanLoai,
-                            Text = item.PhanLoaiThanhChong_LoaiThanhChong ?? ""
-                        });
+                    if (!string.IsNullOrEmpty(item.Id))
+                    {
+                        // Nếu chưa tồn tại, thêm item vào danh sách
+                        selectHTHG.Add(new SelectedItem
+                            {
+                                Value = item.Id,
+                                Text = item.Ten
+                            });
+                    }
+                }
+                if (!selectKCMM.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "HG_LMMHoGa")
+                {
+                    if (!string.IsNullOrEmpty(item.Id))
+                    {
+                        // Nếu chưa tồn tại, thêm item vào danh sách
+                        selectKCMM.Add(new SelectedItem
+                            {
+                                Value = item.Id,
+                                Text = item.Ten
+                            });
+                    }
+                }
+                if (!selectKCT.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "HG_LTHoGa")
+                {
+                    if (!string.IsNullOrEmpty(item.Id))
+                    {
+                        // Nếu chưa tồn tại, thêm item vào danh sách
+                        selectKCT.Add(new SelectedItem
+                            {
+                                Value = item.Id,
+                                Text = item.Ten
+                            });
+                    }
+                }
+                if (!selectHTMHG.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "HG_HTMHoGa")
+                {
+                    if (!string.IsNullOrEmpty(item.Id))
+                    {
+                        // Nếu chưa tồn tại, thêm item vào danh sách
+                        selectHTMHG.Add(new SelectedItem
+                            {
+                                Value = item.Id,
+                                Text = item.Ten
+                            });
+                    }
+                }
+                if (!selectKCM.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "HG_LMHoGa")
+                {
+                    if (!string.IsNullOrEmpty(item.Id))
+                    {
+                        // Nếu chưa tồn tại, thêm item vào danh sách
+                        selectKCM.Add(new SelectedItem
+                            {
+                                Value = item.Id,
+                                Text = item.Ten
+                            });
+                    }
                 }
             }
-            selectLCK.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
-            selectSearchLCK = selectLCK;
-
+            // Thêm phần tử mặc định "chọn..."
+            selectHTHG.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            selectKCMM.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            selectKCT.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            selectHTMHG.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            selectKCM.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
         }
         catch (Exception ex)
         {
@@ -1011,6 +1468,110 @@
         return listModels;
     }
 
+    //search
+    public List<PhanLoaiHoGaModel> listPLHGModelS { get; set; } = new();
+    public List<PhanLoaiHoGaModel> listModelS { get; set; } = new();
+    public MetaData MetaDataS { get; set; }
+    public PhanLoaiHoGaModel dmModelS { get; set; }
+    public async Task SearchS()
+    {
+        dmModelS.PageNumber = 1;
+        await LoadDataPLHG();
+    }
+    private async Task LoadDataPLHG()
+    {
+        try
+        {
+            dmModelS = new();
+            var plhg = await PhanLoaiHoGaRepository.GetAllByVM(InputMDS);
+            listModelS = plhg;
+            listPLHGModelS = PagingS(plhg);
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Lỗi load data" + ex.Message);
+            throw;
+        }
+
+    }
+    private void ShowModalS()
+    {
+        isModalVisibleS = true;
+        isModalVisible = !isModalVisible;
+    }
+    private void HandleModalCloseS(bool isVisible)
+    {
+        isModalVisibleS = isVisible;
+        isModalVisible = !isModalVisible;
+    }
+    private async Task HandleChooseId(PhanLoaiHoGaModel item)
+    {
+        try
+        {
+            isModalVisible = !isModalVisible;
+            //kiểm tra xem Id có tồn tại hay không.
+            var plgh_id = await PhanLoaiHoGaRepository.GetById(item.Id);
+            plHoGaModel = item;
+            Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
+            InputMD.LoaiCauKien = item.ThongTinChungHoGa_TenHoGaSauPhanLoai??"";
+            Input.ThongTinChungHoGa_HinhThucHoGa = item.ThongTinChungHoGa_HinhThucHoGa??"";
+            Input.ThongTinChungHoGa_KetCauMuMo = item.ThongTinChungHoGa_KetCauMuMo ?? "";
+            // InputMD.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
+            // InputMD.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name = item.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "";
+            // PhanLoaiHoGaModel plhgModel = new PhanLoaiHoGaModel();
+            // Input.ThongTinChungHoGa_HinhThucHoGa = item.ThongTinChungHoGa_HinhThucHoGa_Name ?? "";
+            // Input.ThongTinChungHoGa_KetCauMuMo = item.ThongTinChungHoGa_KetCauMuMo_Name ?? "";
+            // Input.ThongTinChungHoGa_HinhThucHoGa = item.ThongTinChungHoGa_HinhThucHoGa_Name ?? "";
+            // if (Input.ThongTinChungHoGa_HinhThucHoGa.ToUpper().Trim() == "Thi công trực tiếp".ToUpper().Trim())
+            // {
+            //     Input.BeTongLotMong_D = (double)item.BeTongLotMong_D;
+            //     Input.BeTongLotMong_R = (double)item.BeTongLotMong_R;
+            //     Input.BeTongLotMong_C = (double)item.BeTongLotMong_C;
+
+            // }
+            isModalVisibleS = false;
+
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                       "Thông báo",
+                        ex.Message,
+                        cssClass: "toast-danger",
+                        iconClass: "fa fa-exclamation-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000);
+        }
+
+    }
+    private void SelectedPageS(int page)
+    {
+        dmModelS.PageNumber = page;
+        PagingS(listModelS);
+    }
+    private void ChangePageSizeS(int pageSize)
+    {
+        dmModelS.PageNumber = 1;
+        dmModelS.pageSize = pageSize;
+        PagingS(listModelS);
+    }
+    private List<PhanLoaiHoGaModel> PagingS(List<PhanLoaiHoGaModel> plhgs)
+    {
+        var count = plhgs.Count();
+        plhgs = plhgs.Skip((dmModelS.PageNumber - 1) * dmModelS.PageSize).Take(dmModelS.PageSize).ToList();
+        listPLHGModelS.Clear();
+
+        foreach (var item in plhgs)
+        {
+            listPLHGModelS.Add(item);
+        }
+        var pagelist = new PageList<PhanLoaiHoGaModel>(listPLHGModelS, count, dmModelS.PageNumber, dmModelS.PageSize);
+        MetaDataS = pagelist.MetaData;
+        return plhgs;
+    }
+    //end search
+
     private void ThumbtackHeader()
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
@@ -1021,14 +1582,32 @@
         string ChiMuc = "I";
         switch (DK)
         {
-            case "I.Bê tông, vận chuyển, lắp đặt":
+            case "I.Móng hố ga, hố ga":
                 ChiMuc = "I";
                 break;
-            case "II.Sản xuất + V.Chuyển B.Tông T.Phẩm":
+            case "II.Hố ga lắp đặt, hố ga":
                 ChiMuc = "II";
                 break;
-            case "III.Gia công, lắp dựng cốt thép":
-                ChiMuc = "III";
+            case "III.1 Tường hố ga xây gạch":
+                ChiMuc = "III.1";
+                break;
+            case "III.2 Chát tường hố ga xây gạch":
+                ChiMuc = "III.1";
+                break;
+            case "IV.1 Tường hố ga bê tông":
+                ChiMuc = "IV.1";
+                break;
+            case "IV.2 Ván khuân tường hố ga bê tông":
+                ChiMuc = "IV.2";
+                break;
+            case "V.Mũ mố hố ga, hố ga":
+                ChiMuc = "V";
+                break;
+            case "VI.Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga":
+                ChiMuc = "VI";
+                break;
+            case "VII.Gia công, lắp dựng cốt thép hố ga":
+                ChiMuc = "VII";
                 break;
         }
         return ChiMuc;

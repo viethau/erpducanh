@@ -1,9 +1,11 @@
 ﻿using DucAnhERP.Data;
+using DucAnhERP.Helpers;
 using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 
 namespace DucAnhERP.Services
 {
@@ -486,6 +488,26 @@ namespace DucAnhERP.Services
                 // Log the exception
                 Console.Error.WriteLine($"An error occurred: {ex.Message}");
                 throw; // Optionally rethrow the exception
+            }
+        }
+
+        public async Task<List<SelectedItem>> GetDSPhanLoaiHoGa()
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var data = (from a in context.PhanLoaiHoGas
+                              join b in context.DSNuocMua on a.Id equals b.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                              select new SelectedItem
+                              {
+                                  Value = a.Id,
+                                  Text = a.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                              }).Distinct().OrderBy(x => x.Text).ToList();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi load dữ liệu :" + ex.Message);
             }
         }
         public async Task Update(PhanLoaiHoGa phanloaihoga)
