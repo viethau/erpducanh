@@ -42,7 +42,7 @@ namespace DucAnhERP.Services
                         on major.ParentId equals parent.Id into parentGroup
                         from parent in parentGroup.DefaultIfEmpty()
                         where major.IsActive == 1
-                        orderby major.Order ascending
+                        orderby major.CreateAt descending
                         select new MajorModel
                         {
                             Id = major.Id,
@@ -89,7 +89,7 @@ namespace DucAnhERP.Services
                 })
                 .Where(selectedMajor => selectedMajor.ParentId == null);
 
-            var data = await query.ToListAsync();
+            var data = await query.OrderBy(major => major.MajorName).ToListAsync();
             return data;
         }
 
@@ -105,7 +105,7 @@ namespace DucAnhERP.Services
                     MajorName = major.MajorName,
                     Order = major.Order,
                     Table = major.Table
-                })
+                }).OrderBy(major=> major.MajorName)
                 .ToListAsync();
         }
 

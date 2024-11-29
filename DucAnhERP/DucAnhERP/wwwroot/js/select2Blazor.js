@@ -11,3 +11,5 @@ window.select2Blazor = {
     }
 };
 
+
+

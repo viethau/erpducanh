@@ -1,0 +1,1036 @@
+﻿@page "/PKKL/PKKLCTiet1HoGa"
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using System.Linq
+@using DucAnhERP.SeedWork
+@using DucAnhERP.Helpers
+@inject NavigationManager navigation
+@inject IPKKLCTietHoGaRepository PKKLCTietHoGaRepository
+@inject ITKThepTChongRepository TKThepTChongRepository
+@inject INuocMuaRepository NuocMuaRepository
+@inject IDanhMucRepository DanhMucRepository
+@inject IDMTLThepRepository DMTLThepRepository
+@inject IPhanLoaiThanhChongRepository PhanLoaiThanhChongRepository
+
+@inject DucAnhERP.Services.ToastService ToastService
+<style>
+    table {
+        position: relative;
+    }
+
+        table thead tr td {
+            white-space: nowrap;
+            text-align: center;
+            padding: 2px 5px;
+        }
+
+</style>
+<div class="container-fluid">
+    <div class="mt-3">
+        <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
+            <BodyTemplate>
+                <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <div>
+                        <h5>Thông tin cấu kiện</h5>
+                        <div class="row">
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="Table">Loại cấu kiện</label>
+                                <Select2 Id="select1" Items="@selectLCK" OnChange="@OnSelectChangeLCK"></Select2>
+                                <ValidationMessage For="()=>Input.ThongTinChungHoGa_TenHoGaSauPhanLoai"></ValidationMessage>
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="table">loại bê tông</label>
+                                <Select2 Id="select2" Items="@selectLBT" OnChange="@OnSelectChangeLBT"></Select2>
+                                <validationmessage for="()=>Input.LoaiBeTong"></validationmessage>
+                            </div>
+                        </div>
+                        <h5>Thông tin tên công tác thực tế</h5>
+                        <div class="row">
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="HangMuc">Hạng mục <span></span></label>
+                                <Select2 Id="select3" Items="@selectHMTC" OnChange="@OnSelectChangeHMTC"></Select2>
+                                <validationmessage for="()=>Input.HangMuc"></validationmessage>
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="HangMucCongTac">Hạng mục công tác <span></span></label>
+                                <InputText @bind-Value="Input.HangMucCongTac" @bind-Value:after="OnValueChanged" class="form-control" id="HangMucCongTac" placeholder="Hạng mục công tác" />
+                                <validationmessage for="()=>Input.HangMucCongTac"></validationmessage>
+                            </div>
+                            @if (disTenCongTac)
+                            {
+                                <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="TenCongTac">Tên công tác<span></span></label>
+                                    <Select2 Id="select6" Items="@selectTenCongTac" OnChange="@OnSelectChangeTenCongTac"></Select2>
+                                    <ValidationMessage For="() => Input.TenCongTac" />
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-floating col-sm-6 col-md-3">
+                                    <label for="TenCongTac">Tên công tác<span></span></label>
+                                    <InputText @bind-Value="Input.TenCongTac" class="form-control" id="TenCongTac" placeholder="Tên công tác" />
+                                    <ValidationMessage For="() => Input.TenCongTac" />
+                                </div>
+                            }
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="VTLayKhoiLuong">Đơn vị<span></span></label>
+                                <InputText @bind-Value:after="OnValueChanged" @bind-Value="Input.DonVi" class="form-control" id="DonVi" placeholder="Đơn vị" />
+                                <ValidationMessage For="() => Input.DonVi" />
+                            </div>
+                        </div>
+                        <h5>Thông tin KTHH tính khối lượng (m3)</h5>
+                        <div class="row">
+                            <div class="form-floating col-sm-6 col-md-3" title="Bắt buộc phải nhập giá trị vào đây. Giá trị là chiều dài thực tế của 01 cấu kiện">
+                                <label for="KTHH_D">D<span></span></label>
+                                <InputNumber @bind-Value="Input.KTHH_D" @bind-Value:after="OnValueChanged" class="form-control" id="KTHH_D" readonly="@disKTHH" key="@disKTHH" />
+                                <ValidationMessage For="() => Input.KTHH_D" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="KTHH_R">R<span></span></label>
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KTHH_R" class="form-control" id="KTHH_R" readonly="@disKTHH" key="@disKTHH" />
+                                <ValidationMessage For="() => Input.KTHH_R" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="KTHH_C">C<span></span></label>
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KTHH_C" class="form-control" id="KTHH_C" readonly="@disKTHH" key="@disKTHH" />
+                                <ValidationMessage For="() => Input.KTHH_C" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3" title="Bắt buộc phải nhập giá trị tương ứng vào đây. Giá trị là kết quả của của chiều rộng  chiều cao của 01 cấu kiện cống tròn">
+                                <label for="KTHH_DienTich">Diện tích<span></span></label>
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KTHH_DienTich" class="form-control" id="KTHH_DienTich" />
+                                <ValidationMessage For="() => Input.KTHH_DienTich" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3" title="Để cố định. Thông tin cố định là 'Rộng*Cao' ">
+                                <label for="KTHH_GhiChu">Ghi chú<span></span></label>
+                                <Select2 Id="select4" Items="@selectGhiChu" OnChange="@OnSelectChangeGhiChu"></Select2>
+                                <validationmessage for="()=>Input.KTHH_GhiChu"></validationmessage>
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3" title="Bắt buộc phải nhập giá trị vào đây. Giá trị mặc định là 01">
+                                <label for="KTHH_SLCauKien">Số lượng cấu kiện<span></span></label>
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KTHH_SLCauKien" class="form-control" id="KTHH_SLCauKien" />
+                                <ValidationMessage For="() => Input.KTHH_SLCauKien" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="KTHH_KL1CK">KL 01 CK<span></span></label>
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KTHH_KL1CK" class="form-control" id="KTHH_KL1CK" readonly />
+                                <ValidationMessage For="() => Input.KTHH_KL1CK  " />
+                            </div>
+                        </div>
+                        <h5>Thông tin cạnh tính diện tích (m2)</h5>
+                        <div class="row">
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="TTCDT_CDai">Cạnh dài<span></span></label>
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TTCDT_CDai" class="form-control" id="TTCDT_CDai" />
+                                <ValidationMessage For="() => Input.TTCDT_CDai" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="TTCDT_CRong">Cạnh rộng<span></span></label>
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TTCDT_CRong" class="form-control" id="TTCDT_CRong" />
+                                <ValidationMessage For="() => Input.TTCDT_CRong" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="TTCDT_CDay">Cạnh đáy<span></span></label>
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TTCDT_CDay" class="form-control" id="TTCDT_CDay" />
+                                <ValidationMessage For="() => Input.TTCDT_CDay" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="TTCDT_DienTich">Diện tích<span></span></label>
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TTCDT_DienTich" class="form-control" id="TTCDT_DienTich" />
+                                <ValidationMessage For="() => Input.TTCDT_DienTich" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="TTCDT_SLCK">Số lượng cấu kiện<span></span></label>
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TTCDT_SLCK" class="form-control" id="TTCDT_SLCK" />
+                                <ValidationMessage For="() => Input.TTCDT_SLCK" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="TTCDT_KL">KL<span></span></label>
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TTCDT_KL" class="form-control" id="TTCDT_KL" readonly />
+                                <ValidationMessage For="() => Input.TTCDT_KL" />
+                            </div>
+
+                        </div>
+                        <h5>Thông tin KL không phải M2,M3</h5>
+                        <div class="row">
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="KLKP_KL">Khối lượng<span></span></label>
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KLKP_KL" class="form-control" id="KLKP_KL" readonly="@disInput" />
+                                <ValidationMessage For="() => Input.KLKP_KL" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="KLKP_Sl">Số lượng<span></span></label>
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KLKP_Sl" class="form-control" id="KLKP_Sl" />
+                                <ValidationMessage For="() => Input.KLKP_Sl" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="KL1CK_ChuaTruCC">KL 01CK Chưa trừ chiếm chỗ<span></span></label>
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KL1CK_ChuaTruCC" class="form-control" id="KL1CK_ChuaTruCC" readonly />
+                                <ValidationMessage For="() => Input.KL1CK_ChuaTruCC" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="KLCC1CK">KL chiếm chỗ/01CK<span></span></label>
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KLCC1CK" class="form-control" id="KLCC1CK" />
+                                <ValidationMessage For="() => Input.KLCC1CK" />
+                            </div>
+                            <div class="form-floating col-sm-6 col-md-3">
+                                <label for="TKLCK_SauCC">Tổng KLCK sau chiếm chỗ<span></span></label>
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TKLCK_SauCC" class="form-control" id="TKLCK_SauCC" readonly />
+                                <ValidationMessage For="() => Input.TKLCK_SauCC" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-end m-2">
+                        @if (isLoadingCaculate)
+                        {
+                            <button class="btn btn-primary mr-2" type="button" readonly>
+                                <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Loading...
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary mr-2" type="submit">Save</button>
+                        }
+
+                        <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+                    </div>
+
+                </EditForm>
+            </BodyTemplate>
+        </CustomModal>
+    </div>
+    <div class="row m-3 ">
+        <div class="col-md-9 col-sm-12">
+            <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
+                <DataAnnotationsValidator />
+                <div class="row">
+                    <div class="col-sm-4 col-md-3 mb-2">
+                        <label for="Table">Loại cấu kiện</label>
+                        <Select2 Id="select3" Items="@selectSearchLCK" OnChange="@OnSelectChangeSearchLCK"></Select2>
+                        <ValidationMessage For="()=>InputMD.LoaiCauKienId"></ValidationMessage>
+                    </div>
+
+                    <!-- Search Button -->
+                    <div class="col-sm-4 col-md-2 mb-2">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+                    </div>
+                    <div class="col-sm-4 col-md-2 mb-2">
+                        <label>&nbsp;</label>
+                        <button type="button" @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+        <div class="col-md-3 col-sm-6 text-end">
+            <button class="btn btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
+                <i class="fas fa-thumbtack"></i>
+            </button>
+        </div>
+    </div>
+    <div id="tableContainer ">
+        <div class="table-report ">
+            <div>
+                <div class=" mt-1">
+                    <h5 class="mt-2">BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01 THANH CHỐNG</h5>
+                </div>
+                <div class=" mt-2">
+                    <table id="tb-left" class="table table-hover table-bordered mt-3">
+                        <thead class="bg-info @thumbtack">
+                            <tr>
+                                <th rowspan="2"></th>
+                                <th class="text-center" rowspan="2">STT</th>
+                                <th class="text-center" colspan="2">Thông tin cấu kiện</th>
+                                <th class="text-center" colspan="3">Thông tin tên công tác thực tế</th>
+                                <th class="text-center" colspan="7">Thông tin KTHH tính khối lượng (m3)</th>
+                                <th class="text-center" colspan="6">Thông tin cạnh tính diện tích (m2)</th>
+                                <th class="text-center" colspan="2">Thông tin KL không phải M2,M3</th>
+                                <th class="text-center" rowspan="2">KL 01CK Chưa trừ chiếm chỗ</th>
+                                <th class="text-center" rowspan="2">KL chiếm chỗ/01CK</th>
+                                <th class="text-center" rowspan="2">Tổng KLCK sau chiếm chỗ</th>
+                            </tr>
+                            <tr>
+                                <th> Loại cấu kiện</th>
+                                <th> Loại bê tông</th>
+                                <th> Hạng mục công tác</th>
+                                <th> Tên công tác thực tế</th>
+                                <th> Đơn vị</th>
+                                <th> D</th>
+                                <th> R</th>
+                                <th> C</th>
+                                <th> Diện tích</th>
+                                <th> Ghi chú diện tích</th>
+                                <th> Số lượng cấu kiện</th>
+                                <th> KL 01 CK</th>
+                                <th> Cạnh dài</th>
+                                <th> Cạnh rộng</th>
+                                <th> Cạnh đáy</th>
+                                <th> Diện tích</th>
+                                <th> Số lượng cấu kiện</th>
+                                <th> KL</th>
+                                <th> Khối lượng</th>
+                                <th> Số lượng</th>
+                            </tr>
+
+                        </thead>
+                        @if (listPKKLCTietHoGaModel.Any())
+                        {
+                            <tbody>
+                                @foreach (var group in listPKKLCTietHoGaModel.GroupBy(item => item.LoaiCauKienId))
+                                {
+
+                                    int stt = 0;
+                                    string HangMuc = "";
+                                    @foreach (var item in group)
+                                    {
+                                        stt++;
+
+                                        if (string.IsNullOrEmpty(HangMuc) || HangMuc.ToUpper().Trim() != @item.HangMuc.ToUpper().Trim())
+                                        {
+                                            HangMuc = @item.HangMuc;
+                                            <tr class="bg-warning text-bold">
+                                                <td></td>
+                                                <td>@getChiMuc(HangMuc)</td>
+                                                <td colspan="2">@item.LoaiCauKien</td>
+                                                <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
+                                                <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
+                                                <td colspan="19"></td>
+                                            </tr>
+                                        }
+                                        <tr>
+                                            <td class="d-flex nowrap">
+                                                <div class="d-inline-block">
+                                                    <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-primary m-1" title="Sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                            <td>@stt</td>
+                                            <td>@item.LoaiCauKien</td>
+                                            <td>@item.LoaiBeTong</td>
+                                            <td>@item.HangMucCongTac</td>
+                                            <td>@item.TenCongTac</td>
+                                            <td>@item.DonVi</td>
+                                            <td>@item.KTHH_D</td>
+                                            <td>@item.KTHH_R</td>
+                                            <td>@item.KTHH_C</td>
+                                            <td>@item.KTHH_DienTich</td>
+                                            <td>@item.KTHH_GhiChu</td>
+                                            <td>@item.KTHH_SLCauKien</td>
+                                            <td>@item.KTHH_KL1CK</td>
+                                            <td>@item.TTCDT_CDai</td>
+                                            <td>@item.TTCDT_CRong</td>
+                                            <td>@item.TTCDT_CDay</td>
+                                            <td>@item.TTCDT_DienTich</td>
+                                            <td>@item.TTCDT_SLCK</td>
+                                            <td>@item.TTCDT_KL</td>
+                                            <td>@item.KLKP_KL</td>
+                                            <td>@item.KLKP_Sl</td>
+                                            <td>@item.KL1CK_ChuaTruCC </td>
+                                            <td>@item.KLCC1CK </td>
+                                            <td>@item.TKLCK_SauCC </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        }
+                        else
+                        {
+                            <tbody>
+                                <tr>
+                                    <td colspan="24"> Không có dữ liệu</td>
+                                </tr>
+                            </tbody>
+                        }
+                    </table>
+                </div>
+                <div class="mt-4">
+                    @if (listPKKLCTietHoGaModel.Any())
+                    {
+                        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+    <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
+</div>
+
+
+@code {
+
+    private bool isLoadingCaculate = false;
+    private bool isLoading = false;
+    private bool isModalVisible = false;
+    private string TitleModal = "Thêm mới ";
+    bool isEdit = false;
+    string thumbtack = "";
+    private DateTime baseTime;
+    List<NuocMuaModel> repository;
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+
+    private PKKLCTietHoGa Input = new();
+    private PKKLModel InputMD = new PKKLModel();
+
+    private List<SelectedItem> selectHMTC = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true },
+        new SelectedItem { Value = "I.Móng hố ga, hố ga", Text = "I.Móng hố ga, hố ga " },
+        new SelectedItem { Value = "II.Hố ga lắp đặt, hố ga", Text = "II.Hố ga lắp đặt, hố ga  "},
+        new SelectedItem { Value = "III.Tường hố ga xây gạch, hố ga", Text = "III.Tường hố ga xây gạch, hố ga "},
+        new SelectedItem { Value = "III.Tường hố ga xây gạch, hố ga", Text = "III.Tường hố ga xây gạch, hố ga "},
+        new SelectedItem { Value = "III.Tường hố ga xây gạch, hố ga", Text = "III.Tường hố ga xây gạch, hố ga "},
+        new SelectedItem { Value = "III.Tường hố ga xây gạch, hố ga", Text = "III.Tường hố ga xây gạch, hố ga "},
+    };
+    private async void OnSelectChangeHMTC(SelectedItem selectedItem)
+    {
+        Input.HangMuc = selectedItem.Value;
+        Input.TenCongTac = "";
+        await Caculate();
+    }
+
+    private List<SelectedItem> selectGhiChu = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true },
+        new SelectedItem { Value = "Rộng*Cao", Text = "Rộng*Cao" },
+        new SelectedItem { Value = "Dài*Cao", Text = "Dài*Cao"},
+        new SelectedItem { Value = "Dài*Rộng", Text = "Dài*Rộng"},
+    };
+
+    private List<SelectedItem> selectTenCongTac = new();
+
+    private async void OnSelectChangeTenCongTac(SelectedItem selectedItem)
+    {
+        if (double.TryParse(selectedItem.Value, out double result))
+        {
+            Input.KLKP_KL = result;
+        }
+        else
+        {
+            Input.KLKP_KL = 0;
+        }
+        Input.TenCongTac = selectedItem.Text;
+        await Caculate();
+    }
+
+    private async void OnSelectChangeGhiChu(SelectedItem selectedItem)
+    {
+        Input.KTHH_GhiChu = selectedItem.Value;
+        await Caculate();
+    }
+
+    private List<SelectedItem> selectLBT = new List<SelectedItem>
+    {
+        new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true },
+        new SelectedItem { Value = "Bê tông thương phẩm", Text = "Bê tông thương phẩm" },
+    };
+    private async void OnSelectChangeLBT(SelectedItem selectedItem)
+    {
+        Input.LoaiBeTong = selectedItem.Value;
+        await Caculate();
+    }
+
+    private List<SelectedItem> selectLCK = new();
+    private async void OnSelectChangeLCK(SelectedItem selectedItem)
+    {
+        Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = selectedItem.Value;
+        await Caculate();
+    }
+    private List<SelectedItem> selectSearchLCK = new();
+    private void OnSelectChangeSearchLCK(SelectedItem selectedItem)
+    {
+        InputMD.LoaiCauKienId = selectedItem.Value;
+    }
+
+    public List<PKKLModel> listPKKLCTietHoGaModel { get; set; } = new();
+    public List<PKKLModel> listModel { get; set; } = new();
+    public MetaData MetaData { get; set; }
+    public PKKLModel tKThepHoGaModel { get; set; }
+
+
+    private System.Timers.Timer _typingTimer;
+    private int _debounceDelay = 5; // Thời gian đợi sau khi người dùng dừng nhập (ms)
+
+    // Hàm được gọi sau khi bind-value hoàn tất
+    private void OnValueChanged()
+    {
+        // Dừng Timer cũ nếu đang chạy
+        _typingTimer?.Stop();
+
+        // Khởi động Timer mới
+        _typingTimer = new System.Timers.Timer(_debounceDelay);
+        _typingTimer.Elapsed += async (_, _) =>
+        {
+            _typingTimer.Stop();
+            await InvokeAsync(OnTypingStopped); // Gọi hàm xử lý khi người dùng dừng nhập
+        };
+        _typingTimer.AutoReset = false;
+        _typingTimer.Start();
+    }
+
+    // Hàm xử lý logic khi người dùng dừng nhập
+    private async Task OnTypingStopped()
+    {
+        // Đảm bảo dữ liệu đã được bind vào model
+        await Caculate(); // Gọi logic xử lý
+    }
+
+    private bool disInput { get; set; } = false;
+    private bool disTenCongTac { get; set; } = false;
+    private bool disKTHH { get; set; } = false;
+
+    public async Task Caculate()
+    {
+        isLoadingCaculate = true;
+        switch (Input.HangMuc)
+        {
+            case "I.Bê tông, vận chuyển, lắp đặt":
+                if (disInput) { Input.KLKP_KL = 0; }
+                if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai) && Input.HangMucCongTac.ToUpper().Trim() == "thanh chống".ToUpper().Trim())
+                {
+                    var results = repository.Where(obj => obj.ThongTinChungHoGa_TenHoGaSauPhanLoai == Input.ThongTinChungHoGa_TenHoGaSauPhanLoai).FirstOrDefault();
+                    if (results != null)
+                    {
+                        Input.KTHH_D = results.TTKTHHCongHopRanh_CCaoThanhChong;
+                        Input.KTHH_R = results.TTKTHHCongHopRanh_CRongThanhChong;
+                        Input.KTHH_C = results.TTKTHHCongHopRanh_CDai;
+                    }
+
+                    disKTHH = true;
+                }
+                else
+                {
+                    Input.KTHH_D = 0;
+                    Input.KTHH_R = 0;
+                    Input.KTHH_C = 0;
+                    disKTHH = false;
+                }
+                if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai)
+                && Input.HangMucCongTac.ToUpper().Trim() == "Vận chuyển từ bãi đúc đến công trường".ToUpper())
+                {
+                    disInput = true;
+                    var KLKP_KL = await PKKLCTietHoGaRepository.GetTKLCK_SauCCByLCK(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
+                    if (KLKP_KL != null)
+                    {
+                        Input.KLKP_KL = Math.Round((KLKP_KL.TKLCK_SauCC * 2.4), 4);
+                    }
+                }
+                else
+                {
+                    disInput = false;
+                }
+                disTenCongTac = false;
+                Input.KTHH_KL1CK = PKKLCTietHoGaRepository.KTHH_KL1CK(Input);
+                Input.TTCDT_KL = PKKLCTietHoGaRepository.TTCDT_KL(Input);
+                Input.KL1CK_ChuaTruCC = PKKLCTietHoGaRepository.KL1CK_ChuaTruCC(Input);
+                Input.TKLCK_SauCC = Input.KL1CK_ChuaTruCC - Input.KLCC1CK;
+                break;
+            case "II.Sản xuất + V.Chuyển B.Tông T.Phẩm":
+                if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai))
+                {
+                    var TKLCK_SauCC = await PKKLCTietHoGaRepository.GetTKLCK_SauCCByLCK(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
+                    if (TKLCK_SauCC != null)
+                    {
+                        Input.TKLCK_SauCC = TKLCK_SauCC.TKLCK_SauCC;
+                    }
+                }
+                if (disKTHH)
+                {
+                    Input.KTHH_D = 0;
+                    Input.KTHH_R = 0;
+                    Input.KTHH_C = 0;
+                    disKTHH = false;
+                }
+                break;
+            case "III.Gia công, lắp dựng cốt thép":
+                if (disKTHH)
+                {
+                    Input.KTHH_D = 0;
+                    Input.KTHH_R = 0;
+                    Input.KTHH_C = 0;
+                    disKTHH = false;
+                }
+                if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai))
+                {
+                    disInput = true;
+                    disTenCongTac = true;
+                    selectTenCongTac = await TKThepTChongRepository.GetDistinctTenCongTacByPL(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
+                    selectTenCongTac.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+                }
+                else
+                {
+                    if (disInput) { Input.KLKP_KL = 0; }
+                    disTenCongTac = false;
+                }
+                Input.KTHH_KL1CK = PKKLCTietHoGaRepository.KTHH_KL1CK(Input);
+                Input.TTCDT_KL = PKKLCTietHoGaRepository.TTCDT_KL(Input);
+                Input.KL1CK_ChuaTruCC = PKKLCTietHoGaRepository.KL1CK_ChuaTruCC(Input);
+                Input.TKLCK_SauCC = Input.KL1CK_ChuaTruCC - Input.KLCC1CK;
+                break;
+            default:
+                break;
+        }
+        isLoadingCaculate = false;
+        await InvokeAsync(() =>
+          {
+              StateHasChanged();
+          });
+
+    }
+
+    private void ShowModal()
+    {
+        isModalVisible = true;
+        Input = new();
+
+        // Đặt trạng thái chọn cho các danh sách
+        SetSelectedItem(selectLCK, Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
+        SetSelectedItem(selectLBT, Input.LoaiBeTong);
+        SetSelectedItem(selectHMTC, Input.HangMuc);
+    }
+
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+        isEdit = false;
+    }
+
+    private void HandleSave()
+    {
+        // Logic for saving
+        isModalVisible = false;
+    }
+
+    private void HandleCancel()
+    {
+        // Logic for canceling
+        isModalVisible = false;
+        isEdit = false;
+
+    }
+
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await LoadData();
+            repository = await NuocMuaRepository.GetBaoCaoKTHHTC();
+            selectLCK = new();
+            foreach (var item in repository)
+            {
+                // Kiểm tra và thêm item
+                if (!string.IsNullOrEmpty(item.ThongTinChungHoGa_TenHoGaSauPhanLoai) && !selectLCK.Any(x => x.Value == item.ThongTinChungHoGa_TenHoGaSauPhanLoai))
+                {
+                    selectLCK.Add(new SelectedItem
+                        {
+                            Value = item.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                            Text = item.PhanLoaiThanhChong_LoaiThanhChong ?? ""
+                        });
+                }
+            }
+            selectLCK.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            selectSearchLCK = selectLCK;
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+    // Truy vấn data theo điều kiện tìm kiếm
+    private async Task LoadData()
+    {
+        try
+        {
+            isLoading = true;
+            tKThepHoGaModel = new();
+            var repository = await PKKLCTietHoGaRepository.GetAllByVM(InputMD);
+            listModel = repository;
+            listPKKLCTietHoGaModel = Paging(listModel);
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+        isLoading = false;
+    }
+
+    public async Task Search()
+    {
+        tKThepHoGaModel.PageNumber = 1;
+        await LoadData();
+
+    }
+
+    private async Task HandleValidSubmit()
+    {
+
+        try
+        {
+            await Caculate();
+            string[] ids = { Input.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "" };
+            var isValidTenPL = await PhanLoaiThanhChongRepository.CheckExclusive(ids, baseTime);
+            var listExist = await PKKLCTietHoGaRepository.GetExist(Input);
+            if (isValidTenPL)
+            {
+                if (isEdit)
+                {
+                    string[] idss = { Input.Id };
+
+                    if (listExist == null || listExist.Count == 0)
+                    {
+                        bool isValid = await PKKLCTietHoGaRepository.CheckExclusive(idss, baseTime);
+                        if (isValid)
+                        {
+                            await PKKLCTietHoGaRepository.Update(Input);
+                            isModalVisible = false;
+                            Input = new PKKLCTietHoGa();
+                            isEdit = false;
+                            ToastService.ShowToast(
+                                "Thông báo",
+                                "Cập nhật thành công.",
+                                cssClass: "toast-success",
+                                iconClass: "fa fa-check-circle",
+                                progressBarClass: "bg-info",
+                                duration: 5000
+                            );
+                            await LoadData();
+                        }
+                    }
+                    else if (listExist.Count > 0 && listExist[0].Id == Input.Id)
+                    {
+                        await PKKLCTietHoGaRepository.Update(Input);
+                        isModalVisible = false;
+                        Input = new PKKLCTietHoGa();
+                        isEdit = false;
+                        ToastService.ShowToast(
+                            "Thông báo",
+                            "Cập nhật thành công.",
+                            cssClass: "toast-success",
+                            iconClass: "fa fa-check-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
+                        await LoadData();
+                    }
+                    else
+                    {
+                        ToastService.ShowToast(
+                        "Thông báo",
+                         "Đã tồn tại.",
+                         cssClass: "toast-danger",
+                         iconClass: "fa fa-exclamation-circle",
+                         progressBarClass: "bg-info",
+                         duration: 5000);
+                    }
+
+                }
+                else
+                {
+                    if (listExist == null || listExist.Count == 0)
+                    {
+                        if (Flag > 0)
+                        {
+                            // Thêm mới thông tin
+                            var id = await PKKLCTietHoGaRepository.InsertLaterFlag(Input, Flag);
+                            isModalVisible = false;
+                            Input = new PKKLCTietHoGa();
+                            ToastService.ShowToast(
+                                "Thông báo",
+                                "Chèn thành công.",
+                                cssClass: "toast-success",
+                                iconClass: "fa fa-check-circle",
+                                progressBarClass: "bg-info",
+                                duration: 5000
+                            );
+                            await LoadData();
+                            Flag = 0;
+                        }
+                        else
+                        {
+                            // Thêm mới thông tin
+                            await PKKLCTietHoGaRepository.Insert(Input);
+                            isModalVisible = false;
+                            Input = new PKKLCTietHoGa();
+                            ToastService.ShowToast(
+                                "Thông báo",
+                                "Thêm thành công.",
+                                cssClass: "toast-success",
+                                iconClass: "fa fa-check-circle",
+                                progressBarClass: "bg-info",
+                                duration: 5000
+                            );
+                            await LoadData();
+                        }
+                    }
+                    else
+                    {
+                        ToastService.ShowToast(
+                        "Thông báo",
+                         "Đã tồn tại.",
+                         cssClass: "toast-danger",
+                         iconClass: "fa fa-exclamation-circle",
+                         progressBarClass: "bg-info",
+                         duration: 5000);
+                    }
+
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+
+    }
+
+    private string deleteId;
+
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        deleteId = id;
+        confirmModal.Title = "Xác nhận xóa";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.openModal();
+
+    }
+
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        try
+        {
+            if (confirmed)
+            {
+                if (!string.IsNullOrEmpty(deleteId))
+                {
+                    string[] ids = { deleteId };
+                    var result = await PKKLCTietHoGaRepository.CheckExclusive(ids, baseTime);
+                    if (result)
+                    {
+                        // Thực hiện hành động xóa
+                        await PKKLCTietHoGaRepository.DeleteById(deleteId);
+                        ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                        await LoadData();
+                    }
+
+                    deleteId = "";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                 "Thông báo",
+                ex.Message,
+                 cssClass: "toast-danger",
+               iconClass: "fa fa-exclamation-circle",
+                 progressBarClass: "bg-info",
+                 duration: 5000
+             );
+
+        }
+    }
+
+    private async Task HandleEdit(string id)
+    {
+        try
+        {
+            // Thiết lập trạng thái ban đầu
+            TitleModal = "Cập nhật PKKL TĐan TDẫn !";
+            Input = await PKKLCTietHoGaRepository.GetById(id);
+            isEdit = true;
+            isModalVisible = true;
+
+            // Đặt trạng thái chọn cho các danh sách
+            SetSelectedItem(selectLCK, Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
+            SetSelectedItem(selectLBT, Input.LoaiBeTong);
+            SetSelectedItem(selectHMTC, Input.HangMuc);
+
+            // Xử lý từng trường hợp của HangMuc
+            switch (Input.HangMuc)
+            {
+                case "I.Bê tông, vận chuyển, lắp đặt":
+                    disKTHH = ShouldDisableKTHH(Input, "thanh chống");
+                    disInput = ShouldDisableInput(Input, "Vận chuyển từ bãi đúc đến công trường");
+                    disTenCongTac = false;
+                    break;
+
+                case "II.Sản xuất + V.Chuyển B.Tông T.Phẩm":
+                    disKTHH = false;
+                    disTenCongTac = false;
+                    break;
+
+                case "III.Gia công, lắp dựng cốt thép":
+                    disKTHH = false;
+                    if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai))
+                    {
+                        disInput = true;
+                        disTenCongTac = true;
+                        selectTenCongTac = await GetTenCongTacAsync(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai, Input.TenCongTac);
+                    }
+                    else
+                    {
+                        disTenCongTac = false;
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowErrorToast(ex.Message);
+        }
+    }
+
+    private void SetSelectedItem(IEnumerable<SelectedItem> items, string value)
+    {
+        foreach (var item in items)
+        {
+            item.IsSelected = item.Value == value;
+        }
+    }
+
+    private bool ShouldDisableKTHH(PKKLCTietHoGa input, string condition)
+    {
+        return !string.IsNullOrEmpty(input.ThongTinChungHoGa_TenHoGaSauPhanLoai) &&
+               input.HangMucCongTac.ToUpper().Trim() == condition.ToUpper().Trim();
+    }
+
+    private bool ShouldDisableInput(PKKLCTietHoGa input, string condition)
+    {
+        return !string.IsNullOrEmpty(input.ThongTinChungHoGa_TenHoGaSauPhanLoai) &&
+               input.HangMucCongTac.ToUpper().Trim() == condition.ToUpper().Trim();
+    }
+
+    private async Task<List<SelectedItem>> GetTenCongTacAsync(string thanhChong, string tenCongTac)
+    {
+        var result = await TKThepTChongRepository.GetDistinctTenCongTacByPL(thanhChong);
+        result.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        foreach (var item in result)
+        {
+            item.IsSelected = item.Text.Trim() == tenCongTac.Trim();
+        }
+        return result;
+    }
+
+    private void ShowErrorToast(string message)
+    {
+        ToastService.ShowToast(
+            "Thông báo",
+            message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 5000
+        );
+    }
+
+    int Flag = 0;
+    //thêm vào sau
+    private void InsertLaterFlag(int flag)
+    {
+        Flag = flag;
+        TitleModal = "Chèn loại cống !";
+        isModalVisible = true;
+    }
+
+
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        tKThepHoGaModel.PageNumber = 1;
+        Paging(listModel);
+    }
+
+
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        tKThepHoGaModel.PageNumber = page;
+        Paging(listModel);
+    }
+
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+        tKThepHoGaModel.PageNumber = 1;
+        tKThepHoGaModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+
+
+    // Xử lý paging
+    private List<PKKLModel> Paging(List<PKKLModel> listModels)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = listModels.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        listModels = listModels.Skip((tKThepHoGaModel.PageNumber - 1) * tKThepHoGaModel.PageSize).Take(tKThepHoGaModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listPKKLCTietHoGaModel.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var major in listModels)
+        {
+            listPKKLCTietHoGaModel.Add(major);
+        }
+
+        // Tạo pagelist mới
+
+        var pagelist = new PageList<PKKLModel>(listPKKLCTietHoGaModel, count, tKThepHoGaModel.PageNumber, tKThepHoGaModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return listModels;
+    }
+
+    private void ThumbtackHeader()
+    {
+        thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
+    }
+
+    public static string getChiMuc(string DK)
+    {
+        string ChiMuc = "I";
+        switch (DK)
+        {
+            case "I.Bê tông, vận chuyển, lắp đặt":
+                ChiMuc = "I";
+                break;
+            case "II.Sản xuất + V.Chuyển B.Tông T.Phẩm":
+                ChiMuc = "II";
+                break;
+            case "III.Gia công, lắp dựng cốt thép":
+                ChiMuc = "III";
+                break;
+        }
+        return ChiMuc;
+    }
+}

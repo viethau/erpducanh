@@ -20,7 +20,7 @@
 
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="Table">Nghiệp vụ cha</label>
-                        <Select2 disabled="isEdit" Id="ParentId" Items="@selectItems" OnChange="@OnSelectParentMajor"></Select2>
+                        <Select2 disabled="isEdit" Id="ParentId" Items="@selectMMajors" OnChange="@OnSelectParentMajor"></Select2>
                         <ValidationMessage For="()=>Input.ParentId"></ValidationMessage>
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
@@ -57,7 +57,7 @@
             <div class="d-flex row">
                 <div class="form-floating col-sm-3 col-md-3">
                     <label for="Table">Nghiệp vụ cha</label>
-                    <Select2 Id="mySelect2" Items="@selectItems" OnChange="@OnSelectParentMajorSear"></Select2>
+                    <Select2 Id="selectMMajorsSear" Items="@selectMMajorsSear" OnChange="@OnSelectParentMajorSear"></Select2>
                     <ValidationMessage For="()=>majorModel.ParentId"></ValidationMessage>
                 </div>
                 <div class="form-floating col-sm-3 col-md-3">
@@ -155,10 +155,6 @@
                 }
 
             </table>
-            <SuccessModal @ref="successModal" OnResponseClick="Redirect"></SuccessModal>
-            <ErrorModal @ref="errorModal"></ErrorModal>
-            <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
-
         </div>
 
         @if (listMajor.Any())
@@ -167,6 +163,9 @@
         }
 
     </div>
+    <SuccessModal @ref="successModal" OnResponseClick="Redirect"></SuccessModal>
+    <ErrorModal @ref="errorModal"></ErrorModal>
+    <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
 </div>
 
 
@@ -183,19 +182,18 @@
     private bool isEdit = false;
     private DateTime baseTime;
 
-    private List<SelectedItem> selectItems = new List<SelectedItem>
-    {    new SelectedItem { Value = "", Text = "chọn...",IsSelected=true },
-    };
+    private List<SelectedItem> selectMMajors = new List<SelectedItem>
+    {  new SelectedItem { Value = "", Text = "chọn...",IsSelected=true },};
+    private void OnSelectParentMajor(SelectedItem selectedItem)
+    { Input.ParentId = selectedItem.Value; }
 
     private void OnSelectParentMajorSear(SelectedItem selectedItem)
-    {
-        majorModel.ParentId = selectedItem.Value;
-    }
+    { majorModel.ParentId = selectedItem.Value; }
 
-    private void OnSelectParentMajor(SelectedItem selectedItem)
-    {
-        Input.ParentId = selectedItem.Value;
-    }
+    private List<SelectedItem> selectMMajorsSear = new List<SelectedItem>
+    {  new SelectedItem { Value = "", Text = "chọn...",IsSelected=true },};
+
+
 
     [Parameter]
     public SuccessModal successModal { get; set; }
@@ -274,24 +272,43 @@
 
     private async Task LoadData()
     {
+        try
+        {
+            listParentMajor = await MajorService.GetAllParentMajor();
 
-        listParentMajor = await MajorService.GetAllParentMajor();
+            // Khởi tạo danh sách mới với phần tử mặc định
+            var tempSelectMMajors = new List<SelectedItem>
+        {
+            new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true }
+        };
 
-        selectItems = listParentMajor.Select(major => new SelectedItem
-            {
-                Value = major.Id,
-                Text = major.MajorName
-            }).ToList();
+            // Thêm các phần tử từ `listParentMajor`
+            tempSelectMMajors.AddRange(listParentMajor.Select(major => new SelectedItem
+                {
+                    Value = major.Id,
+                    Text = major.MajorName
+                }));
 
-        // Thêm phần tử mặc định "chọn..."
-        selectItems.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            // Gán danh sách mới vào `selectMMajors`
+            selectMMajors = tempSelectMMajors;
+            selectMMajorsSear = selectMMajors;
 
-        var majors = await MajorService.GetAll(majorModel);
-        listModel = majors;
-        listMajor = Paging(majors);
-        baseTime = DateTime.Now;
+            // Cập nhật danh sách các Major
+            var majors = await MajorService.GetAll(majorModel);
+            listModel = majors;
+            listMajor = Paging(majors);
 
+            baseTime = DateTime.Now;
+
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
+        }
     }
+
     private async Task LoadMajor()
     {
         var majors = await MajorService.GetAll(majorModel);
@@ -307,7 +324,7 @@
             Input = await MajorRepository.GetById(id);
             isEdit = true;
             isModalVisible = true;
-            foreach (var item in selectItems)
+            foreach (var item in selectMMajors)
             {
                 item.IsSelected = item.Value == Input.ParentId;
             }
@@ -375,7 +392,7 @@
 
     private void Refresh()
     {
-        foreach (var item in selectItems)
+        foreach (var item in selectMMajors)
         {
             item.IsSelected = item.Value == "";
         }

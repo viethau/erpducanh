@@ -80,6 +80,7 @@ namespace DucAnhERP.Data
         public DbSet<PKKLRXay> PKKLRXays { get; set; }
         public DbSet<PKKLTDanRXay> PKKLTDanRXays { get; set; }
         public DbSet<PKKLTChong> PKKLTChongs { get; set; }
+        public DbSet<PKKLCTietHoGa> PKKLCTietHoGas { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
