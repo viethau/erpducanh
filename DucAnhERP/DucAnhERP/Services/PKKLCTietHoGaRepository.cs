@@ -259,8 +259,8 @@ namespace DucAnhERP.Services
             using var context = _context.CreateDbContext();
             var result = context.PKKLCTietHoGas
                 .Where(a => a.ThongTinChungHoGa_TenHoGaSauPhanLoai == id &&
-                 a.HangMuc == "I.Bê tông, vận chuyển, lắp đặt" &&
-                 a.LoaiBeTong == "Bê tông thương phẩm").OrderBy(a => a.CreateAt)
+                 a.HangMuc == "II.Hố ga lắp đặt, hố ga" &&
+                 a.LoaiBeTong == "Bê tông thương phẩm" && a.KTHH_GhiChu == "Rộng*Cao").OrderBy(a => a.CreateAt)
                  .FirstOrDefault();
 
             return result;
@@ -269,10 +269,15 @@ namespace DucAnhERP.Services
         {
             using var context = _context.CreateDbContext();
             var result = context.PKKLCTietHoGas
-                .Where(a => a.ThongTinChungHoGa_TenHoGaSauPhanLoai == id &&
-                 a.HangMuc == "I.Bê tông, vận chuyển, lắp đặt" &&
-                 a.LoaiBeTong == "Bê tông thương phẩm")
-                 .Sum(x => x.TKLCK_SauCC);
+                 .Where(a => a.ThongTinChungHoGa_TenHoGaSauPhanLoai == @id &&
+                             !new[]
+                             {
+                                "VI.Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga",
+                                "VII.Gia công, lắp dựng cốt thép hố ga"
+                             }.Contains(a.HangMuc) &&
+                             a.LoaiBeTong == "Bê tông thương phẩm")
+                 .Sum(a => a.TKLCK_SauCC);
+
 
             return result;
         }
@@ -653,6 +658,7 @@ namespace DucAnhERP.Services
             record.KLKP_KL = tklckSauCc * 2.4;
             record.TKLCK_SauCC = record.KL1CK_ChuaTruCC - record.KLCC1CK;
         }
+
         public double KTHH_KL1CK(PKKLCTietHoGa obj)
         {
             double result = 0;
