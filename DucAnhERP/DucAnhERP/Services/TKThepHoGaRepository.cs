@@ -1,6 +1,7 @@
 ﻿
 using DucAnhERP.Components.Pages.NghiepVuCongTrinh.BaoCao;
 using DucAnhERP.Data;
+using DucAnhERP.Helpers;
 using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
@@ -134,6 +135,55 @@ namespace DucAnhERP.Services
                 Console.Error.WriteLine($"An error occurred: {ex.Message}");
                 throw; // Optionally rethrow the exception
             }
+        }
+        public async Task<List<SelectedItem>> GetDistinctTenCongTacByPL(string ThongTinChungHoGa_TenHoGaSauPhanLoai)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var data = context.TKThepHoGas
+                 .Where(item => item.ThongTinChungHoGa_TenHoGaSauPhanLoai == ThongTinChungHoGa_TenHoGaSauPhanLoai)
+                 .GroupBy(item => item.TenCongTac)
+                 .Select(group => new SelectedItem
+                 {
+                     Text = group.Key,
+                     Value = group.Sum(item => item.TongTrongLuong).ToString()
+                 })
+                 .Distinct()
+                 .ToList();
+
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+
+        }
+        public async Task<SelectedItem> GetSumTenCongTacByPL(string ThongTinChungHoGa_TenHoGaSauPhanLoai, string TenCongTac)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var data = await context.TKThepHoGas
+                .Where(item =>
+                    item.ThongTinChungHoGa_TenHoGaSauPhanLoai == ThongTinChungHoGa_TenHoGaSauPhanLoai &&
+                    item.TenCongTac == TenCongTac)
+                .GroupBy(item => item.TenCongTac)
+                .Select(group => new SelectedItem
+                {
+                    Text = group.Key,
+                    Value = group.Sum(item => item.TongTrongLuong).ToString()
+                }).FirstOrDefaultAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+
         }
         public async Task Update(TKThepHoGa TKThepHoGa)
         {
