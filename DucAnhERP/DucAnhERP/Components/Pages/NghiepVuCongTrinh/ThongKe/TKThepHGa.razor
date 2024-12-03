@@ -423,6 +423,16 @@
     {
         isModalVisible = true;
         Input = new();
+        InputMD = new();
+        foreach (var item in selectLoaiThep)
+        {
+            item.IsSelected = string.IsNullOrEmpty(item.Value);
+        }
+
+        foreach (var item in selectPLHG)
+        {
+            item.IsSelected = string.IsNullOrEmpty(item.Value);
+        }
     }
 
     private void HandleModalClose(bool isVisible)
@@ -450,7 +460,6 @@
     {
         try
         {
-
             await LoadData();
             var repository = await PhanLoaiHoGaRepository.GetAll();
             selectPLHG = new();
@@ -673,12 +682,12 @@
                 var result = await TKThepHoGaRepository.CheckExclusive(ids,baseTime);
                 if (result)
                 {
-                     // Thực hiện hành động xóa
+                    // Thực hiện hành động xóa
                     await TKThepHoGaRepository.DeleteById(deleteId);
                     ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success",iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                     await LoadData();
                 }
-               
+
                 deleteId = "";
             }
         }
@@ -689,13 +698,17 @@
     {
         try
         {
-            TitleModal = "Cập nhật loại TĐan TDẫn !";
+            TitleModal = "Cập nhật loại thép hố ga !";
             Input = await TKThepHoGaRepository.GetById(id);
             isEdit = true;
             isModalVisible = true;
-             foreach (var item in selectLoaiThep)
+            foreach (var item in selectLoaiThep)
             {
                 item.IsSelected = item.Value == Input.LoaiThep;
+                if (item.IsSelected)
+                {
+                    LoaiThep = item.Text;
+                }
             }
             foreach (var item in selectPLHG)
             {

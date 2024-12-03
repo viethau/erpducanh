@@ -544,9 +544,8 @@ namespace DucAnhERP.Services
                 {
                     if (!string.IsNullOrEmpty(record.TTKTHHCongHopRanh_LoaiThanhChong))
                     {
-                        var getOld = await GetById(entity.Id);
                         var TKLCK_SauCC1 = await GetSumTKLCK_SauCCByLCK(entity.TTKTHHCongHopRanh_LoaiThanhChong);
-                        record.TKLCK_SauCC = getOld.TKLCK_SauCC + entity.TKLCK_SauCC;
+                        record.TKLCK_SauCC = TKLCK_SauCC1 + entity.TKLCK_SauCC;
                     }
                 }
 
@@ -634,9 +633,8 @@ namespace DucAnhERP.Services
                 {
                     if (!string.IsNullOrEmpty(record.TTKTHHCongHopRanh_LoaiThanhChong))
                     {
-                        var getOld = await GetById(entity.Id);
                         var TKLCK_SauCC1 = await GetSumTKLCK_SauCCByLCK(entity.TTKTHHCongHopRanh_LoaiThanhChong);
-                        record.TKLCK_SauCC =  getOld.TKLCK_SauCC - entity.TKLCK_SauCC;
+                        record.TKLCK_SauCC = TKLCK_SauCC1 - entity.TKLCK_SauCC;
                     }
                 }
 
@@ -650,8 +648,8 @@ namespace DucAnhERP.Services
         {
             record.KTHH_KL1CK = KTHH_KL1CK(record);
             record.TTCDT_KL = TTCDT_KL(record);
-            record.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(record);
             record.KLKP_KL = tklckSauCc * 2.4;
+            record.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(record);
             record.TKLCK_SauCC = record.KL1CK_ChuaTruCC - record.KLCC1CK;
         }
         public double KTHH_KL1CK(PKKLTChong obj)

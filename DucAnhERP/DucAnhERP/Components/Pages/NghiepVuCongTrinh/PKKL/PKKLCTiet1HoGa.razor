@@ -719,14 +719,13 @@
     bool isEdit = false;
     string thumbtack = "";
     private DateTime baseTime;
-    List<NuocMuaModel> repository = new();
     PhanLoaiHoGaModel plHoGaModel = new();
 
     [Parameter]
     public ConfirmModal confirmModal { get; set; }
 
     private PKKLCTietHoGa Input = new();
-    private PKKLModel InputMD = new PKKLModel();
+    private PKKLCTietHoGaModel InputMD = new PKKLCTietHoGaModel();
 
     private List<SelectedItem> selectHMTC = new List<SelectedItem>
     {
@@ -768,7 +767,7 @@
             Input.KLKP_KL = 0;
         }
         Input.TenCongTac = selectedItem.Text;
-        
+
         await Caculate();
     }
 
@@ -830,10 +829,10 @@
         InputMDS.ThongTinChungHoGa_KetCauMong = selectedItem.Value;
     }
 
-    public List<PKKLModel> listPKKLCTietHoGaModel { get; set; } = new();
-    public List<PKKLModel> listModel { get; set; } = new();
+    public List<PKKLCTietHoGaModel> listPKKLCTietHoGaModel { get; set; } = new();
+    public List<PKKLCTietHoGaModel> listModel { get; set; } = new();
     public MetaData MetaData { get; set; }
-    public PKKLModel tKThepHoGaModel { get; set; }
+    public PKKLCTietHoGaModel tKThepHoGaModel { get; set; }
     public PhanLoaiHoGaModel InputMDS = new();
 
     private System.Timers.Timer _typingTimer;
@@ -1193,10 +1192,10 @@
                                         Input.KTHH_C = 0;
                                     }
                                 }
-                                
+
                                 break;
                             case "MŨ MỐ HỐ GA THỚT TRÊN CẠNH RỘNG":
-                                
+
                                 if (Input.LoaiBeTong.ToUpper().Trim() == "BÊ TÔNG THƯƠNG PHẨM")
                                 {
                                     if (plHoGaModel.ThongTinChungHoGa_KetCauMuMo_Name.Trim().ToUpper() == "Mũ mố bê tông".ToUpper().Trim()
@@ -1250,7 +1249,7 @@
                                 Input.KTHH_C = plHoGaModel. MuMoThotDuoi_C  ?? 0;
                                 break;
                             case "VÁN KHUÂN MŨ MỐ HỐ GA THỚT TRÊN MẶT TRONG CẠNH DÀI":
-                                
+
                                 Input.KTHH_R = 0;
                                 if(plHoGaModel.ThongTinChungHoGa_KetCauMuMo_Name.ToUpper().Trim() == "MŨ MỐ BÊ TÔNG" || plHoGaModel.ThongTinChungHoGa_KetCauMuMo_Name.ToUpper().Trim() =="MŨ MỐ BÊ TÔNG CỐT THÉP")
                                 {
@@ -1319,7 +1318,7 @@
                         Input.KTHH_R = 0;
                         Input.KTHH_C = 0;
                     }
-                    
+
                     Input.KTHH_KL1CK = PKKLCTietHoGaRepository.KTHH_KL1CK(Input);
                     Input.TTCDT_KL = PKKLCTietHoGaRepository.TTCDT_KL(Input);
                     Input.KL1CK_ChuaTruCC = PKKLCTietHoGaRepository.KL1CK_ChuaTruCC(Input);
@@ -1335,7 +1334,7 @@
                         else
                         {
                             var TKLCK_SauCC = await PKKLCTietHoGaRepository.GetSumTKLCK_SauCCByLCK(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
-                            Input.TKLCK_SauCC = TKLCK_SauCC;
+                            Input.TKLCK_SauCC = Math.Round(TKLCK_SauCC, 4);
                         }
 
                     }
@@ -1380,16 +1379,16 @@
             }
         } else
         {
-                disKTHH = false;
-                ToastService.ShowToast(
-                          "Thông báo",
-                           "Vui lòng chọn loại cấu kiện!",
-                           cssClass: "toast-danger",
-                           iconClass: "fa fa-exclamation-circle",
-                           progressBarClass: "bg-info",
-                           duration: 5000);
-            }
-        
+            disKTHH = false;
+            ToastService.ShowToast(
+                      "Thông báo",
+                       "Vui lòng chọn loại cấu kiện!",
+                       cssClass: "toast-danger",
+                       iconClass: "fa fa-exclamation-circle",
+                       progressBarClass: "bg-info",
+                       duration: 5000);
+        }
+
         isLoadingCaculate = false;
         await InvokeAsync(() =>
           {
@@ -1617,7 +1616,7 @@
                             var id = await PKKLCTietHoGaRepository.InsertLaterFlag(Input, Flag);
                             isModalVisible = false;
                             // Input = new PKKLCTietHoGa();
-                           
+
                             ToastService.ShowToast(
                                 "Thông báo",
                                 "Chèn thành công.",
@@ -1635,7 +1634,7 @@
                             await PKKLCTietHoGaRepository.Insert(Input);
                             //isModalVisible = false;
                             //Input = new PKKLCTietHoGa();
-                           
+
                             ToastService.ShowToast(
                                 "Thông báo",
                                 "Thêm thành công.",
@@ -1718,11 +1717,22 @@
 
     private async Task HandleEdit(string id)
     {
+    //     new SelectedItem { Value = "I.Móng hố ga, hố ga", Text = "I.Móng hố ga, hố ga " },
+    // new SelectedItem { Value = "II.Hố ga lắp đặt, hố ga", Text = "II.Hố ga lắp đặt, hố ga  " },
+    // new SelectedItem { Value = "III.1 Tường hố ga xây gạch", Text = "III.1 Tường hố ga xây gạch " },
+    // new SelectedItem { Value = "III.2 Chát tường hố ga xây gạch", Text = "III.2 Chát tường hố ga xây gạch " },
+    // new SelectedItem { Value = "IV.1 Tường hố ga bê tông", Text = "IV.1 Tường hố ga bê tông " },
+    // new SelectedItem { Value = "IV.2 Ván khuân tường hố ga bê tông", Text = "IV.2 Ván khuân tường hố ga bê tông " },
+    // new SelectedItem { Value = "V.Mũ mố hố ga, hố ga", Text = "V.Mũ mố hố ga, hố ga " },
+    // new SelectedItem { Value = "VI.Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga", Text = "VI.Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga " },
+    // new SelectedItem { Value = "VII.Gia công, lắp dựng cốt thép hố ga", Text = "VII.Gia công, lắp dựng cốt thép hố ga " },
         try
         {
+            plHoGaModel = new();
             // Thiết lập trạng thái ban đầu
-            TitleModal = "Cập nhật PKKL TĐan TDẫn !";
+            TitleModal = "Cập nhật PKKL Chi tiết 1 cấu kiện!";
             Input = await PKKLCTietHoGaRepository.GetById(id);
+            plHoGaModel = await PhanLoaiHoGaRepository.GetIdByVM(new PhanLoaiHoGaModel { Id = Input.ThongTinChungHoGa_TenHoGaSauPhanLoai });
             isEdit = true;
             isModalVisible = true;
 
@@ -1734,18 +1744,42 @@
             // Xử lý từng trường hợp của HangMuc
             switch (Input.HangMuc)
             {
-                case "I.Bê tông, vận chuyển, lắp đặt":
-                    disKTHH = ShouldDisableKTHH(Input, "thanh chống");
+                case "I.Móng hố ga, hố ga":
+                    disKTHH = true;
+                    disTenCongTac = false;
+                    break;
+
+                case "II.Hố ga lắp đặt, hố ga":
+                    disKTHH = false;
                     disInput = ShouldDisableInput(Input, "Vận chuyển từ bãi đúc đến công trường");
                     disTenCongTac = false;
                     break;
 
-                case "II.Sản xuất + V.Chuyển B.Tông T.Phẩm":
+                case "III.1 Tường hố ga xây gạch":
+                    disKTHH = true;
+                    disTenCongTac = false;
+                    break;
+                case "III.2 Chát tường hố ga xây gạch":
+                    disKTHH = true;
+                    disTenCongTac = false;
+                    break;
+                case "IV.1 Tường hố ga bê tông":
+                    disKTHH = true;
+                    disTenCongTac = false;
+                    break;
+                case "IV.2 Ván khuân tường hố ga bê tông":
+                    disKTHH = true;
+                    disTenCongTac = false;
+                    break;
+                case "V.Mũ mố hố ga, hố ga":
+                    disKTHH = true;
+                    disTenCongTac = false;
+                    break;
+                case "VI.Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga":
                     disKTHH = false;
                     disTenCongTac = false;
                     break;
-
-                case "III.Gia công, lắp dựng cốt thép":
+                case "VII.Gia công, lắp dựng cốt thép hố ga":
                     disKTHH = false;
                     if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai))
                     {
@@ -1758,7 +1792,7 @@
                         disTenCongTac = false;
                     }
                     break;
-
+                
                 default:
                     break;
             }
@@ -1789,9 +1823,9 @@
                input.HangMucCongTac.ToUpper().Trim() == condition.ToUpper().Trim();
     }
 
-    private async Task<List<SelectedItem>> GetTenCongTacAsync(string thanhChong, string tenCongTac)
+    private async Task<List<SelectedItem>> GetTenCongTacAsync(string phanloai, string tenCongTac)
     {
-        var result = await TKThepHoGaRepository.GetDistinctTenCongTacByPL(thanhChong);
+        var result = await TKThepHoGaRepository.GetDistinctTenCongTacByPL(phanloai);
         result.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
         foreach (var item in result)
         {
@@ -1854,7 +1888,7 @@
 
 
     // Xử lý paging
-    private List<PKKLModel> Paging(List<PKKLModel> listModels)
+    private List<PKKLCTietHoGaModel> Paging(List<PKKLCTietHoGaModel> listModels)
     {
         // Đếm số bản ghi thỏa mãn
         var count = listModels.Count();
@@ -1873,7 +1907,7 @@
 
         // Tạo pagelist mới
 
-        var pagelist = new PageList<PKKLModel>(listPKKLCTietHoGaModel, count, tKThepHoGaModel.PageNumber, tKThepHoGaModel.PageSize);
+        var pagelist = new PageList<PKKLCTietHoGaModel>(listPKKLCTietHoGaModel, count, tKThepHoGaModel.PageNumber, tKThepHoGaModel.PageSize);
         MetaData = pagelist.MetaData;
         return listModels;
     }

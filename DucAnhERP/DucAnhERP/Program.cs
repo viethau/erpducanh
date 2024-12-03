@@ -71,7 +71,6 @@ builder.Services.AddScoped<IMangThuRepository, MangThuRepository>();
 builder.Services.AddScoped<ITKThepHoGaRepository, TKThepHoGaRepository>();
 builder.Services.AddScoped<ITKThepTamDanRepository, TKThepTamDanRepository>();
 builder.Services.AddScoped<IDMTLThepRepository, DMTLThepRepository>();
-builder.Services.AddScoped<IPKKLHoGaRepository, PKKLHoGaRepository>();
 builder.Services.AddScoped<IChatMaTuongRepository, ChatMaTuongRepository>();
 builder.Services.AddScoped<ITKThepCTronRepository, TKThepCTronRepository>();
 builder.Services.AddScoped<ITKThepMongCTronRepository, TKThepMongCTronRepository>();
@@ -96,6 +95,7 @@ builder.Services.AddScoped<IPKKLRXayRepository, PKKLRXayRepository>();
 builder.Services.AddScoped<IPKKLTDanRXayRepository, PKKLTDanRXayRepository>();
 builder.Services.AddScoped<IPKKLTChongRepository, PKKLTChongRepository>();
 builder.Services.AddScoped<IPKKLCTietHoGaRepository, PKKLCTietHoGaRepository>();
+builder.Services.AddScoped<IPKKLCTietTDHGRepository, PKKLCTietTDHGRepository>();
 
 
 builder.Services.AddAuthentication(options =>

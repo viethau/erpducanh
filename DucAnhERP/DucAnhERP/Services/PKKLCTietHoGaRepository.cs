@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore;
 using DucAnhERP.Repository;
 using Microsoft.AspNetCore.Http.HttpResults;
+using DucAnhERP.Components.Pages.NghiepVuCongTrinh.PKKL;
 
 namespace DucAnhERP.Services
 {
@@ -43,17 +44,17 @@ namespace DucAnhERP.Services
 
             return entity;
         }
-        public async Task<List<PKKLModel>> GetAllByVM(PKKLModel mModel)
+        public async Task<List<PKKLCTietHoGaModel>> GetAllByVM(PKKLCTietHoGaModel mModel)
         {
             try
             {
                 using var context = _context.CreateDbContext();
-                List<PKKLModel> data = new();
+                List<PKKLCTietHoGaModel> data = new();
                 var query = from a in context.PKKLCTietHoGas
                             join b in context.PhanLoaiHoGas
                             on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id
                             orderby b.ThongTinChungHoGa_TenHoGaSauPhanLoai ascending, a.HangMuc ascending, a.LoaiBeTong descending, a.CreateAt ascending
-                            select new PKKLModel
+                            select new PKKLCTietHoGaModel
                             {
                                 Id = a.Id,
                                 Flag= a.Flag,
@@ -152,6 +153,8 @@ namespace DucAnhERP.Services
             try
             {
                 using var context = _context.CreateDbContext();
+                
+
                 var query = (from a in context.PKKLCTietHoGas
                              join b in context.PhanLoaiHoGas on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id
                              join c in context.DSNuocMua on a.ThongTinChungHoGa_TenHoGaSauPhanLoai
@@ -289,8 +292,8 @@ namespace DucAnhERP.Services
                           where a.ThongTinChungHoGa_TenHoGaSauPhanLoai == @id
                                 && !new[]
                                 {
-                        "VI.Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga",
-                        "VII.Gia công, lắp dựng cốt thép hố ga"
+                                    "VI.Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga",
+                                    "VII.Gia công, lắp dựng cốt thép hố ga"
                                 }.Contains(a.HangMuc)
                                 && a.LoaiBeTong == "Bê tông thương phẩm"
                                 && !b.ThongTinChungHoGa_TenHoGaSauPhanLoai.Contains("=G")
@@ -539,7 +542,7 @@ namespace DucAnhERP.Services
         {
             var entity = entry.Entity;
             using var context = _context.CreateDbContext();
-            if (entity.HangMuc == "II.Hố ga lắp đặt, hố ga")
+            if (entity.HangMuc == "II.Hố ga lắp đặt, hố ga" && entity.HangMucCongTac.ToUpper().Trim() == "Bê tông hố ga lắp đặt".ToUpper().Trim() && entity.KTHH_GhiChu.ToUpper().Trim() == "Rộng*Cao".ToUpper().Trim())
             {
                 //Cập nhật I.
                 var recordsToUpdate = await context.PKKLCTietHoGas
@@ -554,7 +557,7 @@ namespace DucAnhERP.Services
                 }
                 await UpdateMulti(recordsToUpdate.ToArray());
             }
-            if (entity.HangMuc != "VII.Gia công, lắp dựng cốt thép hố ga" && entity.LoaiBeTong == "Bê tông thương phẩm")
+            if (entity.HangMuc != "VII.Gia công, lắp dựng cốt thép hố ga" && entity.HangMuc != "VI.Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga" && entity.LoaiBeTong == "Bê tông thương phẩm")
             {
                 //Cập nhật VI.
                 var recordsToUpdate1 = await context.PKKLCTietHoGas
@@ -567,9 +570,9 @@ namespace DucAnhERP.Services
                 {
                     if (!string.IsNullOrEmpty(record.ThongTinChungHoGa_TenHoGaSauPhanLoai))
                     {
-                        var getOld = await GetById(record.Id);
+                        //var getOld = await GetById(record.Id);
                         var TKLCK_SauCC1 = await GetSumTKLCK_SauCCByLCK(entity.ThongTinChungHoGa_TenHoGaSauPhanLoai);
-                        record.TKLCK_SauCC = Math.Round((getOld.TKLCK_SauCC + entity.TKLCK_SauCC), 4);
+                        record.TKLCK_SauCC = Math.Round((TKLCK_SauCC1 + entity.TKLCK_SauCC), 4);
                     }
                 }
 
@@ -580,7 +583,7 @@ namespace DucAnhERP.Services
         {
             var entity = entry.Entity;
             using var context = _context.CreateDbContext();
-            if (entity.HangMuc == "II.Hố ga lắp đặt, hố ga")
+            if (entity.HangMuc == "II.Hố ga lắp đặt, hố ga" && entity.HangMucCongTac.ToUpper().Trim() == "Bê tông hố ga lắp đặt".ToUpper().Trim() && entity.KTHH_GhiChu.ToUpper().Trim() == "Rộng*Cao".ToUpper().Trim())
             {
                 //Cập nhật I.
                 var recordsToUpdate = await context.PKKLCTietHoGas
@@ -595,7 +598,7 @@ namespace DucAnhERP.Services
                 }
                 await UpdateMulti(recordsToUpdate.ToArray());
             }
-            if (entity.HangMuc != "VII.Gia công, lắp dựng cốt thép hố ga" && entity.LoaiBeTong == "Bê tông thương phẩm")
+            if (entity.HangMuc != "VII.Gia công, lắp dựng cốt thép hố ga" && entity.HangMuc != "VI.Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga" && entity.LoaiBeTong == "Bê tông thương phẩm")
             {
                 //Cập nhật VI.
                 var recordsToUpdate1 = await context.PKKLCTietHoGas
@@ -608,9 +611,9 @@ namespace DucAnhERP.Services
                 {
                     if (!string.IsNullOrEmpty(record.ThongTinChungHoGa_TenHoGaSauPhanLoai))
                     {
-                        var getOld = await GetById(record.Id);
+                        var getOld = await GetById(entity.Id);
                         var TKLCK_SauCC1 = await GetSumTKLCK_SauCCByLCK(entity.ThongTinChungHoGa_TenHoGaSauPhanLoai);
-                        record.TKLCK_SauCC = Math.Round((getOld.TKLCK_SauCC + entity.TKLCK_SauCC ), 4);
+                        record.TKLCK_SauCC = Math.Round(((TKLCK_SauCC1 - getOld.TKLCK_SauCC) + entity.TKLCK_SauCC), 4);
                     }
                 }
 
@@ -621,7 +624,7 @@ namespace DucAnhERP.Services
         {
             var entity = entry.Entity;
             using var context = _context.CreateDbContext();
-            if (entity.HangMuc == "II.Hố ga lắp đặt, hố ga")
+            if (entity.HangMuc == "II.Hố ga lắp đặt, hố ga" && entity.HangMucCongTac.ToUpper().Trim() == "Bê tông hố ga lắp đặt".ToUpper().Trim() && entity.KTHH_GhiChu.ToUpper().Trim() == "Rộng*Cao".ToUpper().Trim())
             {
                 //Cập nhật I.
                 var recordsToUpdate = await context.PKKLCTietHoGas
@@ -636,7 +639,7 @@ namespace DucAnhERP.Services
                 }
                 await UpdateMulti(recordsToUpdate.ToArray());
             }
-            if (entity.HangMuc != "VII.Gia công, lắp dựng cốt thép hố ga" && entity.LoaiBeTong == "Bê tông thương phẩm")
+            if (entity.HangMuc != "VII.Gia công, lắp dựng cốt thép hố ga" && entity.HangMuc != "VI.Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga" && entity.LoaiBeTong == "Bê tông thương phẩm")
             {
                 //Cập nhật VI.
                 var recordsToUpdate1 = await context.PKKLCTietHoGas
@@ -649,9 +652,8 @@ namespace DucAnhERP.Services
                 {
                     if (!string.IsNullOrEmpty(record.ThongTinChungHoGa_TenHoGaSauPhanLoai))
                     {
-                        var getOld = await GetById(record.Id);
                         var TKLCK_SauCC1 = await GetSumTKLCK_SauCCByLCK(entity.ThongTinChungHoGa_TenHoGaSauPhanLoai);
-                        record.TKLCK_SauCC = Math.Round((getOld.TKLCK_SauCC - entity.TKLCK_SauCC),4);
+                        record.TKLCK_SauCC = Math.Round((TKLCK_SauCC1 - entity.TKLCK_SauCC),4);
                     }
                 }
 

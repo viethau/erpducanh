@@ -56,7 +56,6 @@ namespace DucAnhERP.Data
         public DbSet<TKThepHoGa> TKThepHoGas { get; set; }
         public DbSet<TKThepTamDan> TKThepTamDans { get; set; }
         public DbSet<DMThep> DMTLTheps { get; set; }
-        public DbSet<PKKLHoGa> PKKLHoGas { get; set; }
         public DbSet<MaTuong> MaTuongs { get; set; }
         public DbSet<TKThepCTron> TKThepCTrons { get; set; }
         public DbSet<TKThepMongCTron> TKThepMongCTrons { get; set; }
@@ -81,6 +80,7 @@ namespace DucAnhERP.Data
         public DbSet<PKKLTDanRXay> PKKLTDanRXays { get; set; }
         public DbSet<PKKLTChong> PKKLTChongs { get; set; }
         public DbSet<PKKLCTietHoGa> PKKLCTietHoGas { get; set; }
+        public DbSet<PKKLCTietTDHG> PKKLCTietTDHGs { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
