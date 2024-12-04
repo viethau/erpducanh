@@ -56,6 +56,7 @@ namespace DucAnhERP.Services
                             select new PKKLModel
                             {
                                 Id = a.Id,
+                                Flag = a.Flag,
                                 LoaiCauKien = b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ?? "",
                                 LoaiCauKienId = a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
                                 LoaiBeTong = a.LoaiBeTong,
@@ -81,7 +82,18 @@ namespace DucAnhERP.Services
                                 KLCC1CK = a.KLCC1CK,
                                 TKLCK_SauCC = a.TKLCK_SauCC
                             };
-
+                if (!string.IsNullOrEmpty(mModel.HangMuc))
+                {
+                    query = query.Where(x => x.HangMuc == mModel.HangMuc);
+                }
+                if (!string.IsNullOrEmpty(mModel.TenCongTac))
+                {
+                    query = query.Where(x => x.TenCongTac == mModel.TenCongTac);
+                }
+                if (!string.IsNullOrEmpty(mModel.LoaiCauKienId))
+                {
+                    query = query.Where(x => x.LoaiCauKienId == mModel.LoaiCauKienId);
+                }
                 data = query.ToList();
                 return data;
             }
@@ -138,7 +150,7 @@ namespace DucAnhERP.Services
                              orderby b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop, a.HangMuc, a.CreateAt
                              select new THKLModel
                              {
-                                 PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                                 PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop??"",
                                  ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
                                  HangMucCongTac = a.HangMucCongTac,
                                  TenCongTac = a.TenCongTac,
@@ -228,7 +240,7 @@ namespace DucAnhERP.Services
                                        {
                                            a.Id,
                                            a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
-                                           PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = c.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                                           PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
                                            a.TenCongTac,
                                            a.DonVi,
                                            a.TKLCK_SauCC,
@@ -239,9 +251,9 @@ namespace DucAnhERP.Services
                                        select new THKLModel
                                        {
                                            Id = g.Key.Id,
-                                           ThongTinLyTrinh_TuyenDuong = item.ThongTinLyTrinh_TuyenDuong,  // Thông tin cố định từ SQL
+                                           ThongTinLyTrinh_TuyenDuong = item.ThongTinLyTrinh_TuyenDuong,  
                                            ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = g.Key.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
-                                           PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop, // Cố định tên loại từ SQL
+                                           PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop,
                                            TenCongTac = g.Key.TenCongTac,
                                            DonVi = g.Key.DonVi,
                                            KL1DonVi = g.Key.TKLCK_SauCC,
@@ -312,17 +324,17 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-        public async Task Update(PKKLMongCTron TKThepDeCong)
+        public async Task Update(PKKLMongCTron input)
         {
             using var context = _context.CreateDbContext();
-            var entity = GetById(TKThepDeCong.Id);
+            var entity = GetById(input.Id);
 
             if (entity == null)
             {
-                throw new Exception($"Không tìm thấy bản ghi theo ID: {TKThepDeCong.Id}");
+                throw new Exception($"Không tìm thấy bản ghi theo ID: {input.Id}");
             }
 
-            context.PKKLMongCTrons.Update(TKThepDeCong);
+            context.PKKLMongCTrons.Update(input);
             await SaveChanges(context);
            
         }
@@ -474,75 +486,55 @@ namespace DucAnhERP.Services
             }
         }
 
-        // Thêm phương thức SaveChanges() để lưu các thay đổi vào cơ sở dữ liệu
+        //cập nhật lại số liệu
         public async Task SaveChanges(ApplicationDbContext context)
         {
             try
             {
-                // Kiểm tra và xử lý các thay đổi trong DbContext
-                var addedEntities = context.ChangeTracker.Entries()
-                    .Where(e => e.State == EntityState.Added)
-                    .ToList();
+                // Xử lý các thay đổi trong DbContext
+                var entries = context.ChangeTracker.Entries<PKKLMongCTron>();
 
-                var modifiedEntities = context.ChangeTracker.Entries()
-                    .Where(e => e.State == EntityState.Modified)
-                    .ToList();
-
-                var deletedEntities = context.ChangeTracker.Entries()
-                    .Where(e => e.State == EntityState.Deleted)
-                    .ToList();
-
-                // Xử lý thay đổi khi thêm
-                if (addedEntities.Any())
+                foreach (var entry in entries)
                 {
-                    foreach (var addedEntity in addedEntities)
+                    switch (entry.State)
                     {
-                        await HandleEntityAdd(addedEntity);
+                        case EntityState.Added:
+                            await HandleEntityAdd(entry);
+                            break;
+
+                        case EntityState.Modified:
+                            await HandleEntityUpdate(entry);
+                            break;
+
+                        case EntityState.Deleted:
+                            await HandleEntityDelete(entry);
+                            break;
                     }
                 }
 
-                // Xử lý thay đổi khi sửa
-                if (modifiedEntities.Any())
-                {
-                    foreach (var modifiedEntity in modifiedEntities)
-                    {
-                        await HandleEntityUpdate(modifiedEntity);
-                    }
-                }
-
-                // Xử lý thay đổi khi xóa
-                if (deletedEntities.Any())
-                {
-                    foreach (var deletedEntity in deletedEntities)
-                    {
-                        await HandleEntityDelete(deletedEntity);
-                    }
-                }
-
-                // Lưu các thay đổi vào cơ sở dữ liệu
                 await context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine($"An error occurred while saving changes: {ex.Message}");
+                Console.Error.WriteLine($"Error while saving changes: {ex.Message}");
                 throw;
             }
         }
 
         // Xử lý khi thêm mới entity
-        private async Task HandleEntityAdd(EntityEntry entityEntry)
+        private async Task HandleEntityAdd(EntityEntry<PKKLMongCTron> entry)
         {
-            var addedEntity = entityEntry.Entity as PKKLMongCTron;
-            if (addedEntity != null)
+            var entity = entry.Entity;
+            if (entity != null)
             {
                 // Kiểm tra điều kiện HangMuc và PhanLoaiMongCongTronCongHop
-                if (addedEntity.HangMuc == "I.Móng cống tròn")
+                if (entity.HangMuc == "I.Móng cống tròn")
                 {
                     using var context = _context.CreateDbContext();
 
-                    // Lọc tất cả các bản ghi có ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop giống với addedEntity
+                    // Lọc tất cả các bản ghi có ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop giống với entity
                     var recordsToUpdate = await context.PKKLMongCTrons
-                        .Where(x => x.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop == addedEntity.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop
+                        .Where(x => x.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop == entity.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop
                         && x.HangMuc == "II.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn")
                         .ToListAsync();
 
@@ -550,7 +542,7 @@ namespace DucAnhERP.Services
                     // Cập nhật các cột TKLCK_SauCC cho từng bản ghi
                     foreach (var record in recordsToUpdate)
                     {
-                        record.TKLCK_SauCC = await GetSumTKLCK_SauCC(addedEntity) + addedEntity.TKLCK_SauCC;
+                        record.TKLCK_SauCC = await GetSumTKLCK_SauCC(entity) + entity.TKLCK_SauCC;
                     }
 
                     // Gọi phương thức UpdateMulti để cập nhật nhiều bản ghi
@@ -558,24 +550,24 @@ namespace DucAnhERP.Services
                     
 
                     // In thông tin của entity mới
-                    Console.WriteLine($"Entity added: {addedEntity}");
+                    Console.WriteLine($"Entity added: {entity}");
                 }
             }
         }
         // Xử lý khi sửa entity
-        private async Task HandleEntityUpdate(EntityEntry entityEntry)
+        private async Task HandleEntityUpdate(EntityEntry<PKKLMongCTron> entry)
         {
-            var modifiedEntity = entityEntry.Entity as PKKLMongCTron;
-            if (modifiedEntity != null)
+            var entity = entry.Entity;
+            if (entity != null)
             {
                 // Kiểm tra điều kiện HangMuc và PhanLoaiMongCongTronCongHop
-                if (modifiedEntity.HangMuc == "I.Móng cống tròn")
+                if (entity.HangMuc == "I.Móng cống tròn")
                 {
                     using var context = _context.CreateDbContext();
 
-                    // Lọc tất cả các bản ghi có ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop giống với addedEntity
+                    // Lọc tất cả các bản ghi có ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop giống với entity
                     var recordsToUpdate = await context.PKKLMongCTrons
-                        .Where(x => x.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop == modifiedEntity.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop
+                        .Where(x => x.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop == entity.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop
                         && x.HangMuc == "II.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn")
                         .ToListAsync();
 
@@ -583,32 +575,38 @@ namespace DucAnhERP.Services
                     // Cập nhật các cột TKLCK_SauCC cho từng bản ghi
                     foreach (var record in recordsToUpdate)
                     {
-                        record.TKLCK_SauCC = await GetSumTKLCK_SauCC(modifiedEntity) + modifiedEntity.TKLCK_SauCC;
+                        if (!string.IsNullOrEmpty(record.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop))
+                        {
+                            var getOld = await GetById(entity.Id);
+                            var TKLCK_SauCC1 = await GetSumTKLCK_SauCC(entity);
+                            record.TKLCK_SauCC = (TKLCK_SauCC1 - getOld.TKLCK_SauCC) + entity.TKLCK_SauCC;
+                        }
+            
                     }
 
                     // Gọi phương thức UpdateMulti để cập nhật nhiều bản ghi
                     await UpdateMulti(recordsToUpdate.ToArray());
 
                     // In thông tin của entity mới
-                    Console.WriteLine($"Entity added: {modifiedEntity}");
+                    Console.WriteLine($"Entity added: {entity}");
                 }
             }
         }
 
         // Xử lý khi xóa entity
-        private async Task HandleEntityDelete(EntityEntry entityEntry)
+        private async Task HandleEntityDelete(EntityEntry<PKKLMongCTron> entry)
         {
-            var deletedEntity = entityEntry.Entity as PKKLMongCTron;
-            if (deletedEntity != null)
+            var entity = entry.Entity;
+            if (entity != null)
             {
                 // Kiểm tra điều kiện HangMuc và PhanLoaiMongCongTronCongHop
-                if (deletedEntity.HangMuc == "I.Móng cống tròn")
+                if (entity.HangMuc == "I.Móng cống tròn")
                 {
                     using var context = _context.CreateDbContext();
 
-                    // Lọc tất cả các bản ghi có ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop giống với addedEntity
+                    // Lọc tất cả các bản ghi có ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop giống với entity
                     var recordsToUpdate = await context.PKKLMongCTrons
-                        .Where(x => x.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop == deletedEntity.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop
+                        .Where(x => x.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop == entity.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop
                         && x.HangMuc == "II.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn")
                         .ToListAsync();
 
@@ -616,80 +614,86 @@ namespace DucAnhERP.Services
                     // Cập nhật các cột TKLCK_SauCC cho từng bản ghi
                     foreach (var record in recordsToUpdate)
                     {
-                        record.TKLCK_SauCC = await GetSumTKLCK_SauCC(deletedEntity) - deletedEntity.TKLCK_SauCC;
+                        record.TKLCK_SauCC = await GetSumTKLCK_SauCC(entity) - entity.TKLCK_SauCC;
                     }
 
                     // Gọi phương thức UpdateMulti để cập nhật nhiều bản ghi
                     await UpdateMulti(recordsToUpdate.ToArray());
 
                     // In thông tin của entity mới
-                    Console.WriteLine($"Entity added: {deletedEntity}");
+                    Console.WriteLine($"Entity added: {entity}");
                 }
             }
         }
 
-        public  double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
+        private void UpdateRecordWithCalculations(PKKLMongCTron record, double tklckSauCc)
+        {
+            record.KTHH_KL1CK = KTHH_KL1CK(record);
+            record.TTCDT_KL = TTCDT_KL(record);
+            record.KLKP_KL = tklckSauCc * 2.4;
+            record.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(record);
+            record.TKLCK_SauCC = record.KL1CK_ChuaTruCC - record.KLCC1CK;
+        }
+        public double KTHH_KL1CK(PKKLMongCTron obj)
         {
             double result = 0;
-            if (DonVi == "M3")
+            if (obj.DonVi == "M3")
             {
-                if (string.IsNullOrEmpty(KTHH_GhiChu) || KTHH_GhiChu == "0")
+                if (string.IsNullOrEmpty(obj.KTHH_GhiChu) || obj.KTHH_GhiChu == "0")
                 {
-                    result = KTHH_D * KTHH_R * KTHH_C;
+                    result = obj.KTHH_D * obj.KTHH_R * obj.KTHH_C;
                 }
-                else if (KTHH_GhiChu == "Rộng*Cao")
+                else if (obj.KTHH_GhiChu == "Rộng*Cao")
                 {
-                    result = KTHH_DienTich * KTHH_D;
+                    result = obj.KTHH_DienTich * obj.KTHH_D;
                 }
-                else if (KTHH_GhiChu == "Dài*Cao")
+                else if (obj.KTHH_GhiChu == "Dài*Cao")
                 {
-                    result = KTHH_DienTich * KTHH_R;
+                    result = obj.KTHH_DienTich * obj.KTHH_R;
                 }
-                else if (KTHH_GhiChu == "Dài*Rộng")
+                else if (obj.KTHH_GhiChu == "Dài*Rộng")
                 {
-                    result = KTHH_DienTich * KTHH_C;
+                    result = obj.KTHH_DienTich * obj.KTHH_C;
                 }
 
             }
             return Math.Round(result, 4);
         }
-
-        public  double TTCDT_KL(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double TTCDT_CDai, double TTCDT_CRong, double TTCDT_CDay, double TTCDT_DienTich)
+        public double TTCDT_KL(PKKLMongCTron obj)
         {
             double result = 0;
-            if (DonVi.ToUpper().Trim() == "M2")
+            if (obj.DonVi.ToUpper().Trim() == "M2")
             {
-                if (string.IsNullOrEmpty(TTCDT_DienTich.ToString()) || TTCDT_DienTich == 0)
+                if (string.IsNullOrEmpty(obj.TTCDT_DienTich.ToString()) || obj.TTCDT_DienTich == 0)
                 {
-                    result = (KTHH_D * KTHH_C * TTCDT_CDai) + (KTHH_R * KTHH_C * TTCDT_CRong) + (KTHH_D * KTHH_R * TTCDT_CDay);
+                    result = obj.KTHH_D * obj.KTHH_C * obj.TTCDT_CDai + obj.KTHH_R * obj.KTHH_C * obj.TTCDT_CRong + obj.KTHH_D * obj.KTHH_R * obj.TTCDT_CDay;
                 }
                 else
                 {
-                    result = TTCDT_DienTich;
+                    result = obj.TTCDT_DienTich;
                 }
             }
             return Math.Round(result, 4);
         }
-
-        public  double KL1CK_ChuaTruCC(double KTHH_KL1CK, double KTHH_SLCauKien, double TTCDT_KL, double TTCDT_SLCK, double KLKP_KL, double KLKP_Sl)
+        public double KL1CK_ChuaTruCC(PKKLMongCTron obj)
         {
             double result = 0;
-            if (KTHH_KL1CK > 0)
+            if (obj.KTHH_KL1CK > 0)
             {
-                result = KTHH_KL1CK * KTHH_SLCauKien;
+                result = obj.KTHH_KL1CK * obj.KTHH_SLCauKien;
             }
-            else if (TTCDT_KL > 0)
+            else if (obj.TTCDT_KL > 0)
             {
-                result = TTCDT_KL * TTCDT_SLCK;
+                result = obj.TTCDT_KL * obj.TTCDT_SLCK;
             }
             else
             {
-                result = KLKP_KL * KLKP_Sl;
+                result = obj.KLKP_KL * obj.KLKP_Sl;
             }
             return Math.Round(result, 4);
         }
 
-        
+
     }
 
 }

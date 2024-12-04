@@ -262,27 +262,32 @@
             selectedItems = new();
             Input.ParentMajorId = selectedItem.Value;
             permissionModel.ParentMajorId = selectedItem.Value;
-            var listMajor = await MajorRepository.GetMajorByParentId(selectedItem.Value);
-            if (listMajor.Count() > 0)
+            if (!string.IsNullOrEmpty(selectedItem.Value))
             {
-                selectMajors = listMajor.Select(major => new SelectedItem
-                    {
-                        Value = major.Id,
-                        Text = major.MajorName
-                    }).ToList();
-                selectMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+                var listMajor = await MajorRepository.GetMajorByParentId(selectedItem.Value);
+                if (listMajor.Count() > 0)
+                {
+                    selectMajors = listMajor.Select(major => new SelectedItem
+                        {
+                            Value = major.Id,
+                            Text = major.MajorName
+                        }).ToList();
+                    selectMajors.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+                }
+                else
+                {
+                    ToastService.ShowToast(
+                         "Thông báo",
+                         "Nghiệp vụ cha:" + selectedItem.Text + ", chưa tồn tại nghiệp vụ nào !",
+                         cssClass: "toast-danger",
+                        iconClass: "fa fa-exclamation-circle",
+                         progressBarClass: "bg-info",
+                         duration: 7000
+                     );
+                }
+
             }
-            else
-            {
-                ToastService.ShowToast(
-                     "Thông báo",
-                     "Nghiệp vụ cha:"+selectedItem.Text +", chưa tồn tại nghiệp vụ nào !",
-                     cssClass: "toast-danger",
-                    iconClass: "fa fa-exclamation-circle",
-                     progressBarClass: "bg-info",
-                     duration: 7000
-                 );
-            }
+
             await InvokeAsync(() =>{ StateHasChanged(); });
         }
         catch (Exception ex)
@@ -302,62 +307,65 @@
         try
         {
             Input.MajorId = selectedItem.Value;
-            permissionModel.MajorId = selectedItem.Value;
-            var list = await PermissionService.GetAllByVM(permissionModel);
-            if (list.Count() > 0)
+            listPer = new MultiSelectList(new List<SelectListItem> { }, "Value", "Text", "Selected");
+            if (!string.IsNullOrEmpty(selectedItem.Value))
             {
-                selectedItems = new();
-                Input.PermissionId = "[]";
-                listPer = new MultiSelectList(
-                        list.Select(permission => new SelectListItem
-                            {
-                                Value = permission.Id,
-                                Text = permission.PermissionName,
-                                Selected = false
-                            }).ToList(),
-                        "Value",
-                        "Text"
-                        );
-            }
-            else
-            {
-                ToastService.ShowToast(
-                     "Thông báo",
-                     "Nghiệp vụ :"+selectedItem.Text +", chưa được khởi tạo loại quyền !",
-                     cssClass: "toast-danger",
-                    iconClass: "fa fa-exclamation-circle",
-                     progressBarClass: "bg-info",
-                     duration: 7000
-                 );
-            }
-
-
-            MMajorUserPermission InputTemp = new();
-
-            InputTemp = await MajorUserPermissionService.GetMUPById(Input.Id);
-            if (InputTemp!=null && !string.IsNullOrEmpty(InputTemp.PermissionId))
-            {
-                selectedItemstemp = JsonSerializer.Deserialize<List<SelectedItem>>(InputTemp.PermissionId);
-
-                // Thiết lập giá trị đã chọn dựa trên `selectedItemstemp`
-                foreach (var item in listPer)
+                permissionModel.MajorId = selectedItem.Value;
+                var list = await PermissionService.GetAllByVM(permissionModel);
+                if (list.Count() > 0)
                 {
-                    // Kiểm tra nếu quyền này đã được chọn (dựa trên Value)
-                    var selected = selectedItemstemp.FirstOrDefault(i => i.Value == item.Value);
-                    if (selected != null)
+                    selectedItems = new();
+                    Input.PermissionId = "[]";
+                    listPer = new MultiSelectList(
+                            list.Select(permission => new SelectListItem
+                                {
+                                    Value = permission.Id,
+                                    Text = permission.PermissionName,
+                                    Selected = false
+                                }).ToList(),
+                            "Value",
+                            "Text"
+                            );
+
+                    MMajorUserPermission InputTemp = new();
+
+                    InputTemp = await MajorUserPermissionService.GetMUPById(Input.Id);
+                    if (InputTemp != null && !string.IsNullOrEmpty(InputTemp.PermissionId))
                     {
-                        // Đánh dấu quyền này là đã được chọn
-                        item.Selected = true;
-                        Input.PermissionId = InputTemp.PermissionId;
+                        selectedItemstemp = JsonSerializer.Deserialize<List<SelectedItem>>(InputTemp.PermissionId);
+
+                        // Thiết lập giá trị đã chọn dựa trên `selectedItemstemp`
+                        foreach (var item in listPer)
+                        {
+                            // Kiểm tra nếu quyền này đã được chọn (dựa trên Value)
+                            var selected = selectedItemstemp.FirstOrDefault(i => i.Value == item.Value);
+                            if (selected != null)
+                            {
+                                // Đánh dấu quyền này là đã được chọn
+                                item.Selected = true;
+                                Input.PermissionId = InputTemp.PermissionId;
+                            }
+                        }
                     }
                 }
-            }
+                else
+                {
+                    ToastService.ShowToast(
+                         "Thông báo",
+                         "Nghiệp vụ :" + selectedItem.Text + ", chưa được khởi tạo loại quyền !",
+                         cssClass: "toast-danger",
+                        iconClass: "fa fa-exclamation-circle",
+                         progressBarClass: "bg-info",
+                         duration: 7000
+                     );
+                }
 
+            }
+           
             await InvokeAsync(() =>
               {
                   StateHasChanged();
               });
-
 
         }
         catch (Exception ex)

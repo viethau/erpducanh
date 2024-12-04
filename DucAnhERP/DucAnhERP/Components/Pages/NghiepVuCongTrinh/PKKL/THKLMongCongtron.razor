@@ -18,8 +18,8 @@
     }
 
         table thead tr td {
-            / white-space: nowrap;
-            / text-align: center;
+            white-space: nowrap;
+            text-align: center;
             padding: 2px 5px;
         }
 
@@ -135,9 +135,9 @@
                                 {
                                     <tr>
                                         <td></td>
-                                        <td>@item.SLTrai</td>
-                                        <td>@item.SLPhai</td>
-                                        <td>@item.SLTong</td>
+                                        <td>@Math.Round(item.SLTrai)</td>
+                                        <td>@Math.Round(item.SLPhai)</td>
+                                        <td>@Math.Round(item.SLTong)</td>
                                         <td>@Format.FormatCurrency(@Math.Round(item.KLTrai, 4))</td>
                                         <td>@Format.FormatCurrency(@Math.Round(@item.KLPhai, 4))</td>
                                         <td>@Format.FormatCurrency(@Math.Round(@item.KLTong, 4)) </td>
@@ -220,7 +220,6 @@
             tKThepHoGaModel = new();
             var repository = await PKKLMongCTronRepository.GetTHKLMongCongTron();
             listModel = repository;
-
 
             listTuyenDuong = await NuocMuaRepository.GetDSTuyenDuong();
 

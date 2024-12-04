@@ -435,9 +435,9 @@ namespace DucAnhERP.Services
                                 }
                                
                             }
-                            pKKLMongCTron.KTHH_KL1CK = _pKKLMongCTronRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
-                            pKKLMongCTron.TTCDT_KL = _pKKLMongCTronRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
-                            pKKLMongCTron.KL1CK_ChuaTruCC = _pKKLMongCTronRepository.KL1CK_ChuaTruCC(record.KTHH_KL1CK, record.KTHH_SLCauKien, record.TTCDT_KL, record.TTCDT_SLCK, pKKLMongCTron.KLKP_KL, record.KLKP_Sl);
+                            pKKLMongCTron.KTHH_KL1CK = _pKKLMongCTronRepository.KTHH_KL1CK(pKKLMongCTron);
+                            pKKLMongCTron.TTCDT_KL = _pKKLMongCTronRepository.TTCDT_KL(pKKLMongCTron);
+                            pKKLMongCTron.KL1CK_ChuaTruCC = _pKKLMongCTronRepository.KL1CK_ChuaTruCC(pKKLMongCTron);
                             pKKLMongCTron.TKLCK_SauCC = pKKLMongCTron.KL1CK_ChuaTruCC - pKKLMongCTron.KLCC1CK;
                             pKKLMongCTrons.Add(pKKLMongCTron);
                         }
@@ -505,9 +505,9 @@ namespace DucAnhERP.Services
                                 }
                                 
                             }
-                            pKKLMongCTron.KTHH_KL1CK = _pKKLMongCTronRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
-                            pKKLMongCTron.TTCDT_KL = _pKKLMongCTronRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
-                            pKKLMongCTron.KL1CK_ChuaTruCC = _pKKLMongCTronRepository.KL1CK_ChuaTruCC(record.KTHH_KL1CK, record.KTHH_SLCauKien, record.TTCDT_KL, record.TTCDT_SLCK, pKKLMongCTron.KLKP_KL, record.KLKP_Sl);
+                            pKKLMongCTron.KTHH_KL1CK = _pKKLMongCTronRepository.KTHH_KL1CK(pKKLMongCTron);
+                            pKKLMongCTron.TTCDT_KL = _pKKLMongCTronRepository.TTCDT_KL(pKKLMongCTron);
+                            pKKLMongCTron.KL1CK_ChuaTruCC = _pKKLMongCTronRepository.KL1CK_ChuaTruCC(pKKLMongCTron);
                             pKKLMongCTron.TKLCK_SauCC = pKKLMongCTron.KL1CK_ChuaTruCC - pKKLMongCTron.KLCC1CK;
                             pKKLMongCTrons.Add(pKKLMongCTron);
                         }
@@ -578,9 +578,9 @@ namespace DucAnhERP.Services
                                    
                                 }
 
-                                pKKLMongCTron.KTHH_KL1CK = _pKKLMongCTronRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
-                                pKKLMongCTron.TTCDT_KL = _pKKLMongCTronRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
-                                pKKLMongCTron.KL1CK_ChuaTruCC = _pKKLMongCTronRepository.KL1CK_ChuaTruCC(record.KTHH_KL1CK, record.KTHH_SLCauKien, record.TTCDT_KL, record.TTCDT_SLCK, pKKLMongCTron.KLKP_KL, record.KLKP_Sl);
+                                pKKLMongCTron.KTHH_KL1CK = _pKKLMongCTronRepository.KTHH_KL1CK(pKKLMongCTron);
+                                pKKLMongCTron.TTCDT_KL = _pKKLMongCTronRepository.TTCDT_KL(pKKLMongCTron);
+                                pKKLMongCTron.KL1CK_ChuaTruCC = _pKKLMongCTronRepository.KL1CK_ChuaTruCC(pKKLMongCTron);
                                 pKKLMongCTron.TKLCK_SauCC = pKKLMongCTron.KL1CK_ChuaTruCC - pKKLMongCTron.KLCC1CK;
                                 pKKLMongCTrons.Add(pKKLMongCTron);
                             }

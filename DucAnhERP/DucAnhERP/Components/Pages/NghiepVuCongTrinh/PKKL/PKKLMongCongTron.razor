@@ -20,8 +20,8 @@
     }
 
         table thead tr td {
-            / white-space: nowrap;
-            / text-align: center;
+            white-space: nowrap;
+            text-align: center;
             padding: 2px 5px;
         }
 
@@ -33,7 +33,6 @@
                 <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
-
                     <div>
                         <h5>Thông tin cấu kiện</h5>
                         <div class="row">
@@ -57,7 +56,7 @@
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="HangMucCongTac">Hạng mục công tác <span></span></label>
-                                <InputText @bind-Value="Input.HangMucCongTac" class="form-control" id="HangMucCongTac" placeholder="Hạng mục công tác" />
+                                <InputText @bind-Value:after="OnValueChanged" @bind-Value="Input.HangMucCongTac" class="form-control" id="HangMucCongTac" placeholder="Hạng mục công tác" />
                                 <validationmessage for="()=>Input.HangMucCongTac"></validationmessage>
                             </div>
                             @if (disTenCongTac)
@@ -72,13 +71,13 @@
                             {
                                 <div class="form-floating col-sm-6 col-md-3">
                                     <label for="TenCongTac">Tên công tác<span></span></label>
-                                    <InputText @bind-Value="Input.TenCongTac" class="form-control" id="TenCongTac" placeholder="Tên công tác" />
+                                    <InputText @bind-Value:after="OnValueChanged" @bind-Value="Input.TenCongTac" class="form-control" id="TenCongTac" placeholder="Tên công tác" />
                                     <ValidationMessage For="() => Input.TenCongTac" />
                                 </div>
                             }
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="VTLayKhoiLuong">Đơn vị<span></span></label>
-                                <InputText @oninput="OnInputChange" @bind-Value="Input.DonVi" class="form-control" id="DonVi" placeholder="Đơn vị" />
+                                <InputText @bind-Value:after="OnValueChanged" @bind-Value="Input.DonVi" class="form-control" id="DonVi" placeholder="Đơn vị" />
                                 <ValidationMessage For="() => Input.DonVi" />
                             </div>
                         </div>
@@ -86,22 +85,22 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3" title="Bắt buộc phải nhập giá trị vào đây. Giá trị là chiều dài thực tế của 01 cấu kiện">
                                 <label for="KTHH_D">D<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_D" class="form-control" id="KTHH_D" />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KTHH_D" class="form-control" id="KTHH_D" />
                                 <ValidationMessage For="() => Input.KTHH_D" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="KTHH_R">R<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_R" class="form-control" id="KTHH_R" disabled="@disKTHH_R" />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KTHH_R" class="form-control" id="KTHH_R" readonly="@disKTHH" />
                                 <ValidationMessage For="() => Input.KTHH_R" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="KTHH_C">C<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_C" class="form-control" id="KTHH_C" disabled="@disKTHH_C" />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KTHH_C" class="form-control" id="KTHH_C" readonly="@disKTHH" />
                                 <ValidationMessage For="() => Input.KTHH_C" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3" title="Bắt buộc phải nhập giá trị tương ứng vào đây. Giá trị là kết quả của của chiều rộng  chiều cao của 01 cấu kiện cống tròn">
                                 <label for="KTHH_DienTich">Diện tích<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_DienTich" class="form-control" id="KTHH_DienTich" />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KTHH_DienTich" class="form-control" id="KTHH_DienTich" />
                                 <ValidationMessage For="() => Input.KTHH_DienTich" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3" title="Để cố định. Thông tin cố định là 'Rộng*Cao' ">
@@ -111,12 +110,12 @@
                             </div>
                             <div class="form-floating col-sm-6 col-md-3" title="Bắt buộc phải nhập giá trị vào đây. Giá trị mặc định là 01">
                                 <label for="KTHH_SLCauKien">Số lượng cấu kiện<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_SLCauKien" class="form-control" id="KTHH_SLCauKien" />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KTHH_SLCauKien" class="form-control" id="KTHH_SLCauKien" />
                                 <ValidationMessage For="() => Input.KTHH_SLCauKien" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="KTHH_KL1CK">KL 01 CK<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KTHH_KL1CK" class="form-control" id="KTHH_KL1CK" disabled />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KTHH_KL1CK" class="form-control" id="KTHH_KL1CK" readonly />
                                 <ValidationMessage For="() => Input.KTHH_KL1CK  " />
                             </div>
                         </div>
@@ -124,32 +123,32 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTCDT_CDai">Cạnh dài<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_CDai" class="form-control" id="TTCDT_CDai" />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TTCDT_CDai" class="form-control" id="TTCDT_CDai" />
                                 <ValidationMessage For="() => Input.TTCDT_CDai" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTCDT_CRong">Cạnh rộng<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_CRong" class="form-control" id="TTCDT_CRong" />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TTCDT_CRong" class="form-control" id="TTCDT_CRong" />
                                 <ValidationMessage For="() => Input.TTCDT_CRong" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTCDT_CDay">Cạnh đáy<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_CDay" class="form-control" id="TTCDT_CDay" />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TTCDT_CDay" class="form-control" id="TTCDT_CDay" />
                                 <ValidationMessage For="() => Input.TTCDT_CDay" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTCDT_DienTich">Diện tích<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_DienTich" class="form-control" id="TTCDT_DienTich" />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TTCDT_DienTich" class="form-control" id="TTCDT_DienTich" />
                                 <ValidationMessage For="() => Input.TTCDT_DienTich" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTCDT_SLCK">Số lượng cấu kiện<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_SLCK" class="form-control" id="TTCDT_SLCK" />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TTCDT_SLCK" class="form-control" id="TTCDT_SLCK" />
                                 <ValidationMessage For="() => Input.TTCDT_SLCK" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTCDT_KL">KL<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.TTCDT_KL" class="form-control" id="TTCDT_KL" disabled />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TTCDT_KL" class="form-control" id="TTCDT_KL" readonly />
                                 <ValidationMessage For="() => Input.TTCDT_KL" />
                             </div>
 
@@ -158,29 +157,29 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="KLKP_KL">Khối lượng<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KLKP_KL" class="form-control" id="KLKP_KL" disabled="@disInput" />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KLKP_KL" class="form-control" id="KLKP_KL" readonly="@disInput" />
                                 <ValidationMessage For="() => Input.KLKP_KL" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="KLKP_Sl">Số lượng<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KLKP_Sl" class="form-control" id="KLKP_Sl" />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KLKP_Sl" class="form-control" id="KLKP_Sl" />
                                 <ValidationMessage For="() => Input.KLKP_Sl" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="KL1CK_ChuaTruCC">KL 01CK Chưa trừ chiếm chỗ<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KL1CK_ChuaTruCC" class="form-control" id="KL1CK_ChuaTruCC" disabled />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KL1CK_ChuaTruCC" class="form-control" id="KL1CK_ChuaTruCC" readonly />
                                 <ValidationMessage For="() => Input.KL1CK_ChuaTruCC" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="KLCC1CK">KL chiếm chỗ/01CK<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.KLCC1CK" class="form-control" id="KLCC1CK" />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KLCC1CK" class="form-control" id="KLCC1CK" />
                                 <ValidationMessage For="() => Input.KLCC1CK" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TKLCK_SauCC">Tổng KLCK sau chiếm chỗ<span></span></label>
-                                <InputNumber @oninput="OnInputChange" @bind-Value="Input.TKLCK_SauCC" class="form-control" id="TKLCK_SauCC" disabled />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TKLCK_SauCC" class="form-control" id="TKLCK_SauCC" readonly />
                                 <ValidationMessage For="() => Input.TKLCK_SauCC" />
                             </div>
                         </div>
@@ -276,58 +275,64 @@
 
                                     int stt = 0;
                                     string HangMuc = "";
-                                    @foreach (var item in group)
+                                    @foreach (var groupChild in group.GroupBy(item => item.HangMuc))
                                     {
-                                        stt++;
-
-                                        if (string.IsNullOrEmpty(HangMuc) || HangMuc.ToUpper().Trim() != @item.HangMuc.ToUpper().Trim())
+                                        @foreach (var item in groupChild.OrderBy(g => g.Flag))
                                         {
-                                            HangMuc = @item.HangMuc;
-                                            <tr class="bg-warning text-bold">
-                                                <td></td>
-                                                <td>@getChiMuc(HangMuc)</td>
-                                                <td colspan="2">@item.LoaiCauKien</td>
-                                                <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
-                                                <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
-                                                <td colspan="19"></td>
+                                            stt++;
+
+                                            if (string.IsNullOrEmpty(HangMuc) || HangMuc.ToUpper().Trim() != @item.HangMuc.ToUpper().Trim())
+                                            {
+                                                HangMuc = @item.HangMuc;
+                                                <tr class="bg-warning text-bold">
+                                                    <td></td>
+                                                    <td>@getChiMuc(HangMuc)</td>
+                                                    <td colspan="2">@item.LoaiCauKien</td>
+                                                    <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
+                                                    <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
+                                                    <td colspan="19"></td>
+                                                </tr>
+                                            }
+                                            <tr>
+                                                <td class="d-flex nowrap">
+                                                    <div class="d-inline-block">
+                                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary m-1" title="Sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td>@stt</td>
+                                                <td>@item.LoaiCauKien</td>
+                                                <td>@item.LoaiBeTong</td>
+                                                <td>@item.HangMucCongTac</td>
+                                                <td>@item.TenCongTac</td>
+                                                <td>@item.DonVi</td>
+                                                <td>@item.KTHH_D</td>
+                                                <td>@item.KTHH_R</td>
+                                                <td>@item.KTHH_C</td>
+                                                <td>@item.KTHH_DienTich</td>
+                                                <td>@item.KTHH_GhiChu</td>
+                                                <td>@item.KTHH_SLCauKien</td>
+                                                <td>@item.KTHH_KL1CK</td>
+                                                <td>@item.TTCDT_CDai</td>
+                                                <td>@item.TTCDT_CRong</td>
+                                                <td>@item.TTCDT_CDay</td>
+                                                <td>@item.TTCDT_DienTich</td>
+                                                <td>@item.TTCDT_SLCK</td>
+                                                <td>@item.TTCDT_KL</td>
+                                                <td>@item.KLKP_KL</td>
+                                                <td>@item.KLKP_Sl</td>
+                                                <td>@item.KL1CK_ChuaTruCC </td>
+                                                <td>@item.KLCC1CK </td>
+                                                <td>@item.TKLCK_SauCC </td>
                                             </tr>
                                         }
-                                        <tr>
-                                            <td class="d-flex nowrap">
-                                                <div class="d-inline-block">
-                                                    <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
-                                                        <i class="fas fa-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                            <td>@stt</td>
-                                            <td>@item.LoaiCauKien</td>
-                                            <td>@item.LoaiBeTong</td>
-                                            <td>@item.HangMucCongTac</td>
-                                            <td>@item.TenCongTac</td>
-                                            <td>@item.DonVi</td>
-                                            <td>@item.KTHH_D</td>
-                                            <td>@item.KTHH_R</td>
-                                            <td>@item.KTHH_C</td>
-                                            <td>@item.KTHH_DienTich</td>
-                                            <td>@item.KTHH_GhiChu</td>
-                                            <td>@item.KTHH_SLCauKien</td>
-                                            <td>@item.KTHH_KL1CK</td>
-                                            <td>@item.TTCDT_CDai</td>
-                                            <td>@item.TTCDT_CRong</td>
-                                            <td>@item.TTCDT_CDay</td>
-                                            <td>@item.TTCDT_DienTich</td>
-                                            <td>@item.TTCDT_SLCK</td>
-                                            <td>@item.TTCDT_KL</td>
-                                            <td>@item.KLKP_KL</td>
-                                            <td>@item.KLKP_Sl</td>
-                                            <td>@item.KL1CK_ChuaTruCC </td>
-                                            <td>@item.KLCC1CK </td>
-                                            <td>@item.TKLCK_SauCC </td>
-                                        </tr>
                                     }
                                 }
                             </tbody>
@@ -378,10 +383,28 @@
         new SelectedItem { Value = "II.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn", Text = "II.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn "},
         new SelectedItem { Value = "III.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn", Text = "III.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn "},
     };
-    private void OnSelectChangeHMTC(SelectedItem selectedItem)
+    private async void OnSelectChangeHMTC(SelectedItem selectedItem)
     {
         Input.HangMuc = selectedItem.Value;
-        Caculate();
+        Input.TenCongTac = "";
+        Input.KTHH_D = 0;
+        Input.KTHH_R = 0;
+        Input.KTHH_C = 0;
+        Input.KTHH_DienTich = 0;
+        Input.KTHH_SLCauKien = 0;
+        Input.KTHH_KL1CK = 0;
+        Input.TTCDT_CDai = 0;
+        Input.TTCDT_CRong = 0;
+        Input.TTCDT_CDay = 0;
+        Input.TTCDT_DienTich = 0;
+        Input.TTCDT_SLCK = 0;
+        Input.TTCDT_KL = 0;
+        Input.KLKP_KL = 0;
+        Input.KLKP_Sl = 0;
+        Input.KL1CK_ChuaTruCC = 0;
+        Input.KLCC1CK = 0;
+        Input.TKLCK_SauCC = 0;
+        await Caculate();
     }
 
     private List<SelectedItem> selectGhiChu = new List<SelectedItem>
@@ -394,7 +417,7 @@
 
     private List<SelectedItem> selectTenCongTac = new();
 
-    private void OnSelectChangeTenCongTac(SelectedItem selectedItem)
+    private async void OnSelectChangeTenCongTac(SelectedItem selectedItem)
     {
         if (double.TryParse(selectedItem.Value, out double result))
         {
@@ -405,13 +428,13 @@
             Input.KLKP_KL = 0;
         }
         Input.TenCongTac = selectedItem.Text;
-        Caculate();
+        await Caculate();
     }
 
-    private void OnSelectChangeGhiChu(SelectedItem selectedItem)
+    private async void OnSelectChangeGhiChu(SelectedItem selectedItem)
     {
         Input.KTHH_GhiChu = selectedItem.Value;
-        Caculate();
+        await  Caculate();
     }
 
     private List<SelectedItem> selectLBT = new List<SelectedItem>
@@ -419,17 +442,17 @@
         new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true },
         new SelectedItem { Value = "Bê tông thương phẩm", Text = "Bê tông thương phẩm" },
     };
-    private void OnSelectChangeLBT(SelectedItem selectedItem)
+    private async void OnSelectChangeLBT(SelectedItem selectedItem)
     {
         Input.LoaiBeTong = selectedItem.Value;
-        Caculate();
+        await Caculate();
     }
 
     private List<SelectedItem> selectLCK = new();
-    private void OnSelectChangeLCK(SelectedItem selectedItem)
+    private async void OnSelectChangeLCK(SelectedItem selectedItem)
     {
         Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = selectedItem.Value;
-        Caculate();
+        await Caculate();
     }
     private List<SelectedItem> selectSearchLCK = new();
     private void OnSelectChangeSearchLCK(SelectedItem selectedItem)
@@ -442,36 +465,42 @@
     public MetaData MetaData { get; set; }
     public PKKLModel tKThepHoGaModel { get; set; }
 
-    //bắt sự kiện khi thay đổi
     private System.Timers.Timer _typingTimer;
-    private int _delay = 1000; // Thời gian chờ (2000ms)
-    private void OnInputChange(ChangeEventArgs e)
+    private int _debounceDelay = 5; // Thời gian đợi sau khi người dùng dừng nhập (ms)
+
+    // Hàm được gọi sau khi bind-value hoàn tất
+    private void OnValueChanged()
     {
-        // Dừng timer nếu đang chạy
+        // Dừng Timer cũ nếu đang chạy
         _typingTimer?.Stop();
 
-        // Khởi động lại timer
-        _typingTimer = new System.Timers.Timer(_delay);
-        _typingTimer.Elapsed += OnTypingStopped;
+        // Khởi động Timer mới
+        _typingTimer = new System.Timers.Timer(_debounceDelay);
+        _typingTimer.Elapsed += async (_, _) =>
+        {
+            _typingTimer.Stop();
+            await InvokeAsync(OnTypingStopped); // Gọi hàm xử lý khi người dùng dừng nhập
+        };
         _typingTimer.AutoReset = false;
         _typingTimer.Start();
     }
 
-
-    private async void OnTypingStopped(object sender, System.Timers.ElapsedEventArgs e)
+    // Hàm xử lý logic khi người dùng dừng nhập
+    private async Task OnTypingStopped()
     {
-        Caculate();
+        // Đảm bảo dữ liệu đã được bind vào model
+        await Caculate(); // Gọi logic xử lý
     }
 
     private bool disInput { get; set; } = false;
     private bool disTenCongTac { get; set; } = false;
-    private bool disKTHH_R { get; set; } = false;
-    private bool disKTHH_C { get; set; } = false;
-    public async void Caculate()
-    {
+    private bool disKTHH { get; set; } = false;
 
+    public async Task Caculate()
+    {
         switch(Input.HangMuc){
             case "I.Móng cống tròn":
+                Input.KTHH_D = 1;
                 var GetBaoCaoKTHHMDC = await NuocMuaRepository.GetBaoCaoKTHHMDC();
 
                 if (Input.HangMucCongTac.Trim().ToUpper() == "Lót móng".ToUpper() 
@@ -504,16 +533,16 @@
                 Input.TTCDT_KL = TTCDT_KL(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.TTCDT_CDai, Input.TTCDT_CRong, Input.TTCDT_CDay, Input.TTCDT_DienTich);
                 Input.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(Input.KTHH_KL1CK, Input.KTHH_SLCauKien, Input.TTCDT_KL, Input.TTCDT_SLCK, Input.KLKP_KL, Input.KLKP_Sl);
                 Input.TKLCK_SauCC = Input.KL1CK_ChuaTruCC - Input.KLCC1CK;
-                disKTHH_R = true;
-                disKTHH_C = true;
+                disKTHH = true;
+                
                 break;
             case "II.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn":
                 if(!string.IsNullOrEmpty(Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop))
                 {
                     Input.TKLCK_SauCC = await PKKLMongCTronRepository.GetSumTKLCK_SauCC(Input);
                 }
-                disKTHH_R = true;
-                disKTHH_C = true;
+                disTenCongTac = false;
+                disKTHH = false;
                 break;
             case "III.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn":
                 disInput = true;
@@ -526,8 +555,7 @@
                 Input.TKLCK_SauCC = Input.KL1CK_ChuaTruCC - Input.KLCC1CK;
                 break;
             default:
-                disKTHH_R = false;
-                disKTHH_C = false;
+                disKTHH = false;
                 disInput = false;
                 disTenCongTac = false;
                 break;
@@ -539,8 +567,6 @@
               StateHasChanged();
           });
     }
-
-
 
 
     private void ShowModal()
@@ -639,7 +665,7 @@
 
         try
         {
-            Caculate();
+            await Caculate();
             string[] ids = { Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ?? "" };
             var isValidTenPL = await PhanLoaiMongCTronRepository.CheckExclusive(ids, baseTime);
             var listExist = await PKKLMongCTronRepository.GetExist(Input);
@@ -722,8 +748,9 @@
                         {
                             // Thêm mới thông tin
                             await PKKLMongCTronRepository.Insert(Input);
-                            isModalVisible = false;
-                            Input = new PKKLMongCTron();
+                            Input.Id = Guid.NewGuid().ToString();
+                            // isModalVisible = false;
+                            // Input = new PKKLMongCTron();
                             ToastService.ShowToast(
                                 "Thông báo",
                                 "Thêm thành công.",
@@ -733,7 +760,7 @@
                                 duration: 5000
                             );
                             await LoadData();
-                            
+
                         }
                     }
                     else
@@ -805,19 +832,51 @@
         }
     }
 
-
     private async Task HandleEdit(string id)
     {
         try
         {
-            TitleModal = "Cập nhật loại TĐan TDẫn !";
+            // Thiết lập trạng thái ban đầu
+            TitleModal = "Cập nhật PKKL móng cống tròn !";
             Input = await PKKLMongCTronRepository.GetById(id);
             isEdit = true;
             isModalVisible = true;
 
-            foreach (var item in selectLCK)
+            // Đặt trạng thái chọn cho các danh sách
+            SetSelectedItem(selectLCK, Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop);
+            SetSelectedItem(selectLBT, Input.LoaiBeTong);
+            SetSelectedItem(selectHMTC, Input.HangMuc);
+
+            // Xử lý từng trường hợp của HangMuc
+            switch (Input.HangMuc)
             {
-                item.IsSelected = item.Value == Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop;
+                case "I.Móng cống tròn":
+                    disKTHH = true;
+                    disInput = ShouldDisableInput(Input, "Móng bê tông");
+                    disTenCongTac = false;
+                    break;
+
+                case "II.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn":
+                    disKTHH = false;
+                    disTenCongTac = false;
+                    break;
+
+                case "III.Sản xuất + V.Chuyển B.Tông T.Phẩm móng cống tròn":
+                    disKTHH = false;
+                    if (!string.IsNullOrEmpty(Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop))
+                    {
+                        disInput = true;
+                        disTenCongTac = true;
+                        selectTenCongTac = await GetTenCongTacAsync(Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop, Input.TenCongTac);
+                    }
+                    else
+                    {
+                        disTenCongTac = false;
+                    }
+                    break;
+
+                default:
+                    break;
             }
         }
         catch (Exception ex)
@@ -833,6 +892,36 @@
         }
 
     }
+    private void SetSelectedItem(IEnumerable<SelectedItem> items, string value)
+    {
+        foreach (var item in items)
+        {
+            item.IsSelected = item.Value == value;
+        }
+    }
+
+    private bool ShouldDisableKTHH(PKKLMongCTron input, string condition)
+    {
+        return !string.IsNullOrEmpty(input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop) &&
+               input.HangMucCongTac.ToUpper().Trim() == condition.ToUpper().Trim();
+    }
+
+    private bool ShouldDisableInput(PKKLMongCTron input, string condition)
+    {
+        return !string.IsNullOrEmpty(input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop) &&
+               input.HangMucCongTac.ToUpper().Trim() == condition.ToUpper().Trim();
+    }
+
+    private async Task<List<SelectedItem>> GetTenCongTacAsync(string thanhChong, string tenCongTac)
+    {
+        var result = await TKThepMongCTronRepository.GetDistinctTenCongTacByPL(thanhChong);
+        result.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        foreach (var item in result)
+        {
+            item.IsSelected = item.Text.Trim() == tenCongTac.Trim();
+        }
+        return result;
+    }
 
 
     int Flag = 0;
@@ -842,6 +931,11 @@
         Flag = flag;
         TitleModal = "Chèn loại cống !";
         isModalVisible = true;
+        Input = new();
+        // Đặt trạng thái chọn cho các danh sách
+        SetSelectedItem(selectLCK, Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop);
+        SetSelectedItem(selectLBT, Input.LoaiBeTong);
+        SetSelectedItem(selectHMTC, Input.HangMuc);
     }
 
 

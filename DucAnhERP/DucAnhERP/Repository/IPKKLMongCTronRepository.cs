@@ -13,6 +13,9 @@ namespace DucAnhERP.Repository
         Task<List<THKLModel>> GetTHKLMongCongTron();
         Task<List<THKLModel>> GetTHKLByTuyenDuong(List<NuocMuaModel> nuocMua);
         Task<PKKLMongCTron> GetTKLCK_SauCCByLCK(string id);
+        double KTHH_KL1CK(PKKLMongCTron obj);
+        double TTCDT_KL(PKKLMongCTron obj);
+        double KL1CK_ChuaTruCC(PKKLMongCTron obj);
         //Task<List<THKLModel>> GetTHKLCongTron();
         //Task<List<THKLModel>> GetTHKLByTuyenDuong(List<NuocMuaModel> nuocMua);
     }

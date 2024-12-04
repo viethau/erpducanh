@@ -55,6 +55,7 @@ namespace DucAnhERP.Services
                             select new PKKLModel
                             {
                                 Id = a.Id,
+                                Flag = a.Flag,
                                 LoaiCauKien = b.TTKTHHCongHopRanh_LoaiThanhChong ?? "",
                                 LoaiCauKienId = a.TTKTHHCongHopRanh_LoaiThanhChong,
                                 LoaiBeTong = a.LoaiBeTong,
@@ -157,7 +158,7 @@ namespace DucAnhERP.Services
                              {
                                  a.Id,
                                  b.TTKTHHCongHopRanh_LoaiThanhChong,
-                                 PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = c.TTKTHHCongHopRanh_LoaiThanhChong,
+                                 PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.TTKTHHCongHopRanh_LoaiThanhChong,
                                  a.TenCongTac,
                                  a.DonVi,
                                  a.TKLCK_SauCC,

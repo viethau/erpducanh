@@ -71,7 +71,7 @@
                             {
                                 <div class="form-floating col-sm-6 col-md-3">
                                     <label for="TenCongTac">Tên công tác<span></span></label>
-                                    <InputText @bind-Value="Input.TenCongTac" class="form-control" id="TenCongTac" placeholder="Tên công tác" />
+                                    <InputText @bind-Value:after="OnValueChanged" @bind-Value="Input.TenCongTac" class="form-control" id="TenCongTac" placeholder="Tên công tác" />
                                     <ValidationMessage For="() => Input.TenCongTac" />
                                 </div>
                             }
@@ -398,6 +398,24 @@
     {
         Input.HangMuc = selectedItem.Value;
         Input.TenCongTac = "";
+        Input.KTHH_D = 0;
+        Input.KTHH_R = 0;
+        Input.KTHH_C = 0;
+        Input.KTHH_DienTich = 0;
+        Input.KTHH_SLCauKien = 0;
+        Input.KTHH_KL1CK = 0;
+        Input.TTCDT_CDai = 0;
+        Input.TTCDT_CRong = 0;
+        Input.TTCDT_CDay = 0;
+        Input.TTCDT_DienTich = 0;
+        Input.TTCDT_SLCK = 0;
+        Input.TTCDT_KL = 0;
+        Input.KLKP_KL = 0;
+        Input.KLKP_Sl = 0;
+        Input.KL1CK_ChuaTruCC = 0;
+        Input.KLCC1CK = 0;
+        Input.TKLCK_SauCC = 0;
+
         await Caculate();
     }
 
@@ -538,6 +556,7 @@
                 Input.TKLCK_SauCC = Input.KL1CK_ChuaTruCC - Input.KLCC1CK;
                 break;
             case "II.Sản xuất + V.Chuyển B.Tông T.Phẩm":
+                disTenCongTac = false;
                 if (!string.IsNullOrEmpty(Input.TTKTHHCongHopRanh_LoaiThanhChong))
                 {
                     var TKLCK_SauCC = await PKKLTChongRepository.GetTKLCK_SauCCByLCK(Input.TTKTHHCongHopRanh_LoaiThanhChong);
@@ -587,7 +606,6 @@
           {
               StateHasChanged();
           });
-        
     }
 
     private void ShowModal()
@@ -597,8 +615,8 @@
 
        // Đặt trạng thái chọn cho các danh sách
         SetSelectedItem(selectLCK, Input.TTKTHHCongHopRanh_LoaiThanhChong);
-            SetSelectedItem(selectLBT, Input.LoaiBeTong);
-            SetSelectedItem(selectHMTC, Input.HangMuc);
+        SetSelectedItem(selectLBT, Input.LoaiBeTong);
+        SetSelectedItem(selectHMTC, Input.HangMuc);
     }
 
     private void HandleModalClose(bool isVisible)
@@ -764,8 +782,9 @@
                         {
                             // Thêm mới thông tin
                             await PKKLTChongRepository.Insert(Input);
-                            isModalVisible = false;
-                            Input = new PKKLTChong();
+                            Input.Id = Guid.NewGuid().ToString();
+                            // isModalVisible = false;
+                            // Input = new PKKLTChong();
                             ToastService.ShowToast(
                                 "Thông báo",
                                 "Thêm thành công.",
@@ -949,6 +968,11 @@
         Flag = flag;
         TitleModal = "Chèn loại cống !";
         isModalVisible = true;
+        Input = new();
+        // Đặt trạng thái chọn cho các danh sách
+        SetSelectedItem(selectLCK, Input.TTKTHHCongHopRanh_LoaiThanhChong);
+        SetSelectedItem(selectLBT, Input.LoaiBeTong);
+        SetSelectedItem(selectHMTC, Input.HangMuc);
     }
 
 

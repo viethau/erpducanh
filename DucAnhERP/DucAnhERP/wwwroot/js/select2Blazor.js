@@ -26,6 +26,12 @@ window.select2Blazor = {
         $('#' + id).on('select2:open', function () {
             $('.select2-container .select2-dropdown').css('z-index', 9999);
         });
+    },
+    destroySelect2: function (id) {
+        const element = document.getElementById(id);
+        if (element && $(element).hasClass('select2-hidden-accessible')) {
+            $(element).select2('destroy');
+        }
     }
 };
 

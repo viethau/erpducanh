@@ -15,6 +15,6 @@ namespace DucAnhERP.Repository
         double KTHH_KL1CK(PKKLCTietHoGa obj);
         double TTCDT_KL(PKKLCTietHoGa obj);
         double KL1CK_ChuaTruCC(PKKLCTietHoGa obj);
-        double TKLCK_SauCC(PKKLCTietHoGa obj);
+        Task<double> TKLCK_SauCC(PKKLCTietHoGa obj);
     }
 }

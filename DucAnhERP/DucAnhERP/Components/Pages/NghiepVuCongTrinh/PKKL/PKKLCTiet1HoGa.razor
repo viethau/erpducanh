@@ -907,7 +907,8 @@
                     Input.KTHH_KL1CK = PKKLCTietHoGaRepository.KTHH_KL1CK(Input);
                     Input.TTCDT_KL = PKKLCTietHoGaRepository.TTCDT_KL(Input);
                     Input.KL1CK_ChuaTruCC = PKKLCTietHoGaRepository.KL1CK_ChuaTruCC(Input);
-                    Input.TKLCK_SauCC = PKKLCTietHoGaRepository.TKLCK_SauCC(Input);
+                    Input.TKLCK_SauCC = await PKKLCTietHoGaRepository.TKLCK_SauCC(Input);
+                    disTenCongTac = false;
                     break;
                 case "II.Hố ga lắp đặt, hố ga":
                     if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai)
@@ -927,7 +928,8 @@
                     Input.KTHH_KL1CK = PKKLCTietHoGaRepository.KTHH_KL1CK(Input);
                     Input.TTCDT_KL = PKKLCTietHoGaRepository.TTCDT_KL(Input);
                     Input.KL1CK_ChuaTruCC = PKKLCTietHoGaRepository.KL1CK_ChuaTruCC(Input);
-                    Input.TKLCK_SauCC = PKKLCTietHoGaRepository.TKLCK_SauCC(Input);
+                    Input.TKLCK_SauCC = await PKKLCTietHoGaRepository.TKLCK_SauCC(Input);
+                    disTenCongTac = false;
                     break;
                 case "III.1 Tường hố ga xây gạch":
                     disKTHH = true;
@@ -1006,7 +1008,8 @@
                     Input.KTHH_KL1CK = PKKLCTietHoGaRepository.KTHH_KL1CK(Input);
                     Input.TTCDT_KL = PKKLCTietHoGaRepository.TTCDT_KL(Input);
                     Input.KL1CK_ChuaTruCC = PKKLCTietHoGaRepository.KL1CK_ChuaTruCC(Input);
-                    Input.TKLCK_SauCC = PKKLCTietHoGaRepository.TKLCK_SauCC(Input);
+                    Input.TKLCK_SauCC = await PKKLCTietHoGaRepository.TKLCK_SauCC(Input);
+                    disTenCongTac = false;
                     break;
                 case "III.2 Chát tường hố ga xây gạch":
                     disKTHH = true;
@@ -1051,7 +1054,8 @@
                     Input.KTHH_KL1CK = PKKLCTietHoGaRepository.KTHH_KL1CK(Input);
                     Input.TTCDT_KL = PKKLCTietHoGaRepository.TTCDT_KL(Input);
                     Input.KL1CK_ChuaTruCC = PKKLCTietHoGaRepository.KL1CK_ChuaTruCC(Input);
-                    Input.TKLCK_SauCC = PKKLCTietHoGaRepository.TKLCK_SauCC(Input);
+                    Input.TKLCK_SauCC = await PKKLCTietHoGaRepository.TKLCK_SauCC(Input);
+                    disTenCongTac = false;
                     break;
                 case "IV.1 Tường hố ga bê tông":
                     disKTHH = true;
@@ -1085,7 +1089,8 @@
                     Input.KTHH_KL1CK = PKKLCTietHoGaRepository.KTHH_KL1CK(Input);
                     Input.TTCDT_KL = PKKLCTietHoGaRepository.TTCDT_KL(Input);
                     Input.KL1CK_ChuaTruCC = PKKLCTietHoGaRepository.KL1CK_ChuaTruCC(Input);
-                    Input.TKLCK_SauCC = PKKLCTietHoGaRepository.TKLCK_SauCC(Input);
+                    Input.TKLCK_SauCC = await PKKLCTietHoGaRepository.TKLCK_SauCC(Input);
+                    disTenCongTac = false;
                     break;
                 case "IV.2 Ván khuân tường hố ga bê tông":
                     disKTHH = true;
@@ -1133,7 +1138,8 @@
                     Input.KTHH_KL1CK = PKKLCTietHoGaRepository.KTHH_KL1CK(Input);
                     Input.TTCDT_KL = PKKLCTietHoGaRepository.TTCDT_KL(Input);
                     Input.KL1CK_ChuaTruCC = PKKLCTietHoGaRepository.KL1CK_ChuaTruCC(Input);
-                    Input.TKLCK_SauCC = PKKLCTietHoGaRepository.TKLCK_SauCC(Input);
+                    Input.TKLCK_SauCC = await PKKLCTietHoGaRepository.TKLCK_SauCC(Input);
+                    disTenCongTac = false;
                     break;
                 case "V.Mũ mố hố ga, hố ga":
                     disKTHH = true;
@@ -1322,7 +1328,8 @@
                     Input.KTHH_KL1CK = PKKLCTietHoGaRepository.KTHH_KL1CK(Input);
                     Input.TTCDT_KL = PKKLCTietHoGaRepository.TTCDT_KL(Input);
                     Input.KL1CK_ChuaTruCC = PKKLCTietHoGaRepository.KL1CK_ChuaTruCC(Input);
-                    Input.TKLCK_SauCC = PKKLCTietHoGaRepository.TKLCK_SauCC(Input);
+                    Input.TKLCK_SauCC = await PKKLCTietHoGaRepository.TKLCK_SauCC(Input);
+                    disTenCongTac = false;
                     break;
                 case "VI.Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga":
                     if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai))
@@ -1372,9 +1379,11 @@
                     Input.KTHH_KL1CK = PKKLCTietHoGaRepository.KTHH_KL1CK(Input);
                     Input.TTCDT_KL = PKKLCTietHoGaRepository.TTCDT_KL(Input);
                     Input.KL1CK_ChuaTruCC = PKKLCTietHoGaRepository.KL1CK_ChuaTruCC(Input);
-                    Input.TKLCK_SauCC = PKKLCTietHoGaRepository.TKLCK_SauCC(Input);
+                    Input.TKLCK_SauCC = await PKKLCTietHoGaRepository.TKLCK_SauCC(Input);
+
                     break;
                 default:
+                    disTenCongTac = false;
                     break;
             }
         } else

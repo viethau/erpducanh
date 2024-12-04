@@ -23,15 +23,30 @@ namespace DucAnhERP.Services
             Task.Delay(duration).ContinueWith(_ => RemoveToast(toast.Id));
         }
 
+        //public void RemoveToast(Guid toastId)
+        //{
+        //    var toast = _toasts.FirstOrDefault(t => t.Id == toastId);
+        //    if (toast != null)
+        //    {
+        //        _toasts.Remove(toast);
+        //        NotifyStateChanged();
+        //    }
+        //}
+        private readonly object _lock = new object();
+
         public void RemoveToast(Guid toastId)
         {
-            var toast = _toasts.FirstOrDefault(t => t.Id == toastId);
-            if (toast != null)
+            lock (_lock)
             {
-                _toasts.Remove(toast);
-                NotifyStateChanged();
+                var toast = _toasts.FirstOrDefault(t => t.Id == toastId);
+                if (toast != null)
+                {
+                    _toasts.Remove(toast);
+                    NotifyStateChanged();
+                }
             }
         }
+
 
         private async void NotifyStateChanged()
         {

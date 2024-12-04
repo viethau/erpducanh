@@ -25,12 +25,47 @@
     [Parameter] public bool disabled { get; set; } = false;
 
     private DotNetObjectReference<Select2> objRef;
+    private int previousItemCount = 0;
+
+    protected override bool ShouldRender()
+    {
+        // Render lại nếu số lượng Items thay đổi
+        return Items.Count != previousItemCount;
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender){}
-        objRef = DotNetObjectReference.Create(this);
-        await JSRuntime.InvokeVoidAsync("select2Blazor.initSelect2", Id, objRef);
+        try
+        {
+            if (firstRender || Items.Count != previousItemCount)
+            {
+                // Xóa Select2 cũ
+                await JSRuntime.InvokeVoidAsync("select2Blazor.destroySelect2", Id);
+
+                // Tạo Select2 mới
+                objRef?.Dispose();
+                objRef = DotNetObjectReference.Create(this);
+                await JSRuntime.InvokeVoidAsync("select2Blazor.initSelect2", Id, objRef);
+
+                // Cập nhật số lượng Items
+                previousItemCount = Items.Count;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
+        }
     }
+    // protected override async Task OnAfterRenderAsync(bool firstRender)
+    // {
+    //     if (firstRender)
+    //     {
+    //         objRef = DotNetObjectReference.Create(this);
+    //         await JSRuntime.InvokeVoidAsync("select2Blazor.initSelect2", Id, objRef);
+    //     }
+        
+    // }
 
 
     [JSInvokable]
