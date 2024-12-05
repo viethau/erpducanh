@@ -186,7 +186,18 @@
                     </div>
 
                     <div class="row justify-content-end m-2">
-                        <button class="btn btn-primary mr-2" type="submit">Save</button>
+                        @if (isLoadingCaculate)
+                        {
+                            <button class="btn btn-primary mr-2" type="button" readonly>
+                                <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Loading...
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary mr-2" type="submit">Save</button>
+                        }
+
                         <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
                     </div>
                 </EditForm>
@@ -280,7 +291,6 @@
                                         @foreach (var item in groupChild.OrderBy(g => g.Flag))
                                         {
                                             stt++;
-
                                             if (string.IsNullOrEmpty(HangMuc) || HangMuc.ToUpper().Trim() != @item.HangMuc.ToUpper().Trim())
                                             {
                                                 HangMuc = @item.HangMuc;
@@ -362,7 +372,7 @@
 
 
 @code {
-
+    private bool isLoadingCaculate = false;
     private bool isLoading = false;
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới ";
@@ -498,6 +508,7 @@
 
     public async Task Caculate()
     {
+        isLoadingCaculate = true;
         switch(Input.HangMuc){
             case "I.Móng cống tròn":
                 Input.KTHH_D = 1;
@@ -561,7 +572,7 @@
                 break;
 
         }
-
+        isLoadingCaculate = false;
         await InvokeAsync(() =>
           {
               StateHasChanged();

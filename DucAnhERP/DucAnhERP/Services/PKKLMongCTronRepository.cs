@@ -183,7 +183,7 @@ namespace DucAnhERP.Services
                              {
                                  a.Id,
                                  b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
-                                 PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = c.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                                 PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop = b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
                                  a.TenCongTac,
                                  a.DonVi,
                                  a.TKLCK_SauCC,

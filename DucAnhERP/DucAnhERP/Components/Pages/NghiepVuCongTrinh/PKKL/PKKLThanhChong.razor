@@ -85,17 +85,17 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3" title="Bắt buộc phải nhập giá trị vào đây. Giá trị là chiều dài thực tế của 01 cấu kiện">
                                 <label for="KTHH_D">D<span></span></label>
-                                <InputNumber @bind-Value="Input.KTHH_D" @bind-Value:after="OnValueChanged" class="form-control" id="KTHH_D" readonly="@disKTHH" key="@disKTHH" />
+                                <InputNumber @bind-Value="Input.KTHH_D" @bind-Value:after="OnValueChanged" class="form-control" id="KTHH_D" readonly="@disKTHH"  />
                                 <ValidationMessage For="() => Input.KTHH_D" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="KTHH_R">R<span></span></label>
-                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KTHH_R" class="form-control" id="KTHH_R" readonly="@disKTHH" key="@disKTHH" />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KTHH_R" class="form-control" id="KTHH_R" readonly="@disKTHH" />
                                 <ValidationMessage For="() => Input.KTHH_R" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="KTHH_C">C<span></span></label>
-                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KTHH_C" class="form-control" id="KTHH_C" readonly="@disKTHH" key="@disKTHH" />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KTHH_C" class="form-control" id="KTHH_C" readonly="@disKTHH"  />
                                 <ValidationMessage For="() => Input.KTHH_C" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3" title="Bắt buộc phải nhập giá trị tương ứng vào đây. Giá trị là kết quả của của chiều rộng  chiều cao của 01 cấu kiện cống tròn">
@@ -287,61 +287,64 @@
 
                                     int stt = 0;
                                     string HangMuc = "";
-                                    @foreach (var item in group)
+                                    @foreach (var groupChild in group.GroupBy(item => item.HangMuc))
                                     {
-                                        stt++;
-
-                                        if (string.IsNullOrEmpty(HangMuc) || HangMuc.ToUpper().Trim() != @item.HangMuc.ToUpper().Trim())
+                                        @foreach (var item in groupChild.OrderBy(g => g.Flag))
                                         {
-                                            HangMuc = @item.HangMuc;
-                                            <tr class="bg-warning text-bold">
-                                                <td></td>
-                                                <td>@getChiMuc(HangMuc)</td>
-                                                <td colspan="2">@item.LoaiCauKien</td>
-                                                <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
-                                                <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
-                                                <td colspan="19"></td>
+                                            stt++;
+
+                                            if (string.IsNullOrEmpty(HangMuc) || HangMuc.ToUpper().Trim() != @item.HangMuc.ToUpper().Trim())
+                                            {
+                                                HangMuc = @item.HangMuc;
+                                                <tr class="bg-warning text-bold">
+                                                    <td></td>
+                                                    <td>@getChiMuc(HangMuc)</td>
+                                                    <td colspan="2">@item.LoaiCauKien</td>
+                                                    <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
+                                                    <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
+                                                    <td colspan="19"></td>
+                                                </tr>
+                                            }
+                                            <tr>
+                                                <td class="d-flex nowrap">
+                                                    <div class="d-inline-block">
+                                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary m-1" title="Sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td>@stt</td>
+                                                <td>@item.LoaiCauKien</td>
+                                                <td>@item.LoaiBeTong</td>
+                                                <td>@item.HangMucCongTac</td>
+                                                <td>@item.TenCongTac</td>
+                                                <td>@item.DonVi</td>
+                                                <td>@item.KTHH_D</td>
+                                                <td>@item.KTHH_R</td>
+                                                <td>@item.KTHH_C</td>
+                                                <td>@item.KTHH_DienTich</td>
+                                                <td>@item.KTHH_GhiChu</td>
+                                                <td>@item.KTHH_SLCauKien</td>
+                                                <td>@item.KTHH_KL1CK</td>
+                                                <td>@item.TTCDT_CDai</td>
+                                                <td>@item.TTCDT_CRong</td>
+                                                <td>@item.TTCDT_CDay</td>
+                                                <td>@item.TTCDT_DienTich</td>
+                                                <td>@item.TTCDT_SLCK</td>
+                                                <td>@item.TTCDT_KL</td>
+                                                <td>@item.KLKP_KL</td>
+                                                <td>@item.KLKP_Sl</td>
+                                                <td>@item.KL1CK_ChuaTruCC </td>
+                                                <td>@item.KLCC1CK </td>
+                                                <td>@item.TKLCK_SauCC </td>
                                             </tr>
                                         }
-                                        <tr>
-                                            <td class="d-flex nowrap">
-                                                <div class="d-inline-block">
-                                                    <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-primary m-1" title="Sửa" @onclick="()=>HandleEdit(item.Id)">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
-                                                        <i class="fas fa-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                            <td>@stt</td>
-                                            <td>@item.LoaiCauKien</td>
-                                            <td>@item.LoaiBeTong</td>
-                                            <td>@item.HangMucCongTac</td>
-                                            <td>@item.TenCongTac</td>
-                                            <td>@item.DonVi</td>
-                                            <td>@item.KTHH_D</td>
-                                            <td>@item.KTHH_R</td>
-                                            <td>@item.KTHH_C</td>
-                                            <td>@item.KTHH_DienTich</td>
-                                            <td>@item.KTHH_GhiChu</td>
-                                            <td>@item.KTHH_SLCauKien</td>
-                                            <td>@item.KTHH_KL1CK</td>
-                                            <td>@item.TTCDT_CDai</td>
-                                            <td>@item.TTCDT_CRong</td>
-                                            <td>@item.TTCDT_CDay</td>
-                                            <td>@item.TTCDT_DienTich</td>
-                                            <td>@item.TTCDT_SLCK</td>
-                                            <td>@item.TTCDT_KL</td>
-                                            <td>@item.KLKP_KL</td>
-                                            <td>@item.KLKP_Sl</td>
-                                            <td>@item.KL1CK_ChuaTruCC </td>
-                                            <td>@item.KLCC1CK </td>
-                                            <td>@item.TKLCK_SauCC </td>
-                                        </tr>
                                     }
                                 }
                             </tbody>
@@ -371,7 +374,6 @@
 
 
 @code {
-
     private bool isLoadingCaculate = false;
     private bool isLoading = false;
     private bool isModalVisible = false;
@@ -415,7 +417,6 @@
         Input.KL1CK_ChuaTruCC = 0;
         Input.KLCC1CK = 0;
         Input.TKLCK_SauCC = 0;
-
         await Caculate();
     }
 
@@ -559,11 +560,8 @@
                 disTenCongTac = false;
                 if (!string.IsNullOrEmpty(Input.TTKTHHCongHopRanh_LoaiThanhChong))
                 {
-                    var TKLCK_SauCC = await PKKLTChongRepository.GetTKLCK_SauCCByLCK(Input.TTKTHHCongHopRanh_LoaiThanhChong);
-                    if (TKLCK_SauCC != null)
-                    {
-                        Input.TKLCK_SauCC = TKLCK_SauCC.TKLCK_SauCC;
-                    }
+                    var TKLCK_SauCC = await PKKLTChongRepository.GetSumTKLCK_SauCCByLCK(Input.TTKTHHCongHopRanh_LoaiThanhChong);
+                    Input.TKLCK_SauCC = TKLCK_SauCC;
                 }
                 if (disKTHH)
                 {
@@ -870,7 +868,7 @@
         try
         {
             // Thiết lập trạng thái ban đầu
-            TitleModal = "Cập nhật PKKL TĐan TDẫn !";
+            TitleModal = "Cập nhật PKKL thanh chống !";
             Input = await PKKLTChongRepository.GetById(id);
             isEdit = true;
             isModalVisible = true;
@@ -1005,7 +1003,6 @@
         tKThepHoGaModel.pageSize = pageSize;
         Paging(listModel);
     }
-
 
     // Xử lý paging
     private List<PKKLModel> Paging(List<PKKLModel> listModels)

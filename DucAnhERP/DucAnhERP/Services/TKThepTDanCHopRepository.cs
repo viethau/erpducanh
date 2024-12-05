@@ -428,9 +428,9 @@ namespace DucAnhERP.Services
                                 }
 
                             }
-                            PKKLTDanCHop.KTHH_KL1CK = _pKKLTDanCHopRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
-                            PKKLTDanCHop.TTCDT_KL = _pKKLTDanCHopRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
-                            PKKLTDanCHop.KL1CK_ChuaTruCC = _pKKLTDanCHopRepository.KL1CK_ChuaTruCC(record.KTHH_KL1CK, record.KTHH_SLCauKien, record.TTCDT_KL, record.TTCDT_SLCK, PKKLTDanCHop.KLKP_KL, record.KLKP_Sl);
+                            PKKLTDanCHop.KTHH_KL1CK = _pKKLTDanCHopRepository.KTHH_KL1CK(PKKLTDanCHop);
+                            PKKLTDanCHop.TTCDT_KL = _pKKLTDanCHopRepository.TTCDT_KL(PKKLTDanCHop);
+                            PKKLTDanCHop.KL1CK_ChuaTruCC = _pKKLTDanCHopRepository.KL1CK_ChuaTruCC(PKKLTDanCHop);
                             PKKLTDanCHop.TKLCK_SauCC = PKKLTDanCHop.KL1CK_ChuaTruCC - PKKLTDanCHop.KLCC1CK;
                             PKKLTDanCHops.Add(PKKLTDanCHop);
                         }
@@ -496,9 +496,9 @@ namespace DucAnhERP.Services
                                 }
 
                             }
-                            PKKLTDanCHop.KTHH_KL1CK = _pKKLTDanCHopRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
-                            PKKLTDanCHop.TTCDT_KL = _pKKLTDanCHopRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
-                            PKKLTDanCHop.KL1CK_ChuaTruCC = _pKKLTDanCHopRepository.KL1CK_ChuaTruCC(record.KTHH_KL1CK, record.KTHH_SLCauKien, record.TTCDT_KL, record.TTCDT_SLCK, PKKLTDanCHop.KLKP_KL, record.KLKP_Sl);
+                            PKKLTDanCHop.KTHH_KL1CK = _pKKLTDanCHopRepository.KTHH_KL1CK(PKKLTDanCHop);
+                            PKKLTDanCHop.TTCDT_KL = _pKKLTDanCHopRepository.TTCDT_KL(PKKLTDanCHop);
+                            PKKLTDanCHop.KL1CK_ChuaTruCC = _pKKLTDanCHopRepository.KL1CK_ChuaTruCC(PKKLTDanCHop);
                             PKKLTDanCHop.TKLCK_SauCC = PKKLTDanCHop.KL1CK_ChuaTruCC - PKKLTDanCHop.KLCC1CK;
                             PKKLTDanCHops.Add(PKKLTDanCHop);
                         }
@@ -568,9 +568,9 @@ namespace DucAnhERP.Services
 
                                 }
 
-                                PKKLTDanCHop.KTHH_KL1CK = _pKKLTDanCHopRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
-                                PKKLTDanCHop.TTCDT_KL = _pKKLTDanCHopRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
-                                PKKLTDanCHop.KL1CK_ChuaTruCC = _pKKLTDanCHopRepository.KL1CK_ChuaTruCC(record.KTHH_KL1CK, record.KTHH_SLCauKien, record.TTCDT_KL, record.TTCDT_SLCK, PKKLTDanCHop.KLKP_KL, record.KLKP_Sl);
+                                PKKLTDanCHop.KTHH_KL1CK = _pKKLTDanCHopRepository.KTHH_KL1CK(PKKLTDanCHop);
+                                PKKLTDanCHop.TTCDT_KL = _pKKLTDanCHopRepository.TTCDT_KL(PKKLTDanCHop);
+                                PKKLTDanCHop.KL1CK_ChuaTruCC = _pKKLTDanCHopRepository.KL1CK_ChuaTruCC(PKKLTDanCHop);
                                 PKKLTDanCHop.TKLCK_SauCC = PKKLTDanCHop.KL1CK_ChuaTruCC - PKKLTDanCHop.KLCC1CK;
                                 PKKLTDanCHops.Add(PKKLTDanCHop);
                             }

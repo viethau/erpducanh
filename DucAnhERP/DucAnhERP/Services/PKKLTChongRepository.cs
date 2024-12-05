@@ -516,23 +516,26 @@ namespace DucAnhERP.Services
         private async Task HandleEntityAdd(EntityEntry<PKKLTChong> entry)
         {
             var entity = entry.Entity;
-            if (entity.HangMuc == "I.Bê tông, vận chuyển, lắp đặt" &&
-                entity.HangMucCongTac.Trim().ToLower() == "thanh chống".Trim().ToLower())
+            if (entity.HangMuc == "I.Bê tông, vận chuyển, lắp đặt")
             {
                 using var context = _context.CreateDbContext();
 
-                //Cập nhật I.
-                var recordsToUpdate = await context.PKKLTChongs
+                if (entity.LoaiBeTong.ToUpper().Trim() == "Bê tông thương phẩm".ToUpper().Trim() 
+                    && entity.HangMucCongTac.Trim().ToLower() == "thanh chống".Trim().ToLower())
+                {
+                    //Cập nhật I.
+                    var recordsToUpdate = await context.PKKLTChongs
                     .Where(x => x.TTKTHHCongHopRanh_LoaiThanhChong == entity.TTKTHHCongHopRanh_LoaiThanhChong &&
                                 x.HangMuc == "I.Bê tông, vận chuyển, lắp đặt" &&
                                 x.HangMucCongTac == "Vận chuyển từ bãi đúc đến công trường")
                     .ToListAsync();
 
-                foreach (var record in recordsToUpdate)
-                {
-                    UpdateRecordWithCalculations(record, entity.TKLCK_SauCC);
+                    foreach (var record in recordsToUpdate)
+                    {
+                        UpdateRecordWithCalculations(record, entity.TKLCK_SauCC);
+                    }
+                    await UpdateMulti(recordsToUpdate.ToArray());
                 }
-                await UpdateMulti(recordsToUpdate.ToArray());
 
                 //Cập nhật II.
                 var recordsToUpdate1 = await context.PKKLTChongs
@@ -553,32 +556,33 @@ namespace DucAnhERP.Services
                 await UpdateMulti(recordsToUpdate1.ToArray());
             }
         }
-        private async Task HandleEntityUpdate(EntityEntry entry)
+        private async Task HandleEntityUpdate(EntityEntry<PKKLTChong> entry)
         {
-            var entity = entry.Entity as PKKLTChong;
+            var entity = entry.Entity;
             if (entity != null)
             {
                 // Kiểm tra điều kiện một lần duy nhất
-                if (entity.HangMuc == "I.Bê tông, vận chuyển, lắp đặt"
-                    && entity.HangMucCongTac.Trim().ToLower() == "thanh chống".Trim().ToLower())
+                if (entity.HangMuc == "I.Bê tông, vận chuyển, lắp đặt")
                 {
                     // Lưu trữ giá trị TKLCK_SauCC để sử dụng nhiều lần
-                    var TKLCK_SauCC = entity.TKLCK_SauCC;
                     using var context = _context.CreateDbContext();
 
-                    //Cập nhật I.
-                    var recordsToUpdate = await context.PKKLTChongs
-                        .Where(x => x.TTKTHHCongHopRanh_LoaiThanhChong == entity.TTKTHHCongHopRanh_LoaiThanhChong
-                                   && x.HangMuc == "I.Bê tông, vận chuyển, lắp đặt"
-                                   && x.HangMucCongTac == "Vận chuyển từ bãi đúc đến công trường")
+                    if (entity.LoaiBeTong.ToUpper().Trim() == "Bê tông thương phẩm".ToUpper().Trim()
+                    && entity.HangMucCongTac.Trim().ToLower() == "thanh chống".Trim().ToLower())
+                    {
+                        //Cập nhật I.
+                        var recordsToUpdate = await context.PKKLTChongs
+                        .Where(x => x.TTKTHHCongHopRanh_LoaiThanhChong == entity.TTKTHHCongHopRanh_LoaiThanhChong &&
+                                    x.HangMuc == "I.Bê tông, vận chuyển, lắp đặt" &&
+                                    x.HangMucCongTac == "Vận chuyển từ bãi đúc đến công trường")
                         .ToListAsync();
 
-                    foreach (var record in recordsToUpdate)
-                    {
-                        UpdateRecordWithCalculations(record, entity.TKLCK_SauCC);
+                        foreach (var record in recordsToUpdate)
+                        {
+                            UpdateRecordWithCalculations(record, entity.TKLCK_SauCC);
+                        }
+                        await UpdateMulti(recordsToUpdate.ToArray());
                     }
-
-                    await UpdateMulti(recordsToUpdate.ToArray());
 
                     //Cập nhật II.
                     var recordsToUpdate1 = await context.PKKLTChongs
@@ -593,7 +597,7 @@ namespace DucAnhERP.Services
                         {
                             var getOld = await GetById(entity.Id);
                             var TKLCK_SauCC1 = await GetSumTKLCK_SauCCByLCK(entity.TTKTHHCongHopRanh_LoaiThanhChong);
-                            record.TKLCK_SauCC = (TKLCK_SauCC - getOld.TKLCK_SauCC) + entity.TKLCK_SauCC;
+                            record.TKLCK_SauCC = (TKLCK_SauCC1 - getOld.TKLCK_SauCC) + entity.TKLCK_SauCC;
                         }
                     }
 
@@ -607,22 +611,25 @@ namespace DucAnhERP.Services
         private async Task HandleEntityDelete(EntityEntry<PKKLTChong> entry)
         {
             var entity = entry.Entity;
-            if (entity.HangMuc == "I.Bê tông, vận chuyển, lắp đặt" &&
-                entity.HangMucCongTac.Trim().ToLower() == "thanh chống".Trim().ToLower())
+            if (entity.HangMuc == "I.Bê tông, vận chuyển, lắp đặt")
             {
                 using var context = _context.CreateDbContext();
-                //Cập nhật I.
-                var recordsToUpdate = await context.PKKLTChongs
+                if (entity.LoaiBeTong.ToUpper().Trim() == "Bê tông thương phẩm".ToUpper().Trim()
+                    && entity.HangMucCongTac.Trim().ToLower() == "thanh chống".Trim().ToLower())
+                {
+                    //Cập nhật I.
+                    var recordsToUpdate = await context.PKKLTChongs
                     .Where(x => x.TTKTHHCongHopRanh_LoaiThanhChong == entity.TTKTHHCongHopRanh_LoaiThanhChong &&
                                 x.HangMuc == "I.Bê tông, vận chuyển, lắp đặt" &&
                                 x.HangMucCongTac == "Vận chuyển từ bãi đúc đến công trường")
                     .ToListAsync();
 
-                foreach (var record in recordsToUpdate)
-                {
-                    UpdateRecordWithCalculations(record, 0); // Xử lý giá trị sau khi xóa
+                    foreach (var record in recordsToUpdate)
+                    {
+                        UpdateRecordWithCalculations(record, 0);
+                    }
+                    await UpdateMulti(recordsToUpdate.ToArray());
                 }
-                await UpdateMulti(recordsToUpdate.ToArray());
                 //Cập nhật II.
                 var recordsToUpdate1 = await context.PKKLTChongs
                     .Where(x => x.TTKTHHCongHopRanh_LoaiThanhChong == entity.TTKTHHCongHopRanh_LoaiThanhChong

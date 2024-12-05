@@ -472,70 +472,50 @@ namespace DucAnhERP.Services
         {
             try
             {
-                // Kiểm tra và xử lý các thay đổi trong DbContext
-                var addedEntities = context.ChangeTracker.Entries()
-                    .Where(e => e.State == EntityState.Added)
-                    .ToList();
+                // Xử lý các thay đổi trong DbContext
+                var entries = context.ChangeTracker.Entries<PKKLRanhBT>();
 
-                var modifiedEntities = context.ChangeTracker.Entries()
-                    .Where(e => e.State == EntityState.Modified)
-                    .ToList();
-
-                var deletedEntities = context.ChangeTracker.Entries()
-                    .Where(e => e.State == EntityState.Deleted)
-                    .ToList();
-
-                // Xử lý thay đổi khi thêm
-                if (addedEntities.Any())
+                foreach (var entry in entries)
                 {
-                    foreach (var addedEntity in addedEntities)
+                    switch (entry.State)
                     {
-                        await HandleEntityAdd(addedEntity);
+                        case EntityState.Added:
+                            await HandleEntityAdd(entry);
+                            break;
+
+                        case EntityState.Modified:
+                            await HandleEntityUpdate(entry);
+                            break;
+
+                        case EntityState.Deleted:
+                            await HandleEntityDelete(entry);
+                            break;
                     }
                 }
 
-                // Xử lý thay đổi khi sửa
-                if (modifiedEntities.Any())
-                {
-                    foreach (var modifiedEntity in modifiedEntities)
-                    {
-                        await HandleEntityUpdate(modifiedEntity);
-                    }
-                }
-
-                // Xử lý thay đổi khi xóa
-                if (deletedEntities.Any())
-                {
-                    foreach (var deletedEntity in deletedEntities)
-                    {
-                        await HandleEntityDelete(deletedEntity);
-                    }
-                }
-
-                // Lưu các thay đổi vào cơ sở dữ liệu
                 await context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine($"An error occurred while saving changes: {ex.Message}");
+                Console.Error.WriteLine($"Error while saving changes: {ex.Message}");
                 throw;
             }
         }
         // Xử lý khi thêm mới entity
-        private async Task HandleEntityAdd(EntityEntry entityEntry)
+        private async Task HandleEntityAdd(EntityEntry<PKKLRanhBT> entry)
         {
-            var addedEntity = entityEntry.Entity as PKKLRanhBT;
-            if (addedEntity != null)
+            var entity = entry.Entity;
+            if (entity != null)
             {
                 // Kiểm tra điều kiện HangMuc và PhanLoaiMongCongTronCongHop
-                if (addedEntity.HangMuc == "I.Móng" || addedEntity.HangMuc == "II.Tường" || addedEntity.HangMuc == "III.Mũ mố" || addedEntity.HangMuc==""
-                    && addedEntity.HangMucCongTac.Trim().ToLower() == "Bê tông cống tròn".Trim().ToLower())
+                if (entity.HangMuc == "I.Móng" || entity.HangMuc == "II.Tường" || entity.HangMuc == "III.Mũ mố" || entity.HangMuc==""
+                    && entity.HangMucCongTac.Trim().ToLower() == "Bê tông cống tròn".Trim().ToLower())
                 {
                     using var context = _context.CreateDbContext();
-                    var TKLCK_SauCC = addedEntity.TKLCK_SauCC;
+                    var TKLCK_SauCC = entity.TKLCK_SauCC;
                    
                     var recordsToUpdate1 = await context.PKKLRanhBTs
-                        .Where(x => x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == addedEntity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai
+                        .Where(x => x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai
                         && x.HangMuc == "IV.Sản xuất + V.Chuyển B.Tông T.Phẩm" && x.LoaiBeTong == "Bê tông thương phẩm")
                         .ToListAsync();
 
@@ -564,34 +544,34 @@ namespace DucAnhERP.Services
 
 
                     // In thông tin của entity mới
-                    Console.WriteLine($"Entity added: {addedEntity}");
+                    Console.WriteLine($"Entity added: {entity}");
                 }
             }
         }
         // Xử lý khi sửa entity
-        private async Task HandleEntityUpdate(EntityEntry entityEntry)
+        private async Task HandleEntityUpdate(EntityEntry<PKKLRanhBT> entry)
         {
-            var modifiedEntity = entityEntry.Entity as PKKLRanhBT;
-            if (modifiedEntity != null)
+            var entity = entry.Entity;
+            if (entity != null)
             {
 
             }
         }
         // Xử lý khi xóa entity
-        private async Task HandleEntityDelete(EntityEntry entityEntry)
+        private async Task HandleEntityDelete(EntityEntry<PKKLRanhBT> entry)
         {
-            var deletedEntity = entityEntry.Entity as PKKLRanhBT;
-            if (deletedEntity != null)
+            var entity = entry.Entity;
+            if (entity != null)
             {
                 // Kiểm tra điều kiện HangMuc và PhanLoaiMongCongTronCongHop
-                if (deletedEntity.HangMuc == "I.Móng" || deletedEntity.HangMuc == "II.Tường" || deletedEntity.HangMuc == "III.Mũ mố" || deletedEntity.HangMuc == ""
-                   && deletedEntity.HangMucCongTac.Trim().ToLower() == "Bê tông cống tròn".Trim().ToLower())
+                if (entity.HangMuc == "I.Móng" || entity.HangMuc == "II.Tường" || entity.HangMuc == "III.Mũ mố" || entity.HangMuc == ""
+                   && entity.HangMucCongTac.Trim().ToLower() == "Bê tông cống tròn".Trim().ToLower())
                 {
                     using var context = _context.CreateDbContext();
-                    var TKLCK_SauCC = deletedEntity.TKLCK_SauCC;
+                    var TKLCK_SauCC = entity.TKLCK_SauCC;
 
                     var recordsToUpdate1 = await context.PKKLRanhBTs
-                        .Where(x => x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == deletedEntity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai
+                        .Where(x => x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai
                         && x.HangMuc == "IV.Sản xuất + V.Chuyển B.Tông T.Phẩm" && x.LoaiBeTong == "Bê tông thương phẩm")
                         .ToListAsync();
 
@@ -604,7 +584,7 @@ namespace DucAnhERP.Services
                             var TKLCK_SauCC1 = await GetTKLCK_SauCCByLCK(record.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
                             if (TKLCK_SauCC1 >0 )
                             {
-                                record.TKLCK_SauCC = TKLCK_SauCC1 - deletedEntity.TKLCK_SauCC;
+                                record.TKLCK_SauCC = TKLCK_SauCC1 - entity.TKLCK_SauCC;
                             }
                             else
                             {
@@ -620,61 +600,70 @@ namespace DucAnhERP.Services
                 }
             }
         }
-        public double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
+        //tính toán
+        private void UpdateRecordWithCalculations(PKKLRanhBT record, double tklckSauCc)
+        {
+            record.KTHH_KL1CK = KTHH_KL1CK(record);
+            record.TTCDT_KL = TTCDT_KL(record);
+            record.KLKP_KL = Math.Round((tklckSauCc * 2.4),4);
+            record.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(record);
+            record.TKLCK_SauCC = record.KL1CK_ChuaTruCC - record.KLCC1CK;
+        }
+        public double KTHH_KL1CK(PKKLRanhBT obj)
         {
             double result = 0;
-            if (DonVi == "M3")
+            if (obj.DonVi == "M3")
             {
-                if (string.IsNullOrEmpty(KTHH_GhiChu) || KTHH_GhiChu == "0")
+                if (string.IsNullOrEmpty(obj.KTHH_GhiChu) || obj.KTHH_GhiChu == "0")
                 {
-                    result = KTHH_D * KTHH_R * KTHH_C;
+                    result = obj.KTHH_D * obj.KTHH_R * obj.KTHH_C;
                 }
-                else if (KTHH_GhiChu == "Rộng*Cao")
+                else if (obj.KTHH_GhiChu == "Rộng*Cao")
                 {
-                    result = KTHH_DienTich * KTHH_D;
+                    result = obj.KTHH_DienTich * obj.KTHH_D;
                 }
-                else if (KTHH_GhiChu == "Dài*Cao")
+                else if (obj.KTHH_GhiChu == "Dài*Cao")
                 {
-                    result = KTHH_DienTich * KTHH_R;
+                    result = obj.KTHH_DienTich * obj.KTHH_R;
                 }
-                else if (KTHH_GhiChu == "Dài*Rộng")
+                else if (obj.KTHH_GhiChu == "Dài*Rộng")
                 {
-                    result = KTHH_DienTich * KTHH_C;
+                    result = obj.KTHH_DienTich * obj.KTHH_C;
                 }
 
             }
             return Math.Round(result, 4);
         }
-        public double TTCDT_KL(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double TTCDT_CDai, double TTCDT_CRong, double TTCDT_CDay, double TTCDT_DienTich)
+        public double TTCDT_KL(PKKLRanhBT obj)
         {
             double result = 0;
-            if (DonVi.ToUpper().Trim() == "M2")
+            if (obj.DonVi.ToUpper().Trim() == "M2")
             {
-                if (string.IsNullOrEmpty(TTCDT_DienTich.ToString()) || TTCDT_DienTich == 0)
+                if (string.IsNullOrEmpty(obj.TTCDT_DienTich.ToString()) || obj.TTCDT_DienTich == 0)
                 {
-                    result = (KTHH_D * KTHH_C * TTCDT_CDai) + (KTHH_R * KTHH_C * TTCDT_CRong) + (KTHH_D * KTHH_R * TTCDT_CDay);
+                    result = obj.KTHH_D * obj.KTHH_C * obj.TTCDT_CDai + obj.KTHH_R * obj.KTHH_C * obj.TTCDT_CRong + obj.KTHH_D * obj.KTHH_R * obj.TTCDT_CDay;
                 }
                 else
                 {
-                    result = TTCDT_DienTich;
+                    result = obj.TTCDT_DienTich;
                 }
             }
             return Math.Round(result, 4);
         }
-        public double KL1CK_ChuaTruCC(double KTHH_KL1CK, double KTHH_SLCauKien, double TTCDT_KL, double TTCDT_SLCK, double KLKP_KL, double KLKP_Sl)
+        public double KL1CK_ChuaTruCC(PKKLRanhBT obj)
         {
             double result = 0;
-            if (KTHH_KL1CK > 0)
+            if (obj.KTHH_KL1CK > 0)
             {
-                result = KTHH_KL1CK * KTHH_SLCauKien;
+                result = obj.KTHH_KL1CK * obj.KTHH_SLCauKien;
             }
-            else if (TTCDT_KL > 0)
+            else if (obj.TTCDT_KL > 0)
             {
-                result = TTCDT_KL * TTCDT_SLCK;
+                result = obj.TTCDT_KL * obj.TTCDT_SLCK;
             }
             else
             {
-                result = KLKP_KL * KLKP_Sl;
+                result = obj.KLKP_KL * obj.KLKP_Sl;
             }
             return Math.Round(result, 4);
         }

@@ -10,5 +10,7 @@ namespace DucAnhERP.Repository
         Task<List<TKThepCHopModel>> GetAllByVM(TKThepCHopModel mModel);
         Task<List<TKThepCHop>> GetExist(TKThepCHop searchData);
         Task<List<SelectedItem>> GetDistinctTenCongTacByPL(string ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
+
+        
     }
 }

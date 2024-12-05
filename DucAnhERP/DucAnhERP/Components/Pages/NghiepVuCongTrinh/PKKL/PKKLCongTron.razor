@@ -186,7 +186,18 @@
                     </div>
 
                     <div class="row justify-content-end m-2">
-                        <button class="btn btn-primary mr-2" type="submit">Save</button>
+                        @if (isLoadingCaculate)
+                        {
+                            <button class="btn btn-primary mr-2" type="button" readonly>
+                                <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Loading...
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary mr-2" type="submit">Save</button>
+                        }
+
                         <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
                     </div>
                 </EditForm>
@@ -274,10 +285,11 @@
                                 {
                                     int stt = 0;
                                     string HangMuc = "";
-                                    @foreach (var item in group)
+                                    @foreach (var groupChild in group.GroupBy(item => item.HangMuc))
+                                    {
+                                        @foreach (var item in groupChild.OrderBy(g => g.Flag))
                                         {
                                             stt++;
-
                                             if (string.IsNullOrEmpty(HangMuc) || HangMuc.ToUpper().Trim() != @item.HangMuc.ToUpper().Trim())
                                             {
                                                 HangMuc = @item.HangMuc;
@@ -330,6 +342,7 @@
                                                 <td>@item.TKLCK_SauCC </td>
                                             </tr>
                                         }
+                                     }
                                 }
                             </tbody>
                         }
@@ -664,7 +677,7 @@
 
         try
         {
-            Caculate();
+            await Caculate();
             string[] ids = { Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai??"" };
             var isValidTenPL = await PhanLoaiCTronHopNhuaRepository.CheckExclusive(ids,baseTime);
             var listExist = await PKKLCTronRepository.GetExist(Input);

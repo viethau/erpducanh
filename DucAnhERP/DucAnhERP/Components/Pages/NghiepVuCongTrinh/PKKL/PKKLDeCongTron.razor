@@ -33,7 +33,6 @@
                 <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
-
                     <div>
                         <h5>Thông tin cấu kiện</h5>
                         <div class="row">
@@ -187,7 +186,18 @@
                     </div>
 
                     <div class="row justify-content-end m-2">
-                        <button class="btn btn-primary mr-2" type="submit">Save</button>
+                        @if (isLoadingCaculate)
+                        {
+                            <button class="btn btn-primary mr-2" type="button" readonly>
+                                <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Loading...
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary mr-2" type="submit">Save</button>
+                        }
+
                         <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
                     </div>
                 </EditForm>
@@ -276,58 +286,64 @@
 
                                     int stt = 0;
                                     string HangMuc = "";
-                                    @foreach (var item in group)
+                                    @foreach (var groupChild in group.GroupBy(item => item.HangMuc))
                                     {
-                                        stt++;
-
-                                        if (string.IsNullOrEmpty(HangMuc) || HangMuc.ToUpper().Trim() != @item.HangMuc.ToUpper().Trim())
+                                        @foreach (var item in groupChild.OrderBy(g => g.Flag))
                                         {
-                                            HangMuc = @item.HangMuc;
-                                            <tr class="bg-warning text-bold">
-                                                <td></td>
-                                                <td>@getChiMuc(HangMuc)</td>
-                                                <td colspan="2">@item.LoaiCauKien</td>
-                                                <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
-                                                <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
-                                                <td colspan="19"></td>
+                                            stt++;
+
+                                            if (string.IsNullOrEmpty(HangMuc) || HangMuc.ToUpper().Trim() != @item.HangMuc.ToUpper().Trim())
+                                            {
+                                                HangMuc = @item.HangMuc;
+                                                <tr class="bg-warning text-bold">
+                                                    <td></td>
+                                                    <td>@getChiMuc(HangMuc)</td>
+                                                    <td colspan="2">@item.LoaiCauKien</td>
+                                                    <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
+                                                    <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
+                                                    <td colspan="19"></td>
+                                                </tr>
+                                            }
+                                            <tr>
+                                                <td class="d-flex nowrap">
+                                                    <div class="d-inline-block">
+                                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary m-1" title="Sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td>@stt</td>
+                                                <td>@item.LoaiCauKien</td>
+                                                <td>@item.LoaiBeTong</td>
+                                                <td>@item.HangMucCongTac</td>
+                                                <td>@item.TenCongTac</td>
+                                                <td>@item.DonVi</td>
+                                                <td>@item.KTHH_D</td>
+                                                <td>@item.KTHH_R</td>
+                                                <td>@item.KTHH_C</td>
+                                                <td>@item.KTHH_DienTich</td>
+                                                <td>@item.KTHH_GhiChu</td>
+                                                <td>@item.KTHH_SLCauKien</td>
+                                                <td>@item.KTHH_KL1CK</td>
+                                                <td>@item.TTCDT_CDai</td>
+                                                <td>@item.TTCDT_CRong</td>
+                                                <td>@item.TTCDT_CDay</td>
+                                                <td>@item.TTCDT_DienTich</td>
+                                                <td>@item.TTCDT_SLCK</td>
+                                                <td>@item.TTCDT_KL</td>
+                                                <td>@item.KLKP_KL</td>
+                                                <td>@item.KLKP_Sl</td>
+                                                <td>@item.KL1CK_ChuaTruCC </td>
+                                                <td>@item.KLCC1CK </td>
+                                                <td>@item.TKLCK_SauCC </td>
                                             </tr>
                                         }
-                                        <tr>
-                                            <td class="d-flex nowrap">
-                                                <div class="d-inline-block">
-                                                    <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
-                                                        <i class="fas fa-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                            <td>@stt</td>
-                                            <td>@item.LoaiCauKien</td>
-                                            <td>@item.LoaiBeTong</td>
-                                            <td>@item.HangMucCongTac</td>
-                                            <td>@item.TenCongTac</td>
-                                            <td>@item.DonVi</td>
-                                            <td>@item.KTHH_D</td>
-                                            <td>@item.KTHH_R</td>
-                                            <td>@item.KTHH_C</td>
-                                            <td>@item.KTHH_DienTich</td>
-                                            <td>@item.KTHH_GhiChu</td>
-                                            <td>@item.KTHH_SLCauKien</td>
-                                            <td>@item.KTHH_KL1CK</td>
-                                            <td>@item.TTCDT_CDai</td>
-                                            <td>@item.TTCDT_CRong</td>
-                                            <td>@item.TTCDT_CDay</td>
-                                            <td>@item.TTCDT_DienTich</td>
-                                            <td>@item.TTCDT_SLCK</td>
-                                            <td>@item.TTCDT_KL</td>
-                                            <td>@item.KLKP_KL</td>
-                                            <td>@item.KLKP_Sl</td>
-                                            <td>@item.KL1CK_ChuaTruCC </td>
-                                            <td>@item.KLCC1CK </td>
-                                            <td>@item.TKLCK_SauCC </td>
-                                        </tr>
                                     }
                                 }
                             </tbody>
@@ -357,7 +373,7 @@
 
 
 @code {
-
+    private bool isLoadingCaculate = false;
     private bool isLoading = false;
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới ";
@@ -381,6 +397,24 @@
     private async void OnSelectChangeHMTC(SelectedItem selectedItem)
     {
         Input.HangMuc = selectedItem.Value;
+        Input.TenCongTac = "";
+        Input.KTHH_D = 0;
+        Input.KTHH_R = 0;
+        Input.KTHH_C = 0;
+        Input.KTHH_DienTich = 0;
+        Input.KTHH_SLCauKien = 0;
+        Input.KTHH_KL1CK = 0;
+        Input.TTCDT_CDai = 0;
+        Input.TTCDT_CRong = 0;
+        Input.TTCDT_CDay = 0;
+        Input.TTCDT_DienTich = 0;
+        Input.TTCDT_SLCK = 0;
+        Input.TTCDT_KL = 0;
+        Input.KLKP_KL = 0;
+        Input.KLKP_Sl = 0;
+        Input.KL1CK_ChuaTruCC = 0;
+        Input.KLCC1CK = 0;
+        Input.TKLCK_SauCC = 0;
         await Caculate();
     }
 
@@ -475,29 +509,10 @@
     private bool disKTHH { get; set; } = false;
     public async Task Caculate()
     {
-        if (Input.HangMuc == "II.Sản xuất + V.Chuyển B.Tông T.Phẩm")
+        isLoadingCaculate = true;
+        switch (Input.HangMuc)
         {
-            if (!string.IsNullOrEmpty(Input.ThongTinDeCong_TenLoaiDeCong))
-            {
-                var TKLCK_SauCC = await PKKLDeCTronRepository.GetTKLCK_SauCCByLCK(Input.ThongTinDeCong_TenLoaiDeCong);
-                if (TKLCK_SauCC != null)
-                {
-                    Input.TKLCK_SauCC = TKLCK_SauCC.TKLCK_SauCC;
-                }
-            }
-        }
-        else
-        {
-            if (!string.IsNullOrEmpty(Input.ThongTinDeCong_TenLoaiDeCong)
-           && Input.HangMuc.ToUpper().Trim() == "III.Gia công, lắp dựng cốt thép".ToUpper())
-            {
-                disInput = true;
-                disTenCongTac = true;
-                selectTenCongTac = await TKThepDeCongRepository.GetDistinctTenCongTacByPL(Input.ThongTinDeCong_TenLoaiDeCong);
-                selectTenCongTac.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
-            }
-            else
-            {
+            case "I.Sản xuất, vận chuyển, lắp đặt":
                 if (disInput) { Input.KLKP_KL = 0; }
                 if (!string.IsNullOrEmpty(Input.ThongTinDeCong_TenLoaiDeCong)
                 && Input.HangMucCongTac.ToUpper().Trim() == "Vận chuyển từ bãi đúc đến công trường".ToUpper()
@@ -515,13 +530,62 @@
                     disInput = false;
                 }
                 disTenCongTac = false;
-            }
-
-            Input.KTHH_KL1CK = KTHH_KL1CK(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.KTHH_DienTich, Input.KTHH_GhiChu);
-            Input.TTCDT_KL = TTCDT_KL(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.TTCDT_CDai, Input.TTCDT_CRong, Input.TTCDT_CDay, Input.TTCDT_DienTich);
-            Input.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(Input.KTHH_KL1CK, Input.KTHH_SLCauKien, Input.TTCDT_KL, Input.TTCDT_SLCK, Input.KLKP_KL, Input.KLKP_Sl);
-            Input.TKLCK_SauCC = Input.KL1CK_ChuaTruCC - Input.KLCC1CK;
+                Input.KTHH_KL1CK = PKKLDeCTronRepository.KTHH_KL1CK(Input);
+                Input.TTCDT_KL = PKKLDeCTronRepository.TTCDT_KL(Input);
+                Input.KL1CK_ChuaTruCC = PKKLDeCTronRepository.KL1CK_ChuaTruCC(Input);
+                Input.TKLCK_SauCC = Input.KL1CK_ChuaTruCC - Input.KLCC1CK;
+                break;
+            case "II.Sản xuất + V.Chuyển B.Tông T.Phẩm":
+                disTenCongTac = false;
+                if (!string.IsNullOrEmpty(Input.ThongTinDeCong_TenLoaiDeCong))
+                {
+                    if (!string.IsNullOrEmpty(Input.ThongTinDeCong_TenLoaiDeCong))
+                    {
+                        var TKLCK_SauCC = await PKKLDeCTronRepository.GetSumTKLCK_SauCCByLCK(Input.ThongTinDeCong_TenLoaiDeCong);
+                        Input.TKLCK_SauCC = TKLCK_SauCC;
+                    }
+                }
+                if (disKTHH)
+                {
+                    Input.KTHH_D = 0;
+                    Input.KTHH_R = 0;
+                    Input.KTHH_C = 0;
+                    disKTHH = false;
+                }
+                break;
+            case "III.Gia công, lắp dựng cốt thép":
+                if (disKTHH)
+                {
+                    Input.KTHH_D = 0;
+                    Input.KTHH_R = 0;
+                    Input.KTHH_C = 0;
+                    disKTHH = false;
+                }
+                if (!string.IsNullOrEmpty(Input.ThongTinDeCong_TenLoaiDeCong))
+                {
+                    disInput = true;
+                    disTenCongTac = true;
+                    selectTenCongTac = await TKThepDeCongRepository.GetDistinctTenCongTacByPL(Input.ThongTinDeCong_TenLoaiDeCong);
+                    selectTenCongTac.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+                }
+                else
+                {
+                    if (disInput) { Input.KLKP_KL = 0; }
+                    disTenCongTac = false;
+                }
+                Input.KTHH_KL1CK = PKKLDeCTronRepository.KTHH_KL1CK(Input);
+                Input.TTCDT_KL = PKKLDeCTronRepository.TTCDT_KL(Input);
+                Input.KL1CK_ChuaTruCC = PKKLDeCTronRepository.KL1CK_ChuaTruCC(Input);
+                Input.TKLCK_SauCC = Input.KL1CK_ChuaTruCC - Input.KLCC1CK;
+                break;
+            default:
+                break;
         }
+        isLoadingCaculate = false;
+        await InvokeAsync(() =>
+          {
+              StateHasChanged();
+          });
 
         await InvokeAsync(() =>
           {
@@ -708,8 +772,9 @@
                         {
                             // Thêm mới thông tin
                             await PKKLDeCTronRepository.Insert(Input);
-                            isModalVisible = false;
-                            Input = new PKKLDeCTron();
+                            // isModalVisible = false;
+                            // Input = new PKKLDeCTron();
+                            Input.Id = Guid.NewGuid().ToString();
                             ToastService.ShowToast(
                                 "Thông báo",
                                 "Thêm thành công.",
@@ -802,7 +867,7 @@
             isModalVisible = true;
 
             // Đặt trạng thái chọn cho các danh sách
-            SetSelectedItem(selectLCK, Input.TTKTHHCongHopRanh_LoaiThanhChong);
+            SetSelectedItem(selectLCK, Input.ThongTinDeCong_TenLoaiDeCong);
             SetSelectedItem(selectLBT, Input.LoaiBeTong);
             SetSelectedItem(selectHMTC, Input.HangMuc);
 
@@ -822,11 +887,11 @@
 
                 case "III.Gia công, lắp dựng cốt thép":
                     disKTHH = false;
-                    if (!string.IsNullOrEmpty(Input.TTKTHHCongHopRanh_LoaiThanhChong))
+                    if (!string.IsNullOrEmpty(Input.ThongTinDeCong_TenLoaiDeCong))
                     {
                         disInput = true;
                         disTenCongTac = true;
-                        selectTenCongTac = await GetTenCongTacAsync(Input.TTKTHHCongHopRanh_LoaiThanhChong, Input.TenCongTac);
+                        selectTenCongTac = await GetTenCongTacAsync(Input.ThongTinDeCong_TenLoaiDeCong, Input.TenCongTac);
                     }
                     else
                     {
@@ -859,15 +924,15 @@
         }
     }
 
-    private bool ShouldDisableKTHH(PKKLTChong input, string condition)
+    private bool ShouldDisableKTHH(PKKLDeCTron input, string condition)
     {
-        return !string.IsNullOrEmpty(input.TTKTHHCongHopRanh_LoaiThanhChong) &&
+        return !string.IsNullOrEmpty(input.ThongTinDeCong_TenLoaiDeCong) &&
                input.HangMucCongTac.ToUpper().Trim() == condition.ToUpper().Trim();
     }
 
-    private bool ShouldDisableInput(PKKLTChong input, string condition)
+    private bool ShouldDisableInput(PKKLDeCTron input, string condition)
     {
-        return !string.IsNullOrEmpty(input.TTKTHHCongHopRanh_LoaiThanhChong) &&
+        return !string.IsNullOrEmpty(input.ThongTinDeCong_TenLoaiDeCong) &&
                input.HangMucCongTac.ToUpper().Trim() == condition.ToUpper().Trim();
     }
 
@@ -890,6 +955,11 @@
         Flag = flag;
         TitleModal = "Chèn loại cống !";
         isModalVisible = true;
+        Input = new();
+        // Đặt trạng thái chọn cho các danh sách
+        SetSelectedItem(selectLCK, Input.ThongTinDeCong_TenLoaiDeCong);
+        SetSelectedItem(selectLBT, Input.LoaiBeTong);
+        SetSelectedItem(selectHMTC, Input.HangMuc);
     }
 
 
@@ -952,67 +1022,6 @@
     private void ThumbtackHeader()
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
-    }
-
-    public static double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
-    {
-        double result = 0;
-        if (DonVi == "M3")
-        {
-            if (string.IsNullOrEmpty(KTHH_GhiChu) || KTHH_GhiChu == "0")
-            {
-                result= KTHH_D * KTHH_R * KTHH_C;
-            }
-            else if (KTHH_GhiChu == "Rộng*Cao")
-            {
-                result= KTHH_DienTich * KTHH_D;
-            }
-            else if (KTHH_GhiChu == "Dài*Cao")
-            {
-                result= KTHH_DienTich * KTHH_R;
-            }
-            else if (KTHH_GhiChu == "Dài*Rộng")
-            {
-                result = KTHH_DienTich *KTHH_C;
-            }
-            
-        }
-        return Math.Round(result,4);
-    }
-
-    public static double TTCDT_KL(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double TTCDT_CDai, double TTCDT_CRong, double TTCDT_CDay, double TTCDT_DienTich)
-    {
-        double result = 0;
-        if (DonVi.ToUpper().Trim() == "M2")
-        {
-            if (string.IsNullOrEmpty(TTCDT_DienTich.ToString()) || TTCDT_DienTich == 0)
-            {
-                result = (KTHH_D * KTHH_C * TTCDT_CDai) + (KTHH_R * KTHH_C * TTCDT_CRong) + (KTHH_D * KTHH_R * TTCDT_CDay);
-            }
-            else
-            {
-                result = TTCDT_DienTich;
-            }
-        }
-        return Math.Round(result, 4);
-    }
-
-    public static double KL1CK_ChuaTruCC(double KTHH_KL1CK, double KTHH_SLCauKien, double TTCDT_KL, double TTCDT_SLCK, double KLKP_KL, double KLKP_Sl)
-    {
-        double result = 0;
-        if (KTHH_KL1CK > 0)
-        {
-            result = KTHH_KL1CK * KTHH_SLCauKien;
-        }
-        else if (TTCDT_KL > 0)
-        {
-            result = TTCDT_KL * TTCDT_SLCK;
-        }
-        else
-        {
-            result = KLKP_KL * KLKP_Sl;
-        }
-        return Math.Round(result, 4);
     }
 
     public static string getChiMuc(string DK)
