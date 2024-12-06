@@ -502,8 +502,7 @@
     // Hàm xử lý logic khi người dùng dừng nhập
     private async Task OnTypingStopped()
     {
-        // Đảm bảo dữ liệu đã được bind vào model
-        await Caculate(); // Gọi logic xử lý
+        await Caculate();
     }
 
     private bool disInput { get; set; } = false;
@@ -964,7 +963,7 @@
     private void InsertLaterFlag(int flag)
     {
         Flag = flag;
-        TitleModal = "Chèn loại cống !";
+        TitleModal = "Chèn loại thanh chống !";
         isModalVisible = true;
         Input = new();
         // Đặt trạng thái chọn cho các danh sách

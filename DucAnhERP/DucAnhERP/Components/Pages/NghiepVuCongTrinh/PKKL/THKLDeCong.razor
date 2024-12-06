@@ -18,8 +18,8 @@
     }
 
         table thead tr td {
-            / white-space: nowrap;
-            / text-align: center;
+            white-space: nowrap;
+            text-align: center;
             padding: 2px 5px;
         }
 
@@ -441,65 +441,7 @@
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
     }
 
-    public static double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
-    {
-        if (DonVi == "M3")
-        {
-            if (string.IsNullOrEmpty(KTHH_GhiChu) || KTHH_GhiChu == "0")
-            {
-                return KTHH_D * KTHH_R * KTHH_C;
-            }
-            else if (KTHH_GhiChu == "Rộng*Cao")
-            {
-                return KTHH_DienTich * KTHH_D;
-            }
-            else if (KTHH_GhiChu == "Dài*Cao")
-            {
-                return KTHH_DienTich * KTHH_R;
-            }
-            else if (KTHH_GhiChu == "Dài*Rộng")
-            {
-                return KTHH_DienTich * KTHH_C;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-        return 0;
-    }
-
-    public static double TTCDT_KL(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double TTCDT_CDai, double TTCDT_CRong, double TTCDT_CDay, double TTCDT_DienTich)
-    {
-        if (DonVi.ToUpper().Trim() == "M2")
-        {
-            if (string.IsNullOrEmpty(TTCDT_DienTich.ToString()) || TTCDT_DienTich == 0)
-            {
-                return (KTHH_D * KTHH_C * TTCDT_CDai) + (KTHH_R * KTHH_C * TTCDT_CRong) + (KTHH_D * KTHH_R * TTCDT_CDay);
-            }
-            else
-            {
-                return TTCDT_DienTich;
-            }
-        }
-        return 0;
-    }
-
-    public static double KL1CK_ChuaTruCC(double KTHH_KL1CK, double KTHH_SLCauKien, double TTCDT_KL, double TTCDT_SLCK, double KLKP_KL, double KLKP_Sl)
-    {
-        if (KTHH_KL1CK > 0)
-        {
-            return KTHH_KL1CK * KTHH_SLCauKien;
-        }
-        else if (TTCDT_KL > 0)
-        {
-            return TTCDT_KL * TTCDT_SLCK;
-        }
-        else
-        {
-            return KLKP_KL * KLKP_Sl;
-        }
-    }
+  
 
     public static string getChiMuc(string DK)
     {

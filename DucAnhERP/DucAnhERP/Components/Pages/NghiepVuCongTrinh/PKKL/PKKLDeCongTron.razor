@@ -20,8 +20,8 @@
     }
 
         table thead tr td {
-            / white-space: nowrap;
-            / text-align: center;
+            white-space: nowrap;
+            text-align: center;
             padding: 2px 5px;
         }
 
@@ -601,10 +601,10 @@
         isModalVisible = true;
         Input = new();
 
-        foreach (var item in selectLCK)
-        {
-            item.IsSelected = string.IsNullOrEmpty(item.Value);
-        }
+        // Đặt trạng thái chọn cho các danh sách
+        SetSelectedItem(selectLCK, Input.ThongTinDeCong_TenLoaiDeCong);
+        SetSelectedItem(selectLBT, Input.LoaiBeTong);
+        SetSelectedItem(selectHMTC, Input.HangMuc);
     }
 
     private void HandleModalClose(bool isVisible)

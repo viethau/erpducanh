@@ -1726,15 +1726,15 @@
 
     private async Task HandleEdit(string id)
     {
-    //     new SelectedItem { Value = "I.Móng hố ga, hố ga", Text = "I.Móng hố ga, hố ga " },
-    // new SelectedItem { Value = "II.Hố ga lắp đặt, hố ga", Text = "II.Hố ga lắp đặt, hố ga  " },
-    // new SelectedItem { Value = "III.1 Tường hố ga xây gạch", Text = "III.1 Tường hố ga xây gạch " },
-    // new SelectedItem { Value = "III.2 Chát tường hố ga xây gạch", Text = "III.2 Chát tường hố ga xây gạch " },
-    // new SelectedItem { Value = "IV.1 Tường hố ga bê tông", Text = "IV.1 Tường hố ga bê tông " },
-    // new SelectedItem { Value = "IV.2 Ván khuân tường hố ga bê tông", Text = "IV.2 Ván khuân tường hố ga bê tông " },
-    // new SelectedItem { Value = "V.Mũ mố hố ga, hố ga", Text = "V.Mũ mố hố ga, hố ga " },
-    // new SelectedItem { Value = "VI.Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga", Text = "VI.Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga " },
-    // new SelectedItem { Value = "VII.Gia công, lắp dựng cốt thép hố ga", Text = "VII.Gia công, lắp dựng cốt thép hố ga " },
+        //     new SelectedItem { Value = "I.Móng hố ga, hố ga", Text = "I.Móng hố ga, hố ga " },
+        // new SelectedItem { Value = "II.Hố ga lắp đặt, hố ga", Text = "II.Hố ga lắp đặt, hố ga  " },
+        // new SelectedItem { Value = "III.1 Tường hố ga xây gạch", Text = "III.1 Tường hố ga xây gạch " },
+        // new SelectedItem { Value = "III.2 Chát tường hố ga xây gạch", Text = "III.2 Chát tường hố ga xây gạch " },
+        // new SelectedItem { Value = "IV.1 Tường hố ga bê tông", Text = "IV.1 Tường hố ga bê tông " },
+        // new SelectedItem { Value = "IV.2 Ván khuân tường hố ga bê tông", Text = "IV.2 Ván khuân tường hố ga bê tông " },
+        // new SelectedItem { Value = "V.Mũ mố hố ga, hố ga", Text = "V.Mũ mố hố ga, hố ga " },
+        // new SelectedItem { Value = "VI.Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga", Text = "VI.Sản xuất + V.Chuyển B.Tông T.Phẩm hố ga " },
+        // new SelectedItem { Value = "VII.Gia công, lắp dựng cốt thép hố ga", Text = "VII.Gia công, lắp dựng cốt thép hố ga " },
         try
         {
             plHoGaModel = new();
@@ -1801,7 +1801,7 @@
                         disTenCongTac = false;
                     }
                     break;
-                
+
                 default:
                     break;
             }
@@ -1862,6 +1862,10 @@
         Flag = flag;
         TitleModal = "Chèn loại cống !";
         isModalVisible = true;
+        // Đặt trạng thái chọn cho các danh sách
+        SetSelectedItem(selectLCK, Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
+        SetSelectedItem(selectLBT, Input.LoaiBeTong);
+        SetSelectedItem(selectHMTC, Input.HangMuc);
     }
 
 
@@ -1952,6 +1956,11 @@
     {
         isModalVisibleS = true;
         isModalVisible = !isModalVisible;
+        Input = new();
+        // Đặt trạng thái chọn cho các danh sách
+        SetSelectedItem(selectLCK, Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
+        SetSelectedItem(selectLBT, Input.LoaiBeTong);
+        SetSelectedItem(selectHMTC, Input.HangMuc);
     }
     private void HandleModalCloseS(bool isVisible)
     {

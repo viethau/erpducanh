@@ -11,5 +11,9 @@ namespace DucAnhERP.Repository
         Task<PKKLTDanRBT> GetTKLCK_SauCCByLCK(string id);
         Task<List<THKLModel>> GetTHKLTDanRBT();
         Task<List<THKLModel>> GetTHKLByTuyenDuong(List<NuocMuaModel> nuocMua);
+
+        double KTHH_KL1CK(PKKLTDanRBT obj);
+        double TTCDT_KL(PKKLTDanRBT obj);
+        double KL1CK_ChuaTruCC(PKKLTDanRBT obj);
     }
 }

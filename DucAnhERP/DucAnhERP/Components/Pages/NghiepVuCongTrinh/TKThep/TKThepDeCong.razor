@@ -45,7 +45,7 @@
                          </div>
                           <div class="form-floating col-sm-6 col-md-3">
                            <label for="VTLayKhoiLuong">Vị trí lấy khối lượng<span class="text-danger">*</span></label>
-                            <InputText @oninput="OnInputChange" @bind-Value="Input.VTLayKhoiLuong" class="form-control" id="VTLayKhoiLuong" placeholder="Vị trí lấy khối lượng" />
+                            <InputText @bind-Value:after="OnValueChanged" @bind-Value="Input.VTLayKhoiLuong" class="form-control" id="VTLayKhoiLuong" placeholder="Vị trí lấy khối lượng" />
                             <ValidationMessage For="() => Input.VTLayKhoiLuong" class="text-danger" />
                          </div>
                           <div class="form-floating col-sm-6 col-md-3">
@@ -55,22 +55,22 @@
                         </div>
                          <div class="form-floating col-sm-6 col-md-3">
                            <label for="DKCD">Số hiệu<span class="text-danger">*</span></label>
-                            <InputText @oninput="OnInputChange"  @bind-Value="Input.SoHieu" class="form-control" id="SoHieu" placeholder="Số hiệu" />
+                            <InputText @bind-Value:after="OnValueChanged"  @bind-Value="Input.SoHieu" class="form-control" id="SoHieu" placeholder="Số hiệu" />
                             <ValidationMessage For="() => Input.SoHieu" class="text-danger" />
                          </div>
                           <div class="form-floating col-sm-6 col-md-3">
                            <label for="DKCD">Đường kính/chiều dầy(mm,mm2)<span class="text-danger">*</span></label>
-                            <InputNumber @oninput="OnInputChange"  @bind-Value="Input.DKCD" class="form-control" id="DKCD" placeholder="Đường kính/chiều dầy" />
+                            <InputNumber @bind-Value:after="OnValueChanged"  @bind-Value="Input.DKCD" class="form-control" id="DKCD" placeholder="Đường kính/chiều dầy" />
                             <ValidationMessage For="() => Input.DKCD" class="text-danger" />
                          </div>
                           <div class="form-floating col-sm-6 col-md-3">
                            <label for="SoThanh">Số thanh/01 cấu kiện<span class="text-danger">*</span></label>
-                            <InputNumber @oninput="OnInputChange" @bind-Value="Input.SoThanh" class="form-control" id="SoThanh" placeholder="Số thanh/01 cấu kiện" />
+                            <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.SoThanh" class="form-control" id="SoThanh" placeholder="Số thanh/01 cấu kiện" />
                             <ValidationMessage For="() => Input.SoThanh" class="text-danger" />
                          </div>
                           <div class="form-floating col-sm-6 col-md-3">
                            <label for="SoCK">Số cấu kiện<span class="text-danger">*</span></label>
-                            <InputNumber @oninput="OnInputChange"  @bind-Value="Input.SoCK" class="form-control" id="SoCK" placeholder="Số cấu kiện" />
+                            <InputNumber @bind-Value:after="OnValueChanged"  @bind-Value="Input.SoCK" class="form-control" id="SoCK" placeholder="Số cấu kiện" />
                             <ValidationMessage For="() => Input.SoCK" class="text-danger" />
                          </div>
                           <div class="form-floating col-sm-6 col-md-3">
@@ -81,12 +81,12 @@
 
                          <div class="form-floating col-sm-6 col-md-3">
                            <label for="ChieuDai1Thanh">Chiều dài 01 thanh (mm)/diện tích (mm2)<span class="text-danger">*</span></label>
-                            <InputNumber @oninput="OnInputChange"  @bind-Value="Input.ChieuDai1Thanh" class="form-control" id="ChieuDai1Thanh" placeholder="Chiều dài 01 thanh" />
+                            <InputNumber @bind-Value:after="OnValueChanged"  @bind-Value="Input.ChieuDai1Thanh" class="form-control" id="ChieuDai1Thanh" placeholder="Chiều dài 01 thanh" />
                             <ValidationMessage For="() => Input.ChieuDai1Thanh" class="text-danger" />
                          </div>
                          <div class="form-floating col-sm-6 col-md-3">
                            <label for="TongChieuDai">Tổng chiều dài (m,m2)<span class="text-danger">*</span></label>
-                            <InputNumber @oninput="OnInputChange"  @bind-Value="Input.TongChieuDai" class="form-control" id="TongChieuDai" placeholder="Tổng chiều dài (m,m2)" disabled/>
+                            <InputNumber @bind-Value:after="OnValueChanged"  @bind-Value="Input.TongChieuDai" class="form-control" id="TongChieuDai" placeholder="Tổng chiều dài (m,m2)" disabled/>
                             <ValidationMessage For="() => Input.TongChieuDai" class="text-danger" />
                          </div>
                           <div class="form-floating col-sm-6 col-md-3">
@@ -326,10 +326,10 @@
     private TKThepDCongModel InputMD = new TKThepDCongModel();
 
     private List<SelectedItem> selectLCK = new();
-    private void OnSelectChangeLCK(SelectedItem selectedItem)
+    private async void OnSelectChangeLCK(SelectedItem selectedItem)
     {
         Input.ThongTinDeCong_TenLoaiDeCong = selectedItem.Value;
-        Caculate();
+        await Caculate();
     }
     private List<SelectedItem> selectSearchLCK = new();
     private void OnSelectChangeSearchLCK(SelectedItem selectedItem)
@@ -339,11 +339,11 @@
 
     public string LoaiThep = "";
     private List<SelectedItem> selectLoaiThep = new();
-    private void OnSelectChangeLoaiThep(SelectedItem selectedItem)
+    private async void OnSelectChangeLoaiThep(SelectedItem selectedItem)
     {
         Input.LoaiThep = selectedItem.Value;
         LoaiThep = selectedItem.Text;
-         Caculate();
+        await Caculate();
     }
     private List<SelectedItem> selectSearchLoaiThep = new();
     private void OnSelectChangeSearchLoaiThep(SelectedItem selectedItem)
@@ -356,28 +356,40 @@
     public MetaData MetaData { get; set; }
     public TKThepDCongModel tKThepHoGaModel { get; set; }
 
+    
     //bắt sự kiện khi thay đổi
     private System.Timers.Timer _typingTimer;
-    private int _delay = 1000; // Thời gian chờ (2000ms)
-    private void OnInputChange(ChangeEventArgs e)
+    private int _debounceDelay = 50; // Thời gian đợi sau khi người dùng dừng nhập (ms)
+
+    // Hàm được gọi sau khi bind-value hoàn tất
+    private void OnValueChanged()
     {
-        // Dừng timer nếu đang chạy
+        // Dừng Timer cũ nếu đang chạy
         _typingTimer?.Stop();
 
-        // Khởi động lại timer
-        _typingTimer = new System.Timers.Timer(_delay);
-        _typingTimer.Elapsed += OnTypingStopped;
+        // Khởi động Timer mới
+        _typingTimer = new System.Timers.Timer(_debounceDelay);
+        _typingTimer.Elapsed += async (_, _) =>
+        {
+            _typingTimer.Stop();
+            await InvokeAsync(OnTypingStopped); // Gọi hàm xử lý khi người dùng dừng nhập
+        };
         _typingTimer.AutoReset = false;
         _typingTimer.Start();
     }
 
+    // Hàm xử lý logic khi người dùng dừng nhập
+    private async Task OnTypingStopped()
+    {
+         await Caculate(); 
+    }
 
     private async void OnTypingStopped(object sender, System.Timers.ElapsedEventArgs e)
     {
-        Caculate();
+        await Caculate();
     }
 
-    public async void Caculate()
+    public async Task Caculate()
     {
         Input.TenCongTac = ($"Gia công lắp dựng thép {Input.VTLayKhoiLuong} {LoaiThep} D{Input.DKCD}");
         Input.TongSoThanh = (Input.SoThanh * Input.SoCK);

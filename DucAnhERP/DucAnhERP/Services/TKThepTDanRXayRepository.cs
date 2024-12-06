@@ -427,10 +427,10 @@ namespace DucAnhERP.Services
                                 }
 
                             }
-                            PKKLTDanRXay.KTHH_KL1CK = _pKKLTDanRXayRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
-                            PKKLTDanRXay.TTCDT_KL = _pKKLTDanRXayRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
-                            PKKLTDanRXay.KL1CK_ChuaTruCC = _pKKLTDanRXayRepository.KL1CK_ChuaTruCC(record.KTHH_KL1CK, record.KTHH_SLCauKien, record.TTCDT_KL, record.TTCDT_SLCK, PKKLTDanRXay.KLKP_KL, record.KLKP_Sl);
-                            PKKLTDanRXay.TKLCK_SauCC = PKKLTDanRXay.KL1CK_ChuaTruCC - PKKLTDanRXay.KLCC1CK;
+                            PKKLTDanRXay.KTHH_KL1CK = _pKKLTDanRXayRepository.KTHH_KL1CK(PKKLTDanRXay);
+                            PKKLTDanRXay.TTCDT_KL = _pKKLTDanRXayRepository.TTCDT_KL(PKKLTDanRXay);
+                            PKKLTDanRXay.KL1CK_ChuaTruCC = _pKKLTDanRXayRepository.KL1CK_ChuaTruCC(PKKLTDanRXay);
+                            PKKLTDanRXay.TKLCK_SauCC = Math.Round((PKKLTDanRXay.KL1CK_ChuaTruCC - PKKLTDanRXay.KLCC1CK), 4);
                             PKKLTDanRXays.Add(PKKLTDanRXay);
                         }
 
@@ -495,10 +495,10 @@ namespace DucAnhERP.Services
                                 }
 
                             }
-                            PKKLTDanRXay.KTHH_KL1CK = _pKKLTDanRXayRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
-                            PKKLTDanRXay.TTCDT_KL = _pKKLTDanRXayRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
-                            PKKLTDanRXay.KL1CK_ChuaTruCC = _pKKLTDanRXayRepository.KL1CK_ChuaTruCC(record.KTHH_KL1CK, record.KTHH_SLCauKien, record.TTCDT_KL, record.TTCDT_SLCK, PKKLTDanRXay.KLKP_KL, record.KLKP_Sl);
-                            PKKLTDanRXay.TKLCK_SauCC = PKKLTDanRXay.KL1CK_ChuaTruCC - PKKLTDanRXay.KLCC1CK;
+                            PKKLTDanRXay.KTHH_KL1CK = _pKKLTDanRXayRepository.KTHH_KL1CK(PKKLTDanRXay);
+                            PKKLTDanRXay.TTCDT_KL = _pKKLTDanRXayRepository.TTCDT_KL(PKKLTDanRXay);
+                            PKKLTDanRXay.KL1CK_ChuaTruCC = _pKKLTDanRXayRepository.KL1CK_ChuaTruCC(PKKLTDanRXay);
+                            PKKLTDanRXay.TKLCK_SauCC = Math.Round((PKKLTDanRXay.KL1CK_ChuaTruCC - PKKLTDanRXay.KLCC1CK), 4);
                             PKKLTDanRXays.Add(PKKLTDanRXay);
                         }
 
@@ -566,10 +566,10 @@ namespace DucAnhERP.Services
                                         PKKLTDanRXay.KLKP_KL = Math.Round(PKKLTDanRXay.KLKP_KL, 4);
                                     }
                                 }
-                                PKKLTDanRXay.KTHH_KL1CK = _pKKLTDanRXayRepository.KTHH_KL1CK(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.KTHH_DienTich, record.KTHH_GhiChu);
-                                PKKLTDanRXay.TTCDT_KL = _pKKLTDanRXayRepository.TTCDT_KL(record.DonVi, record.KTHH_D, record.KTHH_R, record.KTHH_C, record.TTCDT_CDai, record.TTCDT_CRong, record.TTCDT_CDay, record.TTCDT_DienTich);
-                                PKKLTDanRXay.KL1CK_ChuaTruCC = _pKKLTDanRXayRepository.KL1CK_ChuaTruCC(record.KTHH_KL1CK, record.KTHH_SLCauKien, record.TTCDT_KL, record.TTCDT_SLCK, PKKLTDanRXay.KLKP_KL, record.KLKP_Sl);
-                                PKKLTDanRXay.TKLCK_SauCC = PKKLTDanRXay.KL1CK_ChuaTruCC - PKKLTDanRXay.KLCC1CK;
+                                PKKLTDanRXay.KTHH_KL1CK = _pKKLTDanRXayRepository.KTHH_KL1CK(PKKLTDanRXay);
+                                PKKLTDanRXay.TTCDT_KL = _pKKLTDanRXayRepository.TTCDT_KL(PKKLTDanRXay);
+                                PKKLTDanRXay.KL1CK_ChuaTruCC = _pKKLTDanRXayRepository.KL1CK_ChuaTruCC(PKKLTDanRXay);
+                                PKKLTDanRXay.TKLCK_SauCC = Math.Round((PKKLTDanRXay.KL1CK_ChuaTruCC - PKKLTDanRXay.KLCC1CK), 4);
                                 PKKLTDanRXays.Add(PKKLTDanRXay);
                             }
 

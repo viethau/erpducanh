@@ -55,6 +55,7 @@ namespace DucAnhERP.Services
                             select new PKKLModel
                             {
                                 Id = a.Id,
+                                Flag = a.Flag,
                                 LoaiCauKien = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "",
                                 LoaiCauKienId = a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
                                 LoaiBeTong = a.LoaiBeTong,
@@ -157,7 +158,7 @@ namespace DucAnhERP.Services
                              {
                                  a.Id,
                                  b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
-                                 PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = c.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                 PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
                                  a.TenCongTac,
                                  a.DonVi,
                                  a.TKLCK_SauCC,
@@ -214,7 +215,7 @@ namespace DucAnhERP.Services
                                        {
                                            a.Id,
                                            a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
-                                           PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = c.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "",
+                                           PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "",
                                            a.TenCongTac,
                                            a.DonVi,
                                            a.TKLCK_SauCC,
@@ -254,7 +255,16 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-        public async Task<Double> GetTKLCK_SauCCByLCK(string id)
+
+        public async Task<PKKLRanhBT> GetTKLCK_SauCCByLCK(string id)
+        {
+            using var context = _context.CreateDbContext();
+            var result = context.PKKLRanhBTs.Where(x => new[] { "I.Móng", "II.Tường", "III.Mũ mố" }.Contains(x.HangMuc) &&
+               x.LoaiBeTong == "Bê tông thương phẩm" &&
+               x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == id).OrderBy(a => a.CreateAt).FirstOrDefault();
+            return result;
+        }
+        public async Task<Double> GetSumTKLCK_SauCCByLCK(string id)
         {
             using var context = _context.CreateDbContext();
            
@@ -320,12 +330,10 @@ namespace DucAnhERP.Services
             }
 
             context.PKKLRanhBTs.Update(TKThepDeCong);
-            await context.SaveChangesAsync();
+            await SaveChanges(context);
         }
         public async Task UpdateMulti(PKKLRanhBT[] PKKLRanhBT)
         {
-
-
             try
             {
                 using var context = _context.CreateDbContext();
@@ -457,7 +465,7 @@ namespace DucAnhERP.Services
                 context.PKKLRanhBTs.Add(entity);
 
                 // Lưu bản ghi mới vào cơ sở dữ liệu
-                await context.SaveChangesAsync();
+                await SaveChanges(context);
                 // Trả về Id của bản ghi mới được thêm
                 id = entity.Id ?? "";
                 return id;
@@ -508,8 +516,8 @@ namespace DucAnhERP.Services
             if (entity != null)
             {
                 // Kiểm tra điều kiện HangMuc và PhanLoaiMongCongTronCongHop
-                if (entity.HangMuc == "I.Móng" || entity.HangMuc == "II.Tường" || entity.HangMuc == "III.Mũ mố" || entity.HangMuc==""
-                    && entity.HangMucCongTac.Trim().ToLower() == "Bê tông cống tròn".Trim().ToLower())
+                if (entity.HangMuc == "I.Móng" || entity.HangMuc == "II.Tường" || entity.HangMuc == "III.Mũ mố" 
+                    && entity.HangMucCongTac.Trim().ToLower() == "Bê tông thương phẩm".Trim().ToLower())
                 {
                     using var context = _context.CreateDbContext();
                     var TKLCK_SauCC = entity.TKLCK_SauCC;
@@ -523,18 +531,47 @@ namespace DucAnhERP.Services
                     // Cập nhật các cột TKLCK_SauCC cho từng bản ghi
                     foreach (var record in recordsToUpdate1)
                     {
-
                         if (!string.IsNullOrEmpty(record.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
                         {
-                            var TKLCK_SauCC1 = await GetTKLCK_SauCCByLCK(record.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
-                            if (TKLCK_SauCC1 >0)
-                            {
-                                record.TKLCK_SauCC = TKLCK_SauCC1 + TKLCK_SauCC;
-                            }
-                            else
-                            {
-                                record.TKLCK_SauCC = TKLCK_SauCC;
-                            }
+                            var TKLCK_SauCC1 = await GetSumTKLCK_SauCCByLCK(record.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
+                            record.TKLCK_SauCC = Math.Round((TKLCK_SauCC1 + TKLCK_SauCC),4);
+                        }
+                    }
+
+                    // Gọi phương thức UpdateMulti để cập nhật nhiều bản ghi
+                    await UpdateMulti(recordsToUpdate1.ToArray());
+                    // In thông tin của entity mới
+                    Console.WriteLine($"Entity added: {entity}");
+                }
+            }
+        }
+        // Xử lý khi sửa entity
+        private async Task HandleEntityUpdate(EntityEntry<PKKLRanhBT> entry)
+        {
+            var entity = entry.Entity;
+            if (entity != null)
+            {
+                // Kiểm tra điều kiện HangMuc
+                if (entity.HangMuc == "I.Móng" || entity.HangMuc == "II.Tường" || entity.HangMuc == "III.Mũ mố" 
+                    && entity.HangMucCongTac.Trim().ToLower() == "Bê tông thương phẩm".Trim().ToLower())
+                {
+                    using var context = _context.CreateDbContext();
+                    var TKLCK_SauCC = entity.TKLCK_SauCC;
+
+                    var recordsToUpdate1 = await context.PKKLRanhBTs
+                        .Where(x => x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai
+                        && x.HangMuc == "IV.Sản xuất + V.Chuyển B.Tông T.Phẩm" && x.LoaiBeTong == "Bê tông thương phẩm")
+                        .ToListAsync();
+
+
+                    // Cập nhật các cột TKLCK_SauCC cho từng bản ghi
+                    foreach (var record in recordsToUpdate1)
+                    {
+                        if (!string.IsNullOrEmpty(record.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
+                        {
+                            var getOld = await GetById(entity.Id);
+                            var TKLCK_SauCC1 = await GetSumTKLCK_SauCCByLCK(entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
+                            record.TKLCK_SauCC =Math.Round(((TKLCK_SauCC1 - getOld.TKLCK_SauCC) + entity.TKLCK_SauCC),4);
                         }
 
                     }
@@ -548,15 +585,6 @@ namespace DucAnhERP.Services
                 }
             }
         }
-        // Xử lý khi sửa entity
-        private async Task HandleEntityUpdate(EntityEntry<PKKLRanhBT> entry)
-        {
-            var entity = entry.Entity;
-            if (entity != null)
-            {
-
-            }
-        }
         // Xử lý khi xóa entity
         private async Task HandleEntityDelete(EntityEntry<PKKLRanhBT> entry)
         {
@@ -564,8 +592,8 @@ namespace DucAnhERP.Services
             if (entity != null)
             {
                 // Kiểm tra điều kiện HangMuc và PhanLoaiMongCongTronCongHop
-                if (entity.HangMuc == "I.Móng" || entity.HangMuc == "II.Tường" || entity.HangMuc == "III.Mũ mố" || entity.HangMuc == ""
-                   && entity.HangMucCongTac.Trim().ToLower() == "Bê tông cống tròn".Trim().ToLower())
+                if (entity.HangMuc == "I.Móng" || entity.HangMuc == "II.Tường" || entity.HangMuc == "III.Mũ mố" 
+                   && entity.HangMucCongTac.Trim().ToLower() == "Bê tông thương phẩm".Trim().ToLower())
                 {
                     using var context = _context.CreateDbContext();
                     var TKLCK_SauCC = entity.TKLCK_SauCC;
@@ -578,20 +606,11 @@ namespace DucAnhERP.Services
                     // Cập nhật các cột TKLCK_SauCC cho từng bản ghi
                     foreach (var record in recordsToUpdate1)
                     {
-
                         if (!string.IsNullOrEmpty(record.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
                         {
-                            var TKLCK_SauCC1 = await GetTKLCK_SauCCByLCK(record.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
-                            if (TKLCK_SauCC1 >0 )
-                            {
-                                record.TKLCK_SauCC = TKLCK_SauCC1 - entity.TKLCK_SauCC;
-                            }
-                            else
-                            {
-                                record.TKLCK_SauCC = TKLCK_SauCC;
-                            }
+                            var TKLCK_SauCC1 = await GetSumTKLCK_SauCCByLCK(record.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
+                            record.TKLCK_SauCC = Math.Round((TKLCK_SauCC1 - entity.TKLCK_SauCC),4);
                         }
-
                     }
 
                     // Gọi phương thức UpdateMulti để cập nhật nhiều bản ghi

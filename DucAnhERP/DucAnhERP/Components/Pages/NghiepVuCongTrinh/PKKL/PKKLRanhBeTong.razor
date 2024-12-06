@@ -286,61 +286,64 @@
 
                                     int stt = 0;
                                     string HangMuc = "";
-                                    @foreach (var item in group)
+                                    @foreach (var groupChild in group.GroupBy(item => item.HangMuc))
                                     {
-                                        stt++;
-
-                                        if (string.IsNullOrEmpty(HangMuc) || HangMuc.ToUpper().Trim() != @item.HangMuc.ToUpper().Trim())
+                                        @foreach (var item in groupChild.OrderBy(g => g.Flag))
                                         {
-                                            HangMuc = @item.HangMuc;
-                                            <tr class="bg-warning text-bold">
-                                                <td></td>
-                                                <td>@getChiMuc(HangMuc)</td>
-                                                <td colspan="2">@item.LoaiCauKien</td>
-                                                <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
-                                                <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
-                                                <td colspan="19"></td>
+                                            stt++;
+
+                                            if (string.IsNullOrEmpty(HangMuc) || HangMuc.ToUpper().Trim() != @item.HangMuc.ToUpper().Trim())
+                                            {
+                                                HangMuc = @item.HangMuc;
+                                                <tr class="bg-warning text-bold">
+                                                    <td></td>
+                                                    <td>@getChiMuc(HangMuc)</td>
+                                                    <td colspan="2">@item.LoaiCauKien</td>
+                                                    <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
+                                                    <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
+                                                    <td colspan="19"></td>
+                                                </tr>
+                                            }
+                                            <tr>
+                                                <td class="d-flex nowrap">
+                                                    <div class="d-inline-block">
+                                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary m-1" title="Sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td>@stt</td>
+                                                <td>@item.LoaiCauKien</td>
+                                                <td>@item.LoaiBeTong</td>
+                                                <td>@item.HangMucCongTac</td>
+                                                <td>@item.TenCongTac</td>
+                                                <td>@item.DonVi</td>
+                                                <td>@item.KTHH_D</td>
+                                                <td>@item.KTHH_R</td>
+                                                <td>@item.KTHH_C</td>
+                                                <td>@item.KTHH_DienTich</td>
+                                                <td>@item.KTHH_GhiChu</td>
+                                                <td>@item.KTHH_SLCauKien</td>
+                                                <td>@item.KTHH_KL1CK</td>
+                                                <td>@item.TTCDT_CDai</td>
+                                                <td>@item.TTCDT_CRong</td>
+                                                <td>@item.TTCDT_CDay</td>
+                                                <td>@item.TTCDT_DienTich</td>
+                                                <td>@item.TTCDT_SLCK</td>
+                                                <td>@item.TTCDT_KL</td>
+                                                <td>@item.KLKP_KL</td>
+                                                <td>@item.KLKP_Sl</td>
+                                                <td>@item.KL1CK_ChuaTruCC </td>
+                                                <td>@item.KLCC1CK </td>
+                                                <td>@item.TKLCK_SauCC </td>
                                             </tr>
                                         }
-                                        <tr>
-                                            <td class="d-flex nowrap">
-                                                <div class="d-inline-block">
-                                                    <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-primary m-1" title="Sửa" @onclick="()=>HandleEdit(item.Id)">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
-                                                        <i class="fas fa-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                            <td>@stt</td>
-                                            <td>@item.LoaiCauKien</td>
-                                            <td>@item.LoaiBeTong</td>
-                                            <td>@item.HangMucCongTac</td>
-                                            <td>@item.TenCongTac</td>
-                                            <td>@item.DonVi</td>
-                                            <td>@item.KTHH_D</td>
-                                            <td>@item.KTHH_R</td>
-                                            <td>@item.KTHH_C</td>
-                                            <td>@item.KTHH_DienTich</td>
-                                            <td>@item.KTHH_GhiChu</td>
-                                            <td>@item.KTHH_SLCauKien</td>
-                                            <td>@item.KTHH_KL1CK</td>
-                                            <td>@item.TTCDT_CDai</td>
-                                            <td>@item.TTCDT_CRong</td>
-                                            <td>@item.TTCDT_CDay</td>
-                                            <td>@item.TTCDT_DienTich</td>
-                                            <td>@item.TTCDT_SLCK</td>
-                                            <td>@item.TTCDT_KL</td>
-                                            <td>@item.KLKP_KL</td>
-                                            <td>@item.KLKP_Sl</td>
-                                            <td>@item.KL1CK_ChuaTruCC </td>
-                                            <td>@item.KLCC1CK </td>
-                                            <td>@item.TKLCK_SauCC </td>
-                                        </tr>
                                     }
                                 }
                             </tbody>
@@ -397,6 +400,24 @@
     private async void OnSelectChangeHMTC(SelectedItem selectedItem)
     {
         Input.HangMuc = selectedItem.Value;
+        Input.TenCongTac = "";
+        Input.KTHH_D = 0;
+        Input.KTHH_R = 0;
+        Input.KTHH_C = 0;
+        Input.KTHH_DienTich = 0;
+        Input.KTHH_SLCauKien = 0;
+        Input.KTHH_KL1CK = 0;
+        Input.TTCDT_CDai = 0;
+        Input.TTCDT_CRong = 0;
+        Input.TTCDT_CDay = 0;
+        Input.TTCDT_DienTich = 0;
+        Input.TTCDT_SLCK = 0;
+        Input.TTCDT_KL = 0;
+        Input.KLKP_KL = 0;
+        Input.KLKP_Sl = 0;
+        Input.KL1CK_ChuaTruCC = 0;
+        Input.KLCC1CK = 0;
+        Input.TKLCK_SauCC = 0;
         await Caculate();
     }
 
@@ -618,11 +639,8 @@
                 Input.KTHH_D = 0;
                 if (!string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
                 {
-                    var TKLCK_SauCC = await PKKLRanhBTRepository.GetTKLCK_SauCCByLCK(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
-                    if (TKLCK_SauCC != null)
-                    {
-                        Input.TKLCK_SauCC = Math.Round(TKLCK_SauCC,4);
-                    }
+                    var TKLCK_SauCC = await PKKLRanhBTRepository.GetSumTKLCK_SauCCByLCK(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
+                    Input.TKLCK_SauCC = Math.Round(TKLCK_SauCC, 4);
                 }
                 if (disKTHH_C || disKTHH_R)
                 {
@@ -667,9 +685,9 @@
 
     public void TinhToan(PKKLRanhBT Input)
     {
-        Input.KTHH_KL1CK = KTHH_KL1CK(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.KTHH_DienTich, Input.KTHH_GhiChu);
-        Input.TTCDT_KL = TTCDT_KL(Input.DonVi, Input.KTHH_D, Input.KTHH_R, Input.KTHH_C, Input.TTCDT_CDai, Input.TTCDT_CRong, Input.TTCDT_CDay, Input.TTCDT_DienTich);
-        Input.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(Input.KTHH_KL1CK, Input.KTHH_SLCauKien, Input.TTCDT_KL, Input.TTCDT_SLCK, Input.KLKP_KL, Input.KLKP_Sl);
+        Input.KTHH_KL1CK = PKKLRanhBTRepository.KTHH_KL1CK(Input);
+        Input.TTCDT_KL = PKKLRanhBTRepository.TTCDT_KL(Input);
+        Input.KL1CK_ChuaTruCC = PKKLRanhBTRepository.KL1CK_ChuaTruCC(Input);
         Input.TKLCK_SauCC = Input.KL1CK_ChuaTruCC - Input.KLCC1CK;
     }
 
@@ -1008,37 +1026,6 @@
             }
 
 
-            // switch (Input.HangMuc)
-            // {
-
-            //     case "I.Bê tông, vận chuyển, lắp đặt":
-            //         disKTHH = ShouldDisableKTHH(Input, "thanh chống");
-            //         disInput = ShouldDisableInput(Input, "Vận chuyển từ bãi đúc đến công trường");
-            //         disTenCongTac = false;
-            //         break;
-
-            //     case "II.Sản xuất + V.Chuyển B.Tông T.Phẩm":
-            //         disKTHH = false;
-            //         disTenCongTac = false;
-            //         break;
-
-            //     case "III.Gia công, lắp dựng cốt thép":
-            //         disKTHH = false;
-            //         if (!string.IsNullOrEmpty(Input.TTKTHHCongHopRanh_LoaiThanhChong))
-            //         {
-            //             disInput = true;
-            //             disTenCongTac = true;
-            //             selectTenCongTac = await GetTenCongTacAsync(Input.TTKTHHCongHopRanh_LoaiThanhChong, Input.TenCongTac);
-            //         }
-            //         else
-            //         {
-            //             disTenCongTac = false;
-            //         }
-            //         break;
-
-            //     default:
-            //         break;
-            // }
         }
         catch (Exception ex)
         {
@@ -1162,67 +1149,7 @@
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
     }
 
-    public static double KTHH_KL1CK(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double KTHH_DienTich, string KTHH_GhiChu)
-    {
-        double result = 0;
-        if (DonVi == "M3")
-        {
-            if (string.IsNullOrEmpty(KTHH_GhiChu) || KTHH_GhiChu == "0")
-            {
-                result = KTHH_D * KTHH_R * KTHH_C;
-            }
-            else if (KTHH_GhiChu == "Rộng*Cao")
-            {
-                result = KTHH_DienTich * KTHH_D;
-            }
-            else if (KTHH_GhiChu == "Dài*Cao")
-            {
-                result = KTHH_DienTich * KTHH_R;
-            }
-            else if (KTHH_GhiChu == "Dài*Rộng")
-            {
-                result = KTHH_DienTich * KTHH_C;
-            }
-
-        }
-        return Math.Round(result, 4);
-    }
-
-    public static double TTCDT_KL(string DonVi, double KTHH_D, double KTHH_R, double KTHH_C, double TTCDT_CDai, double TTCDT_CRong, double TTCDT_CDay, double TTCDT_DienTich)
-    {
-        double result = 0;
-        if (DonVi.ToUpper().Trim() == "M2")
-        {
-            if (string.IsNullOrEmpty(TTCDT_DienTich.ToString()) || TTCDT_DienTich == 0)
-            {
-                result = (KTHH_D * KTHH_C * TTCDT_CDai) + (KTHH_R * KTHH_C * TTCDT_CRong) + (KTHH_D * KTHH_R * TTCDT_CDay);
-            }
-            else
-            {
-                result = TTCDT_DienTich;
-            }
-        }
-        return Math.Round(result, 4);
-    }
-
-    public static double KL1CK_ChuaTruCC(double KTHH_KL1CK, double KTHH_SLCauKien, double TTCDT_KL, double TTCDT_SLCK, double KLKP_KL, double KLKP_Sl)
-    {
-        double result = 0;
-        if (KTHH_KL1CK > 0)
-        {
-            result = KTHH_KL1CK * KTHH_SLCauKien;
-        }
-        else if (TTCDT_KL > 0)
-        {
-            result = TTCDT_KL * TTCDT_SLCK;
-        }
-        else
-        {
-            result = KLKP_KL * KLKP_Sl;
-        }
-        return Math.Round(result, 4);
-    }
-
+   
     public static string getChiMuc(string DK)
     {
         string ChiMuc = "I";

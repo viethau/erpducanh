@@ -587,10 +587,10 @@
         isModalVisible = true;
         Input = new();
 
-        foreach (var item in selectLCK)
-        {
-            item.IsSelected = string.IsNullOrEmpty(item.Value);
-        }
+        // Đặt trạng thái chọn cho các danh sách
+        SetSelectedItem(selectLCK, Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai);
+        SetSelectedItem(selectLBT, Input.LoaiBeTong);
+        SetSelectedItem(selectHMTC, Input.HangMuc);
     }
 
     private void HandleModalClose(bool isVisible)

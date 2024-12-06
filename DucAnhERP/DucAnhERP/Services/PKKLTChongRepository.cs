@@ -656,9 +656,9 @@ namespace DucAnhERP.Services
         {
             record.KTHH_KL1CK = KTHH_KL1CK(record);
             record.TTCDT_KL = TTCDT_KL(record);
-            record.KLKP_KL = tklckSauCc * 2.4;
+            record.KLKP_KL = Math.Round((tklckSauCc * 2.4), 4);
             record.KL1CK_ChuaTruCC = KL1CK_ChuaTruCC(record);
-            record.TKLCK_SauCC = record.KL1CK_ChuaTruCC - record.KLCC1CK;
+            record.TKLCK_SauCC = Math.Round((record.KL1CK_ChuaTruCC - record.KLCC1CK), 4);
         }
         public double KTHH_KL1CK(PKKLTChong obj)
         {

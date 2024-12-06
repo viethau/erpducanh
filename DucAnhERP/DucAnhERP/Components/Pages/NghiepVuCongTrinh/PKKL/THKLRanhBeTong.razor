@@ -18,8 +18,8 @@
     }
 
         table thead tr td {
-            / white-space: nowrap;
-            / text-align: center;
+            white-space: nowrap;
+            text-align: center;
             padding: 2px 5px;
         }
 
@@ -28,8 +28,6 @@
     }
 </style>
 <div class="container-fluid">
-
-
     <div id="tableContainer" class=" m-2 mt-3">
         <h5>BẢNG TỔNG HỢP KHỐI LƯỢNG RÃNH BỂ TÔNG THEO LOẠI RÃNH BÊ TÔNG THEO TUYẾN</h5>
         <div style="white-space:nowrap">
@@ -137,12 +135,12 @@
                                 {
                                     <tr>
                                         <td></td>
-                                        <td>@item.SLTrai</td>
-                                        <td>@item.SLPhai</td>
-                                        <td>@item.SLTong</td>
-                                        <td>@Format.FormatCurrency(@Math.Round(item.KLTrai, 4))</td>
-                                        <td>@Format.FormatCurrency(@Math.Round(@item.KLPhai, 4))</td>
-                                        <td>@Format.FormatCurrency(@Math.Round(@item.KLTong, 4)) </td>
+                                        <td>@Format.FormatCurrency(Math.Round(item.SLTrai,4))</td>
+                                        <td>@Format.FormatCurrency(Math.Round(item.SLPhai,4))</td>
+                                        <td>@Format.FormatCurrency(Math.Round(item.SLTong,4))</td>
+                                        <td>@Format.FormatCurrency(Math.Round(item.KLTrai, 4))</td>
+                                        <td>@Format.FormatCurrency(Math.Round(item.KLPhai, 4))</td>
+                                        <td>@Format.FormatCurrency(Math.Round(item.KLTong, 4)) </td>
                                     </tr>
                                 }
                             </tbody>
