@@ -25,7 +25,7 @@
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinDuongTruyenDan_HinhThucTruyenDan">Hình thức truyền dẫn <span class="text-danger">*</span></label>
-                        <select disabled="@isEdit" id="ThongTinDuongTruyenDan_HinhThucTruyenDan" class="form-control" @bind="Input.ThongTinDuongTruyenDan_HinhThucTruyenDan">
+                        <select readonly="@isEdit" id="ThongTinDuongTruyenDan_HinhThucTruyenDan" class="form-control" @bind="Input.ThongTinDuongTruyenDan_HinhThucTruyenDan">
                             <option value="">Hình thức truyền dẫn ...</option>
                             @foreach (var dm in FindByIdNhomDanhMuc("TD_HTTruyenDan"))
                             {
@@ -36,7 +36,7 @@
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinDuongTruyenDan_LoaiTruyenDan">Loại truyền dẫn <span class="text-danger">*</span></label>
-                        <select disabled="@isEdit" id="ThongTinDuongTruyenDan_LoaiTruyenDan" class="form-control" @bind="Input.ThongTinDuongTruyenDan_LoaiTruyenDan">
+                        <select readonly="@isEdit" id="ThongTinDuongTruyenDan_LoaiTruyenDan" class="form-control" @bind="Input.ThongTinDuongTruyenDan_LoaiTruyenDan">
                             <option value="">Loại truyền dẫn...</option>
                             @foreach (var dm in FindByIdNhomDanhMuc("TD_LTruyenDan"))
                             {
@@ -48,12 +48,12 @@
                     
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien">C.Dài C.Kiện (C.Tròn, C.Hộp) <span class="text-danger">*</span></label>
-                        <InputNumber disabled="@isEdit" @bind-Value="Input.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien" class="form-control" id="TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien" placeholder="C.Dài C.Kiện (C.Tròn, C.Hộp)" />
+                        <InputNumber readonly="@isEdit" @bind-Value="Input.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien" class="form-control" id="TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien" placeholder="C.Dài C.Kiện (C.Tròn, C.Hộp)" />
                         <ValidationMessage For="() => Input.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien" class="text-danger" />
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinCauTaoCongTron_CDayPhuBi">C.Dầy phủ bì (m) <span class="text-danger">*</span></label>
-                        <InputNumber disabled="@isEdit" @bind-Value="Input.ThongTinCauTaoCongTron_CDayPhuBi" class="form-control" id="ThongTinCauTaoCongTron_CDayPhuBi" placeholder="C.Dầy phủ bì (m)" />
+                        <InputNumber readonly="@isEdit" @bind-Value="Input.ThongTinCauTaoCongTron_CDayPhuBi" class="form-control" id="ThongTinCauTaoCongTron_CDayPhuBi" placeholder="C.Dầy phủ bì (m)" />
                         <ValidationMessage For="() => Input.ThongTinCauTaoCongTron_CDayPhuBi" class="text-danger" />
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTKTHHCongHopRanh_CauTaoTuong">Cấu tạo tường<span class="text-danger"></span></label>
-                                <select disabled="@isEdit" id="TTKTHHCongHopRanh_CauTaoTuong" class="form-control" @bind="Input.TTKTHHCongHopRanh_CauTaoTuong">
+                                <select readonly="@isEdit" id="TTKTHHCongHopRanh_CauTaoTuong" class="form-control" @bind="Input.TTKTHHCongHopRanh_CauTaoTuong">
                                     <option value="">Cấu tạo tường...</option>
                                     @foreach (var dm in FindByIdNhomDanhMuc("TD_LDanhTuong"))
                                     {
@@ -76,7 +76,7 @@
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTKTHHCongHopRanh_CauTaoMuMo">Cấu tạo mũ mố<span class="text-danger"></span></label>
-                                <select disabled="@isEdit" id="TTKTHHCongHopRanh_CauTaoMuMo" class="form-control" @bind="Input.TTKTHHCongHopRanh_CauTaoMuMo">
+                                <select readonly="@isEdit" id="TTKTHHCongHopRanh_CauTaoMuMo" class="form-control" @bind="Input.TTKTHHCongHopRanh_CauTaoMuMo">
                                     <option value="">Cấu tạo mũ mố...</option>
                                     @foreach (var dm in FindByIdNhomDanhMuc("TD_LMMCongRanh"))
                                     {
@@ -87,7 +87,7 @@
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTKTHHCongHopRanh_ChatMatTrong">Chát mặt trong<span class="text-danger"></span></label>
-                                <select disabled="@isEdit" id="TTKTHHCongHopRanh_ChatMatTrong" class="form-control" @bind="Input.TTKTHHCongHopRanh_ChatMatTrong">
+                                <select readonly="@isEdit" id="TTKTHHCongHopRanh_ChatMatTrong" class="form-control" @bind="Input.TTKTHHCongHopRanh_ChatMatTrong">
                                     <option value="">Chát mặt trong...</option>
                                     @foreach (var dm in FindByIdNhomDanhMuc("DM_CoKhong"))
                                     {
@@ -98,7 +98,7 @@
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTKTHHCongHopRanh_ChatMatNgoai">Chát mặt ngoài<span class="text-danger"></span></label>
-                                <select disabled="@isEdit" id="TTKTHHCongHopRanh_ChatMatNgoai" class="form-control" @bind="Input.TTKTHHCongHopRanh_ChatMatNgoai">
+                                <select readonly="@isEdit" id="TTKTHHCongHopRanh_ChatMatNgoai" class="form-control" @bind="Input.TTKTHHCongHopRanh_ChatMatNgoai">
                                     <option value="">Chát mặt ngoài...</option>
                                     @foreach (var dm in FindByIdNhomDanhMuc("DM_CoKhong"))
                                     {
@@ -113,12 +113,12 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTKTHHCongHopRanh_CCaoDe">C.Cao đế(m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CCaoDe" class="form-control" id="TTKTHHCongHopRanh_CCaoDe" placeholder="C.Cao đế" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CCaoDe" class="form-control" id="TTKTHHCongHopRanh_CCaoDe" placeholder="C.Cao đế" />
                                 <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CCaoDe" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTKTHHCongHopRanh_CRongDe">C.Rộng đế(m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CRongDe" class="form-control" id="TTKTHHCongHopRanh_CRongDe" placeholder="C.Rộng đế" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CRongDe" class="form-control" id="TTKTHHCongHopRanh_CRongDe" placeholder="C.Rộng đế" />
                                 <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CRongDe" class="text-danger" />
                             </div>
                         </div>
@@ -126,22 +126,22 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTKTHHCongHopRanh_CDayTuong01Ben">C.Dầy tường 01 bên (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CDayTuong01Ben" class="form-control" id="TTKTHHCongHopRanh_CDayTuong01Ben" placeholder="C.Dầy tường 01 bên" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CDayTuong01Ben" class="form-control" id="TTKTHHCongHopRanh_CDayTuong01Ben" placeholder="C.Dầy tường 01 bên" />
                                 <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CDayTuong01Ben" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTKTHHCongHopRanh_SoLuongTuong">Số lượng tường(m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_SoLuongTuong" class="form-control" id="TTKTHHCongHopRanh_SoLuongTuong" placeholder="Số lượng tường" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_SoLuongTuong" class="form-control" id="TTKTHHCongHopRanh_SoLuongTuong" placeholder="Số lượng tường" />
                                 <ValidationMessage For="() => Input.TTKTHHCongHopRanh_SoLuongTuong" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTKTHHCongHopRanh_CRongLongSuDung">C.Rộng lòng sử dụng(m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CRongLongSuDung" class="form-control" id="TTKTHHCongHopRanh_CRongLongSuDung" placeholder="C.Rộng lòng sử dụng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CRongLongSuDung" class="form-control" id="TTKTHHCongHopRanh_CRongLongSuDung" placeholder="C.Rộng lòng sử dụng" />
                                 <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CRongLongSuDung" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTKTHHCongHopRanh_CCaoTuongGop">C.Cao tường gộp(m)</label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CCaoTuongGop" class="form-control" id="TTKTHHCongHopRanh_CCaoTuongGop" placeholder="C.Cao tường gộp" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CCaoTuongGop" class="form-control" id="TTKTHHCongHopRanh_CCaoTuongGop" placeholder="C.Cao tường gộp" />
 
                             </div>
                         </div>
@@ -149,22 +149,22 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTKTHHCongHopRanh_CCaoMuMoThotDuoi">C.Cao mũ mố thớt dưới(m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CCaoMuMoThotDuoi" class="form-control" id="TTKTHHCongHopRanh_CCaoMuMoThotDuoi" placeholder="C.Cao mũ mố thớt dưới" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CCaoMuMoThotDuoi" class="form-control" id="TTKTHHCongHopRanh_CCaoMuMoThotDuoi" placeholder="C.Cao mũ mố thớt dưới" />
                                 <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CCaoMuMoThotDuoi" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTKTHHCongHopRanh_CRongMuMoDuoi">C.Rộng mũ mố dưới(m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CRongMuMoDuoi" class="form-control" id="TTKTHHCongHopRanh_CRongMuMoDuoi" placeholder="C.Rộng mũ mố dưới" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CRongMuMoDuoi" class="form-control" id="TTKTHHCongHopRanh_CRongMuMoDuoi" placeholder="C.Rộng mũ mố dưới" />
                                 <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CRongMuMoDuoi" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTKTHHCongHopRanh_CCaoMuMoThotTren">C.Cao mũ mố thớt trên (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CCaoMuMoThotTren" class="form-control" id="TTKTHHCongHopRanh_CCaoMuMoThotTren" placeholder="C.Cao mũ mố thớt trên" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CCaoMuMoThotTren" class="form-control" id="TTKTHHCongHopRanh_CCaoMuMoThotTren" placeholder="C.Cao mũ mố thớt trên" />
                                 <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CCaoMuMoThotTren" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTKTHHCongHopRanh_CRongMuMoTren">C.Rộng mũ mố trên(m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CRongMuMoTren" class="form-control" id="TTKTHHCongHopRanh_CRongMuMoTren" placeholder="C.Rộng mũ mố trên" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CRongMuMoTren" class="form-control" id="TTKTHHCongHopRanh_CRongMuMoTren" placeholder="C.Rộng mũ mố trên" />
                                 <ValidationMessage For="() => Input.TTKTHHCongHopRanh_CRongMuMoTren" class="text-danger" />
                             </div>
                         </div>
@@ -173,11 +173,11 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTKTHHCongHopRanh_CCaoChatMatTrong">C.Cao chát mặt trong (m)</label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CCaoChatMatTrong" class="form-control" id="TTKTHHCongHopRanh_CCaoChatMatTrong" placeholder="C.Cao chát mặt trong (m)" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CCaoChatMatTrong" class="form-control" id="TTKTHHCongHopRanh_CCaoChatMatTrong" placeholder="C.Cao chát mặt trong (m)" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTKTHHCongHopRanh_CCaoChatMatNgoai">C.Cao chát mặt ngoài (m</label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CCaoChatMatNgoai" class="form-control" id="TTKTHHCongHopRanh_CCaoChatMatNgoai" placeholder="C.Cao chát mặt ngoài (m" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.TTKTHHCongHopRanh_CCaoChatMatNgoai" class="form-control" id="TTKTHHCongHopRanh_CCaoChatMatNgoai" placeholder="C.Cao chát mặt ngoài (m" />
                             </div>
 
                         </div>

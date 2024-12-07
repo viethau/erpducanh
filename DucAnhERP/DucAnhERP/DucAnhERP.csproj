@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Components\Pages\PhanQuyen\**" />
+    <Content Remove="Components\Pages\PhanQuyen\**" />
+    <EmbeddedResource Remove="Components\Pages\PhanQuyen\**" />
+    <None Remove="Components\Pages\PhanQuyen\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Components\Pages\NghiepVuCongTrinh\Test.razor~RF29bcef.TMP" />
     <None Remove="ViewModel\PKKLCTronModel.cs~RF14fdfb70.TMP" />
   </ItemGroup>
@@ -25,7 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\Pages\PhanQuyen\" />
     <Folder Include="Data\Migrations\" />
     <Folder Include="Migrations\" />
   </ItemGroup>

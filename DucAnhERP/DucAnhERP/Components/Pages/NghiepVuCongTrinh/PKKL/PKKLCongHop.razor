@@ -114,7 +114,7 @@
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="KTHH_KL1CK">KL 01 CK<span></span></label>
-                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KTHH_KL1CK" class="form-control" id="KTHH_KL1CK" disabled />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KTHH_KL1CK" class="form-control" id="KTHH_KL1CK" readonly />
                                 <ValidationMessage For="() => Input.KTHH_KL1CK  " />
                             </div>
                         </div>
@@ -147,7 +147,7 @@
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TTCDT_KL">KL<span></span></label>
-                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TTCDT_KL" class="form-control" id="TTCDT_KL" disabled />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TTCDT_KL" class="form-control" id="TTCDT_KL" readonly />
                                 <ValidationMessage For="() => Input.TTCDT_KL" />
                             </div>
 
@@ -156,7 +156,7 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="KLKP_KL">Khối lượng<span></span></label>
-                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KLKP_KL" class="form-control" id="KLKP_KL" disabled="@disInput" />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KLKP_KL" class="form-control" id="KLKP_KL" readonly="@disInput" />
                                 <ValidationMessage For="() => Input.KLKP_KL" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
@@ -168,7 +168,7 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="KL1CK_ChuaTruCC">KL 01CK Chưa trừ chiếm chỗ<span></span></label>
-                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KL1CK_ChuaTruCC" class="form-control" id="KL1CK_ChuaTruCC" disabled />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.KL1CK_ChuaTruCC" class="form-control" id="KL1CK_ChuaTruCC" readonly />
                                 <ValidationMessage For="() => Input.KL1CK_ChuaTruCC" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
@@ -178,7 +178,7 @@
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TKLCK_SauCC">Tổng KLCK sau chiếm chỗ<span></span></label>
-                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TKLCK_SauCC" class="form-control" id="TKLCK_SauCC" disabled />
+                                <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TKLCK_SauCC" class="form-control" id="TKLCK_SauCC" readonly />
                                 <ValidationMessage For="() => Input.TKLCK_SauCC" />
                             </div>
                         </div>

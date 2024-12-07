@@ -24,7 +24,7 @@
                  </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinTamDanHoGa2_HinhThucDayHoGa"> Hình thức đậy hố ga <span class="text-danger"></span></label>
-                        <select disabled="@isEdit" id="gender" class="form-control" @bind="Input.ThongTinTamDanHoGa2_HinhThucDayHoGa">
+                        <select readonly="@isEdit" id="gender" class="form-control" @bind="Input.ThongTinTamDanHoGa2_HinhThucDayHoGa">
                             <option value="">Hình thức đậy hố ga ...</option>
                             @foreach (var dm in FindByIdNhomDanhMuc("HG_HTDHoGa"))
                             {
@@ -35,29 +35,29 @@
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinTamDanHoGa2_DuongKinh">Đường kính (m)<span class="text-danger">*</span></label>
-                        <InputNumber disabled="@isEdit" @bind-Value="Input.ThongTinTamDanHoGa2_DuongKinh" class="form-control" id="ThongTinTamDanHoGa2_PhanLoaiDayHoGa" placeholder="Đường kính" />
+                        <InputNumber readonly="@isEdit" @bind-Value="Input.ThongTinTamDanHoGa2_DuongKinh" class="form-control" id="ThongTinTamDanHoGa2_PhanLoaiDayHoGa" placeholder="Đường kính" />
                         <ValidationMessage For="() => Input.ThongTinTamDanHoGa2_DuongKinh" class="text-danger" />
                     </div>
 
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinTamDanHoGa2_ChieuDay">Chiều dầy (m)<span class="text-danger">*</span></label>
-                        <InputNumber disabled="@isEdit" @bind-Value="Input.ThongTinTamDanHoGa2_ChieuDay" class="form-control" id="ThongTinTamDanHoGa2_ChieuDay" placeholder="Chiều dầy" />
+                        <InputNumber readonly="@isEdit" @bind-Value="Input.ThongTinTamDanHoGa2_ChieuDay" class="form-control" id="ThongTinTamDanHoGa2_ChieuDay" placeholder="Chiều dầy" />
                         <ValidationMessage For="() => Input.ThongTinTamDanHoGa2_ChieuDay" class="text-danger" />
                     </div>
 
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinTamDanHoGa2_D">Chiều dài (m)<span class="text-danger">*</span></label>
-                        <InputNumber disabled="@isEdit" @bind-Value="Input.ThongTinTamDanHoGa2_D" class="form-control" id="ThongTinTamDanHoGa2_D" placeholder="Chiều dài" />
+                        <InputNumber readonly="@isEdit" @bind-Value="Input.ThongTinTamDanHoGa2_D" class="form-control" id="ThongTinTamDanHoGa2_D" placeholder="Chiều dài" />
                         <ValidationMessage For="() => Input.ThongTinTamDanHoGa2_D" class="text-danger" />
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinTamDanHoGa2_R">Chiều rộng (m)<span class="text-danger">*</span></label>
-                        <InputNumber disabled="@isEdit"  @bind-Value="Input.ThongTinTamDanHoGa2_R" class="form-control" id="ThongTinTamDanHoGa2_R" placeholder="Chiều rộng" />
+                        <InputNumber readonly="@isEdit"  @bind-Value="Input.ThongTinTamDanHoGa2_R" class="form-control" id="ThongTinTamDanHoGa2_R" placeholder="Chiều rộng" />
                         <ValidationMessage For="() => Input.ThongTinTamDanHoGa2_R" class="text-danger" />
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinTamDanHoGa2_C">Chiều cao (m)<span class="text-danger">*</span></label>
-                        <InputNumber disabled="@isEdit" @bind-Value="Input.ThongTinTamDanHoGa2_C" class="form-control" id="ThongTinTamDanHoGa2_C" placeholder="Chiều cao" />
+                        <InputNumber readonly="@isEdit" @bind-Value="Input.ThongTinTamDanHoGa2_C" class="form-control" id="ThongTinTamDanHoGa2_C" placeholder="Chiều cao" />
                         <ValidationMessage For="() => Input.ThongTinTamDanHoGa2_C" class="text-danger" />
                     </div>
                 </div>

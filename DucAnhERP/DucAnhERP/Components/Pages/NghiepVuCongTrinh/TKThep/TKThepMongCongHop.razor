@@ -100,29 +100,29 @@
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="ThongTinLyTrinh_TuyenDuong">Tuyến đường<span class="text-danger">*</span></label>
                             <button type="button" @onclick="ShowModalS" class="btn btn-outline-info form-control">Chọn @Input.ThongTinLyTrinh_TuyenDuong</button>
-                            @*  <InputText  @bind-Value="Input.ThongTinLyTrinh_TuyenDuong" class="form-control" id="ThongTinLyTrinh_TuyenDuong" placeholder="Tuyến đường"  disabled/> *@
+                            @*  <InputText  @bind-Value="Input.ThongTinLyTrinh_TuyenDuong" class="form-control" id="ThongTinLyTrinh_TuyenDuong" placeholder="Tuyến đường"  readonly/> *@
                             <ValidationMessage For="() => Input.ThongTinLyTrinh_TuyenDuong" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="ThongTinLyTrinhTruyenDan_TuLyTrinh">Từ lý trình<span class="text-danger">*</span></label>
-                            <InputNumber @bind-Value="Input.ThongTinLyTrinhTruyenDan_TuLyTrinh" class="form-control" id="ThongTinLyTrinhTruyenDan_TuLyTrinh" placeholder="Từ lý trình" disabled />
+                            <InputNumber @bind-Value="Input.ThongTinLyTrinhTruyenDan_TuLyTrinh" class="form-control" id="ThongTinLyTrinhTruyenDan_TuLyTrinh" placeholder="Từ lý trình" readonly />
                             <ValidationMessage For="() => Input.ThongTinLyTrinhTruyenDan_TuLyTrinh" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="ThongTinLyTrinhTruyenDan_DenLyTrinh">Đến lý trình<span class="text-danger">*</span></label>
-                            <InputNumber @bind-Value="Input.ThongTinLyTrinhTruyenDan_DenLyTrinh" class="form-control" id="ThongTinLyTrinhTruyenDan_DenLyTrinh" placeholder="Đến lý trình" disabled />
+                            <InputNumber @bind-Value="Input.ThongTinLyTrinhTruyenDan_DenLyTrinh" class="form-control" id="ThongTinLyTrinhTruyenDan_DenLyTrinh" placeholder="Đến lý trình" readonly />
                             <ValidationMessage For="() => Input.ThongTinLyTrinhTruyenDan_DenLyTrinh" class="text-danger" />
                         </div>
 
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="Table">Loại cấu kiện</label>
-                            <InputText @bind-Value="PhanLoaiMongCongTronCongHop" class="form-control" id="PhanLoaiMongCongTronCongHop" placeholder="Loại cấu kiện" disabled />
+                            <InputText @bind-Value="PhanLoaiMongCongTronCongHop" class="form-control" id="PhanLoaiMongCongTronCongHop" placeholder="Loại cấu kiện" readonly />
                             <ValidationMessage For="() => Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop" class="text-danger" />
 
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="TenCongTac">Tên công tác<span class="text-danger">*</span></label>
-                            <InputText @bind-Value="Input.TenCongTac" class="form-control" id="TenCongTac" placeholder="Tên công tác" disabled />
+                            <InputText @bind-Value="Input.TenCongTac" class="form-control" id="TenCongTac" placeholder="Tên công tác" readonly />
                             <ValidationMessage For="() => Input.TenCongTac" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
@@ -157,7 +157,7 @@
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="TongSoThanh">Tổng số thanh<span class="text-danger">*</span></label>
-                            <InputNumber @bind-Value="Input.TongSoThanh" class="form-control" id="TongSoThanh" placeholder="Tổng số thanh" disabled />
+                            <InputNumber @bind-Value="Input.TongSoThanh" class="form-control" id="TongSoThanh" placeholder="Tổng số thanh" readonly />
                             <ValidationMessage For="() => Input.TongSoThanh" class="text-danger" />
                         </div>
 
@@ -168,17 +168,17 @@
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="TongChieuDai">Tổng chiều dài (m,m2)<span class="text-danger">*</span></label>
-                            <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TongChieuDai" class="form-control" id="TongChieuDai" placeholder="Tổng chiều dài (m,m2)" disabled />
+                            <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.TongChieuDai" class="form-control" id="TongChieuDai" placeholder="Tổng chiều dài (m,m2)" readonly />
                             <ValidationMessage For="() => Input.TongChieuDai" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="TrongLuong">Trọng lượng thép/(kg/m,m3)<span class="text-danger">*</span></label>
-                            <InputNumber @bind-Value="Input.TrongLuong" class="form-control" id="TrongLuong" placeholder="Trọng lượng thép/(kg/m,m3)" disabled />
+                            <InputNumber @bind-Value="Input.TrongLuong" class="form-control" id="TrongLuong" placeholder="Trọng lượng thép/(kg/m,m3)" readonly />
                             <ValidationMessage For="() => Input.TrongLuong" class="text-danger" />
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="TongTrongLuong">Tổng trọng lượng (kg)<span class="text-danger">*</span></label>
-                            <InputNumber @bind-Value="Input.TongTrongLuong" class="form-control" id="TongTrongLuong" placeholder="Tổng trọng lượng (kg)" disabled />
+                            <InputNumber @bind-Value="Input.TongTrongLuong" class="form-control" id="TongTrongLuong" placeholder="Tổng trọng lượng (kg)" readonly />
 
                             <ValidationMessage For="() => Input.TongTrongLuong" class="text-danger" />
                         </div>

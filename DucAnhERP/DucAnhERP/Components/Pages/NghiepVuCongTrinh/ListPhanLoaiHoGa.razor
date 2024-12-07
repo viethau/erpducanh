@@ -30,7 +30,7 @@
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                 <label for="ThongTinChungHoGa_HinhThucHoGa"> Hình thức hố ga <span class="text-danger">*</span></label>
-                                <select disabled="@isEdit" id="ThongTinChungHoGa_HinhThucHoGa" class="form-control" @bind="Input.ThongTinChungHoGa_HinhThucHoGa">
+                                <select readonly="@isEdit" id="ThongTinChungHoGa_HinhThucHoGa" class="form-control" @bind="Input.ThongTinChungHoGa_HinhThucHoGa">
                                     <option value="">Hình thức hố ga ...</option>
                                     @foreach (var dm in FindByIdNhomDanhMuc("HG_HTHGa"))
                                     {
@@ -41,7 +41,7 @@
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                 <label for="ThongTinChungHoGa_KetCauMuMo"> Kết cấu mũ mố <span class="text-danger">*</span></label>
-                                <select disabled="@isEdit" id="ThongTinChungHoGa_KetCauMuMo" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauMuMo">
+                                <select readonly="@isEdit" id="ThongTinChungHoGa_KetCauMuMo" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauMuMo">
                                     <option value="">Kết cấu mũ mố ...</option>
                                     @foreach (var dm in FindByIdNhomDanhMuc("HG_LMMHoGa"))
                                     {
@@ -52,7 +52,7 @@
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                 <label for="ThongTinChungHoGa_KetCauTuong"> Kết cấu tường <span class="text-danger">*</span></label>
-                                <select disabled="@isEdit" id="ThongTinChungHoGa_KetCauTuong" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauTuong" name="ThongTinChungHoGa_KetCauTuong">
+                                <select readonly="@isEdit" id="ThongTinChungHoGa_KetCauTuong" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauTuong" name="ThongTinChungHoGa_KetCauTuong">
                                     <option value="">Kết cấu tường ...</option>
                                     @foreach (var dm in FindByIdNhomDanhMuc("HG_LTHoGa"))
                                     {
@@ -63,7 +63,7 @@
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                 <label for="ThongTinChungHoGa_HinhThucMongHoGa"> Hình thức móng hố ga <span class="text-danger">*</span></label>
-                                <select disabled="@isEdit" id="ThongTinChungHoGa_HinhThucMongHoGa" class="form-control" @bind="Input.ThongTinChungHoGa_HinhThucMongHoGa">
+                                <select readonly="@isEdit" id="ThongTinChungHoGa_HinhThucMongHoGa" class="form-control" @bind="Input.ThongTinChungHoGa_HinhThucMongHoGa">
                                     <option value="">Hình thức móng hố ga  ...</option>
                                     @foreach (var dm in FindByIdNhomDanhMuc("HG_HTMHoGa"))
                                     {
@@ -74,7 +74,7 @@
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                 <label for="ThongTinChungHoGa_KetCauMong"> Kết cấu móng <span class="text-danger">*</span></label>
-                                <select disabled="@isEdit" id="ThongTinChungHoGa_KetCauMong" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauMong">
+                                <select readonly="@isEdit" id="ThongTinChungHoGa_KetCauMong" class="form-control" @bind="Input.ThongTinChungHoGa_KetCauMong">
                                     <option value="">Kết cấu móng ...</option>
                                     @foreach (var dm in FindByIdNhomDanhMuc("HG_LMHoGa"))
                                     {
@@ -86,7 +86,7 @@
 
                             <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                 <label for="ThongTinChungHoGa_ChatMatTrong"> Chát mặt trong <span class="text-danger">*</span></label>
-                                <select disabled="@isEdit" id="ThongTinChungHoGa_ChatMatTrong" class="form-control" @bind="Input.ThongTinChungHoGa_ChatMatTrong">
+                                <select readonly="@isEdit" id="ThongTinChungHoGa_ChatMatTrong" class="form-control" @bind="Input.ThongTinChungHoGa_ChatMatTrong">
                                     <option value="">Chát mặt trong ...</option>
                                     @foreach (var dm in FindByIdNhomDanhMuc("DM_CoKhong"))
                                     {
@@ -98,7 +98,7 @@
 
                             <div class="form-floating col-sm-6 col-md-3 col-lg-4">
                                 <label for="ThongTinChungHoGa_ChatMatNgoai"> Chát mặt ngoài <span class="text-danger">*</span></label>
-                                <select disabled="@isEdit" id="ThongTinChungHoGa_ChatMatNgoai" class="form-control" @bind="Input.ThongTinChungHoGa_ChatMatNgoai">
+                                <select readonly="@isEdit" id="ThongTinChungHoGa_ChatMatNgoai" class="form-control" @bind="Input.ThongTinChungHoGa_ChatMatNgoai">
                                     <option value="">Chát mặt ngoài ...</option>
                                     @foreach (var dm in FindByIdNhomDanhMuc("DM_CoKhong"))
                                     {
@@ -119,12 +119,12 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="PhuBiHoGa_CDai">Chiểu dài (m) <span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.PhuBiHoGa_CDai" class="form-control" id="PhuBiHoGa_CDai" placeholder="Chiểu dài" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.PhuBiHoGa_CDai" class="form-control" id="PhuBiHoGa_CDai" placeholder="Chiểu dài" />
                                 <ValidationMessage For="() => Input.PhuBiHoGa_CDai" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="PhuBiHoGa_CRong">Chiều rộng (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.PhuBiHoGa_CRong" class="form-control" id="PhuBiHoGa_CRong" placeholder="Chiều rộng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.PhuBiHoGa_CRong" class="form-control" id="PhuBiHoGa_CRong" placeholder="Chiều rộng" />
                                 <ValidationMessage For="() => Input.PhuBiHoGa_CRong" class="text-danger" />
                             </div>
                         </div>
@@ -132,17 +132,17 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="BeTongLotMong_D">Chiểu dài (m) <span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.BeTongLotMong_D" class="form-control" id="BeTongLotMong_D" placeholder="Chiểu dài" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.BeTongLotMong_D" class="form-control" id="BeTongLotMong_D" placeholder="Chiểu dài" />
                                 <ValidationMessage For="() => Input.BeTongLotMong_D" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="BeTongLotMong_R">Chiều rộng (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.BeTongLotMong_R" class="form-control" id="BeTongLotMong_R" placeholder="Chiều rộng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.BeTongLotMong_R" class="form-control" id="BeTongLotMong_R" placeholder="Chiều rộng" />
                                 <ValidationMessage For="() => Input.BeTongLotMong_R" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="BeTongLotMong_C">Chiều cao (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.BeTongLotMong_C" class="form-control" id="BeTongLotMong_C" placeholder="Chiều cao" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.BeTongLotMong_C" class="form-control" id="BeTongLotMong_C" placeholder="Chiều cao" />
                                 <ValidationMessage For="() => Input.BeTongLotMong_C" class="text-danger" />
                             </div>
                         </div>
@@ -150,17 +150,17 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="BeTongMongHoGa_D">Chiểu dài (m) <span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.BeTongMongHoGa_D" class="form-control" id="BeTongMongHoGa_D" placeholder="Chiểu dài" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.BeTongMongHoGa_D" class="form-control" id="BeTongMongHoGa_D" placeholder="Chiểu dài" />
                                 <ValidationMessage For="() => Input.BeTongMongHoGa_D" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="BeTongLotMong_R">Chiều rộng (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.BeTongMongHoGa_R" class="form-control" id="BeTongMongHoGa_R" placeholder="Chiều rộng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.BeTongMongHoGa_R" class="form-control" id="BeTongMongHoGa_R" placeholder="Chiều rộng" />
                                 <ValidationMessage For="() => Input.BeTongMongHoGa_R" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="BeTongMongHoGa_C">Chiều cao (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.BeTongMongHoGa_C" class="form-control" id="BeTongMongHoGa_C" placeholder="Chiều cao" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.BeTongMongHoGa_C" class="form-control" id="BeTongMongHoGa_C" placeholder="Chiều cao" />
                                 <ValidationMessage For="() => Input.BeTongMongHoGa_C" class="text-danger" />
                             </div>
                         </div>
@@ -168,17 +168,17 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="DeHoGa_D">Chiểu dài (m) <span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.DeHoGa_D" class="form-control" id="DeHoGa_D" placeholder="Chiểu dài" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.DeHoGa_D" class="form-control" id="DeHoGa_D" placeholder="Chiểu dài" />
                                 <ValidationMessage For="() => Input.DeHoGa_D" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="DeHoGa_R">Chiều rộng (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.DeHoGa_R" class="form-control" id="DeHoGa_R" placeholder="Chiều rộng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.DeHoGa_R" class="form-control" id="DeHoGa_R" placeholder="Chiều rộng" />
                                 <ValidationMessage For="() => Input.DeHoGa_R" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="DeHoGa_C">Chiều cao (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.DeHoGa_C" class="form-control" id="DeHoGa_C" placeholder="Chiều cao" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.DeHoGa_C" class="form-control" id="DeHoGa_C" placeholder="Chiều cao" />
                                 <ValidationMessage For="() => Input.DeHoGa_C" class="text-danger" />
                             </div>
                         </div>
@@ -186,22 +186,22 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TuongHoGa_D">Chiểu dài (m) <span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.TuongHoGa_D" class="form-control" id="TuongHoGa_D" placeholder="Chiểu dài" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.TuongHoGa_D" class="form-control" id="TuongHoGa_D" placeholder="Chiểu dài" />
                                 <ValidationMessage For="() => Input.TuongHoGa_D" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TuongHoGa_R">Chiều rộng (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.TuongHoGa_R" class="form-control" id="TuongHoGa_R" placeholder="Chiều rộng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.TuongHoGa_R" class="form-control" id="TuongHoGa_R" placeholder="Chiều rộng" />
                                 <ValidationMessage For="() => Input.TuongHoGa_R" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="TuongHoGa_C">Chiều cao (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.TuongHoGa_C" class="form-control" id="TuongHoGa_C" placeholder="Chiều cao" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.TuongHoGa_C" class="form-control" id="TuongHoGa_C" placeholder="Chiều cao" />
                                 <ValidationMessage For="() => Input.TuongHoGa_C" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="DeHoGa_C">Chiều dài tường (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.TuongHoGa_CdTuong" class="form-control" id="TuongHoGa_CdTuong" placeholder="Chiều dài tường" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.TuongHoGa_CdTuong" class="form-control" id="TuongHoGa_CdTuong" placeholder="Chiều dài tường" />
                                 <ValidationMessage For="() => Input.TuongHoGa_CdTuong" class="text-danger" />
                             </div>
                         </div>
@@ -209,27 +209,27 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="DamGiuaHoGa_D">Chiểu dài (m) <span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.DamGiuaHoGa_D" class="form-control" id="DamGiuaHoGa_D" placeholder="Chiểu dài" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.DamGiuaHoGa_D" class="form-control" id="DamGiuaHoGa_D" placeholder="Chiểu dài" />
                                 <ValidationMessage For="() => Input.DamGiuaHoGa_D" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="DamGiuaHoGa_R">Chiều rộng (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.DamGiuaHoGa_R" class="form-control" id="DamGiuaHoGa_R" placeholder="Chiều rộng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.DamGiuaHoGa_R" class="form-control" id="DamGiuaHoGa_R" placeholder="Chiều rộng" />
                                 <ValidationMessage For="() => Input.DamGiuaHoGa_R" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="DamGiuaHoGa_C">Chiều cao (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.DamGiuaHoGa_C" class="form-control" id="DamGiuaHoGa_C" placeholder="Chiều cao" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.DamGiuaHoGa_C" class="form-control" id="DamGiuaHoGa_C" placeholder="Chiều cao" />
                                 <ValidationMessage For="() => Input.DamGiuaHoGa_C" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="DamGiuaHoGa_CdDam">Chiều dài tường (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.DamGiuaHoGa_CdDam" class="form-control" id="DamGiuaHoGa_CdDam" placeholder="Chiều dài dầm" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.DamGiuaHoGa_CdDam" class="form-control" id="DamGiuaHoGa_CdDam" placeholder="Chiều dài dầm" />
                                 <ValidationMessage For="() => Input.DamGiuaHoGa_CdDam" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa">C.Cao dầm giữa tường so với đáy hố ga (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa" class="form-control" id="DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa" placeholder="Chiều dài dầm" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa" class="form-control" id="DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa" placeholder="Chiều dài dầm" />
                                 <ValidationMessage For="() => Input.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa" class="text-danger" />
                             </div>
                         </div>
@@ -237,17 +237,17 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="ChatMatTrong_D">Chiểu dài (m) <span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.ChatMatTrong_D" class="form-control" id="ChatMatTrong_D" placeholder="Chiểu dài" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.ChatMatTrong_D" class="form-control" id="ChatMatTrong_D" placeholder="Chiểu dài" />
                                 <ValidationMessage For="() => Input.ChatMatTrong_D" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="ChatMatTrong_R">Chiều rộng (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.ChatMatTrong_R" class="form-control" id="ChatMatTrong_R" placeholder="Chiều rộng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.ChatMatTrong_R" class="form-control" id="ChatMatTrong_R" placeholder="Chiều rộng" />
                                 <ValidationMessage For="() => Input.ChatMatTrong_R" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="ChatMatTrong_C">Chiều cao (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.ChatMatTrong_C" class="form-control" id="ChatMatTrong_C" placeholder="Chiều cao" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.ChatMatTrong_C" class="form-control" id="ChatMatTrong_C" placeholder="Chiều cao" />
                                 <ValidationMessage For="() => Input.ChatMatTrong_C" class="text-danger" />
                             </div>
                         </div>
@@ -255,17 +255,17 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="ChatMatNgoaiCanh_D">Chiểu dài (m) <span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.ChatMatNgoaiCanh_D" class="form-control" id="ChatMatNgoaiCanh_D" placeholder="Chiểu dài" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.ChatMatNgoaiCanh_D" class="form-control" id="ChatMatNgoaiCanh_D" placeholder="Chiểu dài" />
                                 <ValidationMessage For="() => Input.ChatMatNgoaiCanh_D" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="ChatMatNgoaiCanh_R">Chiều rộng (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.ChatMatNgoaiCanh_R" class="form-control" id="ChatMatNgoaiCanh_R" placeholder="Chiều rộng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.ChatMatNgoaiCanh_R" class="form-control" id="ChatMatNgoaiCanh_R" placeholder="Chiều rộng" />
                                 <ValidationMessage For="() => Input.ChatMatNgoaiCanh_R" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="ChatMatNgoaiCanh_C">Chiều cao (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.ChatMatNgoaiCanh_C" class="form-control" id="ChatMatNgoaiCanh_C" placeholder="Chiều cao" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.ChatMatNgoaiCanh_C" class="form-control" id="ChatMatNgoaiCanh_C" placeholder="Chiều cao" />
                                 <ValidationMessage For="() => Input.ChatMatNgoaiCanh_C" class="text-danger" />
                             </div>
                         </div>
@@ -273,22 +273,22 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="MuMoThotDuoi_D">Chiểu dài (m) <span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.MuMoThotDuoi_D" class="form-control" id="MuMoThotDuoi_D" placeholder="Chiểu dài" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.MuMoThotDuoi_D" class="form-control" id="MuMoThotDuoi_D" placeholder="Chiểu dài" />
                                 <ValidationMessage For="() => Input.MuMoThotDuoi_D" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="MuMoThotDuoi_R">Chiều rộng (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.MuMoThotDuoi_R" class="form-control" id="MuMoThotDuoi_R" placeholder="Chiều rộng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.MuMoThotDuoi_R" class="form-control" id="MuMoThotDuoi_R" placeholder="Chiều rộng" />
                                 <ValidationMessage For="() => Input.MuMoThotDuoi_R" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="MuMoThotDuoi_C">Chiều cao (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.MuMoThotDuoi_C" class="form-control" id="MuMoThotDuoi_C" placeholder="Chiều cao" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.MuMoThotDuoi_C" class="form-control" id="MuMoThotDuoi_C" placeholder="Chiều cao" />
                                 <ValidationMessage For="() => Input.MuMoThotDuoi_C" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="MuMoThotDuoi_CdTuong">Chiều dài tường (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.MuMoThotDuoi_CdTuong" class="form-control" id="MuMoThotDuoi_CdTuong" placeholder="Chiều dài tường" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.MuMoThotDuoi_CdTuong" class="form-control" id="MuMoThotDuoi_CdTuong" placeholder="Chiều dài tường" />
                                 <ValidationMessage For="() => Input.MuMoThotDuoi_CdTuong" class="text-danger" />
                             </div>
                         </div>
@@ -296,22 +296,22 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="MuMoThotTren_D">Chiểu dài (m) <span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.MuMoThotTren_D" class="form-control" id="MuMoThotTren_D" placeholder="Chiểu dài" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.MuMoThotTren_D" class="form-control" id="MuMoThotTren_D" placeholder="Chiểu dài" />
                                 <ValidationMessage For="() => Input.MuMoThotTren_D" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="MuMoThotTren_R">Chiều rộng (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.MuMoThotTren_R" class="form-control" id="MuMoThotTren_R" placeholder="Chiều rộng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.MuMoThotTren_R" class="form-control" id="MuMoThotTren_R" placeholder="Chiều rộng" />
                                 <ValidationMessage For="() => Input.MuMoThotTren_R" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="MuMoThotTren_C">Chiều cao (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.MuMoThotTren_C" class="form-control" id="MuMoThotTren_C" placeholder="Chiều cao" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.MuMoThotTren_C" class="form-control" id="MuMoThotTren_C" placeholder="Chiều cao" />
                                 <ValidationMessage For="() => Input.MuMoThotTren_C" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="MuMoThotTren_CdTuong">Chiều dài tường (m)<span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.MuMoThotTren_CdTuong" class="form-control" id="MuMoThotTren_CdTuong" placeholder="Chiều dài tường" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.MuMoThotTren_CdTuong" class="form-control" id="MuMoThotTren_CdTuong" placeholder="Chiều dài tường" />
                                 <ValidationMessage For="() => Input.MuMoThotTren_CdTuong" class="text-danger" />
                             </div>
                         </div>
@@ -326,22 +326,22 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi1_Loai">Loại <span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi1_Loai" class="form-control" id="HinhThucDauNoi1_Loai" placeholder="Loại" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi1_Loai" class="form-control" id="HinhThucDauNoi1_Loai" placeholder="Loại" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi1_Loai" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi1_CanhDai">Cạnh dài <span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi1_CanhDai" class="form-control" id="HinhThucDauNoi1_CanhDai" placeholder="Cạnh dài" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi1_CanhDai" class="form-control" id="HinhThucDauNoi1_CanhDai" placeholder="Cạnh dài" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi1_CanhDai" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi1_CanhRong">Cạnh rộng <span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi1_CanhRong" class="form-control" id="HinhThucDauNoi1_CanhRong" placeholder="Cạnh rộng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi1_CanhRong" class="form-control" id="HinhThucDauNoi1_CanhRong" placeholder="Cạnh rộng" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi1_CanhRong" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi1_CanhCheo">Cạnh chéo <span class="text-danger">*</span></label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi1_CanhCheo" class="form-control" id="HinhThucDauNoi1_CanhCheo" placeholder="Cạnh chéo" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi1_CanhCheo" class="form-control" id="HinhThucDauNoi1_CanhCheo" placeholder="Cạnh chéo" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi1_CanhCheo" class="text-danger" />
                             </div>
                         </div>
@@ -349,22 +349,22 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi2_Loai">Loại </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi2_Loai" class="form-control" id="HinhThucDauNoi2_Loai" placeholder="Loại" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi2_Loai" class="form-control" id="HinhThucDauNoi2_Loai" placeholder="Loại" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi2_Loai" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi2_CanhDai">Cạnh dài </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi2_CanhDai" class="form-control" id="HinhThucDauNoi2_CanhDai" placeholder="Cạnh dài" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi2_CanhDai" class="form-control" id="HinhThucDauNoi2_CanhDai" placeholder="Cạnh dài" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi2_CanhDai" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi2_CanhRong">Cạnh rộng </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi2_CanhRong" class="form-control" id="HinhThucDauNoi2_CanhRong" placeholder="Cạnh rộng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi2_CanhRong" class="form-control" id="HinhThucDauNoi2_CanhRong" placeholder="Cạnh rộng" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi2_CanhRong" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi2_CanhCheo">Cạnh chéo </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi2_CanhCheo" class="form-control" id="HinhThucDauNoi2_CanhCheo" placeholder="Cạnh chéo" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi2_CanhCheo" class="form-control" id="HinhThucDauNoi2_CanhCheo" placeholder="Cạnh chéo" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi2_CanhCheo" class="text-danger" />
                             </div>
                         </div>
@@ -372,22 +372,22 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi3_Loai">Loại </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi3_Loai" class="form-control" id="HinhThucDauNoi3_Loai" placeholder="Loại" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi3_Loai" class="form-control" id="HinhThucDauNoi3_Loai" placeholder="Loại" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi3_Loai" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi3_CanhDai">Cạnh dài </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi3_CanhDai" class="form-control" id="HinhThucDauNoi3_CanhDai" placeholder="Cạnh dài" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi3_CanhDai" class="form-control" id="HinhThucDauNoi3_CanhDai" placeholder="Cạnh dài" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi3_CanhDai" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi3_CanhRong">Cạnh rộng </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi3_CanhRong" class="form-control" id="HinhThucDauNoi3_CanhRong" placeholder="Cạnh rộng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi3_CanhRong" class="form-control" id="HinhThucDauNoi3_CanhRong" placeholder="Cạnh rộng" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi3_CanhRong" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi3_CanhCheo">Cạnh chéo </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi3_CanhCheo" class="form-control" id="HinhThucDauNoi3_CanhCheo" placeholder="Cạnh chéo" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi3_CanhCheo" class="form-control" id="HinhThucDauNoi3_CanhCheo" placeholder="Cạnh chéo" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi3_CanhCheo" class="text-danger" />
                             </div>
                         </div>
@@ -395,22 +395,22 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi4_Loai">Loại </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi4_Loai" class="form-control" id="HinhThucDauNoi4_Loai" placeholder="Loại" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi4_Loai" class="form-control" id="HinhThucDauNoi4_Loai" placeholder="Loại" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi4_Loai" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi4_CanhDai">Cạnh dài </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi4_CanhDai" class="form-control" id="HinhThucDauNoi4_CanhDai" placeholder="Cạnh dài" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi4_CanhDai" class="form-control" id="HinhThucDauNoi4_CanhDai" placeholder="Cạnh dài" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi4_CanhDai" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi4_CanhRong">Cạnh rộng </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi4_CanhRong" class="form-control" id="HinhThucDauNoi4_CanhRong" placeholder="Cạnh rộng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi4_CanhRong" class="form-control" id="HinhThucDauNoi4_CanhRong" placeholder="Cạnh rộng" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi4_CanhRong" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi4_CanhCheo">Cạnh chéo </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi4_CanhCheo" class="form-control" id="HinhThucDauNoi4_CanhCheo" placeholder="Cạnh chéo" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi4_CanhCheo" class="form-control" id="HinhThucDauNoi4_CanhCheo" placeholder="Cạnh chéo" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi4_CanhCheo" class="text-danger" />
                             </div>
                         </div>
@@ -418,22 +418,22 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi5_Loai">Loại </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi5_Loai" class="form-control" id="HinhThucDauNoi5_Loai" placeholder="Loại" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi5_Loai" class="form-control" id="HinhThucDauNoi5_Loai" placeholder="Loại" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi5_Loai" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi5_CanhDai">Cạnh dài </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi5_CanhDai" class="form-control" id="HinhThucDauNoi5_CanhDai" placeholder="Cạnh dài" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi5_CanhDai" class="form-control" id="HinhThucDauNoi5_CanhDai" placeholder="Cạnh dài" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi5_CanhDai" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi5_CanhRong">Cạnh rộng </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi5_CanhRong" class="form-control" id="HinhThucDauNoi5_CanhRong" placeholder="Cạnh rộng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi5_CanhRong" class="form-control" id="HinhThucDauNoi5_CanhRong" placeholder="Cạnh rộng" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi5_CanhRong" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi5_CanhCheo">Cạnh chéo </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi5_CanhCheo" class="form-control" id="HinhThucDauNoi5_CanhCheo" placeholder="Cạnh chéo" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi5_CanhCheo" class="form-control" id="HinhThucDauNoi5_CanhCheo" placeholder="Cạnh chéo" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi5_CanhCheo" class="text-danger" />
                             </div>
                         </div>
@@ -442,22 +442,22 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi6_Loai">Loại </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi6_Loai" class="form-control" id="HinhThucDauNoi6_Loai" placeholder="Loại" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi6_Loai" class="form-control" id="HinhThucDauNoi6_Loai" placeholder="Loại" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi6_Loai" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi6_CanhDai">Cạnh dài </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi6_CanhDai" class="form-control" id="HinhThucDauNoi6_CanhDai" placeholder="Cạnh dài" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi6_CanhDai" class="form-control" id="HinhThucDauNoi6_CanhDai" placeholder="Cạnh dài" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi6_CanhDai" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi6_CanhRong">Cạnh rộng </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi6_CanhRong" class="form-control" id="HinhThucDauNoi6_CanhRong" placeholder="Cạnh rộng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi6_CanhRong" class="form-control" id="HinhThucDauNoi6_CanhRong" placeholder="Cạnh rộng" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi6_CanhRong" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi6_CanhCheo">Cạnh chéo </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi6_CanhCheo" class="form-control" id="HinhThucDauNoi6_CanhCheo" placeholder="Cạnh chéo" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi6_CanhCheo" class="form-control" id="HinhThucDauNoi6_CanhCheo" placeholder="Cạnh chéo" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi6_CanhCheo" class="text-danger" />
                             </div>
                         </div>
@@ -466,22 +466,22 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi7_Loai">Loại </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi7_Loai" class="form-control" id="HinhThucDauNoi7_Loai" placeholder="Loại" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi7_Loai" class="form-control" id="HinhThucDauNoi7_Loai" placeholder="Loại" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi7_Loai" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi7_CanhDai">Cạnh dài </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi7_CanhDai" class="form-control" id="HinhThucDauNoi7_CanhDai" placeholder="Cạnh dài" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi7_CanhDai" class="form-control" id="HinhThucDauNoi7_CanhDai" placeholder="Cạnh dài" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi7_CanhDai" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi7_CanhRong">Cạnh rộng </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi7_CanhRong" class="form-control" id="HinhThucDauNoi7_CanhRong" placeholder="Cạnh rộng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi7_CanhRong" class="form-control" id="HinhThucDauNoi7_CanhRong" placeholder="Cạnh rộng" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi7_CanhRong" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi7_CanhCheo">Cạnh chéo </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi7_CanhCheo" class="form-control" id="HinhThucDauNoi7_CanhCheo" placeholder="Cạnh chéo" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi7_CanhCheo" class="form-control" id="HinhThucDauNoi7_CanhCheo" placeholder="Cạnh chéo" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi7_CanhCheo" class="text-danger" />
                             </div>
                         </div>
@@ -490,22 +490,22 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi8_Loai">Loại </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi8_Loai" class="form-control" id="HinhThucDauNoi8_Loai" placeholder="Loại" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi8_Loai" class="form-control" id="HinhThucDauNoi8_Loai" placeholder="Loại" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi8_Loai" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi8_CanhDai">Cạnh dài </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi8_CanhDai" class="form-control" id="HinhThucDauNoi8_CanhDai" placeholder="Cạnh dài" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi8_CanhDai" class="form-control" id="HinhThucDauNoi8_CanhDai" placeholder="Cạnh dài" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi8_CanhDai" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi8_CanhRong">Cạnh rộng </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi8_CanhRong" class="form-control" id="HinhThucDauNoi8_CanhRong" placeholder="Cạnh rộng" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi8_CanhRong" class="form-control" id="HinhThucDauNoi8_CanhRong" placeholder="Cạnh rộng" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi8_CanhRong" class="text-danger" />
                             </div>
                             <div class="form-floating col-sm-6 col-md-3 col-lg-3">
                                 <label for="HinhThucDauNoi8_CanhCheo">Cạnh chéo </label>
-                                <InputNumber disabled="@isEdit" @bind-Value="Input.HinhThucDauNoi8_CanhCheo" class="form-control" id="HinhThucDauNoi8_CanhCheo" placeholder="Cạnh chéo" />
+                                <InputNumber readonly="@isEdit" @bind-Value="Input.HinhThucDauNoi8_CanhCheo" class="form-control" id="HinhThucDauNoi8_CanhCheo" placeholder="Cạnh chéo" />
                                 <ValidationMessage For="() => Input.HinhThucDauNoi8_CanhCheo" class="text-danger" />
                             </div>
                         </div>
