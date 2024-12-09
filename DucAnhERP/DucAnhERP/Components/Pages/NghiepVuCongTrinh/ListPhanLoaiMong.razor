@@ -340,7 +340,7 @@
                         );
                         await LoadData();
                     }
-                   
+
                 }
                 else
                 if (phanLoaiMongCTronExist.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop.ToUpper().Trim() != Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop.ToUpper().Trim() && !existName)
@@ -475,10 +475,18 @@
     {
         try
         {
-            TitleModal = "Cập nhật loại cống !";
-            Input = await PhanLoaiMongCTronRepository.GetById(id);
-            isEdit = true;
-            isModalVisible = true;
+            var result = await PhanLoaiMongCTronRepository.CheckUsingId(id);
+            if (result)
+            {
+                ToastService.ShowToast("Thông báo", "Không thể sửa phân loại đang được sử dụng trong DS Nước mua.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+            }
+            else
+            {
+                TitleModal = "Cập nhật loại cống !";
+                Input = await PhanLoaiMongCTronRepository.GetById(id);
+                isEdit = true;
+                isModalVisible = true;
+            }
         }
         catch (Exception ex)
         {

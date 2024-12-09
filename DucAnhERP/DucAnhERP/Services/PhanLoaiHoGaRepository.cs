@@ -60,6 +60,7 @@ namespace DucAnhERP.Services
                             select new PhanLoaiHoGaModel
                             {
                                 Id = plhg.Id,
+                                Flag = plhg.Flag,
                                 ThongTinChungHoGa_TenHoGaSauPhanLoai = plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
                                 ThongTinChungHoGa_HinhThucHoGa = plhg.ThongTinChungHoGa_HinhThucHoGa ?? "",
                                 ThongTinChungHoGa_HinhThucHoGa_Name = hinhThucHoGa.Ten ?? "",
@@ -141,7 +142,6 @@ namespace DucAnhERP.Services
                                 HinhThucDauNoi8_CanhDai = plhg.HinhThucDauNoi8_CanhDai ?? 0,
                                 HinhThucDauNoi8_CanhRong = plhg.HinhThucDauNoi8_CanhRong ?? 0,
                                 HinhThucDauNoi8_CanhCheo = plhg.HinhThucDauNoi8_CanhCheo ?? 0,
-                                Flag = plhg.Flag,
                                 CreateAt = plhg.CreateAt,
                                 CreateBy = plhg.CreateBy,
                                 IsActive = plhg.IsActive,

@@ -451,10 +451,18 @@
     {
         try
         {
-            TitleModal = "Cập nhật loại TĐan TDẫn !";
-            Input = await PhanLoaiTDanTDanRepository.GetById(id);
-            isEdit = true;
-            isModalVisible = true;
+            var result = await PhanLoaiTDanTDanRepository.CheckUsingId(id);
+            if (result)
+            {
+                ToastService.ShowToast("Thông báo", "Không thể sửa phân loại đang được sử dụng trong DS Nước mua.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+            }
+            else
+            {
+                TitleModal = "Cập nhật loại TĐan TDẫn !";
+                Input = await PhanLoaiTDanTDanRepository.GetById(id);
+                isEdit = true;
+                isModalVisible = true;
+            }
         }
         catch (Exception ex)
         {

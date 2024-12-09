@@ -6,15 +6,10 @@
 <select id="@Id" class="form-control" disabled="@disabled">
     @if (Items != null && Items.Any())
     {
-        var a = "";
         @foreach (var item in Items)
         {
-            a= a+" ,"+ @item.Text;
-            var text = @item.Text;
             <option value="@item.Value" selected="@item.IsSelected">@item.Text</option>
         }
-        Console.WriteLine(a);
-        Console.WriteLine(Id);
     }
 </select>
 
@@ -33,6 +28,9 @@
         return Items.Count != previousItemCount;
     }
 
+    private CancellationTokenSource? cts;
+
+    
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         try
@@ -57,15 +55,6 @@
             throw;
         }
     }
-    // protected override async Task OnAfterRenderAsync(bool firstRender)
-    // {
-    //     if (firstRender)
-    //     {
-    //         objRef = DotNetObjectReference.Create(this);
-    //         await JSRuntime.InvokeVoidAsync("select2Blazor.initSelect2", Id, objRef);
-    //     }
-        
-    // }
 
 
     [JSInvokable]

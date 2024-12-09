@@ -3,8 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\components\\pages\\nghiepvucongtrinh\\listnuocmua.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\components\\pages\\nghiepvucongtrinh\\listnuocmua.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\components\\pages\\caidathethong\\listmajoruserpermission.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\components\\pages\\caidathethong\\listmajoruserpermission.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\components\\pages\\common\\select2.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\components\\pages\\common\\select2.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\components\\pages\\nghiepvucongtrinh\\uploadnuocmua.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\components\\pages\\nghiepvucongtrinh\\uploadnuocmua.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,19 +22,45 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ListNuocMua.razor",
-              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
-              "RelativeDocumentMoniker": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
-              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
-              "RelativeToolTip": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
-              "ViewState": "AQIAAMElAAAAAAAAAAAjwMwlAAAtAAAA",
+              "DocumentIndex": 1,
+              "Title": "Select2.razor",
+              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\Common\\Select2.razor",
+              "RelativeDocumentMoniker": "DucAnhERP\\Components\\Pages\\Common\\Select2.razor",
+              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\Common\\Select2.razor",
+              "RelativeToolTip": "DucAnhERP\\Components\\Pages\\Common\\Select2.razor",
+              "ViewState": "AQIAAC0AAAAAAAAAAAAAAAgAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-12-07T03:54:11.516Z",
+              "WhenOpened": "2024-12-09T00:39:13.204Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ListMajorUserPermission.razor",
+              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\CaiDatHeThong\\ListMajorUserPermission.razor",
+              "RelativeDocumentMoniker": "DucAnhERP\\Components\\Pages\\CaiDatHeThong\\ListMajorUserPermission.razor",
+              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\CaiDatHeThong\\ListMajorUserPermission.razor",
+              "RelativeToolTip": "DucAnhERP\\Components\\Pages\\CaiDatHeThong\\ListMajorUserPermission.razor",
+              "ViewState": "AQIAAAQBAAAAAAAAAAAuwBgBAAAkAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-12-09T07:07:38.651Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UploadNuocMua.razor",
+              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\UploadNuocMua.razor",
+              "RelativeDocumentMoniker": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\UploadNuocMua.razor",
+              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\UploadNuocMua.razor",
+              "RelativeToolTip": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\UploadNuocMua.razor",
+              "ViewState": "AQIAAHIAAAAAAAAAAAAAAHkAAABFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-12-09T06:27:04.323Z",
               "EditorCaption": ""
             }
           ]

@@ -393,7 +393,7 @@
                         duration: 5000
                     );
         }
-        
+
 
     }
 
@@ -436,12 +436,21 @@
 
     private async Task HandleEdit(string id)
     {
-       try
+        try
         {
-            TitleModal = "Cập nhật loại tấm đan hố ga !";
-            Input = await PhanLoaiTDHoGaRepository.GetById(id);
-            isEdit = true;
-            isModalVisible = true;
+            var result = await PhanLoaiTDHoGaRepository.CheckUsingId(id);
+            if (result)
+            {
+                ToastService.ShowToast("Thông báo", "Không thể sửa phân loại đang được sử dụng trong DS Nước mua.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+            }
+            else
+            {
+                TitleModal = "Cập nhật loại tấm đan hố ga !";
+                Input = await PhanLoaiTDHoGaRepository.GetById(id);
+                isEdit = true;
+                isModalVisible = true;
+            }
+           
         }
         catch (Exception ex)
         {

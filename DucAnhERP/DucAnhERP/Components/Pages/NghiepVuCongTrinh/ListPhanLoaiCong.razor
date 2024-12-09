@@ -612,10 +612,19 @@
     {
         try
         {
-            TitleModal = "Cập nhật loại cống !";
-            Input = await PhanLoaiCTronHopNhuaRepository.GetById(id);
-            isEdit = true;
-            isModalVisible = true;
+            var result = await PhanLoaiCTronHopNhuaRepository.CheckUsingId(id);
+            if (result)
+            {
+                ToastService.ShowToast("Thông báo", "Không thể sửa phân loại đang được sử dụng trong DS Nước mua.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+            }
+            else
+            {
+                TitleModal = "Cập nhật loại cống !";
+                Input = await PhanLoaiCTronHopNhuaRepository.GetById(id);
+                isEdit = true;
+                isModalVisible = true;
+            }
+           
         }
         catch (Exception ex)
         {

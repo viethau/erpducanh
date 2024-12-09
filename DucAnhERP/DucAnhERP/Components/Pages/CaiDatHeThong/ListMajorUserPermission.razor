@@ -276,6 +276,10 @@
                 }
                 else
                 {
+                    Input.MajorId = "";
+                    selectMajors = new();
+                    Input.PermissionId = "";
+                    listPer = new MultiSelectList(new List<SelectListItem> { }, "Value", "Text", "Selected");
                     ToastService.ShowToast(
                          "Thông báo",
                          "Nghiệp vụ cha:" + selectedItem.Text + ", chưa tồn tại nghiệp vụ nào !",
@@ -350,6 +354,8 @@
                 }
                 else
                 {
+                    Input.PermissionId ="";
+                    listPer = new MultiSelectList(new List<SelectListItem>{}, "Value", "Text", "Selected");
                     ToastService.ShowToast(
                          "Thông báo",
                          "Nghiệp vụ :" + selectedItem.Text + ", chưa được khởi tạo loại quyền !",
@@ -361,7 +367,7 @@
                 }
 
             }
-           
+
             await InvokeAsync(() =>
               {
                   StateHasChanged();
@@ -384,7 +390,7 @@
     {
         Input.UserId = selectedItem.Value;
     }
-    
+
 
     private void OnSelectCompanySear(SelectedItem selectedItem)
     {
@@ -537,10 +543,7 @@
         {
             item.IsSelected = item.Value == "";
         }
-        foreach (var item in selectMajors)
-        {
-            item.IsSelected = item.Value == "";
-        }
+        selectMajors = new();
         foreach (var item in selectUsers)
         {
             item.IsSelected = item.Value == "";
@@ -550,11 +553,8 @@
     {
         isModalVisible = true;
         selectedItems = new();
-        listPer = new MultiSelectList(new List<SelectListItem>
-        {
-
-        }, "Value", "Text", "Selected"
-                                    );
+        listPer = new MultiSelectList(new List<SelectListItem>{}, "Value", "Text", "Selected");
+        
     }
 
     private void HandleModalClose(bool isVisible)

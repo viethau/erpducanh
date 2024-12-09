@@ -10,9 +10,6 @@
 @inject IPhanLoaiHoGaRepository PhanLoaiHoGaRepository
 @inject DucAnhERP.Services.ToastService ToastService
 
-@code{
-    private bool isEdit { get; set; } = false;
-}
 <div class="m-5">
 
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
@@ -866,6 +863,8 @@
     private bool isModalVisible = false;
     private bool isLoading = false;
     private string TitleModal = "Thêm phân loại hố ga";
+    private bool isEdit { get; set; } = false;
+    private bool permissionEdit { get; set; } = false;
 
     private List<SelectedItem> selectHTHG = new();
     private List<SelectedItem> selectKCMM = new();
@@ -1173,14 +1172,14 @@
         }
         catch (Exception ex)
         {
-             ToastService.ShowToast(
-                           "Thông báo",
-                           ex.Message,
-                           cssClass: "toast-danger",
-                            iconClass: "fa fa-exclamation-circle",
-                           progressBarClass: "bg-info",
-                           duration: 5000
-                       );
+            ToastService.ShowToast(
+                          "Thông báo",
+                          ex.Message,
+                          cssClass: "toast-danger",
+                           iconClass: "fa fa-exclamation-circle",
+                          progressBarClass: "bg-info",
+                          duration: 5000
+                      );
         }
     }
 
@@ -1223,10 +1222,19 @@
     {
         try
         {
-            TitleModal = "Cập nhật phân loại hố ga !";
-            Input = await PhanLoaiHoGaRepository.GetById(id);
-            isEdit = true;
-            isModalVisible = true;
+            var result = await PhanLoaiHoGaRepository.CheckUsingId(id);
+            if (result)
+            {
+                ToastService.ShowToast("Thông báo", "Không thể sửa phân loại đang được sử dụng trong DS Nước mua.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+            }
+            else
+            {
+                TitleModal = "Cập nhật phân loại hố ga !";
+                Input = await PhanLoaiHoGaRepository.GetById(id);
+                isEdit = true;
+                isModalVisible = true;
+            }
+            
         }
         catch (Exception ex)
         {

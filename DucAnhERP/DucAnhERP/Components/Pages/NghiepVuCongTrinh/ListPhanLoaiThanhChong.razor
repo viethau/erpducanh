@@ -428,10 +428,18 @@
     {
         try
         {
-            TitleModal = "Cập nhật loại thanh chống!";
-            Input = await PhanLoaiThanhChongRepository.GetById(id);
-            isEdit = true;
-            isModalVisible = true;
+            var result = await PhanLoaiThanhChongRepository.CheckUsingId(id);
+            if (result)
+            {
+                ToastService.ShowToast("Thông báo", "Không thể sửa phân loại đang được sử dụng trong DS Nước mua.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+            }
+            else
+            {
+                TitleModal = "Cập nhật loại thanh chống!";
+                Input = await PhanLoaiThanhChongRepository.GetById(id);
+                isEdit = true;
+                isModalVisible = true;
+            }
         }catch (Exception ex)
         {
             ToastService.ShowToast(
