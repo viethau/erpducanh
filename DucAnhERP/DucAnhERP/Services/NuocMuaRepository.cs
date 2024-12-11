@@ -205,7 +205,10 @@ namespace DucAnhERP.Services
                                 ThongTinLyTrinh_TuyenDuong = nuocMua.ThongTinLyTrinh_TuyenDuong ?? "",
                                 ThongTinLyTrinh_LyTrinhTaiTimHoGa = nuocMua.ThongTinLyTrinh_LyTrinhTaiTimHoGa ?? "",
                                 ThongTinChungHoGa_TenHoGaSauPhanLoai = nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
-                                PhanLoaiHoGas_TenHoGaSauPhanLoai = phanLoaiHoGa != null ? phanLoaiHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai : "",
+                                PhanLoaiHoGas_TenHoGaSauPhanLoai = (nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe != null &&
+                             nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G"))
+                                ? phanLoaiHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai + "=G"
+                                : phanLoaiHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai,
                                 ThongTinChungHoGa_TenHoGaTheoBanVe = nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe ?? "",
                                 ThongTinChungHoGa_HinhThucHoGa = nuocMua.ThongTinChungHoGa_HinhThucHoGa ?? "",
                                 ThongTinChungHoGa_HinhThucHoGa_Name = "",

@@ -72,6 +72,7 @@
                             listNuocMuaRight = await convertDataRight(excelDataList);
                             List<NuocMua> listConvertNuocMua = new();
                             DSNuocMuaConversionHelper helper = new();
+                            //left
                             listConvertNuocMua = await helper.ConvertDSNuocMua(listNuocMua,listDanhMuc);
                             listNuocMua = await loadPhanLoai(listConvertNuocMua);
                             var count = await NuocMuaRepository.MultiInsert(listNuocMua);
@@ -112,46 +113,38 @@
             for (int i = 0; i < listData.Count; i++)
             {
                 NuocMua nuocMua = listData[i];
+                //Load phân loại hố ga
+
                 nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = "";
-                if (nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe == "M1C.7")
+                //Đoạn này test theo số liệu excel 
+                if (nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe == "M2T.7")
                 {
-                    Console.WriteLine("ac");
+                    nuocMua.TuongHoGa_C = 0.9;
+                    nuocMua.ChatMatTrong_C = 1.05;
+                    nuocMua.ChatMatNgoaiCanh_C = 0;
+                    nuocMua.ThongTinCaoDoHoGa_CCaoTuong = 0.9;
+                    nuocMua.ThongTinCaoDoHoGa_DinhTuong = 42.65;
+                    nuocMua.ThongTinCaoDoHoGa_DinhMuMoThotDuoi = 42.8;
                 }
-                //load phân loại
+
                 List<PhanLoaiHoGa> loadTenHoGaSauPhanLoai = new();
                 loadTenHoGaSauPhanLoai = await LoadTenHoGaSauPhanLoai(nuocMua);
+                // var TenHoGaSauPhanLoai = "";
                 if (loadTenHoGaSauPhanLoai != null && loadTenHoGaSauPhanLoai.Count > 0)
                 {
                     foreach (var item in loadTenHoGaSauPhanLoai)
                     {
-                        // Kiểm tra xem tên hố ga theo bản vẽ có kết thúc bằng "=G"
-                        if (!string.IsNullOrEmpty(nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe) &&
-                            nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
-                        {
-                            if (item.G == "=G")
-                            {
-                                nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
-                                break; 
-                            }
-                        }
-                        else
-                        {
-                            // Nếu G là null hoặc rỗng, gán giá trị Id
-                            if (string.IsNullOrEmpty(item.G))
-                            {
-                                nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
-                                break; 
-                            }
-                        }
+                        nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
+                        
                     }
                 }
 
                 // Nếu vẫn chưa gán được giá trị, tạo mới tên hố ga theo phân loại
                 if (string.IsNullOrEmpty(nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai))
                 {
-                    nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = ""; // Gán giá trị mặc định
-                    var id = await ThemTenTheoPL(nuocMua); // Gọi hàm tạo tên theo phân loại
-                    nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = id; // Gán lại giá trị sau khi thêm
+                      nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = "";
+                      var id = await ThemTenTheoPL(nuocMua);
+                      nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
                 }
 
                 //load phân loại LoadTenHoGaSauPhanLoaiTDHoGa
@@ -982,7 +975,7 @@
     PhanLoai phanloai=new();
 
     //Thêm tên theo bảng phân loại hố ga
-    public async Task<string> ThemTenTheoPL(NuocMua Input)
+    public async Task<string> ThemTenTheoPL(NuocMua Input, string TenPL="")
     {
         var id = "";
         PhanLoaiHoGa searchData = new PhanLoaiHoGa
@@ -1062,15 +1055,11 @@
                 HinhThucDauNoi8_CanhRong = Input.HinhThucDauNoi8_CanhRong,
                 HinhThucDauNoi8_CanhCheo = Input.HinhThucDauNoi8_CanhCheo
             };
-        if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
-        {
-            searchData.G = "=G";
-        }
         CheckObjHelper checkObjhelper = new();
         if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
         {
             string HoGa_KetCauTuong = GetTenDanhMucById(searchData.ThongTinChungHoGa_KetCauTuong);
-            id = await PhanLoaiHoGaRepository.InsertId(searchData, HoGa_KetCauTuong, Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
+            id = await PhanLoaiHoGaRepository.InsertId(searchData, HoGa_KetCauTuong, TenPL);
             Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
         }
         return id;

@@ -1,5 +1,6 @@
 ﻿using DucAnhERP.Models;
 using DucAnhERP.SeedWork;
+using System.ComponentModel.DataAnnotations;
 
 namespace DucAnhERP.ViewModel
 {

@@ -9993,10 +9993,10 @@
 
         //load phân loại
         CheckObjHelper checkObjhelper = new();
-        if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
+       @*  if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
         {
             searchData.G = "=G";
-        }
+        } *@
         if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
         {
              Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = "";
@@ -10006,25 +10006,26 @@
             {
                 foreach(var item in loadTenHoGaSauPhanLoai)
                 {
-                    // Kiểm tra xem tên hố ga theo bản vẽ có kết thúc bằng "=G"
-                        if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaTheoBanVe) &&
-                            Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
-                        {
-                            if (item.G == "=G")
-                            {
-                                Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
-                                break; 
-                            }
-                        }
-                        else
-                        {
-                            // Nếu G là null hoặc rỗng, gán giá trị Id
-                            if (string.IsNullOrEmpty(item.G))
-                            {
-                            Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
-                                break; 
-                            }
-                        }
+                     Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
+                    // // Kiểm tra xem tên hố ga theo bản vẽ có kết thúc bằng "=G"
+                    //     if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaTheoBanVe) &&
+                    //         Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
+                    //     {
+                    //         if (item.G == "=G")
+                    //         {
+                    //             Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
+                    //             break; 
+                    //         }
+                    //     }
+                    //     else
+                    //     {
+                    //         // Nếu G là null hoặc rỗng, gán giá trị Id
+                    //         if (string.IsNullOrEmpty(item.G))
+                    //         {
+                    //         Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
+                    //             break; 
+                    //         }
+                    //     }
                 }
 
             }
@@ -10119,10 +10120,10 @@
             };
 
         PhanLoaiHoGa plHoGa = new();
-        if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
-        {
-            searchData.G = "=G";
-        }
+        // if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
+        // {
+        //     searchData.G = "=G";
+        // }
         plHoGa = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaByDetail(searchData);
         if (plHoGa == null)
         {

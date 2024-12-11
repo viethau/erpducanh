@@ -168,8 +168,7 @@ namespace DucAnhERP.Services
                 {
                     query = query.Where(x => x.ThongTinChungHoGa_KetCauMong == Input.ThongTinChungHoGa_KetCauMong);
                 }
-                var data = await query
-                    .ToListAsync();
+                var data = await query.ToListAsync();
                 return data;
             }
             catch (Exception ex)
@@ -203,6 +202,7 @@ namespace DucAnhERP.Services
             isSuccess = data.Any();
             return (isSuccess);
         }
+
         public async Task<PhanLoaiHoGa> GetPhanLoaiHoGaByDetail(PhanLoaiHoGa searchData)
         {
             try
@@ -212,7 +212,7 @@ namespace DucAnhERP.Services
                 // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
                 var query = context.PhanLoaiHoGas
                              .Where(plhg => (
-                                        plhg.G == searchData.G &&
+                                       
                                         plhg.ThongTinChungHoGa_HinhThucHoGa == searchData.ThongTinChungHoGa_HinhThucHoGa &&
                                         plhg.ThongTinChungHoGa_KetCauMuMo == searchData.ThongTinChungHoGa_KetCauMuMo &&
                                         plhg.ThongTinChungHoGa_KetCauTuong == searchData.ThongTinChungHoGa_KetCauTuong &&
@@ -404,7 +404,6 @@ namespace DucAnhERP.Services
                 var query = context.PhanLoaiHoGas
                              .Where(plhg => (
                                         plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai == searchData.ThongTinChungHoGa_TenHoGaSauPhanLoai ||
-                                        plhg.G == searchData.G &&
                                         plhg.ThongTinChungHoGa_HinhThucHoGa == searchData.ThongTinChungHoGa_HinhThucHoGa &&
                                         plhg.ThongTinChungHoGa_KetCauMuMo == searchData.ThongTinChungHoGa_KetCauMuMo &&
                                         plhg.ThongTinChungHoGa_KetCauTuong == searchData.ThongTinChungHoGa_KetCauTuong &&
@@ -606,6 +605,7 @@ namespace DucAnhERP.Services
                             select new PhanLoaiHoGaModel
                             {
                                 Id = plhg.Id,
+                                Flag = plhg.Flag,
                                 ThongTinChungHoGa_TenHoGaSauPhanLoai = plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
                                 ThongTinChungHoGa_HinhThucHoGa = plhg.ThongTinChungHoGa_HinhThucHoGa ?? "",
                                 ThongTinChungHoGa_HinhThucHoGa_Name = hinhThucHoGa.Ten ?? "",
@@ -687,7 +687,6 @@ namespace DucAnhERP.Services
                                 HinhThucDauNoi8_CanhDai = plhg.HinhThucDauNoi8_CanhDai ?? 0,
                                 HinhThucDauNoi8_CanhRong = plhg.HinhThucDauNoi8_CanhRong ?? 0,
                                 HinhThucDauNoi8_CanhCheo = plhg.HinhThucDauNoi8_CanhCheo ?? 0,
-                                Flag = plhg.Flag,
                                 CreateAt = plhg.CreateAt,
                                 CreateBy = plhg.CreateBy,
                                 IsActive = plhg.IsActive,
@@ -775,36 +774,26 @@ namespace DucAnhERP.Services
 
                 // Tăng giá trị Flag lên 1
                 entity.Flag = maxFlag + 1;
+                
+
                 ThongTinChungHoGa_KetCauTuong = ThongTinChungHoGa_KetCauTuong.ToUpper().Trim();
-                if (entity.G == "=G")
+                if (string.IsNullOrEmpty(TenPL))
                 {
-                    if (string.IsNullOrEmpty(TenPL))
+                    string formattedFlag = entity.Flag < 10 ? "0" + entity.Flag : entity.Flag.ToString();
+
+                    if (ThongTinChungHoGa_KetCauTuong == "Tường bê tông".ToUpper().Trim() || ThongTinChungHoGa_KetCauTuong == "Tường bê tông cốt thép".ToUpper().Trim())
                     {
-                        if (ThongTinChungHoGa_KetCauTuong == "Tường bê tông".ToUpper().Trim() || ThongTinChungHoGa_KetCauTuong == "Tường bê tông cốt thép".ToUpper().Trim())
-                        {
-                            entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag + "(BT)" + "=G";
-                        }
-                        else
-                        {
-                            entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag + "=G";
-                        }
+                        entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + formattedFlag + "(BT)" ;
                     }
                     else
                     {
-                        entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = TenPL + "=G";
+                        entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + formattedFlag;
                     }
-                    
+
                 }
                 else
                 {
-                    if (ThongTinChungHoGa_KetCauTuong == "Tường bê tông".ToUpper().Trim() || ThongTinChungHoGa_KetCauTuong == "Tường bê tông cốt thép".ToUpper().Trim())
-                    {
-                        entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag + "(BT)";
-                    }
-                    else
-                    {
-                        entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = "GML" + entity.Flag;
-                    }
+                    entity.ThongTinChungHoGa_TenHoGaSauPhanLoai = TenPL ;
 
                 }
 
@@ -915,6 +904,7 @@ namespace DucAnhERP.Services
                             select new PhanLoaiHoGaModel
                             {
                                 Id = plhg.Id,
+                                Flag = plhg.Flag,
                                 ThongTinChungHoGa_TenHoGaSauPhanLoai = plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
                                 ThongTinChungHoGa_HinhThucHoGa = plhg.ThongTinChungHoGa_HinhThucHoGa ?? "",
                                 ThongTinChungHoGa_HinhThucHoGa_Name = hinhThucHoGa.Ten ?? "",
@@ -932,7 +922,6 @@ namespace DucAnhERP.Services
                                 ThongTinChungHoGa_ChatMatNgoai_Name = chatMatNgoai.Ten ?? "",
                                 PhuBiHoGa_CDai = plhg.PhuBiHoGa_CDai ?? 0,
                                 PhuBiHoGa_CRong = plhg.PhuBiHoGa_CRong ?? 0,
-                                Flag = plhg.Flag,
                                 CreateAt = plhg.CreateAt,
                                 CreateBy = plhg.CreateBy,
                                 IsActive = plhg.IsActive,
@@ -984,6 +973,7 @@ namespace DucAnhERP.Services
                             select new PhanLoaiHoGaModel
                             {
                                 Id = plhg.Id,
+                                Flag = plhg.Flag,
                                 ThongTinChungHoGa_TenHoGaSauPhanLoai = plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
                                 ThongTinChungHoGa_HinhThucHoGa = plhg.ThongTinChungHoGa_HinhThucHoGa ?? "",
                                 ThongTinChungHoGa_HinhThucHoGa_Name = hinhThucHoGa.Ten ?? "",
@@ -1022,7 +1012,6 @@ namespace DucAnhERP.Services
                                 MuMoThotTren_R = plhg.MuMoThotTren_R ?? 0,
                                 MuMoThotTren_C = plhg.MuMoThotTren_C ?? 0,
                                 MuMoThotTren_CdTuong = plhg.MuMoThotTren_CdTuong ?? 0,
-                                Flag = plhg.Flag,
                                 CreateAt = plhg.CreateAt,
                                 CreateBy = plhg.CreateBy,
                                 IsActive = plhg.IsActive,
@@ -1061,6 +1050,7 @@ namespace DucAnhERP.Services
                             select new PhanLoaiHoGaModel
                             {
                                 Id = plhg.Id,
+                                Flag = plhg.Flag,
                                 ThongTinChungHoGa_TenHoGaSauPhanLoai = plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
                                 ThongTinChungHoGa_HinhThucHoGa = plhg.ThongTinChungHoGa_HinhThucHoGa ?? "",
                                 ThongTinChungHoGa_HinhThucHoGa_Name = hinhThucHoGa.Ten ?? "",
@@ -1070,8 +1060,6 @@ namespace DucAnhERP.Services
                                 ThongTinChungHoGa_KetCauTuong_Name = ketCauTuong.Ten ?? "",
                                 ThongTinChungHoGa_KetCauMong = plhg.ThongTinChungHoGa_KetCauMong ?? "",
                                 ThongTinChungHoGa_KetCauMong_Name = ketCauMong.Ten ?? "",
-                               
-                                Flag = plhg.Flag,
                                 CreateAt = plhg.CreateAt,
                                 CreateBy = plhg.CreateBy,
                                 IsActive = plhg.IsActive,

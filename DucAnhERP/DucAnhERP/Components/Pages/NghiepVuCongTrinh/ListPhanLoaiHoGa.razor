@@ -1052,10 +1052,10 @@
         try
         {
             PhanLoaiHoGa phanLoaiHoGaExist = new();
-            if (Input.ThongTinChungHoGa_TenHoGaSauPhanLoai.ToUpper().EndsWith("=G"))
-            {
-                Input.G = "=G";
-            }
+            // if (Input.ThongTinChungHoGa_TenHoGaSauPhanLoai.ToUpper().EndsWith("=G"))
+            // {
+            //     Input.G = "=G";
+            // }
             phanLoaiHoGaExist = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaExist(Input);
             var existName = false;
             existName = await PhanLoaiHoGaRepository.CheckUsingName(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
@@ -1185,7 +1185,7 @@
 
     private string deleteId;
 
-    private async Task ConfirmDelete(string id, string Ten)
+    private async Task ConfirmDelete(string id, string Ten="")
     {
         deleteId = id;
         confirmModal.Title = "Xác nhận xóa";

@@ -10,8 +10,6 @@ namespace DucAnhERP.Models
         [Required(ErrorMessage = "Bạn phải nhập Tên hố ga sau phân loại !")]
         public string ThongTinChungHoGa_TenHoGaSauPhanLoai { get; set; }
 
-        public string G { get; set; } = "";
-
         [Required(ErrorMessage = "Bạn phải nhập hình thức hố ga!")]
         public string ThongTinChungHoGa_HinhThucHoGa { get; set; } 
         [Required(ErrorMessage = "Bạn phải nhập  kết cấu mũ mố !")]
