@@ -1,4 +1,5 @@
-﻿using DucAnhERP.Data;
+﻿using DucAnhERP.Components.Pages.NghiepVuCongTrinh;
+using DucAnhERP.Data;
 using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
@@ -35,6 +36,39 @@ namespace DucAnhERP.Services
             try
             {
                 using var context = _context.CreateDbContext();
+
+                //var query2 = (
+                //                from ds in context.DSNuocMua
+                //                join pl in context.PhanLoaiHoGas on ds.ThongTinChungHoGa_TenHoGaSauPhanLoai equals pl.Id
+                //                select new
+                //                {
+                //                    ds.ThongTinChungHoGa_TenHoGaTheoBanVe,
+                //                    pl.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                //                    ds.CreateAt
+                //                } into LOC
+                //                select new
+                //                {
+                //                    LOC.ThongTinChungHoGa_TenHoGaTheoBanVe,
+                //                    PhanLoaiHoGas_TenHoGaSauPhanLoai = LOC.ThongTinChungHoGa_TenHoGaTheoBanVe != null &&
+                //                        LOC.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G")
+                //                        ? (
+                //                            (from dsSub in context.DSNuocMua
+                //                             join plSub in context.PhanLoaiHoGas
+                //                                 on dsSub.ThongTinChungHoGa_TenHoGaSauPhanLoai equals plSub.Id
+                //                             where LOC.ThongTinChungHoGa_TenHoGaTheoBanVe.Replace("=G", "") == dsSub.ThongTinChungHoGa_TenHoGaTheoBanVe &&
+                //                                   !dsSub.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G")
+                //                             select plSub.ThongTinChungHoGa_TenHoGaSauPhanLoai)
+                //                            .FirstOrDefault() ?? LOC.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                //                        ) + "=G"
+                //                        : LOC.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                //                    LOC.CreateAt
+                //                }
+                //            ).OrderBy(LOC => LOC.CreateAt).ToList();
+
+
+                //Console.WriteLine("data");
+
+
                 var query = from nuocMua in context.DSNuocMua
                                 // Left join với bảng PhanLoaiHoGas
                             join phanLoaiHoGa in context.PhanLoaiHoGas
@@ -205,10 +239,18 @@ namespace DucAnhERP.Services
                                 ThongTinLyTrinh_TuyenDuong = nuocMua.ThongTinLyTrinh_TuyenDuong ?? "",
                                 ThongTinLyTrinh_LyTrinhTaiTimHoGa = nuocMua.ThongTinLyTrinh_LyTrinhTaiTimHoGa ?? "",
                                 ThongTinChungHoGa_TenHoGaSauPhanLoai = nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
-                                PhanLoaiHoGas_TenHoGaSauPhanLoai = (nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe != null &&
-                             nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G"))
-                                ? phanLoaiHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai + "=G"
-                                : phanLoaiHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                                PhanLoaiHoGas_TenHoGaSauPhanLoai = nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe != null &&
+                                        nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G")
+                                        ? (
+                                            (from dsSub in context.DSNuocMua
+                                             join plSub in context.PhanLoaiHoGas
+                                                 on dsSub.ThongTinChungHoGa_TenHoGaSauPhanLoai equals plSub.Id
+                                             where nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe.Replace("=G", "") == dsSub.ThongTinChungHoGa_TenHoGaTheoBanVe &&
+                                                   !dsSub.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G")
+                                             select plSub.ThongTinChungHoGa_TenHoGaSauPhanLoai)
+                                            .FirstOrDefault() ?? phanLoaiHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                                        ) + "=G"
+                                        : phanLoaiHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai,
                                 ThongTinChungHoGa_TenHoGaTheoBanVe = nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe ?? "",
                                 ThongTinChungHoGa_HinhThucHoGa = nuocMua.ThongTinChungHoGa_HinhThucHoGa ?? "",
                                 ThongTinChungHoGa_HinhThucHoGa_Name = "",
@@ -743,6 +785,8 @@ namespace DucAnhERP.Services
                     query = query.Where(x=>x.TraiPhai == nuocMuaModel.TraiPhai);
                 }
                 var data = await query.ToListAsync();
+
+               
                 return data;
             }
             catch (Exception ex)

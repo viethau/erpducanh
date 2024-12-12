@@ -116,16 +116,16 @@
                 //Load phân loại hố ga
 
                 nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai = "";
-                //Đoạn này test theo số liệu excel 
-                if (nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe == "M2T.7")
-                {
-                    nuocMua.TuongHoGa_C = 0.9;
-                    nuocMua.ChatMatTrong_C = 1.05;
-                    nuocMua.ChatMatNgoaiCanh_C = 0;
-                    nuocMua.ThongTinCaoDoHoGa_CCaoTuong = 0.9;
-                    nuocMua.ThongTinCaoDoHoGa_DinhTuong = 42.65;
-                    nuocMua.ThongTinCaoDoHoGa_DinhMuMoThotDuoi = 42.8;
-                }
+                // //Đoạn này test theo số liệu excel 
+                // if (nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe == "M2T.7")
+                // {
+                //       nuocMua.TuongHoGa_C = 0.9;
+                //     nuocMua.ChatMatTrong_C = 1.05;
+                //     nuocMua.ChatMatNgoaiCanh_C = 0;
+                //     nuocMua.ThongTinCaoDoHoGa_CCaoTuong = 0.9;
+                //     nuocMua.ThongTinCaoDoHoGa_DinhTuong = 42.65;
+                //     nuocMua.ThongTinCaoDoHoGa_DinhMuMoThotDuoi = 42.8;
+                // }
 
                 List<PhanLoaiHoGa> loadTenHoGaSauPhanLoai = new();
                 loadTenHoGaSauPhanLoai = await LoadTenHoGaSauPhanLoai(nuocMua);
