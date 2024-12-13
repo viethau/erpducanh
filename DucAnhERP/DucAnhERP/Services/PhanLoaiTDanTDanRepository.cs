@@ -3,6 +3,8 @@ using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Runtime.InteropServices;
 
 namespace DucAnhERP.Services
 {
@@ -31,12 +33,15 @@ namespace DucAnhERP.Services
             }
         }
 
-        public async Task<List<PhanLoaiTDanTDanModel>> GetAllByVM()
+        public async Task<List<PhanLoaiTDanTDanModel>> GetAllByVM(PhanLoaiTDanTDanModel pltdtdModel)
         {
             try
             {
                 using var context = _context.CreateDbContext();
                 var query = from pltdtd in context.PhanLoaiTDanTDans
+                             join ds in context.DSNuocMua
+                                on pltdtd.Id equals ds.TTTDCongHoRanh_TenLoaiTamDanTieuChuan into dsJoin
+                            from ds in dsJoin.DefaultIfEmpty()
                             join hinhThucTruyenDan in context.DSDanhMuc
                                 on pltdtd.ThongTinDuongTruyenDan_HinhThucTruyenDan equals hinhThucTruyenDan.Id into gj1
                             from hinhThucTruyenDan in gj1.DefaultIfEmpty() // Left join for HinhThucTruyenDan
@@ -50,6 +55,7 @@ namespace DucAnhERP.Services
                             select new PhanLoaiTDanTDanModel
                             {
                                 Id = pltdtd.Id,
+                                IsEdit = ds != null && ds.TTTDCongHoRanh_TenLoaiTamDanTieuChuan != null ? 1 : 0,
                                 TTTDCongHoRanh_TenLoaiTamDanTieuChuan = pltdtd.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
                                 ThongTinLyTrinhTruyenDan_TuLyTrinh = pltdtd.ThongTinLyTrinhTruyenDan_TuLyTrinh,
                                 ThongTinLyTrinhTruyenDan_DenLyTrinh = pltdtd.ThongTinLyTrinhTruyenDan_DenLyTrinh,
@@ -67,6 +73,18 @@ namespace DucAnhERP.Services
                                 IsActive = pltdtd.IsActive,
                                 Flag = pltdtd.Flag,
                             };
+                if (!string.IsNullOrEmpty(pltdtdModel.ThongTinDuongTruyenDan_HinhThucTruyenDan))
+                {
+                    query = query.Where(x => x.ThongTinDuongTruyenDan_HinhThucTruyenDan == pltdtdModel.ThongTinDuongTruyenDan_HinhThucTruyenDan);
+                }
+                if (!string.IsNullOrEmpty(pltdtdModel.ThongTinDuongTruyenDan_LoaiTruyenDan))
+                {
+                    query = query.Where(x => x.ThongTinDuongTruyenDan_LoaiTruyenDan == pltdtdModel.ThongTinDuongTruyenDan_LoaiTruyenDan);
+                }
+                if (!string.IsNullOrEmpty(pltdtdModel.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan))
+                {
+                    query = query.Where(x => x.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan == pltdtdModel.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan);
+                }
 
                 var data = await query
                     .ToListAsync();

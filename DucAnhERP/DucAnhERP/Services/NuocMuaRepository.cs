@@ -37,38 +37,6 @@ namespace DucAnhERP.Services
             {
                 using var context = _context.CreateDbContext();
 
-                //var query2 = (
-                //                from ds in context.DSNuocMua
-                //                join pl in context.PhanLoaiHoGas on ds.ThongTinChungHoGa_TenHoGaSauPhanLoai equals pl.Id
-                //                select new
-                //                {
-                //                    ds.ThongTinChungHoGa_TenHoGaTheoBanVe,
-                //                    pl.ThongTinChungHoGa_TenHoGaSauPhanLoai,
-                //                    ds.CreateAt
-                //                } into LOC
-                //                select new
-                //                {
-                //                    LOC.ThongTinChungHoGa_TenHoGaTheoBanVe,
-                //                    PhanLoaiHoGas_TenHoGaSauPhanLoai = LOC.ThongTinChungHoGa_TenHoGaTheoBanVe != null &&
-                //                        LOC.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G")
-                //                        ? (
-                //                            (from dsSub in context.DSNuocMua
-                //                             join plSub in context.PhanLoaiHoGas
-                //                                 on dsSub.ThongTinChungHoGa_TenHoGaSauPhanLoai equals plSub.Id
-                //                             where LOC.ThongTinChungHoGa_TenHoGaTheoBanVe.Replace("=G", "") == dsSub.ThongTinChungHoGa_TenHoGaTheoBanVe &&
-                //                                   !dsSub.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G")
-                //                             select plSub.ThongTinChungHoGa_TenHoGaSauPhanLoai)
-                //                            .FirstOrDefault() ?? LOC.ThongTinChungHoGa_TenHoGaSauPhanLoai
-                //                        ) + "=G"
-                //                        : LOC.ThongTinChungHoGa_TenHoGaSauPhanLoai,
-                //                    LOC.CreateAt
-                //                }
-                //            ).OrderBy(LOC => LOC.CreateAt).ToList();
-
-
-                //Console.WriteLine("data");
-
-
                 var query = from nuocMua in context.DSNuocMua
                                 // Left join với bảng PhanLoaiHoGas
                             join phanLoaiHoGa in context.PhanLoaiHoGas
@@ -784,6 +752,39 @@ namespace DucAnhERP.Services
                 {
                     query = query.Where(x=>x.TraiPhai == nuocMuaModel.TraiPhai);
                 }
+                if (!string.IsNullOrEmpty(nuocMuaModel.ThongTinChungHoGa_TenHoGaTheoBanVe))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_TenHoGaTheoBanVe == nuocMuaModel.ThongTinChungHoGa_TenHoGaTheoBanVe);
+                }
+                if (!string.IsNullOrEmpty(nuocMuaModel.ThongTinChungHoGa_HinhThucHoGa))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_HinhThucHoGa == nuocMuaModel.ThongTinChungHoGa_HinhThucHoGa);
+                }
+                if (!string.IsNullOrEmpty(nuocMuaModel.ThongTinChungHoGa_KetCauMuMo))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_KetCauMuMo == nuocMuaModel.ThongTinChungHoGa_KetCauMuMo);
+                }
+                if (!string.IsNullOrEmpty(nuocMuaModel.ThongTinChungHoGa_KetCauTuong))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_KetCauTuong == nuocMuaModel.ThongTinChungHoGa_KetCauTuong);
+                }
+                if (!string.IsNullOrEmpty(nuocMuaModel.ThongTinChungHoGa_HinhThucMongHoGa))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_HinhThucMongHoGa == nuocMuaModel.ThongTinChungHoGa_HinhThucMongHoGa);
+                }
+                if (!string.IsNullOrEmpty(nuocMuaModel.ThongTinChungHoGa_KetCauMong))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_KetCauMong == nuocMuaModel.ThongTinChungHoGa_KetCauMong);
+                }
+                if (!string.IsNullOrEmpty(nuocMuaModel.ThongTinChungHoGa_ChatMatTrong))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_ChatMatTrong == nuocMuaModel.ThongTinChungHoGa_ChatMatTrong);
+                }
+                if (!string.IsNullOrEmpty(nuocMuaModel.ThongTinChungHoGa_ChatMatNgoai))
+                {
+                    query = query.Where(x => x.ThongTinChungHoGa_ChatMatNgoai == nuocMuaModel.ThongTinChungHoGa_ChatMatNgoai);
+                }
+
                 var data = await query.ToListAsync();
 
                

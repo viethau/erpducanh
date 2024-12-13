@@ -119,15 +119,21 @@
                         <tr>
                             <td class="d-flex nowrap">
                                 <div class="d-inline-block">
-                                    <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
                                     <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
                                         <i class="fas fa-plus"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                                    @{
+                                        if (item.IsEdit == 0)
+                                        {
+                                            <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        }
+                                    }
+                                    
                                 </div>
                             </td>
                             <td>@stt</td>
@@ -168,6 +174,7 @@
 @code {
     private List<PhanLoaiTDHoGa> listPhanLoaiTDHoGa = new List<PhanLoaiTDHoGa>();
     private PhanLoaiTDHoGa Input = new();
+    private PhanLoaiTDHoGaModel InputModel = new();
     public List<DanhMuc1> listDanhMuc = new();
     private DateTime baseTime;
 
@@ -257,7 +264,7 @@
         isLoading = true;
         dmModel = new();
         listDanhMuc = await DanhMucRepository.GetAll();
-        var plhg = await PhanLoaiTDHoGaRepository.GetAllByVM();
+        var plhg = await PhanLoaiTDHoGaRepository.GetAllByVM(InputModel);
         listModel = plhg;
         listPLTDHoGaModel = Paging(plhg);
         isLoading = false;

@@ -30,10 +30,7 @@
         }
 </style>
 <div class="container-fluid">
-    <div class="row m-2">
-         <div class="col-md-9 col-sm-12">
-             <button class="mx-2 my-3 btn btn-primary" @onclick="ShowModal">Thêm mới</button>
-             </div>
+    <div class="row m-2 justify-content-end">
          <div class="col-md-3 col-sm-6 text-end">
              <!-- Nút hiển thị bảng trái -->
            <button class="btn btn-primary me-2" @onclick="View" title="@(viewLeft == "d-block" ? "Xem bảng phải" : "Xem bảng trái")">
@@ -46,7 +43,6 @@
                     <i class="fas fa-arrow-left"></i>
                 }
             </button>
-
             <!-- Nút hiển thị cả hai bảng -->
             <button class="btn btn-primary me-2" @onclick="ViewAll" title="Xem cả hai bảng">
                 <i class="fas fa-columns"></i>
@@ -63,6 +59,47 @@
         </div>
     </div>
    
+    <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
+        <DataAnnotationsValidator />
+        <div class="row ">
+            <!-- Select for nhóm danh mục-->
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Hình thức hố ga</label>
+                <Select2 Id="mySelect1" Items="@selectHTHG" OnChange="@OnSelectChangeHTHG"></Select2>
+                <ValidationMessage For="()=>InputMD.ThongTinChungHoGa_HinhThucHoGa"></ValidationMessage>
+            </div>
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Kết cấu mũ mỗ</label>
+                <Select2 Id="mySelect2" Items="@selectKCMM" OnChange="@OnSelectChangeKCMM"></Select2>
+                <ValidationMessage For="()=>InputMD.ThongTinChungHoGa_KetCauMuMo"></ValidationMessage>
+            </div>
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Kết cấu tường</label>
+                <Select2 Id="mySelect3" Items="@selectKCT" OnChange="@OnSelectChangeKCT"></Select2>
+                <ValidationMessage For="()=>InputMD.ThongTinChungHoGa_KetCauTuong"></ValidationMessage>
+            </div>
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Hình thức móng hố ga</label>
+                <Select2 Id="mySelect4" Items="@selectHTMHG" OnChange="@OnSelectChangeHTMHG"></Select2>
+                <ValidationMessage For="()=>InputMD.ThongTinChungHoGa_HinhThucMongHoGa"></ValidationMessage>
+            </div>
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Kết cấu móng</label>
+                <Select2 Id="mySelect5" Items="@selectKCM" OnChange="@OnSelectChangeKCM"></Select2>
+                <ValidationMessage For="()=>InputMD.ThongTinChungHoGa_KetCauMong"></ValidationMessage>
+            </div>
+            <!-- Search Button -->
+            <div class="col-sm-4 col-md-1">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+            </div>
+            <div class="col-sm-4 col-md-1">
+                <label>&nbsp;</label>
+                <button @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
+            </div>
+        </div>
+    </EditForm>
+
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
         <BodyTemplate>
             <EditForm Model="Input" method="post" FormName="Thêm mới" OnValidSubmit="HandleValidSubmit">
@@ -3117,7 +3154,6 @@
                     <table id="tb-left" class="table table-bordered table-hover" cellpadding="1" cellspacing="2">
                         <thead class="bg-info @thumbtack">
                             <tr>
-
                                 <th class="text-center" rowspan="3"></th>
                                 <th class="text-center" rowspan="3">No.</th>
                                 <th class="text-center" colspan="2" rowspan="2">Thông tin lý trình</th>
@@ -9642,6 +9678,7 @@
 @code {
     [SupplyParameterFromForm]
     private NuocMua Input { get; set; } = new();
+    private NuocMuaModel InputMD = new();
     public List<DanhMuc1> listDanhMuc = new();
     private bool isEdit = false;
     private NuocMuaModel nuocMuaVM;
@@ -9663,15 +9700,110 @@
     [Parameter]
     public ConfirmModal confirmModal { get; set; }
 
+    private List<SelectedItem> selectHTHG = new();
+    private List<SelectedItem> selectKCMM = new();
+    private List<SelectedItem> selectKCT = new();
+    private List<SelectedItem> selectHTMHG = new();
+    private List<SelectedItem> selectKCM = new();
+    private void OnSelectChangeHTHG(SelectedItem selectedItem)
+    {
+        InputMD.ThongTinChungHoGa_HinhThucHoGa = selectedItem.Value;
+    }
+    private void OnSelectChangeKCMM(SelectedItem selectedItem)
+    {
+        InputMD.ThongTinChungHoGa_KetCauMuMo = selectedItem.Value;
+    }
+    private void OnSelectChangeKCT(SelectedItem selectedItem)
+    {
+        InputMD.ThongTinChungHoGa_KetCauTuong = selectedItem.Value;
+    }
+    private void OnSelectChangeHTMHG(SelectedItem selectedItem)
+    {
+        InputMD.ThongTinChungHoGa_HinhThucMongHoGa = selectedItem.Value;
+    }
+    private void OnSelectChangeKCM(SelectedItem selectedItem)
+    {
+        InputMD.ThongTinChungHoGa_KetCauMong = selectedItem.Value;
+    }
+
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
         baseTime = DateTime.Now;
         nuocMuaModel = new();
+        InputMD = new();
         await LoadData();
+        foreach (var item in listDanhMuc)
+        {
+            // Kiểm tra xem item đã tồn tại trong danh sách hay chưa
+            if (!selectHTHG.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "HG_HTHGa")
+            {
+                if (!string.IsNullOrEmpty(item.Id))
+                {
+                    // Nếu chưa tồn tại, thêm item vào danh sách
+                    selectHTHG.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.Ten
+                        });
+                }
+            }
+            if (!selectKCMM.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "HG_LMMHoGa")
+            {
+                if (!string.IsNullOrEmpty(item.Id))
+                {
+                    // Nếu chưa tồn tại, thêm item vào danh sách
+                    selectKCMM.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.Ten
+                        });
+                }
+            }
+            if (!selectKCT.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "HG_LTHoGa")
+            {
+                if (!string.IsNullOrEmpty(item.Id))
+                {
+                    // Nếu chưa tồn tại, thêm item vào danh sách
+                    selectKCT.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.Ten
+                        });
+                }
+            }
+            if (!selectHTMHG.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "HG_HTMHoGa")
+            {
+                if (!string.IsNullOrEmpty(item.Id))
+                {
+                    // Nếu chưa tồn tại, thêm item vào danh sách
+                    selectHTMHG.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.Ten
+                        });
+                }
+            }
+            if (!selectKCM.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "HG_LMHoGa")
+            {
+                if (!string.IsNullOrEmpty(item.Id))
+                {
+                    // Nếu chưa tồn tại, thêm item vào danh sách
+                    selectKCM.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.Ten
+                        });
+                }
+            }
+        }
+        // Thêm phần tử mặc định "chọn..."
+        selectHTHG.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        selectKCMM.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        selectKCT.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        selectHTMHG.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        selectKCM.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
     }
-
-    
 
     //bắt sự kiện khi thay đổi
     private System.Timers.Timer _typingTimer;
@@ -9748,7 +9880,11 @@
               StateHasChanged();
           });
     }
-    
+     public async Task Search()
+    {
+        nuocMuaModel.PageNumber = 1;
+        await LoadData();
+    }
     
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
@@ -9756,17 +9892,17 @@
         isLoading = true;
         var helper = new DataConversionHelper();
         listDanhMuc = await DanhMucRepository.GetAll();
-        NuocMuaModel nuocMuaModelSearch = new();
+        
 
-        nuocMuaModelSearch.TraiPhai = 0;
-        var nuocMuaRepositoryLeft = await NuocMuaRepository.GetAllByVM(nuocMuaModelSearch);
+        InputMD.TraiPhai = 0;
+        var nuocMuaRepositoryLeft = await NuocMuaRepository.GetAllByVM(InputMD);
         List<NuocMuaModel> nuocmuasLeft;
         nuocmuasLeft = await ConvertDanhMuc(nuocMuaRepositoryLeft);
         listModelLeft = nuocmuasLeft;
         listNuocMuaModelLeft = PagingLeft(nuocmuasLeft);
 
-        nuocMuaModelSearch.TraiPhai = 1;
-        var nuocMuaRepositoryRight = await NuocMuaRepository.GetAllByVM(nuocMuaModelSearch);
+        InputMD.TraiPhai = 1;
+        var nuocMuaRepositoryRight = await NuocMuaRepository.GetAllByVM(InputMD);
         List<NuocMuaModel> nuocmuasRight;
         nuocmuasRight = await ConvertDanhMuc(nuocMuaRepositoryRight);
         listModelRight = nuocmuasRight;
@@ -9999,14 +10135,14 @@
         } *@
         if (checkObjhelper.AreAllDoublePropertiesGreaterThanZero(searchData))
         {
-             Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = "";
+            Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = "";
             List<PhanLoaiHoGa> loadTenHoGaSauPhanLoai = new();
             loadTenHoGaSauPhanLoai = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaByDetails(searchData);
             if (loadTenHoGaSauPhanLoai !=null && loadTenHoGaSauPhanLoai.Count>0)
             {
                 foreach(var item in loadTenHoGaSauPhanLoai)
                 {
-                     Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
+                    Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
                     // // Kiểm tra xem tên hố ga theo bản vẽ có kết thúc bằng "=G"
                     //     if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaTheoBanVe) &&
                     //         Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
@@ -10585,12 +10721,13 @@
         try
         {
             Console.WriteLine(Input);
-
-            // Kiểm tra xem danh mục có tồn tại hay không
+            //Kiểm tra xem tên hố ga theo bản vẽ
+            var isExistTHGBV = await NuocMuaRepository.CheckExistId("ThongTinChungHoGa_TenHoGaTheoBanVe", Input.ThongTinChungHoGa_TenHoGaTheoBanVe);
+            if (!isExistTHGBV)
+            {
+                // Kiểm tra xem danh mục có tồn tại hay không
             bool check = await CheckIsExitsIdDanhMuc();
             //thêm phân loại
-
-
             if (check)
             {
 
@@ -10687,6 +10824,17 @@
                     nuocMuaVM = new();
                 }
             }
+            }else{
+                ToastService.ShowToast(
+                   "Thông báo lỗi ",
+                   "Tên hỗ ga theo bản vẽ đã tồn tại !",
+                   cssClass: "toast-danger",
+                   iconClass: "fa fa-exclamation-circle",
+                   progressBarClass: "bg-info",
+                   duration: 5000
+               );
+            }
+            
         }
         catch (Exception ex)
         {
@@ -10967,10 +11115,10 @@
     private string viewRight = "d-none";
 
     private void View()
-    {
+    {   space = "";
         if(viewLeft == "d-block"){
              viewLeft = "d-none";
-            viewRight = "d-block";
+             viewRight = "d-block";
         }else{
             viewRight  = "d-none";
             viewLeft = "d-block";
@@ -10980,8 +11128,9 @@
 
     private void ViewAll()
     {
-         viewLeft = "d-block";
+        viewLeft = "d-block";
         viewRight = "d-block";
+        space = "ml-5";
     }
 
     private void ViewHorizontal()

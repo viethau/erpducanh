@@ -3,6 +3,7 @@ using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 
 namespace DucAnhERP.Services
 {
@@ -32,12 +33,15 @@ namespace DucAnhERP.Services
             }
         }
 
-        public async Task<List<PhanLoaiMongCongModel>> GetAllByVM()
+        public async Task<List<PhanLoaiMongCongModel>> GetAllByVM(PhanLoaiMongCongModel plmModel)
         {
             try
             {
                 using var context = _context.CreateDbContext();
                 var query = from plmc in context.PhanLoaiMongCTrons
+                            join ds in context.DSNuocMua
+                                 on plmc.Id equals ds.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop into dsJoin
+                            from ds in dsJoin.DefaultIfEmpty()
                             join hinhThucTruyenDan in context.DSDanhMuc
                                on plmc.ThongTinDuongTruyenDan_HinhThucTruyenDan equals hinhThucTruyenDan.Id
                             join loaiTruyenDan in context.DSDanhMuc
@@ -69,7 +73,23 @@ namespace DucAnhERP.Services
                                 CreateBy = plmc.CreateBy,
                                 IsActive = plmc.IsActive,
                             };
-
+                if (!string.IsNullOrEmpty(plmModel.ThongTinDuongTruyenDan_HinhThucTruyenDan))
+                {
+                    query = query.Where(x => x.ThongTinDuongTruyenDan_HinhThucTruyenDan == plmModel.ThongTinDuongTruyenDan_HinhThucTruyenDan);
+                }
+                if (!string.IsNullOrEmpty(plmModel.ThongTinDuongTruyenDan_LoaiTruyenDan))
+                {
+                    query = query.Where(x => x.ThongTinDuongTruyenDan_LoaiTruyenDan == plmModel.ThongTinDuongTruyenDan_LoaiTruyenDan);
+                }
+                if (!string.IsNullOrEmpty(plmModel.ThongTinMongDuongTruyenDan_LoaiMong))
+                {
+                    query = query.Where(x => x.ThongTinMongDuongTruyenDan_LoaiMong == plmModel.ThongTinMongDuongTruyenDan_LoaiMong);
+                }
+                if (!string.IsNullOrEmpty(plmModel.ThongTinMongDuongTruyenDan_HinhThucMong))
+                {
+                    query = query.Where(x => x.ThongTinMongDuongTruyenDan_HinhThucMong == plmModel.ThongTinMongDuongTruyenDan_HinhThucMong);
+                }
+                
                 var data = await query
                     .ToListAsync();
                 return data;

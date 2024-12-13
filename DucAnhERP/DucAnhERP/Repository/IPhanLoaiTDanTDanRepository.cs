@@ -5,7 +5,7 @@ namespace DucAnhERP.Repository
 {
     public interface IPhanLoaiTDanTDanRepository : IBaseRepository<PhanLoaiTDanTDan>
     {
-        Task<List<PhanLoaiTDanTDanModel>> GetAllByVM();
+        Task<List<PhanLoaiTDanTDanModel>> GetAllByVM(PhanLoaiTDanTDanModel pltdtdModel);
         Task<bool> CheckUsingId(string id);
         Task<bool> CheckUsingName(string name);
         Task<PhanLoaiTDanTDan> GetPhanLoaiTDanTDanByDetail(PhanLoaiTDanTDan pltdtd);

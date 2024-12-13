@@ -36,61 +36,65 @@ namespace DucAnhERP.Services
             {
                 using var context = _context.CreateDbContext();
                
-                var query = from pltdhg in context.PhanLoaiCTronHopNhuas
+                var query = from plCong in context.PhanLoaiCTronHopNhuas
+                            join ds in context.DSNuocMua
+                                on plCong.Id equals ds.ThongTinDuongTruyenDan_HinhThucTruyenDan into dsJoin
+                            from ds in dsJoin.DefaultIfEmpty()
                             join hinhThucTruyenDan in context.DSDanhMuc
-                                on pltdhg.ThongTinDuongTruyenDan_HinhThucTruyenDan equals hinhThucTruyenDan.Id
+                                on plCong.ThongTinDuongTruyenDan_HinhThucTruyenDan equals hinhThucTruyenDan.Id
                             join danhmucLoaiTruyenDan in context.DSDanhMuc
-                                on pltdhg.ThongTinDuongTruyenDan_LoaiTruyenDan equals danhmucLoaiTruyenDan.Id
+                                on plCong.ThongTinDuongTruyenDan_LoaiTruyenDan equals danhmucLoaiTruyenDan.Id
                             join danhmucCauTaoTuong in context.DSDanhMuc
-                                on pltdhg.TTKTHHCongHopRanh_CauTaoTuong equals danhmucCauTaoTuong.Id into gj1
+                                on plCong.TTKTHHCongHopRanh_CauTaoTuong equals danhmucCauTaoTuong.Id into gj1
                             from danhmucCauTaoTuong in gj1.DefaultIfEmpty() // Left join
 
                             join danhmucCauTaoMuMo in context.DSDanhMuc
-                                on pltdhg.TTKTHHCongHopRanh_CauTaoMuMo equals danhmucCauTaoMuMo.Id into mm
+                                on plCong.TTKTHHCongHopRanh_CauTaoMuMo equals danhmucCauTaoMuMo.Id into mm
                             from danhmucCauTaoMuMo in mm.DefaultIfEmpty() // Left join
 
                             join danhmucChatMatTrong in context.DSDanhMuc
-                                on pltdhg.TTKTHHCongHopRanh_ChatMatTrong equals danhmucChatMatTrong.Id into gj2
+                                on plCong.TTKTHHCongHopRanh_ChatMatTrong equals danhmucChatMatTrong.Id into gj2
                             from danhmucChatMatTrong in gj2.DefaultIfEmpty() // Left join
                             join danhmucChatMatNgoai in context.DSDanhMuc
-                                on pltdhg.TTKTHHCongHopRanh_ChatMatNgoai equals danhmucChatMatNgoai.Id into gj3
+                                on plCong.TTKTHHCongHopRanh_ChatMatNgoai equals danhmucChatMatNgoai.Id into gj3
                             from danhmucChatMatNgoai in gj3.DefaultIfEmpty() // Left join
-                            orderby pltdhg.Flag
+                            orderby plCong.Flag
                             select new PhanLoaiCTronHopNhuaModel
                             {
-                                Id = pltdhg.Id,
-                                ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = pltdhg.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
-                                ThongTinDuongTruyenDan_HinhThucTruyenDan = pltdhg.ThongTinDuongTruyenDan_HinhThucTruyenDan,
+                                Id = plCong.Id,
+                                IsEdit = ds != null && ds.ThongTinDuongTruyenDan_HinhThucTruyenDan != null ? 1 : 0,
+                                ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = plCong.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                                ThongTinDuongTruyenDan_HinhThucTruyenDan = plCong.ThongTinDuongTruyenDan_HinhThucTruyenDan,
                                 ThongTinDuongTruyenDan_HinhThucTruyenDan_Name = hinhThucTruyenDan.Ten,
-                                ThongTinDuongTruyenDan_LoaiTruyenDan = pltdhg.ThongTinDuongTruyenDan_LoaiTruyenDan,
+                                ThongTinDuongTruyenDan_LoaiTruyenDan = plCong.ThongTinDuongTruyenDan_LoaiTruyenDan,
                                 ThongTinDuongTruyenDan_LoaiTruyenDan_Name = danhmucLoaiTruyenDan.Ten,
-                                TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien = pltdhg.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien,
-                                ThongTinCauTaoCongTron_CDayPhuBi = pltdhg.ThongTinCauTaoCongTron_CDayPhuBi,
-                                TTKTHHCongHopRanh_CauTaoTuong = pltdhg.TTKTHHCongHopRanh_CauTaoTuong,
+                                TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien = plCong.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien,
+                                ThongTinCauTaoCongTron_CDayPhuBi = plCong.ThongTinCauTaoCongTron_CDayPhuBi,
+                                TTKTHHCongHopRanh_CauTaoTuong = plCong.TTKTHHCongHopRanh_CauTaoTuong,
                                 TTKTHHCongHopRanh_CauTaoTuong_Name = danhmucCauTaoTuong != null ? danhmucCauTaoTuong.Ten : string.Empty,
-                                TTKTHHCongHopRanh_CauTaoMuMo = pltdhg.TTKTHHCongHopRanh_CauTaoMuMo ,
+                                TTKTHHCongHopRanh_CauTaoMuMo = plCong.TTKTHHCongHopRanh_CauTaoMuMo ,
                                 TTKTHHCongHopRanh_CauTaoMuMo_Name = danhmucCauTaoMuMo != null ? danhmucCauTaoMuMo.Ten : string.Empty,
-                                TTKTHHCongHopRanh_ChatMatTrong = pltdhg.TTKTHHCongHopRanh_ChatMatTrong,
+                                TTKTHHCongHopRanh_ChatMatTrong = plCong.TTKTHHCongHopRanh_ChatMatTrong,
                                 TTKTHHCongHopRanh_ChatMatTrong_Name = danhmucChatMatTrong != null ? danhmucChatMatTrong.Ten : string.Empty,
-                                TTKTHHCongHopRanh_ChatMatNgoai = pltdhg.TTKTHHCongHopRanh_ChatMatNgoai,
+                                TTKTHHCongHopRanh_ChatMatNgoai = plCong.TTKTHHCongHopRanh_ChatMatNgoai,
                                 TTKTHHCongHopRanh_ChatMatNgoai_Name = danhmucChatMatNgoai != null ? danhmucChatMatNgoai.Ten : string.Empty,
-                                TTKTHHCongHopRanh_CCaoDe = pltdhg.TTKTHHCongHopRanh_CCaoDe,
-                                TTKTHHCongHopRanh_CRongDe = pltdhg.TTKTHHCongHopRanh_CRongDe,
-                                TTKTHHCongHopRanh_CDayTuong01Ben = pltdhg.TTKTHHCongHopRanh_CDayTuong01Ben,
-                                TTKTHHCongHopRanh_SoLuongTuong = pltdhg.TTKTHHCongHopRanh_SoLuongTuong,
-                                TTKTHHCongHopRanh_CRongLongSuDung = pltdhg.TTKTHHCongHopRanh_CRongLongSuDung,
-                                TTKTHHCongHopRanh_CCaoTuongGop = pltdhg.TTKTHHCongHopRanh_CCaoTuongGop,
-                                TTKTHHCongHopRanh_CCaoMuMoThotDuoi = pltdhg.TTKTHHCongHopRanh_CCaoMuMoThotDuoi,
-                                TTKTHHCongHopRanh_CRongMuMoDuoi = pltdhg.TTKTHHCongHopRanh_CRongMuMoDuoi,
-                                TTKTHHCongHopRanh_CCaoMuMoThotTren = pltdhg.TTKTHHCongHopRanh_CCaoMuMoThotTren,
-                                TTKTHHCongHopRanh_CRongMuMoTren = pltdhg.TTKTHHCongHopRanh_CRongMuMoTren,
-                                TTKTHHCongHopRanh_CCaoChatMatTrong = pltdhg.TTKTHHCongHopRanh_CCaoChatMatTrong,
-                                TTKTHHCongHopRanh_CCaoChatMatNgoai = pltdhg.TTKTHHCongHopRanh_CCaoChatMatNgoai,
-                                ThongTinKichThuocHinhHocOngNhua_CDayPhuBi = pltdhg.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi,
-                                Flag=pltdhg.Flag,
-                                CreateAt = pltdhg.CreateAt,
-                                CreateBy = pltdhg.CreateBy,
-                                IsActive = pltdhg.IsActive,
+                                TTKTHHCongHopRanh_CCaoDe = plCong.TTKTHHCongHopRanh_CCaoDe,
+                                TTKTHHCongHopRanh_CRongDe = plCong.TTKTHHCongHopRanh_CRongDe,
+                                TTKTHHCongHopRanh_CDayTuong01Ben = plCong.TTKTHHCongHopRanh_CDayTuong01Ben,
+                                TTKTHHCongHopRanh_SoLuongTuong = plCong.TTKTHHCongHopRanh_SoLuongTuong,
+                                TTKTHHCongHopRanh_CRongLongSuDung = plCong.TTKTHHCongHopRanh_CRongLongSuDung,
+                                TTKTHHCongHopRanh_CCaoTuongGop = plCong.TTKTHHCongHopRanh_CCaoTuongGop,
+                                TTKTHHCongHopRanh_CCaoMuMoThotDuoi = plCong.TTKTHHCongHopRanh_CCaoMuMoThotDuoi,
+                                TTKTHHCongHopRanh_CRongMuMoDuoi = plCong.TTKTHHCongHopRanh_CRongMuMoDuoi,
+                                TTKTHHCongHopRanh_CCaoMuMoThotTren = plCong.TTKTHHCongHopRanh_CCaoMuMoThotTren,
+                                TTKTHHCongHopRanh_CRongMuMoTren = plCong.TTKTHHCongHopRanh_CRongMuMoTren,
+                                TTKTHHCongHopRanh_CCaoChatMatTrong = plCong.TTKTHHCongHopRanh_CCaoChatMatTrong,
+                                TTKTHHCongHopRanh_CCaoChatMatNgoai = plCong.TTKTHHCongHopRanh_CCaoChatMatNgoai,
+                                ThongTinKichThuocHinhHocOngNhua_CDayPhuBi = plCong.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi,
+                                Flag=plCong.Flag,
+                                CreateAt = plCong.CreateAt,
+                                CreateBy = plCong.CreateBy,
+                                IsActive = plCong.IsActive,
                             };
 
 
@@ -138,27 +142,27 @@ namespace DucAnhERP.Services
 
                 // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
                 var query = context.PhanLoaiCTronHopNhuas
-                             .Where(pltdhg => (
-                                 pltdhg.ThongTinDuongTruyenDan_HinhThucTruyenDan == searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan &&
-                                 pltdhg.ThongTinDuongTruyenDan_LoaiTruyenDan == searchData.ThongTinDuongTruyenDan_LoaiTruyenDan &&
-                                 pltdhg.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien == searchData.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien &&
-                                 pltdhg.ThongTinCauTaoCongTron_CDayPhuBi == searchData.ThongTinCauTaoCongTron_CDayPhuBi &&
-                                 pltdhg.TTKTHHCongHopRanh_CauTaoTuong == searchData.TTKTHHCongHopRanh_CauTaoTuong &&
-                                 pltdhg.TTKTHHCongHopRanh_ChatMatTrong == searchData.TTKTHHCongHopRanh_ChatMatTrong &&
-                                 pltdhg.TTKTHHCongHopRanh_ChatMatNgoai == searchData.TTKTHHCongHopRanh_ChatMatNgoai &&
-                                 pltdhg.TTKTHHCongHopRanh_CCaoDe == searchData.TTKTHHCongHopRanh_CCaoDe &&
-                                 pltdhg.TTKTHHCongHopRanh_CRongDe == searchData.TTKTHHCongHopRanh_CRongDe &&
-                                 pltdhg.TTKTHHCongHopRanh_CDayTuong01Ben == searchData.TTKTHHCongHopRanh_CDayTuong01Ben &&
-                                 pltdhg.TTKTHHCongHopRanh_SoLuongTuong == searchData.TTKTHHCongHopRanh_SoLuongTuong &&
-                                 pltdhg.TTKTHHCongHopRanh_CRongLongSuDung == searchData.TTKTHHCongHopRanh_CRongLongSuDung &&
-                                 pltdhg.TTKTHHCongHopRanh_CCaoTuongGop == searchData.TTKTHHCongHopRanh_CCaoTuongGop &&
-                                 pltdhg.TTKTHHCongHopRanh_CCaoMuMoThotDuoi == searchData.TTKTHHCongHopRanh_CCaoMuMoThotDuoi &&
-                                 pltdhg.TTKTHHCongHopRanh_CRongMuMoDuoi == searchData.TTKTHHCongHopRanh_CRongMuMoDuoi &&
-                                 pltdhg.TTKTHHCongHopRanh_CCaoMuMoThotTren == searchData.TTKTHHCongHopRanh_CCaoMuMoThotTren &&
-                                 pltdhg.TTKTHHCongHopRanh_CRongMuMoTren == searchData.TTKTHHCongHopRanh_CRongMuMoTren &&
-                                 pltdhg.TTKTHHCongHopRanh_CCaoChatMatTrong == searchData.TTKTHHCongHopRanh_CCaoChatMatTrong &&
-                                 pltdhg.TTKTHHCongHopRanh_CCaoChatMatNgoai == searchData.TTKTHHCongHopRanh_CCaoChatMatNgoai &&
-                                 pltdhg.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi == searchData.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi
+                             .Where(plCong => (
+                                 plCong.ThongTinDuongTruyenDan_HinhThucTruyenDan == searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan &&
+                                 plCong.ThongTinDuongTruyenDan_LoaiTruyenDan == searchData.ThongTinDuongTruyenDan_LoaiTruyenDan &&
+                                 plCong.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien == searchData.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien &&
+                                 plCong.ThongTinCauTaoCongTron_CDayPhuBi == searchData.ThongTinCauTaoCongTron_CDayPhuBi &&
+                                 plCong.TTKTHHCongHopRanh_CauTaoTuong == searchData.TTKTHHCongHopRanh_CauTaoTuong &&
+                                 plCong.TTKTHHCongHopRanh_ChatMatTrong == searchData.TTKTHHCongHopRanh_ChatMatTrong &&
+                                 plCong.TTKTHHCongHopRanh_ChatMatNgoai == searchData.TTKTHHCongHopRanh_ChatMatNgoai &&
+                                 plCong.TTKTHHCongHopRanh_CCaoDe == searchData.TTKTHHCongHopRanh_CCaoDe &&
+                                 plCong.TTKTHHCongHopRanh_CRongDe == searchData.TTKTHHCongHopRanh_CRongDe &&
+                                 plCong.TTKTHHCongHopRanh_CDayTuong01Ben == searchData.TTKTHHCongHopRanh_CDayTuong01Ben &&
+                                 plCong.TTKTHHCongHopRanh_SoLuongTuong == searchData.TTKTHHCongHopRanh_SoLuongTuong &&
+                                 plCong.TTKTHHCongHopRanh_CRongLongSuDung == searchData.TTKTHHCongHopRanh_CRongLongSuDung &&
+                                 plCong.TTKTHHCongHopRanh_CCaoTuongGop == searchData.TTKTHHCongHopRanh_CCaoTuongGop &&
+                                 plCong.TTKTHHCongHopRanh_CCaoMuMoThotDuoi == searchData.TTKTHHCongHopRanh_CCaoMuMoThotDuoi &&
+                                 plCong.TTKTHHCongHopRanh_CRongMuMoDuoi == searchData.TTKTHHCongHopRanh_CRongMuMoDuoi &&
+                                 plCong.TTKTHHCongHopRanh_CCaoMuMoThotTren == searchData.TTKTHHCongHopRanh_CCaoMuMoThotTren &&
+                                 plCong.TTKTHHCongHopRanh_CRongMuMoTren == searchData.TTKTHHCongHopRanh_CRongMuMoTren &&
+                                 plCong.TTKTHHCongHopRanh_CCaoChatMatTrong == searchData.TTKTHHCongHopRanh_CCaoChatMatTrong &&
+                                 plCong.TTKTHHCongHopRanh_CCaoChatMatNgoai == searchData.TTKTHHCongHopRanh_CCaoChatMatNgoai &&
+                                 plCong.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi == searchData.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi
                                           ));
 
                 var result = await query.FirstOrDefaultAsync();
@@ -179,12 +183,12 @@ namespace DucAnhERP.Services
 
                 // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
                 var query = context.PhanLoaiCTronHopNhuas
-                 .Where(pltdhg => (
-                     pltdhg.ThongTinDuongTruyenDan_HinhThucTruyenDan == searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan &&
-                     pltdhg.ThongTinDuongTruyenDan_LoaiTruyenDan == searchData.ThongTinDuongTruyenDan_LoaiTruyenDan &&
-                     pltdhg.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien == searchData.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien
+                 .Where(plCong => (
+                     plCong.ThongTinDuongTruyenDan_HinhThucTruyenDan == searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan &&
+                     plCong.ThongTinDuongTruyenDan_LoaiTruyenDan == searchData.ThongTinDuongTruyenDan_LoaiTruyenDan &&
+                     plCong.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien == searchData.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien
                               ))
-                 .OrderByDescending(pltdhg => pltdhg.Loai);
+                 .OrderByDescending(plCong => plCong.Loai);
 
 
                 var result = await query.FirstOrDefaultAsync();
@@ -205,28 +209,28 @@ namespace DucAnhERP.Services
 
                 // Thực hiện lọc dữ liệu dựa trên các thuộc tính của searchData
                 var query = context.PhanLoaiCTronHopNhuas
-                             .Where(pltdhg => (
-                                pltdhg.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == searchData.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ||
-                                 pltdhg.ThongTinDuongTruyenDan_HinhThucTruyenDan == searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan &&
-                                 pltdhg.ThongTinDuongTruyenDan_LoaiTruyenDan == searchData.ThongTinDuongTruyenDan_LoaiTruyenDan &&
-                                 pltdhg.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien == searchData.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien &&
-                                 pltdhg.ThongTinCauTaoCongTron_CDayPhuBi == searchData.ThongTinCauTaoCongTron_CDayPhuBi &&
-                                 pltdhg.TTKTHHCongHopRanh_CauTaoTuong == searchData.TTKTHHCongHopRanh_CauTaoTuong &&
-                                 pltdhg.TTKTHHCongHopRanh_ChatMatTrong == searchData.TTKTHHCongHopRanh_ChatMatTrong &&
-                                 pltdhg.TTKTHHCongHopRanh_ChatMatNgoai == searchData.TTKTHHCongHopRanh_ChatMatNgoai &&
-                                 pltdhg.TTKTHHCongHopRanh_CCaoDe == searchData.TTKTHHCongHopRanh_CCaoDe &&
-                                 pltdhg.TTKTHHCongHopRanh_CRongDe == searchData.TTKTHHCongHopRanh_CRongDe &&
-                                 pltdhg.TTKTHHCongHopRanh_CDayTuong01Ben == searchData.TTKTHHCongHopRanh_CDayTuong01Ben &&
-                                 pltdhg.TTKTHHCongHopRanh_SoLuongTuong == searchData.TTKTHHCongHopRanh_SoLuongTuong &&
-                                 pltdhg.TTKTHHCongHopRanh_CRongLongSuDung == searchData.TTKTHHCongHopRanh_CRongLongSuDung &&
-                                 pltdhg.TTKTHHCongHopRanh_CCaoTuongGop == searchData.TTKTHHCongHopRanh_CCaoTuongGop &&
-                                 pltdhg.TTKTHHCongHopRanh_CCaoMuMoThotDuoi == searchData.TTKTHHCongHopRanh_CCaoMuMoThotDuoi &&
-                                 pltdhg.TTKTHHCongHopRanh_CRongMuMoDuoi == searchData.TTKTHHCongHopRanh_CRongMuMoDuoi &&
-                                 pltdhg.TTKTHHCongHopRanh_CCaoMuMoThotTren == searchData.TTKTHHCongHopRanh_CCaoMuMoThotTren &&
-                                 pltdhg.TTKTHHCongHopRanh_CRongMuMoTren == searchData.TTKTHHCongHopRanh_CRongMuMoTren &&
-                                 pltdhg.TTKTHHCongHopRanh_CCaoChatMatTrong == searchData.TTKTHHCongHopRanh_CCaoChatMatTrong &&
-                                 pltdhg.TTKTHHCongHopRanh_CCaoChatMatNgoai == searchData.TTKTHHCongHopRanh_CCaoChatMatNgoai &&
-                                 pltdhg.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi == searchData.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi
+                             .Where(plCong => (
+                                plCong.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == searchData.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ||
+                                 plCong.ThongTinDuongTruyenDan_HinhThucTruyenDan == searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan &&
+                                 plCong.ThongTinDuongTruyenDan_LoaiTruyenDan == searchData.ThongTinDuongTruyenDan_LoaiTruyenDan &&
+                                 plCong.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien == searchData.TTCDSLCauKienDuongTruyenDan_ChieuDai01CauKien &&
+                                 plCong.ThongTinCauTaoCongTron_CDayPhuBi == searchData.ThongTinCauTaoCongTron_CDayPhuBi &&
+                                 plCong.TTKTHHCongHopRanh_CauTaoTuong == searchData.TTKTHHCongHopRanh_CauTaoTuong &&
+                                 plCong.TTKTHHCongHopRanh_ChatMatTrong == searchData.TTKTHHCongHopRanh_ChatMatTrong &&
+                                 plCong.TTKTHHCongHopRanh_ChatMatNgoai == searchData.TTKTHHCongHopRanh_ChatMatNgoai &&
+                                 plCong.TTKTHHCongHopRanh_CCaoDe == searchData.TTKTHHCongHopRanh_CCaoDe &&
+                                 plCong.TTKTHHCongHopRanh_CRongDe == searchData.TTKTHHCongHopRanh_CRongDe &&
+                                 plCong.TTKTHHCongHopRanh_CDayTuong01Ben == searchData.TTKTHHCongHopRanh_CDayTuong01Ben &&
+                                 plCong.TTKTHHCongHopRanh_SoLuongTuong == searchData.TTKTHHCongHopRanh_SoLuongTuong &&
+                                 plCong.TTKTHHCongHopRanh_CRongLongSuDung == searchData.TTKTHHCongHopRanh_CRongLongSuDung &&
+                                 plCong.TTKTHHCongHopRanh_CCaoTuongGop == searchData.TTKTHHCongHopRanh_CCaoTuongGop &&
+                                 plCong.TTKTHHCongHopRanh_CCaoMuMoThotDuoi == searchData.TTKTHHCongHopRanh_CCaoMuMoThotDuoi &&
+                                 plCong.TTKTHHCongHopRanh_CRongMuMoDuoi == searchData.TTKTHHCongHopRanh_CRongMuMoDuoi &&
+                                 plCong.TTKTHHCongHopRanh_CCaoMuMoThotTren == searchData.TTKTHHCongHopRanh_CCaoMuMoThotTren &&
+                                 plCong.TTKTHHCongHopRanh_CRongMuMoTren == searchData.TTKTHHCongHopRanh_CRongMuMoTren &&
+                                 plCong.TTKTHHCongHopRanh_CCaoChatMatTrong == searchData.TTKTHHCongHopRanh_CCaoChatMatTrong &&
+                                 plCong.TTKTHHCongHopRanh_CCaoChatMatNgoai == searchData.TTKTHHCongHopRanh_CCaoChatMatNgoai &&
+                                 plCong.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi == searchData.ThongTinKichThuocHinhHocOngNhua_CDayPhuBi
                                           ));
 
                 var result = await query.FirstOrDefaultAsync();

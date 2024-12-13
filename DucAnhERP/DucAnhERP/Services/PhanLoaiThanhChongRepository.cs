@@ -3,6 +3,7 @@ using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.InteropServices;
 
 namespace DucAnhERP.Services
 {
@@ -31,12 +32,15 @@ namespace DucAnhERP.Services
             }
         }
 
-        public async Task<List<PhanLoaiThanhChongModel>> GetAllByVM()
+        public async Task<List<PhanLoaiThanhChongModel>> GetAllByVM(PhanLoaiThanhChongModel pltcModel)
         {
             try
             {
                 using var context = _context.CreateDbContext();
                 var query = from pltc in context.PhanLoaiThanhChongs
+                            join ds in context.DSNuocMua
+                                on pltc.Id equals ds.TTKTHHCongHopRanh_LoaiThanhChong into dsJoin
+                            from ds in dsJoin.DefaultIfEmpty()
                             join cauTaoThanhChong in context.DSDanhMuc 
                             on pltc.TTKTHHCongHopRanh_CauTaoThanhChong equals cauTaoThanhChong.Id
                             orderby pltc.Flag
@@ -44,6 +48,7 @@ namespace DucAnhERP.Services
                             {
                                 Id = pltc.Id,
                                 Flag = pltc.Flag,
+                                IsEdit = ds != null && ds.TTKTHHCongHopRanh_LoaiThanhChong != null ? 1 : 0,
                                 TTKTHHCongHopRanh_LoaiThanhChong = pltc.TTKTHHCongHopRanh_LoaiThanhChong,
                                 TTKTHHCongHopRanh_CauTaoThanhChong = pltc.TTKTHHCongHopRanh_CauTaoThanhChong,
                                 TTKTHHCongHopRanh_CauTaoThanhChong_Name = cauTaoThanhChong.Ten,
@@ -54,7 +59,11 @@ namespace DucAnhERP.Services
                                 CreateBy = pltc.CreateBy,
                                 IsActive = pltc.IsActive,
                             };
-
+                if (!string.IsNullOrEmpty(pltcModel.TTKTHHCongHopRanh_CauTaoThanhChong))
+                {
+                    query = query.Where(x => x.TTKTHHCongHopRanh_CauTaoThanhChong == pltcModel.TTKTHHCongHopRanh_CauTaoThanhChong);
+                }
+                
                 var data = await query
                     .ToListAsync();
                 return data;

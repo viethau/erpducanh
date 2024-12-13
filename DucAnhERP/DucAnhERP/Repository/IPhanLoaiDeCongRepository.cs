@@ -5,7 +5,7 @@ namespace DucAnhERP.Repository
 {
     public interface IPhanLoaiDeCongRepository : IBaseRepository<PhanLoaiDeCong>
     {
-        Task<List<PhanLoaiDeCongModel>> GetAllByVM();
+        Task<List<PhanLoaiDeCongModel>> GetAllByVM(PhanLoaiDeCongModel pldcModel);
         Task<bool> CheckUsingId(string id);
         Task<bool> CheckUsingName(string name);
         Task<PhanLoaiDeCong> GetPhanLoaiDeCongByDetail(PhanLoaiDeCong plmc);

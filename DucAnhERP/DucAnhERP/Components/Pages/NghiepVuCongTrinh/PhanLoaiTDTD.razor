@@ -135,15 +135,20 @@
                         <tr>
                             <td class="d-flex nowrap">
                                 <div class="d-inline-block">
-                                    <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
                                     <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
                                         <i class="fas fa-plus"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TTTDCongHoRanh_TenLoaiTamDanTieuChuan)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                                    @{
+                                        if (item.IsEdit == 0)
+                                        {
+                                            <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TTTDCongHoRanh_TenLoaiTamDanTieuChuan)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        }
+                                       }
                                 </div>
                             </td>
                             <td class="text-center">@stt</td>
@@ -186,6 +191,7 @@
 @code {
     private List<PhanLoaiTDanTDan> listPhanLoaiTDanTDan = new List<PhanLoaiTDanTDan>();
     private PhanLoaiTDanTDan Input = new();
+    private PhanLoaiTDanTDanModel InputModel = new();
     public List<DanhMuc1> listDanhMuc = new();
     private DateTime baseTime;
     private bool isModalVisible = false;
@@ -274,7 +280,7 @@
         isLoading = true;
         dmModel = new();
         listDanhMuc = await DanhMucRepository.GetAll();
-        var plhg = await PhanLoaiTDanTDanRepository.GetAllByVM();
+        var plhg = await PhanLoaiTDanTDanRepository.GetAllByVM(InputModel);
         listModel = plhg;
         listPLTDTDModel = Paging(plhg);
         isLoading = false;
