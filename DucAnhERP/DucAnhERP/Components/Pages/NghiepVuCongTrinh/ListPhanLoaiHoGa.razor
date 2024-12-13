@@ -17,7 +17,7 @@
             <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
                 <div class="row">
                     <div class="col">
-                        <h4 class="mt-2">Thông tin chung hố ga</h4>
+                        <h5 class="mt-2">Thông tin chung hố ga</h5>
                         <hr />
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3 col-lg-4 ">
@@ -564,9 +564,9 @@
         <table class="table table-hover table-bordered">
             <thead class="bg-info">
                 <tr class="nowrap">
-                    <th class="text-center" rowspan="3"></th>
-                    <th class="text-center" rowspan="3">STT</th>
-                    <th class="text-center" colspan="8" rowspan="2">Thông tin chung hố ga</th>
+                    <th class="text-center vertical-middle"  rowspan="3"></th>
+                    <th class="text-center vertical-middle" rowspan="3">STT</th>
+                    <th class="text-center vertical-middle" colspan="8" rowspan="2">Thông tin chung hố ga</th>
                     <th class="text-center" colspan="34">Thông tin kích thước hình học hố ga</th>
                     <th class="text-center" colspan="32">Hạng mục chiếm chỗ hố ga</th>
                 </tr>
@@ -592,49 +592,49 @@
                     <th class="text-center" colspan="4">Hình thức đấu nối</th>
                 </tr>
                 <tr>
-                    <th onclick="@(() => SortTable("ThongTinChungHoGa_TenHoGaSauPhanLoai"))" class="text-center sortable" rowspan="2">
+                    <th onclick="@(() => SortTable("ThongTinChungHoGa_TenHoGaSauPhanLoai"))" class="text-center sortable">
                         <div class="mr-3">
                             Tên hố ga sau phân loại
                             <span class="arrow @(GetSortStyle("ThongTinChungHoGa_TenHoGaSauPhanLoai"))"></span>
                         </div>
                     </th>
-                    <th onclick="@(() => SortTable("ThongTinChungHoGa_HinhThucHoGa_Name"))" class="text-center sortable" rowspan="2">
+                    <th onclick="@(() => SortTable("ThongTinChungHoGa_HinhThucHoGa_Name"))" class="text-center sortable">
                         <div class="mr-3">
                             Hình thức hố ga
                             <span class="arrow @(GetSortStyle("ThongTinChungHoGa_HinhThucHoGa_Name"))"></span>
                         </div>
                     </th>
-                    <th onclick="@(() => SortTable("ThongTinChungHoGa_KetCauMuMo_Name"))" class="text-center sortable" rowspan="2">
+                    <th onclick="@(() => SortTable("ThongTinChungHoGa_KetCauMuMo_Name"))" class="text-center sortable">
                         <div class="mr-3">
                             Kết cấu mũ mố
                             <span class="arrow @(GetSortStyle("ThongTinChungHoGa_KetCauMuMo_Name"))"></span>
                         </div>
                     </th>
-                    <th onclick="@(() => SortTable("ThongTinChungHoGa_KetCauTuong_Name"))" class="text-center sortable" rowspan="2">
+                    <th onclick="@(() => SortTable("ThongTinChungHoGa_KetCauTuong_Name"))" class="text-center sortable">
                         <div class="mr-3">
                             Kết cấu tường
                             <span class="arrow @(GetSortStyle("ThongTinChungHoGa_KetCauTuong_Name"))"></span>
                         </div>
                     </th>
-                    <th onclick="@(() => SortTable("ThongTinChungHoGa_HinhThucMongHoGa_Name"))" class="text-center sortable" rowspan="2">
+                    <th onclick="@(() => SortTable("ThongTinChungHoGa_HinhThucMongHoGa_Name"))" class="text-center sortable">
                         <div class="mr-3">
                             Hình thức móng hố ga
                             <span class="arrow @(GetSortStyle("ThongTinChungHoGa_HinhThucMongHoGa_Name"))"></span>
                         </div>
                     </th>
-                    <th onclick="@(() => SortTable("ThongTinChungHoGa_KetCauMong_Name"))" class="text-center sortable" rowspan="2">
+                    <th onclick="@(() => SortTable("ThongTinChungHoGa_KetCauMong_Name"))" class="text-center sortable">
                         <div class="mr-3">
                             Kết cấu móng
                             <span class="arrow @(GetSortStyle("ThongTinChungHoGa_KetCauMong_Name"))"></span>
                         </div>
                     </th>
-                    <th onclick="@(() => SortTable("ThongTinChungHoGa_ChatMatTrong_Name"))" class="text-center sortable" rowspan="2">
+                    <th onclick="@(() => SortTable("ThongTinChungHoGa_ChatMatTrong_Name"))" class="text-center sortable">
                         <div class="mr-3">
                             Chát mặt trong
                             <span class="arrow @(GetSortStyle("ThongTinChungHoGa_ChatMatTrong_Name"))"></span>
                         </div>
                     </th>
-                    <th onclick="@(() => SortTable("ThongTinChungHoGa_ChatMatNgoai_Name"))" class="text-center sortable" rowspan="2">
+                    <th onclick="@(() => SortTable("ThongTinChungHoGa_ChatMatNgoai_Name"))" class="text-center sortable">
                         <div class="mr-3">
                             Chát mặt ngoài
                             <span class="arrow @(GetSortStyle("ThongTinChungHoGa_ChatMatNgoai_Name"))"></span>

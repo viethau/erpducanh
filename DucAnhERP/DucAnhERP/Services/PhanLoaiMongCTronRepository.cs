@@ -39,9 +39,6 @@ namespace DucAnhERP.Services
             {
                 using var context = _context.CreateDbContext();
                 var query = from plmc in context.PhanLoaiMongCTrons
-                            join ds in context.DSNuocMua
-                                 on plmc.Id equals ds.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop into dsJoin
-                            from ds in dsJoin.DefaultIfEmpty()
                             join hinhThucTruyenDan in context.DSDanhMuc
                                on plmc.ThongTinDuongTruyenDan_HinhThucTruyenDan equals hinhThucTruyenDan.Id
                             join loaiTruyenDan in context.DSDanhMuc
@@ -56,6 +53,7 @@ namespace DucAnhERP.Services
                             {
                                 Id = plmc.Id,
                                 Flag = plmc.Flag,
+                                IsEdit = context.DSNuocMua.Any(ds => ds.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop == plmc.Id) ? 1 : 0,
                                 ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = plmc.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
                                 ThongTinDuongTruyenDan_HinhThucTruyenDan = plmc.ThongTinDuongTruyenDan_HinhThucTruyenDan,
                                 ThongTinDuongTruyenDan_HinhThucTruyenDan_Name = hinhThucTruyenDan.Ten,
@@ -90,8 +88,7 @@ namespace DucAnhERP.Services
                     query = query.Where(x => x.ThongTinMongDuongTruyenDan_HinhThucMong == plmModel.ThongTinMongDuongTruyenDan_HinhThucMong);
                 }
                 
-                var data = await query
-                    .ToListAsync();
+                var data = await query.ToListAsync();
                 return data;
             }
             catch (Exception ex)

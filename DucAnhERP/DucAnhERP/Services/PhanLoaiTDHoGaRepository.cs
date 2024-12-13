@@ -37,16 +37,13 @@ namespace DucAnhERP.Services
             {
                 using var context = _context.CreateDbContext();
                 var query = from pltdhg in context.PhanLoaiTDHoGas
-                            join ds in context.DSNuocMua
-                               on pltdhg.Id equals ds.ThongTinTamDanHoGa2_PhanLoaiDayHoGa into dsJoin
-                            from ds in dsJoin.DefaultIfEmpty()
                             join hinhThucDayHoGa in context.DSDanhMuc
                             on pltdhg.ThongTinTamDanHoGa2_HinhThucDayHoGa equals hinhThucDayHoGa.Id
                             orderby pltdhg.Flag
                             select new PhanLoaiTDHoGaModel
                             {
                                 Id = pltdhg.Id,
-                                IsEdit = ds != null && ds.ThongTinTamDanHoGa2_PhanLoaiDayHoGa != null ? 1 : 0,
+                                IsEdit = context.DSNuocMua.Any(ds => ds.ThongTinTamDanHoGa2_PhanLoaiDayHoGa == pltdhg.Id) ? 1 : 0,
                                 ThongTinTamDanHoGa2_PhanLoaiDayHoGa = pltdhg.ThongTinTamDanHoGa2_PhanLoaiDayHoGa,
                                 ThongTinTamDanHoGa2_HinhThucDayHoGa = pltdhg.ThongTinTamDanHoGa2_HinhThucDayHoGa,
                                 ThongTinTamDanHoGa2_HinhThucDayHoGa_Name = hinhThucDayHoGa.Ten,

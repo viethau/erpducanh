@@ -38,9 +38,7 @@ namespace DucAnhERP.Services
             {
                 using var context = _context.CreateDbContext();
                 var query = from plhg in context.PhanLoaiHoGas
-                            join ds in context.DSNuocMua
-                                on plhg.Id equals ds.ThongTinChungHoGa_TenHoGaSauPhanLoai into dsJoin
-                            from ds in dsJoin.DefaultIfEmpty()
+                            
                             join hinhThucHoGa in context.DSDanhMuc
                                 on plhg.ThongTinChungHoGa_HinhThucHoGa equals hinhThucHoGa.Id
                             join ketCauMuMo in context.DSDanhMuc
@@ -64,7 +62,7 @@ namespace DucAnhERP.Services
                             {
                                 Id = plhg.Id,
                                 Flag = plhg.Flag,
-                                IsEdit = ds != null && ds.ThongTinChungHoGa_TenHoGaSauPhanLoai != null ? 1 : 0,
+                                IsEdit = context.DSNuocMua.Any(ds => ds.ThongTinChungHoGa_TenHoGaSauPhanLoai == plhg.Id) ? 1 : 0,
                                 ThongTinChungHoGa_TenHoGaSauPhanLoai = plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
                                 ThongTinChungHoGa_HinhThucHoGa = plhg.ThongTinChungHoGa_HinhThucHoGa ?? "",
                                 ThongTinChungHoGa_HinhThucHoGa_Name = hinhThucHoGa.Ten ?? "",

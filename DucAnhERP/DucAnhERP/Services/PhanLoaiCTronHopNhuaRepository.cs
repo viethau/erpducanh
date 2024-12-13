@@ -30,16 +30,13 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-        public async Task<List<PhanLoaiCTronHopNhuaModel>> GetAllByVM()
+        public async Task<List<PhanLoaiCTronHopNhuaModel>> GetAllByVM(PhanLoaiCTronHopNhuaModel input)
         {
             try
             {
                 using var context = _context.CreateDbContext();
                
                 var query = from plCong in context.PhanLoaiCTronHopNhuas
-                            join ds in context.DSNuocMua
-                                on plCong.Id equals ds.ThongTinDuongTruyenDan_HinhThucTruyenDan into dsJoin
-                            from ds in dsJoin.DefaultIfEmpty()
                             join hinhThucTruyenDan in context.DSDanhMuc
                                 on plCong.ThongTinDuongTruyenDan_HinhThucTruyenDan equals hinhThucTruyenDan.Id
                             join danhmucLoaiTruyenDan in context.DSDanhMuc
@@ -62,7 +59,7 @@ namespace DucAnhERP.Services
                             select new PhanLoaiCTronHopNhuaModel
                             {
                                 Id = plCong.Id,
-                                IsEdit = ds != null && ds.ThongTinDuongTruyenDan_HinhThucTruyenDan != null ? 1 : 0,
+                                IsEdit = context.DSNuocMua.Any(ds => ds.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == plCong.Id) ? 1 : 0,
                                 ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = plCong.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
                                 ThongTinDuongTruyenDan_HinhThucTruyenDan = plCong.ThongTinDuongTruyenDan_HinhThucTruyenDan,
                                 ThongTinDuongTruyenDan_HinhThucTruyenDan_Name = hinhThucTruyenDan.Ten,
@@ -96,10 +93,25 @@ namespace DucAnhERP.Services
                                 CreateBy = plCong.CreateBy,
                                 IsActive = plCong.IsActive,
                             };
+                if (!string.IsNullOrEmpty(input.ThongTinDuongTruyenDan_HinhThucTruyenDan))
+                {
+                    query = query.Where(x => x.ThongTinDuongTruyenDan_HinhThucTruyenDan == input.ThongTinDuongTruyenDan_HinhThucTruyenDan);
+                }
+                if (!string.IsNullOrEmpty(input.ThongTinDuongTruyenDan_LoaiTruyenDan))
+                {
+                    query = query.Where(x => x.ThongTinDuongTruyenDan_LoaiTruyenDan == input.ThongTinDuongTruyenDan_LoaiTruyenDan);
+                }
+                if (!string.IsNullOrEmpty(input.TTKTHHCongHopRanh_CauTaoTuong))
+                {
+                    query = query.Where(x => x.TTKTHHCongHopRanh_CauTaoTuong == input.TTKTHHCongHopRanh_CauTaoTuong);
+                }
+                if (!string.IsNullOrEmpty(input.TTKTHHCongHopRanh_CauTaoMuMo))
+                {
+                    query = query.Where(x => x.TTKTHHCongHopRanh_CauTaoMuMo == input.TTKTHHCongHopRanh_CauTaoMuMo);
+                }
+              
 
-
-                var data = await query
-                    .ToListAsync();
+                var data = await query.ToListAsync();
                 return data;
             }
             catch (Exception ex)
