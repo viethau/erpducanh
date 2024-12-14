@@ -109,23 +109,29 @@
             </BodyTemplate>
         </CustomModal>
     </div>
-    <div class="row m-3 ">
-        <div class="col-md-9 col-sm-12">
-            <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
-                <DataAnnotationsValidator />
-                <div class="row">
-                    <div class="col-sm-4 col-md-3 mb-2">
+
+     <div class="row m-2 justify-content-end">
+         <div class="col-md-3 col-sm-6 text-end">
+             <button class="btn btn-sm btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
+                <i class="fas fa-thumbtack"></i>
+            </button>
+         </div>
+     </div>
+      <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
+          <DataAnnotationsValidator />
+          <div class="row">
+                    <div class="col-sm-4 col-md-2 mb-2">
                         <label for="Table">Loại cấu kiện</label>
-                        <Select2 Id="select3" Items="@selectSearchPLD" OnChange="@OnSelectChangeSearchPLD"></Select2>
+                        <Select2 Id="selectS1" Items="@selectSearchPLD" OnChange="@OnSelectChangeSearchPLD"></Select2>
                         <ValidationMessage For="()=>InputMD.ThongTinTamDanHoGa2_PhanLoaiDayHoGa"></ValidationMessage>
                     </div>
-                    <div class="form-floating col-sm-4 col-md-3">
+                    <div class="col-sm-4 col-md-2 mb-2">
                             <label for="Table">Loại thép</label>
-                            <Select2 Id="select2" Items="@selectSearchLoaiThep" OnChange="@OnSelectChangeSearchLoaiThep"></Select2>
+                            <Select2 Id="selectS2" Items="@selectSearchLoaiThep" OnChange="@OnSelectChangeSearchLoaiThep"></Select2>
                             <ValidationMessage For="()=>InputMD.LoaiThep"></ValidationMessage>
                         </div>
                     <!-- Search Button -->
-                    <div class="col-sm-4 col-md-2 mb-2">
+                    <div class="col-sm-4 col-md-1 mb-1">
                         <label>&nbsp;</label>
                         <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
                     </div>
@@ -134,14 +140,8 @@
                         <button type="button" @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
                     </div>
                 </div>
-            </EditForm>
-        </div>
-        <div class="col-md-3 col-sm-6 text-end">
-            <button class="btn btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
-                <i class="fas fa-thumbtack"></i>
-            </button>
-        </div>
-    </div>
+      </EditForm>
+    
     <div id="tableContainer ">
         <div class="table-report ">
             <div>
@@ -213,7 +213,7 @@
                                         Chiều dài 01 thanh (mm)/diện tích (mm2)
                                         <span class="arrow @(GetSortStyle("ChieuDai1Thanh"))"></span>
                                     </div>
-                                </th
+                                </th>
                                  <th onclick="@(() => SortTable("TongChieuDai"))" class="text-center sortable">
                                     <div class="mr-3">
                                         Tổng chiều dài (m,m2)
@@ -244,15 +244,17 @@
                                 }
                                 @foreach (var item in listTKThepHGaModel)
                                 {
-                                    stt++;
+                                   
                                     if (string.IsNullOrEmpty(LoaiCK) || LoaiCK.ToUpper().Trim() !=  @item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa_Name.ToUpper().Trim())
                                     {
+                                        stt = 0;
                                         LoaiCK = @item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa_Name;
                                         <tr class="bg-warning">
                                             <td colspan="2"></td>
                                             <td colspan="13">@LoaiCK</td>
                                         </tr>
                                     }
+                                     stt++;
                                     <tr>
                                         <td class="d-flex nowrap">
                                                 <div class="d-inline-block">
@@ -324,7 +326,7 @@
     public ConfirmModal confirmModal { get; set; }
 
     private TKThepTamDan Input = new ();
-    private TKThepTamDanModel InputMD = new TKThepTamDanModel();
+    private TKThepTamDanModel InputMD = new ();
 
     private List<SelectedItem> selectPLD = new();
     private void OnSelectChangePLD(SelectedItem selectedItem)
@@ -333,12 +335,6 @@
         Caculate();
 
     }
-    private List<SelectedItem> selectSearchPLD = new();
-    private void OnSelectChangeSearchPLD(SelectedItem selectedItem)
-    {
-        InputMD.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = selectedItem.Value;
-    }
-
     public string LoaiThep = "";
     private List<SelectedItem> selectLoaiThep = new();
     private void OnSelectChangeLoaiThep(SelectedItem selectedItem)
@@ -346,6 +342,12 @@
         Input.LoaiThep = selectedItem.Value;
         LoaiThep = selectedItem.Text;
         Caculate();
+    }
+
+    private List<SelectedItem> selectSearchPLD = new();
+    private void OnSelectChangeSearchPLD(SelectedItem selectedItem)
+    {
+        InputMD.ThongTinTamDanHoGa2_PhanLoaiDayHoGa = selectedItem.Value;
     }
     private List<SelectedItem> selectSearchLoaiThep = new();
     private void OnSelectChangeSearchLoaiThep(SelectedItem selectedItem)
@@ -457,7 +459,6 @@
     {
         try
         {
-
             await LoadData();
             var repository = await PhanLoaiTDHoGaRepository.GetAll();
             selectPLD = new();

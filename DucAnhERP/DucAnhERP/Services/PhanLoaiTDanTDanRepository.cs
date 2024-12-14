@@ -52,7 +52,7 @@ namespace DucAnhERP.Services
                             select new PhanLoaiTDanTDanModel
                             {
                                 Id = pltdtd.Id,
-                                IsEdit = context.DSNuocMua.Any(ds => ds.TTTDCongHoRanh_TenLoaiTamDanTieuChuan == pltdtd.Id) ? 1 : 0,
+                                IsEdit = context.DSNuocMua.Any(ds => ds.TTTDCongHoRanh_TenLoaiTamDanTieuChuan == pltdtd.Id || ds.TTTDCongHoRanh_TenLoaiTamDanLoai02 == pltdtd.Id) ? 1 : 0,
                                 TTTDCongHoRanh_TenLoaiTamDanTieuChuan = pltdtd.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
                                 ThongTinLyTrinhTruyenDan_TuLyTrinh = pltdtd.ThongTinLyTrinhTruyenDan_TuLyTrinh,
                                 ThongTinLyTrinhTruyenDan_DenLyTrinh = pltdtd.ThongTinLyTrinhTruyenDan_DenLyTrinh,

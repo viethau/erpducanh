@@ -14,7 +14,6 @@
     table {
         position: relative;
     }
-
         table thead tr td {
             /*   white-space: nowrap; */
             text-align: center;
@@ -22,35 +21,10 @@
         }
 </style>
 <div class="container-fluid">
-    <div class="row m-3 ">
-        <div class="col-md-9 col-sm-12">
-            <EditForm Model="Input" FormName="Search" OnValidSubmit="@Search">
-                <DataAnnotationsValidator />
-                <div class="row">
-                    <!-- Select for Tên loại tấm đan -->
-                    <div class="col-sm-6 col-md-3 mb-3">
-                        <label for="Table">Tên loại tấm đan</label>
-                        <Select2 Id="mySelect2" Items="@selectPLDayHoGa" OnChange="@OnSelectChange"></Select2>
-                        <ValidationMessage For="()=>Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa"></ValidationMessage>
-                    </div>
-
-                    <!-- Select for Hình thức truyền dẫn -->
-                    <div class="col-sm-6 col-md-3 mb-3">
-                        <label for="Table">Hình thức truyền dẫn</label>
-                        <Select2 Id="mySelect3" Items="@selectHTTruyenDan" OnChange="@OnSelectChangeTD"></Select2>
-                        <ValidationMessage For="()=>Input.ThongTinDuongTruyenDan_HinhThucTruyenDan"></ValidationMessage>
-                    </div>
-
-                    <!-- Search Button -->
-                    <div class="col-sm-6 col-md-3 mb-3">
-                        <label>&nbsp;</label>
-                        <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
-                    </div>
-                </div>
-            </EditForm>
-        </div>
+    <div class="row m-2 justify-content-end">
         <div class="col-md-3 col-sm-6 text-end">
-            <button class="btn btn-primary me-2" @onclick="View" title="@(viewLeft == "d-block" ? "Xem bảng phải" : "Xem bảng trái")">
+            <!-- Nút hiển thị bảng trái -->
+            <button class="btn btn-sm btn-primary me-2" @onclick="View" title="@(viewLeft == "d-block" ? "Xem bảng phải" : "Xem bảng trái")">
                 @if (viewLeft == "d-block")
                 {
                     <i class="fas fa-arrow-right"></i>
@@ -61,20 +35,45 @@
                 }
             </button>
             <!-- Nút hiển thị cả hai bảng -->
-            <button class="btn btn-primary me-2" @onclick="ViewAll" title="Xem cả hai bảng">
+            <button class="btn btn-sm btn-primary me-2" @onclick="ViewAll" title="Xem cả hai bảng">
                 <i class="fas fa-columns"></i>
             </button>
-            <button class="btn btn-primary me-2" @onclick="ViewHorizontal" title="Xem theo chiều ngang">
+            <button class="btn btn-sm btn-primary me-2" @onclick="ViewHorizontal" title="Xem theo chiều ngang">
                 <i class="fas fa-arrows-alt-h"></i>
             </button>
-            <button class="btn btn-secondary" @onclick="ViewVertical" title="Xem theo chiều dọc">
+            <button class="btn btn-sm btn-secondary" @onclick="ViewVertical" title="Xem theo chiều dọc">
                 <i class="fas fa-arrows-alt-v"></i>
             </button>
-            <button class="btn btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
+            <button class="btn btn-sm btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
         </div>
     </div>
+    <EditForm Model="Input" FormName="Search" OnValidSubmit="@Search">
+        <DataAnnotationsValidator />
+        <div class="row">
+            <!-- Select for Tên loại tấm đan -->
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Tên loại tấm đan</label>
+                <Select2 Id="mySelect2" Items="@selectPLDayHoGa" OnChange="@OnSelectChange"></Select2>
+                <ValidationMessage For="()=>Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa"></ValidationMessage>
+            </div>
+
+            <!-- Select for Hình thức truyền dẫn -->
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Hình thức truyền dẫn</label>
+                <Select2 Id="mySelect3" Items="@selectHTTruyenDan" OnChange="@OnSelectChangeTD"></Select2>
+                <ValidationMessage For="()=>Input.ThongTinDuongTruyenDan_HinhThucTruyenDan"></ValidationMessage>
+            </div>
+
+            <!-- Search Button -->
+            <div class="col-sm-4 col-md-1 mb-1">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+            </div>
+        </div>
+    </EditForm>
+   
     <div id="tableContainer ">
         <div class="our-table @layoutClass">
             <div class="@viewLeft">

@@ -23,38 +23,35 @@
 
 </style>
 <div class="container-fluid">
-    <div class="row m-3 ">
-        <div class="col-md-9 col-sm-12">
-            <EditForm Model="Input" FormName="Search" OnValidSubmit="@Search">
-                <DataAnnotationsValidator />
-                <div class="row">
-                    <div class="col-sm-4 col-md-4 mb-2">
-                        <label for="Table">Hình thức hố ha</label>
-                        <Select2 Id="select1" Items="@selectHTHG" OnChange="@OnSelectChangeHTHG"></Select2>
-                        <ValidationMessage For="()=>Input.ThongTinChungHoGa_HinhThucHoGa"></ValidationMessage>
-                    </div>
-
-                    <!-- Search Button -->
-                    <div class="col-sm-4 col-md-3 mb-2">
-                        <label>&nbsp;</label>
-                        <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
-                    </div>
-                </div>
-            </EditForm>
-        </div>
+    <div class="row m-2 justify-content-end">
         <div class="col-md-3 col-sm-6 text-end">
-            <button class="btn btn-primary me-2" @onclick="ViewHorizontal" title="Xem theo chiều ngang">
+            <button class="btn btn-sm btn-primary me-2" @onclick="ViewHorizontal" title="Xem theo chiều ngang">
                 <i class="fas fa-arrows-alt-h"></i>
             </button>
-            <button class="btn btn-secondary" @onclick="ViewVertical" title="Xem theo chiều dọc">
+            <button class="btn btn-sm btn-secondary" @onclick="ViewVertical" title="Xem theo chiều dọc">
                 <i class="fas fa-arrows-alt-v"></i>
             </button>
-            <button class="btn btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
+            <button class="btn btn-sm btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
         </div>
-
     </div>
+    <EditForm Model="Input" FormName="Search" OnValidSubmit="@Search">
+        <DataAnnotationsValidator />
+        <div class="row">
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Hình thức hố ha</label>
+                <Select2 Id="select1" Items="@selectHTHG" OnChange="@OnSelectChangeHTHG"></Select2>
+                <ValidationMessage For="()=>Input.ThongTinChungHoGa_HinhThucHoGa"></ValidationMessage>
+            </div>
+
+            <!-- Search Button -->
+            <div class="col-sm-4 col-md-1 mb-1">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+            </div>
+        </div>
+    </EditForm>
     <div id="tableContainer ">
         <div class="our-table @layoutClass ">
             <div>

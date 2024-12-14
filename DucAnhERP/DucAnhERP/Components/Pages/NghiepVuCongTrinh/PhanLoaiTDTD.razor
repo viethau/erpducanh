@@ -1,4 +1,5 @@
 ﻿@page "/NghiepVuCongTrinh/PhanLoaiTDTD"
+@using DucAnhERP.Helpers
 @using DucAnhERP.ViewModel
 @using DucAnhERP.Models
 @using DucAnhERP.Components.Pages.Common
@@ -12,7 +13,7 @@
 @code {
     private bool isEdit { get; set; } = false;
 }
-<div class="m-5">
+<div class="m-4">
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
         <BodyTemplate>
             <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
@@ -93,7 +94,37 @@
         </BodyTemplate>
     </CustomModal>
 
-    <button class="btn btn-primary" @onclick="ShowModal">Thêm phân loại TĐan TDẫn</button>
+    <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
+        <DataAnnotationsValidator />
+        <div class="row ">
+            <!-- Select for nhóm danh mục-->
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Hình thức truyền dẫn</label>
+                <Select2 Id="mySelect1" Items="@selectHTTD" OnChange="@OnSelectChangeHTTD"></Select2>
+                <ValidationMessage For="()=>InputMD.ThongTinDuongTruyenDan_HinhThucTruyenDan"></ValidationMessage>
+            </div>
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Loại truyền dẫn</label>
+                <Select2 Id="mySelect2" Items="@selectLTD" OnChange="@OnSelectChangeLTD"></Select2>
+                <ValidationMessage For="()=>InputMD.ThongTinDuongTruyenDan_LoaiTruyenDan"></ValidationMessage>
+            </div>
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Cấu tạo tấm đan truyền dẫn</label>
+                <Select2 Id="mySelect3" Items="@selectCTTDTC" OnChange="@OnSelectChangeCTTDTC"></Select2>
+                <ValidationMessage For="()=>InputMD.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan"></ValidationMessage>
+            </div>
+            
+            <!-- Search Button -->
+            <div class="col-sm-4 col-md-1 mb-1">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+            </div>
+            <div class="col-sm-4 col-md-1 mb-1">
+                <label>&nbsp;</label>
+                <button type="button" @onclick="ShowModal" class="btn btn-info w-100">Tạo mới</button>
+            </div>
+        </div>
+    </EditForm>
 
     <h3 class="mt-2">Danh sách phân loại TĐan TDẫn </h3>
     <div class="row mt-3 our-table">
@@ -191,13 +222,36 @@
 @code {
     private List<PhanLoaiTDanTDan> listPhanLoaiTDanTDan = new List<PhanLoaiTDanTDan>();
     private PhanLoaiTDanTDan Input = new();
-    private PhanLoaiTDanTDanModel InputModel = new();
+    private PhanLoaiTDanTDanModel InputMD = new();
     public List<DanhMuc1> listDanhMuc = new();
     private DateTime baseTime;
     private bool isModalVisible = false;
     private bool isLoading = false;
-    private string TitleModal = "Thêm mới loại đế cống";
+    private string TitleModal = "Thêm mới loại tấm đan tiêu chuẩn";
 
+
+    private List<SelectedItem> selectHTTD = new();
+    private List<SelectedItem> selectLTD = new();
+    private List<SelectedItem> selectCTTDTC = new();
+
+    private void OnSelectChangeHTTD(SelectedItem selectedItem)
+    {
+        InputMD.ThongTinDuongTruyenDan_HinhThucTruyenDan = selectedItem.Value;
+    }
+    private void OnSelectChangeLTD(SelectedItem selectedItem)
+    {
+        InputMD.ThongTinDuongTruyenDan_LoaiTruyenDan = selectedItem.Value;
+    }
+    private void OnSelectChangeCTTDTC(SelectedItem selectedItem)
+    {
+        InputMD.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan = selectedItem.Value;
+    }
+
+    public async Task Search()
+    {
+        dmModel.PageNumber = 1;
+        await LoadData();
+    }
 
     private void ShowModal()
     {
@@ -230,31 +284,10 @@
     [Parameter]
     public ConfirmModal confirmModal { get; set; }
 
-    public List<PhanLoaiTDanTDanModel> listPLTDTDModel
-    {
-        get;
-        set;
-    } = new();
-
-    public List<PhanLoaiTDanTDanModel> listModel
-    {
-        get;
-        set;
-    } = new();
-
-    public MetaData MetaData
-    {
-        get;
-        set;
-    }
-
-    public PhanLoaiTDanTDanModel dmModel
-    {
-        get;
-        set;
-    }
-
-
+    public List<PhanLoaiTDanTDanModel> listPLTDTDModel {get;set;} = new();
+    public List<PhanLoaiTDanTDanModel> listModel {get;set;} = new();
+    public MetaData MetaData {get;set;}
+    public PhanLoaiTDanTDanModel dmModel {get;set;}
 
     public List<DanhMuc1> FindByIdNhomDanhMuc(string idNhomDanhMuc)
     {
@@ -271,6 +304,50 @@
     {
         baseTime = DateTime.Now;
         await LoadData();
+        foreach (var item in listDanhMuc)
+        {
+            // Kiểm tra xem item đã tồn tại trong danh sách hay chưa
+            if (!selectHTTD.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "TD_HTTruyenDan")
+            {
+                if (!string.IsNullOrEmpty(item.Id))
+                {
+                    // Nếu chưa tồn tại, thêm item vào danh sách
+                    selectHTTD.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.Ten
+                        });
+                }
+            }
+            if (!selectLTD.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "TD_LTruyenDan")
+            {
+                if (!string.IsNullOrEmpty(item.Id))
+                {
+                    // Nếu chưa tồn tại, thêm item vào danh sách
+                    selectLTD.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.Ten
+                        });
+                }
+            }
+            if (!selectCTTDTC.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "TD_CTTDTruyenDan")
+            {
+                if (!string.IsNullOrEmpty(item.Id))
+                {
+                    // Nếu chưa tồn tại, thêm item vào danh sách
+                    selectCTTDTC.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.Ten
+                        });
+                }
+            }
+        }
+        // Thêm phần tử mặc định "chọn..."
+        selectHTTD.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        selectLTD.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        selectCTTDTC.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
     }
 
 
@@ -280,7 +357,7 @@
         isLoading = true;
         dmModel = new();
         listDanhMuc = await DanhMucRepository.GetAll();
-        var plhg = await PhanLoaiTDanTDanRepository.GetAllByVM(InputModel);
+        var plhg = await PhanLoaiTDanTDanRepository.GetAllByVM(InputMD);
         listModel = plhg;
         listPLTDTDModel = Paging(plhg);
         isLoading = false;

@@ -22,31 +22,29 @@
         }
 </style>
 <div class="container-fluid">
-    <div class="row m-3 ">
-        <div class="col-md-9 col-sm-12">
-            <EditForm Model="Input" FormName="Search" OnValidSubmit="@Search">
-                <DataAnnotationsValidator />
-                <div class="row">
-                    <div class="col-sm-4 col-md-4 mb-2">
-                        <label for="Table">Cấu tạo tấm đan</label>
-                        <Select2 Id="select3" Items="@selectHTDHG" OnChange="@OnSelectChangeHTDHG"></Select2>
-                        <ValidationMessage For="()=>Input.ThongTinTamDanHoGa2_HinhThucDayHoGa"></ValidationMessage>
-                    </div>
-                    <!-- Search Button -->
-                    <div class="col-sm-4 col-md-3 mb-2">
-                        <label>&nbsp;</label>
-                        <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
-                    </div>
-                </div>
-            </EditForm>
-        </div>
+    
+    <div class="row m-2 justify-content-end">
         <div class="col-md-3 col-sm-6 text-end">
-            <button class="btn btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
+            <button class="btn btn-sm btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
         </div>
-
     </div>
+    <EditForm Model="Input" FormName="Search" OnValidSubmit="@Search">
+        <DataAnnotationsValidator />
+        <div class="row">
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Cấu tạo tấm đan</label>
+                <Select2 Id="select3" Items="@selectHTDHG" OnChange="@OnSelectChangeHTDHG"></Select2>
+                <ValidationMessage For="()=>Input.ThongTinTamDanHoGa2_HinhThucDayHoGa"></ValidationMessage>
+            </div>
+            <!-- Search Button -->
+            <div class="col-sm-4 col-md-1 mb-1">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+            </div>
+        </div>
+    </EditForm>
     <div id="tableContainer ">
         <div class="table-report ">
             <div>

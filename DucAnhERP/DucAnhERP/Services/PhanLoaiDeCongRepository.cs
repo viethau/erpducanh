@@ -11,12 +11,10 @@ namespace DucAnhERP.Services
     public class PhanLoaiDeCongRepository : IPhanLoaiDeCongRepository
     {
         private readonly IDbContextFactory<ApplicationDbContext> _context;
-
         public PhanLoaiDeCongRepository(IDbContextFactory<ApplicationDbContext> context)
         {
             _context = context;
         }
-
         public async Task<List<PhanLoaiDeCong>> GetAll()
         {
             try
@@ -313,7 +311,16 @@ namespace DucAnhERP.Services
                 {
                     entity.Loai = 1;
                 }
-                entity.ThongTinDeCong_TenLoaiDeCong = "Đế cống " + CTDC + " " + LoaiTD + " loại " + entity.Loai;
+                var loai = "";
+                if(entity.Loai < 10)
+                {
+                    loai = "0"+entity.Loai;
+                }
+                else
+                {
+                    loai = entity.Loai.ToString();
+                }
+                entity.ThongTinDeCong_TenLoaiDeCong = "Đế cống " + LoaiTD + " "+ CTDC + " loại " + loai;
 
                 // Chèn bản ghi mới vào bảng
                 context.PhanLoaiDeCongs.Add(entity);

@@ -10,7 +10,7 @@
 @inject IPhanLoaiCTronHopNhuaRepository PhanLoaiCTronHopNhuaRepository
 @inject DucAnhERP.Services.ToastService ToastService
 
-<div class="m-5">
+<div class="m-4">
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
         <BodyTemplate>
             <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
@@ -190,7 +190,6 @@
             </EditForm>
         </BodyTemplate>
     </CustomModal>
-
     <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
         <DataAnnotationsValidator />
         <div class="row ">
@@ -201,17 +200,17 @@
                 <ValidationMessage For="()=>InputMD.ThongTinDuongTruyenDan_HinhThucTruyenDan"></ValidationMessage>
             </div>
             <div class="col-sm-4 col-md-2 mb-2">
-                <label for="Table">Kết cấu mũ mỗ</label>
+                <label for="Table">Loại truyền dẫn</label>
                 <Select2 Id="mySelect2" Items="@selectLTD" OnChange="@OnSelectChangeLTD"></Select2>
                 <ValidationMessage For="()=>InputMD.ThongTinDuongTruyenDan_LoaiTruyenDan"></ValidationMessage>
             </div>
             <div class="col-sm-4 col-md-2 mb-2">
-                <label for="Table">Kết cấu tường</label>
+                <label for="Table">Cấu tạo tường</label>
                 <Select2 Id="mySelect3" Items="@selectCTT" OnChange="@OnSelectChangeCTT"></Select2>
                 <ValidationMessage For="()=>InputMD.TTKTHHCongHopRanh_CauTaoTuong"></ValidationMessage>
             </div>
             <div class="col-sm-4 col-md-2 mb-2">
-                <label for="Table">Hình thức móng hố ga</label>
+                <label for="Table">Cấu tạo mũ mố</label>
                 <Select2 Id="mySelect4" Items="@selectCTMM" OnChange="@OnSelectChangeCTMM"></Select2>
                 <ValidationMessage For="()=>InputMD.TTKTHHCongHopRanh_CauTaoMuMo"></ValidationMessage>
             </div>
@@ -222,7 +221,7 @@
             </div>
             <div class="col-sm-4 col-md-1 mb-1">
                 <label>&nbsp;</label>
-                <button @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
+                <button type="button" @onclick="ShowModal" class="btn btn-info w-100">Tạo mới</button>
             </div>
         </div>
     </EditForm>
@@ -511,7 +510,6 @@
         selectHTTD.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
         selectLTD.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
         selectCTT.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
-        selectCTMM.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
     }
 
     // Truy vấn data theo điều kiện tìm kiếm

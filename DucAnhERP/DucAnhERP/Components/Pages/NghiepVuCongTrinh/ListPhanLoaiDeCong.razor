@@ -1,4 +1,5 @@
 ﻿@page "/NghiepVuCongTrinh/PhanLoaiDeCong"
+@using DucAnhERP.Helpers
 @using DucAnhERP.ViewModel
 @using DucAnhERP.Models
 @using DucAnhERP.Components.Pages.Common
@@ -12,7 +13,7 @@
 @code {
     private bool isEdit { get; set; } = false;
 }
-<div class="m-5">
+<div class="m-4">
 
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
         <BodyTemplate>
@@ -72,10 +73,35 @@
         </BodyTemplate>
     </CustomModal>
 
-    <button class="btn btn-primary" @onclick="ShowModal">Thêm phân loại đế cống</button>
+    <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
+        <DataAnnotationsValidator />
+        <div class="row ">
+            <!-- Select for nhóm danh mục-->
+           
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Loại truyền dẫn</label>
+                <Select2 Id="mySelect2" Items="@selectLTD" OnChange="@OnSelectChangeLTD"></Select2>
+                <ValidationMessage For="()=>InputMD.ThongTinDuongTruyenDan_LoaiTruyenDan"></ValidationMessage>
+            </div>
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Cấu tạo đế cống</label>
+                <Select2 Id="mySelect3" Items="@selectCTDC" OnChange="@OnSelectChangeCTDC"></Select2>
+                <ValidationMessage For="()=>InputMD.ThongTinDeCong_CauTaoDeCong"></ValidationMessage>
+            </div>
+           
+            <!-- Search Button -->
+            <div class="col-sm-4 col-md-1 mb-1">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+            </div>
+            <div class="col-sm-4 col-md-1 mb-1">
+                <label>&nbsp;</label>
+                <button type="button" @onclick="ShowModal" class="btn btn-info w-100">Tạo mới</button>
+            </div>
+        </div>
+    </EditForm>
 
-    <h3 class="mt-2">Danh sách phân loại đế cống </h3>
-   
+    <h5 class="mt-2">Danh sách phân loại đế cống </h5>
     <div class="row mt-3 our-table">
         <table class="table table-hover table-bordered">
             <thead class="bg-info ">
@@ -171,7 +197,7 @@
 @code {
     private List<PhanLoaiDeCong> listPhanLoaiDeCong = new List<PhanLoaiDeCong>();
     private PhanLoaiDeCong Input = new();
-    private PhanLoaiDeCongModel InputModel = new();
+    private PhanLoaiDeCongModel InputMD = new();
     public List<DanhMuc1> listDanhMuc = new();
     private DateTime baseTime;
 
@@ -179,6 +205,23 @@
     private bool isLoading = false;
     private string TitleModal = "Thêm mới loại đế cống";
 
+    private List<SelectedItem> selectLTD = new();
+    private List<SelectedItem> selectCTDC = new();
+
+    private void OnSelectChangeLTD(SelectedItem selectedItem)
+    {
+        InputMD.ThongTinDuongTruyenDan_LoaiTruyenDan = selectedItem.Value;
+    }
+    private void OnSelectChangeCTDC(SelectedItem selectedItem)
+    {
+        InputMD.ThongTinDeCong_CauTaoDeCong = selectedItem.Value;
+    }
+
+    public async Task Search()
+    {
+        dmModel.PageNumber = 1;
+        await LoadData();
+    }
 
     private void ShowModal()
     {
@@ -197,7 +240,6 @@
     {
         // Logic for saving
         isModalVisible = false;
-
     }
 
     private void HandleCancel()
@@ -210,32 +252,10 @@
 
     [Parameter]
     public ConfirmModal confirmModal { get; set; }
-
-    public List<PhanLoaiDeCongModel> listPLCTronHopNhuaModel
-    {
-        get;
-        set;
-    } = new();
-
-    public List<PhanLoaiDeCongModel> listModel
-    {
-        get;
-        set;
-    } = new();
-
-    public MetaData MetaData
-    {
-        get;
-        set;
-    }
-
-    public PhanLoaiDeCongModel dmModel
-    {
-        get;
-        set;
-    }
-
-
+    public List<PhanLoaiDeCongModel> listPLCTronHopNhuaModel{get;set;} = new();
+    public List<PhanLoaiDeCongModel> listModel{get;set;} = new();
+    public MetaData MetaData{get;set;}
+    public PhanLoaiDeCongModel dmModel{get;set;}
 
     public List<DanhMuc1> FindByIdNhomDanhMuc(string idNhomDanhMuc)
     {
@@ -252,6 +272,38 @@
     {
         baseTime = DateTime.Now;
         await LoadData();
+
+        foreach (var item in listDanhMuc)
+        {
+            // Kiểm tra xem item đã tồn tại trong danh sách hay chưa
+            if (!selectLTD.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "TD_LTruyenDan")
+            {
+                if (!string.IsNullOrEmpty(item.Id))
+                {
+                    // Nếu chưa tồn tại, thêm item vào danh sách
+                    selectLTD.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.Ten
+                        });
+                }
+            }
+            if (!selectCTDC.Any(x => x.Value == item.Id) && item.IdNhomDanhMuc == "TD_CTDCTron")
+            {
+                if (!string.IsNullOrEmpty(item.Id))
+                {
+                    // Nếu chưa tồn tại, thêm item vào danh sách
+                    selectCTDC.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.Ten
+                        });
+                }
+            }
+        }
+        // Thêm phần tử mặc định "chọn..."
+        selectLTD.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        selectCTDC.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
     }
 
 
@@ -261,11 +313,10 @@
         isLoading = true;
         dmModel = new();
         listDanhMuc = await DanhMucRepository.GetAll();
-        var plhg = await PhanLoaiDeCongRepository.GetAllByVM(InputModel);
+        var plhg = await PhanLoaiDeCongRepository.GetAllByVM(InputMD);
         listModel = plhg;
         listPLCTronHopNhuaModel = Paging(plhg);
         isLoading = false;
-
     }
 
     private async Task HandleValidSubmit()

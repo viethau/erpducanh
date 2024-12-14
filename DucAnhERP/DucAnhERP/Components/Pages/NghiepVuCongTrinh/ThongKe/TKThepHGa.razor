@@ -109,39 +109,41 @@
             </BodyTemplate>
         </CustomModal>
     </div>
-    <div class="row m-3 ">
-        <div class="col-md-9 col-sm-12">
-            <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
-                <DataAnnotationsValidator />
-                <div class="row">
-                    <div class="col-sm-4 col-md-3 mb-2">
-                        <label for="Table">Loại cấu kiện</label>
-                        <Select2 Id="select3" Items="@selectSearchPLHG" OnChange="@OnSelectChangeSearchPLHG"></Select2>
-                        <ValidationMessage For="()=>InputMD.ThongTinChungHoGa_TenHoGaSauPhanLoai"></ValidationMessage>
-                    </div>
-                    <div class="form-floating col-sm-4 col-md-3">
-                            <label for="Table">Loại thép</label>
-                            <Select2 Id="select2" Items="@selectSearchLoaiThep" OnChange="@OnSelectChangeSearchLoaiThep"></Select2>
-                            <ValidationMessage For="()=>InputMD.LoaiThep"></ValidationMessage>
-                        </div>
-                    <!-- Search Button -->
-                    <div class="col-sm-4 col-md-2 mb-2">
-                        <label>&nbsp;</label>
-                        <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
-                    </div>
-                     <div class="col-sm-4 col-md-1 mb-1">
-                        <label>&nbsp;</label>
-                        <button type="button" @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
-                    </div>
-                </div>
-            </EditForm>
-        </div>
+
+    <div class="row m-2 justify-content-end">
         <div class="col-md-3 col-sm-6 text-end">
-            <button class="btn btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
+            <button class="btn btn-sm btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
         </div>
     </div>
+    <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
+        <DataAnnotationsValidator />
+        <div class="row">
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Loại cấu kiện</label>
+                <Select2 Id="select3" Items="@selectSearchPLHG" OnChange="@OnSelectChangeSearchPLHG"></Select2>
+                <ValidationMessage For="()=>InputMD.ThongTinChungHoGa_TenHoGaSauPhanLoai"></ValidationMessage>
+            </div>
+            <div class="col-sm-4 col-md-2 mb-2">
+                <label for="Table">Loại thép</label>
+                <Select2 Id="select2" Items="@selectSearchLoaiThep" OnChange="@OnSelectChangeSearchLoaiThep"></Select2>
+                <ValidationMessage For="()=>InputMD.LoaiThep"></ValidationMessage>
+            </div>
+            <!-- Search Button -->
+            <div class="col-sm-4 col-md-1 mb-1">
+                <label>&nbsp;</label>
+                <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+            </div>
+            <div class="col-sm-4 col-md-1 mb-1">
+                <label>&nbsp;</label>
+                <button type="button" @onclick="ShowModal" class="btn btn-info  w-100">Tạo mới</button>
+            </div>
+        </div>
+    </EditForm>
+
+
+   
     <div id="tableContainer ">
         <div class="table-report ">
             <div>
@@ -244,17 +246,18 @@
                                 }
                                 @foreach (var item in listTKThepHGaModel)
                                 {
-                                     stt++;
                                     if (string.IsNullOrEmpty(LoaiCK) || LoaiCK.ToUpper().Trim() !=  @item.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name.ToUpper().Trim())
                                     {
+                                        stt = 0;
                                         LoaiCK = @item.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name;
                                         <tr class="bg-warning">
                                             <td colspan="2"></td>
                                             <td colspan="13">@LoaiCK</td>
                                         </tr>
                                     }
-                                    
-                                        <tr>
+                                    stt++;
+
+                                     <tr>
                                         <td class="d-flex nowrap">
                                                 <div class="d-inline-block">
                                                     <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
@@ -669,7 +672,6 @@
         confirmModal.Title = "Xác nhận xóa";
         confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
         confirmModal.openModal();
-
     }
 
     private async Task HandleResponseClick(bool confirmed)
@@ -687,7 +689,6 @@
                     ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success",iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                     await LoadData();
                 }
-
                 deleteId = "";
             }
         }

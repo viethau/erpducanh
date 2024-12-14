@@ -21,7 +21,7 @@ namespace DucAnhERP.Services
             try
             {
                 using var context = _context.CreateDbContext();
-                var entity = await context.PhanLoaiTDHoGas.ToListAsync();
+                var entity = await context.PhanLoaiTDHoGas.OrderBy(x=>x.Flag).ToListAsync();
                 return entity;
             }
             catch (Exception ex)

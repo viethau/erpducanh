@@ -33,7 +33,7 @@
     <div class="row m-2 justify-content-end">
          <div class="col-md-3 col-sm-6 text-end">
              <!-- Nút hiển thị bảng trái -->
-           <button class="btn btn-primary me-2" @onclick="View" title="@(viewLeft == "d-block" ? "Xem bảng phải" : "Xem bảng trái")">
+           <button class="btn btn-sm btn-primary me-2" @onclick="View" title="@(viewLeft == "d-block" ? "Xem bảng phải" : "Xem bảng trái")">
                 @if (viewLeft == "d-block")
                 {
                     <i class="fas fa-arrow-right"></i>
@@ -44,16 +44,16 @@
                 }
             </button>
             <!-- Nút hiển thị cả hai bảng -->
-            <button class="btn btn-primary me-2" @onclick="ViewAll" title="Xem cả hai bảng">
+            <button class="btn btn-sm btn-primary me-2" @onclick="ViewAll" title="Xem cả hai bảng">
                 <i class="fas fa-columns"></i>
             </button>
-            <button class="btn btn-primary me-2" @onclick="ViewHorizontal" title="Xem theo chiều ngang">
+            <button class="btn btn-sm btn-primary me-2" @onclick="ViewHorizontal" title="Xem theo chiều ngang">
                 <i class="fas fa-arrows-alt-h"></i>
             </button>
-            <button class="btn btn-secondary" @onclick="ViewVertical" title="Xem theo chiều dọc">
+            <button class="btn btn-sm btn-secondary" @onclick="ViewVertical" title="Xem theo chiều dọc">
                 <i class="fas fa-arrows-alt-v"></i>
             </button>
-            <button class="btn btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
+            <button class="btn btn-sm btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
         </div>
@@ -95,7 +95,7 @@
             </div>
             <div class="col-sm-4 col-md-1">
                 <label>&nbsp;</label>
-                <button @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
+                <button type="button" @onclick="ShowModal" class="btn btn-info w-100">Tạo mới</button>
             </div>
         </div>
     </EditForm>
@@ -3215,7 +3215,7 @@
                                 <th class="text-center" colspan="14">Hình thức đấu nối</th>
 
 
-                                <th rowspan="2" onclick="@(() => SortTableLeft("PhanLoaiTDHoGa_PhanLoaiDayHoGa"))" class="text-center text-info sortable align-middle">
+                                <th rowspan="2" onclick="@(() => SortTableLeft("PhanLoaiTDHoGa_PhanLoaiDayHoGa"))" class="text-center sortable align-middle">
                                     <div class="mr-3 ">
                                         Phân loại đậy hố ga
                                         <span class="arrow @(GetSortStyle("PhanLoaiTDHoGa_PhanLoaiDayHoGa"))"></span>
@@ -4620,7 +4620,7 @@
                                         <span class="arrow @(GetSortStyle("TTTDCongHoRanh_CCao"))"></span>
                                     </div>
                                 </th>
-                                <th onclick="@(() => SortTableLeft("PhanLoaiTDanTDan_TenLoaiTamDanLoai02"))" class="text-center text-info sortable align-middle">
+                                <th onclick="@(() => SortTableLeft("PhanLoaiTDanTDan_TenLoaiTamDanLoai02"))" class="text-center sortable align-middle">
                                     <div class="mr-3">
                                         Tên loại tấm đan loại 02
                                         <span class="arrow @(GetSortStyle("PhanLoaiTDanTDan_TenLoaiTamDanLoai02"))"></span>
@@ -6296,42 +6296,42 @@
                                         <td class="text-center text-danger">@item.TTCCCCT_CCaoCongDaTLuu</td>
                                         <td class="text-center text-danger">@item.TTCCCCT_CCaoCongDaHLuu</td>
                                         <td class="text-center text-danger">@item.TTCCCCT_CCongCongDaTBinh</td>
-                                        <td class="text-center">@item.TTCCCCCHR_CCaoLotDatTLuu</td>
-                                        <td class="text-center">@item.TTCCCCCHR_CCaoLotDatHLuu</td>
-                                        <td class="text-center">@item.TTCCCCCHR_CCaoLotDatTBinh</td>
-                                        <td class="text-center">@item.TTCCCCCHR_CCaoLotDaTLuu</td>
-                                        <td class="text-center">@item.TTCCCCCHR_CCaoLotDaHLuu</td>
-                                        <td class="text-center">@item.TTCCCCCHR_CCaoLotDaTBinh</td>
-                                        <td class="text-center">@item.TTCCCCCHR_CCaoMongDatTLuu</td>
-                                        <td class="text-center">@item.TTCCCCCHR_CCaoMongDatHLuu</td>
-                                        <td class="text-center">@item.TTCCCCCHR_CCaoMongDatTBinh</td>
-                                        <td class="text-center">@item.TTCCCCCHR_CCaoMongDaTLuu</td>
-                                        <td class="text-center">@item.TTCCCCCHR_CCaoMongDaHLuu</td>
-                                        <td class="text-center">@item.TTCCCCCHR_CCaoMongDaTBinh</td>
-                                        <td class="text-center">@item.TTCCCCCHR_CCaoTuongDatTLuu</td>
-                                        <td class="text-center">@item.TTCCCCCHR_CCaoTuongDatHLuu</td>
-                                        <td class="text-center">@item.TTCCCCCHR_CCaoTuongDatTBinh</td>
-                                        <td class="text-center">@item.TTCCCCCHR_CCaoTuongDaTLuu</td>
-                                        <td class="text-center">@item.TTCCCCCHR_CCaoTuongDaHLuu</td>
-                                        <td class="text-center">@item.TTCCCCCHR_CCaoTuongDaTBinh</td>
-                                        <td class="text-center">@item.TTCCCCON_CCaoDemCatDatTLuu</td>
-                                        <td class="text-center">@item.TTCCCCON_CCaoDemCatDatHLuu</td>
-                                        <td class="text-center">@item.TTCCCCON_CCaoDemCatDatTBinh</td>
-                                        <td class="text-center">@item.TTCCCCON_CCaoDemCatDaTLuu</td>
-                                        <td class="text-center">@item.TTCCCCON_CCaoDemCatDaHLuu</td>
-                                        <td class="text-center">@item.TTCCCCON_CCaoDemCatDaTBinh</td>
-                                        <td class="text-center">@item.TTCCCCON_CCaoOngDatTLuu</td>
-                                        <td class="text-center">@item.TTCCCCON_CCaoOngDatHLuu</td>
-                                        <td class="text-center">@item.TTCCCCON_CCaoDatTBinh</td>
-                                        <td class="text-center">@item.TTCCCCON_CCaoOngDaTLuu</td>
-                                        <td class="text-center">@item.TTCCCCON_CCaoOngDaHLuu</td>
-                                        <td class="text-center">@item.TTCCCCON_CCaoDaTBinh</td>
-                                        <td class="text-center">@item.TTCCCCON_CCaoDapCatDatTLuu</td>
-                                        <td class="text-center">@item.TTCCCCON_CCaoDapCatDatHLuu</td>
-                                        <td class="text-center">@item.TTCCCCON_CCaoDapCatDatTBinh</td>
-                                        <td class="text-center">@item.TTCCCCON_CCaoDapCatDaTLuu</td>
-                                        <td class="text-center">@item.TTCCCCON_CCaoDapCatDaHLuu</td>
-                                        <td class="text-center">@item.TTCCCCON_CCaoDapCatDaTBinh</td>
+                                        <td class="text-center text-danger">@item.TTCCCCCHR_CCaoLotDatTLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCCHR_CCaoLotDatHLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCCHR_CCaoLotDatTBinh</td>
+                                        <td class="text-center text-danger">@item.TTCCCCCHR_CCaoLotDaTLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCCHR_CCaoLotDaHLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCCHR_CCaoLotDaTBinh</td>
+                                        <td class="text-center text-danger">@item.TTCCCCCHR_CCaoMongDatTLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCCHR_CCaoMongDatHLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCCHR_CCaoMongDatTBinh</td>
+                                        <td class="text-center text-danger">@item.TTCCCCCHR_CCaoMongDaTLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCCHR_CCaoMongDaHLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCCHR_CCaoMongDaTBinh</td>
+                                        <td class="text-center text-danger">@item.TTCCCCCHR_CCaoTuongDatTLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCCHR_CCaoTuongDatHLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCCHR_CCaoTuongDatTBinh</td>
+                                        <td class="text-center text-danger">@item.TTCCCCCHR_CCaoTuongDaTLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCCHR_CCaoTuongDaHLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCCHR_CCaoTuongDaTBinh</td>
+                                        <td class="text-center text-danger">@item.TTCCCCON_CCaoDemCatDatTLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCON_CCaoDemCatDatHLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCON_CCaoDemCatDatTBinh</td>
+                                        <td class="text-center text-danger">@item.TTCCCCON_CCaoDemCatDaTLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCON_CCaoDemCatDaHLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCON_CCaoDemCatDaTBinh</td>
+                                        <td class="text-center text-danger">@item.TTCCCCON_CCaoOngDatTLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCON_CCaoOngDatHLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCON_CCaoDatTBinh</td>
+                                        <td class="text-center text-danger">@item.TTCCCCON_CCaoOngDaTLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCON_CCaoOngDaHLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCON_CCaoDaTBinh</td>
+                                        <td class="text-center text-danger">@item.TTCCCCON_CCaoDapCatDatTLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCON_CCaoDapCatDatHLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCON_CCaoDapCatDatTBinh</td>
+                                        <td class="text-center text-danger">@item.TTCCCCON_CCaoDapCatDaTLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCON_CCaoDapCatDaHLuu</td>
+                                        <td class="text-center text-danger">@item.TTCCCCON_CCaoDapCatDaTBinh</td>
                                         <td class="text-center">@item.TTMDRanhOngThang_ChieuRongDayDaoNho</td>
                                         <td class="text-center">@item.TTMDRanhOngThang_TyLeMoMai</td>
                                         <td class="text-center">@item.TTMDRanhOngThang_SoCanhMaiTrai</td>
