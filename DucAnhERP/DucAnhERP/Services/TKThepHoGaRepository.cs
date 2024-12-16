@@ -52,7 +52,7 @@ namespace DucAnhERP.Services
             {
                 using var context = _context.CreateDbContext();
                 var query = (from a in context.TKThepHoGas
-                            join b in context.PhanLoaiHoGas
+                            join b in context.PhanLoaiHoGaDetails
                             on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id into plHoGaGroup
                             from b in plHoGaGroup.DefaultIfEmpty()
                             join dm in context.DSDanhMuc

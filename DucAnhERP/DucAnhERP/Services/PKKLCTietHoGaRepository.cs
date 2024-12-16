@@ -51,7 +51,7 @@ namespace DucAnhERP.Services
                 using var context = _context.CreateDbContext();
                 List<PKKLCTietHoGaModel> data = new();
                 var query = from a in context.PKKLCTietHoGas
-                            join b in context.PhanLoaiHoGas
+                            join b in context.PhanLoaiHoGaDetails
                             on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id
                             orderby b.ThongTinChungHoGa_TenHoGaSauPhanLoai ascending, a.HangMuc ascending, a.LoaiBeTong descending, a.CreateAt ascending
                             select new PKKLCTietHoGaModel
@@ -112,13 +112,14 @@ namespace DucAnhERP.Services
             }
 
         }
+
         public async Task<List<THKLModel>> GetTHKL1HoGa()
         {
             try
             {
                 using var context = _context.CreateDbContext();
                 var query = (from a in context.PKKLCTietHoGas
-                             join b in context.PhanLoaiHoGas
+                             join b in context.PhanLoaiHoGaDetails
                              on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id
                              let kl1Dv = context.PKKLCTietHoGas
                                  .Where(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai == a.ThongTinChungHoGa_TenHoGaSauPhanLoai
@@ -155,7 +156,7 @@ namespace DucAnhERP.Services
                 using var context = _context.CreateDbContext();
 
                 var query = (from a in context.PKKLCTietHoGas
-                                join b in context.PhanLoaiHoGas on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id
+                                join b in context.PhanLoaiHoGaDetails on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id
                                 select new THKLModel
                                 {
                                     Id = a.Id,
@@ -192,7 +193,7 @@ namespace DucAnhERP.Services
 
 
                 //var query = (from a in context.PKKLCTietHoGas
-                //             join b in context.PhanLoaiHoGas on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id
+                //             join b in context.PhanLoaiHoGaDetails on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id
                 //             join c in context.DSNuocMua on a.ThongTinChungHoGa_TenHoGaSauPhanLoai
                 //             equals c.ThongTinChungHoGa_TenHoGaSauPhanLoai into cGroup
                 //             from c in cGroup.DefaultIfEmpty()
@@ -247,7 +248,7 @@ namespace DucAnhERP.Services
                 foreach (var item in nuocMua)
                 {
                     var query = (from a in context.PKKLCTietHoGas
-                                 join b in context.PhanLoaiHoGas on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id
+                                 join b in context.PhanLoaiHoGaDetails on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id
                                  select new THKLModel
                                  {
                                      Id = a.Id,
@@ -310,7 +311,7 @@ namespace DucAnhERP.Services
         {
             using var context = _context.CreateDbContext();
             var result = (from a in context.PKKLCTietHoGas
-                          join b in context.PhanLoaiHoGas
+                          join b in context.PhanLoaiHoGaDetails
                           on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id
                           where a.ThongTinChungHoGa_TenHoGaSauPhanLoai == @id
                                 && !new[]
@@ -386,8 +387,6 @@ namespace DucAnhERP.Services
         }
         public async Task UpdateMulti(PKKLCTietHoGa[] PKKLCTietHoGa)
         {
-
-
             try
             {
                 using var context = _context.CreateDbContext();
@@ -755,7 +754,7 @@ namespace DucAnhERP.Services
         public async Task<double> TKLCK_SauCC(PKKLCTietHoGa obj)
         {
             using var context = _context.CreateDbContext();
-            var tenHoGaSauPhanLoai = await context.PhanLoaiHoGas
+            var tenHoGaSauPhanLoai = await context.PhanLoaiHoGaDetails
              .Where(x => x.Id.Equals(obj.ThongTinChungHoGa_TenHoGaSauPhanLoai))
              .Select(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai)
              .FirstOrDefaultAsync();

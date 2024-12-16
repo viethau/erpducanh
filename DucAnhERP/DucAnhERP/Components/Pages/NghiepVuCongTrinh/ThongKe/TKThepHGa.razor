@@ -464,7 +464,7 @@
         try
         {
             await LoadData();
-            var repository = await PhanLoaiHoGaRepository.GetAll();
+            var repository = await PhanLoaiHoGaRepository.GetAllDetailsG("");
             selectPLHG = new();
             foreach (var item in repository)
             {
@@ -550,7 +550,7 @@
         {
             Caculate();
             string[] ids = { Input.ThongTinChungHoGa_TenHoGaSauPhanLoai??"" };
-            var isValidTenPL = await PhanLoaiHoGaRepository.CheckExclusive(ids,baseTime);
+            var isValidTenPL = await PhanLoaiHoGaRepository.CheckExclusiveDetails(ids,baseTime);
             var listExist = await TKThepHoGaRepository.GetExist(Input);
             if (isValidTenPL)
             {

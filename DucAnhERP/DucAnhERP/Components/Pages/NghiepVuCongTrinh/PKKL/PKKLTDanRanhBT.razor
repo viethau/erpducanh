@@ -222,7 +222,7 @@
                     </div>
                     <div class="col-sm-4 col-md-2 mb-2">
                         <label>&nbsp;</label>
-                        <button type="button" @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
+                        <button type="button" @onclick="ShowModal" class="btn btn-info w-100">Tạo mới</button>
                     </div>
                 </div>
             </EditForm>
@@ -614,6 +614,7 @@
         SetSelectedItem(selectLCK, Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan);
         SetSelectedItem(selectLBT, Input.LoaiBeTong);
         SetSelectedItem(selectHMTC, Input.HangMuc);
+        SetSelectedItem(selectGhiChu, Input.KTHH_GhiChu);
     }
 
     private void HandleModalClose(bool isVisible)
@@ -875,6 +876,7 @@
             SetSelectedItem(selectLCK, Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan);
             SetSelectedItem(selectLBT, Input.LoaiBeTong);
             SetSelectedItem(selectHMTC, Input.HangMuc);
+            SetSelectedItem(selectGhiChu, Input.KTHH_GhiChu);
 
             // Xử lý từng trường hợp của HangMuc
             switch (Input.HangMuc)

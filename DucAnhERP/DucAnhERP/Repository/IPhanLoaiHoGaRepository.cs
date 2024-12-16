@@ -19,5 +19,13 @@ namespace DucAnhERP.Repository
         Task<List<PhanLoaiHoGa>> GetPhanLoaiHoGaByDetails(PhanLoaiHoGa searchData);
         Task<PhanLoaiHoGaModel> GetIdByVM(PhanLoaiHoGaModel Input);
         Task<List<SelectedItem>> GetDSPhanLoaiHoGa();
+
+        //bảng detail
+        Task<List<PhanLoaiHoGaDetail>> GetAllDetailsG(string? G);
+        Task<PhanLoaiHoGaDetail> GetByIdDetails(string id);
+        Task<bool> CheckExclusiveDetails(string[] ids, DateTime baseTime);
+        Task<List<PhanLoaiHoGaDetail>> SelectInsertPLHGDetail();
+        Task<PhanLoaiHoGaModel> GetIdByVMDetails(PhanLoaiHoGaModel Input);
+
     }
 }

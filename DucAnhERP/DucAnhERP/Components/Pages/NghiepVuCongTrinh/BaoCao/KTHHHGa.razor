@@ -373,10 +373,7 @@
     private PhanLoaiHoGaModel Input = new PhanLoaiHoGaModel();
 
     private List<SelectedItem> selectHTHG = new();
-    private List<SelectedItem> selectKCMM = new();
-    private List<SelectedItem> selectKCT = new();
-    private List<SelectedItem> selectHTM = new();
-    private List<SelectedItem> selectKCM = new();
+
     private string layoutClass = "d-flex justify-content-between";
     private string space = "ml-5";
     private string thumbtack = "";
@@ -399,10 +396,6 @@
 
         await LoadData();
         selectHTHG = new();
-        selectKCMM = new();
-        selectKCT = new();
-        selectHTM = new();
-        selectKCM = new();
         foreach (var item in listModel)
         {
 

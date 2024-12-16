@@ -558,7 +558,7 @@
                     </div>
                     <div class="col-sm-4 col-md-2 mb-2">
                         <label>&nbsp;</label>
-                        <button type="button" @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
+                        <button type="button" @onclick="ShowModal" class="btn btn-info w-100">Tạo mới</button>
                     </div>
                 </div>
             </EditForm>
@@ -798,7 +798,6 @@
     private async void OnSelectChangeSearchLCK(SelectedItem selectedItem)
     {
         InputMD.LoaiCauKienId = selectedItem.Value;
-        await Caculate();
     }
 
     //search
@@ -930,6 +929,7 @@
                     Input.KL1CK_ChuaTruCC = PKKLCTietHoGaRepository.KL1CK_ChuaTruCC(Input);
                     Input.TKLCK_SauCC = await PKKLCTietHoGaRepository.TKLCK_SauCC(Input);
                     disTenCongTac = false;
+                    disKTHH = false;
                     break;
                 case "III.1 Tường hố ga xây gạch":
                     disKTHH = true;
@@ -1384,6 +1384,7 @@
                     break;
                 default:
                     disTenCongTac = false;
+                    disKTHH = false;
                     break;
             }
         } else
@@ -1410,11 +1411,12 @@
     {
         isModalVisible = true;
         Input = new();
-
+        plHoGaModel = new();
         // Đặt trạng thái chọn cho các danh sách
         SetSelectedItem(selectLCK, Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
         SetSelectedItem(selectLBT, Input.LoaiBeTong);
         SetSelectedItem(selectHMTC, Input.HangMuc);
+        SetSelectedItem(selectGhiChu ,Input.KTHH_GhiChu);
     }
 
     private void HandleModalClose(bool isVisible)
@@ -1446,8 +1448,25 @@
             await LoadData();
             await LoadDataPLHG();
             PhanLoaiHoGaModel plhg = new();
-            listPLHGModelS = await PhanLoaiHoGaRepository.GetAllByVM(plhg);
+            listPLHGModelS = await PhanLoaiHoGaRepository.GetBaoCaoKTHHHGa(plhg);
             listDanhMuc = await DanhMucRepository.GetAll();
+
+
+            foreach (var item in listPLHGModelS)
+            {
+                if (!selectSearchLCK.Any(x => x.Value == item.ThongTinChungHoGa_TenHoGaSauPhanLoai))
+                {
+                    if (!string.IsNullOrEmpty(item.Id))
+                    {
+                        // Nếu chưa tồn tại, thêm item vào danh sách
+                        selectSearchLCK.Add(new SelectedItem
+                            {
+                                Value = item.Id,
+                                Text = item.ThongTinChungHoGa_TenHoGaSauPhanLoai??""
+                            });
+                    }
+                }
+            }
 
             foreach (var item in listDanhMuc)
             {
@@ -1519,6 +1538,7 @@
             selectKCT.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
             selectHTMHG.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
             selectKCM.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            selectSearchLCK.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
         }
         catch (Exception ex)
         {
@@ -1554,12 +1574,11 @@
 
     private async Task HandleValidSubmit()
     {
-
         try
         {
             await Caculate();
             string[] ids = { Input.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "" };
-            var isValidTenPL = await PhanLoaiHoGaRepository.CheckExclusive(ids, baseTime);
+            var isValidTenPL = await PhanLoaiHoGaRepository.CheckExclusiveDetails(ids, baseTime);
             var listExist = await PKKLCTietHoGaRepository.GetExist(Input);
             if (isValidTenPL)
             {
@@ -1741,7 +1760,7 @@
             // Thiết lập trạng thái ban đầu
             TitleModal = "Cập nhật PKKL Chi tiết 1 cấu kiện!";
             Input = await PKKLCTietHoGaRepository.GetById(id);
-            plHoGaModel = await PhanLoaiHoGaRepository.GetIdByVM(new PhanLoaiHoGaModel { Id = Input.ThongTinChungHoGa_TenHoGaSauPhanLoai });
+            plHoGaModel = await PhanLoaiHoGaRepository.GetIdByVMDetails(new PhanLoaiHoGaModel { Id = Input.ThongTinChungHoGa_TenHoGaSauPhanLoai });
             isEdit = true;
             isModalVisible = true;
 
@@ -1749,6 +1768,7 @@
             SetSelectedItem(selectLCK, Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
             SetSelectedItem(selectLBT, Input.LoaiBeTong);
             SetSelectedItem(selectHMTC, Input.HangMuc);
+            SetSelectedItem(selectGhiChu, Input.KTHH_GhiChu);
 
             // Xử lý từng trường hợp của HangMuc
             switch (Input.HangMuc)
@@ -1940,10 +1960,9 @@
         try
         {
             dmModelS = new();
-            var plhg = await PhanLoaiHoGaRepository.GetAllByVM(InputMDS);
+            var plhg = await PhanLoaiHoGaRepository.GetBaoCaoKTHHHGa(InputMDS);
             listModelS = plhg;
             listPLHGModelS = PagingS(plhg);
-
         }
         catch (Exception ex)
         {
@@ -1973,25 +1992,15 @@
         {
             isModalVisible = !isModalVisible;
             //kiểm tra xem Id có tồn tại hay không.
-            var plgh_id = await PhanLoaiHoGaRepository.GetById(item.Id);
+            var plgh_id = await PhanLoaiHoGaRepository.GetByIdDetails(item.Id);
             plHoGaModel = item;
+            Input = new();
+            disKTHH =false;
+            disTenCongTac = false;
             Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
             InputMD.LoaiCauKien = item.ThongTinChungHoGa_TenHoGaSauPhanLoai??"";
             Input.ThongTinChungHoGa_HinhThucHoGa = item.ThongTinChungHoGa_HinhThucHoGa??"";
             Input.ThongTinChungHoGa_KetCauMuMo = item.ThongTinChungHoGa_KetCauMuMo ?? "";
-            // InputMD.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
-            // InputMD.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name = item.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "";
-            // PhanLoaiHoGaModel plhgModel = new PhanLoaiHoGaModel();
-            // Input.ThongTinChungHoGa_HinhThucHoGa = item.ThongTinChungHoGa_HinhThucHoGa_Name ?? "";
-            // Input.ThongTinChungHoGa_KetCauMuMo = item.ThongTinChungHoGa_KetCauMuMo_Name ?? "";
-            // Input.ThongTinChungHoGa_HinhThucHoGa = item.ThongTinChungHoGa_HinhThucHoGa_Name ?? "";
-            // if (Input.ThongTinChungHoGa_HinhThucHoGa.ToUpper().Trim() == "Thi công trực tiếp".ToUpper().Trim())
-            // {
-            //     Input.BeTongLotMong_D = item.BeTongLotMong_D;
-            //     Input.BeTongLotMong_R = item.BeTongLotMong_R;
-            //     Input.BeTongLotMong_C = item.BeTongLotMong_C;
-
-            // }
             isModalVisibleS = false;
 
         }
@@ -2060,7 +2069,7 @@
                 ChiMuc = "III.1";
                 break;
             case "III.2 Chát tường hố ga xây gạch":
-                ChiMuc = "III.1";
+                ChiMuc = "III.";
                 break;
             case "IV.1 Tường hố ga bê tông":
                 ChiMuc = "IV.1";
