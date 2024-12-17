@@ -1,41 +1,88 @@
 ﻿@page "/NghiepVuCongtrinh/Test"
-<div id="tableContainer" class="@layoutClass">
-    
-</div>
+@using Microsoft.AspNetCore.SignalR.Client;
+@inject NavigationManager Navigation
+@implements IAsyncDisposable
+@inject DataService DataService
 
-<div class="mt-3">
-    <div id="tableContainer ">
-       @*  <div class="our-table @layoutClass">
-            <div>
-                <div class=" mt-1">
-                    <h5 class="mt-2">BẢNG THÔNG TIN TỔNG HỢP HỐ GA NƯỚC MƯA DỌC PHÍA TRÁI</h5>
-                </div>
-                
-            </div>
-            <div class="@space">
-                <div class=" mt-1">
-                    <h5 class="mt-2">BẢNG THÔNG TIN TỔNG HỢP HỐ GA NƯỚC MƯA DỌC PHÍA PHẢI</h5>
-                </div>
-               
-            </div>
-        </div> *@
-    </div>
-</div>
+<h3>Dữ liệu hiển thị</h3>
+
+<button @onclick="AddData">Thêm dữ liệu</button>
+<button @onclick="UpdateData">Cập nhật dữ liệu</button>
+<button @onclick="DeleteData">Xóa dữ liệu</button>
+
+<ul>
+    @foreach (var item in data)
+    {
+        <li>@item</li>
+    }
+</ul>
 
 @code {
-    private string layoutClass = "d-flex justify-content-between"; // Default to horizontal view
+    private HubConnection? hubConnection;
+    private List<string> data = new List<string>();
 
-    private void ViewHorizontal()
+    protected override async Task OnInitializedAsync()
     {
-        layoutClass = "d-flex justify-content-between"; // Use Bootstrap flexbox classes for horizontal view
+        // Khởi tạo kết nối SignalR
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(Navigation.ToAbsoluteUri("/dataUpdateHub"))
+            .Build();
+
+        // Đăng ký nhận thông báo khi dữ liệu thay đổi
+        hubConnection.On("ReceiveDataUpdate", async () =>
+        {
+            // Gọi lại dữ liệu mới từ server khi có thay đổi
+            await LoadData();
+        });
+
+        // Bắt đầu kết nối với Hub
+        await hubConnection.StartAsync();
+
+        // Tải dữ liệu ban đầu
+        await LoadData();
     }
 
-    private void ViewVertical()
+    private async Task LoadData()
     {
-        layoutClass = "d-block"; // Use block display for vertical view
+        // Giả sử bạn gọi dịch vụ để lấy dữ liệu từ server
+        // data = await _dataService.GetDataAsync();
+
+        // Cập nhật lại giao diện
+        data.Clear();
+        data.Add("Dữ liệu mới 1");
+        data.Add("Dữ liệu mới 2");
+        data.Add("Dữ liệu mới 3");
+
+        StateHasChanged(); // Cập nhật lại giao diện
+    }
+
+    private async Task AddData()
+    {
+        var a = "";
+        // Thêm dữ liệu và thông báo cho tất cả các client
+        await DataService.AddDataAsync("Dữ liệu mới được thêm");
+    }
+
+    private async Task UpdateData()
+    {
+        // Cập nhật dữ liệu và thông báo cho tất cả các client
+        await DataService.UpdateDataAsync("Dữ liệu đã được cập nhật");
+    }
+
+    private async Task DeleteData()
+    {
+        // Xóa dữ liệu và thông báo cho tất cả các client
+        await DataService.DeleteDataAsync("Dữ liệu đã bị xóa");
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
     }
 }
-
 
 
 

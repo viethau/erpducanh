@@ -22,7 +22,6 @@
 <div class="container-fluid p-3">
 
     <div class="d-inline">
-        <button @onclick="TestPL">Tesst</button>
         <InputFile class="my-2" OnChange="HandleFileSelected" title="Upload file excel"> Upload </InputFile>
         <a href="/files/file_mau_nuocmua.xlsx" download="file_mau_nuocmua.xlsx" class="btn btn-link  my-3">Tải về file mẫu</a>
     </div>
@@ -46,7 +45,6 @@
     {
         listDanhMuc = await DanhMucRepository.GetAll();
     }
-
 
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
     {
@@ -84,6 +82,8 @@
                             listNuocMuaRight = await loadPhanLoai(listConvertNuocMuaRight);
                             var countRight = await NuocMuaRepository.MultiInsert(listNuocMuaRight);
 
+                            var a= await PhanLoaiHoGaRepository.SelectInsertPLHGDetail();
+
                             ToastService.ShowToast("Thông báo", "Đã thêm thành công :" + count + " dòng phía trái , "+countRight +" : dòng phía phải ", cssClass: "toast-success");
                         }
                         else
@@ -103,20 +103,6 @@
                 Console.WriteLine($"Error: {ex.Message}");
                 isLoading = false;
             }
-        }
-    }
-
-    private async Task TestPL()
-    {
-        try
-        {
-            var a = await PhanLoaiHoGaRepository.SelectInsertPLHGDetail();
-            Console.WriteLine(a);
-        }
-        catch (Exception)
-        {
-            
-            throw;
         }
     }
 

@@ -23,6 +23,7 @@
     table {
         position: relative;
     }
+
         table thead tr td {
             /*   white-space: nowrap; */
             text-align: center;
@@ -31,9 +32,9 @@
 </style>
 <div class="container-fluid">
     <div class="row m-2 justify-content-end">
-         <div class="col-md-3 col-sm-6 text-end">
-             <!-- Nút hiển thị bảng trái -->
-           <button class="btn btn-sm btn-primary me-2" @onclick="View" title="@(viewLeft == "d-block" ? "Xem bảng phải" : "Xem bảng trái")">
+        <div class="col-md-3 col-sm-6 text-end">
+            <!-- Nút hiển thị bảng trái -->
+            <button class="btn btn-sm btn-primary me-2" @onclick="View" title="@(viewLeft == "d-block" ? "Xem bảng phải" : "Xem bảng trái")">
                 @if (viewLeft == "d-block")
                 {
                     <i class="fas fa-arrow-right"></i>
@@ -58,7 +59,7 @@
             </button>
         </div>
     </div>
-   
+
     <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
         <DataAnnotationsValidator />
         <div class="row ">
@@ -3144,9 +3145,9 @@
         </BodyTemplate>
 
     </CustomModal>
-     <div id="tableContainer ">
+    <div id="tableContainer ">
         <div class="our-table @layoutClass">
-            <div class="@viewLeft" >
+            <div class="@viewLeft">
                 <div class=" mt-1">
                     <h5 class="mt-2">BẢNG TỔNG HỢP THÔNG TIN HỆ THỐNG THOÁT NƯỚC MƯA DỌC PHÍA TRÁI TUYẾN</h5>
                 </div>
@@ -6413,9 +6414,9 @@
                 </div>
                 <div class="mt-2">
                     <table id="tb-right" class="table table-bordered table-hover" cellpadding="1" cellspacing="2">
-                         <thead class="bg-info @thumbtack">
+                        <thead class="bg-info @thumbtack">
                             <tr>
-                            
+
                                 <th class="text-center" rowspan="3"></th>
                                 <th class="text-center" rowspan="3">No.</th>
                                 <th class="text-center" colspan="2" rowspan="2">Thông tin lý trình</th>
@@ -9669,7 +9670,7 @@
             </div>
         </div>
     </div>
-    
+
     <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
     <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
 </div>
@@ -9689,13 +9690,13 @@
     private string space = "ml-5";
     private string thumbtack = "";
 
-    public List<NuocMuaModel> listNuocMuaModelLeft {get;set;} = new(); 
-    public List<NuocMuaModel> listNuocMuaModelRight {get;set;} = new();
-    public List<NuocMuaModel> listModelLeft {get;set;} = new();
-    public List<NuocMuaModel> listModelRight {get;set;} = new();
+    public List<NuocMuaModel> listNuocMuaModelLeft { get; set; } = new();
+    public List<NuocMuaModel> listNuocMuaModelRight { get; set; } = new();
+    public List<NuocMuaModel> listModelLeft { get; set; } = new();
+    public List<NuocMuaModel> listModelRight { get; set; } = new();
 
-    public MetaData MetaData {get;set;}
-    public NuocMuaModel nuocMuaModel {get;set;}
+    public MetaData MetaData { get; set; }
+    public NuocMuaModel nuocMuaModel { get; set; }
 
     [Parameter]
     public ConfirmModal confirmModal { get; set; }
@@ -9829,10 +9830,11 @@
     // Hàm xử lý logic khi người dùng dừng nhập
     private async Task OnTypingStopped()
     {
-         await Caculate(); 
-    }              
-    
-    public async Task Caculate(){
+        await Caculate();
+    }
+
+    public async Task Caculate()
+    {
 
         // Xử lý khi người dùng ngừng nhập
         Console.WriteLine("Người dùng đã ngừng nhập.");
@@ -9880,19 +9882,19 @@
               StateHasChanged();
           });
     }
-     public async Task Search()
+    public async Task Search()
     {
         nuocMuaModel.PageNumber = 1;
         await LoadData();
     }
-    
+
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
     {
         isLoading = true;
         var helper = new DataConversionHelper();
         listDanhMuc = await DanhMucRepository.GetAll();
-        
+
 
         InputMD.TraiPhai = 0;
         var nuocMuaRepositoryLeft = await NuocMuaRepository.GetAllByVM(InputMD);
@@ -10011,7 +10013,7 @@
     }
     int Flag = 0;
     //thêm vào sau
-    private void InsertLaterFlag(int flag,int TraiPhai=0)
+    private void InsertLaterFlag(int flag, int TraiPhai = 0)
     {
         Flag = flag;
         nuocMuaVM = new();
@@ -10129,7 +10131,7 @@
 
         //load phân loại
         CheckObjHelper checkObjhelper = new();
-       @*  if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
+        @*  if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().EndsWith("=G"))
         {
             searchData.G = "=G";
         } *@
@@ -10138,9 +10140,9 @@
             Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = "";
             List<PhanLoaiHoGa> loadTenHoGaSauPhanLoai = new();
             loadTenHoGaSauPhanLoai = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaByDetails(searchData);
-            if (loadTenHoGaSauPhanLoai !=null && loadTenHoGaSauPhanLoai.Count>0)
+            if (loadTenHoGaSauPhanLoai != null && loadTenHoGaSauPhanLoai.Count > 0)
             {
-                foreach(var item in loadTenHoGaSauPhanLoai)
+                foreach (var item in loadTenHoGaSauPhanLoai)
                 {
                     Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
                     // // Kiểm tra xem tên hố ga theo bản vẽ có kết thúc bằng "=G"
@@ -10150,7 +10152,7 @@
                     //         if (item.G == "=G")
                     //         {
                     //             Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
-                    //             break; 
+                    //             break;
                     //         }
                     //     }
                     //     else
@@ -10159,21 +10161,22 @@
                     //         if (string.IsNullOrEmpty(item.G))
                     //         {
                     //         Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.Id;
-                    //             break; 
+                    //             break;
                     //         }
                     //     }
                 }
 
             }
-            if(string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai)){
+            if (string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai))
+            {
                 Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = "";
                 string HoGa_KetCauTuong = GetTenDanhMucById(searchData.ThongTinChungHoGa_KetCauTuong);
-                var id = await PhanLoaiHoGaRepository.InsertId(searchData, HoGa_KetCauTuong,Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
+                var id = await PhanLoaiHoGaRepository.InsertId(searchData, HoGa_KetCauTuong, Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
                 Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = id;
             }
         }
     }
-
+    string TenHoGaTheoPhanLoai ="";
     //Load tên theo phân loại hố ga
     public async Task LoadTenHoGaSauPhanLoai()
     {
@@ -10260,26 +10263,50 @@
         // {
         //     searchData.G = "=G";
         // }
-        plHoGa = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaByDetail(searchData);
-        if (plHoGa == null)
-        {
-            await InvokeAsync(() =>
-            {
-                nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = "";
-                Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = "";
-                StateHasChanged();
-            });
-        }
-        else
-        {
-            await InvokeAsync(() =>
-            {
-                nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai;
-                Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = plHoGa.Id;
-                StateHasChanged();
-            });
-        }
 
+        if(!string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaTheoBanVe)){
+            var formatTenHoGaTheoBanVe = Input.ThongTinChungHoGa_TenHoGaTheoBanVe;
+            if (Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().Trim().EndsWith("=G"))
+            {
+                formatTenHoGaTheoBanVe = Input.ThongTinChungHoGa_TenHoGaTheoBanVe.Substring(0, Input.ThongTinChungHoGa_TenHoGaTheoBanVe.Length - 2);
+            }
+
+            // Kiểm tra  xem  đã tồn tại tại Phân lại theo Tên hố ga 
+            List<NuocMuaModel> results = new List<NuocMuaModel>();
+            results = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaByTenHGTBV(formatTenHoGaTheoBanVe);
+            foreach(var item in results)
+            {
+                TenHoGaTheoPhanLoai = item.PhanLoaiHoGas_TenHoGaSauPhanLoai;
+                if (TenHoGaTheoPhanLoai.ToUpper().Trim().EndsWith("=G"))
+                {
+                    TenHoGaTheoPhanLoai = TenHoGaTheoPhanLoai.Substring(0,TenHoGaTheoPhanLoai.Length - 2);
+                }
+                if(item.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().Trim() == Input.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().Trim()){
+                    Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = item.ThongTinChungHoGa_TenHoGaSauPhanLoai;
+                }
+            }
+        }
+        if(!string.IsNullOrEmpty(TenHoGaTheoPhanLoai)){
+            plHoGa = await PhanLoaiHoGaRepository.GetPhanLoaiHoGaByDetail(searchData);
+            if (plHoGa == null)
+            {
+                await InvokeAsync(() =>
+                {
+                    nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = "";
+                    Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = "";
+                    StateHasChanged();
+                });
+            }
+            else
+            {
+                await InvokeAsync(() =>
+                {
+                    nuocMuaVM.PhanLoaiHoGas_TenHoGaSauPhanLoai = plHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai;
+                    Input.ThongTinChungHoGa_TenHoGaSauPhanLoai = plHoGa.Id;
+                    StateHasChanged();
+                });
+            }
+        }
     }
 
     //Thêm tên theo bảng phân loại tấm đan hố ga
@@ -10610,7 +10637,7 @@
         {
             if (searchData.TTTDCongHoRanh_CDai > 0 || searchData.TTTDCongHoRanh_CRong > 0 || searchData.TTTDCongHoRanh_CCao > 0)
             {
-                var id = await PhanLoaiTDanTDanRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan),"Tấm đan tiêu chuẩn");
+                var id = await PhanLoaiTDanTDanRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan), "Tấm đan tiêu chuẩn");
                 Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = id;
             }
         }
@@ -10634,7 +10661,7 @@
         {
             if (searchData.TTTDCongHoRanh_CDai > 0 || searchData.TTTDCongHoRanh_CRong > 0 || searchData.TTTDCongHoRanh_CCao > 0)
             {
-                var id = await PhanLoaiTDanTDanRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan),"Tấm đan bổ sung");
+                var id = await PhanLoaiTDanTDanRepository.InsertId(searchData, GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_HinhThucTruyenDan), GetTenDanhMucById(searchData.ThongTinDuongTruyenDan_LoaiTruyenDan), GetTenDanhMucById(searchData.TTTDCongHoRanh_CauTaoTamDanTruyenDanTamDanTieuChuan), "Tấm đan bổ sung");
                 Input.TTTDCongHoRanh_TenLoaiTamDanLoai02 = id;
             }
 
@@ -10822,19 +10849,23 @@
                         );
                         await LoadData();
                         nuocMuaVM = new();
+                        //sync dữ liệu sang bảng PhanLoaiHoGaDetails
+                        var a = PhanLoaiHoGaRepository.InsertMissingPhanLoaiHoGaDetails();
                     }
                 }
-            }else{
+            }
+            else
+            {
                 ToastService.ShowToast(
                    "Thông báo lỗi ",
-                   "Tên hỗ ga theo bản vẽ :"+Input.ThongTinChungHoGa_TenHoGaTheoBanVe+" đã tồn tại !",
+                   "Tên hỗ ga theo bản vẽ :" + Input.ThongTinChungHoGa_TenHoGaTheoBanVe + " đã tồn tại !",
                    cssClass: "toast-danger",
                    iconClass: "fa fa-exclamation-circle",
                    progressBarClass: "bg-info",
                    duration: 5000
                );
             }
-            
+
         }
         catch (Exception ex)
         {
@@ -10973,7 +11004,7 @@
         nuocMuaModel.PageNumber = 1;
         PagingLeft(listModelLeft);
     }
-     private void SortTableRight(string columnName)
+    private void SortTableRight(string columnName)
     {
         listModelRight = SortService.SortTable(listModelRight, columnName);
         nuocMuaModel.PageNumber = 1;
@@ -11028,7 +11059,7 @@
         return nuocMuaModels;
     }
     // Xử lý paging right
-     private List<NuocMuaModel> PagingRight(List<NuocMuaModel> nuocMuaModels)
+    private List<NuocMuaModel> PagingRight(List<NuocMuaModel> nuocMuaModels)
     {
         // Đếm số bản ghi thỏa mãn
         var count = nuocMuaModels.Count();
@@ -11115,15 +11146,19 @@
     private string viewRight = "d-none";
 
     private void View()
-    {   space = "";
-        if(viewLeft == "d-block"){
-             viewLeft = "d-none";
-             viewRight = "d-block";
-        }else{
-            viewRight  = "d-none";
+    {
+        space = "";
+        if (viewLeft == "d-block")
+        {
+            viewLeft = "d-none";
+            viewRight = "d-block";
+        }
+        else
+        {
+            viewRight = "d-none";
             viewLeft = "d-block";
         }
-       
+
     }
 
     private void ViewAll()

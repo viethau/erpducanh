@@ -21,10 +21,12 @@ namespace DucAnhERP.Repository
         Task<List<SelectedItem>> GetDSPhanLoaiHoGa();
 
         //bảng detail
+        Task<List<NuocMuaModel>> GetPhanLoaiHoGaByTenHGTBV(string ThongTinChungHoGa_TenHoGaTheoBanVe);
         Task<List<PhanLoaiHoGaDetail>> GetAllDetailsG(string? G);
         Task<PhanLoaiHoGaDetail> GetByIdDetails(string id);
         Task<bool> CheckExclusiveDetails(string[] ids, DateTime baseTime);
         Task<List<PhanLoaiHoGaDetail>> SelectInsertPLHGDetail();
+        Task<List<PhanLoaiHoGaDetail>> InsertMissingPhanLoaiHoGaDetails();
         Task<PhanLoaiHoGaModel> GetIdByVMDetails(PhanLoaiHoGaModel Input);
 
     }
