@@ -610,7 +610,7 @@
         var nuocMuaRepositoryLeft = await NuocMuaRepository.GetBaoCaoKLBPhapHGa(Input);
         listModelLeft = nuocMuaRepositoryLeft;
         listNuocMuaModelLeft = PagingLeft(listModelLeft, listNuocMuaModelLeft);
-        Input.TraiPhai = 0;
+        Input.TraiPhai = 1;
         var nuocMuaRepositoryRight = await NuocMuaRepository.GetBaoCaoKLBPhapHGa(Input);
         listModelRight = nuocMuaRepositoryRight;
         listNuocMuaModelRight = PagingRight(listModelRight, listNuocMuaModelRight);
@@ -733,13 +733,14 @@
             viewRight = "d-none";
             viewLeft = "d-block";
         }
-
+        space = "m-0";
     }
 
     private void ViewAll()
     {
         viewLeft = "d-block";
         viewRight = "d-block";
+        space = "ml-5";
     }
 
     private void ViewHorizontal()

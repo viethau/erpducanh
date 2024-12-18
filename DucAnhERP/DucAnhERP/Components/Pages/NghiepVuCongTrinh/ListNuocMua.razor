@@ -10814,6 +10814,8 @@
                             );
                             await LoadData();
                             nuocMuaVM = new();
+                            //sync dữ liệu sang bảng PhanLoaiHoGaDetails
+                            var a = PhanLoaiHoGaRepository.InsertMissingPhanLoaiHoGaDetails();
                         }
                     }
                     else if (Flag > 0)
@@ -10832,6 +10834,8 @@
                         );
                         await LoadData();
                         Flag = 0;
+                        //sync dữ liệu sang bảng PhanLoaiHoGaDetails
+                        var a = PhanLoaiHoGaRepository.InsertMissingPhanLoaiHoGaDetails();
                     }
                     else
                     {

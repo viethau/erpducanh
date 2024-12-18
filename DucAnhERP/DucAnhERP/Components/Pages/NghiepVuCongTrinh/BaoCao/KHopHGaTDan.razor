@@ -63,16 +63,16 @@
 
                             </tr>
                             <tr>
-                                <th onclick="@(() => SortTable("ThongTinChungHoGa_TenHoGaSauPhanLoai"))" class="text-center sortable">
+                                <th onclick="@(() => SortTable("PhanLoaiHoGas_TenHoGaSauPhanLoai"))" class="text-center sortable">
                                     <div class="mr-3">
                                         Loại hố ga
-                                        <span class="arrow @(GetSortStyle("ThongTinChungHoGa_TenHoGaSauPhanLoai"))"></span>
+                                        <span class="arrow @(GetSortStyle("PhanLoaiHoGas_TenHoGaSauPhanLoai"))"></span>
                                     </div>
                                 </th>
-                                <th onclick="@(() => SortTable("ThongTinTamDanHoGa2_PhanLoaiDayHoGa"))" class="text-center sortable">
+                                <th onclick="@(() => SortTable("PhanLoaiTDHoGa_PhanLoaiDayHoGa"))" class="text-center sortable">
                                     <div class="mr-3">
                                         Loại nắp đậy hố ga
-                                        <span class="arrow @(GetSortStyle("ThongTinTamDanHoGa2_PhanLoaiDayHoGa"))"></span>
+                                        <span class="arrow @(GetSortStyle("PhanLoaiTDHoGa_PhanLoaiDayHoGa"))"></span>
                                     </div>
                                 </th>
 
@@ -217,19 +217,7 @@
     {
         isLoading = true;
         listModel = new();
-        var repository = await NuocMuaRepository.GetBaoCaoKHopHGaTDan(Input);
-        foreach (var item in repository)
-        {
-            // Kiểm tra và thêm item
-            if (!string.IsNullOrEmpty(item.ThongTinChungHoGa_TenHoGaSauPhanLoai) && !string.IsNullOrEmpty(item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa) && !listModel.Any(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai == item.ThongTinChungHoGa_TenHoGaSauPhanLoai))
-            {
-                listModel.Add(item);
-            }
-            else
-            {
-                Console.WriteLine(item);
-            }
-        }
+        listModel = await NuocMuaRepository.GetBaoCaoKHopHGaTDan(Input);
 
         listNuocMuaModel = Paging(listModel);
         isLoading = false;

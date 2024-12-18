@@ -1,4 +1,5 @@
 ﻿using DucAnhERP.Components.Pages.NghiepVuCongTrinh;
+using DucAnhERP.Components.Pages.NghiepVuCongTrinh.PKKL;
 using DucAnhERP.Data;
 using DucAnhERP.Models;
 using DucAnhERP.Repository;
@@ -1053,7 +1054,18 @@ namespace DucAnhERP.Services
                                 ThongTinLyTrinh_TuyenDuong = nuocMua.ThongTinLyTrinh_TuyenDuong ?? "",
                                 ThongTinLyTrinh_LyTrinhTaiTimHoGa = nuocMua.ThongTinLyTrinh_LyTrinhTaiTimHoGa ?? "",
                                 ThongTinChungHoGa_TenHoGaSauPhanLoai = nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
-                                PhanLoaiHoGas_TenHoGaSauPhanLoai = phanLoaiHoGa != null ? phanLoaiHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai : "",
+                                PhanLoaiHoGas_TenHoGaSauPhanLoai = nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe != null &&
+                                        nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G")
+                                        ? (
+                                            (from dsSub in context.DSNuocMua
+                                             join plSub in context.PhanLoaiHoGas
+                                                 on dsSub.ThongTinChungHoGa_TenHoGaSauPhanLoai equals plSub.Id
+                                             where nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe.Replace("=G", "") == dsSub.ThongTinChungHoGa_TenHoGaTheoBanVe &&
+                                                   !dsSub.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G")
+                                             select plSub.ThongTinChungHoGa_TenHoGaSauPhanLoai)
+                                            .FirstOrDefault() ?? phanLoaiHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                                        ) + "=G"
+                                        : phanLoaiHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai,
                                 ThongTinChungHoGa_TenHoGaTheoBanVe = nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe ?? "",
                                 ThongTinTamDanHoGa2_PhanLoaiDayHoGa = nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
                                 PhanLoaiTDHoGa_PhanLoaiDayHoGa = phanLoaiTDHoGa.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
@@ -1135,7 +1147,18 @@ namespace DucAnhERP.Services
                                 ThongTinLyTrinh_TuyenDuong = nuocMua.ThongTinLyTrinh_TuyenDuong ?? "",
                                 ThongTinLyTrinh_LyTrinhTaiTimHoGa = nuocMua.ThongTinLyTrinh_LyTrinhTaiTimHoGa ?? "",
                                 ThongTinChungHoGa_TenHoGaSauPhanLoai = nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
-                                PhanLoaiHoGas_TenHoGaSauPhanLoai = phanLoaiHoGa != null ? phanLoaiHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai : "",
+                                PhanLoaiHoGas_TenHoGaSauPhanLoai = nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe != null &&
+                                        nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G")
+                                        ? (
+                                            (from dsSub in context.DSNuocMua
+                                             join plSub in context.PhanLoaiHoGas
+                                                 on dsSub.ThongTinChungHoGa_TenHoGaSauPhanLoai equals plSub.Id
+                                             where nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe.Replace("=G", "") == dsSub.ThongTinChungHoGa_TenHoGaTheoBanVe &&
+                                                   !dsSub.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G")
+                                             select plSub.ThongTinChungHoGa_TenHoGaSauPhanLoai)
+                                            .FirstOrDefault() ?? phanLoaiHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                                        ) + "=G"
+                                        : phanLoaiHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai,
                                 ThongTinChungHoGa_TenHoGaTheoBanVe = nuocMua.ThongTinChungHoGa_TenHoGaTheoBanVe ?? "",
                                 ThongTinTamDanHoGa2_PhanLoaiDayHoGa = nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
                                 PhanLoaiTDHoGa_PhanLoaiDayHoGa = phanLoaiTDHoGa.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
@@ -1200,53 +1223,37 @@ namespace DucAnhERP.Services
             try
             {
                 using var context = _context.CreateDbContext();
-                var query = from nuocMua in context.DSNuocMua
-                                // Left join với bảng PhanLoaiHoGas
-                            join phanLoaiHoGa in context.PhanLoaiHoGas
-                            on nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai equals phanLoaiHoGa.Id into phanLoaiHoGaJoin
-                            from phanLoaiHoGa in phanLoaiHoGaJoin.DefaultIfEmpty()
-
-                                // Left join với bảng PhanLoaiTDHoGas
-                            join phanLoaiTDHoGa in context.PhanLoaiTDHoGas
-                            on nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa equals phanLoaiTDHoGa.Id into phanLoaiTDHoGaJoin
-                            from phanLoaiTDHoGa in phanLoaiTDHoGaJoin.DefaultIfEmpty()
-
-                            orderby nuocMua.Flag
-                            select new NuocMuaModel
-                            {
-                                Id = nuocMua.Id,
-                                ThongTinLyTrinh_TuyenDuong = nuocMua.ThongTinLyTrinh_TuyenDuong ?? "",
-                                ThongTinLyTrinh_LyTrinhTaiTimHoGa = nuocMua.ThongTinLyTrinh_LyTrinhTaiTimHoGa ?? "",
-                                ThongTinChungHoGa_TenHoGaSauPhanLoai = nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
-                                PhanLoaiHoGas_TenHoGaSauPhanLoai = phanLoaiHoGa != null ? phanLoaiHoGa.ThongTinChungHoGa_TenHoGaSauPhanLoai : "",
-
-                                ThongTinTamDanHoGa2_PhanLoaiDayHoGa = nuocMua.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
-                                PhanLoaiTDHoGa_PhanLoaiDayHoGa = phanLoaiTDHoGa.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
-                               
-                                ThongTinTamDanHoGa2_DuongKinh = nuocMua.ThongTinTamDanHoGa2_DuongKinh ?? 0,
-                                ThongTinTamDanHoGa2_ChieuDay = nuocMua.ThongTinTamDanHoGa2_ChieuDay ?? 0,
-
-                                ThongTinTamDanHoGa2_D = nuocMua.ThongTinTamDanHoGa2_D ?? 0,
-                                ThongTinTamDanHoGa2_R = nuocMua.ThongTinTamDanHoGa2_R ?? 0,
-                                ThongTinTamDanHoGa2_C = nuocMua.ThongTinTamDanHoGa2_C ?? 0,
-                                ThongTinTamDanHoGa2_SoLuongNapDay = nuocMua.ThongTinTamDanHoGa2_SoLuongNapDay ?? 0,
-
-                                ToaDoX = nuocMua.ToaDoX ?? 0,
-                                ToaDoY = nuocMua.ToaDoY ?? 0,
-                                Flag = nuocMua.Flag,
-                                TraiPhai = nuocMua.TraiPhai,
-                            };
+                
+                var query = (from ds in context.DSNuocMua
+                             join pl in context.PhanLoaiHoGas
+                                 on ds.ThongTinChungHoGa_TenHoGaSauPhanLoai equals pl.Id
+                             join plt in context.PhanLoaiTDHoGas
+                                 on ds.ThongTinTamDanHoGa2_PhanLoaiDayHoGa equals plt.Id
+                             select new NuocMuaModel
+                             {
+                                 ThongTinChungHoGa_TenHoGaSauPhanLoai = ds.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                                 PhanLoaiHoGas_TenHoGaSauPhanLoai = pl.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                                 ThongTinTamDanHoGa2_PhanLoaiDayHoGa = ds.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
+                                 PhanLoaiTDHoGa_PhanLoaiDayHoGa = plt.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
+                                 ThongTinTamDanHoGa2_DuongKinh = ds.ThongTinTamDanHoGa2_DuongKinh ?? 0,
+                                 ThongTinTamDanHoGa2_ChieuDay = ds.ThongTinTamDanHoGa2_ChieuDay ?? 0,
+                                 ThongTinTamDanHoGa2_D = ds.ThongTinTamDanHoGa2_D ?? 0,
+                                 ThongTinTamDanHoGa2_R = ds.ThongTinTamDanHoGa2_R ?? 0,
+                                 ThongTinTamDanHoGa2_C = ds.ThongTinTamDanHoGa2_C ?? 0,
+                                 ThongTinTamDanHoGa2_SoLuongNapDay = ds.ThongTinTamDanHoGa2_SoLuongNapDay ?? 0,
+                                 
+                             });
 
                 if (!string.IsNullOrEmpty(nuocMuaModel.ThongTinTamDanHoGa2_PhanLoaiDayHoGa))
                 {
                     query = query.Where(x => x.ThongTinTamDanHoGa2_PhanLoaiDayHoGa == nuocMuaModel.ThongTinTamDanHoGa2_PhanLoaiDayHoGa);
                 }
-                if (nuocMuaModel.TraiPhai != 2)
-                {
-                    query = query.Where(x => x.TraiPhai.Equals(nuocMuaModel.TraiPhai));
-                }
-                var data = await query.ToListAsync();
+                
+                var data = await query.Distinct()
+                                      .OrderBy(x => x.PhanLoaiHoGas_TenHoGaSauPhanLoai)
+                                      .ToListAsync();
                 return data;
+
             }
             catch (Exception ex)
             {
@@ -1261,18 +1268,34 @@ namespace DucAnhERP.Services
                 using var context = _context.CreateDbContext();
                 var query = from d in context.DSNuocMua
                             join p in context.PhanLoaiHoGas
-                            on d.ThongTinChungHoGa_TenHoGaSauPhanLoai equals p.Id
-                            group d by new { p.Id, p.ThongTinChungHoGa_TenHoGaSauPhanLoai } into grouped
+                                on d.ThongTinChungHoGa_TenHoGaSauPhanLoai equals p.Id
+                            group d by new
+                            {
+                                p.Id,
+                                PhanLoaiHoGas_TenHoGaSauPhanLoai = d.ThongTinChungHoGa_TenHoGaTheoBanVe != null &&
+                                                                   d.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G")
+                                                                   ? (
+                                                                       (from dsSub in context.DSNuocMua
+                                                                        join plSub in context.PhanLoaiHoGas
+                                                                            on dsSub.ThongTinChungHoGa_TenHoGaSauPhanLoai equals plSub.Id
+                                                                        where d.ThongTinChungHoGa_TenHoGaTheoBanVe.Replace("=G", "") == dsSub.ThongTinChungHoGa_TenHoGaTheoBanVe &&
+                                                                              !dsSub.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G")
+                                                                        select plSub.ThongTinChungHoGa_TenHoGaSauPhanLoai)
+                                                                       .FirstOrDefault() ?? p.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                                                                   ) + "=G"
+                                                                   : p.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                            } into grouped
                             select new PLHGBaoCaoModel
                             {
                                 Id = grouped.Key.Id,
-                                ThongTinChungHoGa_TenHoGaSauPhanLoai = grouped.Key.ThongTinChungHoGa_TenHoGaSauPhanLoai,
-                                countTrai = grouped.Sum(x => x.TraiPhai == 0 ? 1 : 0),
-                                countPhai = grouped.Sum(x => x.TraiPhai == 1 ? 1 : 0),
-                                Tong = grouped.Sum(x => (x.TraiPhai == 0 ? 1 : 0)) + grouped.Sum(x => (x.TraiPhai == 1 ? 1 : 0))
+                                ThongTinChungHoGa_TenHoGaSauPhanLoai = grouped.Key.PhanLoaiHoGas_TenHoGaSauPhanLoai,
+                                countTrai = grouped.Count(x => x.TraiPhai == 0),
+                                countPhai = grouped.Count(x => x.TraiPhai == 1),
+                                Tong = grouped.Count()
                             };
 
                 var data = await query.ToListAsync();
+
                 return data;
             }
             catch(Exception ex)
@@ -1288,13 +1311,26 @@ namespace DucAnhERP.Services
                 var query = from n in context.DSNuocMua
                             join p in context.PhanLoaiHoGas
                             on n.ThongTinChungHoGa_TenHoGaSauPhanLoai equals p.Id
-                            group n by new { n.ThongTinLyTrinh_TuyenDuong, p.ThongTinChungHoGa_TenHoGaSauPhanLoai, p.Id } into grouped
+                            group n by new { n.ThongTinLyTrinh_TuyenDuong,
+                                PhanLoaiHoGas_TenHoGaSauPhanLoai = n.ThongTinChungHoGa_TenHoGaTheoBanVe != null &&
+                                                                   n.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G")
+                                                                   ? (
+                                                                       (from dsSub in context.DSNuocMua
+                                                                        join plSub in context.PhanLoaiHoGas
+                                                                            on dsSub.ThongTinChungHoGa_TenHoGaSauPhanLoai equals plSub.Id
+                                                                        where n.ThongTinChungHoGa_TenHoGaTheoBanVe.Replace("=G", "") == dsSub.ThongTinChungHoGa_TenHoGaTheoBanVe &&
+                                                                              !dsSub.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G")
+                                                                        select plSub.ThongTinChungHoGa_TenHoGaSauPhanLoai)
+                                                                       .FirstOrDefault() ?? p.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                                                                   ) + "=G"
+                                                                   : p.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                                                                   , p.Id } into grouped
                             orderby grouped.Key.ThongTinLyTrinh_TuyenDuong
                             select new PLHGBaoCaoSLHGTTModel
                             {
                                 Id = grouped.Key.Id,
                                 ThongTinLyTrinh_TuyenDuong = grouped.Key.ThongTinLyTrinh_TuyenDuong,
-                                ThongTinChungHoGa_TenHoGaSauPhanLoai = grouped.Key.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                                ThongTinChungHoGa_TenHoGaSauPhanLoai = grouped.Key.PhanLoaiHoGas_TenHoGaSauPhanLoai,
                                 countTrai = grouped.Sum(x => x.TraiPhai == 0 ? 1 : 0),
                                 countPhai = grouped.Sum(x => x.TraiPhai == 1 ? 1 : 0),
                                 Tong = grouped.Sum(x => x.TraiPhai == 0 ? 1 : 0) + grouped.Sum(x => x.TraiPhai == 1 ? 1 : 0)

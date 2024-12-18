@@ -82,7 +82,7 @@
                             listNuocMuaRight = await loadPhanLoai(listConvertNuocMuaRight);
                             var countRight = await NuocMuaRepository.MultiInsert(listNuocMuaRight);
 
-                            var a= await PhanLoaiHoGaRepository.SelectInsertPLHGDetail();
+                            var a= await PhanLoaiHoGaRepository.InsertMissingPhanLoaiHoGaDetails();
 
                             ToastService.ShowToast("Thông báo", "Đã thêm thành công :" + count + " dòng phía trái , "+countRight +" : dòng phía phải ", cssClass: "toast-success");
                         }

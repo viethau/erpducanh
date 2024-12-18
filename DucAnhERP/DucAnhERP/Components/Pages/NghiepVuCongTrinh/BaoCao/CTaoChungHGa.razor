@@ -260,12 +260,12 @@
                         Text = item.ThongTinChungHoGa_HinhThucHoGa_Name ?? ""
                     });
             }
-            if (!string.IsNullOrEmpty(item.ThongTinChungHoGa_KetCauMong) && !selectKCMM.Any(x => x.Value == item.ThongTinChungHoGa_KetCauMong))
+            if (!string.IsNullOrEmpty(item.ThongTinChungHoGa_KetCauMuMo) && !selectKCMM.Any(x => x.Value == item.ThongTinChungHoGa_KetCauMuMo))
             {
                 selectKCMM.Add(new SelectedItem
                     {
-                        Value = item.ThongTinChungHoGa_KetCauMong,
-                        Text = item.ThongTinChungHoGa_KetCauMong_Name ?? ""
+                        Value = item.ThongTinChungHoGa_KetCauMuMo,
+                        Text = item.ThongTinChungHoGa_KetCauMuMo_Name ?? ""
                     });
             }
             if (!string.IsNullOrEmpty(item.ThongTinChungHoGa_KetCauTuong) && !selectKCT.Any(x => x.Value == item.ThongTinChungHoGa_KetCauTuong))

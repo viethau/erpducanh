@@ -1131,8 +1131,7 @@ namespace DucAnhERP.Services
                                          .FirstOrDefault() + "=G"
                                        )
                                      : pl.ThongTinChungHoGa_TenHoGaSauPhanLoai,
-                                 G = ds.ThongTinChungHoGa_TenHoGaTheoBanVe != null &&
-                                     ds.ThongTinChungHoGa_TenHoGaTheoBanVe.Contains("=G") ? "=G" : "",
+                                 G = ds.ThongTinChungHoGa_TenHoGaTheoBanVe != null && ds.ThongTinChungHoGa_TenHoGaTheoBanVe.Contains("=G") ? "=G" : "",
                                  ThongTinChungHoGa_HinhThucHoGa = pl.ThongTinChungHoGa_HinhThucHoGa,
                                  ThongTinChungHoGa_KetCauMuMo = pl.ThongTinChungHoGa_KetCauMuMo,
                                  ThongTinChungHoGa_KetCauTuong = pl.ThongTinChungHoGa_KetCauTuong,
@@ -1220,7 +1219,6 @@ namespace DucAnhERP.Services
                 Console.WriteLine("Lỗi select insert PhanLoaiHoGaDetails " + ex.Message);
                 throw;
             }
-
 
             return result;
         }
@@ -1433,88 +1431,241 @@ namespace DucAnhERP.Services
         }
 
         //báo cáo
+        //public async Task<List<PhanLoaiHoGaModel>> GetBaoCaoCTaoCHungHGa(PhanLoaiHoGaModel plhgModel)
+        //{
+        //    try
+        //    {
+        //        using var context = _context.CreateDbContext();
+
+        //        var query = from plhg in context.PhanLoaiHoGaDetails
+        //                    join hinhThucHoGa in context.DSDanhMuc
+        //                        on plhg.ThongTinChungHoGa_HinhThucHoGa equals hinhThucHoGa.Id
+        //                    join ketCauMuMo in context.DSDanhMuc
+        //                        on plhg.ThongTinChungHoGa_KetCauMuMo equals ketCauMuMo.Id
+        //                    join ketCauTuong in context.DSDanhMuc
+        //                        on plhg.ThongTinChungHoGa_KetCauTuong equals ketCauTuong.Id
+        //                    join hinhThucMongHoGa in context.DSDanhMuc
+        //                        on plhg.ThongTinChungHoGa_HinhThucMongHoGa equals hinhThucMongHoGa.Id
+        //                    join ketCauMong in context.DSDanhMuc
+        //                        on plhg.ThongTinChungHoGa_KetCauMong equals ketCauMong.Id
+
+        //                    join chatMatTrong in context.DSDanhMuc
+        //                        on plhg.ThongTinChungHoGa_ChatMatTrong equals chatMatTrong.Id into gj2
+        //                    from chatMatTrong in gj2.DefaultIfEmpty() // Left join
+        //                    join chatMatNgoai in context.DSDanhMuc
+        //                        on plhg.ThongTinChungHoGa_ChatMatNgoai equals chatMatNgoai.Id into gj3
+        //                    from chatMatNgoai in gj3.DefaultIfEmpty() // Left join
+
+        //                    select new PhanLoaiHoGaModel
+        //                    {
+        //                        Id = plhg.Id,
+        //                        ThongTinChungHoGa_TenHoGaSauPhanLoai = plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
+        //                        ThongTinChungHoGa_HinhThucHoGa = plhg.ThongTinChungHoGa_HinhThucHoGa ?? "",
+        //                        ThongTinChungHoGa_HinhThucHoGa_Name = hinhThucHoGa.Ten ?? "",
+        //                        ThongTinChungHoGa_KetCauMuMo = plhg.ThongTinChungHoGa_KetCauMuMo ?? "",
+        //                        ThongTinChungHoGa_KetCauMuMo_Name = ketCauMuMo.Ten ?? "",
+        //                        ThongTinChungHoGa_KetCauTuong = plhg.ThongTinChungHoGa_KetCauTuong ?? "",
+        //                        ThongTinChungHoGa_KetCauTuong_Name = ketCauTuong.Ten ?? "",
+        //                        ThongTinChungHoGa_HinhThucMongHoGa = plhg.ThongTinChungHoGa_HinhThucMongHoGa ?? "",
+        //                        ThongTinChungHoGa_HinhThucMongHoGa_Name = hinhThucMongHoGa.Ten ?? "",
+        //                        ThongTinChungHoGa_KetCauMong = plhg.ThongTinChungHoGa_KetCauMong ?? "",
+        //                        ThongTinChungHoGa_KetCauMong_Name = ketCauMong.Ten ?? "",
+        //                        ThongTinChungHoGa_ChatMatTrong = plhg.ThongTinChungHoGa_ChatMatTrong ?? "",
+        //                        ThongTinChungHoGa_ChatMatTrong_Name = chatMatTrong.Ten ?? "",
+        //                        ThongTinChungHoGa_ChatMatNgoai = plhg.ThongTinChungHoGa_ChatMatNgoai ?? "",
+        //                        ThongTinChungHoGa_ChatMatNgoai_Name = chatMatNgoai.Ten ?? "",
+        //                        PhuBiHoGa_CDai = plhg.PhuBiHoGa_CDai ?? 0,
+        //                        PhuBiHoGa_CRong = plhg.PhuBiHoGa_CRong ?? 0,
+
+        //                    };
+
+        //        if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_HinhThucHoGa))
+        //        {
+        //            query = query.Where(x => x.ThongTinChungHoGa_HinhThucHoGa == plhgModel.ThongTinChungHoGa_HinhThucHoGa);
+        //        }
+        //        if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauMuMo))
+        //        {
+        //            query = query.Where(x => x.ThongTinChungHoGa_KetCauMuMo == plhgModel.ThongTinChungHoGa_KetCauMuMo);
+        //        }
+        //        if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauTuong))
+        //        {
+        //            query = query.Where(x => x.ThongTinChungHoGa_KetCauTuong == plhgModel.ThongTinChungHoGa_KetCauTuong);
+        //        }
+        //        if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_HinhThucMongHoGa))
+        //        {
+        //            query = query.Where(x => x.ThongTinChungHoGa_HinhThucMongHoGa == plhgModel.ThongTinChungHoGa_HinhThucMongHoGa);
+        //        }
+        //        if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauMong))
+        //        {
+        //            query = query.Where(x => x.ThongTinChungHoGa_KetCauMong == plhgModel.ThongTinChungHoGa_KetCauMong);
+        //        }
+        //        var data = await query
+        //            .ToListAsync();
+        //        return data;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.ToString());
+        //        throw;
+        //    }
+
+        //}
+
+        //public async Task<List<PhanLoaiHoGaModel>> GetBaoCaoHGaSDThep(PhanLoaiHoGaModel plhgModel)
+        //{
+        //    try
+        //    {
+        //        using var context = _context.CreateDbContext();
+        //        var query = from plhg in context.PhanLoaiHoGas
+        //                    join hinhThucHoGa in context.DSDanhMuc
+        //                        on plhg.ThongTinChungHoGa_HinhThucHoGa equals hinhThucHoGa.Id
+        //                    join ketCauMuMo in context.DSDanhMuc
+        //                        on plhg.ThongTinChungHoGa_KetCauMuMo equals ketCauMuMo.Id
+        //                    join ketCauTuong in context.DSDanhMuc
+        //                        on plhg.ThongTinChungHoGa_KetCauTuong equals ketCauTuong.Id
+        //                    join hinhThucMongHoGa in context.DSDanhMuc
+        //                        on plhg.ThongTinChungHoGa_HinhThucMongHoGa equals hinhThucMongHoGa.Id
+        //                    join ketCauMong in context.DSDanhMuc
+        //                        on plhg.ThongTinChungHoGa_KetCauMong equals ketCauMong.Id
+
+        //                    orderby plhg.Flag
+        //                    select new PhanLoaiHoGaModel
+        //                    {
+        //                        Id = plhg.Id,
+        //                        Flag = plhg.Flag,
+        //                        ThongTinChungHoGa_TenHoGaSauPhanLoai = plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
+        //                        ThongTinChungHoGa_HinhThucHoGa = plhg.ThongTinChungHoGa_HinhThucHoGa ?? "",
+        //                        ThongTinChungHoGa_HinhThucHoGa_Name = hinhThucHoGa.Ten ?? "",
+        //                        ThongTinChungHoGa_KetCauMuMo = plhg.ThongTinChungHoGa_KetCauMuMo ?? "",
+        //                        ThongTinChungHoGa_KetCauMuMo_Name = ketCauMuMo.Ten ?? "",
+        //                        ThongTinChungHoGa_KetCauTuong = plhg.ThongTinChungHoGa_KetCauTuong ?? "",
+        //                        ThongTinChungHoGa_KetCauTuong_Name = ketCauTuong.Ten ?? "",
+        //                        ThongTinChungHoGa_KetCauMong = plhg.ThongTinChungHoGa_KetCauMong ?? "",
+        //                        ThongTinChungHoGa_KetCauMong_Name = ketCauMong.Ten ?? "",
+        //                        CreateAt = plhg.CreateAt,
+        //                        CreateBy = plhg.CreateBy,
+        //                        IsActive = plhg.IsActive,
+
+        //                    };
+        //        if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauMuMo))
+        //        {
+        //            query = query.Where(x => x.ThongTinChungHoGa_KetCauMuMo == plhgModel.ThongTinChungHoGa_KetCauMuMo);
+        //        }
+        //        if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauTuong))
+        //        {
+        //            query = query.Where(x => x.ThongTinChungHoGa_KetCauTuong == plhgModel.ThongTinChungHoGa_KetCauTuong);
+        //        }
+        //        if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauMong))
+        //        {
+        //            query = query.Where(x => x.ThongTinChungHoGa_KetCauMong == plhgModel.ThongTinChungHoGa_KetCauMong);
+        //        }
+        //        var data = await query
+        //            .ToListAsync();
+        //        return data;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.ToString());
+        //        throw;
+        //    }
+        //}
+
         public async Task<List<PhanLoaiHoGaModel>> GetBaoCaoCTaoCHungHGa(PhanLoaiHoGaModel plhgModel)
         {
+            List<PhanLoaiHoGaModel> result = new();
             try
             {
                 using var context = _context.CreateDbContext();
-                var query = from plhg in context.PhanLoaiHoGas
-                            join hinhThucHoGa in context.DSDanhMuc
-                                on plhg.ThongTinChungHoGa_HinhThucHoGa equals hinhThucHoGa.Id
-                            join ketCauMuMo in context.DSDanhMuc
-                                on plhg.ThongTinChungHoGa_KetCauMuMo equals ketCauMuMo.Id
-                            join ketCauTuong in context.DSDanhMuc
-                                on plhg.ThongTinChungHoGa_KetCauTuong equals ketCauTuong.Id
-                            join hinhThucMongHoGa in context.DSDanhMuc
-                                on plhg.ThongTinChungHoGa_HinhThucMongHoGa equals hinhThucMongHoGa.Id
-                            join ketCauMong in context.DSDanhMuc
-                                on plhg.ThongTinChungHoGa_KetCauMong equals ketCauMong.Id
+                var query = (from ds in context.DSNuocMua
+                             join pl in context.PhanLoaiHoGas
+                                 on ds.ThongTinChungHoGa_TenHoGaSauPhanLoai equals pl.Id into dsJoin
+                             from pl in dsJoin.DefaultIfEmpty() // RIGHT JOIN
+                             join hinhThucHoGa in context.DSDanhMuc
+                                on pl.ThongTinChungHoGa_HinhThucHoGa equals hinhThucHoGa.Id
+                             join ketCauMuMo in context.DSDanhMuc
+                                 on pl.ThongTinChungHoGa_KetCauMuMo equals ketCauMuMo.Id
+                             join ketCauTuong in context.DSDanhMuc
+                                 on pl.ThongTinChungHoGa_KetCauTuong equals ketCauTuong.Id
+                             join hinhThucMongHoGa in context.DSDanhMuc
+                                 on pl.ThongTinChungHoGa_HinhThucMongHoGa equals hinhThucMongHoGa.Id
+                             join ketCauMong in context.DSDanhMuc
+                                 on pl.ThongTinChungHoGa_KetCauMong equals ketCauMong.Id
 
-                            join chatMatTrong in context.DSDanhMuc
-                                on plhg.ThongTinChungHoGa_ChatMatTrong equals chatMatTrong.Id into gj2
-                            from chatMatTrong in gj2.DefaultIfEmpty() // Left join
-                            join chatMatNgoai in context.DSDanhMuc
-                                on plhg.ThongTinChungHoGa_ChatMatNgoai equals chatMatNgoai.Id into gj3
-                            from chatMatNgoai in gj3.DefaultIfEmpty() // Left join
+                             join chatMatTrong in context.DSDanhMuc
+                                 on pl.ThongTinChungHoGa_ChatMatTrong equals chatMatTrong.Id into gj2
+                             from chatMatTrong in gj2.DefaultIfEmpty() // Left join
+                             join chatMatNgoai in context.DSDanhMuc
+                                 on pl.ThongTinChungHoGa_ChatMatNgoai equals chatMatNgoai.Id into gj3
+                             from chatMatNgoai in gj3.DefaultIfEmpty() // Left join
 
-                            orderby plhg.Flag
-                            select new PhanLoaiHoGaModel
+                             let TenHoGaTheoBanVeNoSuffix = ds.ThongTinChungHoGa_TenHoGaTheoBanVe != null
+                                                             ? ds.ThongTinChungHoGa_TenHoGaTheoBanVe.Replace("=G", "")
+                                                             : null
+                             select new PhanLoaiHoGaModel
+                             {
+                                Id = pl.Id,
+                                 ThongTinChungHoGa_TenHoGaSauPhanLoai =
+                                     ds.ThongTinChungHoGa_TenHoGaTheoBanVe != null &&
+                                     ds.ThongTinChungHoGa_TenHoGaTheoBanVe.Contains("=G")
+                                     ? (
+                                         (from subDs in context.DSNuocMua
+                                          join subPl in context.PhanLoaiHoGas on subDs.ThongTinChungHoGa_TenHoGaSauPhanLoai equals subPl.Id
+                                          where subDs.ThongTinChungHoGa_TenHoGaTheoBanVe == TenHoGaTheoBanVeNoSuffix &&
+                                                !subDs.ThongTinChungHoGa_TenHoGaTheoBanVe.Contains("=G")
+                                          select subPl.ThongTinChungHoGa_TenHoGaSauPhanLoai)
+                                         .FirstOrDefault() + "=G"
+                                       )
+                                     : pl.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                                 ThongTinChungHoGa_HinhThucHoGa = pl.ThongTinChungHoGa_HinhThucHoGa ?? "",
+                                 ThongTinChungHoGa_HinhThucHoGa_Name = hinhThucHoGa.Ten ?? "",
+                                 ThongTinChungHoGa_KetCauMuMo = pl.ThongTinChungHoGa_KetCauMuMo ?? "",
+                                 ThongTinChungHoGa_KetCauMuMo_Name = ketCauMuMo.Ten ?? "",
+                                 ThongTinChungHoGa_KetCauTuong = pl.ThongTinChungHoGa_KetCauTuong ?? "",
+                                 ThongTinChungHoGa_KetCauTuong_Name = ketCauTuong.Ten ?? "",
+                                 ThongTinChungHoGa_HinhThucMongHoGa = pl.ThongTinChungHoGa_HinhThucMongHoGa ?? "",
+                                 ThongTinChungHoGa_HinhThucMongHoGa_Name = hinhThucMongHoGa.Ten ?? "",
+                                 ThongTinChungHoGa_KetCauMong = pl.ThongTinChungHoGa_KetCauMong ?? "",
+                                 ThongTinChungHoGa_KetCauMong_Name = ketCauMong.Ten ?? "",
+                                 ThongTinChungHoGa_ChatMatTrong = pl.ThongTinChungHoGa_ChatMatTrong ?? "",
+                                 ThongTinChungHoGa_ChatMatTrong_Name = chatMatTrong.Ten ?? "",
+                                 ThongTinChungHoGa_ChatMatNgoai = pl.ThongTinChungHoGa_ChatMatNgoai ?? "",
+                                 ThongTinChungHoGa_ChatMatNgoai_Name = chatMatNgoai.Ten ?? "",
+                                 PhuBiHoGa_CDai = pl.PhuBiHoGa_CDai ?? 0,
+                                 PhuBiHoGa_CRong = pl.PhuBiHoGa_CRong ?? 0,
+                                 
+                             });
+                            if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_HinhThucHoGa))
                             {
-                                Id = plhg.Id,
-                                Flag = plhg.Flag,
-                                ThongTinChungHoGa_TenHoGaSauPhanLoai = plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
-                                ThongTinChungHoGa_HinhThucHoGa = plhg.ThongTinChungHoGa_HinhThucHoGa ?? "",
-                                ThongTinChungHoGa_HinhThucHoGa_Name = hinhThucHoGa.Ten ?? "",
-                                ThongTinChungHoGa_KetCauMuMo = plhg.ThongTinChungHoGa_KetCauMuMo ?? "",
-                                ThongTinChungHoGa_KetCauMuMo_Name = ketCauMuMo.Ten ?? "",
-                                ThongTinChungHoGa_KetCauTuong = plhg.ThongTinChungHoGa_KetCauTuong ?? "",
-                                ThongTinChungHoGa_KetCauTuong_Name = ketCauTuong.Ten ?? "",
-                                ThongTinChungHoGa_HinhThucMongHoGa = plhg.ThongTinChungHoGa_HinhThucMongHoGa ?? "",
-                                ThongTinChungHoGa_HinhThucMongHoGa_Name = hinhThucMongHoGa.Ten ?? "",
-                                ThongTinChungHoGa_KetCauMong = plhg.ThongTinChungHoGa_KetCauMong ?? "",
-                                ThongTinChungHoGa_KetCauMong_Name = ketCauMong.Ten ?? "",
-                                ThongTinChungHoGa_ChatMatTrong = plhg.ThongTinChungHoGa_ChatMatTrong ?? "",
-                                ThongTinChungHoGa_ChatMatTrong_Name = chatMatTrong.Ten ?? "",
-                                ThongTinChungHoGa_ChatMatNgoai = plhg.ThongTinChungHoGa_ChatMatNgoai ?? "",
-                                ThongTinChungHoGa_ChatMatNgoai_Name = chatMatNgoai.Ten ?? "",
-                                PhuBiHoGa_CDai = plhg.PhuBiHoGa_CDai ?? 0,
-                                PhuBiHoGa_CRong = plhg.PhuBiHoGa_CRong ?? 0,
-                                CreateAt = plhg.CreateAt,
-                                CreateBy = plhg.CreateBy,
-                                IsActive = plhg.IsActive,
-
-                            };
-
-                if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_HinhThucHoGa))
-                {
-                    query = query.Where(x => x.ThongTinChungHoGa_HinhThucHoGa == plhgModel.ThongTinChungHoGa_HinhThucHoGa);
-                }
-                if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauMuMo))
-                {
-                    query = query.Where(x => x.ThongTinChungHoGa_KetCauMuMo == plhgModel.ThongTinChungHoGa_KetCauMuMo);
-                }
-                if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauTuong))
-                {
-                    query = query.Where(x => x.ThongTinChungHoGa_KetCauTuong == plhgModel.ThongTinChungHoGa_KetCauTuong);
-                }
-                if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_HinhThucMongHoGa))
-                {
-                    query = query.Where(x => x.ThongTinChungHoGa_HinhThucMongHoGa == plhgModel.ThongTinChungHoGa_HinhThucMongHoGa);
-                }
-                if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauMong))
-                {
-                    query = query.Where(x => x.ThongTinChungHoGa_KetCauMong == plhgModel.ThongTinChungHoGa_KetCauMong);
-                }
-                var data = await query
-                    .ToListAsync();
+                                query = query.Where(x => x.ThongTinChungHoGa_HinhThucHoGa == plhgModel.ThongTinChungHoGa_HinhThucHoGa);
+                            }
+                            if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauMuMo))
+                            {
+                                query = query.Where(x => x.ThongTinChungHoGa_KetCauMuMo == plhgModel.ThongTinChungHoGa_KetCauMuMo);
+                            }
+                            if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauTuong))
+                            {
+                                query = query.Where(x => x.ThongTinChungHoGa_KetCauTuong == plhgModel.ThongTinChungHoGa_KetCauTuong);
+                            }
+                            if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_HinhThucMongHoGa))
+                            {
+                                query = query.Where(x => x.ThongTinChungHoGa_HinhThucMongHoGa == plhgModel.ThongTinChungHoGa_HinhThucMongHoGa);
+                            }
+                            if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauMong))
+                            {
+                                query = query.Where(x => x.ThongTinChungHoGa_KetCauMong == plhgModel.ThongTinChungHoGa_KetCauMong);
+                            }
+                var data = await query.Distinct().OrderBy(x=> x.ThongTinChungHoGa_TenHoGaSauPhanLoai)
+                      .Where(x => x.Id != null)
+                      .ToListAsync();
                 return data;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine("Lỗi select insert PhanLoaiHoGaDetails " + ex.Message);
                 throw;
             }
 
+            return result;
         }
         public async Task<List<PhanLoaiHoGaModel>> GetBaoCaoKTHHHGa(PhanLoaiHoGaModel Input)
         {
@@ -1661,37 +1812,60 @@ namespace DucAnhERP.Services
             try
             {
                 using var context = _context.CreateDbContext();
-                var query = from plhg in context.PhanLoaiHoGas
-                            join hinhThucHoGa in context.DSDanhMuc
-                                on plhg.ThongTinChungHoGa_HinhThucHoGa equals hinhThucHoGa.Id
-                            join ketCauMuMo in context.DSDanhMuc
-                                on plhg.ThongTinChungHoGa_KetCauMuMo equals ketCauMuMo.Id
-                            join ketCauTuong in context.DSDanhMuc
-                                on plhg.ThongTinChungHoGa_KetCauTuong equals ketCauTuong.Id
-                            join hinhThucMongHoGa in context.DSDanhMuc
-                                on plhg.ThongTinChungHoGa_HinhThucMongHoGa equals hinhThucMongHoGa.Id
-                            join ketCauMong in context.DSDanhMuc
-                                on plhg.ThongTinChungHoGa_KetCauMong equals ketCauMong.Id
 
-                            orderby plhg.Flag
-                            select new PhanLoaiHoGaModel
-                            {
-                                Id = plhg.Id,
-                                Flag = plhg.Flag,
-                                ThongTinChungHoGa_TenHoGaSauPhanLoai = plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
-                                ThongTinChungHoGa_HinhThucHoGa = plhg.ThongTinChungHoGa_HinhThucHoGa ?? "",
-                                ThongTinChungHoGa_HinhThucHoGa_Name = hinhThucHoGa.Ten ?? "",
-                                ThongTinChungHoGa_KetCauMuMo = plhg.ThongTinChungHoGa_KetCauMuMo ?? "",
-                                ThongTinChungHoGa_KetCauMuMo_Name = ketCauMuMo.Ten ?? "",
-                                ThongTinChungHoGa_KetCauTuong = plhg.ThongTinChungHoGa_KetCauTuong ?? "",
-                                ThongTinChungHoGa_KetCauTuong_Name = ketCauTuong.Ten ?? "",
-                                ThongTinChungHoGa_KetCauMong = plhg.ThongTinChungHoGa_KetCauMong ?? "",
-                                ThongTinChungHoGa_KetCauMong_Name = ketCauMong.Ten ?? "",
-                                CreateAt = plhg.CreateAt,
-                                CreateBy = plhg.CreateBy,
-                                IsActive = plhg.IsActive,
+                var query = (from ds in context.DSNuocMua
+                             join pl in context.PhanLoaiHoGas
+                                 on ds.ThongTinChungHoGa_TenHoGaSauPhanLoai equals pl.Id into dsJoin
+                             from pl in dsJoin.DefaultIfEmpty() // RIGHT JOIN
+                             join hinhThucHoGa in context.DSDanhMuc
+                                on pl.ThongTinChungHoGa_HinhThucHoGa equals hinhThucHoGa.Id
+                             join ketCauMuMo in context.DSDanhMuc
+                                 on pl.ThongTinChungHoGa_KetCauMuMo equals ketCauMuMo.Id
+                             join ketCauTuong in context.DSDanhMuc
+                                 on pl.ThongTinChungHoGa_KetCauTuong equals ketCauTuong.Id
+                             join hinhThucMongHoGa in context.DSDanhMuc
+                                 on pl.ThongTinChungHoGa_HinhThucMongHoGa equals hinhThucMongHoGa.Id
+                             join ketCauMong in context.DSDanhMuc
+                                 on pl.ThongTinChungHoGa_KetCauMong equals ketCauMong.Id
 
-                            };
+                             join chatMatTrong in context.DSDanhMuc
+                                 on pl.ThongTinChungHoGa_ChatMatTrong equals chatMatTrong.Id into gj2
+                             from chatMatTrong in gj2.DefaultIfEmpty() // Left join
+                             join chatMatNgoai in context.DSDanhMuc
+                                 on pl.ThongTinChungHoGa_ChatMatNgoai equals chatMatNgoai.Id into gj3
+                             from chatMatNgoai in gj3.DefaultIfEmpty() // Left join
+
+                             let TenHoGaTheoBanVeNoSuffix = ds.ThongTinChungHoGa_TenHoGaTheoBanVe != null
+                                                             ? ds.ThongTinChungHoGa_TenHoGaTheoBanVe.Replace("=G", "")
+                                                             : null
+                             select new PhanLoaiHoGaModel
+                             {
+                                 Id = pl.Id,
+                                 ThongTinChungHoGa_TenHoGaSauPhanLoai =
+                                     ds.ThongTinChungHoGa_TenHoGaTheoBanVe != null &&
+                                     ds.ThongTinChungHoGa_TenHoGaTheoBanVe.Contains("=G")
+                                     ? (
+                                         (from subDs in context.DSNuocMua
+                                          join subPl in context.PhanLoaiHoGas on subDs.ThongTinChungHoGa_TenHoGaSauPhanLoai equals subPl.Id
+                                          where subDs.ThongTinChungHoGa_TenHoGaTheoBanVe == TenHoGaTheoBanVeNoSuffix &&
+                                                !subDs.ThongTinChungHoGa_TenHoGaTheoBanVe.Contains("=G")
+                                          select subPl.ThongTinChungHoGa_TenHoGaSauPhanLoai)
+                                         .FirstOrDefault() + "=G"
+                                       )
+                                     : pl.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                                 ThongTinChungHoGa_HinhThucHoGa = pl.ThongTinChungHoGa_HinhThucHoGa ?? "",
+                                 ThongTinChungHoGa_HinhThucHoGa_Name = hinhThucHoGa.Ten ?? "",
+                                 ThongTinChungHoGa_KetCauMuMo = pl.ThongTinChungHoGa_KetCauMuMo ?? "",
+                                 ThongTinChungHoGa_KetCauMuMo_Name = ketCauMuMo.Ten ?? "",
+                                 ThongTinChungHoGa_KetCauTuong = pl.ThongTinChungHoGa_KetCauTuong ?? "",
+                                 ThongTinChungHoGa_KetCauTuong_Name = ketCauTuong.Ten ?? "",
+                                 ThongTinChungHoGa_HinhThucMongHoGa = pl.ThongTinChungHoGa_HinhThucMongHoGa ?? "",
+                                 ThongTinChungHoGa_HinhThucMongHoGa_Name = hinhThucMongHoGa.Ten ?? "",
+                                 ThongTinChungHoGa_KetCauMong = pl.ThongTinChungHoGa_KetCauMong ?? "",
+                                 ThongTinChungHoGa_KetCauMong_Name = ketCauMong.Ten ?? "",
+                             });
+
+
                 if (!string.IsNullOrEmpty(plhgModel.ThongTinChungHoGa_KetCauMuMo))
                 {
                     query = query.Where(x => x.ThongTinChungHoGa_KetCauMuMo == plhgModel.ThongTinChungHoGa_KetCauMuMo);
@@ -1704,8 +1878,11 @@ namespace DucAnhERP.Services
                 {
                     query = query.Where(x => x.ThongTinChungHoGa_KetCauMong == plhgModel.ThongTinChungHoGa_KetCauMong);
                 }
-                var data = await query
-                    .ToListAsync();
+
+                var data = await query.Distinct().OrderBy(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai)
+                      .Where(x => x.Id != null)
+                      .ToListAsync();
+
                 return data;
             }
             catch (Exception ex)
