@@ -48,7 +48,7 @@ namespace DucAnhERP.Services
             {
                 using var context = _context.CreateDbContext();
                 var query = from a in context.MaTuongs
-                            join b in context.PhanLoaiHoGas
+                            join b in context.PhanLoaiHoGaDetails
                             on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id into plHoGaGroup
                             from b in plHoGaGroup.DefaultIfEmpty()
                             join KLBoSung1 in context.DSDanhMuc
@@ -278,10 +278,10 @@ namespace DucAnhERP.Services
                 using var context = _context.CreateDbContext();
 
                 var query = from nuocMua in context.DSNuocMua
-                            join plhg in context.PhanLoaiHoGas
-                            on nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai equals plhg.Id into plhgGroup
+                            join plhg in context.PhanLoaiHoGaDetails
+                            on nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai equals plhg.Id_PhanLoaiHoGa into plhgGroup
                             from plhg in plhgGroup.DefaultIfEmpty()
-                            where nuocMua.ThongTinChungHoGa_TenHoGaSauPhanLoai == id
+                            where plhg.Id == id
                             orderby nuocMua.CreateAt 
                             select new MaTuongModel
                             {

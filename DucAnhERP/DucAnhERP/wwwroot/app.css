@@ -47,10 +47,36 @@ table td{
 .table thead th {
     border-bottom: none!important; 
 }
-.sidebar {
-    overflow-y: scroll !important;
-    height: calc(100vh - (3.5rem + 1px)) !important;
+
+.btn-top {
+    width: 25px;
+    background-color: #c0adef;
+    border-radius: 3px 3px 0px 0px;
+    margin-bottom: 2px;
 }
+
+    .btn-top :hover {
+        color: white;
+        background-color: dodgerblue;
+        border: 1px solid white;
+    }
+
+.btn-down {
+        width: 25px;
+        background-color: #c0adef;
+        border-radius: 0px 0px 3px 3px;
+    }
+
+    .btn-down :hover {
+        color: white;
+        background-color: dodgerblue;
+        border: 1px solid white;
+    }
+
+.sidebar {
+        overflow-y: scroll !important;
+        height: calc(100vh - (3.5rem + 1px)) !important;
+    }
 
 .modal {
     position: absolute !important;

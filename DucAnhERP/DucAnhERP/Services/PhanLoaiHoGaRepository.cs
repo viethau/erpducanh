@@ -950,6 +950,144 @@ namespace DucAnhERP.Services
 
             return entity;
         }
+        public async Task<List<PhanLoaiHoGaModel>> GetAllByVMDetails(PhanLoaiHoGaModel Input)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var query = from plhg in context.PhanLoaiHoGaDetails
+                            join hinhThucHoGa in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_HinhThucHoGa equals hinhThucHoGa.Id
+                            join ketCauMuMo in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_KetCauMuMo equals ketCauMuMo.Id
+                            join ketCauTuong in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_KetCauTuong equals ketCauTuong.Id
+                            join hinhThucMongHoGa in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_HinhThucMongHoGa equals hinhThucMongHoGa.Id
+                            join ketCauMong in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_KetCauMong equals ketCauMong.Id
+                            join chatMatTrong in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_ChatMatTrong equals chatMatTrong.Id into gj2
+                            from chatMatTrong in gj2.DefaultIfEmpty() // Left join
+                            join chatMatNgoai in context.DSDanhMuc
+                                on plhg.ThongTinChungHoGa_ChatMatNgoai equals chatMatNgoai.Id into gj3
+                            from chatMatNgoai in gj3.DefaultIfEmpty() // Left join
+                            select new PhanLoaiHoGaModel
+                            {
+                                Id =plhg.Id,
+                                IsEdit = context.DSNuocMua.Any(ds => ds.ThongTinChungHoGa_TenHoGaSauPhanLoai == plhg.Id) ? 1 : 0,
+                                ThongTinChungHoGa_TenHoGaSauPhanLoai = plhg.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
+                                ThongTinChungHoGa_HinhThucHoGa = plhg.ThongTinChungHoGa_HinhThucHoGa ?? "",
+                                ThongTinChungHoGa_HinhThucHoGa_Name = hinhThucHoGa.Ten ?? "",
+                                ThongTinChungHoGa_KetCauMuMo = plhg.ThongTinChungHoGa_KetCauMuMo ?? "",
+                                ThongTinChungHoGa_KetCauMuMo_Name = ketCauMuMo.Ten ?? "",
+                                ThongTinChungHoGa_KetCauTuong = plhg.ThongTinChungHoGa_KetCauTuong ?? "",
+                                ThongTinChungHoGa_KetCauTuong_Name = ketCauTuong.Ten ?? "",
+                                ThongTinChungHoGa_HinhThucMongHoGa = plhg.ThongTinChungHoGa_HinhThucMongHoGa ?? "",
+                                ThongTinChungHoGa_HinhThucMongHoGa_Name = hinhThucMongHoGa.Ten ?? "",
+                                ThongTinChungHoGa_KetCauMong = plhg.ThongTinChungHoGa_KetCauMong ?? "",
+                                ThongTinChungHoGa_KetCauMong_Name = ketCauMong.Ten ?? "",
+                                ThongTinChungHoGa_ChatMatTrong = plhg.ThongTinChungHoGa_ChatMatTrong ?? "",
+                                ThongTinChungHoGa_ChatMatTrong_Name = chatMatTrong.Ten ?? "",
+                                ThongTinChungHoGa_ChatMatNgoai = plhg.ThongTinChungHoGa_ChatMatNgoai ?? "",
+                                ThongTinChungHoGa_ChatMatNgoai_Name = chatMatNgoai.Ten ?? "",
+                                PhuBiHoGa_CDai = plhg.PhuBiHoGa_CDai ?? 0,
+                                PhuBiHoGa_CRong = plhg.PhuBiHoGa_CRong ?? 0,
+                                BeTongLotMong_D = plhg.BeTongLotMong_D ?? 0,
+                                BeTongLotMong_R = plhg.BeTongLotMong_R ?? 0,
+                                BeTongLotMong_C = plhg.BeTongLotMong_C ?? 0,
+                                BeTongMongHoGa_D = plhg.BeTongMongHoGa_D ?? 0,
+                                BeTongMongHoGa_R = plhg.BeTongMongHoGa_R ?? 0,
+                                BeTongMongHoGa_C = plhg.BeTongMongHoGa_C ?? 0,
+                                DeHoGa_D = plhg.DeHoGa_D ?? 0,
+                                DeHoGa_R = plhg.DeHoGa_R ?? 0,
+                                DeHoGa_C = plhg.DeHoGa_C ?? 0,
+                                TuongHoGa_D = plhg.TuongHoGa_D ?? 0,
+                                TuongHoGa_R = plhg.TuongHoGa_R ?? 0,
+                                TuongHoGa_C = plhg.TuongHoGa_C ?? 0,
+                                TuongHoGa_CdTuong = plhg.TuongHoGa_CdTuong ?? 0,
+                                DamGiuaHoGa_D = plhg.DamGiuaHoGa_D ?? 0,
+                                DamGiuaHoGa_R = plhg.DamGiuaHoGa_R ?? 0,
+                                DamGiuaHoGa_C = plhg.DamGiuaHoGa_C ?? 0,
+                                DamGiuaHoGa_CdDam = plhg.DamGiuaHoGa_CdDam ?? 0,
+                                DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa = plhg.DamGiuaHoGa_CCaoDamGiuaTuongSoVoiDayHoGa ?? 0,
+                                ChatMatTrong_D = plhg.ChatMatTrong_D ?? 0,
+                                ChatMatTrong_R = plhg.ChatMatTrong_R ?? 0,
+                                ChatMatTrong_C = plhg.ChatMatTrong_C ?? 0,
+                                ChatMatNgoaiCanh_D = plhg.ChatMatNgoaiCanh_D ?? 0,
+                                ChatMatNgoaiCanh_R = plhg.ChatMatNgoaiCanh_R ?? 0,
+                                ChatMatNgoaiCanh_C = plhg.ChatMatNgoaiCanh_C ?? 0,
+                                MuMoThotDuoi_D = plhg.MuMoThotDuoi_D ?? 0,
+                                MuMoThotDuoi_R = plhg.MuMoThotDuoi_R ?? 0,
+                                MuMoThotDuoi_C = plhg.MuMoThotDuoi_C ?? 0,
+                                MuMoThotDuoi_CdTuong = plhg.MuMoThotDuoi_CdTuong ?? 0,
+                                MuMoThotTren_D = plhg.MuMoThotTren_D ?? 0,
+                                MuMoThotTren_R = plhg.MuMoThotTren_R ?? 0,
+                                MuMoThotTren_C = plhg.MuMoThotTren_C ?? 0,
+                                MuMoThotTren_CdTuong = plhg.MuMoThotTren_CdTuong ?? 0,
+                                HinhThucDauNoi1_Loai = plhg.HinhThucDauNoi1_Loai ?? 0,
+                                HinhThucDauNoi1_CanhDai = plhg.HinhThucDauNoi1_CanhDai ?? 0,
+                                HinhThucDauNoi1_CanhRong = plhg.HinhThucDauNoi1_CanhRong ?? 0,
+                                HinhThucDauNoi1_CanhCheo = plhg.HinhThucDauNoi1_CanhCheo ?? 0,
+                                HinhThucDauNoi2_Loai = plhg.HinhThucDauNoi2_Loai ?? 0,
+                                HinhThucDauNoi2_CanhDai = plhg.HinhThucDauNoi2_CanhDai ?? 0,
+                                HinhThucDauNoi2_CanhRong = plhg.HinhThucDauNoi2_CanhRong ?? 0,
+                                HinhThucDauNoi2_CanhCheo = plhg.HinhThucDauNoi2_CanhCheo ?? 0,
+                                HinhThucDauNoi3_Loai = plhg.HinhThucDauNoi3_Loai ?? 0,
+                                HinhThucDauNoi3_CanhDai = plhg.HinhThucDauNoi3_CanhDai ?? 0,
+                                HinhThucDauNoi3_CanhRong = plhg.HinhThucDauNoi3_CanhRong ?? 0,
+                                HinhThucDauNoi3_CanhCheo = plhg.HinhThucDauNoi3_CanhCheo ?? 0,
+                                HinhThucDauNoi4_Loai = plhg.HinhThucDauNoi4_Loai ?? 0,
+                                HinhThucDauNoi4_CanhDai = plhg.HinhThucDauNoi4_CanhDai ?? 0,
+                                HinhThucDauNoi4_CanhRong = plhg.HinhThucDauNoi4_CanhRong ?? 0,
+                                HinhThucDauNoi4_CanhCheo = plhg.HinhThucDauNoi4_CanhCheo ?? 0,
+                                HinhThucDauNoi5_Loai = plhg.HinhThucDauNoi5_Loai ?? 0,
+                                HinhThucDauNoi5_CanhDai = plhg.HinhThucDauNoi5_CanhDai ?? 0,
+                                HinhThucDauNoi5_CanhRong = plhg.HinhThucDauNoi5_CanhRong ?? 0,
+                                HinhThucDauNoi5_CanhCheo = plhg.HinhThucDauNoi5_CanhCheo ?? 0,
+                                HinhThucDauNoi6_Loai = plhg.HinhThucDauNoi6_Loai ?? 0,
+                                HinhThucDauNoi6_CanhDai = plhg.HinhThucDauNoi6_CanhDai ?? 0,
+                                HinhThucDauNoi6_CanhRong = plhg.HinhThucDauNoi6_CanhRong ?? 0,
+                                HinhThucDauNoi6_CanhCheo = plhg.HinhThucDauNoi6_CanhCheo ?? 0,
+                                HinhThucDauNoi7_Loai = plhg.HinhThucDauNoi7_Loai ?? 0,
+                                HinhThucDauNoi7_CanhDai = plhg.HinhThucDauNoi7_CanhDai ?? 0,
+                                HinhThucDauNoi7_CanhRong = plhg.HinhThucDauNoi7_CanhRong ?? 0,
+                                HinhThucDauNoi7_CanhCheo = plhg.HinhThucDauNoi7_CanhCheo ?? 0,
+                                HinhThucDauNoi8_Loai = plhg.HinhThucDauNoi8_Loai ?? 0,
+                                HinhThucDauNoi8_CanhDai = plhg.HinhThucDauNoi8_CanhDai ?? 0,
+                                HinhThucDauNoi8_CanhRong = plhg.HinhThucDauNoi8_CanhRong ?? 0,
+                                HinhThucDauNoi8_CanhCheo = plhg.HinhThucDauNoi8_CanhCheo ?? 0,
+
+                            };
+
+                            if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_HinhThucHoGa))
+                            {
+                                query = query.Where(x => x.ThongTinChungHoGa_HinhThucHoGa == Input.ThongTinChungHoGa_HinhThucHoGa);
+                            }
+                            if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_KetCauMuMo))
+                            {
+                                query = query.Where(x => x.ThongTinChungHoGa_KetCauMuMo == Input.ThongTinChungHoGa_KetCauMuMo);
+                            }
+                            if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_KetCauTuong))
+                            {
+                                query = query.Where(x => x.ThongTinChungHoGa_KetCauTuong == Input.ThongTinChungHoGa_KetCauTuong);
+                            }
+                            if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_HinhThucMongHoGa))
+                            {
+                                query = query.Where(x => x.ThongTinChungHoGa_HinhThucMongHoGa == Input.ThongTinChungHoGa_HinhThucMongHoGa);
+                            }
+                            if (!string.IsNullOrEmpty(Input.ThongTinChungHoGa_KetCauMong))
+                            {
+                                query = query.Where(x => x.ThongTinChungHoGa_KetCauMong == Input.ThongTinChungHoGa_KetCauMong);
+                            }
+                var data = await query.OrderBy(x=>x.ThongTinChungHoGa_TenHoGaSauPhanLoai).ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi load dữ liệu :" + ex.Message);
+            }
+        }
         public async Task<bool> CheckExclusiveDetails(string[] ids, DateTime baseTime)
         {
             foreach (var id in ids)

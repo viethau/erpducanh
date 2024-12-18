@@ -27,6 +27,7 @@ namespace DucAnhERP.Repository
         Task<List<NuocMuaModel>> GetPhanLoaiHoGaByTenHGTBV(string ThongTinChungHoGa_TenHoGaTheoBanVe);
         Task<List<PhanLoaiHoGaDetail>> GetAllDetailsG(string? G);
         Task<PhanLoaiHoGaDetail> GetByIdDetails(string id);
+        Task<List<PhanLoaiHoGaModel>> GetAllByVMDetails(PhanLoaiHoGaModel Input);
         Task<bool> CheckExclusiveDetails(string[] ids, DateTime baseTime);
         Task<List<PhanLoaiHoGaDetail>> SelectInsertPLHGDetail();
         Task<List<PhanLoaiHoGaDetail>> InsertMissingPhanLoaiHoGaDetails();

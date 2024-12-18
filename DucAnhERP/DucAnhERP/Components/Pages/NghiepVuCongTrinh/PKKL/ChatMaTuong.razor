@@ -9,7 +9,6 @@
 @inject IChatMaTuongRepository ChatMaTuongRepository
 @inject IPhanLoaiHoGaRepository PhanLoaiHoGaRepository
 @inject IDanhMucRepository DanhMucRepository
-@inject IChatMaTuongRepository ChatMaTuongRepository
 
 @inject DucAnhERP.Services.ToastService ToastService
 <style>
@@ -25,6 +24,7 @@
 
 </style>
 <div class="container-fluid">
+
     <div class="mt-3">
         <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
             <BodyTemplate>
@@ -858,6 +858,35 @@
             </BodyTemplate>
         </CustomModal>
     </div>
+    <div class="row m-3 ">
+        <div class="col-md-9 col-sm-12">
+            <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
+                <DataAnnotationsValidator />
+                <div class="row">
+                    <div class="col-sm-4 col-md-3 mb-2">
+                        <label for="Table">Tên hố ga sau phân loại</label>
+                        <Select2 Id="selectSearchLCK" Items="@selectSearchPLHG" OnChange="@OnSelectChangeSearchPLHG"></Select2>
+                        <ValidationMessage For="()=>InputMD.ThongTinChungHoGa_TenHoGaSauPhanLoai"></ValidationMessage>
+                    </div>
+
+                    <!-- Search Button -->
+                    <div class="col-sm-4 col-md-2 mb-2">
+                        <label>&nbsp;</label>
+                        <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+                    </div>
+                    <div class="col-sm-4 col-md-2 mb-2">
+                        <label>&nbsp;</label>
+                        <button type="button" @onclick="ShowModal" class="btn btn-info w-100">Tạo mới</button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+        <div class="col-md-3 col-sm-6 text-end">
+            <button class="btn btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
+                <i class="fas fa-thumbtack"></i>
+            </button>
+        </div>
+    </div>
     <div id="tableContainer ">
         <div class="table-report ">
             <div>
@@ -1053,7 +1082,7 @@
                                         <td>@item.KLS_KL</td>
                                         <td>@item.KLS_TenCongTac1</td>
                                         <td>@item.KLS_KL1</td>
-                                        <td>@item.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name</td>
+                                        <td class="text-bold text-center">@item.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name</td>
                                         <td>@item.HinhThucDauNoi1_Loai</td>
                                         <td>@item.HinhThucDauNoi1_KLBoSung_Name</td>
                                         <td>@item.HinhThucDauNoi1_CanhDai</td>
@@ -1739,7 +1768,7 @@
         {
             await LoadData();
 
-            var listPLHGModel = await PhanLoaiHoGaRepository.GetAllByVM(new PhanLoaiHoGaModel());
+            var listPLHGModel = await PhanLoaiHoGaRepository.GetAllByVMDetails(new PhanLoaiHoGaModel());
             selectPLHG = new();
             foreach (var item in listPLHGModel)
             {
@@ -1754,6 +1783,7 @@
                 }
             }
             selectPLHG.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            selectSearchPLHG = selectPLHG;
             listDM =  await DanhMucRepository.GetDMByIdNhomDanhMuc("DM_CoKhong");
             foreach(var item in listDM)
             {
@@ -1793,7 +1823,7 @@
         try
         {
             string[] ids = { Input.ThongTinChungHoGa_TenHoGaSauPhanLoai??"" };
-            var isValidTenPL = await PhanLoaiHoGaRepository.CheckExclusive(ids,baseTime);
+            var isValidTenPL = await PhanLoaiHoGaRepository.CheckExclusiveDetails(ids, baseTime);
             var listExist = await ChatMaTuongRepository.GetExist(Input);
             if (isValidTenPL)
             {
@@ -1928,12 +1958,12 @@
                 var result = await ChatMaTuongRepository.CheckExclusive(ids,baseTime);
                 if (result)
                 {
-                     // Thực hiện hành động xóa
+                    // Thực hiện hành động xóa
                     await ChatMaTuongRepository.DeleteById(deleteId);
                     ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success",iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                     await LoadData();
                 }
-               
+
                 deleteId = "";
             }
         }
@@ -1948,7 +1978,7 @@
             Input = await ChatMaTuongRepository.GetById(id);
             isEdit = true;
             isModalVisible = true;
-           
+
             foreach (var item in selectPLHG)
             {
                 item.IsSelected = item.Value == Input.ThongTinChungHoGa_TenHoGaSauPhanLoai;
@@ -1964,10 +1994,15 @@
                  progressBarClass: "bg-info",
                  duration: 5000
              );
-       }
+        }
 
     }
 
+    private async Task Search()
+    {
+        tKMaTuongModel.PageNumber = 1;
+        await LoadData();
+    }
 
       int Flag = 0;
     //thêm vào sau
