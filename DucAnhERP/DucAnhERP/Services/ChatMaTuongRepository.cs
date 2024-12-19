@@ -83,7 +83,7 @@ namespace DucAnhERP.Services
                               on a.HinhThucDauNoi8_KLBoSung equals KLBoSung8.Id into gj33
                             from KLBoSung8 in gj33.DefaultIfEmpty() // Left join for HinhThucDauNoi8_KLBoSung
 
-                            orderby a.CreateAt
+                            orderby a.Flag ascending
                             select new MaTuongModel
                             {
                                 Id = a.Id,
@@ -493,7 +493,8 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
             }
         }
-        public async Task<string> InsertLaterFlag(MaTuong entity, int FlagLast)
+
+        public async Task<string> InsertLaterFlag(MaTuong entity, int FlagLast, bool insertBefore)
         {
             string id = "";
             try
@@ -505,10 +506,10 @@ namespace DucAnhERP.Services
                     throw new Exception("Không có bản ghi nào để thêm!");
                 }
 
-                // Bước 1: Lấy danh sách các bản ghi có flag > FlagLast
+                // Bước 1: Lấy danh sách các bản ghi cần cập nhật flag
                 var recordsToUpdate = await context.MaTuongs
-                     .Where(x => x.Flag > FlagLast)
-                     .ToListAsync();
+                    .Where(x => insertBefore ? x.Flag >= FlagLast : x.Flag > FlagLast)
+                    .ToListAsync();
 
                 // Bước 2: Tăng giá trị flag của các bản ghi đó thêm 1
                 foreach (var record in recordsToUpdate)
@@ -519,8 +520,8 @@ namespace DucAnhERP.Services
                 // Lưu các thay đổi cập nhật flag
                 await context.SaveChangesAsync();
 
-                // Bước 3: Đặt flag cho bản ghi mới bằng 3
-                if (recordsToUpdate.Count() == 0)
+                // Bước 3: Đặt flag cho bản ghi mới
+                if (recordsToUpdate.Count == 0)
                 {
                     // Kiểm tra xem bảng có bản ghi nào không
                     var maxFlag = await context.MaTuongs.AnyAsync()
@@ -532,7 +533,7 @@ namespace DucAnhERP.Services
                 }
                 else
                 {
-                    entity.Flag = FlagLast + 1;
+                    entity.Flag = insertBefore ? FlagLast : FlagLast + 1;
                 }
 
                 // Bước 4: Chèn bản ghi mới vào bảng
@@ -540,6 +541,7 @@ namespace DucAnhERP.Services
 
                 // Lưu bản ghi mới vào cơ sở dữ liệu
                 await context.SaveChangesAsync();
+
                 // Trả về Id của bản ghi mới được thêm
                 id = entity.Id ?? "";
                 return id;
@@ -550,5 +552,67 @@ namespace DucAnhERP.Services
                 return id;
             }
         }
+
+
+        //public async Task<string> InsertLaterFlag(MaTuong entity, int FlagLast)
+        //{
+        //    string id = "";
+        //    try
+        //    {
+        //        using var context = _context.CreateDbContext();
+
+        //        if (entity == null)
+        //        {
+        //            throw new Exception("Không có bản ghi nào để thêm!");
+        //        }
+
+        //        // Bước 1: Lấy danh sách các bản ghi có flag > FlagLast
+        //        var recordsToUpdate = await context.MaTuongs
+        //             .Where(x => x.Flag > FlagLast)
+        //             .ToListAsync();
+
+        //        // Bước 2: Tăng giá trị flag của các bản ghi đó thêm 1
+        //        foreach (var record in recordsToUpdate)
+        //        {
+        //            record.Flag += 1;
+        //        }
+
+        //        // Lưu các thay đổi cập nhật flag
+        //        await context.SaveChangesAsync();
+
+        //        // Bước 3: Đặt flag cho bản ghi mới bằng 3
+        //        if (recordsToUpdate.Count() == 0)
+        //        {
+        //            // Kiểm tra xem bảng có bản ghi nào không
+        //            var maxFlag = await context.MaTuongs.AnyAsync()
+        //                          ? await context.MaTuongs.MaxAsync(x => x.Flag)
+        //                          : 0;
+
+        //            // Tăng giá trị Flag lên 1
+        //            entity.Flag = maxFlag + 1;
+        //        }
+        //        else
+        //        {
+        //            entity.Flag = FlagLast + 1;
+        //        }
+
+        //        // Bước 4: Chèn bản ghi mới vào bảng
+        //        context.MaTuongs.Add(entity);
+
+        //        // Lưu bản ghi mới vào cơ sở dữ liệu
+        //        await context.SaveChangesAsync();
+        //        // Trả về Id của bản ghi mới được thêm
+        //        id = entity.Id ?? "";
+        //        return id;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.ToString());
+        //        return id;
+        //    }
+        //}
+
+
+
     }
 }

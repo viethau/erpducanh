@@ -110,7 +110,7 @@
                         <div class="row">
                              <div class="form-floating col-sm-6 col-md-3">
                                    <label for="table">Tên hố ga sau phân loại</label>
-                                   <Select2 Id="select1" Items="@selectPLHG" OnChange="@OnSelectChangePLHG"></Select2>
+                                <Select2 Id="select1" Items="@selectPLHG" OnChange="@OnSelectChangePLHG"></Select2>
                                    <validationmessage for="()=>Input.thongtinchunghoga_tenhogasauphanloai"></validationmessage>
                              </div>
                         </div>
@@ -1057,17 +1057,21 @@
                                     stt++;
                                     <tr>
                                         <td class="d-flex nowrap">
-                                                <div class="d-inline-block">
-                                                    <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
-                                                        <i class="fas fa-plus"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.Id)">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
+                                            <div class="d-inline-block">
+                                                <button class="btn btn-sm btn-danger " title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.Id)">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-primary" title="Sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <div class="btn btn-sm p-0">
+                                                    <div class="d-flex flex-column align-items-center">
+                                                        <i class="fa fa-angle-up btn-top" @onclick="()=>InsertLaterFlag(item ,true)" title="Thêm vào trước" aria-hidden="true"></i>
+                                                        <i class="fa fa-angle-down btn-down" @onclick="()=>InsertLaterFlag(item,false)" title="Thêm vào sau" aria-hidden="true"></i>
+
+                                                    </div>
                                                 </div>
+                                            </div>
                                          </td>
                                          <td>@stt</td>
                                         <td>@item.KLGX_TenCongTac</td>
@@ -1407,292 +1411,6 @@
             Console.WriteLine(ex.Message);
         }
     }
-    public double KLGX_KL(MaTuong Input ,string TenHoGaSauPhanLoai)
-    {
-        // Kiểm tra điều kiện đầu tiên
-        if (TenHoGaSauPhanLoai.EndsWith("(BT)"))
-        {
-            return 0;
-        }
-
-        double result = (Input.HinhThucDauNoi1_CanhDai * Input.HinhThucDauNoi1_CDD * Input.HinhThucDauNoi1_CDR * Input.HinhThucDauNoi1_CDC??0) +
-                        (Input.HinhThucDauNoi1_CanhRong * Input.HinhThucDauNoi1_CRD * Input.HinhThucDauNoi1_CRR * Input.HinhThucDauNoi1_CRC??0) +
-                        (Input.HinhThucDauNoi1_CanhCheo * Input.HinhThucDauNoi1_CCD * Input.HinhThucDauNoi1_CCR * Input.HinhThucDauNoi1_CCC??0);
-
-
-        double d1500 = (Input.HinhThucDauNoi2_CanhDai * (3.14 * Input.HinhThucDauNoi2_CDD * Input.HinhThucDauNoi2_CDC / 4) * Input.HinhThucDauNoi2_CDR??0) 
-                       + (Input.HinhThucDauNoi2_CanhRong * (3.14 * Input.HinhThucDauNoi2_CRD * Input.HinhThucDauNoi2_CRC / 4) * Input.HinhThucDauNoi2_CRR??0) 
-                        + (Input.HinhThucDauNoi2_CanhCheo * (3.14 * Input.HinhThucDauNoi2_CCD *Input.HinhThucDauNoi2_CCC / 4) * Input.HinhThucDauNoi2_CCR??0);
-
-        double d1000 = (Input.HinhThucDauNoi3_CanhDai * (3.14 * Input.HinhThucDauNoi3_CDD * Input.HinhThucDauNoi3_CDC / 4) * Input.HinhThucDauNoi3_CDR??0) 
-                        +(Input.HinhThucDauNoi3_CanhRong * (3.14 * Input.HinhThucDauNoi3_CRD * Input.HinhThucDauNoi3_CRC / 4) * Input.HinhThucDauNoi3_CRR??0) 
-                        + (Input.HinhThucDauNoi3_CanhCheo* (3.14 * Input.HinhThucDauNoi3_CCD * Input.HinhThucDauNoi3_CCC / 4) * Input.HinhThucDauNoi3_CCR??0);
-
-        double B1000 = (Input.HinhThucDauNoi4_CanhDai *Input.	HinhThucDauNoi4_CDD	*Input.HinhThucDauNoi4_CDR *	Input.HinhThucDauNoi4_CDC??0)	
-                        +(Input.HinhThucDauNoi4_CanhRong *Input.	HinhThucDauNoi4_CRD	*Input.HinhThucDauNoi4_CRR *	Input.HinhThucDauNoi4_CRC??0)
-                        +(Input.HinhThucDauNoi4_CanhCheo  *Input.	HinhThucDauNoi4_CCD	*Input.HinhThucDauNoi4_CCR *	Input.HinhThucDauNoi4_CCC??0);
-
-        double B1000CL =( Input.HinhThucDauNoi5_CanhDai *Input.HinhThucDauNoi5_CDD*Input.HinhThucDauNoi5_CDR*Input.HinhThucDauNoi5_CDC??0 )
-                        +( Input.HinhThucDauNoi5_CanhRong *Input.HinhThucDauNoi5_CRD*Input.HinhThucDauNoi5_CRR*Input.HinhThucDauNoi5_CRC??0 )
-                        +( Input.HinhThucDauNoi5_CanhCheo *Input.HinhThucDauNoi5_CCD*Input.HinhThucDauNoi5_CCR*Input.HinhThucDauNoi5_CCC ??0);
-
-        double d600 = (Input.HinhThucDauNoi6_CanhDai * (3.14 * Input.HinhThucDauNoi6_CDD * Input.HinhThucDauNoi6_CDC / 4) * Input.HinhThucDauNoi6_CDR??0)
-                        + (Input.HinhThucDauNoi6_CanhRong * (3.14 * Input.HinhThucDauNoi6_CRD* Input.HinhThucDauNoi6_CRC / 4) * Input.HinhThucDauNoi6_CRR??0)
-                        + (Input.HinhThucDauNoi6_CanhCheo * (3.14 * Input.HinhThucDauNoi6_CCD * Input.HinhThucDauNoi6_CCC/ 4) * Input.HinhThucDauNoi6_CCR??0);
-
-        double B800 = (Input.HinhThucDauNoi7_CanhDai* Input.HinhThucDauNoi7_CDD*Input.HinhThucDauNoi7_CDR *Input.HinhThucDauNoi7_CDC??0)
-                        +(Input.HinhThucDauNoi7_CanhRong* Input.HinhThucDauNoi7_CRD*Input.HinhThucDauNoi7_CRR*Input.HinhThucDauNoi7_CRC??0)
-                        +(Input.HinhThucDauNoi7_CanhCheo* Input.HinhThucDauNoi7_CCD*Input.HinhThucDauNoi7_CCR*Input.HinhThucDauNoi7_CCC??0);
-
-        double B2000 = (Input.HinhThucDauNoi8_CanhDai *Input.HinhThucDauNoi8_CDD *Input.HinhThucDauNoi8_CDR *Input.HinhThucDauNoi8_CDC??0) 
-                        +(Input.HinhThucDauNoi8_CanhRong*Input.HinhThucDauNoi8_CRD*Input.HinhThucDauNoi8_CRR*Input.HinhThucDauNoi8_CRC??0)
-                        +(Input.HinhThucDauNoi8_CanhCheo* Input.HinhThucDauNoi8_CCD*Input.HinhThucDauNoi8_CCR*Input.HinhThucDauNoi8_CCC??0);
-
-        result = result + d1500 + d1000 + B1000 + B1000CL + d600 + B800 + B2000;
-
-        result = Math.Round(result, 4);
-        return Math.Round(result,3);
-    }
-
-    public  double KLC_KL(MaTuong Input ,string TenHoGaSauPhanLoai)
-    {
-        // Kiểm tra điều kiện đầu tiên
-        if (TenHoGaSauPhanLoai.EndsWith("(BT)"))
-        {
-            return 0;
-        }
-        // Tính tổng dựa trên các điều kiện từ các cột khác nhau
-        double result = (Input.HinhThucDauNoi1_CDD * Input.HinhThucDauNoi1_CDC +
-                        Input.HinhThucDauNoi1_CRD * Input.HinhThucDauNoi1_CRC +
-                        Input.HinhThucDauNoi1_CCD * Input.HinhThucDauNoi1_CCC)??0;
-
-        double d1500 = (Input.HinhThucDauNoi2_CanhDai * (3.14 * Input.HinhThucDauNoi2_CDD * Input.HinhThucDauNoi2_CDC / 4)) 
-                      + (Input.HinhThucDauNoi2_CanhRong * (3.14 * Input.HinhThucDauNoi2_CRD * Input.HinhThucDauNoi2_CRC / 4)) 
-                       + (Input.HinhThucDauNoi2_CanhCheo * (3.14 * Input.HinhThucDauNoi2_CCD *Input.HinhThucDauNoi2_CCC / 4))??0;
-
-        double d1000 = (Input.HinhThucDauNoi3_CanhDai * (3.14 * Input.HinhThucDauNoi3_CDD * Input.HinhThucDauNoi3_CDC / 4) ) 
-                        +(Input.HinhThucDauNoi3_CanhRong * (3.14 * Input.HinhThucDauNoi3_CRD * Input.HinhThucDauNoi3_CRC / 4)) 
-                        + (Input.HinhThucDauNoi3_CanhCheo* (3.14 * Input.HinhThucDauNoi3_CCD * Input.HinhThucDauNoi3_CCC / 4))??0;
-
-        double B1000 = (Input.HinhThucDauNoi4_CanhDai *Input.	HinhThucDauNoi4_CDD	*Input.HinhThucDauNoi4_CDR *	Input.HinhThucDauNoi4_CDC)	
-                        +(Input.HinhThucDauNoi4_CanhRong *Input.	HinhThucDauNoi4_CRD	*Input.HinhThucDauNoi4_CRR *	Input.HinhThucDauNoi4_CRC)
-                        +(Input.HinhThucDauNoi4_CanhCheo  *Input.	HinhThucDauNoi4_CCD	*Input.HinhThucDauNoi4_CCR *	Input.HinhThucDauNoi4_CCC)??0;
-
-        double B1000CL =( Input.HinhThucDauNoi5_CanhDai *Input.HinhThucDauNoi5_CDD*Input.HinhThucDauNoi5_CDR*Input.HinhThucDauNoi5_CDC )
-                        +( Input.HinhThucDauNoi5_CanhRong *Input.HinhThucDauNoi5_CRD*Input.HinhThucDauNoi5_CRR*Input.HinhThucDauNoi5_CRC)
-                        +( Input.HinhThucDauNoi5_CanhCheo *Input.HinhThucDauNoi5_CCD*Input.HinhThucDauNoi5_CCR*Input.HinhThucDauNoi5_CCC)??0;
-
-        double d600 = (Input.HinhThucDauNoi6_CanhDai * (3.14 * Input.HinhThucDauNoi6_CDD * Input.HinhThucDauNoi6_CDC / 4) )
-                        + (Input.HinhThucDauNoi6_CanhRong * (3.14 * Input.HinhThucDauNoi6_CRD* Input.HinhThucDauNoi6_CRC / 4))
-                        + (Input.HinhThucDauNoi6_CanhCheo * (3.14 * Input.HinhThucDauNoi6_CCD * Input.HinhThucDauNoi6_CCC/ 4))??0;
-
-        double B800 = (Input.HinhThucDauNoi7_CanhDai* Input.HinhThucDauNoi7_CDD*Input.HinhThucDauNoi7_CDR *Input.HinhThucDauNoi7_CDC)
-                        +(Input.HinhThucDauNoi7_CanhRong* Input.HinhThucDauNoi7_CRD*Input.HinhThucDauNoi7_CRR*Input.HinhThucDauNoi7_CRC)
-                        +(Input.HinhThucDauNoi7_CanhCheo* Input.HinhThucDauNoi7_CCD*Input.HinhThucDauNoi7_CCR*Input.HinhThucDauNoi7_CCC)??0;
-
-        double B2000 = (Input.HinhThucDauNoi8_CanhDai *Input.HinhThucDauNoi8_CDD *Input.HinhThucDauNoi8_CDR *Input.HinhThucDauNoi8_CDC) 
-                        +(Input.HinhThucDauNoi8_CanhRong*Input.HinhThucDauNoi8_CRD*Input.HinhThucDauNoi8_CRR*Input.HinhThucDauNoi8_CRC)
-                        +(Input.HinhThucDauNoi8_CanhCheo* Input.HinhThucDauNoi8_CCD*Input.HinhThucDauNoi8_CCR*Input.HinhThucDauNoi8_CCC)??0;
-        // Nhân đôi tổng nếu không có "(BT)" trong `n14`
-        result = result + d1500 + d1000 + B1000 + B1000CL + d600 + B800 + B2000;
-
-        if (TenHoGaSauPhanLoai.EndsWith("(BT)"))
-        {
-            result =  result * 2;
-        }
-
-        result = Math.Round(result, 4);
-        return Math.Round(result,3);
-    }
-
-    public double KLBT_KL(MaTuong Input ,string TenHoGaSauPhanLoai)
-    {
-        double result = 0 ;
-        if (TenHoGaSauPhanLoai.EndsWith("(BT)")){
-            result = (Input.HinhThucDauNoi1_CanhDai * Input.HinhThucDauNoi1_CDD * Input.HinhThucDauNoi1_CDR * Input.HinhThucDauNoi1_CDC)+
-                 (Input.HinhThucDauNoi1_CanhRong * Input.HinhThucDauNoi1_CRD * Input.HinhThucDauNoi1_CRR * Input.HinhThucDauNoi1_CRC)+
-                 ( Input.HinhThucDauNoi1_CanhCheo  * Input.HinhThucDauNoi1_CCD * Input.HinhThucDauNoi1_CCR * Input.HinhThucDauNoi1_CCC)??0;
-
-            double d1500 = (Input.HinhThucDauNoi2_CanhDai * (3.14 * Input.HinhThucDauNoi2_CDD * Input.HinhThucDauNoi2_CDC / 4)*Input.HinhThucDauNoi2_CDR) 
-                         + (Input.HinhThucDauNoi2_CanhRong * (3.14 * Input.HinhThucDauNoi2_CRD * Input.HinhThucDauNoi2_CRC / 4)* Input.HinhThucDauNoi2_CRR) 
-                          + (Input.HinhThucDauNoi2_CanhCheo * (3.14 * Input.HinhThucDauNoi2_CCD *Input.HinhThucDauNoi2_CCC / 4) * Input.HinhThucDauNoi2_CCR)??0;
-
-            double d1000 = (Input.HinhThucDauNoi3_CanhDai * (3.14 * Input.HinhThucDauNoi3_CDD * Input.HinhThucDauNoi3_CDC / 4) *Input.HinhThucDauNoi3_CDR) 
-                            +(Input.HinhThucDauNoi3_CanhRong * (3.14 * Input.HinhThucDauNoi3_CRD * Input.HinhThucDauNoi3_CRC / 4)*Input.HinhThucDauNoi3_CRR) 
-                            + (Input.HinhThucDauNoi3_CanhCheo* (3.14 * Input.HinhThucDauNoi3_CCD * Input.HinhThucDauNoi3_CCC / 4)*Input.HinhThucDauNoi3_CCR)??0;
-
-            double B1000 = (Input.HinhThucDauNoi4_CanhDai *Input.	HinhThucDauNoi4_CDD	*Input.HinhThucDauNoi4_CDR *	Input.HinhThucDauNoi4_CDC)	
-                            +(Input.HinhThucDauNoi4_CanhRong *Input.	HinhThucDauNoi4_CRD	*Input.HinhThucDauNoi4_CRR *	Input.HinhThucDauNoi4_CRC)
-                            +(Input.HinhThucDauNoi4_CanhCheo  *Input.	HinhThucDauNoi4_CCD	*Input.HinhThucDauNoi4_CCR *	Input.HinhThucDauNoi4_CCC)??0;
-
-            double B1000CL =( Input.HinhThucDauNoi5_CanhDai *Input.HinhThucDauNoi5_CDD*Input.HinhThucDauNoi5_CDR*Input.HinhThucDauNoi5_CDC )
-                            +( Input.HinhThucDauNoi5_CanhRong *Input.HinhThucDauNoi5_CRD*Input.HinhThucDauNoi5_CRR*Input.HinhThucDauNoi5_CRC)
-                            +( Input.HinhThucDauNoi5_CanhCheo *Input.HinhThucDauNoi5_CCD*Input.HinhThucDauNoi5_CCR*Input.HinhThucDauNoi5_CCC)??0;
-
-            double D600 = (Input.HinhThucDauNoi6_CanhDai * (3.14 * Input.HinhThucDauNoi6_CDD * Input.HinhThucDauNoi6_CDC / 4) *Input.HinhThucDauNoi4_CDR )
-                            + (Input.HinhThucDauNoi6_CanhRong * (3.14 * Input.HinhThucDauNoi6_CRD* Input.HinhThucDauNoi6_CRC / 4) *Input.HinhThucDauNoi4_CRR)
-                            + (Input.HinhThucDauNoi6_CanhCheo * (3.14 * Input.HinhThucDauNoi6_CCD * Input.HinhThucDauNoi6_CCC/ 4) *Input.HinhThucDauNoi4_CCR)??0;
-
-            double B800 = (Input.HinhThucDauNoi7_CanhDai* Input.HinhThucDauNoi7_CDD*Input.HinhThucDauNoi7_CDR *Input.HinhThucDauNoi7_CDC)
-                            +(Input.HinhThucDauNoi7_CanhRong* Input.HinhThucDauNoi7_CRD*Input.HinhThucDauNoi7_CRR*Input.HinhThucDauNoi7_CRC)
-                            +(Input.HinhThucDauNoi7_CanhCheo* Input.HinhThucDauNoi7_CCD*Input.HinhThucDauNoi7_CCR*Input.HinhThucDauNoi7_CCC)??0;
-
-            double B2000 = (Input.HinhThucDauNoi8_CanhDai *Input.HinhThucDauNoi8_CDD *Input.HinhThucDauNoi8_CDR *Input.HinhThucDauNoi8_CDC) 
-                            +(Input.HinhThucDauNoi8_CanhRong*Input.HinhThucDauNoi8_CRD*Input.HinhThucDauNoi8_CRR*Input.HinhThucDauNoi8_CRC)
-                            +(Input.HinhThucDauNoi8_CanhCheo* Input.HinhThucDauNoi8_CCD*Input.HinhThucDauNoi8_CCR*Input.HinhThucDauNoi8_CCC)??0;
-            result = result + d1500 + d1000 + B1000 + B1000CL + D600 + B800 + B2000;
-        }else{
-            result = 0;
-        }
-
-        result = Math.Round(result,4);
-        return Math.Round(result,3);
-    }
-
-    public double KLVK_KL(MaTuong Input ,string TenHoGaSauPhanLoai)
-    {
-        double result =0 ;
-        if (!TenHoGaSauPhanLoai.EndsWith("(BT)"))
-        {
-            return 0;
-        }
-        result = (Input.HinhThucDauNoi1_CDD * Input.HinhThucDauNoi1_CDC + Input.HinhThucDauNoi1_CRD * Input.HinhThucDauNoi1_CRC + Input.HinhThucDauNoi1_CCD * Input.HinhThucDauNoi1_CCC  ??0);
-        double D1500 = ( Input.HinhThucDauNoi2_CanhDai * (3.14 *  Input.HinhThucDauNoi2_CDD *  Input.HinhThucDauNoi2_CDC / 4)) +
-                             ( Input.HinhThucDauNoi2_CanhRong * (3.14 *  Input.HinhThucDauNoi2_CRD *  Input.HinhThucDauNoi2_CRC / 4)) +
-                             ( Input.HinhThucDauNoi2_CanhCheo * (3.14 *  Input.HinhThucDauNoi2_CCD *  Input.HinhThucDauNoi2_CCC / 4))??0;
-
-        double D1000 = ( Input.HinhThucDauNoi3_CanhDai * (3.14 *  Input.HinhThucDauNoi3_CDD *  Input.HinhThucDauNoi3_CDC / 4)) +
-                         ( Input.HinhThucDauNoi3_CanhRong * (3.14 *  Input.HinhThucDauNoi3_CRD *  Input.HinhThucDauNoi3_CRC / 4)) +
-                         ( Input.HinhThucDauNoi3_CanhCheo * (3.14 *  Input.HinhThucDauNoi3_CCD *  Input.HinhThucDauNoi3_CCC / 4))??0;
-
-        double D600 =( Input.HinhThucDauNoi6_CanhDai * (3.14 *  Input.HinhThucDauNoi6_CDD *  Input.HinhThucDauNoi6_CDC / 4)) +
-                         ( Input.HinhThucDauNoi6_CanhRong * (3.14 *  Input.HinhThucDauNoi6_CRD *  Input.HinhThucDauNoi6_CRC / 4)) +
-                         ( Input.HinhThucDauNoi6_CanhCheo * (3.14 *  Input.HinhThucDauNoi6_CCD *  Input.HinhThucDauNoi6_CCC / 4))??0;
-
-        double B1000 = (Input.HinhThucDauNoi4_CanhDai*  Input.HinhThucDauNoi4_CDD*  Input.HinhThucDauNoi4_CDC) 
-                        + (Input.HinhThucDauNoi4_CanhRong*  Input.HinhThucDauNoi4_CRD*  Input.HinhThucDauNoi4_CRC)
-                         + ( Input.HinhThucDauNoi4_CanhCheo*  Input.HinhThucDauNoi4_CCD*  Input.HinhThucDauNoi4_CCC)??0;
-        double B1000CL = (Input.HinhThucDauNoi5_CanhDai*  Input.HinhThucDauNoi5_CDD*  Input.HinhThucDauNoi5_CDC) 
-                        + (Input.HinhThucDauNoi5_CanhRong*  Input.HinhThucDauNoi5_CRD*  Input.HinhThucDauNoi5_CRC)
-                         + ( Input.HinhThucDauNoi5_CanhCheo*  Input.HinhThucDauNoi5_CCD*  Input.HinhThucDauNoi5_CCC)??0;
-        double B800 = (Input.HinhThucDauNoi7_CanhDai*  Input.HinhThucDauNoi7_CDD*  Input.HinhThucDauNoi7_CDC) 
-                         + (Input.HinhThucDauNoi7_CanhRong*  Input.HinhThucDauNoi7_CRD*  Input.HinhThucDauNoi7_CRC)
-                          + ( Input.HinhThucDauNoi7_CanhCheo*  Input.HinhThucDauNoi7_CCD*  Input.HinhThucDauNoi7_CCC)??0;
-        double B2000 = (Input.HinhThucDauNoi8_CanhDai*  Input.HinhThucDauNoi8_CDD*  Input.HinhThucDauNoi8_CDC) 
-                        + (Input.HinhThucDauNoi8_CanhRong*  Input.HinhThucDauNoi8_CRD*  Input.HinhThucDauNoi8_CRC)
-                         + ( Input.HinhThucDauNoi8_CanhCheo*  Input.HinhThucDauNoi8_CCD*  Input.HinhThucDauNoi8_CCC)??0;
-
-        if (TenHoGaSauPhanLoai.EndsWith("(BT)"))
-        {
-            result =(result+ D1500 + D1000 + D600 + B1000 + B1000CL + B800 + B2000)*2;
-        }
-        else
-        {
-            result =result+ D1500 + D1000 + D600 + B1000 + B1000CL + B800 + B2000;
-        }
-
-        result = Math.Round(result,4);
-        return Math.Round(result,3);
-    }
-
-    public double KLS_KL(MaTuong Input,string TenHoGaSauPhanLoai)
-    {
-        double result = 0 ;
-        if (TenHoGaSauPhanLoai.EndsWith("(BT)"))
-        {
-            return 0;
-        }
-
-        result = ((Input.HinhThucDauNoi1_CanhDai*Input.HinhThucDauNoi1_CDD* Input.HinhThucDauNoi1_CDR)+(Input.HinhThucDauNoi1_CDR*Input.HinhThucDauNoi1_CDC * 2))??0+
-                 ((Input.HinhThucDauNoi1_CanhRong*Input.HinhThucDauNoi1_CRD* Input.HinhThucDauNoi1_CRR)+(Input.HinhThucDauNoi1_CanhRong * Input.HinhThucDauNoi1_CRR* Input.HinhThucDauNoi1_CRC *2))+
-                 ((Input.HinhThucDauNoi1_CanhCheo * Input.HinhThucDauNoi1_CCD * Input.HinhThucDauNoi1_CCR) + (Input.HinhThucDauNoi1_CanhCheo * Input.HinhThucDauNoi1_CCR * Input.HinhThucDauNoi1_CCC))??0;
-
-        double B1000 = (Input.HinhThucDauNoi4_KLBoSung == IdDMCo) ? (Input.HinhThucDauNoi4_CanhDai* Input.HinhThucDauNoi4_CDD* Input.HinhThucDauNoi4_CDR)+
-            (Input.HinhThucDauNoi4_CanhDai* Input.HinhThucDauNoi4_CDR* Input.HinhThucDauNoi4_CDC* 2)+
-            (Input.HinhThucDauNoi4_CanhRong* Input.HinhThucDauNoi4_CRD* Input.HinhThucDauNoi4_CRR)+
-            (Input.HinhThucDauNoi4_CanhRong* Input.HinhThucDauNoi4_CRR* Input.HinhThucDauNoi4_CRC* 2)+
-            (Input.HinhThucDauNoi4_CanhCheo * Input.HinhThucDauNoi4_CCD* Input.HinhThucDauNoi4_CCR)+
-            (Input.HinhThucDauNoi4_CanhCheo* Input.HinhThucDauNoi4_CCR* Input.HinhThucDauNoi4_CCC* 2)??0 : 0;
-
-        double B1000CL = (Input.HinhThucDauNoi5_KLBoSung == IdDMCo) ? (Input.HinhThucDauNoi5_CanhDai* Input.HinhThucDauNoi5_CDD* Input.HinhThucDauNoi5_CDR)+
-            (Input.HinhThucDauNoi5_CanhDai* Input.HinhThucDauNoi5_CDR* Input.HinhThucDauNoi5_CDC* 2)+
-            (Input.HinhThucDauNoi5_CanhRong* Input.HinhThucDauNoi5_CRD* Input.HinhThucDauNoi5_CRR)+
-            (Input.HinhThucDauNoi5_CanhRong* Input.HinhThucDauNoi5_CRR* Input.HinhThucDauNoi5_CRC* 2)+
-            (Input.HinhThucDauNoi5_CanhCheo * Input.HinhThucDauNoi5_CCD* Input.HinhThucDauNoi5_CCR)+
-            (Input.HinhThucDauNoi5_CanhCheo* Input.HinhThucDauNoi5_CCR* Input.HinhThucDauNoi5_CCC* 2)??0 : 0;
-
-        double B800 = (Input.HinhThucDauNoi7_KLBoSung == IdDMCo) ? (Input.HinhThucDauNoi7_CanhDai* Input.HinhThucDauNoi7_CDD* Input.HinhThucDauNoi7_CDR)+
-            (Input.HinhThucDauNoi7_CanhDai* Input.HinhThucDauNoi7_CDR* Input.HinhThucDauNoi7_CDC* 2)+
-            (Input.HinhThucDauNoi7_CanhRong* Input.HinhThucDauNoi7_CRD* Input.HinhThucDauNoi7_CRR)+
-            (Input.HinhThucDauNoi7_CanhRong* Input.HinhThucDauNoi7_CRR* Input.HinhThucDauNoi7_CRC* 2)+
-            (Input.HinhThucDauNoi7_CanhCheo * Input.HinhThucDauNoi7_CCD* Input.HinhThucDauNoi7_CCR)+
-            (Input.HinhThucDauNoi7_CanhCheo* Input.HinhThucDauNoi7_CCR* Input.HinhThucDauNoi7_CCC* 2)??0 : 0;
-
-        double B2000 = (Input.HinhThucDauNoi8_KLBoSung == IdDMCo) ? (Input.HinhThucDauNoi8_CanhDai* Input.HinhThucDauNoi8_CDD* Input.HinhThucDauNoi8_CDR)+
-           (Input.HinhThucDauNoi8_CanhDai* Input.HinhThucDauNoi8_CDR* Input.HinhThucDauNoi8_CDC* 2)+
-           (Input.HinhThucDauNoi8_CanhRong* Input.HinhThucDauNoi8_CRD* Input.HinhThucDauNoi8_CRR)+
-           (Input.HinhThucDauNoi8_CanhRong* Input.HinhThucDauNoi8_CRR* Input.HinhThucDauNoi8_CRC* 2)+
-           (Input.HinhThucDauNoi8_CanhCheo * Input.HinhThucDauNoi8_CCD* Input.HinhThucDauNoi8_CCR)+
-           (Input.HinhThucDauNoi8_CanhCheo* Input.HinhThucDauNoi8_CCR* Input.HinhThucDauNoi8_CCC* 2)??0 : 0;
-
-        result = result + B1000 + B1000CL + B800 + B2000;
-        result = Math.Round(result,4);
-        return Math.Round(result,3);
-    }
-
-    public  double KLS_KL1(MaTuong Input ,string TenHoGaSauPhanLoai){
-        double result =0;
-        double B1000 = (Input.HinhThucDauNoi4_KLBoSung == IdDMCo) ? (Input.HinhThucDauNoi4_CanhDai* Input.HinhThucDauNoi4_CDD* Input.HinhThucDauNoi4_CDR)+
-              (Input.HinhThucDauNoi4_CanhDai* Input.HinhThucDauNoi4_CDR* Input.HinhThucDauNoi4_CDC* 2)+
-              (Input.HinhThucDauNoi4_CanhRong* Input.HinhThucDauNoi4_CRD* Input.HinhThucDauNoi4_CRR)+
-              (Input.HinhThucDauNoi4_CanhRong* Input.HinhThucDauNoi4_CRR* Input.HinhThucDauNoi4_CRC* 2)+
-              (Input.HinhThucDauNoi4_CanhCheo * Input.HinhThucDauNoi4_CCD* Input.HinhThucDauNoi4_CCR)+
-              (Input.HinhThucDauNoi4_CanhCheo* Input.HinhThucDauNoi4_CCR* Input.HinhThucDauNoi4_CCC* 2)??0 : 0;
-
-        double B1000CL = (Input.HinhThucDauNoi5_KLBoSung == IdDMCo) ? (Input.HinhThucDauNoi5_CanhDai* Input.HinhThucDauNoi5_CDD* Input.HinhThucDauNoi5_CDR)+
-            (Input.HinhThucDauNoi5_CanhDai* Input.HinhThucDauNoi5_CDR* Input.HinhThucDauNoi5_CDC* 2)+
-            (Input.HinhThucDauNoi5_CanhRong* Input.HinhThucDauNoi5_CRD* Input.HinhThucDauNoi5_CRR)+
-            (Input.HinhThucDauNoi5_CanhRong* Input.HinhThucDauNoi5_CRR* Input.HinhThucDauNoi5_CRC* 2)+
-            (Input.HinhThucDauNoi5_CanhCheo * Input.HinhThucDauNoi5_CCD* Input.HinhThucDauNoi5_CCR)+
-            (Input.HinhThucDauNoi5_CanhCheo* Input.HinhThucDauNoi5_CCR* Input.HinhThucDauNoi5_CCC* 2)??0 : 0;
-
-        double B800 = (Input.HinhThucDauNoi7_KLBoSung == IdDMCo) ? (Input.HinhThucDauNoi7_CanhDai* Input.HinhThucDauNoi7_CDD* Input.HinhThucDauNoi7_CDR)+
-            (Input.HinhThucDauNoi7_CanhDai* Input.HinhThucDauNoi7_CDR* Input.HinhThucDauNoi7_CDC* 2)+
-            (Input.HinhThucDauNoi7_CanhRong* Input.HinhThucDauNoi7_CRD* Input.HinhThucDauNoi7_CRR)+
-            (Input.HinhThucDauNoi7_CanhRong* Input.HinhThucDauNoi7_CRR* Input.HinhThucDauNoi7_CRC* 2)+
-            (Input.HinhThucDauNoi7_CanhCheo * Input.HinhThucDauNoi7_CCD* Input.HinhThucDauNoi7_CCR)+
-            (Input.HinhThucDauNoi7_CanhCheo* Input.HinhThucDauNoi7_CCR* Input.HinhThucDauNoi7_CCC* 2)??0 : 0;
-
-        double B2000 = (Input.HinhThucDauNoi8_KLBoSung == IdDMCo) ? (Input.HinhThucDauNoi8_CanhDai* Input.HinhThucDauNoi8_CDD* Input.HinhThucDauNoi8_CDR)+
-           (Input.HinhThucDauNoi8_CanhDai* Input.HinhThucDauNoi8_CDR* Input.HinhThucDauNoi8_CDC* 2)+
-           (Input.HinhThucDauNoi8_CanhRong* Input.HinhThucDauNoi8_CRD* Input.HinhThucDauNoi8_CRR)+
-           (Input.HinhThucDauNoi8_CanhRong* Input.HinhThucDauNoi8_CRR* Input.HinhThucDauNoi8_CRC* 2)+
-           (Input.HinhThucDauNoi8_CanhCheo * Input.HinhThucDauNoi8_CCD* Input.HinhThucDauNoi8_CCR)+
-           (Input.HinhThucDauNoi8_CanhCheo* Input.HinhThucDauNoi8_CCR* Input.HinhThucDauNoi8_CCC* 2)??0 : 0;
-        if (TenHoGaSauPhanLoai.EndsWith("(BT)")){
-            result = ((Input.HinhThucDauNoi1_CanhDai * Input.HinhThucDauNoi1_CDD * Input.HinhThucDauNoi1_CDR)+
-                     (Input.HinhThucDauNoi1_CDR * Input.HinhThucDauNoi1_CDC * 2))+
-                     ((Input.HinhThucDauNoi1_CanhRong * Input.HinhThucDauNoi1_CRD * Input.HinhThucDauNoi1_CRR)+
-                     (Input.HinhThucDauNoi1_CanhRong * Input.HinhThucDauNoi1_CRD * Input.HinhThucDauNoi1_CRR * Input.HinhThucDauNoi1_CRC * 2))+
-                     ((Input.HinhThucDauNoi1_CanhCheo  * Input.HinhThucDauNoi1_CCD * Input.HinhThucDauNoi1_CCR)+
-                     (Input.HinhThucDauNoi1_CanhCheo  * Input.HinhThucDauNoi1_CCD * Input.HinhThucDauNoi1_CCR * Input.HinhThucDauNoi1_CCC))??0;
-
-
-
-            result = result + B1000 + B1000CL + B800 + B2000;
-        }
-        else
-        {
-            result = (Input.HinhThucDauNoi1_CanhDai * Input.HinhThucDauNoi1_CDD * Input.HinhThucDauNoi1_CDR) +
-                    (Input.HinhThucDauNoi1_CanhRong * Input.HinhThucDauNoi1_CRD * Input.HinhThucDauNoi1_CRR) +
-                    (Input.HinhThucDauNoi1_CanhCheo * Input.HinhThucDauNoi1_CCD * Input.HinhThucDauNoi1_CCR) ?? 0;
-
-            result = result + B1000 + B1000CL + B800 + B2000;
-        }
-
-        result = Math.Round(result, 4);
-        return Math.Round(result,3);
-    }
 
     private List<SelectedItem> selectSearchPLHG = new();
     private void OnSelectChangeSearchPLHG(SelectedItem selectedItem)
@@ -1736,7 +1454,11 @@
 
     private void ShowModal()
     {
+        Input = new();
+        InputMD = new();
         isModalVisible = true;
+        insertFlagItem = new();
+        SetSelectedItem(selectPLHG ,Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
     }
 
     private void HandleModalClose(bool isVisible)
@@ -1882,12 +1604,11 @@
                 {
                     if( listExist== null||listExist.Count == 0)
                     {
-                        if (Flag > 0)
+                        if (insertFlagItem.Flag > 0)
                         {
                             // Thêm mới thông tin
-                            var id = await ChatMaTuongRepository.InsertLaterFlag(Input, Flag);
+                            var id = await ChatMaTuongRepository.InsertLaterFlag(Input, insertFlagItem.Flag, insertBefore);
                             isModalVisible = false;
-                            Input = new ();
                             ToastService.ShowToast(
                                 "Thông báo",
                                 "Chèn thành công.",
@@ -1896,8 +1617,10 @@
                                 progressBarClass: "bg-info",
                                 duration: 5000
                             );
+                            Input = new ();
+                            insertFlagItem = new();
                             await LoadData();
-                            Flag = 0;
+                            
                         }
                         else
                         {
@@ -1978,11 +1701,7 @@
             Input = await ChatMaTuongRepository.GetById(id);
             isEdit = true;
             isModalVisible = true;
-
-            foreach (var item in selectPLHG)
-            {
-                item.IsSelected = item.Value == Input.ThongTinChungHoGa_TenHoGaSauPhanLoai;
-            }
+            SetSelectedItem(selectPLHG, Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
         }
         catch (Exception ex)
         {
@@ -2004,15 +1723,34 @@
         await LoadData();
     }
 
-      int Flag = 0;
+    bool insertBefore = false;
+    MaTuongModel insertFlagItem = new();
     //thêm vào sau
-    private void InsertLaterFlag(int flag)
+    private async Task InsertLaterFlag(MaTuongModel inputMD, bool position)
     {
-        Flag = flag;
-        TitleModal = "Chèn loại cống !";
+ 
+        TitleModal = "Chèn PKKL chát má tường+VK!";
+        Input = new();
+        
+        insertFlagItem = inputMD;
+        insertBefore = position;
         isModalVisible = true;
+        // Đặt trạng thái chọn cho các danh sách
+        SetSelectedItem(selectPLHG, Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
+        await InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+        
     }
 
+    private void SetSelectedItem(IEnumerable<SelectedItem> items, string value)
+    {
+        foreach (var item in items)
+        {
+            item.IsSelected = item.Value == value;
+        }
+    }
 
     // Sắp xếp data
     private void SortTable(string columnName)
@@ -2074,4 +1812,298 @@
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
     }
+
+
+    public double KLGX_KL(MaTuong Input, string TenHoGaSauPhanLoai)
+    {
+        // Kiểm tra điều kiện đầu tiên
+        if (TenHoGaSauPhanLoai.EndsWith("(BT)"))
+        {
+            return 0;
+        }
+
+        double result = (Input.HinhThucDauNoi1_CanhDai * Input.HinhThucDauNoi1_CDD * Input.HinhThucDauNoi1_CDR * Input.HinhThucDauNoi1_CDC ?? 0) +
+                        (Input.HinhThucDauNoi1_CanhRong * Input.HinhThucDauNoi1_CRD * Input.HinhThucDauNoi1_CRR * Input.HinhThucDauNoi1_CRC ?? 0) +
+                        (Input.HinhThucDauNoi1_CanhCheo * Input.HinhThucDauNoi1_CCD * Input.HinhThucDauNoi1_CCR * Input.HinhThucDauNoi1_CCC ?? 0);
+
+
+        double d1500 = (Input.HinhThucDauNoi2_CanhDai * (3.14 * Input.HinhThucDauNoi2_CDD * Input.HinhThucDauNoi2_CDC / 4) * Input.HinhThucDauNoi2_CDR ?? 0)
+                       + (Input.HinhThucDauNoi2_CanhRong * (3.14 * Input.HinhThucDauNoi2_CRD * Input.HinhThucDauNoi2_CRC / 4) * Input.HinhThucDauNoi2_CRR ?? 0)
+                        + (Input.HinhThucDauNoi2_CanhCheo * (3.14 * Input.HinhThucDauNoi2_CCD * Input.HinhThucDauNoi2_CCC / 4) * Input.HinhThucDauNoi2_CCR ?? 0);
+
+        double d1000 = (Input.HinhThucDauNoi3_CanhDai * (3.14 * Input.HinhThucDauNoi3_CDD * Input.HinhThucDauNoi3_CDC / 4) * Input.HinhThucDauNoi3_CDR ?? 0)
+                        + (Input.HinhThucDauNoi3_CanhRong * (3.14 * Input.HinhThucDauNoi3_CRD * Input.HinhThucDauNoi3_CRC / 4) * Input.HinhThucDauNoi3_CRR ?? 0)
+                        + (Input.HinhThucDauNoi3_CanhCheo * (3.14 * Input.HinhThucDauNoi3_CCD * Input.HinhThucDauNoi3_CCC / 4) * Input.HinhThucDauNoi3_CCR ?? 0);
+
+        double B1000 = (Input.HinhThucDauNoi4_CanhDai * Input.HinhThucDauNoi4_CDD * Input.HinhThucDauNoi4_CDR * Input.HinhThucDauNoi4_CDC ?? 0)
+                        + (Input.HinhThucDauNoi4_CanhRong * Input.HinhThucDauNoi4_CRD * Input.HinhThucDauNoi4_CRR * Input.HinhThucDauNoi4_CRC ?? 0)
+                        + (Input.HinhThucDauNoi4_CanhCheo * Input.HinhThucDauNoi4_CCD * Input.HinhThucDauNoi4_CCR * Input.HinhThucDauNoi4_CCC ?? 0);
+
+        double B1000CL = (Input.HinhThucDauNoi5_CanhDai * Input.HinhThucDauNoi5_CDD * Input.HinhThucDauNoi5_CDR * Input.HinhThucDauNoi5_CDC ?? 0)
+                        + (Input.HinhThucDauNoi5_CanhRong * Input.HinhThucDauNoi5_CRD * Input.HinhThucDauNoi5_CRR * Input.HinhThucDauNoi5_CRC ?? 0)
+                        + (Input.HinhThucDauNoi5_CanhCheo * Input.HinhThucDauNoi5_CCD * Input.HinhThucDauNoi5_CCR * Input.HinhThucDauNoi5_CCC ?? 0);
+
+        double d600 = (Input.HinhThucDauNoi6_CanhDai * (3.14 * Input.HinhThucDauNoi6_CDD * Input.HinhThucDauNoi6_CDC / 4) * Input.HinhThucDauNoi6_CDR ?? 0)
+                        + (Input.HinhThucDauNoi6_CanhRong * (3.14 * Input.HinhThucDauNoi6_CRD * Input.HinhThucDauNoi6_CRC / 4) * Input.HinhThucDauNoi6_CRR ?? 0)
+                        + (Input.HinhThucDauNoi6_CanhCheo * (3.14 * Input.HinhThucDauNoi6_CCD * Input.HinhThucDauNoi6_CCC / 4) * Input.HinhThucDauNoi6_CCR ?? 0);
+
+        double B800 = (Input.HinhThucDauNoi7_CanhDai * Input.HinhThucDauNoi7_CDD * Input.HinhThucDauNoi7_CDR * Input.HinhThucDauNoi7_CDC ?? 0)
+                        + (Input.HinhThucDauNoi7_CanhRong * Input.HinhThucDauNoi7_CRD * Input.HinhThucDauNoi7_CRR * Input.HinhThucDauNoi7_CRC ?? 0)
+                        + (Input.HinhThucDauNoi7_CanhCheo * Input.HinhThucDauNoi7_CCD * Input.HinhThucDauNoi7_CCR * Input.HinhThucDauNoi7_CCC ?? 0);
+
+        double B2000 = (Input.HinhThucDauNoi8_CanhDai * Input.HinhThucDauNoi8_CDD * Input.HinhThucDauNoi8_CDR * Input.HinhThucDauNoi8_CDC ?? 0)
+                        + (Input.HinhThucDauNoi8_CanhRong * Input.HinhThucDauNoi8_CRD * Input.HinhThucDauNoi8_CRR * Input.HinhThucDauNoi8_CRC ?? 0)
+                        + (Input.HinhThucDauNoi8_CanhCheo * Input.HinhThucDauNoi8_CCD * Input.HinhThucDauNoi8_CCR * Input.HinhThucDauNoi8_CCC ?? 0);
+
+        result = result + d1500 + d1000 + B1000 + B1000CL + d600 + B800 + B2000;
+
+        result = Math.Round(result, 4);
+        return Math.Round(result, 3);
+    }
+
+    public double KLC_KL(MaTuong Input, string TenHoGaSauPhanLoai)
+    {
+        // Kiểm tra điều kiện đầu tiên
+        if (TenHoGaSauPhanLoai.EndsWith("(BT)"))
+        {
+            return 0;
+        }
+        // Tính tổng dựa trên các điều kiện từ các cột khác nhau
+        double result = (Input.HinhThucDauNoi1_CDD * Input.HinhThucDauNoi1_CDC +
+                        Input.HinhThucDauNoi1_CRD * Input.HinhThucDauNoi1_CRC +
+                        Input.HinhThucDauNoi1_CCD * Input.HinhThucDauNoi1_CCC) ?? 0;
+
+        double d1500 = (Input.HinhThucDauNoi2_CanhDai * (3.14 * Input.HinhThucDauNoi2_CDD * Input.HinhThucDauNoi2_CDC / 4))
+                      + (Input.HinhThucDauNoi2_CanhRong * (3.14 * Input.HinhThucDauNoi2_CRD * Input.HinhThucDauNoi2_CRC / 4))
+                       + (Input.HinhThucDauNoi2_CanhCheo * (3.14 * Input.HinhThucDauNoi2_CCD * Input.HinhThucDauNoi2_CCC / 4)) ?? 0;
+
+        double d1000 = (Input.HinhThucDauNoi3_CanhDai * (3.14 * Input.HinhThucDauNoi3_CDD * Input.HinhThucDauNoi3_CDC / 4))
+                        + (Input.HinhThucDauNoi3_CanhRong * (3.14 * Input.HinhThucDauNoi3_CRD * Input.HinhThucDauNoi3_CRC / 4))
+                        + (Input.HinhThucDauNoi3_CanhCheo * (3.14 * Input.HinhThucDauNoi3_CCD * Input.HinhThucDauNoi3_CCC / 4)) ?? 0;
+
+        double B1000 = (Input.HinhThucDauNoi4_CanhDai * Input.HinhThucDauNoi4_CDD * Input.HinhThucDauNoi4_CDR * Input.HinhThucDauNoi4_CDC)
+                        + (Input.HinhThucDauNoi4_CanhRong * Input.HinhThucDauNoi4_CRD * Input.HinhThucDauNoi4_CRR * Input.HinhThucDauNoi4_CRC)
+                        + (Input.HinhThucDauNoi4_CanhCheo * Input.HinhThucDauNoi4_CCD * Input.HinhThucDauNoi4_CCR * Input.HinhThucDauNoi4_CCC) ?? 0;
+
+        double B1000CL = (Input.HinhThucDauNoi5_CanhDai * Input.HinhThucDauNoi5_CDD * Input.HinhThucDauNoi5_CDR * Input.HinhThucDauNoi5_CDC)
+                        + (Input.HinhThucDauNoi5_CanhRong * Input.HinhThucDauNoi5_CRD * Input.HinhThucDauNoi5_CRR * Input.HinhThucDauNoi5_CRC)
+                        + (Input.HinhThucDauNoi5_CanhCheo * Input.HinhThucDauNoi5_CCD * Input.HinhThucDauNoi5_CCR * Input.HinhThucDauNoi5_CCC) ?? 0;
+
+        double d600 = (Input.HinhThucDauNoi6_CanhDai * (3.14 * Input.HinhThucDauNoi6_CDD * Input.HinhThucDauNoi6_CDC / 4))
+                        + (Input.HinhThucDauNoi6_CanhRong * (3.14 * Input.HinhThucDauNoi6_CRD * Input.HinhThucDauNoi6_CRC / 4))
+                        + (Input.HinhThucDauNoi6_CanhCheo * (3.14 * Input.HinhThucDauNoi6_CCD * Input.HinhThucDauNoi6_CCC / 4)) ?? 0;
+
+        double B800 = (Input.HinhThucDauNoi7_CanhDai * Input.HinhThucDauNoi7_CDD * Input.HinhThucDauNoi7_CDR * Input.HinhThucDauNoi7_CDC)
+                        + (Input.HinhThucDauNoi7_CanhRong * Input.HinhThucDauNoi7_CRD * Input.HinhThucDauNoi7_CRR * Input.HinhThucDauNoi7_CRC)
+                        + (Input.HinhThucDauNoi7_CanhCheo * Input.HinhThucDauNoi7_CCD * Input.HinhThucDauNoi7_CCR * Input.HinhThucDauNoi7_CCC) ?? 0;
+
+        double B2000 = (Input.HinhThucDauNoi8_CanhDai * Input.HinhThucDauNoi8_CDD * Input.HinhThucDauNoi8_CDR * Input.HinhThucDauNoi8_CDC)
+                        + (Input.HinhThucDauNoi8_CanhRong * Input.HinhThucDauNoi8_CRD * Input.HinhThucDauNoi8_CRR * Input.HinhThucDauNoi8_CRC)
+                        + (Input.HinhThucDauNoi8_CanhCheo * Input.HinhThucDauNoi8_CCD * Input.HinhThucDauNoi8_CCR * Input.HinhThucDauNoi8_CCC) ?? 0;
+        // Nhân đôi tổng nếu không có "(BT)" trong `n14`
+        result = result + d1500 + d1000 + B1000 + B1000CL + d600 + B800 + B2000;
+
+        if (TenHoGaSauPhanLoai.EndsWith("(BT)"))
+        {
+            result = result * 2;
+        }
+
+        result = Math.Round(result, 4);
+        return Math.Round(result, 3);
+    }
+
+    public double KLBT_KL(MaTuong Input, string TenHoGaSauPhanLoai)
+    {
+        double result = 0;
+        if (TenHoGaSauPhanLoai.EndsWith("(BT)"))
+        {
+            result = (Input.HinhThucDauNoi1_CanhDai * Input.HinhThucDauNoi1_CDD * Input.HinhThucDauNoi1_CDR * Input.HinhThucDauNoi1_CDC) +
+                 (Input.HinhThucDauNoi1_CanhRong * Input.HinhThucDauNoi1_CRD * Input.HinhThucDauNoi1_CRR * Input.HinhThucDauNoi1_CRC) +
+                 (Input.HinhThucDauNoi1_CanhCheo * Input.HinhThucDauNoi1_CCD * Input.HinhThucDauNoi1_CCR * Input.HinhThucDauNoi1_CCC) ?? 0;
+
+            double d1500 = (Input.HinhThucDauNoi2_CanhDai * (3.14 * Input.HinhThucDauNoi2_CDD * Input.HinhThucDauNoi2_CDC / 4) * Input.HinhThucDauNoi2_CDR)
+                         + (Input.HinhThucDauNoi2_CanhRong * (3.14 * Input.HinhThucDauNoi2_CRD * Input.HinhThucDauNoi2_CRC / 4) * Input.HinhThucDauNoi2_CRR)
+                          + (Input.HinhThucDauNoi2_CanhCheo * (3.14 * Input.HinhThucDauNoi2_CCD * Input.HinhThucDauNoi2_CCC / 4) * Input.HinhThucDauNoi2_CCR) ?? 0;
+
+            double d1000 = (Input.HinhThucDauNoi3_CanhDai * (3.14 * Input.HinhThucDauNoi3_CDD * Input.HinhThucDauNoi3_CDC / 4) * Input.HinhThucDauNoi3_CDR)
+                            + (Input.HinhThucDauNoi3_CanhRong * (3.14 * Input.HinhThucDauNoi3_CRD * Input.HinhThucDauNoi3_CRC / 4) * Input.HinhThucDauNoi3_CRR)
+                            + (Input.HinhThucDauNoi3_CanhCheo * (3.14 * Input.HinhThucDauNoi3_CCD * Input.HinhThucDauNoi3_CCC / 4) * Input.HinhThucDauNoi3_CCR) ?? 0;
+
+            double B1000 = (Input.HinhThucDauNoi4_CanhDai * Input.HinhThucDauNoi4_CDD * Input.HinhThucDauNoi4_CDR * Input.HinhThucDauNoi4_CDC)
+                            + (Input.HinhThucDauNoi4_CanhRong * Input.HinhThucDauNoi4_CRD * Input.HinhThucDauNoi4_CRR * Input.HinhThucDauNoi4_CRC)
+                            + (Input.HinhThucDauNoi4_CanhCheo * Input.HinhThucDauNoi4_CCD * Input.HinhThucDauNoi4_CCR * Input.HinhThucDauNoi4_CCC) ?? 0;
+
+            double B1000CL = (Input.HinhThucDauNoi5_CanhDai * Input.HinhThucDauNoi5_CDD * Input.HinhThucDauNoi5_CDR * Input.HinhThucDauNoi5_CDC)
+                            + (Input.HinhThucDauNoi5_CanhRong * Input.HinhThucDauNoi5_CRD * Input.HinhThucDauNoi5_CRR * Input.HinhThucDauNoi5_CRC)
+                            + (Input.HinhThucDauNoi5_CanhCheo * Input.HinhThucDauNoi5_CCD * Input.HinhThucDauNoi5_CCR * Input.HinhThucDauNoi5_CCC) ?? 0;
+
+            double D600 = (Input.HinhThucDauNoi6_CanhDai * (3.14 * Input.HinhThucDauNoi6_CDD * Input.HinhThucDauNoi6_CDC / 4) * Input.HinhThucDauNoi4_CDR)
+                            + (Input.HinhThucDauNoi6_CanhRong * (3.14 * Input.HinhThucDauNoi6_CRD * Input.HinhThucDauNoi6_CRC / 4) * Input.HinhThucDauNoi4_CRR)
+                            + (Input.HinhThucDauNoi6_CanhCheo * (3.14 * Input.HinhThucDauNoi6_CCD * Input.HinhThucDauNoi6_CCC / 4) * Input.HinhThucDauNoi4_CCR) ?? 0;
+
+            double B800 = (Input.HinhThucDauNoi7_CanhDai * Input.HinhThucDauNoi7_CDD * Input.HinhThucDauNoi7_CDR * Input.HinhThucDauNoi7_CDC)
+                            + (Input.HinhThucDauNoi7_CanhRong * Input.HinhThucDauNoi7_CRD * Input.HinhThucDauNoi7_CRR * Input.HinhThucDauNoi7_CRC)
+                            + (Input.HinhThucDauNoi7_CanhCheo * Input.HinhThucDauNoi7_CCD * Input.HinhThucDauNoi7_CCR * Input.HinhThucDauNoi7_CCC) ?? 0;
+
+            double B2000 = (Input.HinhThucDauNoi8_CanhDai * Input.HinhThucDauNoi8_CDD * Input.HinhThucDauNoi8_CDR * Input.HinhThucDauNoi8_CDC)
+                            + (Input.HinhThucDauNoi8_CanhRong * Input.HinhThucDauNoi8_CRD * Input.HinhThucDauNoi8_CRR * Input.HinhThucDauNoi8_CRC)
+                            + (Input.HinhThucDauNoi8_CanhCheo * Input.HinhThucDauNoi8_CCD * Input.HinhThucDauNoi8_CCR * Input.HinhThucDauNoi8_CCC) ?? 0;
+            result = result + d1500 + d1000 + B1000 + B1000CL + D600 + B800 + B2000;
+        }
+        else
+        {
+            result = 0;
+        }
+
+        result = Math.Round(result, 4);
+        return Math.Round(result, 3);
+    }
+
+    public double KLVK_KL(MaTuong Input, string TenHoGaSauPhanLoai)
+    {
+        double result = 0;
+        if (!TenHoGaSauPhanLoai.EndsWith("(BT)"))
+        {
+            return 0;
+        }
+        result = (Input.HinhThucDauNoi1_CDD * Input.HinhThucDauNoi1_CDC + Input.HinhThucDauNoi1_CRD * Input.HinhThucDauNoi1_CRC + Input.HinhThucDauNoi1_CCD * Input.HinhThucDauNoi1_CCC ?? 0);
+        double D1500 = (Input.HinhThucDauNoi2_CanhDai * (3.14 * Input.HinhThucDauNoi2_CDD * Input.HinhThucDauNoi2_CDC / 4)) +
+                             (Input.HinhThucDauNoi2_CanhRong * (3.14 * Input.HinhThucDauNoi2_CRD * Input.HinhThucDauNoi2_CRC / 4)) +
+                             (Input.HinhThucDauNoi2_CanhCheo * (3.14 * Input.HinhThucDauNoi2_CCD * Input.HinhThucDauNoi2_CCC / 4)) ?? 0;
+
+        double D1000 = (Input.HinhThucDauNoi3_CanhDai * (3.14 * Input.HinhThucDauNoi3_CDD * Input.HinhThucDauNoi3_CDC / 4)) +
+                         (Input.HinhThucDauNoi3_CanhRong * (3.14 * Input.HinhThucDauNoi3_CRD * Input.HinhThucDauNoi3_CRC / 4)) +
+                         (Input.HinhThucDauNoi3_CanhCheo * (3.14 * Input.HinhThucDauNoi3_CCD * Input.HinhThucDauNoi3_CCC / 4)) ?? 0;
+
+        double D600 = (Input.HinhThucDauNoi6_CanhDai * (3.14 * Input.HinhThucDauNoi6_CDD * Input.HinhThucDauNoi6_CDC / 4)) +
+                         (Input.HinhThucDauNoi6_CanhRong * (3.14 * Input.HinhThucDauNoi6_CRD * Input.HinhThucDauNoi6_CRC / 4)) +
+                         (Input.HinhThucDauNoi6_CanhCheo * (3.14 * Input.HinhThucDauNoi6_CCD * Input.HinhThucDauNoi6_CCC / 4)) ?? 0;
+
+        double B1000 = (Input.HinhThucDauNoi4_CanhDai * Input.HinhThucDauNoi4_CDD * Input.HinhThucDauNoi4_CDC)
+                        + (Input.HinhThucDauNoi4_CanhRong * Input.HinhThucDauNoi4_CRD * Input.HinhThucDauNoi4_CRC)
+                         + (Input.HinhThucDauNoi4_CanhCheo * Input.HinhThucDauNoi4_CCD * Input.HinhThucDauNoi4_CCC) ?? 0;
+        double B1000CL = (Input.HinhThucDauNoi5_CanhDai * Input.HinhThucDauNoi5_CDD * Input.HinhThucDauNoi5_CDC)
+                        + (Input.HinhThucDauNoi5_CanhRong * Input.HinhThucDauNoi5_CRD * Input.HinhThucDauNoi5_CRC)
+                         + (Input.HinhThucDauNoi5_CanhCheo * Input.HinhThucDauNoi5_CCD * Input.HinhThucDauNoi5_CCC) ?? 0;
+        double B800 = (Input.HinhThucDauNoi7_CanhDai * Input.HinhThucDauNoi7_CDD * Input.HinhThucDauNoi7_CDC)
+                         + (Input.HinhThucDauNoi7_CanhRong * Input.HinhThucDauNoi7_CRD * Input.HinhThucDauNoi7_CRC)
+                          + (Input.HinhThucDauNoi7_CanhCheo * Input.HinhThucDauNoi7_CCD * Input.HinhThucDauNoi7_CCC) ?? 0;
+        double B2000 = (Input.HinhThucDauNoi8_CanhDai * Input.HinhThucDauNoi8_CDD * Input.HinhThucDauNoi8_CDC)
+                        + (Input.HinhThucDauNoi8_CanhRong * Input.HinhThucDauNoi8_CRD * Input.HinhThucDauNoi8_CRC)
+                         + (Input.HinhThucDauNoi8_CanhCheo * Input.HinhThucDauNoi8_CCD * Input.HinhThucDauNoi8_CCC) ?? 0;
+
+        if (TenHoGaSauPhanLoai.EndsWith("(BT)"))
+        {
+            result = (result + D1500 + D1000 + D600 + B1000 + B1000CL + B800 + B2000) * 2;
+        }
+        else
+        {
+            result = result + D1500 + D1000 + D600 + B1000 + B1000CL + B800 + B2000;
+        }
+
+        result = Math.Round(result, 4);
+        return Math.Round(result, 3);
+    }
+
+    public double KLS_KL(MaTuong Input, string TenHoGaSauPhanLoai)
+    {
+        double result = 0;
+        if (TenHoGaSauPhanLoai.EndsWith("(BT)"))
+        {
+            return 0;
+        }
+
+        result = ((Input.HinhThucDauNoi1_CanhDai * Input.HinhThucDauNoi1_CDD * Input.HinhThucDauNoi1_CDR) + (Input.HinhThucDauNoi1_CDR * Input.HinhThucDauNoi1_CDC * 2)) ?? 0 +
+                 ((Input.HinhThucDauNoi1_CanhRong * Input.HinhThucDauNoi1_CRD * Input.HinhThucDauNoi1_CRR) + (Input.HinhThucDauNoi1_CanhRong * Input.HinhThucDauNoi1_CRR * Input.HinhThucDauNoi1_CRC * 2)) +
+                 ((Input.HinhThucDauNoi1_CanhCheo * Input.HinhThucDauNoi1_CCD * Input.HinhThucDauNoi1_CCR) + (Input.HinhThucDauNoi1_CanhCheo * Input.HinhThucDauNoi1_CCR * Input.HinhThucDauNoi1_CCC)) ?? 0;
+
+        double B1000 = (Input.HinhThucDauNoi4_KLBoSung == IdDMCo) ? (Input.HinhThucDauNoi4_CanhDai * Input.HinhThucDauNoi4_CDD * Input.HinhThucDauNoi4_CDR) +
+            (Input.HinhThucDauNoi4_CanhDai * Input.HinhThucDauNoi4_CDR * Input.HinhThucDauNoi4_CDC * 2) +
+            (Input.HinhThucDauNoi4_CanhRong * Input.HinhThucDauNoi4_CRD * Input.HinhThucDauNoi4_CRR) +
+            (Input.HinhThucDauNoi4_CanhRong * Input.HinhThucDauNoi4_CRR * Input.HinhThucDauNoi4_CRC * 2) +
+            (Input.HinhThucDauNoi4_CanhCheo * Input.HinhThucDauNoi4_CCD * Input.HinhThucDauNoi4_CCR) +
+            (Input.HinhThucDauNoi4_CanhCheo * Input.HinhThucDauNoi4_CCR * Input.HinhThucDauNoi4_CCC * 2) ?? 0 : 0;
+
+        double B1000CL = (Input.HinhThucDauNoi5_KLBoSung == IdDMCo) ? (Input.HinhThucDauNoi5_CanhDai * Input.HinhThucDauNoi5_CDD * Input.HinhThucDauNoi5_CDR) +
+            (Input.HinhThucDauNoi5_CanhDai * Input.HinhThucDauNoi5_CDR * Input.HinhThucDauNoi5_CDC * 2) +
+            (Input.HinhThucDauNoi5_CanhRong * Input.HinhThucDauNoi5_CRD * Input.HinhThucDauNoi5_CRR) +
+            (Input.HinhThucDauNoi5_CanhRong * Input.HinhThucDauNoi5_CRR * Input.HinhThucDauNoi5_CRC * 2) +
+            (Input.HinhThucDauNoi5_CanhCheo * Input.HinhThucDauNoi5_CCD * Input.HinhThucDauNoi5_CCR) +
+            (Input.HinhThucDauNoi5_CanhCheo * Input.HinhThucDauNoi5_CCR * Input.HinhThucDauNoi5_CCC * 2) ?? 0 : 0;
+
+        double B800 = (Input.HinhThucDauNoi7_KLBoSung == IdDMCo) ? (Input.HinhThucDauNoi7_CanhDai * Input.HinhThucDauNoi7_CDD * Input.HinhThucDauNoi7_CDR) +
+            (Input.HinhThucDauNoi7_CanhDai * Input.HinhThucDauNoi7_CDR * Input.HinhThucDauNoi7_CDC * 2) +
+            (Input.HinhThucDauNoi7_CanhRong * Input.HinhThucDauNoi7_CRD * Input.HinhThucDauNoi7_CRR) +
+            (Input.HinhThucDauNoi7_CanhRong * Input.HinhThucDauNoi7_CRR * Input.HinhThucDauNoi7_CRC * 2) +
+            (Input.HinhThucDauNoi7_CanhCheo * Input.HinhThucDauNoi7_CCD * Input.HinhThucDauNoi7_CCR) +
+            (Input.HinhThucDauNoi7_CanhCheo * Input.HinhThucDauNoi7_CCR * Input.HinhThucDauNoi7_CCC * 2) ?? 0 : 0;
+
+        double B2000 = (Input.HinhThucDauNoi8_KLBoSung == IdDMCo) ? (Input.HinhThucDauNoi8_CanhDai * Input.HinhThucDauNoi8_CDD * Input.HinhThucDauNoi8_CDR) +
+           (Input.HinhThucDauNoi8_CanhDai * Input.HinhThucDauNoi8_CDR * Input.HinhThucDauNoi8_CDC * 2) +
+           (Input.HinhThucDauNoi8_CanhRong * Input.HinhThucDauNoi8_CRD * Input.HinhThucDauNoi8_CRR) +
+           (Input.HinhThucDauNoi8_CanhRong * Input.HinhThucDauNoi8_CRR * Input.HinhThucDauNoi8_CRC * 2) +
+           (Input.HinhThucDauNoi8_CanhCheo * Input.HinhThucDauNoi8_CCD * Input.HinhThucDauNoi8_CCR) +
+           (Input.HinhThucDauNoi8_CanhCheo * Input.HinhThucDauNoi8_CCR * Input.HinhThucDauNoi8_CCC * 2) ?? 0 : 0;
+
+        result = result + B1000 + B1000CL + B800 + B2000;
+        result = Math.Round(result, 4);
+        return Math.Round(result, 3);
+    }
+
+    public double KLS_KL1(MaTuong Input, string TenHoGaSauPhanLoai)
+    {
+        double result = 0;
+        double B1000 = (Input.HinhThucDauNoi4_KLBoSung == IdDMCo) ? (Input.HinhThucDauNoi4_CanhDai * Input.HinhThucDauNoi4_CDD * Input.HinhThucDauNoi4_CDR) +
+              (Input.HinhThucDauNoi4_CanhDai * Input.HinhThucDauNoi4_CDR * Input.HinhThucDauNoi4_CDC * 2) +
+              (Input.HinhThucDauNoi4_CanhRong * Input.HinhThucDauNoi4_CRD * Input.HinhThucDauNoi4_CRR) +
+              (Input.HinhThucDauNoi4_CanhRong * Input.HinhThucDauNoi4_CRR * Input.HinhThucDauNoi4_CRC * 2) +
+              (Input.HinhThucDauNoi4_CanhCheo * Input.HinhThucDauNoi4_CCD * Input.HinhThucDauNoi4_CCR) +
+              (Input.HinhThucDauNoi4_CanhCheo * Input.HinhThucDauNoi4_CCR * Input.HinhThucDauNoi4_CCC * 2) ?? 0 : 0;
+
+        double B1000CL = (Input.HinhThucDauNoi5_KLBoSung == IdDMCo) ? (Input.HinhThucDauNoi5_CanhDai * Input.HinhThucDauNoi5_CDD * Input.HinhThucDauNoi5_CDR) +
+            (Input.HinhThucDauNoi5_CanhDai * Input.HinhThucDauNoi5_CDR * Input.HinhThucDauNoi5_CDC * 2) +
+            (Input.HinhThucDauNoi5_CanhRong * Input.HinhThucDauNoi5_CRD * Input.HinhThucDauNoi5_CRR) +
+            (Input.HinhThucDauNoi5_CanhRong * Input.HinhThucDauNoi5_CRR * Input.HinhThucDauNoi5_CRC * 2) +
+            (Input.HinhThucDauNoi5_CanhCheo * Input.HinhThucDauNoi5_CCD * Input.HinhThucDauNoi5_CCR) +
+            (Input.HinhThucDauNoi5_CanhCheo * Input.HinhThucDauNoi5_CCR * Input.HinhThucDauNoi5_CCC * 2) ?? 0 : 0;
+
+        double B800 = (Input.HinhThucDauNoi7_KLBoSung == IdDMCo) ? (Input.HinhThucDauNoi7_CanhDai * Input.HinhThucDauNoi7_CDD * Input.HinhThucDauNoi7_CDR) +
+            (Input.HinhThucDauNoi7_CanhDai * Input.HinhThucDauNoi7_CDR * Input.HinhThucDauNoi7_CDC * 2) +
+            (Input.HinhThucDauNoi7_CanhRong * Input.HinhThucDauNoi7_CRD * Input.HinhThucDauNoi7_CRR) +
+            (Input.HinhThucDauNoi7_CanhRong * Input.HinhThucDauNoi7_CRR * Input.HinhThucDauNoi7_CRC * 2) +
+            (Input.HinhThucDauNoi7_CanhCheo * Input.HinhThucDauNoi7_CCD * Input.HinhThucDauNoi7_CCR) +
+            (Input.HinhThucDauNoi7_CanhCheo * Input.HinhThucDauNoi7_CCR * Input.HinhThucDauNoi7_CCC * 2) ?? 0 : 0;
+
+        double B2000 = (Input.HinhThucDauNoi8_KLBoSung == IdDMCo) ? (Input.HinhThucDauNoi8_CanhDai * Input.HinhThucDauNoi8_CDD * Input.HinhThucDauNoi8_CDR) +
+           (Input.HinhThucDauNoi8_CanhDai * Input.HinhThucDauNoi8_CDR * Input.HinhThucDauNoi8_CDC * 2) +
+           (Input.HinhThucDauNoi8_CanhRong * Input.HinhThucDauNoi8_CRD * Input.HinhThucDauNoi8_CRR) +
+           (Input.HinhThucDauNoi8_CanhRong * Input.HinhThucDauNoi8_CRR * Input.HinhThucDauNoi8_CRC * 2) +
+           (Input.HinhThucDauNoi8_CanhCheo * Input.HinhThucDauNoi8_CCD * Input.HinhThucDauNoi8_CCR) +
+           (Input.HinhThucDauNoi8_CanhCheo * Input.HinhThucDauNoi8_CCR * Input.HinhThucDauNoi8_CCC * 2) ?? 0 : 0;
+        if (TenHoGaSauPhanLoai.EndsWith("(BT)"))
+        {
+            result = ((Input.HinhThucDauNoi1_CanhDai * Input.HinhThucDauNoi1_CDD * Input.HinhThucDauNoi1_CDR) +
+                     (Input.HinhThucDauNoi1_CDR * Input.HinhThucDauNoi1_CDC * 2)) +
+                     ((Input.HinhThucDauNoi1_CanhRong * Input.HinhThucDauNoi1_CRD * Input.HinhThucDauNoi1_CRR) +
+                     (Input.HinhThucDauNoi1_CanhRong * Input.HinhThucDauNoi1_CRD * Input.HinhThucDauNoi1_CRR * Input.HinhThucDauNoi1_CRC * 2)) +
+                     ((Input.HinhThucDauNoi1_CanhCheo * Input.HinhThucDauNoi1_CCD * Input.HinhThucDauNoi1_CCR) +
+                     (Input.HinhThucDauNoi1_CanhCheo * Input.HinhThucDauNoi1_CCD * Input.HinhThucDauNoi1_CCR * Input.HinhThucDauNoi1_CCC)) ?? 0;
+
+
+
+            result = result + B1000 + B1000CL + B800 + B2000;
+        }
+        else
+        {
+            result = (Input.HinhThucDauNoi1_CanhDai * Input.HinhThucDauNoi1_CDD * Input.HinhThucDauNoi1_CDR) +
+                    (Input.HinhThucDauNoi1_CanhRong * Input.HinhThucDauNoi1_CRD * Input.HinhThucDauNoi1_CRR) +
+                    (Input.HinhThucDauNoi1_CanhCheo * Input.HinhThucDauNoi1_CCD * Input.HinhThucDauNoi1_CCR) ?? 0;
+
+            result = result + B1000 + B1000CL + B800 + B2000;
+        }
+
+        result = Math.Round(result, 4);
+        return Math.Round(result, 3);
+    }
+
 }
