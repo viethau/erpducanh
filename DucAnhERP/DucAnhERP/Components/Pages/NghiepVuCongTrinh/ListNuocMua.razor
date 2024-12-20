@@ -7,6 +7,7 @@
 @* @using Microsoft.AspNetCore.Authorization *@
 @using DucAnhERP.Helpers
 @inject NavigationManager navigation
+@inject IJSRuntime JSRuntime
 @inject INuocMuaRepository NuocMuaRepository
 @inject IDanhMucRepository DanhMucRepository
 @inject IPhanLoaiHoGaRepository PhanLoaiHoGaRepository
@@ -60,7 +61,7 @@
         </div>
     </div>
 
-    <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
+    <EditForm  Model="InputMD" FormName="Search" OnValidSubmit="@Search">
         <DataAnnotationsValidator />
         <div class="row ">
             <!-- Select for nhóm danh mục-->
@@ -103,7 +104,9 @@
 
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
         <BodyTemplate>
-            <EditForm Model="Input" method="post" FormName="Thêm mới" OnValidSubmit="HandleValidSubmit">
+            <EditForm id="editFormId" Model="Input" method="post" OnInvalidSubmit="HandleInValidSubmit" OnValidSubmit="HandleValidSubmit">
+                 <DataAnnotationsValidator />
+                 <ValidationSummary />
                 <div>
                     <div>
                         <div class="row">
@@ -3132,18 +3135,15 @@
                             </div>
                         </div>
                     </div>
-                    <DataAnnotationsValidator />
-                    <ValidationSummary />
-                    <div class="row my-5 d-flex justify-content-end">
-                        <div>
-                            <button type="submit" class="btn btn-primary btn-sm btn-block">@TitleModal</button>
-                        </div>
-                    </div>
                 </div>
-
             </EditForm>
         </BodyTemplate>
-
+        <FooterTemplate>
+            <div class="d-flex justify-content-end pr-5 py-3 modal-footer-with-border">
+                <button class="btn btn-primary mr-2" type="submit" form="editFormId">@TitleModal</button>
+                <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+            </div>
+        </FooterTemplate>
     </CustomModal>
     <div id="tableContainer ">
         <div class="our-table @layoutClass">
@@ -10741,7 +10741,10 @@
 
     }
 
-
+    private async Task HandleInValidSubmit()
+    {
+       await JSRuntime.InvokeVoidAsync("scrollToFirstError");
+    }
 
     private async Task HandleValidSubmit()
     {

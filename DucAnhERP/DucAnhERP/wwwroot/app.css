@@ -139,6 +139,12 @@ table td{
     flex-grow: 1;
 }
 
+.modal-footer-with-border {
+    border-top: 1px solid #dee2e6; 
+    padding-top: 10px; 
+    background-color: #f8f9fa; 
+}
+
 .select2-selection {
     height: calc(2.25rem + 2px) !important;
     display: flex !important;

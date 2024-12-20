@@ -55,6 +55,7 @@ namespace DucAnhERP.Services
                             select new PKKLModel
                             {
                                 Id = a.Id,
+                                Flag =a.Flag,
                                 LoaiCauKien = b.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
                                 LoaiCauKienId = a.ThongTinTamDanHoGa2_PhanLoaiDayHoGa,
                                 LoaiBeTong = a.LoaiBeTong,
@@ -202,7 +203,6 @@ namespace DucAnhERP.Services
                 // Duyệt qua từng tuyến đường trong danh sách `nuocMua`
                 foreach (var item in nuocMua)
                 {
-
                     var query = await (from a in context.PKKLCTietTDHGs
                                        join b in context.PhanLoaiTDHoGas
                                            on a.ThongTinTamDanHoGa2_PhanLoaiDayHoGa equals b.Id
@@ -219,9 +219,9 @@ namespace DucAnhERP.Services
                                            a.DonVi,
                                            a.TKLCK_SauCC,
                                            a.HangMuc,
-                                           a.CreateAt
+                                           a.Flag
                                        } into g
-                                       orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, g.Key.HangMuc, g.Key.CreateAt
+                                       orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, g.Key.HangMuc, g.Key.Flag
                                        select new THKLModel
                                        {
                                            Id = g.Key.Id,
@@ -418,7 +418,7 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
             }
         }
-        public async Task<string> InsertLaterFlag(PKKLCTietTDHG entity, int FlagLast)
+        public async Task<string> InsertLaterFlag(PKKLCTietTDHG entity, int FlagLast, bool insertBefore)
         {
             string id = "";
             try
@@ -432,7 +432,9 @@ namespace DucAnhERP.Services
 
                 // Bước 1: Lấy danh sách các bản ghi có flag > FlagLast
                 var recordsToUpdate = await context.PKKLCTietTDHGs
-                    .Where(x => x.Flag > FlagLast && x.ThongTinTamDanHoGa2_PhanLoaiDayHoGa == entity.ThongTinTamDanHoGa2_PhanLoaiDayHoGa && x.HangMuc == entity.HangMuc)
+                    .Where(x => (insertBefore ? x.Flag >= FlagLast : x.Flag > FlagLast) 
+                    && x.ThongTinTamDanHoGa2_PhanLoaiDayHoGa == entity.ThongTinTamDanHoGa2_PhanLoaiDayHoGa 
+                    && x.HangMuc == entity.HangMuc)
                     .ToListAsync();
 
                 // Bước 2: Tăng giá trị flag của các bản ghi đó thêm 1
@@ -457,7 +459,7 @@ namespace DucAnhERP.Services
                 }
                 else
                 {
-                    entity.Flag = FlagLast + 1;
+                    entity.Flag = insertBefore ? FlagLast : FlagLast + 1;
                 }
 
                 // Bước 4: Chèn bản ghi mới vào bảng

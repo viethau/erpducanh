@@ -5,6 +5,7 @@
 @using DucAnhERP.Components.Pages.Common
 @using System.Linq
 @using DucAnhERP.SeedWork
+@inject IJSRuntime JSRuntime
 @* @using Microsoft.AspNetCore.Authorization *@
 @inject IDanhMucRepository DanhMucRepository
 @inject IPhanLoaiTDanTDanRepository PhanLoaiTDanTDanRepository
@@ -16,7 +17,9 @@
 <div class="m-4">
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
         <BodyTemplate>
-            <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
+            <EditForm Model="Input" id="editFormId" OnInvalidSubmit="HandleInValidSubmit" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
                 <div class="row">
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="TTTDCongHoRanh_TenLoaiTamDanTieuChuan">Tên loại tấm đan  <span class="text-danger">*</span></label>
@@ -83,15 +86,14 @@
                         <ValidationMessage For="() => Input.TTTDCongHoRanh_CCao" class="text-danger" />
                     </div>
                 </div>
-
-                <DataAnnotationsValidator />
-                <ValidationSummary />
-                <div class="row mt-5 justify-content-end">
-                    <button class="btn btn-primary mr-2" type="submit">Save</button>
-                    <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
-                </div>
             </EditForm>
         </BodyTemplate>
+        <FooterTemplate>
+            <div class="d-flex justify-content-end pr-5 py-3 modal-footer-with-border">
+                <button class="btn btn-primary mr-2" type="submit" form="editFormId">Save</button>
+                <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+            </div>
+        </FooterTemplate>
     </CustomModal>
 
     <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
@@ -362,6 +364,12 @@
         listPLTDTDModel = Paging(plhg);
         isLoading = false;
     }
+
+    private async Task HandleInValidSubmit()
+    {
+        await JSRuntime.InvokeVoidAsync("scrollToFirstError");
+    }
+
 
     private async Task HandleValidSubmit()
     {

@@ -156,6 +156,7 @@ namespace DucAnhERP.Services
                              equals c.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai into cGroup
                              from c in cGroup.DefaultIfEmpty()
                              where c.ThongTinLyTrinh_TuyenDuong == TuyenDuong
+                             orderby a.Flag ascending
                              group new { a, c } by new
                              {
                                  a.Id,
@@ -212,7 +213,7 @@ namespace DucAnhERP.Services
                                        join c in context.DSNuocMua
                                            on a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai equals c.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai into cGroup
                                        from c in cGroup.Where(c => c.ThongTinLyTrinh_TuyenDuong == item.ThongTinLyTrinh_TuyenDuong).DefaultIfEmpty()
-
+                                       orderby a.Flag ascending
                                        group new { a, b, c } by new
                                        {
                                            a.Id,
@@ -257,7 +258,6 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-
         public async Task<PKKLCTron> GetTKLCK_SauCCByLCK(string id)
         {
             using var context = _context.CreateDbContext();
@@ -270,7 +270,6 @@ namespace DucAnhERP.Services
 
             return result;
         }
-
         public async Task<double> GetSumTKLCK_SauCCByLCK(string id)
         {
             using var context = _context.CreateDbContext();
@@ -371,8 +370,6 @@ namespace DucAnhERP.Services
                 throw;
             }
         }
-
-
         public async Task DeleteById(string id)
         {
             using var context = _context.CreateDbContext();
@@ -430,7 +427,7 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
             }
         }
-        public async Task<string> InsertLaterFlag(PKKLCTron entity, int FlagLast)
+        public async Task<string> InsertLaterFlag(PKKLCTron entity, int FlagLast, bool insertBefore)
         {
             string id = "";
             try
@@ -444,7 +441,9 @@ namespace DucAnhERP.Services
 
                 // Bước 1: Lấy danh sách các bản ghi có flag > FlagLast
                 var recordsToUpdate = await context.PKKLCTrons
-                    .Where(x => x.Flag > FlagLast && x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai && x.HangMuc == entity.HangMuc)
+                    .Where(x => (insertBefore ? x.Flag >= FlagLast : x.Flag > FlagLast) 
+                    && x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai 
+                    && x.HangMuc == entity.HangMuc)
                     .ToListAsync();
 
                 // Bước 2: Tăng giá trị flag của các bản ghi đó thêm 1
@@ -469,7 +468,7 @@ namespace DucAnhERP.Services
                 }
                 else
                 {
-                    entity.Flag = FlagLast + 1;
+                    entity.Flag = insertBefore ? FlagLast : FlagLast + 1;
                 }
 
                 // Bước 4: Chèn bản ghi mới vào bảng
@@ -487,8 +486,6 @@ namespace DucAnhERP.Services
                 return id;
             }
         }
-
-
         public async Task SaveChanges(ApplicationDbContext context)
         {
             try

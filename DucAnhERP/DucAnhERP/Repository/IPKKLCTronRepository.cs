@@ -5,7 +5,7 @@ namespace DucAnhERP.Repository
 {
     public interface IPKKLCTronRepository :IBaseRepository<PKKLCTron>
     {
-        Task<string> InsertLaterFlag(PKKLCTron entity, int FlagLast);
+        Task<string> InsertLaterFlag(PKKLCTron entity, int FlagLast, bool insertBefore);
         Task<List<PKKLModel>> GetAllByVM(PKKLModel mModel);
         Task<List<PKKLCTron>> GetExist(PKKLCTron searchData);
         Task<PKKLCTron> GetTKLCK_SauCCByLCK(string id);

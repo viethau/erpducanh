@@ -6,6 +6,7 @@
 @using DucAnhERP.SeedWork
 @using DucAnhERP.Helpers
 @inject NavigationManager navigation
+@inject IJSRuntime JSRuntime
 @inject ITKThepMongCTronRepository TKThepMongCTronRepository
 @inject INuocMuaRepository NuocMuaRepository
 @inject IDanhMucRepository DanhMucRepository
@@ -93,7 +94,7 @@
 
         <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
             <BodyTemplate>
-                <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
+                <EditForm Model="Input" id="editFormId" OnInvalidSubmit="HandleInValidSubmit" OnValidSubmit="HandleValidSubmit">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
                     <div class="row">
@@ -183,13 +184,14 @@
                             <ValidationMessage For="() => Input.TongTrongLuong" class="text-danger" />
                          </div>
                     </div>
-                    
-                    <div class="row justify-content-end m-2">
-                        <button class="btn btn-primary mr-2" type="submit">Save</button>
-                        <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
-                    </div>
                 </EditForm>
             </BodyTemplate>
+            <FooterTemplate>
+                <div class="d-flex justify-content-end pr-5 py-3 modal-footer-with-border">
+                    <button class="btn btn-primary mr-2" type="submit" form="editFormId">Save</button>
+                    <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+                </div>
+            </FooterTemplate>
         </CustomModal>
     </div>
 
@@ -705,9 +707,13 @@
 
     }
 
+    private async Task HandleInValidSubmit()
+    {
+        await JSRuntime.InvokeVoidAsync("scrollToFirstError");
+    }
+
     private async Task HandleValidSubmit()
     {
-
         try
         {
             await Caculate();

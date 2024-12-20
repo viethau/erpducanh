@@ -6,6 +6,7 @@
 @using DucAnhERP.SeedWork
 @using DucAnhERP.Helpers
 @inject NavigationManager navigation
+@inject IJSRuntime JSRuntime
 @inject IPKKLMongCTronRepository PKKLMongCTronRepository
 @inject ITKThepMongCTronRepository TKThepMongCTronRepository
 @inject INuocMuaRepository NuocMuaRepository
@@ -30,7 +31,7 @@
     <div class="mt-3">
         <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
             <BodyTemplate>
-                <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
+                <EditForm Model="Input" id="editFormId" OnInvalidSubmit="HandleInValidSubmit" OnValidSubmit="HandleValidSubmit">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
                     <div>
@@ -38,7 +39,7 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="Table">Loại cấu kiện</label>
-                                <Select2 Id="select1" Items="@selectLCK" OnChange="@OnSelectChangeLCK"></Select2>
+                                <Select2 Id="select1" disabled="@isInsert" Items="@selectLCK" OnChange="@OnSelectChangeLCK"></Select2>
                                 <ValidationMessage For="()=>Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop"></ValidationMessage>
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
@@ -51,7 +52,7 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="HangMuc">Hạng mục <span></span></label>
-                                <Select2 Id="select3" Items="@selectHMTC" OnChange="@OnSelectChangeHMTC"></Select2>
+                                <Select2 Id="select3" disabled="@isInsert" Items="@selectHMTC" OnChange="@OnSelectChangeHMTC"></Select2>
                                 <validationmessage for="()=>Input.HangMuc"></validationmessage>
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
@@ -184,24 +185,25 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="row justify-content-end m-2">
-                        @if (isLoadingCaculate)
-                        {
-                            <button class="btn btn-primary mr-2" type="button" readonly>
-                                <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
-                                Loading...
-                            </button>
-                        }
-                        else
-                        {
-                            <button class="btn btn-primary mr-2" type="submit">Save</button>
-                        }
-
-                        <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
-                    </div>
                 </EditForm>
             </BodyTemplate>
+            <FooterTemplate>
+                <div class="d-flex justify-content-end pr-5 py-3 modal-footer-with-border">
+                    @if (isLoadingCaculate)
+                    {
+                        <button class="btn btn-primary mr-2" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-primary mr-2" type="submit" form="editFormId">Save</button>
+                    }
+
+                    <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+                </div>
+            </FooterTemplate>
         </CustomModal>
     </div>
     <div class="row m-3 ">
@@ -312,9 +314,13 @@
                                                         <button class="btn btn-sm btn-primary m-1" title="Sửa" @onclick="()=>HandleEdit(item.Id)">
                                                             <i class="fas fa-edit"></i>
                                                         </button>
-                                                        <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
-                                                            <i class="fas fa-plus"></i>
-                                                        </button>
+                                                        <div class="btn btn-sm p-0">
+                                                            <div class="d-flex flex-column align-items-center">
+                                                                <i class="fa fa-angle-up btn-top" @onclick="()=>InsertLaterFlag(item ,true)" title="Thêm vào trước" aria-hidden="true"></i>
+                                                                <i class="fa fa-angle-down btn-down" @onclick="()=>InsertLaterFlag(item,false)" title="Thêm vào sau" aria-hidden="true"></i>
+
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </td>
                                                 <td>@stt</td>
@@ -671,6 +677,12 @@
 
     }
 
+    private async Task HandleInValidSubmit()
+    {
+        await JSRuntime.InvokeVoidAsync("scrollToFirstError");
+    }
+
+
     private async Task HandleValidSubmit()
     {
 
@@ -738,10 +750,10 @@
                 {
                     if (listExist == null || listExist.Count == 0)
                     {
-                        if (Flag > 0)
+                        if (insertFlagItem.Flag > 0)
                         {
                             // Thêm mới thông tin
-                            var id = await PKKLMongCTronRepository.InsertLaterFlag(Input, Flag);
+                            var id = await PKKLMongCTronRepository.InsertLaterFlag(Input, insertFlagItem.Flag, insertBefore);
                             isModalVisible = false;
                             Input = new PKKLMongCTron();
                             ToastService.ShowToast(
@@ -752,8 +764,9 @@
                                 progressBarClass: "bg-info",
                                 duration: 5000
                             );
+                            insertFlagItem = new();
                             await LoadData();
-                            Flag = 0;
+                            
                         }
                         else
                         {
@@ -935,15 +948,24 @@
         return result;
     }
 
-
-    int Flag = 0;
+    bool isInsert = false;
+    bool insertBefore = false;
+    PKKLModel insertFlagItem = new();
     //thêm vào sau
-    private void InsertLaterFlag(int flag)
+    private void InsertLaterFlag(PKKLModel item, bool position)
     {
-        Flag = flag;
         TitleModal = "Chèn loại cống !";
-        isModalVisible = true;
         Input = new();
+        disKTHH = false;
+        disTenCongTac = false;
+        isInsert = true;
+
+        Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = item.LoaiCauKienId;
+        Input.LoaiBeTong = item.LoaiBeTong;
+        Input.HangMuc = item.HangMuc;
+        insertFlagItem = item;
+        insertBefore = position;
+        isModalVisible = true;
         // Đặt trạng thái chọn cho các danh sách
         SetSelectedItem(selectLCK, Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop);
         SetSelectedItem(selectLBT, Input.LoaiBeTong);

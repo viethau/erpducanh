@@ -11,6 +11,7 @@
 @inject IPhanLoaiHoGaRepository PhanLoaiHoGaRepository
 @inject IDanhMucRepository DanhMucRepository
 @inject IDMTLThepRepository DMTLThepRepository
+@inject IJSRuntime JSRuntime
 
 @inject DucAnhERP.Services.ToastService ToastService
 <style>
@@ -354,7 +355,7 @@
         </CustomModal>
         <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
             <BodyTemplate>
-                <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
+                <EditForm id="editFormId" Model="Input" OnInvalidSubmit="HandleInValidSubmit" OnValidSubmit="HandleValidSubmit">
                     <DataAnnotationsValidator />
                     <ValidationSummary />
                     <div>
@@ -519,25 +520,25 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="row justify-content-end m-2">
-                        @if (isLoadingCaculate)
-                        {
-                            <button class="btn btn-primary mr-2" type="button" readonly>
-                                <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
-                                Loading...
-                            </button>
-                        }
-                        else
-                        {
-                            <button class="btn btn-primary mr-2" type="submit">Save</button>
-                        }
-
-                        <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
-                    </div>
-
                 </EditForm>
             </BodyTemplate>
+            <FooterTemplate>
+                <div class="d-flex justify-content-end pr-5 py-3 modal-footer-with-border">
+                    @if (isLoadingCaculate)
+                    {
+                        <button class="btn btn-primary mr-2" type="button" disabled>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-primary mr-2" type="submit" form="editFormId">Save</button>
+                    }
+
+                    <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+                </div>
+            </FooterTemplate>
         </CustomModal>
     </div>
     <div class="row m-3 ">
@@ -1428,6 +1429,9 @@
     {
         isModalVisible = isVisible;
         isEdit = false;
+        Input = new();
+        isInsert = false;
+        insertFlagItem = new();
     }
 
     private void HandleSave()
@@ -1442,6 +1446,9 @@
         isModalVisible = false;
         isEdit = false;
 
+        Input = new();
+        isInsert = false;
+        insertFlagItem = new();
     }
 
     // Khởi tạo màn hình
@@ -1577,10 +1584,15 @@
 
     }
 
+    private async Task HandleInValidSubmit()
+    {
+        await JSRuntime.InvokeVoidAsync("scrollToFirstError");
+    }
+
     private async Task HandleValidSubmit()
     {
         try
-        {
+        { 
             await Caculate();
             string[] ids = { Input.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "" };
             var isValidTenPL = await PhanLoaiHoGaRepository.CheckExclusiveDetails(ids, baseTime);

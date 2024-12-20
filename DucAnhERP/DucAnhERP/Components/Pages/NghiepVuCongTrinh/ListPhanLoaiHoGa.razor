@@ -9,12 +9,15 @@
 @inject IDanhMucRepository DanhMucRepository
 @inject IPhanLoaiHoGaRepository PhanLoaiHoGaRepository
 @inject DucAnhERP.Services.ToastService ToastService
+@inject IJSRuntime JSRuntime
 
 <div class="m-4">
 
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
         <BodyTemplate>
-            <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
+            <EditForm Model="Input" id="editFormId" OnInvalidSubmit="HandleInValidSubmit" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
                 <div class="row">
                     <div class="col">
                         <h5 class="mt-2">Thông tin chung hố ga</h5>
@@ -508,14 +511,15 @@
                         </div>
                     </div>
                 </div>
-                <DataAnnotationsValidator />
-                <ValidationSummary />
-                <div class="row mt-5 justify-content-end">
-                    <button class="btn btn-primary mr-2" type="submit">Save</button>
-                    <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
-                </div>
+ 
             </EditForm>
         </BodyTemplate>
+         <FooterTemplate>
+                <div class="d-flex justify-content-end pr-5 py-3 modal-footer-with-border">
+                     <button class="btn btn-primary mr-2" type="submit" form="editFormId">Save</button>
+                    <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+                </div>
+           </FooterTemplate>
     </CustomModal>
 
     <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
@@ -1054,6 +1058,12 @@
                        );
         }
     }
+
+    private async Task HandleInValidSubmit()
+    {
+        await JSRuntime.InvokeVoidAsync("scrollToFirstError");
+    }
+
 
     private async Task HandleValidSubmit()
     {
