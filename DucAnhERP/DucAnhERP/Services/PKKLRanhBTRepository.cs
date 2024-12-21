@@ -122,7 +122,7 @@ namespace DucAnhERP.Services
                                           && x.HangMucCongTac == a.HangMucCongTac
                                           && x.TenCongTac == a.TenCongTac)
                                  .Sum(x => x.TKLCK_SauCC)
-                             orderby b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai, a.HangMuc, a.CreateAt
+                             orderby b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai, a.HangMuc, a.Flag
                              select new THKLModel
                              {
                                  PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai ?? "",
@@ -163,9 +163,9 @@ namespace DucAnhERP.Services
                                  a.DonVi,
                                  a.TKLCK_SauCC,
                                  a.HangMuc,
-                                 a.CreateAt
+                                 a.Flag
                              } into g
-                             orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, g.Key.HangMuc, g.Key.CreateAt
+                             orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, g.Key.HangMuc, g.Key.Flag
                              select new THKLModel
                              {
                                  Id = g.Key.Id,
@@ -220,9 +220,9 @@ namespace DucAnhERP.Services
                                            a.DonVi,
                                            a.TKLCK_SauCC,
                                            a.HangMuc,
-                                           a.CreateAt
+                                           a.Flag
                                        } into g
-                                       orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, g.Key.HangMuc, g.Key.CreateAt
+                                       orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, g.Key.HangMuc, g.Key.Flag
                                        select new THKLModel
                                        {
                                            Id = g.Key.Id,
@@ -419,7 +419,7 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
             }
         }
-        public async Task<string> InsertLaterFlag(PKKLRanhBT entity, int FlagLast)
+        public async Task<string> InsertLaterFlag(PKKLRanhBT entity, int FlagLast, bool insertBefore)
         {
             string id = "";
             try
@@ -433,7 +433,9 @@ namespace DucAnhERP.Services
 
                 // Bước 1: Lấy danh sách các bản ghi có flag > FlagLast
                 var recordsToUpdate = await context.PKKLRanhBTs
-                    .Where(x => x.Flag > FlagLast && x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai && x.HangMuc == entity.HangMuc)
+                    .Where(x => (insertBefore ? x.Flag >= FlagLast : x.Flag > FlagLast)
+                    && x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai 
+                    && x.HangMuc == entity.HangMuc)
                     .ToListAsync();
 
                 // Bước 2: Tăng giá trị flag của các bản ghi đó thêm 1
@@ -458,7 +460,7 @@ namespace DucAnhERP.Services
                 }
                 else
                 {
-                    entity.Flag = FlagLast + 1;
+                    entity.Flag = insertBefore ? FlagLast : FlagLast + 1;
                 }
 
                 // Bước 4: Chèn bản ghi mới vào bảng

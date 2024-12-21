@@ -590,6 +590,8 @@
     {
         isModalVisible = true;
         Input = new();
+        isInsert = false;
+        insertFlagItem = new();
         // Đặt trạng thái chọn cho các danh sách
         SetSelectedItem(selectLCK, Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop);
         SetSelectedItem(selectLBT, Input.LoaiBeTong);
@@ -601,6 +603,10 @@
     {
         isModalVisible = isVisible;
         isEdit = false;
+
+        Input = new();
+        isInsert = false;
+        insertFlagItem = new();
     }
 
     private void HandleSave()
@@ -615,6 +621,9 @@
         isModalVisible = false;
         isEdit = false;
 
+        Input = new();
+        isInsert = false;
+        insertFlagItem = new();
     }
 
     // Khởi tạo màn hình

@@ -147,7 +147,7 @@ namespace DucAnhERP.Services
                                           && x.HangMucCongTac == a.HangMucCongTac
                                           && x.TenCongTac == a.TenCongTac)
                                  .Sum(x => x.TKLCK_SauCC)
-                             orderby b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop, a.HangMuc, a.CreateAt
+                             orderby b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop, a.HangMuc, a.Flag
                              select new THKLModel
                              {
                                  PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop??"",
@@ -188,9 +188,9 @@ namespace DucAnhERP.Services
                                  a.DonVi,
                                  a.TKLCK_SauCC,
                                  a.HangMuc,
-                                 a.CreateAt
+                                 a.Flag
                              } into g
-                             orderby g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop, g.Key.HangMuc, g.Key.CreateAt
+                             orderby g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop, g.Key.HangMuc, g.Key.Flag
                              select new THKLModel
                              {
                                  Id = g.Key.Id,
@@ -245,9 +245,9 @@ namespace DucAnhERP.Services
                                            a.DonVi,
                                            a.TKLCK_SauCC,
                                            a.HangMuc,
-                                           a.CreateAt
+                                           a.Flag
                                        } into g
-                                       orderby g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop, g.Key.HangMuc, g.Key.CreateAt
+                                       orderby g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop, g.Key.HangMuc, g.Key.Flag
                                        select new THKLModel
                                        {
                                            Id = g.Key.Id,

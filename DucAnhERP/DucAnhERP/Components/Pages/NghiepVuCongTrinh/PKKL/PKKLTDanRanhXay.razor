@@ -39,7 +39,7 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="Table">Loại cấu kiện</label>
-                                <Select2 Id="select1" Items="@selectLCK" OnChange="@OnSelectChangeLCK"></Select2>
+                                <Select2 disabled="@isInsert" Id="select1" Items="@selectLCK" OnChange="@OnSelectChangeLCK"></Select2>
                                 <ValidationMessage For="()=>Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan"></ValidationMessage>
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
@@ -52,7 +52,7 @@
                         <div class="row">
                             <div class="form-floating col-sm-6 col-md-3">
                                 <label for="HangMuc">Hạng mục <span></span></label>
-                                <Select2 Id="select3" Items="@selectHMTC" OnChange="@OnSelectChangeHMTC"></Select2>
+                                <Select2 disabled="@isInsert" Id="select3" Items="@selectHMTC" OnChange="@OnSelectChangeHMTC"></Select2>
                                 <validationmessage for="()=>Input.HangMuc"></validationmessage>
                             </div>
                             <div class="form-floating col-sm-6 col-md-3">
@@ -303,9 +303,12 @@
                                                         <button class="btn btn-sm btn-primary m-1" title="Sửa" @onclick="()=>HandleEdit(item.Id)">
                                                             <i class="fas fa-edit"></i>
                                                         </button>
-                                                        <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
-                                                            <i class="fas fa-plus"></i>
-                                                        </button>
+                                                        <div class="btn btn-sm p-0">
+                                                            <div class="d-flex flex-column align-items-center">
+                                                                <i class="fa fa-angle-up btn-top" @onclick="()=>InsertLaterFlag(item ,true)" title="Thêm vào trước" aria-hidden="true"></i>
+                                                                <i class="fa fa-angle-down btn-down" @onclick="()=>InsertLaterFlag(item,false)" title="Thêm vào sau" aria-hidden="true"></i>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </td>
                                                 <td>@stt</td>
@@ -593,6 +596,8 @@
     {
         isModalVisible = true;
         Input = new();
+        isInsert = false;
+        insertFlagItem = new();
         // Đặt trạng thái chọn cho các danh sách
         SetSelectedItem(selectLCK, Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan);
         SetSelectedItem(selectLBT, Input.LoaiBeTong);
@@ -604,6 +609,10 @@
     {
         isModalVisible = isVisible;
         isEdit = false;
+
+        Input = new();
+        isInsert = false;
+        insertFlagItem = new();
     }
 
     private void HandleSave()
@@ -618,6 +627,9 @@
         isModalVisible = false;
         isEdit = false;
 
+        Input = new();
+        isInsert = false;
+        insertFlagItem = new();
     }
 
     // Khởi tạo màn hình
@@ -747,10 +759,10 @@
                 {
                     if (listExist == null || listExist.Count == 0)
                     {
-                        if (Flag > 0)
+                        if (insertFlagItem.Flag > 0)
                         {
                             // Thêm mới thông tin
-                            var id = await PKKLTDanRXayRepository.InsertLaterFlag(Input, Flag);
+                            var id = await PKKLTDanRXayRepository.InsertLaterFlag(Input, insertFlagItem.Flag, insertBefore);
                             isModalVisible = false;
                             Input = new PKKLTDanRXay();
                             ToastService.ShowToast(
@@ -761,8 +773,8 @@
                                 progressBarClass: "bg-info",
                                 duration: 5000
                             );
+                            insertFlagItem = new();
                             await LoadData();
-                            Flag = 0;
                         }
                         else
                         {
@@ -943,14 +955,24 @@
         return result;
     }
 
-    int Flag = 0;
+    bool isInsert = false;
+    bool insertBefore = false;
+    PKKLModel insertFlagItem = new();
     //thêm vào sau
-    private void InsertLaterFlag(int flag)
+    private void InsertLaterFlag(PKKLModel item, bool position)
     {
-        Flag = flag;
-        TitleModal = "Chèn loại cống !";
-        isModalVisible = true;
+        TitleModal = "Chèn loại tấm đan rãnh xây !";
         Input = new();
+        disKTHH = false;
+        disTenCongTac = false;
+        isInsert = true;
+
+        Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan = item.LoaiCauKienId;
+        Input.LoaiBeTong = item.LoaiBeTong;
+        Input.HangMuc = item.HangMuc;
+        insertFlagItem = item;
+        insertBefore = position;
+        isModalVisible = true;
         // Đặt trạng thái chọn cho các danh sách
         SetSelectedItem(selectLCK, Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan);
         SetSelectedItem(selectLBT, Input.LoaiBeTong);

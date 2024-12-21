@@ -5,7 +5,7 @@ namespace DucAnhERP.Repository
 {
     public interface IPKKLRXayRepository : IBaseRepository<PKKLRXay>
     {
-        Task<string> InsertLaterFlag(PKKLRXay entity, int FlagLast);
+        Task<string> InsertLaterFlag(PKKLRXay entity, int FlagLast, bool insertBefore);
         Task<List<PKKLModel>> GetAllByVM(PKKLModel mModel);
         Task<List<PKKLRXay>> GetExist(PKKLRXay searchData);
 
