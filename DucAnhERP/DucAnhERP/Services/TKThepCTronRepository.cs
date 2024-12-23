@@ -221,6 +221,20 @@ namespace DucAnhERP.Services
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
             }
 
+            // Bước 1: Cập nhật trực tiếp các bản ghi có flag > FlagLast
+            await context.TKThepCTrons
+                .Where(x => x.Flag > entity.Flag &&
+                            x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
+                .ExecuteUpdateAsync(x => x
+                    .SetProperty(r => r.Flag, r => r.Flag - 1)
+                    .SetProperty(r => r.SoHieu, r => CheckObjHelper.UpdateSoHieu(r.SoHieu,1)));
+
+            // Bước 2: Xóa bản ghi
+            context.TKThepCTrons.Remove(entity);
+
+            // Lưu tất cả các thay đổi
+            await context.SaveChangesAsync();
+
             context.Set<TKThepCTron>().Remove(entity);
             await SaveChanges(context);
         }
@@ -268,7 +282,7 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
             }
         }
-        public async Task<string> InsertLaterFlag(TKThepCTron entity, int FlagLast)
+        public async Task<string> InsertLaterFlag(TKThepCTron entity, int FlagLast, bool insertBefore)
         {
             string id = "";
             try
@@ -282,13 +296,15 @@ namespace DucAnhERP.Services
 
                 // Bước 1: Lấy danh sách các bản ghi có flag > FlagLast
                 var recordsToUpdate = await context.TKThepCTrons
-                    .Where(x => x.Flag > FlagLast && x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
+                    .Where(x => (insertBefore ? x.Flag >= FlagLast : x.Flag > FlagLast)
+                    && x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
                     .ToListAsync();
 
                 // Bước 2: Tăng giá trị flag của các bản ghi đó thêm 1
                 foreach (var record in recordsToUpdate)
                 {
                     record.Flag += 1;
+                    record.SoHieu = CheckObjHelper.UpdateSoHieu(record.SoHieu);
                 }
 
                 // Lưu các thay đổi cập nhật flag
@@ -307,7 +323,7 @@ namespace DucAnhERP.Services
                 }
                 else
                 {
-                    entity.Flag = FlagLast + 1;
+                    entity.Flag = insertBefore ? FlagLast : FlagLast + 1;
                 }
 
                 // Bước 4: Chèn bản ghi mới vào bảng

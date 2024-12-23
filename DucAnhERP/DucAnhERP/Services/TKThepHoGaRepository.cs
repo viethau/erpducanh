@@ -6,6 +6,8 @@ using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.IdentityModel.Tokens;
+using System.Text.RegularExpressions;
 
 namespace DucAnhERP.Services
 {
@@ -65,15 +67,12 @@ namespace DucAnhERP.Services
                             {
                                 Id = a.Id,
                                 Flag = a.Flag,
-
                                 ThongTinChungHoGa_TenHoGaSauPhanLoai = a.ThongTinChungHoGa_TenHoGaSauPhanLoai,
                                 ThongTinChungHoGa_TenHoGaSauPhanLoai_Name = b.ThongTinChungHoGa_TenHoGaSauPhanLoai,
-
                                 TenCongTac = a.TenCongTac,
                                 VTLayKhoiLuong = a.VTLayKhoiLuong,
                                 LoaiThep = a.LoaiThep,
                                 LoaiThep_Name = dm.Ten,
-
                                 SoHieu = a.SoHieu,
                                 DKCD = a.DKCD,
                                 SoThanh = a.SoThanh,
@@ -83,7 +82,6 @@ namespace DucAnhERP.Services
                                 TongChieuDai = a.TongChieuDai,
                                 TrongLuong = c.TrongLuong,
                                 TongTrongLuong = a.TongTrongLuong,
-
                                 CreateAt = a.CreateAt,
                                 CreateBy = a.CreateBy,
                                 IsActive = a.IsActive,
@@ -213,16 +211,28 @@ namespace DucAnhERP.Services
         public async Task DeleteById(string id)
         {
             using var context = _context.CreateDbContext();
-            var entity = await GetById(id);
+            var entity = await context.TKThepHoGas.FirstOrDefaultAsync(x => x.Id == id);
 
             if (entity == null)
             {
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
             }
 
-            context.Set<TKThepHoGa>().Remove(entity);
-            await SaveChanges(context);
+            // Bước 1: Cập nhật trực tiếp các bản ghi có flag > FlagLast
+            await context.TKThepHoGas
+                .Where(x => x.Flag > entity.Flag &&
+                            x.ThongTinChungHoGa_TenHoGaSauPhanLoai == entity.ThongTinChungHoGa_TenHoGaSauPhanLoai)
+                .ExecuteUpdateAsync(x => x
+                    .SetProperty(r => r.Flag, r => r.Flag - 1)
+                    .SetProperty(r => r.SoHieu, r => r.SoHieu - 1));
+
+            // Bước 2: Xóa bản ghi
+            context.TKThepHoGas.Remove(entity);
+
+            // Lưu tất cả các thay đổi
+            await context.SaveChangesAsync();
         }
+
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
         {
             foreach (var id in ids)
@@ -267,7 +277,7 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
             }
         }
-        public async Task<string> InsertLaterFlag(TKThepHoGa entity, int FlagLast)
+        public async Task<string> InsertLaterFlag(TKThepHoGa entity, int FlagLast, bool insertBefore)
         {
             string id = "";
             try
@@ -281,13 +291,15 @@ namespace DucAnhERP.Services
 
                 // Bước 1: Lấy danh sách các bản ghi có flag > FlagLast
                 var recordsToUpdate = await context.TKThepHoGas
-                    .Where(x => x.Flag > FlagLast && x.ThongTinChungHoGa_TenHoGaSauPhanLoai == entity.ThongTinChungHoGa_TenHoGaSauPhanLoai)
+                    .Where(x => (insertBefore ? x.Flag >= FlagLast : x.Flag > FlagLast)
+                    && x.ThongTinChungHoGa_TenHoGaSauPhanLoai == entity.ThongTinChungHoGa_TenHoGaSauPhanLoai)
                     .ToListAsync();
 
-                // Bước 2: Tăng giá trị flag của các bản ghi đó thêm 1
+                // Bước 2: Tăng giá trị flag,SoHieu của các bản ghi đó thêm 1
                 foreach (var record in recordsToUpdate)
                 {
                     record.Flag += 1;
+                    record.SoHieu += 1;
                 }
 
                 // Lưu các thay đổi cập nhật flag
@@ -306,7 +318,7 @@ namespace DucAnhERP.Services
                 }
                 else
                 {
-                    entity.Flag = FlagLast + 1;
+                    entity.Flag = insertBefore ? FlagLast : FlagLast + 1;
                 }
 
                 // Bước 4: Chèn bản ghi mới vào bảng

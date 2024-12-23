@@ -1404,12 +1404,8 @@
                        duration: 5000);
         }
 
-        isLoadingCaculate = false;
-        await InvokeAsync(() =>
-          {
-              StateHasChanged();
-          });
-
+        isLoadingCaculate = false; 
+        await InvokeAsync(() =>{StateHasChanged();});
     }
 
     private void ShowModal()

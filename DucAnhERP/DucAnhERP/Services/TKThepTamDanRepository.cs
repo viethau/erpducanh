@@ -62,7 +62,6 @@ namespace DucAnhERP.Services
                             {
                                 Id = tk.Id,
                                 Flag = tk.Flag,
-
                                 ThongTinTamDanHoGa2_PhanLoaiDayHoGa = tk.ThongTinTamDanHoGa2_PhanLoaiDayHoGa,
                                 ThongTinTamDanHoGa2_PhanLoaiDayHoGa_Name = plTDHG.ThongTinTamDanHoGa2_PhanLoaiDayHoGa,
                                 TenCongTac = tk.TenCongTac,
@@ -216,8 +215,19 @@ namespace DucAnhERP.Services
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
             }
 
-            context.Set<TKThepTamDan>().Remove(entity);
-            await SaveChanges(context);
+            // Bước 1: Cập nhật trực tiếp các bản ghi có flag > FlagLast
+            await context.TKThepTamDans
+                .Where(x => x.Flag > entity.Flag &&
+                            x.ThongTinTamDanHoGa2_PhanLoaiDayHoGa == entity.ThongTinTamDanHoGa2_PhanLoaiDayHoGa)
+                .ExecuteUpdateAsync(x => x
+                    .SetProperty(r => r.Flag, r => r.Flag - 1)
+                    .SetProperty(r => r.SoHieu, r => r.SoHieu - 1));
+
+            // Bước 2: Xóa bản ghi
+            context.TKThepTamDans.Remove(entity);
+
+            // Lưu tất cả các thay đổi
+            await context.SaveChangesAsync();
         }
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
         {
@@ -263,7 +273,7 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
             }
         }
-        public async Task<string> InsertLaterFlag(TKThepTamDan entity, int FlagLast)
+        public async Task<string> InsertLaterFlag(TKThepTamDan entity, int FlagLast, bool insertBefore)
         {
             string id = "";
             try
@@ -277,13 +287,15 @@ namespace DucAnhERP.Services
 
                 // Bước 1: Lấy danh sách các bản ghi có flag > FlagLast
                 var recordsToUpdate = await context.TKThepTamDans
-                    .Where(x => x.Flag > FlagLast && x.ThongTinTamDanHoGa2_PhanLoaiDayHoGa == entity.ThongTinTamDanHoGa2_PhanLoaiDayHoGa)
+                    .Where(x => (insertBefore ? x.Flag >= FlagLast : x.Flag > FlagLast)
+                    && x.ThongTinTamDanHoGa2_PhanLoaiDayHoGa == entity.ThongTinTamDanHoGa2_PhanLoaiDayHoGa)
                     .ToListAsync();
 
                 // Bước 2: Tăng giá trị flag của các bản ghi đó thêm 1
                 foreach (var record in recordsToUpdate)
                 {
                     record.Flag += 1;
+                    record.SoHieu += 1;
                 }
 
                 // Lưu các thay đổi cập nhật flag
@@ -302,7 +314,7 @@ namespace DucAnhERP.Services
                 }
                 else
                 {
-                    entity.Flag = FlagLast + 1;
+                    entity.Flag = insertBefore ? FlagLast : FlagLast + 1;
                 }
 
                 // Bước 4: Chèn bản ghi mới vào bảng

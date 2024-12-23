@@ -19,8 +19,8 @@ namespace DucAnhERP.Models
         [Range(0, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
         public int? SoHieu { get; set; } = 0;
 
-        [Required(ErrorMessage = "Bạn phải nhập Đường kính/chiều dầy")]
-        [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]
+        [Required(ErrorMessage = "Bạn phải chọn Đường kính/chiều dầy")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Bạn phải chọn Đường kính/chiều dầy.")]
         [RegularExpression(@"^\d+(\.\d{1,4})?$", ErrorMessage = "Giá trị phải là số hợp lệ với tối đa 3 chữ số thập phân.")]
         public Double? DKCD { get; set; } = 0;
 

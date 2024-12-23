@@ -1,5 +1,6 @@
 ﻿
 using DucAnhERP.Data;
+using DucAnhERP.Helpers;
 using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
@@ -50,7 +51,6 @@ namespace DucAnhERP.Services
                 var query = from tb1 in context.DMTLTheps
                             join tb2 in context.DSDanhMuc
                             on tb1.ChungLoaiThep equals tb2.Id
-
                             orderby tb1.CreateAt
                             select new DMTLThepModel
                             {
@@ -61,7 +61,6 @@ namespace DucAnhERP.Services
                                 DuongKinh = tb1.DuongKinh,
                                 DonVi = tb1.DonVi,
                                 TrongLuong = tb1.TrongLuong,
-
                                 CreateAt = tb1.CreateAt,
                                 CreateBy = tb1.CreateBy,
                                 IsActive = tb1.IsActive,
@@ -113,6 +112,7 @@ namespace DucAnhERP.Services
                 .FirstOrDefaultAsync(x => x.ChungLoaiThep == LoaiThep && x.DuongKinh == DKCD);
             return result;
         }
+      
         public async Task<bool> CheckUsingId(string LoaiThep, string KichThuoc)
         {
             bool isSuccess = false;
