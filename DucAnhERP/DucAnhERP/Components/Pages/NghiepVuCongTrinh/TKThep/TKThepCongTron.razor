@@ -337,7 +337,7 @@
 
     private TKThepCTron Input = new ();
     private TKThepCTronModel InputMD = new TKThepCTronModel();
-     private List<DMTLThepModel> DmThepMDs = new List<DMTLThepModel>();
+    private List<DMTLThepModel> DmThepMDs = new List<DMTLThepModel>();
     private DMThep DMThep = new DMThep();
 
     private List<SelectedItem> selectLCK = new();
@@ -346,7 +346,7 @@
         Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = selectedItem.Value;
         await Caculate();
     }
-        public string LoaiThep = "";
+    public string LoaiThep = "";
     private List<SelectedItem> selectLoaiThep = new();
     private List<SelectedItem> selectDuongKinh = new();
     bool isSelectLoaiThep = true;
@@ -432,7 +432,7 @@
     public MetaData MetaData { get; set; }
     public TKThepCTronModel tKThepHoGaModel { get; set; }
 
-     private System.Timers.Timer _typingTimer;
+    private System.Timers.Timer _typingTimer;
     private int _debounceDelay = 500; // Thời gian đợi sau khi người dùng dừng nhập (ms)
 
     // Hàm được gọi sau khi bind-value hoàn tất
@@ -601,7 +601,7 @@
 
     private async Task HandleInValidSubmit()
     {
-       await JSRuntime.InvokeVoidAsync("scrollToFirstError");
+        await JSRuntime.InvokeVoidAsync("scrollToFirstError");
     }
 
     private async Task HandleValidSubmit()
@@ -692,7 +692,7 @@
                             await TKThepCTronRepository.Insert(Input);
                             // isModalVisible = false;
                             // Input = new TKThepCTron();
-                             Input.Id = Guid.NewGuid().ToString();
+                            Input.Id = Guid.NewGuid().ToString();
                             ToastService.ShowToast(
                                 "Thông báo",
                                 "Thêm thành công.",
@@ -762,7 +762,7 @@
             Input = await TKThepCTronRepository.GetById(id);
             isEdit = true;
             isModalVisible = true;
-            
+
             SetSelectedItem(selectLCK, Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai??"");
             SetSelectedItem(selectLoaiThep, Input.LoaiThep ?? "");
 
@@ -780,6 +780,7 @@
                             Value = item.Id,
                             Text = "Đường kính: " + item.DuongKinh + " ,Đơn vị: " + item.DonVi + " ,Trọng lượng: " + item.TrongLuong
                         });
+                    isSelectLoaiThep = false;
                 }
             }
         }
@@ -809,7 +810,7 @@
         Input = new();
         isInsert = true;
         Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai;
-        Input.SoHieu = position ? item.SoHieu : CheckObjHelper.UpdateSoHieu(item.SoHieu);
+        Input.SoHieu = position ? item.SoHieu : CheckObjHelper.UpdateSoHieu(item.SoHieu,1);
         insertFlagItem = item;
         insertBefore = position;
         isModalVisible = true;

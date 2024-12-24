@@ -15,7 +15,7 @@ namespace DucAnhERP.ViewModel
         public string? VTLayKhoiLuong { get; set; } = "";
         public string? LoaiThep { get; set; } = "";
         public string? LoaiThep_Name { get; set; } = "";
-        public string? SoHieu { get; set; } = "";
+        public int? SoHieu { get; set; } = 0;
         public Double? DKCD { get; set; } = 0;
         public int? SoThanh { get; set; } = 0;
         public int? SoCK { get; set; } = 0;

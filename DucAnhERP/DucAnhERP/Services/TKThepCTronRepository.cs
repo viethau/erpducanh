@@ -213,31 +213,41 @@ namespace DucAnhERP.Services
         }
         public async Task DeleteById(string id)
         {
-            using var context = _context.CreateDbContext();
-            var entity = await GetById(id);
-
-            if (entity == null)
+            try
             {
-                throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
+                using var context = _context.CreateDbContext();
+
+                // Lấy bản ghi cần xóa
+                var entity = await GetById(id)
+                             ?? throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
+
+                //// Lấy danh sách các bản ghi cần cập nhật
+                //var recordsToUpdate = await context.TKThepCTrons
+                //    .Where(x => entity.Flag > x.Flag &&
+                //                x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
+                //    .ToListAsync();
+
+                //// Cập nhật giá trị Flag và SoHieu
+                //recordsToUpdate.ForEach(record =>
+                //{
+                //    record.Flag -= 1;
+                //    record.SoHieu = CheckObjHelper.UpdateSoHieu(record.SoHieu);
+                //});
+
+                // Xóa bản ghi cần xóa
+                context.TKThepCTrons.Remove(entity);
+
+                // Lưu tất cả thay đổi
+                await context.SaveChangesAsync();
             }
-
-            // Bước 1: Cập nhật trực tiếp các bản ghi có flag > FlagLast
-            await context.TKThepCTrons
-                .Where(x => x.Flag > entity.Flag &&
-                            x.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai == entity.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
-                .ExecuteUpdateAsync(x => x
-                    .SetProperty(r => r.Flag, r => r.Flag - 1)
-                    .SetProperty(r => r.SoHieu, r => CheckObjHelper.UpdateSoHieu(r.SoHieu,1)));
-
-            // Bước 2: Xóa bản ghi
-            context.TKThepCTrons.Remove(entity);
-
-            // Lưu tất cả các thay đổi
-            await context.SaveChangesAsync();
-
-            context.Set<TKThepCTron>().Remove(entity);
-            await SaveChanges(context);
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+            
         }
+
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
         {
             foreach (var id in ids)
@@ -304,7 +314,7 @@ namespace DucAnhERP.Services
                 foreach (var record in recordsToUpdate)
                 {
                     record.Flag += 1;
-                    record.SoHieu = CheckObjHelper.UpdateSoHieu(record.SoHieu);
+                    record.SoHieu = CheckObjHelper.UpdateSoHieu(record.SoHieu,1);
                 }
 
                 // Lưu các thay đổi cập nhật flag

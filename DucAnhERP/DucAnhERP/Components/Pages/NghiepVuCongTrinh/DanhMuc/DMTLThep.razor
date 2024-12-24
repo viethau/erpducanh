@@ -20,7 +20,7 @@
                     <div class="col-3">
                         <div class="form-group">
                             <label for="Table">Chủng loại thép</label>
-                            <Select2 Id="mySelect1" Items="@selectCLDM" OnChange="@OnSelectChangeNhomCLAdd"></Select2>
+                            <Select2 Id="mySelect1" disabled="@isUsing" Items="@selectCLDM" OnChange="@OnSelectChangeNhomCLAdd"></Select2>
                             <ValidationMessage For="()=>Input.ChungLoaiThep"></ValidationMessage>
                         </div>
                     </div>
@@ -120,16 +120,14 @@
                             <td class="text-center">@dm.DonVi</td>
                             <td class="text-center">@dm.TrongLuong</td>
                             <td class="text-center">
-                                <button class="btn btn-primary" @onclick="()=>Edit(dm.Id)">
+                                <button class="btn btn-sm btn-primary" @onclick="()=>Edit(dm.Id)">
                                     <i class="fas fa-edit"></i>
                                 </button>
                             </td>
                             <td class="text-center">
-
-                                <button class="btn btn-danger" @onclick="()=>ConfirmDelete(dm.Id,dm.Id)">
+                                <button class="btn btn-sm btn-danger" @onclick="()=>ConfirmDelete(dm.Id,dm.Id)">
                                     <i class="fas fa-trash"></i>
                                 </button>
-
                             </td>
                         </tr>
                         stt++;
@@ -343,13 +341,12 @@
         }
     }
 
-    private void  clearSelect()
+    private void SetSelectedItem(IEnumerable<SelectedItem> items, string value)
     {
-        foreach (var item in selectCLDM)
+        foreach (var item in items)
         {
-            item.IsSelected = false;
+            item.IsSelected = item.Value == value;
         }
-
     }
 
     private string deleteId;
@@ -370,7 +367,7 @@
             {
                 if (!string.IsNullOrEmpty(deleteId))
                 {
-                    //đợi
+                    //kiểm tra xem có đang sử dụng
                     Input = await DMTLThepRepository.GetById(deleteId);
                     var result = await DMTLThepRepository.CheckUsingId(Input.ChungLoaiThep, Input.DuongKinh);
                     if (result)
@@ -395,19 +392,17 @@
         }
 
     }
-
+    bool isUsing = false;
     private async Task Edit(string id)
     {
         try
         {
             TitleModal = "Cập nhật !";
             Input = await DMTLThepRepository.GetById(id);
+            isUsing = await DMTLThepRepository.CheckUsingId(Input.ChungLoaiThep, Input.DuongKinh);
+            SetSelectedItem(selectCLDM, Input.ChungLoaiThep??"");
             isEdit = true;
             isModalVisible = true;
-            foreach (var item in selectCLDM)
-            {
-                item.IsSelected = item.Value == Input.ChungLoaiThep;
-            }
         }
         catch (Exception ex)
         {
@@ -418,7 +413,8 @@
     private void ShowModal()
     {
         isModalVisible = true;
-        clearSelect();
+        Input = new();
+        SetSelectedItem(selectCLDM,Input.ChungLoaiThep??"");
     }
 
     private void HandleModalClose(bool isVisible)

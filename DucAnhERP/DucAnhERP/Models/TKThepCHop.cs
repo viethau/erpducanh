@@ -17,7 +17,7 @@ namespace DucAnhERP.Models
         public string? LoaiThep { get; set; } = "";
 
         [Required(ErrorMessage = "Bạn phải nhập số hiệu")]
-        public string? SoHieu { get; set; } = "";
+        public int? SoHieu { get; set; } = 0;
 
         [Required(ErrorMessage = "Bạn phải nhập Đường kính/chiều dầy")]
         [Range(0.00, double.MaxValue, ErrorMessage = "Giá trị phải lớn hơn 0.")]

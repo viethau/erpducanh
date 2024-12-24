@@ -229,8 +229,7 @@ namespace DucAnhERP.Services
             // Bước 2: Xóa bản ghi
             context.TKThepHoGas.Remove(entity);
 
-            // Lưu tất cả các thay đổi
-            await context.SaveChangesAsync();
+            await SaveChanges(context);
         }
 
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)

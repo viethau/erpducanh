@@ -36,7 +36,7 @@
                     <div class="row">
                         <div class="form-floating col-sm-6 col-md-3">
                             <label for="Table">Loại cấu kiện</label>
-                            <Select2 Id="select1" Items="@selectLCK" OnChange="@OnSelectChangeLCK"></Select2>
+                            <Select2 Id="select1" disabled="@isInsert" Items="@selectLCK" OnChange="@OnSelectChangeLCK"></Select2>
                             <ValidationMessage For="()=>Input.ThongTinDeCong_TenLoaiDeCong"></ValidationMessage>
                         </div>
                         <div class="form-floating col-sm-6 col-md-3">
@@ -56,14 +56,19 @@
                         </div>
                          <div class="form-floating col-sm-6 col-md-3">
                            <label for="DKCD">Số hiệu<span class="text-danger">*</span></label>
-                            <InputText @bind-Value:after="OnValueChanged"  @bind-Value="Input.SoHieu" class="form-control" id="SoHieu" placeholder="Số hiệu" />
+                            <InputNumber @bind-Value:after="OnValueChanged"  @bind-Value="Input.SoHieu" class="form-control" id="SoHieu" placeholder="Số hiệu" />
                             <ValidationMessage For="() => Input.SoHieu" class="text-danger" />
                          </div>
                           <div class="form-floating col-sm-6 col-md-3">
+                            <label for="Table">Đường kính/chiều dầy(mm,mm2)</label>
+                            <Select2 disabled="@isSelectLoaiThep" Id="selectDuongKinh" Items="@selectDuongKinh" OnChange="@OnSelectChangeDuongKinh"></Select2>
+                            <ValidationMessage For="()=>Input.DKCD"></ValidationMessage>
+                        </div>
+                         @*  <div class="form-floating col-sm-6 col-md-3">
                            <label for="DKCD">Đường kính/chiều dầy(mm,mm2)<span class="text-danger">*</span></label>
                             <InputNumber @bind-Value:after="OnValueChanged"  @bind-Value="Input.DKCD" class="form-control" id="DKCD" placeholder="Đường kính/chiều dầy" />
                             <ValidationMessage For="() => Input.DKCD" class="text-danger" />
-                         </div>
+                         </div> *@
                           <div class="form-floating col-sm-6 col-md-3">
                            <label for="SoThanh">Số thanh/01 cấu kiện<span class="text-danger">*</span></label>
                             <InputNumber @bind-Value:after="OnValueChanged" @bind-Value="Input.SoThanh" class="form-control" id="SoThanh" placeholder="Số thanh/01 cấu kiện" />
@@ -264,12 +269,15 @@
                                                     <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
-                                                    <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
-                                                        <i class="fas fa-plus"></i>
-                                                    </button>
                                                     <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
+                                                    <div class="btn btn-sm p-0">
+                                                        <div class="d-flex flex-column align-items-center">
+                                                            <i class="fa fa-angle-up btn-top" @onclick="()=>InsertLaterFlag(item ,true)" title="Thêm vào trước" aria-hidden="true"></i>
+                                                            <i class="fa fa-angle-down btn-down" @onclick="()=>InsertLaterFlag(item,false)" title="Thêm vào sau" aria-hidden="true"></i>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                          </td>
                                         <td>@stt</td>
@@ -328,6 +336,8 @@
 
     private TKThepDCong Input = new ();
     private TKThepDCongModel InputMD = new TKThepDCongModel();
+    private List<DMTLThepModel> DmThepMDs = new List<DMTLThepModel>();
+    private DMThep DMThep = new DMThep();
 
     private List<SelectedItem> selectLCK = new();
     private async void OnSelectChangeLCK(SelectedItem selectedItem)
@@ -343,12 +353,73 @@
 
     public string LoaiThep = "";
     private List<SelectedItem> selectLoaiThep = new();
+     private List<SelectedItem> selectDuongKinh = new();
+    bool isSelectLoaiThep = true;
     private async void OnSelectChangeLoaiThep(SelectedItem selectedItem)
     {
         Input.LoaiThep = selectedItem.Value;
         LoaiThep = selectedItem.Text;
+        selectDuongKinh = new();
+
+        if (!string.IsNullOrEmpty(selectedItem.Value))
+        {
+            DmThepMDs = await DMTLThepRepository.GetAllByVM(new DMTLThepModel { ChungLoaiThep = selectedItem.Value });
+            if (DmThepMDs.Count > 0)
+            {
+                foreach (var item in DmThepMDs)
+                {
+                    // Kiểm tra và thêm item
+                    if (!string.IsNullOrEmpty(item.Id) && !selectDuongKinh.Any(x => x.Value == item.Id))
+                    {
+                        selectDuongKinh.Add(new SelectedItem
+                            {
+                                Value = item.Id,
+                                Text = "Đường kính: " + item.DuongKinh + " ,Đơn vị: " + item.DonVi + " ,Trọng lượng: " + item.TrongLuong
+                            });
+                    }
+                }
+                selectDuongKinh.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+                isSelectLoaiThep = false;
+                await InvokeAsync(() =>
+                    {
+                        StateHasChanged();
+                    });
+            }
+            else
+            {
+                ToastService.ShowToast(
+                        "Thông báo",
+                         "Không có thông số cho loại thép: " + LoaiThep,
+                         cssClass: "toast-danger",
+                         iconClass: "fa fa-exclamation-circle",
+                         progressBarClass: "bg-info",
+                         duration: 5000);
+                isSelectLoaiThep = true;
+            }
+        }
+        else
+        {
+            ToastService.ShowToast(
+                        "Thông báo",
+                         "Vui lòng chọn loại thép.",
+                         cssClass: "toast-danger",
+                         iconClass: "fa fa-exclamation-circle",
+                         progressBarClass: "bg-info",
+                         duration: 5000);
+            isSelectLoaiThep = true;
+        }
+
+    }
+
+    private async Task OnSelectChangeDuongKinh(SelectedItem selectedItem)
+    {
+        DMThep = await DMTLThepRepository.GetById(selectedItem.Value);
+        Input.DKCD = double.Parse(DMThep.DuongKinh ?? "0");
+        Input.TrongLuong = DMThep.TrongLuong;
         await Caculate();
     }
+
+
     private List<SelectedItem> selectSearchLoaiThep = new();
     private void OnSelectChangeSearchLoaiThep(SelectedItem selectedItem)
     {
@@ -363,7 +434,7 @@
     
     //bắt sự kiện khi thay đổi
     private System.Timers.Timer _typingTimer;
-    private int _debounceDelay = 50; // Thời gian đợi sau khi người dùng dừng nhập (ms)
+    private int _debounceDelay = 500; // Thời gian đợi sau khi người dùng dừng nhập (ms)
 
     // Hàm được gọi sau khi bind-value hoàn tất
     private void OnValueChanged()
@@ -385,7 +456,8 @@
     // Hàm xử lý logic khi người dùng dừng nhập
     private async Task OnTypingStopped()
     {
-         await Caculate(); 
+        // Đảm bảo dữ liệu đã được bind vào model
+        await Caculate(); // Gọi logic xử lý
     }
 
     private async void OnTypingStopped(object sender, System.Timers.ElapsedEventArgs e)
@@ -399,19 +471,6 @@
         Input.TongSoThanh = (Input.SoThanh * Input.SoCK);
         Input.TongChieuDai = (Input.TongSoThanh * Input.ChieuDai1Thanh) / 1000;
 
-
-        if(!string.IsNullOrEmpty(Input.LoaiThep) && Input.DKCD >0)
-        {
-            var DMTLThep = await DMTLThepRepository.GetTrongLuong(Input.LoaiThep,Input.DKCD.ToString());
-            if(DMTLThep !=null)
-            {
-                Input.TrongLuong = DMTLThep.TrongLuong;
-            }
-            else
-            {
-                Input.TrongLuong = 0;
-            }
-        }
         if(LoaiThep.Trim().ToUpper() == "THÉP BẢN")
         {
             Input.TongTrongLuong =  (Input.DKCD * Input.TongChieuDai * Input.TrongLuong) / 1000000;
@@ -433,21 +492,23 @@
     {
         isModalVisible = true;
         Input = new();
-         foreach (var item in selectLoaiThep)
-        {
-            item.IsSelected = string.IsNullOrEmpty(item.Value);
-        }
+        isInsert = false;
+        insertFlagItem = new();
 
-        foreach (var item in selectLCK)
-        {
-           item.IsSelected = string.IsNullOrEmpty(item.Value);
-        }
+        SetSelectedItem(selectLCK, Input.ThongTinDeCong_TenLoaiDeCong??"");
+        SetSelectedItem(selectLoaiThep, Input.LoaiThep??"");
+        LoaiThep = "";
+        selectDuongKinh =  new();
+        isSelectLoaiThep = true;
     }
 
     private void HandleModalClose(bool isVisible)
     {
         isModalVisible = isVisible;
         isEdit = false;
+
+         isInsert = false;
+        insertFlagItem = new();
     }
 
     private void HandleSave()
@@ -462,6 +523,8 @@
         isModalVisible = false;
         isEdit = false;
 
+         isInsert = false;
+        insertFlagItem = new();
     }
 
     // Khởi tạo màn hình
@@ -560,7 +623,7 @@
 
         try
         {
-            Caculate();
+            await Caculate();
             string[] ids = { Input.ThongTinDeCong_TenLoaiDeCong??"" };
             var isValidTenPL = await PhanLoaiDeCongRepository.CheckExclusive(ids,baseTime);
             var listExist = await TKThepDeCongRepository.GetExist(Input);
@@ -621,10 +684,10 @@
                 {
                     if( listExist== null||listExist.Count == 0)
                     {
-                        if (Flag > 0)
+                        if (insertFlagItem.Flag > 0)
                         {
                             // Thêm mới thông tin
-                            var id = await TKThepDeCongRepository.InsertLaterFlag(Input, Flag);
+                            var id = await TKThepDeCongRepository.InsertLaterFlag(Input, insertFlagItem.Flag, insertBefore);
                             isModalVisible = false;
                             Input = new TKThepDCong();
                             ToastService.ShowToast(
@@ -635,15 +698,16 @@
                                 progressBarClass: "bg-info",
                                 duration: 5000
                             );
+                            insertFlagItem = new();
                             await LoadData();
-                            Flag = 0;
                         }
                         else
                         {
                             // Thêm mới thông tin
                             await TKThepDeCongRepository.Insert(Input);
-                            isModalVisible = false;
-                            Input = new TKThepDCong();
+                            //isModalVisible = false;
+                            // Input = new TKThepDCong();
+                            Input.Id = Guid.NewGuid().ToString();
                             ToastService.ShowToast(
                                 "Thông báo",
                                 "Thêm thành công.",
@@ -717,17 +781,25 @@
             Input = await TKThepDeCongRepository.GetById(id);
             isEdit = true;
             isModalVisible = true;
-             foreach (var item in selectLoaiThep)
+
+            SetSelectedItem(selectLCK, Input.ThongTinDeCong_TenLoaiDeCong??"");
+            SetSelectedItem(selectLoaiThep, Input.LoaiThep ?? "");
+
+            DmThepMDs = await DMTLThepRepository.GetAllByVM(new DMTLThepModel { ChungLoaiThep = Input.LoaiThep });
+            selectDuongKinh = new();
+            selectDuongKinh.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            foreach (var item in DmThepMDs)
             {
-                item.IsSelected = item.Value == Input.LoaiThep;
-                if (item.IsSelected == true)
+                // Kiểm tra và thêm item
+                if (!string.IsNullOrEmpty(item.Id) && !selectDuongKinh.Any(x => x.Value == item.Id))
                 {
-                    LoaiThep = item.Text;
+                    selectDuongKinh.Add(new SelectedItem
+                        {
+                            IsSelected = item.DuongKinh == Input.DKCD.ToString(),
+                            Value = item.Id,
+                            Text = "Đường kính: " + item.DuongKinh + " ,Đơn vị: " + item.DonVi + " ,Trọng lượng: " + item.TrongLuong
+                        });
                 }
-            }
-            foreach (var item in selectLCK)
-            {
-                item.IsSelected = item.Value == Input.ThongTinDeCong_TenLoaiDeCong;
             }
         }
         catch (Exception ex)
@@ -745,15 +817,33 @@
     }
 
 
-      int Flag = 0;
+    bool isInsert = false;
+    bool insertBefore = false;
+    TKThepDCongModel insertFlagItem = new();
     //thêm vào sau
-    private void InsertLaterFlag(int flag)
+    private void InsertLaterFlag(TKThepDCongModel item, bool position)
     {
-        Flag = flag;
-        TitleModal = "Chèn loại cống !";
-        isModalVisible = true;
-    }
+        TitleModal = "Chèn loại thép !";
 
+        Input = new();
+        isInsert = true;
+        Input.ThongTinDeCong_TenLoaiDeCong = item.ThongTinDeCong_TenLoaiDeCong;
+        Input.SoHieu = position ? item.SoHieu : item.SoHieu + 1;
+        insertFlagItem = item;
+        insertBefore = position;
+        isModalVisible = true;
+        SetSelectedItem(selectLCK, Input.ThongTinDeCong_TenLoaiDeCong??"");
+        SetSelectedItem(selectLoaiThep, Input.LoaiThep ?? "");
+        selectDuongKinh = new();
+        isSelectLoaiThep = true;
+    }
+     private void SetSelectedItem(IEnumerable<SelectedItem> items, string value)
+    {
+        foreach (var item in items)
+        {
+            item.IsSelected = item.Value == value;
+        }
+    }
 
     // Sắp xếp data
     private void SortTable(string columnName)

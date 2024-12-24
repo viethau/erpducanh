@@ -65,15 +65,15 @@
 
                         <tr>
                             <td class="text-center">@stt</td>
-                            <td class="text-center">@ndm.Ten</td>
+                            <td >@ndm.Ten</td>
                             <td class="text-center">
-                                <button class="btn btn-primary" @onclick="()=>Edit(ndm.Id)">
+                                <button class="btn btn-sm btn-primary" @onclick="()=>Edit(ndm.Id)">
                                     <i class="fas fa-edit"></i>
                                 </button>
                             </td>
                             <td class="text-center">
 
-                                <button class="btn btn-danger" @onclick="()=>ConfirmDelete(ndm.Id,ndm.Ten)">
+                                <button class="btn btn-sm btn-danger" @onclick="()=>ConfirmDelete(ndm.Id,ndm.Ten)">
                                     <i class="fas fa-trash"></i>
                                 </button>
 

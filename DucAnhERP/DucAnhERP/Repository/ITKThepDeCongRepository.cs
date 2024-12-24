@@ -6,7 +6,7 @@ namespace DucAnhERP.Repository
 {
     public interface ITKThepDeCongRepository :IBaseRepository<TKThepDCong>
     {
-        Task<string> InsertLaterFlag(TKThepDCong entity, int FlagLast);
+        Task<string> InsertLaterFlag(TKThepDCong entity, int FlagLast, bool insertBefore);
         Task<List<TKThepDCongModel>> GetAllByVM(TKThepDCongModel mModel);
         Task<List<TKThepDCong>> GetExist(TKThepDCong searchData);
         Task<List<SelectedItem>> GetDistinctTenCongTacByPL(string ThongTinDeCong_TenLoaiDeCong);

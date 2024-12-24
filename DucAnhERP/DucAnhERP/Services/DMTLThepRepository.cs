@@ -1,14 +1,13 @@
-﻿
-using DucAnhERP.Data;
+﻿using DucAnhERP.Data;
 using DucAnhERP.Helpers;
 using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace DucAnhERP.Services
 {
-
     public class DMTLThepRepository : IDMTLThepRepository
     {
         private readonly IDbContextFactory<ApplicationDbContext> _context;
@@ -112,29 +111,40 @@ namespace DucAnhERP.Services
                 .FirstOrDefaultAsync(x => x.ChungLoaiThep == LoaiThep && x.DuongKinh == DKCD);
             return result;
         }
-      
-        public async Task<bool> CheckUsingId(string LoaiThep, string KichThuoc)
-        {
-            bool isSuccess = false;
-            using var context = _context.CreateDbContext();
-            var query = context.TKThepHoGas
-                         .Where(x => (x.LoaiThep == LoaiThep && x.DKCD.ToString() == KichThuoc));
 
-            var data = await query.ToListAsync();
-            isSuccess = data.Any();
-            if (isSuccess) {
-                return (isSuccess);
-            }
-            else
+        public async Task<bool> CheckUsingId(string loaiThep, string kichThuoc)
+        {
+            using var context = _context.CreateDbContext();
+
+            // Danh sách các bảng cần kiểm tra
+            var checks = new List<Func<Task<bool>>>
+                {
+                    async () => await context.TKThepCHops.AnyAsync(x => x.LoaiThep == loaiThep && x.DKCD.ToString() == kichThuoc),
+                    async () => await context.TKThepCTrons.AnyAsync(x => x.LoaiThep == loaiThep && x.DKCD.ToString() == kichThuoc),
+                    async () => await context.TKThepDeCongs.AnyAsync(x => x.LoaiThep == loaiThep && x.DKCD.ToString() == kichThuoc),
+                    async () => await context.TKThepHoGas.AnyAsync(x => x.LoaiThep == loaiThep && x.DKCD.ToString() == kichThuoc),
+                    async () => await context.TKThepMongCHops.AnyAsync(x => x.LoaiThep == loaiThep && x.DKCD.ToString() == kichThuoc),
+                    async () => await context.TKThepMongCTrons.AnyAsync(x => x.LoaiThep == loaiThep && x.DKCD.ToString() == kichThuoc),
+                    async () => await context.TKThepRBTongs.AnyAsync(x => x.LoaiThep == loaiThep && x.DKCD.ToString() == kichThuoc),
+                    async () => await context.TKThepRXays.AnyAsync(x => x.LoaiThep == loaiThep && x.DKCD.ToString() == kichThuoc),
+                    async () => await context.TKThepTamDans.AnyAsync(x => x.LoaiThep == loaiThep && x.DKCD.ToString() == kichThuoc),
+                    async () => await context.TKThepTChongs.AnyAsync(x => x.LoaiThep == loaiThep && x.DKCD.ToString() == kichThuoc),
+                    async () => await context.TKThepTDanCHops.AnyAsync(x => x.LoaiThep == loaiThep && x.DKCD.ToString() == kichThuoc),
+                    async () => await context.TKThepTDanRXays.AnyAsync(x => x.LoaiThep == loaiThep && x.DKCD.ToString() == kichThuoc),
+                    async () => await context.TKThepTDRBTongs.AnyAsync(x => x.LoaiThep == loaiThep && x.DKCD.ToString() == kichThuoc)
+                };
+
+            foreach (var check in checks)
             {
-                var query1 = context.TKThepTamDans
-                      .Where(x => (x.LoaiThep == LoaiThep && x.DKCD.ToString() == KichThuoc));
-                var data1 = await query.ToListAsync();
-                // Kiểm tra nếu danh sách kết quả rỗng hoặc không có dữ liệu khớp
-                isSuccess = data1.Any();
-                return (isSuccess);
+                if (await check())
+                {
+                    return true; 
+                }
             }
+
+            return false; 
         }
+
 
         public async Task Update(DMThep DMThep)
         {
@@ -146,8 +156,9 @@ namespace DucAnhERP.Services
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {DMThep.Id}");
             }
 
-            context.DMTLTheps.Update(DMThep);
-            await context.SaveChangesAsync();
+            //context.DMTLTheps.Update(DMThep);
+            //await context.SaveChangesAsync();
+            await SaveChanges(context);
         }
         public async Task UpdateMulti(DMThep[] DMThep)
         {
@@ -275,5 +286,96 @@ namespace DucAnhERP.Services
             }
         }
 
+
+        public async Task SaveChanges(ApplicationDbContext context)
+        {
+            try
+            {
+                // Kiểm tra và xử lý các thay đổi trong DbContext
+                var addedEntities = context.ChangeTracker.Entries()
+                    .Where(e => e.State == EntityState.Added)
+                    .ToList();
+
+                var modifiedEntities = context.ChangeTracker.Entries()
+                    .Where(e => e.State == EntityState.Modified)
+                    .ToList();
+
+                var deletedEntities = context.ChangeTracker.Entries()
+                    .Where(e => e.State == EntityState.Deleted)
+                    .ToList();
+
+                // Xử lý thay đổi khi thêm
+                if (addedEntities.Any())
+                {
+                    foreach (var addedEntity in addedEntities)
+                    {
+                        await HandleEntityAdd(addedEntity);
+                    }
+                }
+
+                // Xử lý thay đổi khi sửa
+                if (modifiedEntities.Any())
+                {
+                    foreach (var modifiedEntity in modifiedEntities)
+                    {
+                        await HandleEntityUpdate(modifiedEntity);
+                    }
+                }
+
+                // Xử lý thay đổi khi xóa
+                if (deletedEntities.Any())
+                {
+                    foreach (var deletedEntity in deletedEntities)
+                    {
+                        await HandleEntityDelete(deletedEntity);
+                    }
+                }
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"An error occurred while saving changes: {ex.Message}");
+                throw;
+            }
+        }
+        private async Task HandleEntityAdd(EntityEntry entityEntry)
+        {
+            var addedEntity = entityEntry.Entity as TKThepHoGa;
+            if (addedEntity != null)
+            {
+                
+                
+            }
+        }
+        private async Task HandleEntityDelete(EntityEntry entityEntry)
+        {
+            var deletedEntity = entityEntry.Entity as TKThepHoGa;
+            if (deletedEntity != null)
+            {
+              
+            }
+        }
+        private async Task HandleEntityUpdate(EntityEntry entityEntry)
+        {
+            try
+            {
+                var modifiedEntity = entityEntry.Entity as DMThep;
+                if (modifiedEntity != null)
+                {
+                    DMThep entity = await GetById(modifiedEntity.Id);
+                    if (entity == null)
+                    {
+                        throw new Exception($"Không tìm thấy bản ghi theo ID: {modifiedEntity.Id}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
     }
 }
