@@ -1,4 +1,5 @@
-﻿using DucAnhERP.Data;
+﻿using DucAnhERP.Components.Pages.NghiepVuCongTrinh.TKThep;
+using DucAnhERP.Data;
 using DucAnhERP.Helpers;
 using DucAnhERP.Models;
 using DucAnhERP.Repository;
@@ -11,9 +12,35 @@ namespace DucAnhERP.Services
     public class DMTLThepRepository : IDMTLThepRepository
     {
         private readonly IDbContextFactory<ApplicationDbContext> _context;
+        private readonly TKThepHoGaRepository _tKThepHoGaRepository;
+        private readonly TKThepTamDanRepository _tKThepTamDanRepository;
+        private readonly TKThepCTronRepository _tKThepCTronRepository;
+        private readonly TKThepMongCTronRepository _tKThepMongCTronRepository;
+        private readonly TKThepDeCongRepository _tKThepDeCongRepository;
+        private readonly TKThepCHopRepository _tKThepCHopRepository;
+        private readonly TKThepMongCHopRepository _tKThepMongCHopRepository;
+        private readonly TKThepTDanCHopRepository _tKThepTDanCHopRepository;
+        private readonly TKThepRXayRepository _tKThepRXayRepository;
+        private readonly TKThepTDanRXayRepository _tKThepTDanRXayRepository;
+        private readonly TKThepTChongRepository _tKThepTChongRepository;
+        private readonly TKThepRBTongRepository _tKThepRBTongRepository;
+        private readonly TKThepTDRBTongRepository _tKThepTDRBTongRepository;
         public DMTLThepRepository(IDbContextFactory<ApplicationDbContext> context)
         {
             _context = context;
+            _tKThepHoGaRepository = new TKThepHoGaRepository(context);
+            _tKThepTamDanRepository = new TKThepTamDanRepository(context);
+            _tKThepCTronRepository = new TKThepCTronRepository(context);
+            _tKThepMongCTronRepository = new TKThepMongCTronRepository(context);
+            _tKThepDeCongRepository = new TKThepDeCongRepository(context);
+            _tKThepCHopRepository = new TKThepCHopRepository(context);
+            _tKThepMongCHopRepository = new TKThepMongCHopRepository(context);
+            _tKThepTDanCHopRepository = new TKThepTDanCHopRepository(context);
+            _tKThepRXayRepository = new TKThepRXayRepository(context);
+            _tKThepTDanRXayRepository = new TKThepTDanRXayRepository(context);
+            _tKThepTChongRepository = new TKThepTChongRepository(context);
+            _tKThepRBTongRepository = new TKThepRBTongRepository(context);
+            _tKThepTDRBTongRepository = new TKThepTDRBTongRepository(context);
         }
         public async Task<List<DMThep>> GetAll()
         {
@@ -89,11 +116,10 @@ namespace DucAnhERP.Services
                 var query = context.DMTLTheps
                              .Where(item => (
                                     item.ChungLoaiThep == searchData.ChungLoaiThep &&
-                                    item.DuongKinh == searchData.DuongKinh &&
-                                    item.DonVi == searchData.DonVi &&
-                                    item.TrongLuong == searchData.TrongLuong
-
-                                          ));
+                                    item.DuongKinh == searchData.DuongKinh 
+                                    //&& item.DonVi == searchData.DonVi
+                                    //&&item.TrongLuong == searchData.TrongLuong
+                                    ));
                 var result = await query.ToListAsync();
                 return result;
             }
@@ -111,7 +137,6 @@ namespace DucAnhERP.Services
                 .FirstOrDefaultAsync(x => x.ChungLoaiThep == LoaiThep && x.DuongKinh == DKCD);
             return result;
         }
-
         public async Task<bool> CheckUsingId(string loaiThep, string kichThuoc)
         {
             using var context = _context.CreateDbContext();
@@ -144,8 +169,6 @@ namespace DucAnhERP.Services
 
             return false; 
         }
-
-
         public async Task Update(DMThep DMThep)
         {
             using var context = _context.CreateDbContext();
@@ -156,7 +179,7 @@ namespace DucAnhERP.Services
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {DMThep.Id}");
             }
 
-            //context.DMTLTheps.Update(DMThep);
+            context.DMTLTheps.Update(DMThep);
             //await context.SaveChangesAsync();
             await SaveChanges(context);
         }
@@ -361,15 +384,565 @@ namespace DucAnhERP.Services
         {
             try
             {
-                var modifiedEntity = entityEntry.Entity as DMThep;
-                if (modifiedEntity != null)
+                if (entityEntry.Entity is not DMThep modifiedEntity) return;
+
+                var entity = await GetById(modifiedEntity.Id);
+                if (entity == null)
                 {
-                    DMThep entity = await GetById(modifiedEntity.Id);
-                    if (entity == null)
-                    {
-                        throw new Exception($"Không tìm thấy bản ghi theo ID: {modifiedEntity.Id}");
-                    }
+                    throw new Exception($"Không tìm thấy bản ghi theo ID: {modifiedEntity.Id}");
                 }
+
+                //tKThepHoGas
+                var tKThepHoGaModel = new TKThepHoGaModel
+                {
+                    LoaiThep = modifiedEntity.ChungLoaiThep,
+                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValue) ? parsedValue : -1
+                };
+                var result = await _tKThepHoGaRepository.GetAllByVM(tKThepHoGaModel);
+                if (result == null || !result.Any()) return;
+                var tKThepHoGas = result.Select(record =>
+                {
+                    if (string.IsNullOrEmpty(record.TenCongTac)) return null;
+
+                    var dkcd = double.TryParse(modifiedEntity.DuongKinh, out var parsedValue1) ? parsedValue1 : 0;
+                    var tongSoThanh = record.SoThanh * record.SoCK??0;
+                    var tongChieuDai = Math.Round((tongSoThanh * record.ChieuDai1Thanh??0) / 1000, 4);
+                    var trongLuong = modifiedEntity.TrongLuong;
+                    var tongTrongLuong = record.LoaiThep_Name.Trim().ToUpper() == "THÉP BẢN"
+                        ? Math.Round((dkcd * tongChieuDai * trongLuong ?? 0) / 1000000, 4)
+                        : Math.Round(tongChieuDai * trongLuong ??0, 4);
+
+                    return new TKThepHoGa
+                    {
+                        Id =record.Id,
+                        ThongTinChungHoGa_TenHoGaSauPhanLoai = record.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                        VTLayKhoiLuong = record.VTLayKhoiLuong,
+                        LoaiThep = record.LoaiThep,
+                        SoHieu = record.SoHieu,
+                        DKCD = dkcd,
+                        SoThanh = record.SoThanh,
+                        SoCK = record.SoCK,
+                        TongSoThanh = tongSoThanh,
+                        ChieuDai1Thanh = record.ChieuDai1Thanh,
+                        TongChieuDai = tongChieuDai,
+                        TrongLuong = trongLuong,
+                        TongTrongLuong = tongTrongLuong,
+                        TenCongTac = $"Gia công lắp dựng thép {dkcd} {record.LoaiThep_Name} D{dkcd}",
+                        CreateAt = record.CreateAt,
+                        CreateBy = record.CreateBy,
+                        Flag = record.Flag
+                    };
+                }).Where(x => x != null).ToList();
+                if (tKThepHoGas.Any())
+                {
+                    await _tKThepHoGaRepository.UpdateMulti(tKThepHoGas.ToArray());
+                }
+
+
+                //tKThepHoGas
+                var tKThepTamDanModel = new TKThepTamDanModel
+                {
+                    LoaiThep = modifiedEntity.ChungLoaiThep,
+                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueTD) ? parsedValueTD : -1
+                };
+                var resultThepTD = await _tKThepTamDanRepository.GetAllByVM(tKThepTamDanModel);
+                if (resultThepTD == null || !resultThepTD.Any()) return;
+                var tKThepTamDans = resultThepTD.Select(record =>
+                {
+                    if (string.IsNullOrEmpty(record.TenCongTac)) return null;
+
+                    var dkcd = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueTD1) ? parsedValueTD1 : 0;
+                    var tongSoThanh = record.SoThanh * record.SoCK ?? 0;
+                    var tongChieuDai = Math.Round((tongSoThanh * record.ChieuDai1Thanh ?? 0) / 1000, 4);
+                    var trongLuong = modifiedEntity.TrongLuong;
+                    var tongTrongLuong = record.LoaiThep_Name.Trim().ToUpper() == "THÉP BẢN"
+                        ? Math.Round((dkcd * tongChieuDai * trongLuong ?? 0) / 1000000, 4)
+                        : Math.Round(tongChieuDai * trongLuong ?? 0, 4);
+
+                    return new TKThepTamDan
+                    {
+                        Id = record.Id,
+                        ThongTinTamDanHoGa2_PhanLoaiDayHoGa = record.ThongTinTamDanHoGa2_PhanLoaiDayHoGa,
+                        VTLayKhoiLuong = record.VTLayKhoiLuong,
+                        LoaiThep = record.LoaiThep,
+                        SoHieu = record.SoHieu,
+                        DKCD = dkcd,
+                        SoThanh = record.SoThanh,
+                        SoCK = record.SoCK,
+                        TongSoThanh = tongSoThanh,
+                        ChieuDai1Thanh = record.ChieuDai1Thanh,
+                        TongChieuDai = tongChieuDai,
+                        TrongLuong = trongLuong,
+                        TongTrongLuong = tongTrongLuong,
+                        TenCongTac = $"Gia công lắp dựng thép {dkcd} {record.LoaiThep_Name} D{dkcd}",
+                        CreateAt = record.CreateAt,
+                        CreateBy = record.CreateBy,
+                        Flag = record.Flag
+                    };
+                }).Where(x => x != null).ToList();
+                if (tKThepTamDans.Any())
+                {
+                    await _tKThepTamDanRepository.UpdateMulti(tKThepTamDans.ToArray());
+                }
+
+                //tKThepCongTrons
+                var tKThepCTronModel = new TKThepCTronModel
+                {
+                    LoaiThep = modifiedEntity.ChungLoaiThep,
+                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueCT) ? parsedValueCT : -1
+                };
+                var resultThepCT = await _tKThepCTronRepository.GetAllByVM(tKThepCTronModel);
+                if (resultThepCT == null || !resultThepCT.Any()) return;
+                var tKThepCongTrons = resultThepCT.Select(record =>
+                {
+                    if (string.IsNullOrEmpty(record.TenCongTac)) return null;
+
+                    var dkcd = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueCT1) ? parsedValueCT1 : 0;
+                    var tongSoThanh = record.SoThanh * record.SoCK ?? 0;
+                    var tongChieuDai = Math.Round((tongSoThanh * record.ChieuDai1Thanh ?? 0) / 1000, 4);
+                    var trongLuong = modifiedEntity.TrongLuong;
+                    var tongTrongLuong = record.LoaiThep_Name.Trim().ToUpper() == "THÉP BẢN"
+                        ? Math.Round((dkcd * tongChieuDai * trongLuong ?? 0) / 1000000, 4)
+                        : Math.Round(tongChieuDai * trongLuong ?? 0, 4);
+
+                    return new TKThepCTron
+                    {
+                        Id = record.Id,
+                        ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = record.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                        VTLayKhoiLuong = record.VTLayKhoiLuong,
+                        LoaiThep = record.LoaiThep,
+                        SoHieu = record.SoHieu,
+                        DKCD = dkcd,
+                        SoThanh = record.SoThanh,
+                        SoCK = record.SoCK,
+                        TongSoThanh = tongSoThanh,
+                        ChieuDai1Thanh = record.ChieuDai1Thanh,
+                        TongChieuDai = tongChieuDai,
+                        TrongLuong = trongLuong,
+                        TongTrongLuong = tongTrongLuong,
+                        TenCongTac = $"Gia công lắp dựng thép {dkcd} {record.LoaiThep_Name} D{dkcd}",
+                        CreateAt = record.CreateAt,
+                        CreateBy = record.CreateBy,
+                        Flag = record.Flag
+                    };
+                }).Where(x => x != null).ToList();
+                if (tKThepCongTrons.Any())
+                {
+                    await _tKThepCTronRepository.UpdateMulti(tKThepCongTrons.ToArray());
+                }
+
+                //tKThepMongCongTrons
+                var tKThepMongCTronModel = new TKThepMongCTronModel
+                {
+                    LoaiThep = modifiedEntity.ChungLoaiThep,
+                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueMCT) ? parsedValueMCT : -1
+                };
+                var resultThepMCT = await _tKThepMongCTronRepository.GetAllByVM(tKThepMongCTronModel);
+                if (resultThepMCT == null || !resultThepMCT.Any()) return;
+                var tKThepMongCongTrons = resultThepMCT.Select(record =>
+                {
+                    if (string.IsNullOrEmpty(record.TenCongTac)) return null;
+
+                    var dkcd = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueMCT1) ? parsedValueMCT1 : 0;
+                    var tongSoThanh = record.SoThanh * record.SoCK ?? 0;
+                    var tongChieuDai = Math.Round((tongSoThanh * record.ChieuDai1Thanh ?? 0) / 1000, 4);
+                    var trongLuong = modifiedEntity.TrongLuong;
+                    var tongTrongLuong = record.LoaiThep_Name.Trim().ToUpper() == "THÉP BẢN"
+                        ? Math.Round((dkcd * tongChieuDai * trongLuong ?? 0) / 1000000, 4)
+                        : Math.Round(tongChieuDai * trongLuong ?? 0, 4);
+
+                    return new TKThepMongCTron
+                    {
+                        Id = record.Id,
+                        ThongTinLyTrinh_TuyenDuong = record.ThongTinLyTrinh_TuyenDuong,
+                        ThongTinLyTrinhTruyenDan_TuLyTrinh = record.ThongTinLyTrinhTruyenDan_TuLyTrinh,
+                        ThongTinLyTrinhTruyenDan_DenLyTrinh = record.ThongTinLyTrinhTruyenDan_DenLyTrinh,
+                        ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = record.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                        VTLayKhoiLuong = record.VTLayKhoiLuong,
+                        LoaiThep = record.LoaiThep,
+                        SoHieu = record.SoHieu,
+                        DKCD = dkcd,
+                        SoThanh = record.SoThanh,
+                        SoCK = record.SoCK,
+                        TongSoThanh = tongSoThanh,
+                        ChieuDai1Thanh = record.ChieuDai1Thanh,
+                        TongChieuDai = tongChieuDai,
+                        TrongLuong = trongLuong,
+                        TongTrongLuong = tongTrongLuong,
+                        TenCongTac = $"Gia công lắp dựng thép {dkcd} {record.LoaiThep_Name} D{dkcd}",
+                        CreateAt = record.CreateAt,
+                        CreateBy = record.CreateBy,
+                        Flag = record.Flag
+                    };
+                }).Where(x => x != null).ToList();
+                if (tKThepMongCongTrons.Any())
+                {
+                    await _tKThepMongCTronRepository.UpdateMulti(tKThepMongCongTrons.ToArray());
+                }
+                
+                //tKThepDeCongs
+                var tKThepDCongModel = new TKThepDCongModel
+                {
+                    LoaiThep = modifiedEntity.ChungLoaiThep,
+                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueDC) ? parsedValueDC : -1
+                };
+                var resultThepDC = await _tKThepDeCongRepository.GetAllByVM(tKThepDCongModel);
+                if (resultThepDC == null || !resultThepDC.Any()) return;
+                var tKThepDeCongs = resultThepDC.Select(record =>
+                {
+                    if (string.IsNullOrEmpty(record.TenCongTac)) return null;
+
+                    var dkcd = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueMCT1) ? parsedValueMCT1 : 0;
+                    var tongSoThanh = record.SoThanh * record.SoCK ?? 0;
+                    var tongChieuDai = Math.Round((tongSoThanh * record.ChieuDai1Thanh ?? 0) / 1000, 4);
+                    var trongLuong = modifiedEntity.TrongLuong;
+                    var tongTrongLuong = record.LoaiThep_Name.Trim().ToUpper() == "THÉP BẢN"
+                        ? Math.Round((dkcd * tongChieuDai * trongLuong ?? 0) / 1000000, 4)
+                        : Math.Round(tongChieuDai * trongLuong ?? 0, 4);
+                    return new TKThepDCong
+                    {
+                        Id = record.Id,
+                        ThongTinDeCong_TenLoaiDeCong = record.ThongTinDeCong_TenLoaiDeCong,
+                        VTLayKhoiLuong = record.VTLayKhoiLuong,
+                        LoaiThep = record.LoaiThep,
+                        SoHieu = record.SoHieu,
+                        DKCD = dkcd,
+                        SoThanh = record.SoThanh,
+                        SoCK = record.SoCK,
+                        TongSoThanh = tongSoThanh,
+                        ChieuDai1Thanh = record.ChieuDai1Thanh,
+                        TongChieuDai = tongChieuDai,
+                        TrongLuong = trongLuong,
+                        TongTrongLuong = tongTrongLuong,
+                        TenCongTac = $"Gia công lắp dựng thép {dkcd} {record.LoaiThep_Name} D{dkcd}",
+                        CreateAt = record.CreateAt,
+                        CreateBy = record.CreateBy,
+                        Flag = record.Flag
+                    };
+                }).Where(x => x != null).ToList();
+                if (tKThepDeCongs.Any())
+                {
+                    await _tKThepDeCongRepository.UpdateMulti(tKThepDeCongs.ToArray());
+                }
+
+                //tKThepCongHops
+                var tkThepCHopModel = new TKThepCHopModel
+                {
+                    LoaiThep = modifiedEntity.ChungLoaiThep,
+                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueCH) ? parsedValueCH : -1
+                };
+                var resultThepCH = await _tKThepCHopRepository.GetAllByVM(tkThepCHopModel);
+                if (resultThepCH == null || !resultThepCH.Any()) return;
+                var tKThepCongHops = resultThepCH.Select(record =>
+                {
+                    if (string.IsNullOrEmpty(record.TenCongTac)) return null;
+
+                    var dkcd = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueCH1) ? parsedValueCH1 : 0;
+                    var tongSoThanh = record.SoThanh * record.SoCK ?? 0;
+                    var tongChieuDai = Math.Round((tongSoThanh * record.ChieuDai1Thanh ?? 0) / 1000, 4);
+                    var trongLuong = modifiedEntity.TrongLuong;
+                    var tongTrongLuong = record.LoaiThep_Name.Trim().ToUpper() == "THÉP BẢN"
+                        ? Math.Round((dkcd * tongChieuDai * trongLuong ?? 0) / 1000000, 4)
+                        : Math.Round(tongChieuDai * trongLuong ?? 0, 4);
+                    return new TKThepCHop
+                    {
+                        Id = record.Id,
+                        ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = record.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                        VTLayKhoiLuong = record.VTLayKhoiLuong,
+                        LoaiThep = record.LoaiThep,
+                        SoHieu = record.SoHieu,
+                        DKCD = dkcd,
+                        SoThanh = record.SoThanh,
+                        SoCK = record.SoCK,
+                        TongSoThanh = tongSoThanh,
+                        ChieuDai1Thanh = record.ChieuDai1Thanh,
+                        TongChieuDai = tongChieuDai,
+                        TrongLuong = trongLuong,
+                        TongTrongLuong = tongTrongLuong,
+                        TenCongTac = $"Gia công lắp dựng thép {dkcd} {record.LoaiThep_Name} D{dkcd}",
+                        CreateAt = record.CreateAt,
+                        CreateBy = record.CreateBy,
+                        Flag = record.Flag
+                    };
+                }).Where(x => x != null).ToList();
+                if (tKThepCongHops.Any())
+                {
+                    await _tKThepCHopRepository.UpdateMulti(tKThepCongHops.ToArray());
+                }
+
+                //tKThepMongCongHops
+                var tkThepMongCHopModel = new TKThepMongCHopModel
+                {
+                    LoaiThep = modifiedEntity.ChungLoaiThep,
+                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueMCH) ? parsedValueMCH : -1
+                };
+                var resultThepMCH = await _tKThepMongCHopRepository.GetAllByVM(tkThepMongCHopModel);
+                if (resultThepMCH == null || !resultThepMCH.Any()) return;
+                var tKThepMongCongHops = resultThepMCH.Select(record =>
+                {
+                    if (string.IsNullOrEmpty(record.TenCongTac)) return null;
+
+                    var dkcd = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueMCH1) ? parsedValueMCH1 : 0;
+                    var tongSoThanh = record.SoThanh * record.SoCK ?? 0;
+                    var tongChieuDai = Math.Round((tongSoThanh * record.ChieuDai1Thanh ?? 0) / 1000, 4);
+                    var trongLuong = modifiedEntity.TrongLuong;
+                    var tongTrongLuong = record.LoaiThep_Name.Trim().ToUpper() == "THÉP BẢN"
+                        ? Math.Round((dkcd * tongChieuDai * trongLuong ?? 0) / 1000000, 4)
+                        : Math.Round(tongChieuDai * trongLuong ?? 0, 4);
+                    return new TKThepMongCHop
+                    {
+                        Id = record.Id,
+                        ThongTinLyTrinh_TuyenDuong = record.ThongTinLyTrinh_TuyenDuong,
+                        ThongTinLyTrinhTruyenDan_TuLyTrinh = record.ThongTinLyTrinhTruyenDan_TuLyTrinh,
+                        ThongTinLyTrinhTruyenDan_DenLyTrinh = record.ThongTinLyTrinhTruyenDan_DenLyTrinh,
+                        ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop = record.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
+                        VTLayKhoiLuong = record.VTLayKhoiLuong,
+                        LoaiThep = record.LoaiThep,
+                        SoHieu = record.SoHieu,
+                        DKCD = dkcd,
+                        SoThanh = record.SoThanh,
+                        SoCK = record.SoCK,
+                        TongSoThanh = tongSoThanh,
+                        ChieuDai1Thanh = record.ChieuDai1Thanh,
+                        TongChieuDai = tongChieuDai,
+                        TrongLuong = trongLuong,
+                        TongTrongLuong = tongTrongLuong,
+                        TenCongTac = $"Gia công lắp dựng thép {dkcd} {record.LoaiThep_Name} D{dkcd}",
+                        CreateAt = record.CreateAt,
+                        CreateBy = record.CreateBy,
+                        Flag = record.Flag
+                    };
+                }).Where(x => x != null).ToList();
+                if (tKThepMongCongHops.Any())
+                {
+                    await _tKThepMongCHopRepository.UpdateMulti(tKThepMongCongHops.ToArray());
+                }
+
+                //tKThepTamDanConghops
+                var tkThepTDanCHopModel = new TKThepTDanCHopModel
+                {
+                    LoaiThep = modifiedEntity.ChungLoaiThep,
+                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueTDCH) ? parsedValueTDCH : -1
+                };
+                var resultThepTDCH = await _tKThepTDanCHopRepository.GetAllByVM(tkThepTDanCHopModel);
+                if (resultThepTDCH == null || !resultThepTDCH.Any()) return;
+                var tKThepTDanCHops = resultThepTDCH.Select(record =>
+                {
+                    if (string.IsNullOrEmpty(record.TenCongTac)) return null;
+
+                    var dkcd = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueTDCH1) ? parsedValueTDCH1 : 0;
+                    var tongSoThanh = record.SoThanh * record.SoCK ?? 0;
+                    var tongChieuDai = Math.Round((tongSoThanh * record.ChieuDai1Thanh ?? 0) / 1000, 4);
+                    var trongLuong = modifiedEntity.TrongLuong;
+                    var tongTrongLuong = record.LoaiThep_Name.Trim().ToUpper() == "THÉP BẢN"
+                        ? Math.Round((dkcd * tongChieuDai * trongLuong ?? 0) / 1000000, 4)
+                        : Math.Round(tongChieuDai * trongLuong ?? 0, 4);
+                    return new TKThepTDanCHop
+                    {
+                        Id = record.Id,
+                        TTTDCongHoRanh_TenLoaiTamDanTieuChuan = record.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
+                        VTLayKhoiLuong = record.VTLayKhoiLuong,
+                        LoaiThep = record.LoaiThep,
+                        SoHieu = record.SoHieu,
+                        DKCD = dkcd,
+                        SoThanh = record.SoThanh,
+                        SoCK = record.SoCK,
+                        TongSoThanh = tongSoThanh,
+                        ChieuDai1Thanh = record.ChieuDai1Thanh,
+                        TongChieuDai = tongChieuDai,
+                        TrongLuong = trongLuong,
+                        TongTrongLuong = tongTrongLuong,
+                        TenCongTac = $"Gia công lắp dựng thép {dkcd} {record.LoaiThep_Name} D{dkcd}",
+                        CreateAt = record.CreateAt,
+                        CreateBy = record.CreateBy,
+                        Flag = record.Flag
+                    };
+                }).Where(x => x != null).ToList();
+                if (tKThepTDanCHops.Any())
+                {
+                    await _tKThepTDanCHopRepository.UpdateMulti(tKThepTDanCHops.ToArray());
+                }
+
+                //tKThepRanhXays
+                var tkThepRXayModel = new TKThepRXayModel
+                {
+                    LoaiThep = modifiedEntity.ChungLoaiThep,
+                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueRX) ? parsedValueRX : -1
+                };
+                var resultThepRX = await _tKThepRXayRepository.GetAllByVM(tkThepRXayModel);
+                if (resultThepRX == null || !resultThepRX.Any()) return;
+                var tKThepRanhXays = resultThepRX.Select(record =>
+                {
+                    if (string.IsNullOrEmpty(record.TenCongTac)) return null;
+
+                    var dkcd = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueRX1) ? parsedValueRX1 : 0;
+                    var tongSoThanh = record.SoThanh * record.SoCK ?? 0;
+                    var tongChieuDai = Math.Round((tongSoThanh * record.ChieuDai1Thanh ?? 0) / 1000, 4);
+                    var trongLuong = modifiedEntity.TrongLuong;
+                    var tongTrongLuong = record.LoaiThep_Name.Trim().ToUpper() == "THÉP BẢN"
+                        ? Math.Round((dkcd * tongChieuDai * trongLuong ?? 0) / 1000000, 4)
+                        : Math.Round(tongChieuDai * trongLuong ?? 0, 4);
+                    return new TKThepRXay
+                    {
+                        Id = record.Id,
+                        ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = record.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                        VTLayKhoiLuong = record.VTLayKhoiLuong,
+                        LoaiThep = record.LoaiThep,
+                        SoHieu = record.SoHieu,
+                        DKCD = dkcd,
+                        SoThanh = record.SoThanh,
+                        SoCK = record.SoCK,
+                        TongSoThanh = tongSoThanh,
+                        ChieuDai1Thanh = record.ChieuDai1Thanh,
+                        TongChieuDai = tongChieuDai,
+                        TrongLuong = trongLuong,
+                        TongTrongLuong = tongTrongLuong,
+                        TenCongTac = $"Gia công lắp dựng thép {dkcd} {record.LoaiThep_Name} D{dkcd}",
+                        CreateAt = record.CreateAt,
+                        CreateBy = record.CreateBy,
+                        Flag = record.Flag
+                    };
+                }).Where(x => x != null).ToList();
+                if (tKThepRanhXays.Any())
+                {
+                    await _tKThepRXayRepository.UpdateMulti(tKThepRanhXays.ToArray());
+                }
+
+                //tKThepTDRanhXays
+                var tkThepTDanRXayModel = new TKThepTDanRXayModel
+                {
+                    LoaiThep = modifiedEntity.ChungLoaiThep,
+                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueTDRX) ? parsedValueTDRX : -1
+                };
+                var resultThepTDRX = await _tKThepTDanRXayRepository.GetAllByVM(tkThepTDanRXayModel);
+                if (resultThepTDRX == null || !resultThepTDRX.Any()) return;
+                var tKThepTDRanhXays = resultThepTDRX.Select(record =>
+                {
+                    if (string.IsNullOrEmpty(record.TenCongTac)) return null;
+
+                    var dkcd = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueTDRX1) ? parsedValueTDRX1 : 0;
+                    var tongSoThanh = record.SoThanh * record.SoCK ?? 0;
+                    var tongChieuDai = Math.Round((tongSoThanh * record.ChieuDai1Thanh ?? 0) / 1000, 4);
+                    var trongLuong = modifiedEntity.TrongLuong;
+                    var tongTrongLuong = record.LoaiThep_Name.Trim().ToUpper() == "THÉP BẢN"
+                        ? Math.Round((dkcd * tongChieuDai * trongLuong ?? 0) / 1000000, 4)
+                        : Math.Round(tongChieuDai * trongLuong ?? 0, 4);
+                    return new TKThepTDanRXay
+                    {
+                        Id = record.Id,
+                        TTTDCongHoRanh_TenLoaiTamDanTieuChuan = record.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
+                        VTLayKhoiLuong = record.VTLayKhoiLuong,
+                        LoaiThep = record.LoaiThep,
+                        SoHieu = record.SoHieu,
+                        DKCD = dkcd,
+                        SoThanh = record.SoThanh,
+                        SoCK = record.SoCK,
+                        TongSoThanh = tongSoThanh,
+                        ChieuDai1Thanh = record.ChieuDai1Thanh,
+                        TongChieuDai = tongChieuDai,
+                        TrongLuong = trongLuong,
+                        TongTrongLuong = tongTrongLuong,
+                        TenCongTac = $"Gia công lắp dựng thép {dkcd} {record.LoaiThep_Name} D{dkcd}",
+                        CreateAt = record.CreateAt,
+                        CreateBy = record.CreateBy,
+                        Flag = record.Flag
+                    };
+                }).Where(x => x != null).ToList();
+                if (tKThepTDRanhXays.Any())
+                {
+                    await _tKThepTDanRXayRepository.UpdateMulti(tKThepTDRanhXays.ToArray());
+                }
+
+                //tKThepRanhBeTongs
+                var tkThepRBTongModel = new TKThepRBTongModel
+                {
+                    LoaiThep = modifiedEntity.ChungLoaiThep,
+                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueRBT) ? parsedValueRBT : -1
+                };
+                var resultThepRBT = await _tKThepRBTongRepository.GetAllByVM(tkThepRBTongModel);
+                if (resultThepRBT == null || !resultThepRBT.Any()) return;
+                var tKThepRanhBeTongs = resultThepRBT.Select(record =>
+                {
+                    if (string.IsNullOrEmpty(record.TenCongTac)) return null;
+
+                    var dkcd = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueRBT1) ? parsedValueRBT1 : 0;
+                    var tongSoThanh = record.SoThanh * record.SoCK ?? 0;
+                    var tongChieuDai = Math.Round((tongSoThanh * record.ChieuDai1Thanh ?? 0) / 1000, 4);
+                    var trongLuong = modifiedEntity.TrongLuong;
+                    var tongTrongLuong = record.LoaiThep_Name.Trim().ToUpper() == "THÉP BẢN"
+                        ? Math.Round((dkcd * tongChieuDai * trongLuong ?? 0) / 1000000, 4)
+                        : Math.Round(tongChieuDai * trongLuong ?? 0, 4);
+                    return new TKThepRBTong
+                    {
+                        Id = record.Id,
+                        ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = record.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                        VTLayKhoiLuong = record.VTLayKhoiLuong,
+                        LoaiThep = record.LoaiThep,
+                        SoHieu = record.SoHieu,
+                        DKCD = dkcd,
+                        SoThanh = record.SoThanh,
+                        SoCK = record.SoCK,
+                        TongSoThanh = tongSoThanh,
+                        ChieuDai1Thanh = record.ChieuDai1Thanh,
+                        TongChieuDai = tongChieuDai,
+                        TrongLuong = trongLuong,
+                        TongTrongLuong = tongTrongLuong,
+                        TenCongTac = $"Gia công lắp dựng thép {dkcd} {record.LoaiThep_Name} D{dkcd}",
+                        CreateAt = record.CreateAt,
+                        CreateBy = record.CreateBy,
+                        Flag = record.Flag
+                    };
+                }).Where(x => x != null).ToList();
+                if (tKThepRanhBeTongs.Any())
+                {
+                    await _tKThepRBTongRepository.UpdateMulti(tKThepRanhBeTongs.ToArray());
+                }
+
+                //tKThepTDRanhBeTongs
+                var tkThepTDRBTongModel = new TKThepTDRBTongModel
+                {
+                    LoaiThep = modifiedEntity.ChungLoaiThep,
+                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueTC) ? parsedValueTC : -1
+                };
+                var resultThepTDRBT = await _tKThepTDRBTongRepository.GetAllByVM(tkThepTDRBTongModel);
+                if (resultThepTDRBT == null || !resultThepTDRBT.Any()) return;
+                var tKThepTDRanhBeTongs = resultThepTDRBT.Select(record =>
+                {
+                    if (string.IsNullOrEmpty(record.TenCongTac)) return null;
+
+                    var dkcd = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueTDRX1) ? parsedValueTDRX1 : 0;
+                    var tongSoThanh = record.SoThanh * record.SoCK ?? 0;
+                    var tongChieuDai = Math.Round((tongSoThanh * record.ChieuDai1Thanh ?? 0) / 1000, 4);
+                    var trongLuong = modifiedEntity.TrongLuong;
+                    var tongTrongLuong = record.LoaiThep_Name.Trim().ToUpper() == "THÉP BẢN"
+                        ? Math.Round((dkcd * tongChieuDai * trongLuong ?? 0) / 1000000, 4)
+                        : Math.Round(tongChieuDai * trongLuong ?? 0, 4);
+                    return new TKThepTDRBTong
+                    {
+                        Id = record.Id,
+                        TTTDCongHoRanh_TenLoaiTamDanTieuChuan = record.TTTDCongHoRanh_TenLoaiTamDanTieuChuan,
+                        VTLayKhoiLuong = record.VTLayKhoiLuong,
+                        LoaiThep = record.LoaiThep,
+                        SoHieu = record.SoHieu,
+                        DKCD = dkcd,
+                        SoThanh = record.SoThanh,
+                        SoCK = record.SoCK,
+                        TongSoThanh = tongSoThanh,
+                        ChieuDai1Thanh = record.ChieuDai1Thanh,
+                        TongChieuDai = tongChieuDai,
+                        TrongLuong = trongLuong,
+                        TongTrongLuong = tongTrongLuong,
+                        TenCongTac = $"Gia công lắp dựng thép {dkcd} {record.LoaiThep_Name} D{dkcd}",
+                        CreateAt = record.CreateAt,
+                        CreateBy = record.CreateBy,
+                        Flag = record.Flag
+                    };
+                }).Where(x => x != null).ToList();
+                if (tKThepTDRanhBeTongs.Any())
+                {
+                    await _tKThepTDRBTongRepository.UpdateMulti(tKThepTDRanhBeTongs.ToArray());
+                }
+
             }
             catch (Exception ex)
             {
@@ -377,5 +950,6 @@ namespace DucAnhERP.Services
                 throw;
             }
         }
+
     }
 }

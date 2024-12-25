@@ -1,18 +1,6 @@
 ﻿@page "/CaiDatHeThong/listMajorUserPermission"
-@using DucAnhERP.Helpers
-@using DucAnhERP.ViewModel
-@using DucAnhERP.Models
-@using DucAnhERP.Components.Pages.Common
-@using System.Linq
-@using DucAnhERP.SeedWork
-@using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Mvc.Rendering
-@using System.Text.Json
-@inject NavigationManager navigation
-@inject DucAnhERP.Services.ToastService ToastService
-@inject IMajorRepository MajorRepository
-@inject IMajorUserPermissionRepository MajorUserPermissionRepository
 
+@using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 
 <div class="mx-5 my-2">
@@ -21,7 +9,6 @@
         <BodyTemplate>
             <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
                 <div class="row">
-
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="CompanyId">Công ty</label>
                         <Select2 Id="CompanyId" Items="@selectCompanys" OnChange="@OnSelectCompany"></Select2>

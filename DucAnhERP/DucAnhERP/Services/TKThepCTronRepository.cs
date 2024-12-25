@@ -200,17 +200,45 @@ namespace DucAnhERP.Services
             context.TKThepCTrons.Update(TKThepCTron);
             await SaveChanges(context);
         }
-        public async Task UpdateMulti(TKThepCTron[] TKThepCTron)
+
+        //public async Task UpdateMulti(TKThepCTron[] TKThepCTron)
+        //{
+        //    using var context = _context.CreateDbContext();
+        //    string[] ids = TKThepCTron.Select(x => x.Id).ToArray();
+        //    var listEntities = await context.TKThepCTrons.Where(x => ids.Contains(x.Id)).ToListAsync();
+        //    foreach (var entity in listEntities)
+        //    {
+        //        context.TKThepCTrons.Update(entity);
+        //    }
+        //    await context.SaveChangesAsync();
+        //}
+        public async Task UpdateMulti(TKThepCTron[] tKThepCTronArray)
         {
             using var context = _context.CreateDbContext();
-            string[] ids = TKThepCTron.Select(x => x.Id).ToArray();
-            var listEntities = await context.TKThepCTrons.Where(x => ids.Contains(x.Id)).ToListAsync();
+
+            // Lấy danh sách ID từ mảng đầu vào
+            var ids = tKThepCTronArray.Select(x => x.Id).ToArray();
+
+            // Lấy danh sách thực thể từ cơ sở dữ liệu dựa trên ID
+            var listEntities = await context.TKThepCTrons
+                .Where(x => ids.Contains(x.Id))
+                .ToListAsync();
+
+            // Cập nhật giá trị cho các thực thể
             foreach (var entity in listEntities)
             {
-                context.TKThepCTrons.Update(entity);
+                var updatedEntity = tKThepCTronArray.FirstOrDefault(x => x.Id == entity.Id);
+                if (updatedEntity != null)
+                {
+                    // Chỉ cập nhật các giá trị thay đổi
+                    context.Entry(entity).CurrentValues.SetValues(updatedEntity);
+                }
             }
-            await context.SaveChangesAsync();
+
+            // Lưu thay đổi
+            await SaveChanges(context);
         }
+
         public async Task DeleteById(string id)
         {
             try
@@ -238,7 +266,7 @@ namespace DucAnhERP.Services
                 context.TKThepCTrons.Remove(entity);
 
                 // Lưu tất cả thay đổi
-                await context.SaveChangesAsync();
+                await SaveChanges(context);
             }
             catch (Exception ex)
             {

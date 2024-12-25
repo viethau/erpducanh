@@ -1,19 +1,5 @@
 ﻿@page "/NghiepVuCongTrinh/PhanLoaiTDTD"
-@using DucAnhERP.Helpers
-@using DucAnhERP.ViewModel
-@using DucAnhERP.Models
-@using DucAnhERP.Components.Pages.Common
-@using System.Linq
-@using DucAnhERP.SeedWork
-@inject IJSRuntime JSRuntime
-@* @using Microsoft.AspNetCore.Authorization *@
-@inject IDanhMucRepository DanhMucRepository
-@inject IPhanLoaiTDanTDanRepository PhanLoaiTDanTDanRepository
-@inject DucAnhERP.Services.ToastService ToastService
 
-@code {
-    private bool isEdit { get; set; } = false;
-}
 <div class="m-4">
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
         <BodyTemplate>
@@ -227,6 +213,7 @@
     private PhanLoaiTDanTDanModel InputMD = new();
     public List<DanhMuc1> listDanhMuc = new();
     private DateTime baseTime;
+    private bool isEdit { get; set; } = false;
     private bool isModalVisible = false;
     private bool isLoading = false;
     private string TitleModal = "Thêm mới loại tấm đan tiêu chuẩn";

@@ -1,16 +1,4 @@
 ﻿@page "/NghiepVuCongTrinh/PhanLoaiCong"
-@using DucAnhERP.Helpers
-@using DucAnhERP.ViewModel
-@using DucAnhERP.Models
-@using DucAnhERP.Components.Pages.Common
-@using System.Linq
-@using DucAnhERP.SeedWork
-@inject IJSRuntime JSRuntime
-@* @using Microsoft.AspNetCore.Authorization *@
-@inject IDanhMucRepository DanhMucRepository
-@inject IPhanLoaiCTronHopNhuaRepository PhanLoaiCTronHopNhuaRepository
-@inject DucAnhERP.Services.ToastService ToastService
-
 
 <div class="m-4">
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">

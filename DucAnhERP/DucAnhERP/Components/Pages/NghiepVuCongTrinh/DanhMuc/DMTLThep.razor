@@ -1,14 +1,5 @@
 ﻿@page "/NghiepVuCongTrinh/DMTLThep"
-@using DucAnhERP.Helpers
-@using DucAnhERP.ViewModel
-@using DucAnhERP.Models
-@using DucAnhERP.Components.Pages.Common
-@using System.Linq
-@using DucAnhERP.SeedWork
 @* @using Microsoft.AspNetCore.Authorization *@
-@inject IDanhMucRepository DanhMucRepository
-@inject IDMTLThepRepository DMTLThepRepository
-@inject DucAnhERP.Services.ToastService ToastService
 
 <div class="m-4">
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
@@ -244,17 +235,52 @@
             string[] ids = { Input.ChungLoaiThep ?? "" };
             var isValidTenPL = await DanhMucRepository.CheckExclusive(ids, baseTime);
             var listExist = await DMTLThepRepository.GetExist(Input);
-            Input.DonVi = Input.DonVi.ToUpper().Trim();
+            Input.DonVi = Input.DonVi??"".ToUpper().Trim();
             if (isValidTenPL)
             {
                 if (isEdit)
                 {
-                    string[] idss = { Input.Id };
-
-                    if (listExist == null || listExist.Count == 0)
+                    bool isValidDuongKinh = false;
+                    if (IsInteger(editDMThep))
                     {
-                        bool isValid = await DMTLThepRepository.CheckExclusive(idss, baseTime);
-                        if (isValid)
+                        if (IsInteger(Input.DuongKinh))
+                        {
+                            isValidDuongKinh = true;
+                        }
+                        else
+                        {
+                            isValidDuongKinh = false;
+                        }
+                    }
+                    else
+                    {
+                        isValidDuongKinh = true;
+                    }
+                    if (isValidDuongKinh)
+                    {
+                        string[] idss = { Input.Id };
+
+                        if (listExist == null || listExist.Count == 0)
+                        {
+                            bool isValid = await DMTLThepRepository.CheckExclusive(idss, baseTime);
+                            if (isValid)
+                            {
+                                await DMTLThepRepository.Update(Input);
+                                isModalVisible = false;
+                                Input = new();
+                                isEdit = false;
+                                ToastService.ShowToast(
+                                    "Thông báo",
+                                    "Cập nhật thành công.",
+                                    cssClass: "toast-success",
+                                    iconClass: "fa fa-check-circle",
+                                    progressBarClass: "bg-info",
+                                    duration: 5000
+                                );
+                                await LoadData();
+                            }
+                        }
+                        else if (listExist.Count > 0 && listExist[0].Id == Input.Id)
                         {
                             await DMTLThepRepository.Update(Input);
                             isModalVisible = false;
@@ -269,35 +295,30 @@
                                 duration: 5000
                             );
                             await LoadData();
-                        }
-                    }
-                    else if (listExist.Count > 0 && listExist[0].Id == Input.Id)
-                    {
-                        await DMTLThepRepository.Update(Input);
-                        isModalVisible = false;
-                        Input = new();
-                        isEdit = false;
-                        ToastService.ShowToast(
-                            "Thông báo",
-                            "Cập nhật thành công.",
-                            cssClass: "toast-success",
-                            iconClass: "fa fa-check-circle",
-                            progressBarClass: "bg-info",
-                            duration: 5000
-                        );
-                        await LoadData();
 
+                        }
+                        else
+                        {
+                            ToastService.ShowToast(
+                            "Thông báo",
+                             "Đã tồn tại: Chủng loại thép, Đường kính",
+                             cssClass: "toast-danger",
+                             iconClass: "fa fa-exclamation-circle",
+                             progressBarClass: "bg-info",
+                             duration: 5000);
+                        }
                     }
                     else
                     {
                         ToastService.ShowToast(
                         "Thông báo",
-                         "Đã tồn tại.",
+                         "Không được thay đổi kiểu dữ liệu đường kính từ số sang chữ ",
                          cssClass: "toast-danger",
                          iconClass: "fa fa-exclamation-circle",
                          progressBarClass: "bg-info",
                          duration: 5000);
                     }
+                    
 
                 }
                 else
@@ -324,7 +345,7 @@
                     {
                         ToastService.ShowToast(
                         "Thông báo",
-                         "Đã tồn tại.",
+                         "Đã tồn tại: Chủng loại thép, Đường kính ",
                          cssClass: "toast-danger",
                          iconClass: "fa fa-exclamation-circle",
                          progressBarClass: "bg-info",
@@ -393,12 +414,14 @@
 
     }
     bool isUsing = false;
+    var editDMThep ="" ;
     private async Task Edit(string id)
     {
         try
         {
             TitleModal = "Cập nhật !";
             Input = await DMTLThepRepository.GetById(id);
+            editDMThep = Input.DuongKinh;
             isUsing = await DMTLThepRepository.CheckUsingId(Input.ChungLoaiThep, Input.DuongKinh);
             SetSelectedItem(selectCLDM, Input.ChungLoaiThep??"");
             isEdit = true;
@@ -414,6 +437,7 @@
     {
         isModalVisible = true;
         Input = new();
+        isUsing = false;
         SetSelectedItem(selectCLDM,Input.ChungLoaiThep??"");
     }
 
@@ -490,4 +514,8 @@
         return danhmucs;
     }
 
+    public bool IsInteger(string input)
+    {
+        return int.TryParse(input, out _);
+    }
 }

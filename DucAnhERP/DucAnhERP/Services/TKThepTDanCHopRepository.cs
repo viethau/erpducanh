@@ -199,17 +199,43 @@ namespace DucAnhERP.Services
             context.TKThepTDanCHops.Update(TKThepDeCong);
             await SaveChanges(context);
         }
+        //public async Task UpdateMulti(TKThepTDanCHop[] TKThepDeCong)
+        //{
+        //    using var context = _context.CreateDbContext();
+        //    string[] ids = TKThepDeCong.Select(x => x.Id).ToArray();
+        //    var listEntities = await context.TKThepTDanCHops.Where(x => ids.Contains(x.Id)).ToListAsync();
+        //    foreach (var entity in listEntities)
+        //    {
+        //        context.TKThepTDanCHops.Update(entity);
+        //    }
+        //    await context.SaveChangesAsync();
+        //}
         public async Task UpdateMulti(TKThepTDanCHop[] TKThepDeCong)
         {
             using var context = _context.CreateDbContext();
-            string[] ids = TKThepDeCong.Select(x => x.Id).ToArray();
-            var listEntities = await context.TKThepTDanCHops.Where(x => ids.Contains(x.Id)).ToListAsync();
+
+            // Lấy danh sách ID từ mảng đầu vào
+            var ids = TKThepDeCong.Select(x => x.Id).ToArray();
+
+            // Lấy danh sách các thực thể từ cơ sở dữ liệu
+            var listEntities = await context.TKThepTDanCHops
+                .Where(x => ids.Contains(x.Id))
+                .ToListAsync();
+
+            // Duyệt qua các thực thể đã lấy được và cập nhật các giá trị thay đổi
             foreach (var entity in listEntities)
             {
-                context.TKThepTDanCHops.Update(entity);
+                // Tìm thực thể tương ứng trong mảng đầu vào
+                var updatedEntity = TKThepDeCong.FirstOrDefault(x => x.Id == entity.Id);
+                if (updatedEntity != null)
+                {
+                    // Cập nhật chỉ các trường có thay đổi từ thực thể đầu vào
+                    context.Entry(entity).CurrentValues.SetValues(updatedEntity);
+                }
             }
-            await context.SaveChangesAsync();
+            await SaveChanges(context);
         }
+
         public async Task DeleteById(string id)
         {
             using var context = _context.CreateDbContext();

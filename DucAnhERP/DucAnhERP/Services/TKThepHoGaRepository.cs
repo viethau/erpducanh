@@ -95,6 +95,11 @@ namespace DucAnhERP.Services
                 {
                     query = query.Where(x => x.LoaiThep == mModel.LoaiThep);
                 }
+                if (mModel.DKCD >0)
+                {
+                    query = query.Where(x => x.DKCD == mModel.DKCD);
+                }
+                
                 var data = await query.Distinct().OrderBy(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai_Name).ThenBy(x => x.SoHieu).ToListAsync();
                 return data;
             }
@@ -197,16 +202,28 @@ namespace DucAnhERP.Services
             context.TKThepHoGas.Update(TKThepHoGa);
             await SaveChanges(context);
         }
-        public async Task UpdateMulti(TKThepHoGa[] TKThepHoGa)
+        public async Task UpdateMulti(TKThepHoGa[] tKThepHoGaArray)
         {
             using var context = _context.CreateDbContext();
-            string[] ids = TKThepHoGa.Select(x => x.Id).ToArray();
-            var listEntities = await context.TKThepHoGas.Where(x => ids.Contains(x.Id)).ToListAsync();
+
+            // Lấy danh sách ID từ mảng đầu vào
+            var ids = tKThepHoGaArray.Select(x => x.Id).ToArray();
+
+            // Lấy danh sách thực thể từ cơ sở dữ liệu dựa trên ID
+            var listEntities = await context.TKThepHoGas
+                .Where(x => ids.Contains(x.Id))
+                .ToListAsync();
+
+            // Cập nhật các thực thể
             foreach (var entity in listEntities)
             {
-                context.TKThepHoGas.Update(entity);
+                var updatedEntity = tKThepHoGaArray.FirstOrDefault(x => x.Id == entity.Id);
+                if (updatedEntity != null)
+                {
+                    context.Entry(entity).CurrentValues.SetValues(updatedEntity);
+                }
             }
-            await context.SaveChangesAsync();
+            await SaveChanges(context);
         }
         public async Task DeleteById(string id)
         {
@@ -335,8 +352,6 @@ namespace DucAnhERP.Services
                 return id;
             }
         }
-
-
 
         public async Task SaveChanges(ApplicationDbContext context)
         {

@@ -200,17 +200,44 @@ namespace DucAnhERP.Services
             context.TKThepCHops.Update(TKThepDeCong);
             await SaveChanges(context);
         }
-        public async Task UpdateMulti(TKThepCHop[] TKThepDeCong)
+        //public async Task UpdateMulti(TKThepCHop[] TKThepDeCong)
+        //{
+        //    using var context = _context.CreateDbContext();
+        //    string[] ids = TKThepDeCong.Select(x => x.Id).ToArray();
+        //    var listEntities = await context.TKThepCHops.Where(x => ids.Contains(x.Id)).ToListAsync();
+        //    foreach (var entity in listEntities)
+        //    {
+        //        context.TKThepCHops.Update(entity);
+        //    }
+        //    await context.SaveChangesAsync();
+        //}
+
+        public async Task UpdateMulti(TKThepCHop[] tKThepCHopArray)
         {
             using var context = _context.CreateDbContext();
-            string[] ids = TKThepDeCong.Select(x => x.Id).ToArray();
-            var listEntities = await context.TKThepCHops.Where(x => ids.Contains(x.Id)).ToListAsync();
+
+            // Lấy danh sách ID từ mảng đầu vào
+            var ids = tKThepCHopArray.Select(x => x.Id).ToArray();
+
+            // Lấy danh sách thực thể từ cơ sở dữ liệu dựa trên ID
+            var listEntities = await context.TKThepCHops
+                .Where(x => ids.Contains(x.Id))
+                .ToListAsync();
+
+            // Cập nhật giá trị cho các thực thể
             foreach (var entity in listEntities)
             {
-                context.TKThepCHops.Update(entity);
+                var updatedEntity = tKThepCHopArray.FirstOrDefault(x => x.Id == entity.Id);
+                if (updatedEntity != null)
+                {
+                    // Chỉ cập nhật các giá trị thay đổi
+                    context.Entry(entity).CurrentValues.SetValues(updatedEntity);
+                }
             }
-            await context.SaveChangesAsync();
+            await SaveChanges(context);
         }
+
+
         public async Task DeleteById(string id)
         {
             using var context = _context.CreateDbContext();

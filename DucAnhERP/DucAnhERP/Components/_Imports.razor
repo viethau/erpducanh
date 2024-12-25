@@ -11,6 +11,15 @@
 @using Microsoft.JSInterop
 @using DucAnhERP
 @using DucAnhERP.Components
+@using DucAnhERP.Helpers
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using DucAnhERP.SeedWork
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using System.Text.Json
+@inject IJSRuntime JSRuntime
+
 @inject IMajorRepository MajorService
 @inject ICompanyRepository CompanyService
 @inject IUserRepository UserService
@@ -26,3 +35,46 @@
 @inject IDepartmentRepository DepartmentService
 @inject IApprovalDeptSettingRepository ApprovalDeptSettingService
 @inject IApprovalStepSettingRepository ApprovalStepSettingService
+
+@inject DucAnhERP.Services.ToastService ToastService
+@inject IMajorRepository MajorRepository
+@inject IDanhMucRepository DanhMucRepository
+@inject IDMTLThepRepository DMTLThepRepository
+@inject IMajorUserPermissionRepository MajorUserPermissionRepository
+@inject IPhanLoaiHoGaRepository PhanLoaiHoGaRepository
+@inject INuocMuaRepository NuocMuaRepository
+@inject IPhanLoaiTDHoGaRepository PhanLoaiTDHoGaRepository
+@inject INhomDanhMucRepository NhomDanhMucRepository
+@inject IChatMaTuongRepository ChatMaTuongRepository
+@inject IPKKLCHopRepository PKKLCHopRepository
+@inject ITKThepCHopRepository TKThepCHopRepository
+@inject IPhanLoaiCTronHopNhuaRepository PhanLoaiCTronHopNhuaRepository
+@inject IPKKLCTronRepository PKKLCTronRepository
+@inject ITKThepCTronRepository TKThepCTronRepository
+@inject IPKKLCTietHoGaRepository PKKLCTietHoGaRepository
+@inject ITKThepHoGaRepository TKThepHoGaRepository
+@inject IPKKLCTietTDHGRepository PKKLCTietTDHGRepository
+@inject ITKThepTamDanRepository TKThepTamDanRepository
+@inject IPKKLDeCTronRepository PKKLDeCTronRepository
+@inject ITKThepDeCongRepository TKThepDeCongRepository
+@inject IPhanLoaiDeCongRepository PhanLoaiDeCongRepository
+@inject IPKKLMongCHopRepository PKKLMongCHopRepository
+@inject ITKThepMongCHopRepository TKThepMongCHopRepository
+@inject IPhanLoaiMongCTronRepository PhanLoaiMongCTronRepository
+@inject IPKKLMongCTronRepository PKKLMongCTronRepository
+@inject ITKThepMongCTronRepository TKThepMongCTronRepository
+@inject IPKKLRanhBTRepository PKKLRanhBTRepository
+@inject ITKThepRBTongRepository TKThepRBTongRepository
+@inject IPKKLRXayRepository PKKLRXayRepository
+@inject ITKThepRXayRepository TKThepRXayRepository
+@inject IPKKLTDanCHopRepository PKKLTDanCHopRepository
+@inject ITKThepTDanCHopRepository TKThepTDanCHopRepository
+@inject IPhanLoaiTDanTDanRepository PhanLoaiTDanTDanRepository
+@inject IPKKLTDanRBTRepository PKKLTDanRBTRepository
+@inject ITKThepTDRBTongRepository TKThepTDRBTongRepository
+@inject IPKKLTDanRXayRepository PKKLTDanRXayRepository
+@inject ITKThepTDanRXayRepository TKThepTDanRXayRepository
+@inject IPKKLTChongRepository PKKLTChongRepository
+@inject ITKThepTChongRepository TKThepTChongRepository
+@inject IPhanLoaiThanhChongRepository PhanLoaiThanhChongRepository
+@inject IPKKLTChongRepository PKKLTChongRepository

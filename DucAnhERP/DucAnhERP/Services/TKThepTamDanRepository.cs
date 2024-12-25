@@ -90,6 +90,10 @@ namespace DucAnhERP.Services
                 {
                     query = query.Where(x => x.LoaiThep == mModel.LoaiThep);
                 }
+                if (mModel.DKCD >0)
+                {
+                    query = query.Where(x => x.DKCD == mModel.DKCD);
+                }
                 var data = await query.Distinct().OrderBy(x=>x.ThongTinTamDanHoGa2_PhanLoaiDayHoGa_Name).ThenBy(x=>x.SoHieu).ToListAsync();
                 return data;
             }
@@ -194,17 +198,45 @@ namespace DucAnhERP.Services
             context.TKThepTamDans.Update(TKThepTamDan);
             await SaveChanges(context);
         }
-        public async Task UpdateMulti(TKThepTamDan[] TKThepTamDan)
+        //public async Task UpdateMulti(TKThepTamDan[] TKThepTamDan)
+        //{
+        //    using var context = _context.CreateDbContext();
+        //    string[] ids = TKThepTamDan.Select(x => x.Id).ToArray();
+        //    var listEntities = await context.TKThepTamDans.Where(x => ids.Contains(x.Id)).ToListAsync();
+        //    foreach (var entity in listEntities)
+        //    {
+        //        context.TKThepTamDans.Update(entity);
+        //    }
+        //    await context.SaveChangesAsync();
+        //}
+        public async Task UpdateMulti(TKThepTamDan[] tKThepTamDanArray)
         {
             using var context = _context.CreateDbContext();
-            string[] ids = TKThepTamDan.Select(x => x.Id).ToArray();
-            var listEntities = await context.TKThepTamDans.Where(x => ids.Contains(x.Id)).ToListAsync();
+
+            // Lấy danh sách ID từ mảng đầu vào
+            var ids = tKThepTamDanArray.Select(x => x.Id).ToArray();
+
+            // Lấy danh sách các thực thể từ cơ sở dữ liệu
+            var listEntities = await context.TKThepTamDans
+                .Where(x => ids.Contains(x.Id))
+                .ToListAsync();
+
+            // Duyệt qua các thực thể đã lấy được và cập nhật các giá trị thay đổi
             foreach (var entity in listEntities)
             {
-                context.TKThepTamDans.Update(entity);
+                // Tìm thực thể tương ứng trong mảng đầu vào
+                var updatedEntity = tKThepTamDanArray.FirstOrDefault(x => x.Id == entity.Id);
+                if (updatedEntity != null)
+                {
+                    // Cập nhật chỉ các trường có thay đổi từ thực thể đầu vào
+                    context.Entry(entity).CurrentValues.SetValues(updatedEntity);
+                }
             }
-            await context.SaveChangesAsync();
+            // Lưu thay đổi vào cơ sở dữ liệu
+            await SaveChanges(context);
         }
+
+
         public async Task DeleteById(string id)
         {
             using var context = _context.CreateDbContext();
@@ -227,7 +259,7 @@ namespace DucAnhERP.Services
             context.TKThepTamDans.Remove(entity);
 
             // Lưu tất cả các thay đổi
-            await context.SaveChangesAsync();
+            await SaveChanges(context);
         }
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
         {

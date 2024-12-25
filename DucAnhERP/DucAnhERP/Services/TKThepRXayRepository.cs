@@ -198,17 +198,44 @@ namespace DucAnhERP.Services
             context.TKThepRXays.Update(TKThepRXay);
             await SaveChanges(context);
         }
-        public async Task UpdateMulti(TKThepRXay[] TKThepRXay)
+        //public async Task UpdateMulti(TKThepRXay[] TKThepRXay)
+        //{
+        //    using var context = _context.CreateDbContext();
+        //    string[] ids = TKThepRXay.Select(x => x.Id).ToArray();
+        //    var listEntities = await context.TKThepRXays.Where(x => ids.Contains(x.Id)).ToListAsync();
+        //    foreach (var entity in listEntities)
+        //    {
+        //        context.TKThepRXays.Update(entity);
+        //    }
+        //    await context.SaveChangesAsync();
+        //}
+
+        public async Task UpdateMulti(TKThepRXay[] tKThepRXayArray)
         {
             using var context = _context.CreateDbContext();
-            string[] ids = TKThepRXay.Select(x => x.Id).ToArray();
-            var listEntities = await context.TKThepRXays.Where(x => ids.Contains(x.Id)).ToListAsync();
+
+            // Lấy danh sách ID từ mảng đầu vào
+            var ids = tKThepRXayArray.Select(x => x.Id).ToArray();
+
+            // Lấy danh sách thực thể từ cơ sở dữ liệu
+            var listEntities = await context.TKThepRXays
+                .Where(x => ids.Contains(x.Id))
+                .ToListAsync();
+
+            // Cập nhật các thực thể
             foreach (var entity in listEntities)
             {
-                context.TKThepRXays.Update(entity);
+                // Tìm thực thể cần cập nhật từ mảng đầu vào
+                var updatedEntity = tKThepRXayArray.FirstOrDefault(x => x.Id == entity.Id);
+                if (updatedEntity != null)
+                {
+                    // Cập nhật chỉ các giá trị thay đổi
+                    context.Entry(entity).CurrentValues.SetValues(updatedEntity);
+                }
             }
-            await context.SaveChangesAsync();
+            await SaveChanges(context);
         }
+
         public async Task DeleteById(string id)
         {
             using var context = _context.CreateDbContext();
