@@ -395,8 +395,8 @@ namespace DucAnhERP.Services
                 //tKThepHoGas
                 var tKThepHoGaModel = new TKThepHoGaModel
                 {
-                    LoaiThep = modifiedEntity.ChungLoaiThep,
-                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValue) ? parsedValue : -1
+                    LoaiThep = entity.ChungLoaiThep,
+                    DKCD = double.TryParse(entity.DuongKinh, out var parsedValue) ? parsedValue : -1
                 };
                 var result = await _tKThepHoGaRepository.GetAllByVM(tKThepHoGaModel);
                 if (result == null || !result.Any()) return;
@@ -442,8 +442,8 @@ namespace DucAnhERP.Services
                 //tKThepHoGas
                 var tKThepTamDanModel = new TKThepTamDanModel
                 {
-                    LoaiThep = modifiedEntity.ChungLoaiThep,
-                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueTD) ? parsedValueTD : -1
+                    LoaiThep = entity.ChungLoaiThep,
+                    DKCD = double.TryParse(entity.DuongKinh, out var parsedValueTD) ? parsedValueTD : -1
                 };
                 var resultThepTD = await _tKThepTamDanRepository.GetAllByVM(tKThepTamDanModel);
                 if (resultThepTD == null || !resultThepTD.Any()) return;
@@ -488,8 +488,8 @@ namespace DucAnhERP.Services
                 //tKThepCongTrons
                 var tKThepCTronModel = new TKThepCTronModel
                 {
-                    LoaiThep = modifiedEntity.ChungLoaiThep,
-                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueCT) ? parsedValueCT : -1
+                    LoaiThep = entity.ChungLoaiThep,
+                    DKCD = double.TryParse(entity.DuongKinh, out var parsedValueCT) ? parsedValueCT : -1
                 };
                 var resultThepCT = await _tKThepCTronRepository.GetAllByVM(tKThepCTronModel);
                 if (resultThepCT == null || !resultThepCT.Any()) return;
@@ -534,8 +534,8 @@ namespace DucAnhERP.Services
                 //tKThepMongCongTrons
                 var tKThepMongCTronModel = new TKThepMongCTronModel
                 {
-                    LoaiThep = modifiedEntity.ChungLoaiThep,
-                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueMCT) ? parsedValueMCT : -1
+                    LoaiThep = entity.ChungLoaiThep,
+                    DKCD = double.TryParse(entity.DuongKinh, out var parsedValueMCT) ? parsedValueMCT : -1
                 };
                 var resultThepMCT = await _tKThepMongCTronRepository.GetAllByVM(tKThepMongCTronModel);
                 if (resultThepMCT == null || !resultThepMCT.Any()) return;
@@ -583,8 +583,8 @@ namespace DucAnhERP.Services
                 //tKThepDeCongs
                 var tKThepDCongModel = new TKThepDCongModel
                 {
-                    LoaiThep = modifiedEntity.ChungLoaiThep,
-                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueDC) ? parsedValueDC : -1
+                    LoaiThep = entity.ChungLoaiThep,
+                    DKCD = double.TryParse(entity.DuongKinh, out var parsedValueDC) ? parsedValueDC : -1
                 };
                 var resultThepDC = await _tKThepDeCongRepository.GetAllByVM(tKThepDCongModel);
                 if (resultThepDC == null || !resultThepDC.Any()) return;
@@ -628,8 +628,8 @@ namespace DucAnhERP.Services
                 //tKThepCongHops
                 var tkThepCHopModel = new TKThepCHopModel
                 {
-                    LoaiThep = modifiedEntity.ChungLoaiThep,
-                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueCH) ? parsedValueCH : -1
+                    LoaiThep = entity.ChungLoaiThep,
+                    DKCD = double.TryParse(entity.DuongKinh, out var parsedValueCH) ? parsedValueCH : -1
                 };
                 var resultThepCH = await _tKThepCHopRepository.GetAllByVM(tkThepCHopModel);
                 if (resultThepCH == null || !resultThepCH.Any()) return;
@@ -673,8 +673,8 @@ namespace DucAnhERP.Services
                 //tKThepMongCongHops
                 var tkThepMongCHopModel = new TKThepMongCHopModel
                 {
-                    LoaiThep = modifiedEntity.ChungLoaiThep,
-                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueMCH) ? parsedValueMCH : -1
+                    LoaiThep = entity.ChungLoaiThep,
+                    DKCD = double.TryParse(entity.DuongKinh, out var parsedValueMCH) ? parsedValueMCH : -1
                 };
                 var resultThepMCH = await _tKThepMongCHopRepository.GetAllByVM(tkThepMongCHopModel);
                 if (resultThepMCH == null || !resultThepMCH.Any()) return;
@@ -721,8 +721,8 @@ namespace DucAnhERP.Services
                 //tKThepTamDanConghops
                 var tkThepTDanCHopModel = new TKThepTDanCHopModel
                 {
-                    LoaiThep = modifiedEntity.ChungLoaiThep,
-                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueTDCH) ? parsedValueTDCH : -1
+                    LoaiThep = entity.ChungLoaiThep,
+                    DKCD = double.TryParse(entity.DuongKinh, out var parsedValueTDCH) ? parsedValueTDCH : -1
                 };
                 var resultThepTDCH = await _tKThepTDanCHopRepository.GetAllByVM(tkThepTDanCHopModel);
                 if (resultThepTDCH == null || !resultThepTDCH.Any()) return;
@@ -766,8 +766,8 @@ namespace DucAnhERP.Services
                 //tKThepRanhXays
                 var tkThepRXayModel = new TKThepRXayModel
                 {
-                    LoaiThep = modifiedEntity.ChungLoaiThep,
-                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueRX) ? parsedValueRX : -1
+                    LoaiThep = entity.ChungLoaiThep,
+                    DKCD = double.TryParse(entity.DuongKinh, out var parsedValueRX) ? parsedValueRX : -1
                 };
                 var resultThepRX = await _tKThepRXayRepository.GetAllByVM(tkThepRXayModel);
                 if (resultThepRX == null || !resultThepRX.Any()) return;
@@ -811,8 +811,8 @@ namespace DucAnhERP.Services
                 //tKThepTDRanhXays
                 var tkThepTDanRXayModel = new TKThepTDanRXayModel
                 {
-                    LoaiThep = modifiedEntity.ChungLoaiThep,
-                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueTDRX) ? parsedValueTDRX : -1
+                    LoaiThep = entity.ChungLoaiThep,
+                    DKCD = double.TryParse(entity.DuongKinh, out var parsedValueTDRX) ? parsedValueTDRX : -1
                 };
                 var resultThepTDRX = await _tKThepTDanRXayRepository.GetAllByVM(tkThepTDanRXayModel);
                 if (resultThepTDRX == null || !resultThepTDRX.Any()) return;
@@ -856,8 +856,8 @@ namespace DucAnhERP.Services
                 //tKThepRanhBeTongs
                 var tkThepRBTongModel = new TKThepRBTongModel
                 {
-                    LoaiThep = modifiedEntity.ChungLoaiThep,
-                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueRBT) ? parsedValueRBT : -1
+                    LoaiThep = entity.ChungLoaiThep,
+                    DKCD = double.TryParse(entity.DuongKinh, out var parsedValueRBT) ? parsedValueRBT : -1
                 };
                 var resultThepRBT = await _tKThepRBTongRepository.GetAllByVM(tkThepRBTongModel);
                 if (resultThepRBT == null || !resultThepRBT.Any()) return;
@@ -901,8 +901,8 @@ namespace DucAnhERP.Services
                 //tKThepTDRanhBeTongs
                 var tkThepTDRBTongModel = new TKThepTDRBTongModel
                 {
-                    LoaiThep = modifiedEntity.ChungLoaiThep,
-                    DKCD = double.TryParse(modifiedEntity.DuongKinh, out var parsedValueTC) ? parsedValueTC : -1
+                    LoaiThep = entity.ChungLoaiThep,
+                    DKCD = double.TryParse(entity.DuongKinh, out var parsedValueTC) ? parsedValueTC : -1
                 };
                 var resultThepTDRBT = await _tKThepTDRBTongRepository.GetAllByVM(tkThepTDRBTongModel);
                 if (resultThepTDRBT == null || !resultThepTDRBT.Any()) return;

@@ -3,8 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\components\\pages\\nghiepvucongtrinh\\danhmuc\\dmtlthep.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\components\\pages\\nghiepvucongtrinh\\danhmuc\\dmtlthep.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\components\\pages\\nghiepvucongtrinh\\test.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\components\\pages\\nghiepvucongtrinh\\test.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\services\\exportexcelservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\services\\exportexcelservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\wwwroot\\js\\exportexcel.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\wwwroot\\js\\exportexcel.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\components\\pages\\nghiepvucongtrinh\\listthoatnuocmua.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\components\\pages\\nghiepvucongtrinh\\listthoatnuocmua.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,19 +26,58 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "DMTLThep.razor",
-              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\DanhMuc\\DMTLThep.razor",
-              "RelativeDocumentMoniker": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\DanhMuc\\DMTLThep.razor",
-              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\DanhMuc\\DMTLThep.razor",
-              "RelativeToolTip": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\DanhMuc\\DMTLThep.razor",
-              "ViewState": "AQIAAI4BAAAAAAAAAAAkwKABAAASAAAA",
+              "DocumentIndex": 3,
+              "Title": "ListThoatNuocMua.razor",
+              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListThoatNuocMua.razor",
+              "RelativeDocumentMoniker": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListThoatNuocMua.razor",
+              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListThoatNuocMua.razor",
+              "RelativeToolTip": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListThoatNuocMua.razor",
+              "ViewState": "AQIAAPAGAAAAAAAAAAAAAAQHAABBAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-12-25T08:51:45.924Z",
+              "WhenOpened": "2024-12-26T06:44:08.031Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "exportExcel.js",
+              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\wwwroot\\js\\exportExcel.js",
+              "RelativeDocumentMoniker": "DucAnhERP\\wwwroot\\js\\exportExcel.js",
+              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\wwwroot\\js\\exportExcel.js",
+              "RelativeToolTip": "DucAnhERP\\wwwroot\\js\\exportExcel.js",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2024-12-26T02:21:18.06Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Test.razor",
+              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\Test.razor",
+              "RelativeDocumentMoniker": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\Test.razor",
+              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\Test.razor",
+              "RelativeToolTip": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\Test.razor",
+              "ViewState": "AQIAABoAAAAAAAAAAAAAACUAAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-12-26T02:04:42.604Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ExportExcelService.cs",
+              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Services\\ExportExcelService.cs",
+              "RelativeDocumentMoniker": "DucAnhERP\\Services\\ExportExcelService.cs",
+              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Services\\ExportExcelService.cs",
+              "RelativeToolTip": "DucAnhERP\\Services\\ExportExcelService.cs",
+              "ViewState": "AQIAAAEBAAAAAAAAAAAjwBgBAABRAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-26T02:02:51.277Z",
               "EditorCaption": ""
             }
           ]

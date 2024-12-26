@@ -227,9 +227,9 @@
         Console.WriteLine(listDanhMuc);
     }
 
+
     private async Task HandleValidSubmit()
     {
-
         try
         {
             string[] ids = { Input.ChungLoaiThep ?? "" };
@@ -414,14 +414,14 @@
 
     }
     bool isUsing = false;
-    var editDMThep ="" ;
+    string editDMThep ="" ;
     private async Task Edit(string id)
     {
         try
         {
             TitleModal = "Cập nhật !";
             Input = await DMTLThepRepository.GetById(id);
-            editDMThep = Input.DuongKinh;
+            editDMThep = Input.DuongKinh ??"";
             isUsing = await DMTLThepRepository.CheckUsingId(Input.ChungLoaiThep, Input.DuongKinh);
             SetSelectedItem(selectCLDM, Input.ChungLoaiThep??"");
             isEdit = true;

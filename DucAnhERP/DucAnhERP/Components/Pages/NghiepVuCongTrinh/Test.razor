@@ -1,86 +1,83 @@
 ﻿@page "/NghiepVuCongtrinh/Test"
-@using Microsoft.AspNetCore.SignalR.Client;
-@inject NavigationManager Navigation
-@implements IAsyncDisposable
-@inject DataService DataService
+@inject ExportExcelService ExportExcelService
+@inject IJSRuntime JS
+@using OfficeOpenXml.Style;
 
-<h3>Dữ liệu hiển thị</h3>
 
-<button @onclick="AddData">Thêm dữ liệu</button>
-<button @onclick="UpdateData">Cập nhật dữ liệu</button>
-<button @onclick="DeleteData">Xóa dữ liệu</button>
-
-<ul>
-    @foreach (var item in data)
-    {
-        <li>@item</li>
-    }
-</ul>
+<button class="btn btn-primary" @onclick="ExportExcel">Xuất Excel</button>
+<button class="btn btn-primary" @onclick="Convert">Xconvert</button>
 
 @code {
-    private HubConnection? hubConnection;
-    private List<string> data = new List<string>();
 
-    protected override async Task OnInitializedAsync()
+    private async Task Convert()
     {
-        // Khởi tạo kết nối SignalR
-        hubConnection = new HubConnectionBuilder()
-            .WithUrl(Navigation.ToAbsoluteUri("/dataUpdateHub"))
-            .Build();
+        string html = @"
+          ";
 
-        // Đăng ký nhận thông báo khi dữ liệu thay đổi
-        hubConnection.On("ReceiveDataUpdate", async () =>
+        var headers = ExportExcelService.ConvertHtmlToComplexHeaders(html);
+        Console.WriteLine(headers);
+    }
+
+    private async Task ExportExcel()
+    {
+        try
         {
-            // Gọi lại dữ liệu mới từ server khi có thay đổi
-            await LoadData();
-        });
+            var complexHeaders = new List<ComplexHeader>
+            {
+                // Dòng tiêu đề chung
+                new ComplexHeader { Title = "CÔNG TY CỔ PHẦN XÂY DỰNG ĐỨC ANH", StartRow = 1, StartCol = 1, EndRow = 1, EndCol = 5,Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "TÊN DỰ ÁN", StartRow = 2, StartCol = 1, EndRow = 2, EndCol = 5 ,Alignment = ExcelHorizontalAlignment.Center ,IsBold=true},
+                new ComplexHeader { Title = "BẢNG TỔNG HỢP THÔNG TIN HỆ THỐNG THOÁT NƯỚC MƯA DỌC PHÍA TRÁI TUYẾN", StartRow = 3, StartCol = 1, EndRow = 3, EndCol = 25, TextColor = System.Drawing.Color.Black, Alignment = ExcelHorizontalAlignment.Center, CapitalizeEachWord = true,IsBold=true },
+                new ComplexHeader { Title = "Số liệu màu đen nhạt là số liệu nhập bằng tay; Số liệu màu đen đậm là kết quả mang từ một bảng khác sang; Số liệu màu đỏ là kết quả của 01 phép tính.", StartRow = 4, StartCol = 1, EndRow = 4, EndCol = 25, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Tất cả số liệu liên quan đến hố ga không được để rỗng cho dù giá trị của ô = 0", StartRow = 5, StartCol = 1, EndRow = 5, EndCol = 25, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Qui ước kích thước hình học: Chiều dài là chiều song song với đường; Chiều rộng là chiều vuông góc với đường; Chiều cao là chiều từ đáy đến đỉnh; Chiều rộng là chiều rộng của cấu kiện.", StartRow = 6, StartCol = 1, EndRow = 6, EndCol = 25, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+                new ComplexHeader { Title = "Quy ước 01 lý trình: Lý trình hố ga là tại tim hố ga; lý trình đầu, cuối ống là mặt trong điểm đầu và điểm cuối hố ga.", StartRow = 7, StartCol = 1, EndRow = 7, EndCol = 25, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Những bảng sử dụng số liệu tại bảng này bị thay đổi nếu số liệu tại bảng này bị thay đổi.", StartRow = 8, StartCol = 1, EndRow = 8, EndCol = 25, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
 
-        // Bắt đầu kết nối với Hub
-        await hubConnection.StartAsync();
+                // Header thông tin chi tiết
+                new ComplexHeader { Title = "STT",DataProperty="STT", StartRow = 16, StartCol = 1, EndRow = 18, EndCol = 1,IsBold=true ,HasBorder = true , Alignment = ExcelHorizontalAlignment.Center},
+                new ComplexHeader { Title = "Thông tin chung", StartRow = 16, StartCol = 2, EndRow = 16, EndCol = 5,IsBold=true ,HasBorder = true , Alignment = ExcelHorizontalAlignment.Center},
+                new ComplexHeader { Title = "Thông tin", StartRow = 17, StartCol = 2, EndRow = 17, EndCol = 3,IsBold=true ,HasBorder = true , Alignment = ExcelHorizontalAlignment.Center},
+                new ComplexHeader { Title = "Chung", StartRow = 17, StartCol = 4, EndRow = 17, EndCol = 5,IsBold=true ,HasBorder = true, Alignment = ExcelHorizontalAlignment.Center},
+                new ComplexHeader { Title = "ID", StartRow = 18, DataProperty="Id", StartCol = 2, EndRow = 18, EndCol = 2 ,IsBold=true ,HasBorder = true},
+                new ComplexHeader { Title = "Tên", StartRow = 18,DataProperty="Name", StartCol = 3, EndRow = 18, EndCol = 3,IsBold=true ,HasBorder = true},
+                new ComplexHeader { Title = "Giá", StartRow = 18,DataProperty="Price", StartCol = 4, EndRow = 18, EndCol = 4,IsBold=true ,HasBorder = true},
+                new ComplexHeader { Title = "Ngày Tạo", StartRow = 18,DataProperty="CreatedDate", StartCol = 5, EndRow = 18, EndCol = 5,IsBold=true ,HasBorder = true}
+            };
 
-        // Tải dữ liệu ban đầu
-        await LoadData();
-    }
+        
 
-    private async Task LoadData()
-    {
-        // Giả sử bạn gọi dịch vụ để lấy dữ liệu từ server
-        // data = await _dataService.GetDataAsync();
+            // Dữ liệu mẫu
+            var data = new List<MyModel>
+            {
+                new MyModel {STT = 1, Id = 1, Name = "Sản phẩm A", Price = 100.5M, CreatedDate = DateTime.Now },
+                new MyModel {STT = 2, Id = 2, Name = "Sản phẩm B", Price = 200.75M, CreatedDate = DateTime.Now.AddDays(-1) }
+            };
 
-        // Cập nhật lại giao diện
-        data.Clear();
-        data.Add("Dữ liệu mới 1");
-        data.Add("Dữ liệu mới 2");
-        data.Add("Dữ liệu mới 3");
+            // Gọi service xuất Excel
+            var excelData = ExportExcelService.ExportToExcelWithComplexHeader(data, complexHeaders);
 
-        StateHasChanged(); // Cập nhật lại giao diện
-    }
-
-    private async Task AddData()
-    {
-        var a = "";
-        // Thêm dữ liệu và thông báo cho tất cả các client
-        await DataService.AddDataAsync("Dữ liệu mới được thêm");
-    }
-
-    private async Task UpdateData()
-    {
-        // Cập nhật dữ liệu và thông báo cho tất cả các client
-        await DataService.UpdateDataAsync("Dữ liệu đã được cập nhật");
-    }
-
-    private async Task DeleteData()
-    {
-        // Xóa dữ liệu và thông báo cho tất cả các client
-        await DataService.DeleteDataAsync("Dữ liệu đã bị xóa");
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        if (hubConnection is not null)
-        {
-            await hubConnection.DisposeAsync();
+            // Trả về file Excel
+            var fileName = "ExportedData.xlsx";
+            using var stream = new MemoryStream(excelData);
+            using var streamRef = new DotNetStreamReference(stream);
+            await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
+        }
+    }
+
+    // Model mẫu
+    public class MyModel
+    {
+        public int STT { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }
 
