@@ -12,12 +12,12 @@
 
 @if (isDisplay)
 {
-    <div class="show" id="notificationModal" tabindex="-1" style="display:block; position: absolute; top: 0; right: 6%; margin: auto; z-index: 1200;" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="show" id="notificationModal" tabindex="-1" style="display:block; position: absolute; top: 0%; right: 6%; margin: auto; z-index: 1200; width:25%;" aria-labelledby="notificationModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content" style="padding:2px !important">
-                <div class="modal-header alert alert-info">
+                <div class="modal-header alert alert-info" style="padding: 5px !important;border: none;border-bottom: 1px solid black;border-radius: 0px;">
                     <h5 class="modal-title" id="notificationModalLabel">Thông báo</h5>
-                    <button type="button" class="btn-default" data-bs-dismiss="modal" aria-label="Close" @onclick="HideModal">X</button>
+                    <button type="button" class="btn btn-default btn-sm" data-bs-dismiss="modal" aria-label="Close" @onclick="HideModal">X</button>
                 </div>
                 <div class="modal-body">
                     @if (!listCategories.Any())
@@ -93,6 +93,7 @@
         </div>
     </div>
 }
+
 
 @code {
 

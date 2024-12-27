@@ -52,31 +52,34 @@ namespace DucAnhERP.Services
         public async Task<List<NotificationModel>> GetAllNotiByUser(string userId)
         {
             using var context = _context.CreateDbContext();
-            var emailHistories = await (from eh in context.EmailHistories
-                                        join parentMajor in context.MMajors on eh.MajorId equals parentMajor.Id into pmj
-                                        from parentMajor in pmj.DefaultIfEmpty()
-                                        where parentMajor.IsActive == 1
-                                        join major in context.MMajors on eh.ScreenId equals major.Id into mj
-                                        from major in mj.DefaultIfEmpty()
-                                        where major.IsActive == 1
-                                        where eh.Receiver == userId
-                                        orderby eh.MajorId, eh.ScreenId
-                                        select new NotificationModel
-                                        {
-                                            Id = eh.Id,
-                                            Receiver = eh.Receiver,
-                                            ParentName = parentMajor.MajorName,
-                                            MajorName = major.MajorName,
-                                            Subject = eh.Subject,
-                                            Content = eh.Content,
-                                            CompanyId = eh.CompanyId,
-                                            MajorId = eh.MajorId,
-                                            ScreenId = eh.ScreenId,
-                                            CreateAt = eh.CreateAt,
-                                            CreateBy = eh.CreateBy,
-                                            IsRead = eh.IsRead
 
-                                        }).ToListAsync();
+            var query = from eh in context.EmailHistories
+                    join parentMajor in context.MMajors on eh.MajorId equals parentMajor.Id into pmj
+                    from parentMajor in pmj.DefaultIfEmpty()
+                    where parentMajor.IsActive == 1
+                    join major in context.MMajors on eh.ScreenId equals major.Id into mj
+                    from major in mj.DefaultIfEmpty()
+                    where major.IsActive == 1
+                    where eh.Receiver == userId
+                    orderby eh.MajorId, eh.ScreenId
+                    select new NotificationModel
+                    {
+                        Id = eh.Id,
+                        Receiver = eh.Receiver,
+                        ParentName = parentMajor.MajorName,
+                        MajorName = major.MajorName,
+                        Subject = eh.Subject,
+                        Content = eh.Content,
+                        CompanyId = eh.CompanyId,
+                        MajorId = eh.MajorId,
+                        ScreenId = eh.ScreenId,
+                        CreateAt = eh.CreateAt,
+                        CreateBy = eh.CreateBy,
+                        IsRead = eh.IsRead
+
+                    };
+
+            var emailHistories =await query.ToListAsync();
 
             return emailHistories;
         }

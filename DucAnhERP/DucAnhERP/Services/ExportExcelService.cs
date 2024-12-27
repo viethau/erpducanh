@@ -7,166 +7,10 @@ using System.Text.RegularExpressions;
 
 public class ExportExcelService
 {
-    //public byte[] ExportToExcelWithComplexHeader<T>(IEnumerable<T> data, List<ComplexHeader> headers, Dictionary<string, string> columnMappings, Dictionary<string, string> columnFormats, Dictionary<string, ExcelBorderStyle> columnBorders = null)
-    //{
-    //    try
-    //    {
-    //        if (data == null || !data.Any()) throw new ArgumentException("Dữ liệu để xuất không được rỗng.");
-
-    //        using (var package = new ExcelPackage())
-    //        {
-    //            var worksheet = package.Workbook.Worksheets.Add("data");
-
-    //            // Thiết lập kiểu chữ và cỡ chữ mặc định cho toàn bộ worksheet
-    //            worksheet.Cells.Style.Font.Name = "Times New Roman";
-    //            worksheet.Cells.Style.Font.Size = 10;
-
-    //            // Thiết lập header phức tạp
-    //            foreach (var header in headers)
-    //            {
-    //                var cellRange = worksheet.Cells[header.StartRow, header.StartCol, header.EndRow, header.EndCol];
-
-    //                // Kiểm tra nếu phạm vi các ô đã được merge
-    //                if (cellRange.Merge == false)
-    //                {
-    //                    cellRange.Merge = true;
-    //                }
-
-    //                // Thiết lập nội dung và viết hoa chữ cái đầu nếu cần
-    //                cellRange.Value = header.CapitalizeEachWord
-    //                    ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(header.Title.ToLower())
-    //                    : header.Title;
-
-    //                // Căn chỉnh
-    //                cellRange.Style.HorizontalAlignment = header.Alignment;
-
-    //                // Màu chữ
-    //                if (header.TextColor.HasValue)
-    //                {
-    //                    cellRange.Style.Font.Color.SetColor(header.TextColor.Value);
-    //                }
-
-    //                // Cỡ chữ và kiểu chữ
-    //                cellRange.Style.Font.Size = header.FontSize;
-    //                cellRange.Style.Font.Name = header.FontName;
-
-    //                // Kiểm tra chữ đậm, nghiêng và gạch chân
-    //                if (header.IsBold)
-    //                {
-    //                    cellRange.Style.Font.Bold = true;
-    //                }
-    //                else
-    //                {
-    //                    cellRange.Style.Font.Bold = false;
-    //                }
-
-    //                if (header.IsItalic)
-    //                {
-    //                    cellRange.Style.Font.Italic = true;
-    //                }
-    //                else
-    //                {
-    //                    cellRange.Style.Font.Italic = false;
-    //                }
-
-    //                if (header.IsUnderlined)
-    //                {
-    //                    cellRange.Style.Font.UnderLine = true;
-    //                }
-    //                else
-    //                {
-    //                    cellRange.Style.Font.UnderLine = false;
-    //                }
-
-    //                // Màu nền
-    //                if (header.BackgroundColor.HasValue)
-    //                {
-    //                    cellRange.Style.Fill.PatternType = ExcelFillStyle.Solid;
-    //                    cellRange.Style.Fill.BackgroundColor.SetColor(header.BackgroundColor.Value);
-    //                }
-
-    //                // Bọc chữ trong ô nếu WrapText = true
-    //                if (header.WrapText)
-    //                {
-    //                    cellRange.Style.WrapText = true;
-    //                }
-
-    //                // Áp dụng border nếu có
-    //                if (header.HasBorder)
-    //                {
-    //                    cellRange.Style.Border.Top.Style = header.BorderStyle;
-    //                    cellRange.Style.Border.Left.Style = header.BorderStyle;
-    //                    cellRange.Style.Border.Bottom.Style = header.BorderStyle;
-    //                    cellRange.Style.Border.Right.Style = header.BorderStyle;
-    //                }
-    //            }
-
-    //            // Ghi dữ liệu
-    //            int dataStartRow = headers.Max(h => h.EndRow) + 1;
-    //            int rowIndex = dataStartRow;
-    //            // Nếu không có columnBorders được định nghĩa, sử dụng ExcelBorderStyle.Thin mặc định
-    //            var defaultBorderStyle = ExcelBorderStyle.Thin;
-    //            foreach (var item in data)
-    //            {
-    //                int colIndex = 1;
-    //                foreach (var column in columnMappings)
-    //                {
-    //                    var property = typeof(T).GetProperty(column.Key, BindingFlags.Public | BindingFlags.Instance);
-    //                    if (property != null)
-    //                    {
-    //                        var cell = worksheet.Cells[rowIndex, colIndex];
-    //                        var value = property.GetValue(item);
-
-    //                        cell.Value = value;
-
-    //                        // Áp dụng định dạng cột nếu được chỉ định
-    //                        if (columnFormats != null && columnFormats.ContainsKey(column.Key))
-    //                        {
-    //                            cell.Style.Numberformat.Format = columnFormats[column.Key];
-    //                        }
-    //                        // Áp dụng border nếu có trong columnBorders, nếu không dùng mặc định
-    //                        if (columnBorders != null && columnBorders.ContainsKey(column.Key))
-    //                        {
-    //                            var borderStyle = columnBorders[column.Key];
-    //                            cell.Style.Border.Top.Style = borderStyle;
-    //                            cell.Style.Border.Left.Style = borderStyle;
-    //                            cell.Style.Border.Bottom.Style = borderStyle;
-    //                            cell.Style.Border.Right.Style = borderStyle;
-    //                        }
-    //                        else
-    //                        {
-    //                            // Nếu không có border được định nghĩa cho cột, áp dụng border mặc định
-    //                            cell.Style.Border.Top.Style = defaultBorderStyle;
-    //                            cell.Style.Border.Left.Style = defaultBorderStyle;
-    //                            cell.Style.Border.Bottom.Style = defaultBorderStyle;
-    //                            cell.Style.Border.Right.Style = defaultBorderStyle;
-    //                        }
-    //                        colIndex++;
-    //                    }
-    //                }
-    //                rowIndex++;
-    //            }
-
-    //            // Tự động điều chỉnh độ rộng cột
-    //            worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
-
-    //            // Xuất ra mảng byte
-    //            return package.GetAsByteArray();
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        Console.WriteLine(ex.Message);
-    //        throw;
-    //    }
-    //}
-
-    public byte[] ExportToExcelWithComplexHeader<T>(IEnumerable<T> data, List<ComplexHeader> headers , Dictionary<string, ExcelBorderStyle> columnBorders = null)
+    public byte[] ExportToExcelWithComplexHeader<T>(IEnumerable<T> data, List<ComplexHeader> headers, Dictionary<string, ExcelBorderStyle> columnBorders = null)
     {
         try
         {
-            if (data == null || !data.Any()) throw new ArgumentException("Dữ liệu để xuất không được rỗng.");
-
             using (var package = new ExcelPackage())
             {
                 var worksheet = package.Workbook.Worksheets.Add("data");
@@ -174,10 +18,14 @@ public class ExportExcelService
                 // Thiết lập kiểu chữ và cỡ chữ mặc định cho toàn bộ worksheet
                 worksheet.Cells.Style.Font.Name = "Times New Roman";
                 worksheet.Cells.Style.Font.Size = 10;
-
+                var defaultBorderStyle = ExcelBorderStyle.Thin;
                 // Thiết lập header phức tạp
                 foreach (var header in headers)
                 {
+                    // Kiểm tra phạm vi cột và dòng
+                    if (header.StartCol < 1 || header.EndCol < 1 || header.StartRow < 1 || header.EndRow < 1)
+                        throw new ArgumentException("Phạm vi cột hoặc dòng không hợp lệ trong header.");
+
                     var cellRange = worksheet.Cells[header.StartRow, header.StartCol, header.EndRow, header.EndCol];
 
                     // Kiểm tra nếu phạm vi các ô đã được merge
@@ -209,15 +57,27 @@ public class ExportExcelService
                     {
                         cellRange.Style.Font.Bold = true;
                     }
+                    else
+                    {
+                        cellRange.Style.Font.Bold = false;
+                    }
 
                     if (header.IsItalic)
                     {
                         cellRange.Style.Font.Italic = true;
                     }
+                    else
+                    {
+                        cellRange.Style.Font.Italic = false;
+                    }
 
                     if (header.IsUnderlined)
                     {
                         cellRange.Style.Font.UnderLine = true;
+                    }
+                    else
+                    {
+                        cellRange.Style.Font.UnderLine = false;
                     }
 
                     // Màu nền
@@ -243,48 +103,60 @@ public class ExportExcelService
                     }
                 }
 
+                // Nếu không có dữ liệu, chỉ render phần header
+                if (data == null || !data.Any())
+                {
+                    return package.GetAsByteArray();  // Trả về chỉ file chứa phần header
+                }
+
                 // Ghi dữ liệu
                 int dataStartRow = headers.Max(h => h.EndRow) + 1;
                 int rowIndex = dataStartRow;
-                var defaultBorderStyle = ExcelBorderStyle.Thin;
+                
                 foreach (var item in data)
                 {
-                    int colIndex = 1;
                     foreach (var header in headers)
                     {
-                        var property = typeof(T).GetProperty(header.DataProperty, BindingFlags.Public | BindingFlags.Instance);
-                        if (property != null)
+                        if (!string.IsNullOrEmpty(header.DataProperty))
                         {
-                            var cell = worksheet.Cells[rowIndex, colIndex];
-                            var value = property.GetValue(item);
-
-                            cell.Value = value;
-
-                            // Áp dụng định dạng cột nếu có trong DataFormat
-                            if (!string.IsNullOrEmpty(header.DataFormat))
+                            var property = typeof(T).GetProperty(header.DataProperty, BindingFlags.Public | BindingFlags.Instance);
+                            if (property != null)
                             {
-                                cell.Style.Numberformat.Format = header.DataFormat;
-                            }
+                                var cell = worksheet.Cells[rowIndex, header.StartCol];
 
-                            // Áp dụng border nếu có trong columnBorders, nếu không dùng mặc định
-                            if (columnBorders != null && columnBorders.ContainsKey(header.DataProperty))
-                            {
-                                var borderStyle = columnBorders[header.DataProperty];
-                                cell.Style.Border.Top.Style = borderStyle;
-                                cell.Style.Border.Left.Style = borderStyle;
-                                cell.Style.Border.Bottom.Style = borderStyle;
-                                cell.Style.Border.Right.Style = borderStyle;
-                            }
-                            else
-                            {
-                                // Nếu không có border được định nghĩa cho cột, áp dụng border mặc định
-                                cell.Style.Border.Top.Style = defaultBorderStyle;
-                                cell.Style.Border.Left.Style = defaultBorderStyle;
-                                cell.Style.Border.Bottom.Style = defaultBorderStyle;
-                                cell.Style.Border.Right.Style = defaultBorderStyle;
-                            }
+                                // Kiểm tra nếu StartCol không vượt quá cột của worksheet
+                                if (header.StartCol > worksheet.Dimension.End.Column)
+                                {
+                                    throw new ArgumentException("StartCol vượt quá phạm vi cột của worksheet.");
+                                }
 
-                            colIndex++;
+                                var value = property.GetValue(item);
+                                cell.Value = value;
+
+                                // Áp dụng định dạng cột nếu có trong DataFormat
+                                if (!string.IsNullOrEmpty(header.DataFormat))
+                                {
+                                    cell.Style.Numberformat.Format = header.DataFormat;
+                                }
+
+                                // Áp dụng border nếu có
+                                if (columnBorders != null && columnBorders.ContainsKey(header.DataProperty))
+                                {
+                                    var borderStyle = columnBorders[header.DataProperty];
+                                    cell.Style.Border.Top.Style = borderStyle;
+                                    cell.Style.Border.Left.Style = borderStyle;
+                                    cell.Style.Border.Bottom.Style = borderStyle;
+                                    cell.Style.Border.Right.Style = borderStyle;
+                                }
+                                else
+                                {
+                                    // Áp dụng border mặc định
+                                    cell.Style.Border.Top.Style = defaultBorderStyle;
+                                    cell.Style.Border.Left.Style = defaultBorderStyle;
+                                    cell.Style.Border.Bottom.Style = defaultBorderStyle;
+                                    cell.Style.Border.Right.Style = defaultBorderStyle;
+                                }
+                            }
                         }
                     }
                     rowIndex++;
@@ -293,7 +165,6 @@ public class ExportExcelService
                 // Tự động điều chỉnh độ rộng cột
                 worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
 
-                // Xuất ra mảng byte
                 return package.GetAsByteArray();
             }
         }
@@ -304,62 +175,76 @@ public class ExportExcelService
         }
     }
 
-    public List<ComplexHeader> ConvertHtmlToComplexHeaders(string html)
+    public List<ComplexHeader> ParseHtmlToComplexHeader(string html)
     {
         var headers = new List<ComplexHeader>();
+        var rowIndex = 16;  // Bắt đầu từ dòng 16 thay vì dòng 
+        var colIndex = 1;
 
-        // Biểu thức chính quy để tìm các thẻ <th> trong HTML
-        string thPattern = @"<th[^>]*>(.*?)</th>";
-        Regex thRegex = new Regex(thPattern, RegexOptions.IgnoreCase);
-
-        var matches = thRegex.Matches(html);
-        int row = 16; // Dòng bắt đầu
-        int col = 1; // Cột bắt đầu
+        // Sử dụng biểu thức chính quy để tìm tất cả thẻ <th> trong đoạn HTML
+        var regex = new Regex(@"<th[^>]*>(.*?)<\/th>", RegexOptions.IgnoreCase);
+        var matches = regex.Matches(html);
 
         foreach (Match match in matches)
         {
-            string thContent = match.Groups[1].Value.Trim();
-            string classAttribute = match.Value.ToLower();
+            // Lấy tiêu đề và các thuộc tính rowspan, colspan
+            var thElement = match.Value;
+            var title = match.Groups[1].Value.Trim();
+            var rowspan = GetAttributeValue(thElement, "rowspan");
+            var colspan = GetAttributeValue(thElement, "colspan");
 
-            // Kiểm tra thuộc tính rowspan, colspan
-            int rowspan = GetRowspan(match);
-            int colspan = GetColspan(match);
+            // Chuyển đổi giá trị rowspan và colspan thành số (hoặc 1 nếu không có)
+            int rowspanValue = string.IsNullOrEmpty(rowspan) ? 1 : int.Parse(rowspan);
+            int colspanValue = string.IsNullOrEmpty(colspan) ? 1 : int.Parse(colspan);
 
-            // Nếu không có rowspan hoặc colspan, giả sử là 1
-            rowspan = rowspan == 0 ? 1 : rowspan;
-            colspan = colspan == 0 ? 1 : colspan;
-
-            // Tạo ComplexHeader mới
-            headers.Add(new ComplexHeader
+            // Tạo đối tượng ComplexHeader cho từng th
+            var header = new ComplexHeader
             {
-                Title = thContent,
-                StartRow = row,
-                StartCol = col,
-                EndRow = row + rowspan - 1,
-                EndCol = col + colspan - 1,
-                IsBold = classAttribute.Contains("text-center"), // Giả sử là chữ đậm khi có "text-center"
-                HasBorder = true, // Thêm viền mặc định
-                Alignment = ExcelHorizontalAlignment.Center // Căn giữa mặc định
-            });
+                Title = CapitalizeWords(title),
+                StartRow = rowIndex,
+                StartCol = colIndex,
+                EndRow = rowIndex + rowspanValue - 1,  // Dòng kết thúc = Dòng bắt đầu + rowspan - 1
+                EndCol = colIndex + colspanValue - 1,  // Cột kết thúc = Cột bắt đầu + colspan - 1
+                TextColor = null,  // Có thể set màu nếu cần
+                Alignment = ExcelHorizontalAlignment.Center,  // Giả sử căn giữa
+                FontSize = 10,  // Cỡ chữ mặc định
+                IsBold = false,  // Có thể thêm điều kiện kiểm tra nếu cần
+                WrapText = true  // Giả sử bọc chữ trong ô
+            };
 
-            // Cập nhật cột cho phần tiếp theo
-            col += colspan;
+            // Thêm ComplexHeader vào danh sách
+            headers.Add(header);
+
+            // Tăng cột cho mỗi th
+            colIndex += colspanValue;  // Cập nhật cột để tính toán chính xác vị trí cho các th tiếp theo
         }
 
         return headers;
     }
 
-    private int GetRowspan(Match match)
+    private string CapitalizeWords(string input)
     {
-        var rowspanMatch = Regex.Match(match.Value, @"rowspan=""(\d+)""", RegexOptions.IgnoreCase);
-        return rowspanMatch.Success ? int.Parse(rowspanMatch.Groups[1].Value) : 1;
+        if (string.IsNullOrEmpty(input)) return input;
+
+        var words = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        for (int i = 0; i < words.Length; i++)
+        {
+            var word = words[i];
+            words[i] = char.ToUpper(word[0]) + word.Substring(1).ToLower();
+        }
+        return string.Join(" ", words);
     }
 
-    private int GetColspan(Match match)
+    // Hàm lấy giá trị của thuộc tính trong thẻ HTML
+    private string GetAttributeValue(string element, string attribute)
     {
-        var colspanMatch = Regex.Match(match.Value, @"colspan=""(\d+)""", RegexOptions.IgnoreCase);
-        return colspanMatch.Success ? int.Parse(colspanMatch.Groups[1].Value) : 1;
+        // Cập nhật Regex để hỗ trợ thêm các khoảng trắng hoặc ký tự khác trước dấu "="
+        var regex = new Regex($"{attribute}\\s*=\\s*['\"]([^'\"]+)['\"]", RegexOptions.IgnoreCase);
+        var match = regex.Match(element);
+        return match.Success ? match.Groups[1].Value : string.Empty;
     }
+
+
 }
 public class ComplexHeader
 {
