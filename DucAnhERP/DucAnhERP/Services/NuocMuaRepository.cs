@@ -800,16 +800,24 @@ namespace DucAnhERP.Services
         
         public async Task Update(NuocMua nuocMua)
         {
-            using var context = _context.CreateDbContext();
-            var entity = GetById(nuocMua.Id);
-
-            if (entity == null)
+            try
             {
-                throw new Exception($"Không tìm thấy bản ghi theo ID: {nuocMua.Id}");
-            }
+                using var context = _context.CreateDbContext();
+                var entity = GetById(nuocMua.Id);
 
-            context.DSNuocMua.Update(nuocMua);
-            await context.SaveChangesAsync();
+                if (entity == null)
+                {
+                    throw new Exception($"Không tìm thấy bản ghi theo ID: {nuocMua.Id}");
+                }
+
+                context.DSNuocMua.Update(nuocMua);
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
         }
         public async Task UpdateMulti(NuocMua[] nuocMua)
         {

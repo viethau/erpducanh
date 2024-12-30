@@ -9874,28 +9874,33 @@
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
     {
-        isLoading = true;
-        var helper = new DataConversionHelper();
-        listDanhMuc = await DanhMucRepository.GetAll();
+       try{
+            isLoading = true;
+            var helper = new DataConversionHelper();
+            listDanhMuc = await DanhMucRepository.GetAll();
 
 
-        InputMD.TraiPhai = 0;
-        var nuocMuaRepositoryLeft = await NuocMuaRepository.GetAllByVM(InputMD);
-        List<NuocMuaModel> nuocmuasLeft;
-        nuocmuasLeft = await ConvertDanhMuc(nuocMuaRepositoryLeft);
-        listModelLeft = nuocmuasLeft;
-        listNuocMuaModelLeft = PagingLeft(nuocmuasLeft);
+            InputMD.TraiPhai = 0;
+            var nuocMuaRepositoryLeft = await NuocMuaRepository.GetAllByVM(InputMD);
+            List<NuocMuaModel> nuocmuasLeft;
+            nuocmuasLeft = await ConvertDanhMuc(nuocMuaRepositoryLeft);
+            listModelLeft = nuocmuasLeft;
+            listNuocMuaModelLeft = PagingLeft(nuocmuasLeft);
 
-        InputMD.TraiPhai = 1;
-        var nuocMuaRepositoryRight = await NuocMuaRepository.GetAllByVM(InputMD);
-        List<NuocMuaModel> nuocmuasRight;
-        nuocmuasRight = await ConvertDanhMuc(nuocMuaRepositoryRight);
-        listModelRight = nuocmuasRight;
-        listNuocMuaModelRight = PagingRight(nuocmuasRight);
+            InputMD.TraiPhai = 1;
+            var nuocMuaRepositoryRight = await NuocMuaRepository.GetAllByVM(InputMD);
+            List<NuocMuaModel> nuocmuasRight;
+            nuocmuasRight = await ConvertDanhMuc(nuocMuaRepositoryRight);
+            listModelRight = nuocmuasRight;
+            listNuocMuaModelRight = PagingRight(nuocmuasRight);
 
 
-        isLoading = false;
-        baseTime = DateTime.Now;
+            isLoading = false;
+            baseTime = DateTime.Now;
+
+       }catch(Exception ex){
+           Console.WriteLine(ex.Message);
+       }
     }
 
     public async Task<List<NuocMuaModel>> ConvertDanhMuc(List<NuocMuaModel> listNuocMua)
@@ -10726,7 +10731,7 @@
 
     private async Task HandleInValidSubmit()
     {
-       await JSRuntime.InvokeVoidAsync("scrollToFirstError");
+        await JSRuntime.InvokeVoidAsync("scrollToFirstError");
     }
 
     private async Task HandleValidSubmit()
@@ -10735,49 +10740,61 @@
         {
             Console.WriteLine(Input);
             //Kiểm tra xem tên hố ga theo bản vẽ
-            var isExistTHGBV = await NuocMuaRepository.CheckExistId("ThongTinChungHoGa_TenHoGaTheoBanVe", Input.ThongTinChungHoGa_TenHoGaTheoBanVe);
-            if (!isExistTHGBV)
+
+            // Kiểm tra xem danh mục có tồn tại hay không
+            bool check = await CheckIsExitsIdDanhMuc();
+            //thêm phân loại
+            if (check)
             {
-                // Kiểm tra xem danh mục có tồn tại hay không
-                bool check = await CheckIsExitsIdDanhMuc();
-                //thêm phân loại
-                if (check)
+
+                if (string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai))
                 {
+                    await ThemTenTheoPL();
+                }
+                if (string.IsNullOrEmpty(Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa))
+                {
+                    await ThemTenTheoPLTDHoGa();
+                }
+                if (string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
+                {
+                    await ThemTenTheoPLCTronHopNhua();
+                }
+                if (string.IsNullOrEmpty(Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop))
+                {
+                    await ThemTenTheoPLMongCTron();
+                }
+                if (string.IsNullOrEmpty(Input.ThongTinDeCong_TenLoaiDeCong))
+                {
+                    await ThemTenTheoPLDeCong();
+                }
+                if (string.IsNullOrEmpty(Input.TTKTHHCongHopRanh_LoaiThanhChong))
+                {
+                    await ThemTenTheoPLThanhChong();
+                }
+                if (string.IsNullOrEmpty(Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan))
+                {
+                    await ThemTenTheoPLTDanTDan();
+                }
+                if (string.IsNullOrEmpty(Input.TTTDCongHoRanh_TenLoaiTamDanLoai02))
+                {
+                    await ThemTenTheoPLTDanTDan02();
+                }
 
-                    if (string.IsNullOrEmpty(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai))
+                if (isEdit)
+                {
+                    // Kiểm tra tên hố ga theo bản vẽ
+                    var list = await NuocMuaRepository.GetAllByVM(new NuocMuaModel 
                     {
-                        await ThemTenTheoPL();
-                    }
-                    if (string.IsNullOrEmpty(Input.ThongTinTamDanHoGa2_PhanLoaiDayHoGa))
-                    {
-                        await ThemTenTheoPLTDHoGa();
-                    }
-                    if (string.IsNullOrEmpty(Input.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai))
-                    {
-                        await ThemTenTheoPLCTronHopNhua();
-                    }
-                    if (string.IsNullOrEmpty(Input.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop))
-                    {
-                        await ThemTenTheoPLMongCTron();
-                    }
-                    if (string.IsNullOrEmpty(Input.ThongTinDeCong_TenLoaiDeCong))
-                    {
-                        await ThemTenTheoPLDeCong();
-                    }
-                    if (string.IsNullOrEmpty(Input.TTKTHHCongHopRanh_LoaiThanhChong))
-                    {
-                        await ThemTenTheoPLThanhChong();
-                    }
-                    if (string.IsNullOrEmpty(Input.TTTDCongHoRanh_TenLoaiTamDanTieuChuan))
-                    {
-                        await ThemTenTheoPLTDanTDan();
-                    }
-                    if (string.IsNullOrEmpty(Input.TTTDCongHoRanh_TenLoaiTamDanLoai02))
-                    {
-                        await ThemTenTheoPLTDanTDan02();
-                    }
+                        ThongTinChungHoGa_TenHoGaTheoBanVe = Input.ThongTinChungHoGa_TenHoGaTheoBanVe
+                    });
 
-                    if (isEdit)
+                    bool isValidTenHGTheoBV = !list.Any() || 
+                        list.Any(item => 
+                            item.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().Trim() == 
+                            nuocMuaVM.ThongTinChungHoGa_TenHoGaTheoBanVe.ToUpper().Trim()
+                        );
+
+                    if (isValidTenHGTheoBV)
                     {
                         string[] ids = { Input.Id };
                         var isValid = await NuocMuaRepository.CheckExclusive(ids, baseTime);
@@ -10794,72 +10811,78 @@
                                 "Thông báo",
                                 "Cập nhật thành công.",
                                 cssClass: "toast-success",
-                               iconClass: "fa fa-check-circle",
+                                iconClass: "fa fa-check-circle",
                                 progressBarClass: "bg-info",
                                 duration: 5000
                             );
                             await LoadData();
                             nuocMuaVM = new();
-                            //sync dữ liệu sang bảng PhanLoaiHoGaDetails
-                            var a = PhanLoaiHoGaRepository.InsertMissingPhanLoaiHoGaDetails();
+
+                            // Đồng bộ dữ liệu sang bảng PhanLoaiHoGaDetails
+                            _ = PhanLoaiHoGaRepository.InsertMissingPhanLoaiHoGaDetails();
                         }
-                    }
-                    else if (Flag > 0)
-                    {
-                        // Thêm mới thông tin
-                        var id = await NuocMuaRepository.InsertLaterFlag(Input, Flag);
-                        isModalVisible = false;
-                        Input = new NuocMua();
-                        ToastService.ShowToast(
-                            "Thông báo",
-                            "Chèn thành công.",
-                            cssClass: "toast-success",
-                            iconClass: "fa fa-check-circle",
-                            progressBarClass: "bg-info",
-                            duration: 5000
-                        );
-                        await LoadData();
-                        Flag = 0;
-                        //sync dữ liệu sang bảng PhanLoaiHoGaDetails
-                        var a = PhanLoaiHoGaRepository.InsertMissingPhanLoaiHoGaDetails();
                     }
                     else
                     {
+                        ToastService.ShowToast(
+                           "Thông báo lỗi",
+                           "Tên hố ga theo bản vẽ: " + Input.ThongTinChungHoGa_TenHoGaTheoBanVe + " đã tồn tại!",
+                           cssClass: "toast-danger",
+                           iconClass: "fa fa-exclamation-circle",
+                           progressBarClass: "bg-info",
+                           duration: 5000
+                       );
+                    }
+                }
+                else
+                {
+                    var isExistTHGBV = await NuocMuaRepository.CheckExistId("ThongTinChungHoGa_TenHoGaTheoBanVe", Input.ThongTinChungHoGa_TenHoGaTheoBanVe);
+                    if (!isExistTHGBV)
+                    {
                         // Thêm mới thông tin
-                        await NuocMuaRepository.Insert(Input);
+                        if (Flag > 0)
+                        {
+                            await NuocMuaRepository.InsertLaterFlag(Input, Flag);
+                            Flag = 0;
+                        }
+                        else
+                        {
+                            await NuocMuaRepository.Insert(Input);
+                        }
+
+                        // Reset trạng thái và thông báo
                         isModalVisible = false;
                         Input = new NuocMua();
                         ToastService.ShowToast(
                             "Thông báo",
-                            "Thêm thành công.",
+                            Flag > 0 ? "Chèn thành công." : "Thêm thành công.",
                             cssClass: "toast-success",
                             iconClass: "fa fa-check-circle",
                             progressBarClass: "bg-info",
                             duration: 5000
                         );
+
                         await LoadData();
-                        nuocMuaVM = new();
-                        //sync dữ liệu sang bảng PhanLoaiHoGaDetails
-                        var a = PhanLoaiHoGaRepository.InsertMissingPhanLoaiHoGaDetails();
+                        _ = PhanLoaiHoGaRepository.InsertMissingPhanLoaiHoGaDetails();
+                    }
+                    else
+                    {
+                        // Hiển thị thông báo lỗi
+                        ToastService.ShowToast(
+                            "Thông báo lỗi",
+                            "Tên hố ga theo bản vẽ: " + Input.ThongTinChungHoGa_TenHoGaTheoBanVe + " đã tồn tại!",
+                            cssClass: "toast-danger",
+                            iconClass: "fa fa-exclamation-circle",
+                            progressBarClass: "bg-info",
+                            duration: 5000
+                        );
                     }
                 }
-            }
-            else
-            {
-                ToastService.ShowToast(
-                   "Thông báo lỗi ",
-                   "Tên hỗ ga theo bản vẽ :" + Input.ThongTinChungHoGa_TenHoGaTheoBanVe + " đã tồn tại !",
-                   cssClass: "toast-danger",
-                   iconClass: "fa fa-exclamation-circle",
-                   progressBarClass: "bg-info",
-                   duration: 5000
-               );
             }
 
         }
         catch (Exception ex)
         {
-
             ToastService.ShowToast(
                    "Thông báo lỗi ",
                    ex.Message,
