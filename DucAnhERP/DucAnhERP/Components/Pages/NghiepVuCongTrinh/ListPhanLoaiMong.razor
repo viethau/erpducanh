@@ -15,7 +15,7 @@
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinDuongTruyenDan_HinhThucTruyenDan">Hình thức truyền dẫn <span class="text-danger">*</span></label>
-                        <select readonly="@isEdit"  id="ThongTinDuongTruyenDan_HinhThucTruyenDan" class="form-control" @bind="Input.ThongTinDuongTruyenDan_HinhThucTruyenDan">
+                        <select   id="ThongTinDuongTruyenDan_HinhThucTruyenDan" class="form-control" @bind="Input.ThongTinDuongTruyenDan_HinhThucTruyenDan">
                             <option value="">Hình thức truyền dẫn ...</option>
                             @foreach (var dm in FindByIdNhomDanhMuc("TD_HTTruyenDan"))
                             {
@@ -26,7 +26,7 @@
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinDuongTruyenDan_LoaiTruyenDan">Loại truyền dẫn <span class="text-danger">*</span></label>
-                        <select readonly="@isEdit"  id="ThongTinDuongTruyenDan_LoaiTruyenDan" class="form-control" @bind="Input.ThongTinDuongTruyenDan_LoaiTruyenDan">
+                        <select   id="ThongTinDuongTruyenDan_LoaiTruyenDan" class="form-control" @bind="Input.ThongTinDuongTruyenDan_LoaiTruyenDan">
                             <option value="">Loại truyền dẫn...</option>
                             @foreach (var dm in FindByIdNhomDanhMuc("TD_LTruyenDan"))
                             {
@@ -37,7 +37,7 @@
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinMongDuongTruyenDan_LoaiMong">Loại móng <span class="text-danger">*</span></label>
-                        <select readonly="@isEdit" id="ThongTinMongDuongTruyenDan_LoaiMong" class="form-control" @bind="Input.ThongTinMongDuongTruyenDan_LoaiMong">
+                        <select  id="ThongTinMongDuongTruyenDan_LoaiMong" class="form-control" @bind="Input.ThongTinMongDuongTruyenDan_LoaiMong">
                             <option value="">Loại móng...</option>
                             @foreach (var dm in FindByIdNhomDanhMuc("TD_LMTruyenDan"))
                             {
@@ -48,7 +48,7 @@
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinMongDuongTruyenDan_HinhThucMong">Hình thức móng <span class="text-danger">*</span></label>
-                        <select readonly="@isEdit" id="ThongTinMongDuongTruyenDan_HinhThucMong" class="form-control" @bind="Input.ThongTinMongDuongTruyenDan_HinhThucMong">
+                        <select  id="ThongTinMongDuongTruyenDan_HinhThucMong" class="form-control" @bind="Input.ThongTinMongDuongTruyenDan_HinhThucMong">
                             <option value="">Hình thức móng...</option>
                             @foreach (var dm in FindByIdNhomDanhMuc("TD_HTMTruyenDan"))
                             {
@@ -59,22 +59,22 @@
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinCauTaoCongTron_CCaoLotMong">C.Cao lót móng (m) <span class="text-danger">*</span></label>
-                        <InputNumber readonly="@isEdit" @bind-Value="Input.ThongTinCauTaoCongTron_CCaoLotMong" class="form-control" id="ThongTinCauTaoCongTron_CCaoLotMong" placeholder="C.Cao lót móng" />
+                        <InputNumber  @bind-Value="Input.ThongTinCauTaoCongTron_CCaoLotMong" class="form-control" id="ThongTinCauTaoCongTron_CCaoLotMong" placeholder="C.Cao lót móng" />
                         <ValidationMessage For="() => Input.ThongTinCauTaoCongTron_CCaoLotMong" class="text-danger" />
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinCauTaoCongTron_CRongLotMong">C.Rộng lót móng (m) <span class="text-danger">*</span></label>
-                        <InputNumber readonly="@isEdit" @bind-Value="Input.ThongTinCauTaoCongTron_CRongLotMong" class="form-control" id="ThongTinCauTaoCongTron_CRongLotMong" placeholder="C.Rộng lót móng" />
+                        <InputNumber  @bind-Value="Input.ThongTinCauTaoCongTron_CRongLotMong" class="form-control" id="ThongTinCauTaoCongTron_CRongLotMong" placeholder="C.Rộng lót móng" />
                         <ValidationMessage For="() => Input.ThongTinCauTaoCongTron_CRongLotMong" class="text-danger" />
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinCauTaoCongTron_CCaoMong">C.Cao móng (m) <span class="text-danger">*</span></label>
-                        <InputNumber readonly="@isEdit" @bind-Value="Input.ThongTinCauTaoCongTron_CCaoMong" class="form-control" id="ThongTinCauTaoCongTron_CCaoMong" placeholder="C.Cao móng" />
+                        <InputNumber  @bind-Value="Input.ThongTinCauTaoCongTron_CCaoMong" class="form-control" id="ThongTinCauTaoCongTron_CCaoMong" placeholder="C.Cao móng" />
                         <ValidationMessage For="() => Input.ThongTinCauTaoCongTron_CCaoMong" class="text-danger" />
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ThongTinCauTaoCongTron_CRongMong"> C.Rộng móng (m) <span class="text-danger">*</span></label>
-                        <InputNumber readonly="@isEdit" @bind-Value="Input.ThongTinCauTaoCongTron_CRongMong" class="form-control" id="ThongTinCauTaoCongTron_CRongMong" placeholder=" C.Rộng móng" />
+                        <InputNumber  @bind-Value="Input.ThongTinCauTaoCongTron_CRongMong" class="form-control" id="ThongTinCauTaoCongTron_CRongMong" placeholder=" C.Rộng móng" />
                         <ValidationMessage For="() => Input.ThongTinCauTaoCongTron_CRongMong" class="text-danger" />
                     </div>
                 </div>

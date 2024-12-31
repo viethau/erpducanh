@@ -545,16 +545,24 @@ namespace DucAnhERP.Services
         }
         public async Task DeleteById(string id)
         {
-            using var context = _context.CreateDbContext();
-            var entity = await GetById(id);
-
-            if (entity == null)
+            try
             {
-                throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
-            }
+                using var context = _context.CreateDbContext();
+                var entity = await GetById(id);
 
-            context.Set<PhanLoaiHoGa>().Remove(entity);
-            await context.SaveChangesAsync();
+                if (entity == null)
+                {
+                    throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
+                }
+
+                context.Set<PhanLoaiHoGa>().Remove(entity);
+                await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
         }
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
         {
