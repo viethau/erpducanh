@@ -1,4 +1,5 @@
-﻿using DucAnhERP.Components.Pages.NghiepVuCongTrinh.PKKL;
+﻿using DucAnhERP.Components.Pages.NghiepVuCongTrinh.DanhMuc;
+using DucAnhERP.Components.Pages.NghiepVuCongTrinh.PKKL;
 using DucAnhERP.Models;
 using DucAnhERP.Services.SignalR;
 using Microsoft.AspNetCore.Identity;
@@ -124,11 +125,70 @@ namespace DucAnhERP.Data
                 modelBuilder.Entity<PhanLoaiDeCong>()
                .ToTable(tb => tb.UseSqlOutputClause(false));
                 modelBuilder.Entity<PhanLoaiThanhChong>()
-              .ToTable(tb => tb.UseSqlOutputClause(false));
+               .ToTable(tb => tb.UseSqlOutputClause(false));
                 modelBuilder.Entity<PhanLoaiTDHoGa>()
-             .ToTable(tb => tb.UseSqlOutputClause(false));
+               .ToTable(tb => tb.UseSqlOutputClause(false));
                 modelBuilder.Entity<PhanLoaiTDanTDan>()
-             .ToTable(tb => tb.UseSqlOutputClause(false));
+               .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<DanhMuc1>()
+               .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<NhomDanhMuc>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<DMThep>()
+               .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<PKKLCHop>()
+               .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<PKKLCTietHoGa>()
+               .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<PKKLCTietTDHG>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<PKKLCTron>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<PKKLDeCTron>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<PKKLMongCHop>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<PKKLMongCTron>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<PKKLRanhBT>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<PKKLRXay>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<PKKLTChong>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<PKKLTDanCHop>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<PKKLTDanRBT>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<PKKLTDanRXay>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+
+                modelBuilder.Entity<TKThepCHop>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<TKThepCTron>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<TKThepDCong>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<TKThepHoGa>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<TKThepMongCHop>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<TKThepMongCTron>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<TKThepRBTong>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<TKThepRXay>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<TKThepTamDan>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<TKThepTChong>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<TKThepCHop>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<TKThepTDanRXay>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+                modelBuilder.Entity<TKThepTDRBTong>()
+               .ToTable(tb => tb.UseSqlOutputClause(false));
             });
 
             OnModelCreatingPartial(modelBuilder);

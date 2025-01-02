@@ -41,6 +41,7 @@ public class ExportExcelService
 
                     // Căn chỉnh
                     cellRange.Style.HorizontalAlignment = header.Alignment;
+                    cellRange.Style.VerticalAlignment = header.VerticalAlignment;
 
                     // Màu chữ
                     if (header.TextColor.HasValue)
@@ -119,6 +120,10 @@ public class ExportExcelService
                     {
                         if (!string.IsNullOrEmpty(header.DataProperty))
                         {
+                            if(header.DataProperty == "TTKTHHCongHopRanh_CCaoChatmatNgoai")
+                            {
+                                Console.WriteLine("TTKTHHCongHopRanh_CCaoChatmatNgoai");
+                            }
                             var property = typeof(T).GetProperty(header.DataProperty, BindingFlags.Public | BindingFlags.Instance);
                             if (property != null)
                             {
@@ -255,6 +260,7 @@ public class ComplexHeader
     public int EndCol { get; set; }
     public System.Drawing.Color? TextColor { get; set; } // Màu chữ
     public ExcelHorizontalAlignment Alignment { get; set; } = ExcelHorizontalAlignment.Left; // Căn chỉnh
+    public ExcelVerticalAlignment VerticalAlignment { get; set; } = ExcelVerticalAlignment.Center; // Căn chỉnh
     public bool CapitalizeEachWord { get; set; } = false; // Viết hoa chữ cái đầu
     public string FontName { get; set; } = "Times New Roman"; // Kiểu chữ mặc định là Times New Roman
     public float FontSize { get; set; } = 10; // Cỡ chữ mặc định là 10

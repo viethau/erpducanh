@@ -116,7 +116,7 @@
                                 </button>
                             </td>
                             <td class="text-center">
-                                <button class="btn btn-sm btn-danger" @onclick="()=>ConfirmDelete(dm.Id,dm.Id)">
+                                <button class="btn btn-sm btn-danger" @onclick="()=>ConfirmDelete(dm)">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </td>
@@ -372,11 +372,11 @@
 
     private string deleteId;
 
-    private async Task ConfirmDelete(string id, string Ten)
+    private async Task ConfirmDelete(DMTLThepModel dm)
     {
-        deleteId = id;
+        deleteId = dm.Id;
         confirmModal.Title = "Xác nhận xóa";
-        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {dm.ChungLoaiThep_Name}?";
         confirmModal.openModal();
     }
 
