@@ -85,7 +85,10 @@
         </div>
     </EditForm>
 
-    <h3 class="mt-2">Danh sách phân loại tấm đan hố ga </h3>
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mt-2">Danh sách phân loại tấm đan hố ga </h5>
+        <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
+    </div>
     <div class="row mt-3 our-table">
         <table class="table table-hover table-bordered">
             <thead class="bg-info">
@@ -557,6 +560,28 @@
         var pagelist = new PageList<PhanLoaiTDHoGaModel>(listPLTDHoGaModel, count, dmModel.PageNumber, dmModel.PageSize);
         MetaData = pagelist.MetaData;
         return plhgs;
+    }
+    private async Task ExportExcel()
+    {
+
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "1.2 PL T.Đan H.Ga",
+                Tables = new List<TableInfo<object>>
+               {
+                  new TableInfo<object>
+                   {
+                      Headers = ConstantHeaderExcel.PHANLOAITDHG_HEADERS.Cast<ComplexHeader>().ToList(),
+                      Data = listModel.Cast<object>().ToList()
+                   },
+               }
+            };
+
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        var fileName = "PhanLoaiTamDanHoGa.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
 
 }

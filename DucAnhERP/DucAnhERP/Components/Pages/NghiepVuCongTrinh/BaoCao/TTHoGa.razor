@@ -67,8 +67,10 @@
     <div id="tableContainer ">
         <div class="our-table @layoutClass">
             <div class="@viewLeft">
-                <div class=" mt-1">
+
+                <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mt-2">BẢNG THÔNG TIN TỔNG HỢP HỐ GA NƯỚC MƯA DỌC PHÍA TRÁI</h5>
+                    <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
                 </div>
                 <div class=" mt-2">
                     <table id="tb-left" class="table table-hover table-bordered mt-3">
@@ -316,10 +318,10 @@
                                         <span class="arrow @(GetSortStyle("ThongTinChungHoGa_TenHoGaTheoBanVe"))"></span>
                                     </div>
                                 </th>
-                                <th onclick="@(() => SortTableRight("ThongTinTamDanHoGa2_PhanLoaiDayHoGa"))" class="text-center sortable">
+                                <th onclick="@(() => SortTableRight("PhanLoaiTDHoGa_PhanLoaiDayHoGa"))" class="text-center sortable">
                                     <div class="mr-3">
                                         Tên loại tấm đan
-                                        <span class="arrow @(GetSortStyle("ThongTinTamDanHoGa2_PhanLoaiDayHoGa"))"></span>
+                                        <span class="arrow @(GetSortStyle("PhanLoaiTDHoGa_PhanLoaiDayHoGa"))"></span>
                                     </div>
                                 </th>
                                 <th onclick="@(() => SortTableRight("ThongTinTamDanHoGa2_SoLuongNapDay"))" class="text-center sortable">
@@ -741,5 +743,53 @@
     private void ThumbtackHeader()
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
+    }
+
+    private async Task ExportExcel()
+    {
+        List<ComplexHeader> rightHeaders = ConstantHeaderExcel.TTHGA_HEADERS.Cast<ComplexHeader>().ToList();
+        right[2].Title = "BẢNG TỔNG HỢP THÔNG TIN HỆ THỐNG THOÁT NƯỚC MƯA DỌC PHÍA PHẢI TUYẾN";
+        // Dữ liệu mẫu
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2. TT H.Ga",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers =ConstantHeaderExcel.TTHGA_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelLeft.Cast<object>().ToList()
+                    },
+                    new TableInfo<object>
+                    {
+                         Headers =rightHeaders,
+                        Data = listModelRight.Cast<object>().ToList()
+                    }
+                }
+            };
+
+        // Xuất Excel
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        var fileName = "TTH.Ga.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+
+
+        
+    }
+
+    public class Employee
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+        public string Department { get; set; }
+    }
+
+    public class Product
+    {
+        public string ProductName { get; set; }
+        public decimal Price { get; set; }
+        public int Quantity { get; set; }
     }
 }
