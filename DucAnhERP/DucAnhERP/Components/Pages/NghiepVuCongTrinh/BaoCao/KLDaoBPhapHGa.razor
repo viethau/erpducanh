@@ -61,8 +61,9 @@
     <div id="tableContainer ">
         <div class="our-table @layoutClass">
             <div class="@viewLeft">
-                <div class=" mt-1">
+                <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mt-2">BẢNG THÔNG TIN TỔNG HỢP ĐÀO BIỆN PHÁP HỐ GA NƯỚC MƯA DỌC PHÍA TRÁI</h5>
+                    <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
                 </div>
                 <div class=" mt-2">
                     <table id="tb-left" class="table table-hover table-bordered mt-3">
@@ -530,8 +531,8 @@
     private NuocMuaModel Input = new NuocMuaModel();
 
     private List<SelectedItem> selectLoaiVLDao = new();
-    private string layoutClass = "d-flex justify-content-between";
-    private string space = "ml-5";
+    private string layoutClass = "d-block";
+    private string space = "";
     private string thumbtack = "";
 
     private void OnSelectChange(SelectedItem selectedItem)
@@ -723,7 +724,7 @@
             viewRight = "d-none";
             viewLeft = "d-block";
         }
-        space = "m-0";
+        space = "";
     }
 
     private void ViewAll()
@@ -736,16 +737,68 @@
     private void ViewHorizontal()
     {
         layoutClass = "d-flex justify-content-between";
-        space = "ml-5";
+        space = "";
     }
 
     private void ViewVertical()
     {
         layoutClass = "d-block";
-        space = "m-0";
+        space = "";
     }
     private void ThumbtackHeader()
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
+    }
+
+    private async Task ExportExcel()
+    {
+        List<ComplexHeader> rightHeaders = ConstantHeaderExcel.TTHKLBPD_HEADERS.Select(h => new ComplexHeader
+            {
+                Title = h.Title,
+                StartRow = h.StartRow,
+                StartCol = h.StartCol,
+                EndRow = h.EndRow,
+                EndCol = h.EndCol,
+                DataProperty = h.DataProperty,
+                Alignment = h.Alignment,
+                VerticalAlignment = h.VerticalAlignment,
+                CapitalizeEachWord = h.CapitalizeEachWord,
+                FontName = h.FontName,
+                FontSize = h.FontSize,
+                IsBold = h.IsBold,
+                IsItalic = h.IsItalic,
+                IsUnderlined = h.IsUnderlined,
+                TextColor = h.TextColor,
+                BackgroundColor = h.BackgroundColor,
+                WrapText = h.WrapText,
+                HasBorder = h.HasBorder,
+                BorderStyle = h.BorderStyle,
+                DataFormat = h.DataFormat
+            }).ToList();
+        rightHeaders[2].Title = "BẢNG THÔNG TIN TỔNG HỢP ĐÀO BIỆN PHÁP HỐ GA NƯỚC MƯA DỌC PHÍA PHẢI";
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.1 KL đào B.Pháp H.Ga",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TTHKLBPD_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelLeft.Cast<object>().ToList()
+                    },
+                    new TableInfo<object>
+                    {
+                         Headers =rightHeaders,
+                        Data = listModelRight.Cast<object>().ToList()
+                    }
+                }
+            };
+
+        // Xuất Excel
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        var fileName = "KLBPD.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
 }

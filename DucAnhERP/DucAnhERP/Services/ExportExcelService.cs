@@ -34,12 +34,14 @@ public class ExportExcelService
                     {
                         cellRange.Merge = true;
                     }
-
-                    // Thiết lập nội dung và viết hoa chữ cái đầu nếu cần
-                    cellRange.Value = header.CapitalizeEachWord
-                        ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(header.Title.ToLower())
-                        : header.Title;
-
+                    //Viết hoa tiêu đề
+                    string title = header.IsUppercase ? header.Title.ToUpper() : header.Title;
+                    // Áp dụng viết hoa chữ cái đầu nếu CapitalizeEachWord = true
+                    if (header.CapitalizeEachWord)
+                    {
+                        title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title.ToLower());
+                    }
+                    cellRange.Value = title;
                     // Căn chỉnh
                     cellRange.Style.HorizontalAlignment = header.Alignment;
                     cellRange.Style.VerticalAlignment = header.VerticalAlignment;
@@ -213,10 +215,14 @@ public class ExportExcelService
                             cellRange.Merge = true;
                         }
 
-                        // Thiết lập nội dung và viết hoa chữ cái đầu nếu cần
-                        cellRange.Value = header.CapitalizeEachWord
-                            ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(header.Title.ToLower())
-                            : header.Title;
+                        //Viết hoa tiêu đề
+                        string title = header.IsUppercase ? header.Title.ToUpper() : header.Title;
+                        // Áp dụng viết hoa chữ cái đầu nếu CapitalizeEachWord = true
+                        if (header.CapitalizeEachWord)
+                        {
+                            title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title.ToLower());
+                        }
+                        cellRange.Value = title;
 
                         // Căn chỉnh
                         cellRange.Style.HorizontalAlignment = header.Alignment;
@@ -323,7 +329,7 @@ public class ExportExcelService
         }
     }
 
-    public byte[] ExportToExcelWithMultipleTables<T>(List<SheetInfo1<T>> sheets)
+    public byte[] ExportToExcelWithMultipleTables<T>(List<SheetInfo1<T>> sheets, RowSpace rowSpace = null)
     {
         try
         {
@@ -351,9 +357,14 @@ public class ExportExcelService
                                 cellRange.Merge = true;
                             }
 
-                            cellRange.Value = header.CapitalizeEachWord
-                                ? CultureInfo.CurrentCulture.TextInfo.ToTitleCase(header.Title.ToLower())
-                                : header.Title;
+                            //Viết hoa tiêu đề
+                            string title = header.IsUppercase ? header.Title.ToUpper() : header.Title;
+                            // Áp dụng viết hoa chữ cái đầu nếu CapitalizeEachWord = true
+                            if (header.CapitalizeEachWord)
+                            {
+                                title = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(title.ToLower());
+                            }
+                            cellRange.Value = title;
 
                             cellRange.Style.HorizontalAlignment = header.Alignment;
                             cellRange.Style.VerticalAlignment = header.VerticalAlignment;
@@ -394,8 +405,41 @@ public class ExportExcelService
                         int rowIndex = dataStartRow;
                         // Biến đếm số thứ tự (STT)
                         int stt = 1;
+                        string previousLoaiCK = null;
+                        int maxEndCol = tableInfo.Headers.Where(h => !string.IsNullOrEmpty(h.DataProperty)).Max(h => h.EndCol); // Lấy EndCol lớn nhất
                         foreach (var item in tableInfo.Data)
                         {
+                            // Kiểm tra và thêm dòng gộp nếu LoaiCK thay đổi
+                            if (rowSpace != null)
+                            {
+                                var propertyLoaiCK = item.GetType().GetProperty(rowSpace.DataProperty, BindingFlags.Public | BindingFlags.Instance);
+                                if (propertyLoaiCK != null)
+                                {
+                                    var currentLoaiCK = propertyLoaiCK.GetValue(item)?.ToString();
+
+                                    // Nếu LoaiCK thay đổi so với giá trị trước đó
+                                    if (!string.IsNullOrEmpty(currentLoaiCK) && currentLoaiCK != previousLoaiCK)
+                                    {
+                                        // Tạo một dòng gộp tất cả các cột
+                                        var mergeRange = worksheet.Cells[rowIndex, currentCol, rowIndex, currentCol + maxEndCol - 1];
+                                        mergeRange.Merge = true; // Gộp các ô
+                                        mergeRange.Value = $"{currentLoaiCK}"; // Đặt giá trị
+                                        mergeRange.Style.Font.Bold = true; // In đậm
+                                        mergeRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left; // Căn giữa
+                                        mergeRange.Style.Fill.PatternType = ExcelFillStyle.Solid; // Tô màu nền
+                                        mergeRange.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightYellow); // Màu nền
+                                        mergeRange.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                                        mergeRange.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                                        mergeRange.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                                        mergeRange.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                                        rowIndex++; // Tăng chỉ số hàng
+                                    }
+
+                                    previousLoaiCK = currentLoaiCK; // Cập nhật giá trị LoaiCK trước đó
+                                }
+                            }
+
+
                             foreach (var header in tableInfo.Headers)
                             {
 
@@ -575,6 +619,7 @@ public class ComplexHeader
     public ExcelHorizontalAlignment Alignment { get; set; } = ExcelHorizontalAlignment.Left; // Căn chỉnh
     public ExcelVerticalAlignment VerticalAlignment { get; set; } = ExcelVerticalAlignment.Center; // Căn chỉnh
     public bool CapitalizeEachWord { get; set; } = false; // Viết hoa chữ cái đầu
+    public bool IsUppercase { get; set; } = false;// Viết hoa toàn bộ
     public string FontName { get; set; } = "Times New Roman"; // Kiểu chữ mặc định là Times New Roman
     public float FontSize { get; set; } = 10; // Cỡ chữ mặc định là 10
     public bool IsBold { get; set; } = false; // Chữ đậm
@@ -607,4 +652,10 @@ public class SheetInfo1<T>
 {
     public string SheetName { get; set; } // Tên của sheet
     public List<TableInfo<T>> Tables { get; set; } // Danh sách các bảng dữ liệu trên sheet
+}
+
+public class RowSpace
+{
+    public string DataProperty { get; set; } // Tên biến
+    public System.Drawing.Color? BackgroundColor { get; set; } // Màu nền của ô
 }

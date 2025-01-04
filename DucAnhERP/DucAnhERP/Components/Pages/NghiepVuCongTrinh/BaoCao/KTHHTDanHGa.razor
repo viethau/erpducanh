@@ -40,9 +40,11 @@
     <div id="tableContainer ">
         <div class="table-report">
             <div>
-                <div class=" mt-1">
+                <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mt-2">BẢNG KÍCH THƯỚC HÌNH HỌC TẤM ĐAN HỐ GA</h5>
+                    <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
                 </div>
+               
                 <div class=" mt-2">
                     <table id="tb-left" class="table table-hover table-bordered mt-3">
                         <thead class="bg-info @thumbtack">
@@ -266,5 +268,27 @@
     private void ThumbtackHeader()
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
+    }
+
+    private async Task ExportExcel()
+    {
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.5 KTHH T.Đan H.Ga",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.KTHHTDHG_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModel.Cast<object>().ToList()
+                    },
+                }
+            };
+        // Xuất Excel
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        var fileName = "KTHHTDHG.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
 }
