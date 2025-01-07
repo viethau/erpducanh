@@ -420,19 +420,36 @@ public class ExportExcelService
                                     // Nếu LoaiCK thay đổi so với giá trị trước đó
                                     if (!string.IsNullOrEmpty(currentLoaiCK) && currentLoaiCK != previousLoaiCK)
                                     {
-                                        // Tạo một dòng gộp tất cả các cột
-                                        var mergeRange = worksheet.Cells[rowIndex, currentCol, rowIndex, currentCol + maxEndCol - 1];
-                                        mergeRange.Merge = true; // Gộp các ô
-                                        mergeRange.Value = $"{currentLoaiCK}"; // Đặt giá trị
-                                        mergeRange.Style.Font.Bold = true; // In đậm
-                                        mergeRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left; // Căn giữa
-                                        mergeRange.Style.Fill.PatternType = ExcelFillStyle.Solid; // Tô màu nền
-                                        mergeRange.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightYellow); // Màu nền
-                                        mergeRange.Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                                        mergeRange.Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                                        mergeRange.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                                        mergeRange.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                                        stt = 1;
+                                        // Tô màu nền cả dòng màu vàng (trừ cột thứ 2)
+                                        for (int col = currentCol; col <= currentCol + maxEndCol - 1; col++)
+                                        {
+                                            if (col != currentCol + 1) // Bỏ qua cột thứ 2
+                                            {
+                                                var cell = worksheet.Cells[rowIndex, col];
+                                                cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                                                cell.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
+                                            }
+                                        }
+
+                                        // Thêm border từ currentCol đến currentCol + maxEndCol - 1
+                                        var rowRange = worksheet.Cells[rowIndex, currentCol, rowIndex, currentCol + maxEndCol - 1];
+                                        rowRange.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                                        rowRange.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                                        rowRange.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                                        rowRange.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+                                        // Tô màu nền cột thứ 2 trong dòng màu light green và chữ in đậm
+                                        var secondColumnCell = worksheet.Cells[rowIndex, currentCol + 1];
+                                        secondColumnCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                                        secondColumnCell.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGreen);
+                                        secondColumnCell.Style.Font.Bold = true;
+
+                                        // Đặt giá trị cho cột thứ 2
+                                        secondColumnCell.Value = $"{currentLoaiCK}";
+
                                         rowIndex++; // Tăng chỉ số hàng
+
                                     }
 
                                     previousLoaiCK = currentLoaiCK; // Cập nhật giá trị LoaiCK trước đó
@@ -454,7 +471,8 @@ public class ExportExcelService
                                         {
                                             cell.Style.Numberformat.Format = header.DataFormat;
                                         }
-
+                                        cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                        cell.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                                         // Áp dụng border nếu có
                                         cell.Style.Border.Top.Style = ExcelBorderStyle.Thin;
                                         cell.Style.Border.Left.Style = ExcelBorderStyle.Thin;

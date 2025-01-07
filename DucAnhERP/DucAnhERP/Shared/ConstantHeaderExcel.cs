@@ -664,7 +664,7 @@ namespace DucAnhERP.Shared
                 new ComplexHeader { Title = "CD tường", DataProperty = "MuMoThotTren_CdTuong", StartRow = 17, EndRow = 17, StartCol = 35, EndCol = 35, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
 
          };
-        //Thống kê thép hố ga
+        //Thống kê thép
         public static List<ComplexHeader> TKTHG_HEADERS = new List<ComplexHeader>
          {
                 // Dòng tiêu đề chung
@@ -694,6 +694,411 @@ namespace DucAnhERP.Shared
                 new ComplexHeader { Title = "Tổng trọng lượng (kg)", DataProperty = "TongTrongLuong", StartRow = 16, EndRow = 16, StartCol = 14, EndCol = 14, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
                 
          };
+        public static List<ComplexHeader> TKTTD_HEADERS = new List<ComplexHeader>
+         {
+                // Dòng tiêu đề chung
+                new ComplexHeader { Title = "CÔNG TY CỔ PHẦN XÂY DỰNG ĐỨC ANH", StartRow = 1, StartCol = 1, EndRow = 1, EndCol = 5,Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "TÊN DỰ ÁN", StartRow = 2, StartCol = 1, EndRow = 2, EndCol = 5 ,Alignment = ExcelHorizontalAlignment.Center ,IsBold=true},
+                new ComplexHeader { Title = "BẢNG THỐNG KÊ THÉP TẤM ĐAN HỐ GA", StartRow = 3, StartCol = 1, EndRow = 3, EndCol = 15, TextColor = System.Drawing.Color.Black, Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "Số liệu màu đen nhạt là số liệu nhập bằng tay; Số liệu màu đen đậm là kết quả mang từ một bảng khác sang; Số liệu màu đỏ là kết quả của 01 phép tính.", StartRow = 4, StartCol = 1, EndRow = 4, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Nhưng bảng sử dụng số liệu của bảng này bị thay đổi số liệu nếu số liệu tại bảng này bị thay đổi", StartRow = 5, StartCol = 1, EndRow = 5, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Bảng này in làm tài liệu lưu trữ, thi công, nghiệm thu, hoàn công.", StartRow = 6, StartCol = 1, EndRow = 6, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+                new ComplexHeader { Title = "", StartRow = 7, StartCol = 1, EndRow = 7, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "", StartRow = 8, StartCol = 1, EndRow = 8, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
 
+                // Header thông tin chi tiết
+                new ComplexHeader { Title = "STT", DataProperty = "STT", StartRow = 16, EndRow = 16, StartCol = 1, EndCol = 1, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại cấu kiện", DataProperty = "ThongTinTamDanHoGa2_PhanLoaiDayHoGa_Name", StartRow = 16, EndRow = 16, StartCol = 2, EndCol = 2, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tên công tác", DataProperty = "TenCongTac", StartRow = 16, EndRow = 16, StartCol = 3, EndCol = 3, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Vị trí lấy khối lượng", DataProperty = "VTLayKhoiLuong", StartRow = 16, EndRow = 16, StartCol = 4, EndCol = 4, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại thép", DataProperty = "LoaiThep_Name", StartRow = 16, EndRow = 16, StartCol = 5, EndCol = 5, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số hiệu", DataProperty = "SoHieu", StartRow = 16, EndRow = 16, StartCol = 6, EndCol = 6, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Đường kính chiều dầy (mm,mm2)", DataProperty = "DKCD", StartRow = 16, EndRow = 16, StartCol = 7, EndCol = 7, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số thanh/01 cấu kiện", DataProperty = "SoThanh", StartRow = 16, EndRow = 16, StartCol = 8, EndCol = 8, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số cấu kiện", DataProperty = "SoCK", StartRow = 16, EndRow = 16, StartCol = 9, EndCol = 9, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng số thanh", DataProperty = "TongSoThanh", StartRow = 16, EndRow = 16, StartCol = 10, EndCol = 10, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Chiều dài 01 thanh (mm)/diện tích (mm2)", DataProperty = "ChieuDai1Thanh", StartRow = 16, EndRow = 16, StartCol = 11, EndCol = 11, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng chiều dài (m,m2)", DataProperty = "TongChieuDai", StartRow = 16, EndRow = 16, StartCol = 12, EndCol = 12, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Trọng lượng thép/(kg/m,m3)", DataProperty = "TrongLuong", StartRow = 16, EndRow = 16, StartCol = 13, EndCol = 13, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng trọng lượng (kg)", DataProperty = "TongTrongLuong", StartRow = 16, EndRow = 16, StartCol = 14, EndCol = 14, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+
+         };
+        public static List<ComplexHeader> TKTCT_HEADERS = new List<ComplexHeader>
+         {
+                // Dòng tiêu đề chung
+                new ComplexHeader { Title = "CÔNG TY CỔ PHẦN XÂY DỰNG ĐỨC ANH", StartRow = 1, StartCol = 1, EndRow = 1, EndCol = 5,Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "TÊN DỰ ÁN", StartRow = 2, StartCol = 1, EndRow = 2, EndCol = 5 ,Alignment = ExcelHorizontalAlignment.Center ,IsBold=true},
+                new ComplexHeader { Title = "BẢNG THỐNG KÊ THÉP CỐNG TRÒN", StartRow = 3, StartCol = 1, EndRow = 3, EndCol = 15, TextColor = System.Drawing.Color.Black, Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "Số liệu màu đen nhạt là số liệu nhập bằng tay; Số liệu màu đen đậm là kết quả mang từ một bảng khác sang; Số liệu màu đỏ là kết quả của 01 phép tính.", StartRow = 4, StartCol = 1, EndRow = 4, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Nhưng bảng sử dụng số liệu của bảng này bị thay đổi số liệu nếu số liệu tại bảng này bị thay đổi", StartRow = 5, StartCol = 1, EndRow = 5, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Bảng này in làm tài liệu lưu trữ, thi công, nghiệm thu, hoàn công.", StartRow = 6, StartCol = 1, EndRow = 6, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+                new ComplexHeader { Title = "", StartRow = 7, StartCol = 1, EndRow = 7, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "", StartRow = 8, StartCol = 1, EndRow = 8, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+
+                // Header thông tin chi tiết
+                new ComplexHeader { Title = "STT", DataProperty = "STT", StartRow = 16, EndRow = 16, StartCol = 1, EndCol = 1, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại cấu kiện", DataProperty = "PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai", StartRow = 16, EndRow = 16, StartCol = 2, EndCol = 2, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tên công tác", DataProperty = "TenCongTac", StartRow = 16, EndRow = 16, StartCol = 3, EndCol = 3, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Vị trí lấy khối lượng", DataProperty = "VTLayKhoiLuong", StartRow = 16, EndRow = 16, StartCol = 4, EndCol = 4, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại thép", DataProperty = "LoaiThep_Name", StartRow = 16, EndRow = 16, StartCol = 5, EndCol = 5, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số hiệu", DataProperty = "SoHieu", StartRow = 16, EndRow = 16, StartCol = 6, EndCol = 6, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Đường kính chiều dầy (mm,mm2)", DataProperty = "DKCD", StartRow = 16, EndRow = 16, StartCol = 7, EndCol = 7, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số thanh/01 cấu kiện", DataProperty = "SoThanh", StartRow = 16, EndRow = 16, StartCol = 8, EndCol = 8, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số cấu kiện", DataProperty = "SoCK", StartRow = 16, EndRow = 16, StartCol = 9, EndCol = 9, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng số thanh", DataProperty = "TongSoThanh", StartRow = 16, EndRow = 16, StartCol = 10, EndCol = 10, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Chiều dài 01 thanh (mm)/diện tích (mm2)", DataProperty = "ChieuDai1Thanh", StartRow = 16, EndRow = 16, StartCol = 11, EndCol = 11, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng chiều dài (m,m2)", DataProperty = "TongChieuDai", StartRow = 16, EndRow = 16, StartCol = 12, EndCol = 12, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Trọng lượng thép/(kg/m,m3)", DataProperty = "TrongLuong", StartRow = 16, EndRow = 16, StartCol = 13, EndCol = 13, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng trọng lượng (kg)", DataProperty = "TongTrongLuong", StartRow = 16, EndRow = 16, StartCol = 14, EndCol = 14, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+
+         };
+        public static List<ComplexHeader> TKTMCT_HEADERS = new List<ComplexHeader>
+         {
+                // Dòng tiêu đề chung
+                new ComplexHeader { Title = "CÔNG TY CỔ PHẦN XÂY DỰNG ĐỨC ANH", StartRow = 1, StartCol = 1, EndRow = 1, EndCol = 5,Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "TÊN DỰ ÁN", StartRow = 2, StartCol = 1, EndRow = 2, EndCol = 5 ,Alignment = ExcelHorizontalAlignment.Center ,IsBold=true},
+                new ComplexHeader { Title = "BẢNG THỐNG KÊ THÉP MÓNG CỐNG TRÒN", StartRow = 3, StartCol = 1, EndRow = 3, EndCol = 15, TextColor = System.Drawing.Color.Black, Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "Số liệu màu đen nhạt là số liệu nhập bằng tay; Số liệu màu đen đậm là kết quả mang từ một bảng khác sang; Số liệu màu đỏ là kết quả của 01 phép tính.", StartRow = 4, StartCol = 1, EndRow = 4, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Nhưng bảng sử dụng số liệu của bảng này bị thay đổi số liệu nếu số liệu tại bảng này bị thay đổi", StartRow = 5, StartCol = 1, EndRow = 5, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Bảng này in làm tài liệu lưu trữ, thi công, nghiệm thu, hoàn công.", StartRow = 6, StartCol = 1, EndRow = 6, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+                new ComplexHeader { Title = "", StartRow = 7, StartCol = 1, EndRow = 7, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "", StartRow = 8, StartCol = 1, EndRow = 8, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+
+                // Header thông tin chi tiết
+                new ComplexHeader { Title = "STT", DataProperty = "STT", StartRow = 16, EndRow = 16, StartCol = 1, EndCol = 1, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tuyến đường", DataProperty = "ThongTinLyTrinh_TuyenDuong", StartRow = 16, EndRow = 16, StartCol = 2, EndCol = 2, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Từ lý trình", DataProperty = "ThongTinLyTrinhTruyenDan_TuLyTrinh", StartRow = 16, EndRow = 16, StartCol = 3, EndCol = 3, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Đến lý trình", DataProperty = "ThongTinLyTrinhTruyenDan_DenLyTrinh", StartRow = 16, EndRow = 16, StartCol = 4, EndCol = 4, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại cấu kiện", DataProperty = "PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop", StartRow = 16, EndRow = 16, StartCol = 5, EndCol = 5, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tên công tác", DataProperty = "TenCongTac", StartRow = 16, EndRow = 16, StartCol = 6, EndCol = 6, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Vị trí lấy khối lượng", DataProperty = "VTLayKhoiLuong", StartRow = 16, EndRow = 16, StartCol = 7, EndCol = 7, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại thép", DataProperty = "LoaiThep_Name", StartRow = 16, EndRow = 16, StartCol = 8, EndCol = 8, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số hiệu", DataProperty = "SoHieu", StartRow = 16, EndRow = 16, StartCol = 9, EndCol = 9, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Đường kính chiều dầy (mm,mm2)", DataProperty = "DKCD", StartRow = 16, EndRow = 16, StartCol = 10, EndCol = 10, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số thanh/01 cấu kiện", DataProperty = "SoThanh", StartRow = 16, EndRow = 16, StartCol = 11, EndCol = 11, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số cấu kiện", DataProperty = "SoCK", StartRow = 16, EndRow = 16, StartCol = 12, EndCol = 12, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng số thanh", DataProperty = "TongSoThanh", StartRow = 16, EndRow = 16, StartCol = 13, EndCol = 13, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Chiều dài 01 thanh (mm)/diện tích (mm2)", DataProperty = "ChieuDai1Thanh", StartRow = 16, EndRow = 16, StartCol = 14, EndCol = 14, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng chiều dài (m,m2)", DataProperty = "TongChieuDai", StartRow = 16, EndRow = 16, StartCol = 15, EndCol = 15, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Trọng lượng thép/(kg/m,m3)", DataProperty = "TrongLuong", StartRow = 16, EndRow = 16, StartCol = 16, EndCol = 16, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng trọng lượng (kg)", DataProperty = "TongTrongLuong", StartRow = 16, EndRow = 16, StartCol = 17, EndCol = 17, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+
+         };
+        public static List<ComplexHeader> TKTDC_HEADERS = new List<ComplexHeader>
+         {
+                // Dòng tiêu đề chung
+                new ComplexHeader { Title = "CÔNG TY CỔ PHẦN XÂY DỰNG ĐỨC ANH", StartRow = 1, StartCol = 1, EndRow = 1, EndCol = 5,Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "TÊN DỰ ÁN", StartRow = 2, StartCol = 1, EndRow = 2, EndCol = 5 ,Alignment = ExcelHorizontalAlignment.Center ,IsBold=true},
+                new ComplexHeader { Title = "BẢNG THỐNG KÊ THÉP ĐẾ CỐNG", StartRow = 3, StartCol = 1, EndRow = 3, EndCol = 15, TextColor = System.Drawing.Color.Black, Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "Số liệu màu đen nhạt là số liệu nhập bằng tay; Số liệu màu đen đậm là kết quả mang từ một bảng khác sang; Số liệu màu đỏ là kết quả của 01 phép tính.", StartRow = 4, StartCol = 1, EndRow = 4, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Nhưng bảng sử dụng số liệu của bảng này bị thay đổi số liệu nếu số liệu tại bảng này bị thay đổi", StartRow = 5, StartCol = 1, EndRow = 5, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Bảng này in làm tài liệu lưu trữ, thi công, nghiệm thu, hoàn công.", StartRow = 6, StartCol = 1, EndRow = 6, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+                new ComplexHeader { Title = "", StartRow = 7, StartCol = 1, EndRow = 7, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "", StartRow = 8, StartCol = 1, EndRow = 8, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+
+                // Header thông tin chi tiết
+                new ComplexHeader { Title = "STT", DataProperty = "STT", StartRow = 16, EndRow = 16, StartCol = 1, EndCol = 1, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại cấu kiện", DataProperty = "PhanLoaiDeCong_TenLoaiDeCong", StartRow = 16, EndRow = 16, StartCol = 2, EndCol = 2, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tên công tác", DataProperty = "TenCongTac", StartRow = 16, EndRow = 16, StartCol = 3, EndCol = 3, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Vị trí lấy khối lượng", DataProperty = "VTLayKhoiLuong", StartRow = 16, EndRow = 16, StartCol = 4, EndCol = 4, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại thép", DataProperty = "LoaiThep_Name", StartRow = 16, EndRow = 16, StartCol = 5, EndCol = 5, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số hiệu", DataProperty = "SoHieu", StartRow = 16, EndRow = 16, StartCol = 6, EndCol = 6, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Đường kính chiều dầy (mm,mm2)", DataProperty = "DKCD", StartRow = 16, EndRow = 16, StartCol = 7, EndCol = 7, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số thanh/01 cấu kiện", DataProperty = "SoThanh", StartRow = 16, EndRow = 16, StartCol = 8, EndCol = 8, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số cấu kiện", DataProperty = "SoCK", StartRow = 16, EndRow = 16, StartCol = 9, EndCol = 9, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng số thanh", DataProperty = "TongSoThanh", StartRow = 16, EndRow = 16, StartCol = 10, EndCol = 10, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Chiều dài 01 thanh (mm)/diện tích (mm2)", DataProperty = "ChieuDai1Thanh", StartRow = 16, EndRow = 16, StartCol = 11, EndCol = 11, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng chiều dài (m,m2)", DataProperty = "TongChieuDai", StartRow = 16, EndRow = 16, StartCol = 12, EndCol = 12, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Trọng lượng thép/(kg/m,m3)", DataProperty = "TrongLuong", StartRow = 16, EndRow = 16, StartCol = 13, EndCol = 13, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng trọng lượng (kg)", DataProperty = "TongTrongLuong", StartRow = 16, EndRow = 16, StartCol = 14, EndCol = 14, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+
+         };
+        public static List<ComplexHeader> TKTCH_HEADERS = new List<ComplexHeader>
+         {
+                // Dòng tiêu đề chung
+                new ComplexHeader { Title = "CÔNG TY CỔ PHẦN XÂY DỰNG ĐỨC ANH", StartRow = 1, StartCol = 1, EndRow = 1, EndCol = 5,Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "TÊN DỰ ÁN", StartRow = 2, StartCol = 1, EndRow = 2, EndCol = 5 ,Alignment = ExcelHorizontalAlignment.Center ,IsBold=true},
+                new ComplexHeader { Title = "BẢNG THỐNG KÊ THÉP CỐNG HỘP", StartRow = 3, StartCol = 1, EndRow = 3, EndCol = 15, TextColor = System.Drawing.Color.Black, Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "Số liệu màu đen nhạt là số liệu nhập bằng tay; Số liệu màu đen đậm là kết quả mang từ một bảng khác sang; Số liệu màu đỏ là kết quả của 01 phép tính.", StartRow = 4, StartCol = 1, EndRow = 4, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Nhưng bảng sử dụng số liệu của bảng này bị thay đổi số liệu nếu số liệu tại bảng này bị thay đổi", StartRow = 5, StartCol = 1, EndRow = 5, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Bảng này in làm tài liệu lưu trữ, thi công, nghiệm thu, hoàn công.", StartRow = 6, StartCol = 1, EndRow = 6, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+                new ComplexHeader { Title = "", StartRow = 7, StartCol = 1, EndRow = 7, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "", StartRow = 8, StartCol = 1, EndRow = 8, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+
+                // Header thông tin chi tiết
+                new ComplexHeader { Title = "STT", DataProperty = "STT", StartRow = 16, EndRow = 16, StartCol = 1, EndCol = 1, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại cấu kiện", DataProperty = "PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai", StartRow = 16, EndRow = 16, StartCol = 2, EndCol = 2, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tên công tác", DataProperty = "TenCongTac", StartRow = 16, EndRow = 16, StartCol = 3, EndCol = 3, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Vị trí lấy khối lượng", DataProperty = "VTLayKhoiLuong", StartRow = 16, EndRow = 16, StartCol = 4, EndCol = 4, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại thép", DataProperty = "LoaiThep_Name", StartRow = 16, EndRow = 16, StartCol = 5, EndCol = 5, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số hiệu", DataProperty = "SoHieu", StartRow = 16, EndRow = 16, StartCol = 6, EndCol = 6, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Đường kính chiều dầy (mm,mm2)", DataProperty = "DKCD", StartRow = 16, EndRow = 16, StartCol = 7, EndCol = 7, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số thanh/01 cấu kiện", DataProperty = "SoThanh", StartRow = 16, EndRow = 16, StartCol = 8, EndCol = 8, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số cấu kiện", DataProperty = "SoCK", StartRow = 16, EndRow = 16, StartCol = 9, EndCol = 9, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng số thanh", DataProperty = "TongSoThanh", StartRow = 16, EndRow = 16, StartCol = 10, EndCol = 10, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Chiều dài 01 thanh (mm)/diện tích (mm2)", DataProperty = "ChieuDai1Thanh", StartRow = 16, EndRow = 16, StartCol = 11, EndCol = 11, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng chiều dài (m,m2)", DataProperty = "TongChieuDai", StartRow = 16, EndRow = 16, StartCol = 12, EndCol = 12, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Trọng lượng thép/(kg/m,m3)", DataProperty = "TrongLuong", StartRow = 16, EndRow = 16, StartCol = 13, EndCol = 13, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng trọng lượng (kg)", DataProperty = "TongTrongLuong", StartRow = 16, EndRow = 16, StartCol = 14, EndCol = 14, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+
+         };
+        public static List<ComplexHeader> TKTMCH_HEADERS = new List<ComplexHeader>
+         {
+                // Dòng tiêu đề chung
+                new ComplexHeader { Title = "CÔNG TY CỔ PHẦN XÂY DỰNG ĐỨC ANH", StartRow = 1, StartCol = 1, EndRow = 1, EndCol = 5,Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "TÊN DỰ ÁN", StartRow = 2, StartCol = 1, EndRow = 2, EndCol = 5 ,Alignment = ExcelHorizontalAlignment.Center ,IsBold=true},
+                new ComplexHeader { Title = "BẢNG THỐNG KÊ THÉP MÓNG CỐNG HỘP", StartRow = 3, StartCol = 1, EndRow = 3, EndCol = 15, TextColor = System.Drawing.Color.Black, Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "Số liệu màu đen nhạt là số liệu nhập bằng tay; Số liệu màu đen đậm là kết quả mang từ một bảng khác sang; Số liệu màu đỏ là kết quả của 01 phép tính.", StartRow = 4, StartCol = 1, EndRow = 4, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Nhưng bảng sử dụng số liệu của bảng này bị thay đổi số liệu nếu số liệu tại bảng này bị thay đổi", StartRow = 5, StartCol = 1, EndRow = 5, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Bảng này in làm tài liệu lưu trữ, thi công, nghiệm thu, hoàn công.", StartRow = 6, StartCol = 1, EndRow = 6, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+                new ComplexHeader { Title = "", StartRow = 7, StartCol = 1, EndRow = 7, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "", StartRow = 8, StartCol = 1, EndRow = 8, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+
+                // Header thông tin chi tiết
+                new ComplexHeader { Title = "STT", DataProperty = "STT", StartRow = 16, EndRow = 16, StartCol = 1, EndCol = 1, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tuyến đường", DataProperty = "ThongTinLyTrinh_TuyenDuong", StartRow = 16, EndRow = 16, StartCol = 2, EndCol = 2, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Từ lý trình", DataProperty = "ThongTinLyTrinhTruyenDan_TuLyTrinh", StartRow = 16, EndRow = 16, StartCol = 3, EndCol = 3, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Đến lý trình", DataProperty = "ThongTinLyTrinhTruyenDan_DenLyTrinh", StartRow = 16, EndRow = 16, StartCol = 4, EndCol = 4, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại cấu kiện", DataProperty = "PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop", StartRow = 16, EndRow = 16, StartCol = 5, EndCol = 5, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tên công tác", DataProperty = "TenCongTac", StartRow = 16, EndRow = 16, StartCol = 6, EndCol = 6, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Vị trí lấy khối lượng", DataProperty = "VTLayKhoiLuong", StartRow = 16, EndRow = 16, StartCol = 7, EndCol = 7, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại thép", DataProperty = "LoaiThep_Name", StartRow = 16, EndRow = 16, StartCol = 8, EndCol = 8, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số hiệu", DataProperty = "SoHieu", StartRow = 16, EndRow = 16, StartCol = 9, EndCol = 9, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Đường kính chiều dầy (mm,mm2)", DataProperty = "DKCD", StartRow = 16, EndRow = 16, StartCol = 10, EndCol = 10, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số thanh/01 cấu kiện", DataProperty = "SoThanh", StartRow = 16, EndRow = 16, StartCol = 11, EndCol = 11, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số cấu kiện", DataProperty = "SoCK", StartRow = 16, EndRow = 16, StartCol = 12, EndCol = 12, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng số thanh", DataProperty = "TongSoThanh", StartRow = 16, EndRow = 16, StartCol = 13, EndCol = 13, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Chiều dài 01 thanh (mm)/diện tích (mm2)", DataProperty = "ChieuDai1Thanh", StartRow = 16, EndRow = 16, StartCol = 14, EndCol = 14, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng chiều dài (m,m2)", DataProperty = "TongChieuDai", StartRow = 16, EndRow = 16, StartCol = 15, EndCol = 15, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Trọng lượng thép/(kg/m,m3)", DataProperty = "TrongLuong", StartRow = 16, EndRow = 16, StartCol = 16, EndCol = 16, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng trọng lượng (kg)", DataProperty = "TongTrongLuong", StartRow = 16, EndRow = 16, StartCol = 17, EndCol = 17, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+
+         };
+        public static List<ComplexHeader> TKTTDCH_HEADERS = new List<ComplexHeader>
+         {
+                // Dòng tiêu đề chung
+                new ComplexHeader { Title = "CÔNG TY CỔ PHẦN XÂY DỰNG ĐỨC ANH", StartRow = 1, StartCol = 1, EndRow = 1, EndCol = 5,Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "TÊN DỰ ÁN", StartRow = 2, StartCol = 1, EndRow = 2, EndCol = 5 ,Alignment = ExcelHorizontalAlignment.Center ,IsBold=true},
+                new ComplexHeader { Title = "BẢNG THỐNG KÊ THÉP TẤM ĐAN CỐNG HỘP", StartRow = 3, StartCol = 1, EndRow = 3, EndCol = 15, TextColor = System.Drawing.Color.Black, Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "Số liệu màu đen nhạt là số liệu nhập bằng tay; Số liệu màu đen đậm là kết quả mang từ một bảng khác sang; Số liệu màu đỏ là kết quả của 01 phép tính.", StartRow = 4, StartCol = 1, EndRow = 4, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Nhưng bảng sử dụng số liệu của bảng này bị thay đổi số liệu nếu số liệu tại bảng này bị thay đổi", StartRow = 5, StartCol = 1, EndRow = 5, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Bảng này in làm tài liệu lưu trữ, thi công, nghiệm thu, hoàn công.", StartRow = 6, StartCol = 1, EndRow = 6, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+                new ComplexHeader { Title = "", StartRow = 7, StartCol = 1, EndRow = 7, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "", StartRow = 8, StartCol = 1, EndRow = 8, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+
+                // Header thông tin chi tiết
+                new ComplexHeader { Title = "STT", DataProperty = "STT", StartRow = 16, EndRow = 16, StartCol = 1, EndCol = 1, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại cấu kiện", DataProperty = "PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan", StartRow = 16, EndRow = 16, StartCol = 2, EndCol = 2, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tên công tác", DataProperty = "TenCongTac", StartRow = 16, EndRow = 16, StartCol = 3, EndCol = 3, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Vị trí lấy khối lượng", DataProperty = "VTLayKhoiLuong", StartRow = 16, EndRow = 16, StartCol = 4, EndCol = 4, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại thép", DataProperty = "LoaiThep_Name", StartRow = 16, EndRow = 16, StartCol = 5, EndCol = 5, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số hiệu", DataProperty = "SoHieu", StartRow = 16, EndRow = 16, StartCol = 6, EndCol = 6, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Đường kính chiều dầy (mm,mm2)", DataProperty = "DKCD", StartRow = 16, EndRow = 16, StartCol = 7, EndCol = 7, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số thanh/01 cấu kiện", DataProperty = "SoThanh", StartRow = 16, EndRow = 16, StartCol = 8, EndCol = 8, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số cấu kiện", DataProperty = "SoCK", StartRow = 16, EndRow = 16, StartCol = 9, EndCol = 9, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng số thanh", DataProperty = "TongSoThanh", StartRow = 16, EndRow = 16, StartCol = 10, EndCol = 10, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Chiều dài 01 thanh (mm)/diện tích (mm2)", DataProperty = "ChieuDai1Thanh", StartRow = 16, EndRow = 16, StartCol = 11, EndCol = 11, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng chiều dài (m,m2)", DataProperty = "TongChieuDai", StartRow = 16, EndRow = 16, StartCol = 12, EndCol = 12, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Trọng lượng thép/(kg/m,m3)", DataProperty = "TrongLuong", StartRow = 16, EndRow = 16, StartCol = 13, EndCol = 13, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng trọng lượng (kg)", DataProperty = "TongTrongLuong", StartRow = 16, EndRow = 16, StartCol = 14, EndCol = 14, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+
+         };
+        public static List<ComplexHeader> TKTRX_HEADERS = new List<ComplexHeader>
+         {
+                // Dòng tiêu đề chung
+                new ComplexHeader { Title = "CÔNG TY CỔ PHẦN XÂY DỰNG ĐỨC ANH", StartRow = 1, StartCol = 1, EndRow = 1, EndCol = 5,Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "TÊN DỰ ÁN", StartRow = 2, StartCol = 1, EndRow = 2, EndCol = 5 ,Alignment = ExcelHorizontalAlignment.Center ,IsBold=true},
+                new ComplexHeader { Title = "BẢNG THỐNG KÊ 01M THÉP RÃNH XÂY", StartRow = 3, StartCol = 1, EndRow = 3, EndCol = 15, TextColor = System.Drawing.Color.Black, Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "Số liệu màu đen nhạt là số liệu nhập bằng tay; Số liệu màu đen đậm là kết quả mang từ một bảng khác sang; Số liệu màu đỏ là kết quả của 01 phép tính.", StartRow = 4, StartCol = 1, EndRow = 4, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Nhưng bảng sử dụng số liệu của bảng này bị thay đổi số liệu nếu số liệu tại bảng này bị thay đổi", StartRow = 5, StartCol = 1, EndRow = 5, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Bảng này in làm tài liệu lưu trữ, thi công, nghiệm thu, hoàn công.", StartRow = 6, StartCol = 1, EndRow = 6, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+                new ComplexHeader { Title = "", StartRow = 7, StartCol = 1, EndRow = 7, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "", StartRow = 8, StartCol = 1, EndRow = 8, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+
+                // Header thông tin chi tiết
+                new ComplexHeader { Title = "STT", DataProperty = "STT", StartRow = 16, EndRow = 16, StartCol = 1, EndCol = 1, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại cấu kiện", DataProperty = "PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai", StartRow = 16, EndRow = 16, StartCol = 2, EndCol = 2, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tên công tác", DataProperty = "TenCongTac", StartRow = 16, EndRow = 16, StartCol = 3, EndCol = 3, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Vị trí lấy khối lượng", DataProperty = "VTLayKhoiLuong", StartRow = 16, EndRow = 16, StartCol = 4, EndCol = 4, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại thép", DataProperty = "LoaiThep_Name", StartRow = 16, EndRow = 16, StartCol = 5, EndCol = 5, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số hiệu", DataProperty = "SoHieu", StartRow = 16, EndRow = 16, StartCol = 6, EndCol = 6, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Đường kính chiều dầy (mm,mm2)", DataProperty = "DKCD", StartRow = 16, EndRow = 16, StartCol = 7, EndCol = 7, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số thanh/01 cấu kiện", DataProperty = "SoThanh", StartRow = 16, EndRow = 16, StartCol = 8, EndCol = 8, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số cấu kiện", DataProperty = "SoCK", StartRow = 16, EndRow = 16, StartCol = 9, EndCol = 9, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng số thanh", DataProperty = "TongSoThanh", StartRow = 16, EndRow = 16, StartCol = 10, EndCol = 10, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Chiều dài 01 thanh (mm)/diện tích (mm2)", DataProperty = "ChieuDai1Thanh", StartRow = 16, EndRow = 16, StartCol = 11, EndCol = 11, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng chiều dài (m,m2)", DataProperty = "TongChieuDai", StartRow = 16, EndRow = 16, StartCol = 12, EndCol = 12, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Trọng lượng thép/(kg/m,m3)", DataProperty = "TrongLuong", StartRow = 16, EndRow = 16, StartCol = 13, EndCol = 13, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng trọng lượng (kg)", DataProperty = "TongTrongLuong", StartRow = 16, EndRow = 16, StartCol = 14, EndCol = 14, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+
+         };
+        public static List<ComplexHeader> TKTTDRX_HEADERS = new List<ComplexHeader>
+         {
+                // Dòng tiêu đề chung
+                new ComplexHeader { Title = "CÔNG TY CỔ PHẦN XÂY DỰNG ĐỨC ANH", StartRow = 1, StartCol = 1, EndRow = 1, EndCol = 5,Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "TÊN DỰ ÁN", StartRow = 2, StartCol = 1, EndRow = 2, EndCol = 5 ,Alignment = ExcelHorizontalAlignment.Center ,IsBold=true},
+                new ComplexHeader { Title = "BẢNG THỐNG KÊ THÉP 01 TẤM ĐAN RÃNH XÂY", StartRow = 3, StartCol = 1, EndRow = 3, EndCol = 15, TextColor = System.Drawing.Color.Black, Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "Số liệu màu đen nhạt là số liệu nhập bằng tay; Số liệu màu đen đậm là kết quả mang từ một bảng khác sang; Số liệu màu đỏ là kết quả của 01 phép tính.", StartRow = 4, StartCol = 1, EndRow = 4, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Nhưng bảng sử dụng số liệu của bảng này bị thay đổi số liệu nếu số liệu tại bảng này bị thay đổi", StartRow = 5, StartCol = 1, EndRow = 5, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Bảng này in làm tài liệu lưu trữ, thi công, nghiệm thu, hoàn công.", StartRow = 6, StartCol = 1, EndRow = 6, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+                new ComplexHeader { Title = "", StartRow = 7, StartCol = 1, EndRow = 7, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "", StartRow = 8, StartCol = 1, EndRow = 8, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+
+                // Header thông tin chi tiết
+                new ComplexHeader { Title = "STT", DataProperty = "STT", StartRow = 16, EndRow = 16, StartCol = 1, EndCol = 1, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại cấu kiện", DataProperty = "PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan", StartRow = 16, EndRow = 16, StartCol = 2, EndCol = 2, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tên công tác", DataProperty = "TenCongTac", StartRow = 16, EndRow = 16, StartCol = 3, EndCol = 3, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Vị trí lấy khối lượng", DataProperty = "VTLayKhoiLuong", StartRow = 16, EndRow = 16, StartCol = 4, EndCol = 4, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại thép", DataProperty = "LoaiThep_Name", StartRow = 16, EndRow = 16, StartCol = 5, EndCol = 5, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số hiệu", DataProperty = "SoHieu", StartRow = 16, EndRow = 16, StartCol = 6, EndCol = 6, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Đường kính chiều dầy (mm,mm2)", DataProperty = "DKCD", StartRow = 16, EndRow = 16, StartCol = 7, EndCol = 7, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số thanh/01 cấu kiện", DataProperty = "SoThanh", StartRow = 16, EndRow = 16, StartCol = 8, EndCol = 8, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số cấu kiện", DataProperty = "SoCK", StartRow = 16, EndRow = 16, StartCol = 9, EndCol = 9, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng số thanh", DataProperty = "TongSoThanh", StartRow = 16, EndRow = 16, StartCol = 10, EndCol = 10, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Chiều dài 01 thanh (mm)/diện tích (mm2)", DataProperty = "ChieuDai1Thanh", StartRow = 16, EndRow = 16, StartCol = 11, EndCol = 11, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng chiều dài (m,m2)", DataProperty = "TongChieuDai", StartRow = 16, EndRow = 16, StartCol = 12, EndCol = 12, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Trọng lượng thép/(kg/m,m3)", DataProperty = "TrongLuong", StartRow = 16, EndRow = 16, StartCol = 13, EndCol = 13, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng trọng lượng (kg)", DataProperty = "TongTrongLuong", StartRow = 16, EndRow = 16, StartCol = 14, EndCol = 14, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+
+         };
+        public static List<ComplexHeader> TKTTC_HEADERS = new List<ComplexHeader>
+         {
+                // Dòng tiêu đề chung
+                new ComplexHeader { Title = "CÔNG TY CỔ PHẦN XÂY DỰNG ĐỨC ANH", StartRow = 1, StartCol = 1, EndRow = 1, EndCol = 5,Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "TÊN DỰ ÁN", StartRow = 2, StartCol = 1, EndRow = 2, EndCol = 5 ,Alignment = ExcelHorizontalAlignment.Center ,IsBold=true},
+                new ComplexHeader { Title = "BẢNG THỐNG KÊ THÉP THANH CHỐNG", StartRow = 3, StartCol = 1, EndRow = 3, EndCol = 15, TextColor = System.Drawing.Color.Black, Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "Số liệu màu đen nhạt là số liệu nhập bằng tay; Số liệu màu đen đậm là kết quả mang từ một bảng khác sang; Số liệu màu đỏ là kết quả của 01 phép tính.", StartRow = 4, StartCol = 1, EndRow = 4, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Nhưng bảng sử dụng số liệu của bảng này bị thay đổi số liệu nếu số liệu tại bảng này bị thay đổi", StartRow = 5, StartCol = 1, EndRow = 5, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Bảng này in làm tài liệu lưu trữ, thi công, nghiệm thu, hoàn công.", StartRow = 6, StartCol = 1, EndRow = 6, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+                new ComplexHeader { Title = "", StartRow = 7, StartCol = 1, EndRow = 7, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "", StartRow = 8, StartCol = 1, EndRow = 8, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+
+                // Header thông tin chi tiết
+                new ComplexHeader { Title = "STT", DataProperty = "STT", StartRow = 16, EndRow = 16, StartCol = 1, EndCol = 1, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại cấu kiện", DataProperty = "PhanLoaiThanhChong_LoaiThanhChong", StartRow = 16, EndRow = 16, StartCol = 2, EndCol = 2, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tên công tác", DataProperty = "TenCongTac", StartRow = 16, EndRow = 16, StartCol = 3, EndCol = 3, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Vị trí lấy khối lượng", DataProperty = "VTLayKhoiLuong", StartRow = 16, EndRow = 16, StartCol = 4, EndCol = 4, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại thép", DataProperty = "LoaiThep_Name", StartRow = 16, EndRow = 16, StartCol = 5, EndCol = 5, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số hiệu", DataProperty = "SoHieu", StartRow = 16, EndRow = 16, StartCol = 6, EndCol = 6, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Đường kính chiều dầy (mm,mm2)", DataProperty = "DKCD", StartRow = 16, EndRow = 16, StartCol = 7, EndCol = 7, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số thanh/01 cấu kiện", DataProperty = "SoThanh", StartRow = 16, EndRow = 16, StartCol = 8, EndCol = 8, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số cấu kiện", DataProperty = "SoCK", StartRow = 16, EndRow = 16, StartCol = 9, EndCol = 9, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng số thanh", DataProperty = "TongSoThanh", StartRow = 16, EndRow = 16, StartCol = 10, EndCol = 10, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Chiều dài 01 thanh (mm)/diện tích (mm2)", DataProperty = "ChieuDai1Thanh", StartRow = 16, EndRow = 16, StartCol = 11, EndCol = 11, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng chiều dài (m,m2)", DataProperty = "TongChieuDai", StartRow = 16, EndRow = 16, StartCol = 12, EndCol = 12, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Trọng lượng thép/(kg/m,m3)", DataProperty = "TrongLuong", StartRow = 16, EndRow = 16, StartCol = 13, EndCol = 13, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng trọng lượng (kg)", DataProperty = "TongTrongLuong", StartRow = 16, EndRow = 16, StartCol = 14, EndCol = 14, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+
+         };
+        public static List<ComplexHeader> TKTRBT_HEADERS = new List<ComplexHeader>
+         {
+                // Dòng tiêu đề chung
+                new ComplexHeader { Title = "CÔNG TY CỔ PHẦN XÂY DỰNG ĐỨC ANH", StartRow = 1, StartCol = 1, EndRow = 1, EndCol = 5,Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "TÊN DỰ ÁN", StartRow = 2, StartCol = 1, EndRow = 2, EndCol = 5 ,Alignment = ExcelHorizontalAlignment.Center ,IsBold=true},
+                new ComplexHeader { Title = "BẢNG THỐNG KÊ 01M THÉP RÃNH BÊ TÔNG", StartRow = 3, StartCol = 1, EndRow = 3, EndCol = 15, TextColor = System.Drawing.Color.Black, Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "Số liệu màu đen nhạt là số liệu nhập bằng tay; Số liệu màu đen đậm là kết quả mang từ một bảng khác sang; Số liệu màu đỏ là kết quả của 01 phép tính.", StartRow = 4, StartCol = 1, EndRow = 4, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Nhưng bảng sử dụng số liệu của bảng này bị thay đổi số liệu nếu số liệu tại bảng này bị thay đổi", StartRow = 5, StartCol = 1, EndRow = 5, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Bảng này in làm tài liệu lưu trữ, thi công, nghiệm thu, hoàn công.", StartRow = 6, StartCol = 1, EndRow = 6, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+                new ComplexHeader { Title = "", StartRow = 7, StartCol = 1, EndRow = 7, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "", StartRow = 8, StartCol = 1, EndRow = 8, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+
+                // Header thông tin chi tiết
+                new ComplexHeader { Title = "STT", DataProperty = "STT", StartRow = 16, EndRow = 16, StartCol = 1, EndCol = 1, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại cấu kiện", DataProperty = "PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai", StartRow = 16, EndRow = 16, StartCol = 2, EndCol = 2, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tên công tác", DataProperty = "TenCongTac", StartRow = 16, EndRow = 16, StartCol = 3, EndCol = 3, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Vị trí lấy khối lượng", DataProperty = "VTLayKhoiLuong", StartRow = 16, EndRow = 16, StartCol = 4, EndCol = 4, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại thép", DataProperty = "LoaiThep_Name", StartRow = 16, EndRow = 16, StartCol = 5, EndCol = 5, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số hiệu", DataProperty = "SoHieu", StartRow = 16, EndRow = 16, StartCol = 6, EndCol = 6, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Đường kính chiều dầy (mm,mm2)", DataProperty = "DKCD", StartRow = 16, EndRow = 16, StartCol = 7, EndCol = 7, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số thanh/01 cấu kiện", DataProperty = "SoThanh", StartRow = 16, EndRow = 16, StartCol = 8, EndCol = 8, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số cấu kiện", DataProperty = "SoCK", StartRow = 16, EndRow = 16, StartCol = 9, EndCol = 9, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng số thanh", DataProperty = "TongSoThanh", StartRow = 16, EndRow = 16, StartCol = 10, EndCol = 10, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Chiều dài 01 thanh (mm)/diện tích (mm2)", DataProperty = "ChieuDai1Thanh", StartRow = 16, EndRow = 16, StartCol = 11, EndCol = 11, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng chiều dài (m,m2)", DataProperty = "TongChieuDai", StartRow = 16, EndRow = 16, StartCol = 12, EndCol = 12, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Trọng lượng thép/(kg/m,m3)", DataProperty = "TrongLuong", StartRow = 16, EndRow = 16, StartCol = 13, EndCol = 13, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng trọng lượng (kg)", DataProperty = "TongTrongLuong", StartRow = 16, EndRow = 16, StartCol = 14, EndCol = 14, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+
+         };
+        public static List<ComplexHeader> TKTTDRBT_HEADERS = new List<ComplexHeader>
+         {
+                // Dòng tiêu đề chung
+                new ComplexHeader { Title = "CÔNG TY CỔ PHẦN XÂY DỰNG ĐỨC ANH", StartRow = 1, StartCol = 1, EndRow = 1, EndCol = 5,Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "TÊN DỰ ÁN", StartRow = 2, StartCol = 1, EndRow = 2, EndCol = 5 ,Alignment = ExcelHorizontalAlignment.Center ,IsBold=true},
+                new ComplexHeader { Title = "BẢNG THỐNG KÊ THÉP 01 TẤM ĐAN RÃNH BÊ TÔNG", StartRow = 3, StartCol = 1, EndRow = 3, EndCol = 15, TextColor = System.Drawing.Color.Black, Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "Số liệu màu đen nhạt là số liệu nhập bằng tay; Số liệu màu đen đậm là kết quả mang từ một bảng khác sang; Số liệu màu đỏ là kết quả của 01 phép tính.", StartRow = 4, StartCol = 1, EndRow = 4, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Nhưng bảng sử dụng số liệu của bảng này bị thay đổi số liệu nếu số liệu tại bảng này bị thay đổi", StartRow = 5, StartCol = 1, EndRow = 5, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Bảng này in làm tài liệu lưu trữ, thi công, nghiệm thu, hoàn công.", StartRow = 6, StartCol = 1, EndRow = 6, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+                new ComplexHeader { Title = "", StartRow = 7, StartCol = 1, EndRow = 7, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "", StartRow = 8, StartCol = 1, EndRow = 8, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+
+                // Header thông tin chi tiết
+                new ComplexHeader { Title = "STT", DataProperty = "STT", StartRow = 16, EndRow = 16, StartCol = 1, EndCol = 1, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại cấu kiện", DataProperty = "PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan", StartRow = 16, EndRow = 16, StartCol = 2, EndCol = 2, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tên công tác", DataProperty = "TenCongTac", StartRow = 16, EndRow = 16, StartCol = 3, EndCol = 3, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Vị trí lấy khối lượng", DataProperty = "VTLayKhoiLuong", StartRow = 16, EndRow = 16, StartCol = 4, EndCol = 4, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại thép", DataProperty = "LoaiThep_Name", StartRow = 16, EndRow = 16, StartCol = 5, EndCol = 5, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số hiệu", DataProperty = "SoHieu", StartRow = 16, EndRow = 16, StartCol = 6, EndCol = 6, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Đường kính chiều dầy (mm,mm2)", DataProperty = "DKCD", StartRow = 16, EndRow = 16, StartCol = 7, EndCol = 7, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số thanh/01 cấu kiện", DataProperty = "SoThanh", StartRow = 16, EndRow = 16, StartCol = 8, EndCol = 8, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số cấu kiện", DataProperty = "SoCK", StartRow = 16, EndRow = 16, StartCol = 9, EndCol = 9, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng số thanh", DataProperty = "TongSoThanh", StartRow = 16, EndRow = 16, StartCol = 10, EndCol = 10, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Chiều dài 01 thanh (mm)/diện tích (mm2)", DataProperty = "ChieuDai1Thanh", StartRow = 16, EndRow = 16, StartCol = 11, EndCol = 11, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng chiều dài (m,m2)", DataProperty = "TongChieuDai", StartRow = 16, EndRow = 16, StartCol = 12, EndCol = 12, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Trọng lượng thép/(kg/m,m3)", DataProperty = "TrongLuong", StartRow = 16, EndRow = 16, StartCol = 13, EndCol = 13, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng trọng lượng (kg)", DataProperty = "TongTrongLuong", StartRow = 16, EndRow = 16, StartCol = 14, EndCol = 14, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+
+         };
+        //PKKL
+        public static List<ComplexHeader> PKKLCT1HG_HEADERS = new List<ComplexHeader>
+         {
+                // Dòng tiêu đề chung
+                new ComplexHeader { Title = "CÔNG TY CỔ PHẦN XÂY DỰNG ĐỨC ANH", StartRow = 1, StartCol = 1, EndRow = 1, EndCol = 5,Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "TÊN DỰ ÁN", StartRow = 2, StartCol = 1, EndRow = 2, EndCol = 5 ,Alignment = ExcelHorizontalAlignment.Center ,IsBold=true},
+                new ComplexHeader { Title = "BẢNG PHÂN KHAI KHỐI LƯỢNG HỐ GA", StartRow = 3, StartCol = 1, EndRow = 3, EndCol = 25, TextColor = System.Drawing.Color.Black, Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title = "Lưu ý số liệu: Dữ liệu màu đen nhạt là nhập bằng tay, màu đen đậm là kết quả mang từ bảng khác sang; màu đỏ là kết quả của 01 phép tính; màu xanh là màu thể hiện kết quả được chia theo đơn vị định mức dự toán", StartRow = 4, StartCol = 1, EndRow = 4, EndCol = 25, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Lập trước thông tin hoàn thiện của 01 loại cấu kiện sau đó gửi bộ phận lập dự toán để bộ phận lập dự toán chọn mã công tác, tên công tác theo định mức lập dự toán trước khi làm các cấu kiện tiếp theo", StartRow = 5, StartCol = 1, EndRow = 5, EndCol = 25, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "Nhưng bảng sử dụng số liệu của bảng này bị thay đổi số liệu nếu số liệu tại bảng này bị thay đổi", StartRow = 6, StartCol = 1, EndRow = 6, EndCol = 25, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+                new ComplexHeader { Title = "Bảng này in để lập dự toán, cấp cho công trường, nghiệm thu, hoàn công (In theo từng loại hố ga)", StartRow = 7, StartCol = 1, EndRow = 7, EndCol = 25, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title = "", StartRow = 8, StartCol = 1, EndRow = 8, EndCol = 25, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+
+               // Header thông tin chi tiết
+                new ComplexHeader { Title = "Thông tin cấu kiện", StartRow = 16, EndRow = 16, StartCol = 1, EndCol = 5, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Thông tin tên công tác thực tế", StartRow = 16, EndRow = 16, StartCol = 6, EndCol = 8, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Thông tin KTHH tính khối lượng (m3)", StartRow = 16, EndRow = 16, StartCol = 9, EndCol = 15, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Thông tin cạnh tính diện tích (m2)", StartRow = 16, EndRow = 16, StartCol = 16, EndCol = 21, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Thông tin KL không phải M2,M3", StartRow = 16, EndRow = 16, StartCol = 22, EndCol = 23, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+               
+                new ComplexHeader { Title = "STT", DataProperty = "STT", StartRow = 17, EndRow = 17, StartCol = 1, EndCol = 1, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại cấu kiện", DataProperty = "LoaiCauKien", StartRow = 17, EndRow = 17, StartCol = 2, EndCol = 2, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Hình thức thi công", DataProperty = "ThongTinChungHoGa_HinhThucHoGa_Name", StartRow = 17, EndRow = 17, StartCol = 3, EndCol = 3, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Kiểu mũ mố", DataProperty = "ThongTinChungHoGa_KetCauMuMo_Name", StartRow = 17, EndRow = 17, StartCol = 4, EndCol = 4, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Loại bê tông", DataProperty = "LoaiBeTong", StartRow = 17, EndRow = 17, StartCol = 5, EndCol = 5, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Hạng mục công tác", DataProperty = "HangMucCongTac", StartRow = 17, EndRow = 17, StartCol = 6, EndCol = 6, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tên công tác thực tế", DataProperty = "TenCongTac", StartRow = 17, EndRow = 17, StartCol = 7, EndCol = 7, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Đơn vị", DataProperty = "DonVi", StartRow = 17, EndRow = 17, StartCol = 8, EndCol = 8, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "D", DataProperty = "KTHH_D", StartRow = 17, EndRow = 17, StartCol = 9, EndCol = 9, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "R", DataProperty = "KTHH_R", StartRow = 17, EndRow = 17, StartCol = 10, EndCol = 10, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "C", DataProperty = "KTHH_C", StartRow = 17, EndRow = 17, StartCol = 11, EndCol = 11, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                
+                new ComplexHeader { Title = "Diện tích", DataProperty = "KTHH_DienTich", StartRow = 17, EndRow = 17, StartCol = 12, EndCol = 12, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Ghi chú diện tích", DataProperty = "KTHH_GhiChu", StartRow = 17, EndRow = 17, StartCol = 13, EndCol = 13, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số lượng cấu kiện", DataProperty = "KTHH_SLCauKien", StartRow = 17, EndRow = 17, StartCol = 14, EndCol = 14, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "KL 01 CK", DataProperty = "KTHH_KL1CK", StartRow = 17, EndRow = 17, StartCol = 15, EndCol = 15, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                
+                new ComplexHeader { Title = "Cạnh dài", DataProperty = "TTCDT_CDai", StartRow = 17, EndRow = 17, StartCol = 16, EndCol = 16, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Cạnh rộng", DataProperty = "TTCDT_CRong", StartRow = 17, EndRow = 17, StartCol = 17, EndCol = 17, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Cạnh đáy", DataProperty = "TTCDT_CDay", StartRow = 17, EndRow = 17, StartCol = 18, EndCol = 18, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Diện tích", DataProperty = "TTCDT_DienTich", StartRow = 17, EndRow = 17, StartCol = 19, EndCol = 19, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số lượng cấu kiện", DataProperty = "TTCDT_SLCK", StartRow = 17, EndRow = 17, StartCol = 20, EndCol = 20, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "KL", DataProperty = "TTCDT_KL", StartRow = 17, EndRow = 17, StartCol = 21, EndCol = 21, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+
+                new ComplexHeader { Title = "Khối lượng", DataProperty = "KLKP_KL", StartRow = 17, EndRow = 17, StartCol = 22, EndCol = 22, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Số lượng", DataProperty = "KLKP_Sl", StartRow = 17, EndRow = 17, StartCol = 23, EndCol = 23, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                
+                new ComplexHeader { Title = "KL 01CK Chưa trừ chiếm chỗ", DataProperty = "KL1CK_ChuaTruCC", StartRow = 16, EndRow = 17, StartCol = 24, EndCol = 24, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "KL chiếm chỗ/01CK", DataProperty = "KLCC1CK", StartRow = 16, EndRow = 17, StartCol = 25, EndCol = 25, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title = "Tổng KLCK sau chiếm chỗ", DataProperty = "TKLCK_SauCC", StartRow = 16, EndRow = 17, StartCol = 26, EndCol = 26, IsBold = true, HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+               
+         };
     }
 }

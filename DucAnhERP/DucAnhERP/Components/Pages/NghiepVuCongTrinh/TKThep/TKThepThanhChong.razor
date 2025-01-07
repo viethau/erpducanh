@@ -93,7 +93,6 @@
                             <ValidationMessage For="() => Input.TongTrongLuong" class="text-danger" />
                          </div>
                     </div>
-                   
                 </EditForm>
             </BodyTemplate>
             <FooterTemplate>
@@ -141,8 +140,9 @@
     <div id="tableContainer ">
         <div class="table-report ">
             <div>
-                <div class=" mt-1">
-                    <h5 class="mt-2">BẢNG THỐNG KÊ THÉP 01 TẤM ĐAN RÃNH XÂY</h5>
+                 <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mt-2">BẢNG THỐNG KÊ THÉP THANH CHỐNG</h5>
+                    <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
                 </div>
                 <div class=" mt-2">
                     <table id="tb-left" class="table table-hover table-bordered mt-3">
@@ -754,12 +754,11 @@
         }
     }
 
-
     private async Task HandleEdit(string id)
     {
         try
         {
-            TitleModal = "Cập nhật loại thép thanh chống!";
+            TitleModal = "Cập nhật loại thép!";
             Input = await TKThepTChongRepository.GetById(id);
             isEdit = true;
             isModalVisible = true;
@@ -798,15 +797,13 @@
 
     }
 
-
-    
     bool isInsert = false;
     bool insertBefore = false;
     TKThepTChongModel insertFlagItem = new();
     //thêm vào sau
     private void InsertLaterFlag(TKThepTChongModel item, bool position)
     {
-        TitleModal = "Chèn loại thép !";
+        TitleModal = "Chèn loại thép!";
 
         Input = new();
         isInsert = true;
@@ -889,5 +886,33 @@
     private void ThumbtackHeader()
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
+    }
+
+    private async Task ExportExcel()
+    {
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.49 TK thép T.Chống",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TKTTC_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModel.Cast<object>().ToList()
+                    },
+                }
+            };
+
+        // Xuất Excel
+        var rowSpace = new RowSpace
+            {
+                DataProperty = "PhanLoaiThanhChong_LoaiThanhChong", // Thuộc tính cần kiểm tra
+                BackgroundColor = System.Drawing.Color.LightGray // Màu nền của hàng trống
+            };
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        var fileName = "TKThepThanhChong.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
 }

@@ -140,8 +140,9 @@
     <div id="tableContainer ">
         <div class="table-report ">
             <div>
-                <div class=" mt-1">
-                    <h5 class="mt-2">BẢNG THỐNG KÊ THÉP 01 TẤM ĐAN RÃNH XÂY</h5>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mt-2">BẢNG THỐNG KÊ THÉP 01 TẤM ĐAN RÃNH BÊ TÔNG</h5>
+                    <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
                 </div>
                 <div class=" mt-2">
                     <table id="tb-left" class="table table-hover table-bordered mt-3">
@@ -757,7 +758,7 @@
     {
         try
         {
-            TitleModal = "Cập nhật loại thép tấm đan rãnh bê tông !";
+            TitleModal = "Cập nhật loại thép!";
             Input = await TKThepTDRBTongRepository.GetById(id);
             isEdit = true;
             isModalVisible = true;
@@ -825,7 +826,6 @@
         }
     }
 
-
     // Sắp xếp data
     private void SortTable(string columnName)
     {
@@ -833,7 +833,6 @@
         tKThepHoGaModel.PageNumber = 1;
         Paging(listModel);
     }
-
 
     // Get css cho chức năng sắp xếp
     private string GetSortStyle(string columnName)
@@ -885,5 +884,33 @@
     private void ThumbtackHeader()
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
+    }
+
+    private async Task ExportExcel()
+    {
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.51 TK thép T.Đan R.B.Tông",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TKTTDRBT_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModel.Cast<object>().ToList()
+                    },
+                }
+            };
+
+        // Xuất Excel
+        var rowSpace = new RowSpace
+            {
+                DataProperty = "PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan", // Thuộc tính cần kiểm tra
+                BackgroundColor = System.Drawing.Color.LightGray // Màu nền của hàng trống
+            };
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        var fileName = "TKThepTDRBT.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
 }

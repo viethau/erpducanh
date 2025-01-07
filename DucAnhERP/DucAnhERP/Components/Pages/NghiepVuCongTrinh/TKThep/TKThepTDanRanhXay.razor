@@ -112,8 +112,8 @@
          </div>
      </div>
      <EditForm Model="InputMD" FormName="Search" OnValidSubmit="@Search">
-                <DataAnnotationsValidator />
-                <div class="row">
+          <DataAnnotationsValidator />
+          <div class="row">
                     <div class="col-sm-4 col-md-2 mb-2">
                         <label for="Table">Loại cấu kiện</label>
                         <Select2 Id="select4" Items="@selectSearchLCK" OnChange="@OnSelectChangeSearchLCK"></Select2>
@@ -139,8 +139,9 @@
     <div id="tableContainer ">
         <div class="table-report ">
             <div>
-                <div class=" mt-1">
+                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mt-2">BẢNG THỐNG KÊ THÉP 01 TẤM ĐAN RÃNH XÂY</h5>
+                    <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
                 </div>
                 <div class=" mt-2">
                     <table id="tb-left" class="table table-hover table-bordered mt-3">
@@ -759,7 +760,7 @@
     {
         try
         {
-            TitleModal = "Cập nhật loại TĐan TDẫn !";
+            TitleModal = "Cập nhật loại thép!";
             Input = await TKThepTDanRXayRepository.GetById(id);
             isEdit = true;
             isModalVisible = true;
@@ -885,5 +886,34 @@
     private void ThumbtackHeader()
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
+    }
+
+    private async Task ExportExcel()
+    {
+        var sheetInfo = new SheetInfo1<object>
+        {
+            SheetName = "3.48 TK thép T.Đan R.Xây",
+            Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TKTTDRX_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModel.Cast<object>().ToList()
+                    },
+                    
+                }
+        };
+
+        // Xuất Excel
+        var rowSpace = new RowSpace
+            {
+                DataProperty = "PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan", // Thuộc tính cần kiểm tra
+                BackgroundColor = System.Drawing.Color.LightGray // Màu nền của hàng trống
+            };
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        var fileName = "TKThepTDanRXay.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
 }

@@ -559,8 +559,9 @@
     <div id="tableContainer ">
         <div class="table-report ">
             <div>
-                <div class=" mt-1">
-                    <h5 class="mt-2">BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01 THANH CHỐNG</h5>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mt-2">BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01 Hố GA</h5>
+                    <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
                 </div>
                 <div class=" mt-2">
                     <table id="tb-left" class="table table-hover table-bordered mt-3">
@@ -568,7 +569,7 @@
                             <tr>
                                 <th rowspan="2"></th>
                                 <th class="text-center" rowspan="2">STT</th>
-                                <th class="text-center" colspan="2">Thông tin cấu kiện</th>
+                                <th class="text-center" colspan="5">Thông tin cấu kiện</th>
                                 <th class="text-center" colspan="3">Thông tin tên công tác thực tế</th>
                                 <th class="text-center" colspan="7">Thông tin KTHH tính khối lượng (m3)</th>
                                 <th class="text-center" colspan="6">Thông tin cạnh tính diện tích (m2)</th>
@@ -579,6 +580,8 @@
                             </tr>
                             <tr>
                                 <th> Loại cấu kiện</th>
+                                <th> Hình thức thi công</th>
+                                <th> Kiểu mũ mố</th>
                                 <th> Loại bê tông</th>
                                 <th> Hạng mục công tác</th>
                                 <th> Tên công tác thực tế</th>
@@ -599,7 +602,6 @@
                                 <th> Khối lượng</th>
                                 <th> Số lượng</th>
                             </tr>
-
                         </thead>
                         @if (listPKKLCTietHoGaModel.Any())
                         {
@@ -647,6 +649,8 @@
                                                 </td>
                                                 <td>@item.Flag</td>
                                                 <td>@item.LoaiCauKien</td>
+                                                <td>@item.ThongTinChungHoGa_HinhThucHoGa_Name</td>
+                                                <td>@item.ThongTinChungHoGa_KetCauMuMo_Name</td>
                                                 <td>@item.LoaiBeTong</td>
                                                 <td>@item.HangMucCongTac</td>
                                                 <td>@item.TenCongTac</td>
@@ -1894,7 +1898,7 @@
         Input.HangMuc = inputMD.HangMuc;
         insertFlagItem = inputMD;
         insertBefore = position;
-        
+
         isModalVisible = true;
         // Đặt trạng thái chọn cho các danh sách
         SetSelectedItem(selectLCK, Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
@@ -2103,5 +2107,47 @@
                 break;
         }
         return ChiMuc;
+    }
+
+    private async Task ExportExcel()
+    {
+        var newList = listModel.GroupBy(item => item.LoaiCauKienId) // Nhóm theo LoaiCauKienId
+    .SelectMany(group => group
+    .GroupBy(item => item.HangMuc) // Trong mỗi nhóm LoaiCauKienId, nhóm tiếp theo HangMuc
+    .SelectMany(groupChild => groupChild
+        .OrderBy(item => item.Flag) // Sắp xếp các phần tử trong nhóm con theo Flag
+        .Select((item, index) => new
+        {
+            Item = item,
+            STT = index + 1,
+            IsNewHangMuc = groupChild.Key != item.HangMuc
+        }))
+    ).ToList();
+
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.14 PKKL C.Tiết 01 H.Ga",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.PKKLCT1HG_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = newList
+                    },
+                }
+            };
+        
+   
+        // Xuất Excel
+        var rowSpace = new RowSpace
+            {
+                DataProperty = "LoaiCauKien", // Thuộc tính cần kiểm tra
+                BackgroundColor = System.Drawing.Color.LightGray // Màu nền của hàng trống
+            };
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        var fileName = "PKKLChiTiet01HGa.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
 }

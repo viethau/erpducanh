@@ -53,6 +53,10 @@ namespace DucAnhERP.Services
                 var query = from a in context.PKKLCTietHoGas
                             join b in context.PhanLoaiHoGaDetails
                             on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id
+                            join hinhThucHoGa in context.DSDanhMuc
+                                on a.ThongTinChungHoGa_HinhThucHoGa equals hinhThucHoGa.Id
+                            join ketCauMuMo in context.DSDanhMuc
+                                on a.ThongTinChungHoGa_KetCauMuMo equals ketCauMuMo.Id
                             orderby b.ThongTinChungHoGa_TenHoGaSauPhanLoai ascending, a.HangMuc ascending, a.LoaiBeTong descending, a.CreateAt ascending
                             select new PKKLCTietHoGaModel
                             {
@@ -60,6 +64,10 @@ namespace DucAnhERP.Services
                                 Flag= a.Flag,
                                 LoaiCauKien = b.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
                                 LoaiCauKienId = a.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                                ThongTinChungHoGa_HinhThucHoGa = a.ThongTinChungHoGa_HinhThucHoGa,
+                                ThongTinChungHoGa_HinhThucHoGa_Name = hinhThucHoGa.Ten,
+                                ThongTinChungHoGa_KetCauMuMo = b.ThongTinChungHoGa_KetCauMuMo,
+                                ThongTinChungHoGa_KetCauMuMo_Name = ketCauMuMo.Ten,
                                 LoaiBeTong = a.LoaiBeTong,
                                 HangMuc = a.HangMuc,
                                 HangMucCongTac = a.HangMucCongTac,
