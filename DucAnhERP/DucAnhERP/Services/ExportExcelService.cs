@@ -1,6 +1,7 @@
 ﻿using DucAnhERP.ViewModel;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Reflection.PortableExecutable;
@@ -398,6 +399,11 @@ public class ExportExcelService
                                 cellRange.Style.Border.Bottom.Style = header.BorderStyle;
                                 cellRange.Style.Border.Right.Style = header.BorderStyle;
                             }
+                            // Tính toán và đặt chiều cao hàng để hiển thị đầy đủ nội dung
+                            double fontSize = header.FontSize;
+                            int lineCount = title.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).Length; // Đếm số dòng
+                            double rowHeight = lineCount * fontSize * 1.5; // Ước lượng chiều cao hàng (1.5 là hệ số)
+                            worksheet.Row(header.StartRow).Height = rowHeight;
                         }
 
                         // Thêm dữ liệu của bảng
@@ -406,6 +412,7 @@ public class ExportExcelService
                         // Biến đếm số thứ tự (STT)
                         int stt = 1;
                         string previousLoaiCK = null;
+                        string previousChild = null;
                         int maxEndCol = tableInfo.Headers.Where(h => !string.IsNullOrEmpty(h.DataProperty)).Max(h => h.EndCol); // Lấy EndCol lớn nhất
                         foreach (var item in tableInfo.Data)
                         {
@@ -444,7 +451,9 @@ public class ExportExcelService
                                         secondColumnCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
                                         secondColumnCell.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGreen);
                                         secondColumnCell.Style.Font.Bold = true;
-
+                                        secondColumnCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                        secondColumnCell.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                                        secondColumnCell.Style.WrapText = true;
                                         // Đặt giá trị cho cột thứ 2
                                         secondColumnCell.Value = $"{currentLoaiCK}";
 
@@ -453,6 +462,61 @@ public class ExportExcelService
                                     }
 
                                     previousLoaiCK = currentLoaiCK; // Cập nhật giá trị LoaiCK trước đó
+                                }
+                                // Áp dụng các level con
+                                foreach (var child in rowSpace.Children)
+                                {
+                                    var propertyChild = item.GetType().GetProperty(child.DataProperty, BindingFlags.Public | BindingFlags.Instance);
+                                    if (propertyChild != null)
+                                    {
+                                        var currentChild = propertyChild.GetValue(item)?.ToString();
+                                        var splitString = SplitString(currentChild??"");
+                                        // Nếu LoaiCK thay đổi so với giá trị trước đó
+                                        if (!string.IsNullOrEmpty(currentChild) && currentChild != previousChild)
+                                        {
+                                            stt = 1;
+                                            // Tô màu nền cả dòng màu vàng (trừ cột thứ 2)
+                                            for (int col = currentCol; col <= currentCol + maxEndCol - 1; col++)
+                                            {
+                                                var cell = worksheet.Cells[rowIndex, col];
+                                                cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                                                cell.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
+                                                cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                                cell.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                                            }
+
+                                            // Thêm border từ currentCol đến currentCol + maxEndCol - 1
+                                            var rowRange = worksheet.Cells[rowIndex, currentCol, rowIndex, currentCol + maxEndCol - 1];
+                                            rowRange.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                                            rowRange.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                                            rowRange.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                                            rowRange.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+
+                                            // Tô màu nền cột thứ 2 trong dòng màu light green và chữ in đậm
+                                            var secondColumnCell = worksheet.Cells[rowIndex, currentCol];
+                                            secondColumnCell.Style.Font.Bold = true;
+                                            secondColumnCell.Style.Font.Color.SetColor(Color.Red);
+                                            secondColumnCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                            secondColumnCell.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                                            secondColumnCell.Value = $"{splitString.Item1}";
+
+                                            // Đặt giá trị cho cột thứ 2
+
+                                            var mergeRange = worksheet.Cells[rowIndex, currentCol + 3, rowIndex, currentCol + 4];
+                                            mergeRange.Merge = true;
+                                            mergeRange.Style.Font.Bold = true;
+                                            mergeRange.Style.Font.Color.SetColor(Color.Red);
+                                            mergeRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                            mergeRange.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                                            mergeRange.Style.WrapText = true;
+                                            mergeRange.Value = $"{splitString.Item2} {previousLoaiCK}";
+
+                                            rowIndex++; // Tăng chỉ số hàng
+
+                                        }
+
+                                        previousChild = currentChild; // Cập nhật giá trị trước đó
+                                    }
                                 }
                             }
 
@@ -463,6 +527,26 @@ public class ExportExcelService
                                 if (!string.IsNullOrEmpty(header.DataProperty))
                                 {
                                     var cell = worksheet.Cells[rowIndex, currentCol + header.StartCol - 1];
+
+                                    // Áp dụng các thuộc tính định dạng từ header cho ô dữ liệu
+                                    cell.Style.Font.Name = header.FontName; // Kiểu chữ
+                                    cell.Style.Font.Color.SetColor(header.TextColor ?? System.Drawing.Color.Black); // Màu chữ
+                                    cell.Style.Fill.PatternType = ExcelFillStyle.Solid; // Tô màu nền
+                                    cell.Style.Fill.BackgroundColor.SetColor(header.BackgroundColor ?? System.Drawing.Color.White); // Màu nền
+                                    cell.Style.HorizontalAlignment = header.Alignment; // Căn chỉnh ngang
+                                    cell.Style.VerticalAlignment = header.VerticalAlignment; // Căn chỉnh dọc
+                                    cell.Style.WrapText = header.WrapText; // Tự động ngắt dòng
+
+                                    // Áp dụng border nếu có
+                                    if (header.HasBorder)
+                                    {
+                                        cell.Style.Border.Top.Style = header.BorderStyle;
+                                        cell.Style.Border.Left.Style = header.BorderStyle;
+                                        cell.Style.Border.Bottom.Style = header.BorderStyle;
+                                        cell.Style.Border.Right.Style = header.BorderStyle;
+                                    }
+
+
                                     // Nếu DataProperty là "STT", điền số thứ tự
                                     if (header.DataProperty == "STT")
                                     {
@@ -532,7 +616,7 @@ public class ExportExcelService
 
                     }
 
-                    // Tự động điều chỉnh độ rộng cột
+                    // Tự động điều chỉnh chiều rộng cột nếu cần
                     worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
                 }
 
@@ -543,6 +627,8 @@ public class ExportExcelService
         {
             throw new Exception($"Lỗi khi xuất file Excel: {ex.Message}");
         }
+
+
     }
 
     public List<ComplexHeader> ParseHtmlToComplexHeaders(string html)
@@ -625,6 +711,24 @@ public class ExportExcelService
         return string.Empty;
     }
 
+    public static (string, string) SplitString(string input)
+    {
+        // Biểu thức chính quy để tách phần số La Mã/số thứ tự và phần nội dung
+        string pattern = @"^([IVXLCDM]+(?:\.\d+)?)\s*(.*)";
+        var match = Regex.Match(input, pattern);
+
+        if (match.Success)
+        {
+            string numberPart = match.Groups[1].Value; // Phần số La Mã/số thứ tự
+            string contentPart = match.Groups[2].Value.Trim(); // Phần nội dung
+            contentPart = contentPart.TrimStart('.', ',').Trim();
+            return (numberPart, contentPart);
+        }
+
+        // Trường hợp không khớp, trả về chuỗi gốc và chuỗi rỗng
+        return (string.Empty, input);
+    }
+
 }
 public class ComplexHeader
 {
@@ -676,4 +780,5 @@ public class RowSpace
 {
     public string DataProperty { get; set; } // Tên biến
     public System.Drawing.Color? BackgroundColor { get; set; } // Màu nền của ô
+    public List<RowSpace> Children { get; set; } = new List<RowSpace>(); // Danh sách các level con
 }

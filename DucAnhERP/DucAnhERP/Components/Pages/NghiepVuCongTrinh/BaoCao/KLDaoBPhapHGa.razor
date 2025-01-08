@@ -731,7 +731,14 @@
     {
         viewLeft = "d-block";
         viewRight = "d-block";
-        space = "ml-5";
+        if (layoutClass == "d-flex justify-content-between")
+        {
+            space = "ml-5";
+        }
+        else
+        {
+            space = "";
+        }
     }
 
     private void ViewHorizontal()

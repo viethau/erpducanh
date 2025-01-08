@@ -18,7 +18,10 @@
 <div class="container-fluid">
 
     <div id="tableContainer" class=" m-2 mt-3">
-        <h5>BẢNG TỔNG HỢP KHỐI LƯỢNG 01 HỐ GA THEO LOẠI HỐ GA</h5>
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mt-2">BẢNG TỔNG HỢP KHỐI LƯỢNG 01 HỐ GA THEO LOẠI HỐ GA</h5>
+            <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
+        </div>
         <div style="white-space:nowrap">
             <div>
                 <div class="row flex-nowrap overflow-auto">
@@ -30,7 +33,13 @@
                                 <th>Tên công tác thực tế</th>
                                 <th>Đơn vị</th>
                                 <th>KL 01 đơn vị</th>
+                                <th>KL chiếm chỗ</th>
+                                <th>KL tăng thêm</th>
+                                <th>KL sau chiếm chỗ và tăng thêm</th>
                                 <th>Tên công tác theo định mức</th>
+                                <th>KL chiếm chỗ</th>
+                                <th>KL tăng thêm</th>
+                                <th>KL sau chiếm chỗ và tăng thêm</th>
                                 <th> Mã định mức</th>
                                 <th> SL trái</th>
                                 <th> SL phải</th>
@@ -56,12 +65,17 @@
                                 {
                                     stt++;
                                     <tr>
-                                        <td>@item.Flag</td>
+                                        <td>@stt</td>
                                         <td>@item.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai</td>
                                         <td>@item.TenCongTac</td>
                                         <td>@item.DonVi</td>
                                         <td>@item.KL1DonVi</td>
                                         <td>@item.TenCongTacTheoDM  </td>
+
+                                        <td>@item.KLChiemCho  </td>
+                                        <td>@item.KLTangThem  </td>
+                                        <td>@item.KLCCVaTT  </td>
+
                                         <td>@item.MaDinhMuc</td>
                                         <td>@Format.FormatCurrency(item.SLTrai) </td>
                                         <td>@Format.FormatCurrency(item.SLPhai) </td>
@@ -164,12 +178,12 @@
     [Parameter]
     public ConfirmModal confirmModal { get; set; }
 
-    public List<THKLModel> THKLByTuyenDuongs = new();
+    public List<THKL1HGModel> THKLByTuyenDuongs = new();
 
-    public List<THKLModel> listTHKLModel { get; set; } = new();
-    public List<THKLModel> listModel { get; set; } = new();
+    public List<THKL1HGModel> listTHKLModel { get; set; } = new();
+    public List<THKL1HGModel> listModel { get; set; } = new();
     public MetaData MetaData { get; set; }
-    public THKLModel tKThepHoGaModel { get; set; }
+    public THKL1HGModel tKThepHoGaModel { get; set; }
 
     string ThongTinLyTrinh_TuyenDuong = "";
     private List<SelectedItem> selectTuyenDuong = new();
@@ -206,7 +220,7 @@
         {
             isLoading = true;
             tKThepHoGaModel = new();
-            var repository = await PKKLCTietHoGaRepository.GetTHKL1HoGa();
+            var repository = await PKKLCTietHoGaRepository.GetTHKL1HoGa1();
             listModel = repository;
 
             listTuyenDuong = await NuocMuaRepository.GetDSTuyenDuong();
@@ -231,11 +245,11 @@
             // Lấy dữ liệu từ repository
             if (listTuyenDuongSelect.Count > 0)
             {
-                THKLByTuyenDuongs = await PKKLCTietHoGaRepository.GetTHKLByTuyenDuong(listTuyenDuongSelect);
+                THKLByTuyenDuongs = await PKKLCTietHoGaRepository.GetTHKLByTuyenDuong1(listTuyenDuongSelect);
             }
             else
             {
-                THKLByTuyenDuongs = await PKKLCTietHoGaRepository.GetTHKLByTuyenDuong(listTuyenDuong);
+                THKLByTuyenDuongs = await PKKLCTietHoGaRepository.GetTHKLByTuyenDuong1(listTuyenDuong);
             }
 
 
@@ -399,7 +413,7 @@
 
 
     // Xử lý paging
-    private List<THKLModel> Paging(List<THKLModel> listModels)
+    private List<THKL1HGModel> Paging(List<THKL1HGModel> listModels)
     {
         // Đếm số bản ghi thỏa mãn
         var count = listModels.Count();
@@ -418,7 +432,7 @@
 
         // Tạo pagelist mới
 
-        var pagelist = new PageList<THKLModel>(listTHKLModel, count, tKThepHoGaModel.PageNumber, tKThepHoGaModel.PageSize);
+        var pagelist = new PageList<THKL1HGModel>(listTHKLModel, count, tKThepHoGaModel.PageNumber, tKThepHoGaModel.PageSize);
         MetaData = pagelist.MetaData;
         return listModels;
     }
@@ -504,5 +518,56 @@
                 break;
         }
         return ChiMuc;
+    }
+    private async Task ExportExcel()
+    {
+        // List<ComplexHeader> rightHeaders = ConstantHeaderExcel.TTHGA_HEADERS.Select(h => new ComplexHeader
+        //     {
+        //         Title = h.Title,
+        //         StartRow = h.StartRow,
+        //         StartCol = h.StartCol,
+        //         EndRow = h.EndRow,
+        //         EndCol = h.EndCol,
+        //         DataProperty = h.DataProperty,
+        //         Alignment = h.Alignment,
+        //         VerticalAlignment = h.VerticalAlignment,
+        //         CapitalizeEachWord = h.CapitalizeEachWord,
+        //         FontName = h.FontName,
+        //         FontSize = h.FontSize,
+        //         IsBold = h.IsBold,
+        //         IsItalic = h.IsItalic,
+        //         IsUnderlined = h.IsUnderlined,
+        //         TextColor = h.TextColor,
+        //         BackgroundColor = h.BackgroundColor,
+        //         WrapText = h.WrapText,
+        //         HasBorder = h.HasBorder,
+        //         BorderStyle = h.BorderStyle,
+        //         DataFormat = h.DataFormat
+        //     }).ToList();
+        // rightHeaders[2].Title = "BẢNG THÔNG TIN TỔNG HỢP HỐ GA NƯỚC MƯA DỌC PHÍA PHẢI";
+        // var sheetInfo = new SheetInfo1<object>
+        //     {
+        //         SheetName = "2. TT H.Ga",
+        //         Tables = new List<TableInfo<object>>
+        //         {
+        //             new TableInfo<object>
+        //             {
+        //                 Headers = ConstantHeaderExcel.TTHGA_HEADERS.Cast<ComplexHeader>().ToList(),
+        //                 Data = listModelLeft.Cast<object>().ToList()
+        //             },
+        //             new TableInfo<object>
+        //             {
+        //                  Headers =rightHeaders,
+        //                 Data = listModelRight.Cast<object>().ToList()
+        //             }
+        //         }
+        //     };
+
+        // // Xuất Excel
+        // byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        // var fileName = "TTH.Ga.xlsx";
+        // using var stream = new MemoryStream(excelBytes);
+        // using var streamRef = new DotNetStreamReference(stream);
+        // await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
 }

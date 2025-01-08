@@ -2111,18 +2111,19 @@
 
     private async Task ExportExcel()
     {
-        var newList = listModel.GroupBy(item => item.LoaiCauKienId) // Nhóm theo LoaiCauKienId
-    .SelectMany(group => group
-    .GroupBy(item => item.HangMuc) // Trong mỗi nhóm LoaiCauKienId, nhóm tiếp theo HangMuc
-    .SelectMany(groupChild => groupChild
-        .OrderBy(item => item.Flag) // Sắp xếp các phần tử trong nhóm con theo Flag
-        .Select((item, index) => new
-        {
-            Item = item,
-            STT = index + 1,
-            IsNewHangMuc = groupChild.Key != item.HangMuc
-        }))
-    ).ToList();
+        var newList = listModel
+        .GroupBy(item => item.LoaiCauKienId) // Nhóm theo LoaiCauKienId
+        .SelectMany(group => group
+            .GroupBy(item => item.HangMuc) // Trong mỗi nhóm LoaiCauKienId, nhóm tiếp theo HangMuc
+            .SelectMany(groupChild => groupChild
+                .OrderBy(item => item.Flag) // Sắp xếp các phần tử trong nhóm con theo Flag
+                .Select((item, index) =>
+                {
+                    return item; // Trả về đối tượng ban đầu
+                })
+            )
+        )
+        .ToList();
 
         var sheetInfo = new SheetInfo1<object>
             {
@@ -2136,13 +2137,19 @@
                     },
                 }
             };
-        
-   
+
         // Xuất Excel
-        var rowSpace = new RowSpace
-            {
+        var rowSpace = new RowSpace{
                 DataProperty = "LoaiCauKien", // Thuộc tính cần kiểm tra
-                BackgroundColor = System.Drawing.Color.LightGray // Màu nền của hàng trống
+                BackgroundColor = System.Drawing.Color.LightGray, // Màu nền của hàng trống
+                Children = new List<RowSpace>
+                {
+                    new RowSpace
+                    {
+                        DataProperty = "HangMuc",
+                        BackgroundColor = System.Drawing.Color.LightGreen
+                    },
+                }
             };
         byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
         var fileName = "PKKLChiTiet01HGa.xlsx";

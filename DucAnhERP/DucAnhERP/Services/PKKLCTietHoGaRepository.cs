@@ -157,6 +157,51 @@ namespace DucAnhERP.Services
             }
 
         }
+        public async Task<List<THKL1HGModel>> GetTHKL1HoGa1()
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var query = (from a in context.PKKLCTietHoGas
+                             join b in context.PhanLoaiHoGaDetails
+                             on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id
+                             let kl1Dv = context.PKKLCTietHoGas
+                                 .Where(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai == a.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                                          && x.LoaiBeTong == a.LoaiBeTong
+                                          && x.HangMuc == a.HangMuc
+                                          && x.HangMucCongTac == a.HangMucCongTac
+                                          && x.TenCongTac == a.TenCongTac)
+                                 .Sum(x => x.TKLCK_SauCC)
+                             let KLChiemCho = context.MaTuongs.Where(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai == a.ThongTinChungHoGa_TenHoGaSauPhanLoai && x.KLGX_TenCongTac == a.TenCongTac).Sum(x => x.KLGX_KL) 
+                             + context.MaTuongs.Where(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai == a.ThongTinChungHoGa_TenHoGaSauPhanLoai && x.KLC_TenCongTac == a.TenCongTac).Sum(x => x.KLC_KL)
+                             + context.MaTuongs.Where(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai == a.ThongTinChungHoGa_TenHoGaSauPhanLoai && x.KLBT_TenCongTac == a.TenCongTac).Sum(x => x.KLBT_KL)
+                             + context.MaTuongs.Where(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai == a.ThongTinChungHoGa_TenHoGaSauPhanLoai && x.KLVK_TenCongTac == a.TenCongTac).Sum(x => x.KLVK_KL)
+                             let KLTangThem = context.MaTuongs.Where(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai == a.ThongTinChungHoGa_TenHoGaSauPhanLoai && x.KLS_TenCongTac == a.TenCongTac).Sum(x => x.KLS_KL)
+                             + context.MaTuongs.Where(x => x.ThongTinChungHoGa_TenHoGaSauPhanLoai == a.ThongTinChungHoGa_TenHoGaSauPhanLoai && x.KLS_TenCongTac1 == a.TenCongTac).Sum(x => x.KLS_KL1)
+                             orderby b.ThongTinChungHoGa_TenHoGaSauPhanLoai, a.HangMuc, a.CreateAt
+                             select new THKL1HGModel
+                             {
+                                 PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinChungHoGa_TenHoGaSauPhanLoai ?? "",
+                                 ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = a.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                                 KLChiemCho = KLChiemCho??0,
+                                 KLTangThem = KLTangThem??0,
+                                 KLCCVaTT = (kl1Dv+KLChiemCho + KLTangThem) ??0,
+                                 HangMucCongTac = a.HangMucCongTac,
+                                 TenCongTac = a.TenCongTac,
+                                 DonVi = a.DonVi,
+                                 KL1DonVi = kl1Dv,
+
+                             }).ToList();
+                return query;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
+
+        }
         public async Task<List<THKLModel>> GetTHKLByTuyenDuong(string TuyenDuong)
         {
             try
@@ -310,6 +355,96 @@ namespace DucAnhERP.Services
                                                  select 1).Any() ? 1 : 0)) * a.TKLCK_SauCC,
 
                                 }).ToList();
+                    finalResult.AddRange(query);
+                }
+
+                // Trả về danh sách kết quả cuối cùng
+                return finalResult;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw; // Optionally rethrow the exception
+            }
+        }
+        public async Task<List<THKL1HGModel>> GetTHKLByTuyenDuong1(List<NuocMuaModel> nuocMua)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                // Khởi tạo một danh sách để lưu kết quả
+                List<THKL1HGModel> finalResult = new List<THKL1HGModel>();
+
+                // Duyệt qua từng tuyến đường trong danh sách `nuocMua`
+                foreach (var item in nuocMua)
+                {
+                    var query = (from a in context.PKKLCTietHoGas
+                                 join b in context.PhanLoaiHoGaDetails on a.ThongTinChungHoGa_TenHoGaSauPhanLoai equals b.Id
+                                 orderby a.Flag ascending
+                                 select new THKL1HGModel
+                                 {
+                                     Id = a.Id,
+                                     ThongTinLyTrinh_TuyenDuong = item.ThongTinLyTrinh_TuyenDuong,
+                                     Flag = a.Flag,
+                                     ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = a.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                                     PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinChungHoGa_TenHoGaSauPhanLoai,
+                                     TenCongTac = a.TenCongTac,
+                                     DonVi = a.DonVi,
+                                     KL1DonVi = a.TKLCK_SauCC,
+                                     SLTrai = (from n in (from n in context.DSNuocMua select new { n.ThongTinLyTrinh_TuyenDuong, n.ThongTinChungHoGa_TenHoGaTheoBanVe, n.ThongTinChungHoGa_TenHoGaSauPhanLoai, n.TraiPhai, G = n.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G") ? "=G" : "", n.CreateAt })
+                                               join p in context.PhanLoaiHoGaDetails
+                                                   on new { Id_PhanLoaiHoGa = n.ThongTinChungHoGa_TenHoGaSauPhanLoai, n.G }
+                                                   equals new { Id_PhanLoaiHoGa = (string)p.Id_PhanLoaiHoGa, p.G }
+                                               where n.TraiPhai == 0 && n.ThongTinLyTrinh_TuyenDuong == item.ThongTinLyTrinh_TuyenDuong && p.Id == a.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                                               select 1).Any() ? 1 : 0,
+                                     SLPhai = (from n in (from n in context.DSNuocMua select new { n.ThongTinLyTrinh_TuyenDuong, n.ThongTinChungHoGa_TenHoGaTheoBanVe, n.ThongTinChungHoGa_TenHoGaSauPhanLoai, n.TraiPhai, G = n.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G") ? "=G" : "", n.CreateAt })
+                                               join p in context.PhanLoaiHoGaDetails
+                                                   on new { Id_PhanLoaiHoGa = n.ThongTinChungHoGa_TenHoGaSauPhanLoai, n.G }
+                                                   equals new { Id_PhanLoaiHoGa = (string)p.Id_PhanLoaiHoGa, p.G }
+                                               where n.TraiPhai == 1 && n.ThongTinLyTrinh_TuyenDuong == item.ThongTinLyTrinh_TuyenDuong && p.Id == a.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                                               select 1).Any() ? 1 : 0,
+
+
+                                     SLTong = ((from n in (from n in context.DSNuocMua select new { n.ThongTinLyTrinh_TuyenDuong, n.ThongTinChungHoGa_TenHoGaTheoBanVe, n.ThongTinChungHoGa_TenHoGaSauPhanLoai, n.TraiPhai, G = n.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G") ? "=G" : "", n.CreateAt })
+                                                join p in context.PhanLoaiHoGaDetails
+                                                   on new { Id_PhanLoaiHoGa = n.ThongTinChungHoGa_TenHoGaSauPhanLoai, n.G }
+                                                   equals new { Id_PhanLoaiHoGa = (string)p.Id_PhanLoaiHoGa, p.G }
+                                                where n.TraiPhai == 0 && n.ThongTinLyTrinh_TuyenDuong == item.ThongTinLyTrinh_TuyenDuong && p.Id == a.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                                                select 1).Any() ? 1 : 0) +
+                                               ((from n in (from n in context.DSNuocMua select new { n.ThongTinLyTrinh_TuyenDuong, n.ThongTinChungHoGa_TenHoGaTheoBanVe, n.ThongTinChungHoGa_TenHoGaSauPhanLoai, n.TraiPhai, G = n.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G") ? "=G" : "", n.CreateAt })
+                                                 join p in context.PhanLoaiHoGaDetails
+                                                  on new { Id_PhanLoaiHoGa = n.ThongTinChungHoGa_TenHoGaSauPhanLoai, n.G }
+                                                  equals new { Id_PhanLoaiHoGa = (string)p.Id_PhanLoaiHoGa, p.G }
+                                                 where n.TraiPhai == 1 && n.ThongTinLyTrinh_TuyenDuong == item.ThongTinLyTrinh_TuyenDuong && p.Id == a.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                                                 select 1).Any() ? 1 : 0),
+                                     KLTrai = ((from n in (from n in context.DSNuocMua select new { n.ThongTinLyTrinh_TuyenDuong, n.ThongTinChungHoGa_TenHoGaTheoBanVe, n.ThongTinChungHoGa_TenHoGaSauPhanLoai, n.TraiPhai, G = n.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G") ? "=G" : "", n.CreateAt })
+                                                join p in context.PhanLoaiHoGaDetails
+                                                   on new { Id_PhanLoaiHoGa = n.ThongTinChungHoGa_TenHoGaSauPhanLoai, n.G }
+                                                   equals new { Id_PhanLoaiHoGa = (string)p.Id_PhanLoaiHoGa, p.G }
+                                                where n.TraiPhai == 0 && n.ThongTinLyTrinh_TuyenDuong == item.ThongTinLyTrinh_TuyenDuong && p.Id == a.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                                                select 1).Any() ? 1 : 0) * a.TKLCK_SauCC,
+                                     KLPhai = ((from n in (from n in context.DSNuocMua select new { n.ThongTinLyTrinh_TuyenDuong, n.ThongTinChungHoGa_TenHoGaTheoBanVe, n.ThongTinChungHoGa_TenHoGaSauPhanLoai, n.TraiPhai, G = n.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G") ? "=G" : "", n.CreateAt })
+                                                join p in context.PhanLoaiHoGaDetails
+                                                    on new { Id_PhanLoaiHoGa = n.ThongTinChungHoGa_TenHoGaSauPhanLoai, n.G }
+                                                    equals new { Id_PhanLoaiHoGa = (string)p.Id_PhanLoaiHoGa, p.G }
+                                                where n.TraiPhai == 1 && n.ThongTinLyTrinh_TuyenDuong == item.ThongTinLyTrinh_TuyenDuong && p.Id == a.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                                                select 1).Any() ? 1 : 0) * a.TKLCK_SauCC,
+                                     KLTong = (((from n in (from n in context.DSNuocMua select new { n.ThongTinLyTrinh_TuyenDuong, n.ThongTinChungHoGa_TenHoGaTheoBanVe, n.ThongTinChungHoGa_TenHoGaSauPhanLoai, n.TraiPhai, G = n.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G") ? "=G" : "", n.CreateAt })
+                                                 join p in context.PhanLoaiHoGaDetails
+                                                    on new { Id_PhanLoaiHoGa = n.ThongTinChungHoGa_TenHoGaSauPhanLoai, n.G }
+                                                    equals new { Id_PhanLoaiHoGa = (string)p.Id_PhanLoaiHoGa, p.G }
+                                                 where n.TraiPhai == 0 && n.ThongTinLyTrinh_TuyenDuong == item.ThongTinLyTrinh_TuyenDuong && p.Id == a.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                                                 select 1).Any() ? 1 : 0) +
+                                               ((from n in (from n in context.DSNuocMua select new { n.ThongTinLyTrinh_TuyenDuong, n.ThongTinChungHoGa_TenHoGaTheoBanVe, n.ThongTinChungHoGa_TenHoGaSauPhanLoai, n.TraiPhai, G = n.ThongTinChungHoGa_TenHoGaTheoBanVe.EndsWith("=G") ? "=G" : "", n.CreateAt })
+                                                 join p in context.PhanLoaiHoGaDetails
+                                                  on new { Id_PhanLoaiHoGa = n.ThongTinChungHoGa_TenHoGaSauPhanLoai, n.G }
+                                                  equals new { Id_PhanLoaiHoGa = (string)p.Id_PhanLoaiHoGa, p.G }
+                                                 where n.TraiPhai == 1 && n.ThongTinLyTrinh_TuyenDuong == item.ThongTinLyTrinh_TuyenDuong && p.Id == a.ThongTinChungHoGa_TenHoGaSauPhanLoai
+                                                 select 1).Any() ? 1 : 0)) * a.TKLCK_SauCC,
+
+                                 }).ToList();
                     finalResult.AddRange(query);
                 }
 

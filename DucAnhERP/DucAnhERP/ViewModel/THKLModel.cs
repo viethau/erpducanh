@@ -27,4 +27,11 @@ namespace DucAnhERP.ViewModel
         public string? CreateBy { get; set; } = "";
         public int? IsActive { get; set; } = 1;
     }
+
+    public class THKL1HGModel: THKLModel
+    {
+        public double KLChiemCho { get; set; } = 0;
+        public double KLTangThem { get; set; } = 0;
+        public double KLCCVaTT { get; set; } = 0;
+    }
 }
