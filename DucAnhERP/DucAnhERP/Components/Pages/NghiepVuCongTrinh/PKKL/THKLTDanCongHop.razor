@@ -18,7 +18,10 @@
 <div class="container-fluid">
 
     <div id="tableContainer m-2 mt-3">
-        <h5>BẢNG TỔNG HỢP KHỐI LƯỢNG TẤM ĐAN CỐNG HỘP LẮP ĐẶT THEO LOẠI TẤM ĐAN CỐNG HỘP LẮP ĐẶT THEO TUYẾN</h5>
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mt-2">BẢNG TỔNG HỢP KHỐI LƯỢNG TẤM ĐAN CỐNG HỘP LẮP ĐẶT THEO LOẠI TẤM ĐAN CỐNG HỘP LẮP ĐẶT THEO TUYẾN</h5>
+            <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
+        </div>
         <div style="white-space:nowrap">
             <div>
                 <div class="row flex-nowrap overflow-auto">
@@ -507,4 +510,37 @@
         }
         return ChiMuc;
     }
+
+    private async Task ExportExcel()
+    {
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.63 THKL T.Đan C.hộp",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.THKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModel.Cast<object>().ToList()
+                    }
+
+                }
+            };
+        @foreach (var group in THKLByTuyenDuongs.GroupBy(item => item.ThongTinLyTrinh_TuyenDuong))
+        {
+            sheetInfo.Tables.Add(new TableInfo<object>
+                {
+                    Headers = ConstantHeaderExcel.THKL_SUB_HEADERS.Cast<ComplexHeader>().ToList(),
+                    Data = group
+                });
+        }
+
+        // Xuất Excel
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        var fileName = "THKLTDCHop.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+    }
+}
 }

@@ -377,7 +377,7 @@ public class ExportExcelService
 
                             cellRange.Style.Font.Size = header.FontSize;
                             cellRange.Style.Font.Name = header.FontName;
-                            cellRange.Style.Font.Bold = header.IsBold;
+                            cellRange.Style.Font.Bold = true;
                             cellRange.Style.Font.Italic = header.IsItalic;
                             cellRange.Style.Font.UnderLine = header.IsUnderlined;
 
@@ -387,10 +387,7 @@ public class ExportExcelService
                                 cellRange.Style.Fill.BackgroundColor.SetColor(header.BackgroundColor.Value);
                             }
 
-                            if (header.WrapText)
-                            {
-                                cellRange.Style.WrapText = true;
-                            }
+                            cellRange.Style.WrapText = header.WrapText;
 
                             if (header.HasBorder)
                             {
@@ -536,7 +533,7 @@ public class ExportExcelService
                                     cell.Style.HorizontalAlignment = header.Alignment; // Căn chỉnh ngang
                                     cell.Style.VerticalAlignment = header.VerticalAlignment; // Căn chỉnh dọc
                                     cell.Style.WrapText = header.WrapText; // Tự động ngắt dòng
-
+                                    cell.Style.Font.Bold = header.IsBold;
                                     // Áp dụng border nếu có
                                     if (header.HasBorder)
                                     {

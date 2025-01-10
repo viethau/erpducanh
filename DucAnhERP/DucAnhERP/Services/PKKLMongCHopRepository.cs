@@ -149,15 +149,34 @@ namespace DucAnhERP.Services
                              orderby b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop ,a.HangMuc, a.Flag
                              select new THKLModel
                              {
+                                 Flag = a.Flag,
+                                 HangMuc = a.HangMuc,
                                  PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop??"",
                                  ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = a.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
                                  HangMucCongTac = a.HangMucCongTac,
                                  TenCongTac = a.TenCongTac,
                                  DonVi = a.DonVi,
-                                 KL1DonVi = kl1Dv,
-
+                                 KL1DonVi = Math.Round(kl1Dv, 4),
                              }).ToList();
-                return query;
+
+                var newList = query.GroupBy(item => item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
+                   .SelectMany(group => group.GroupBy(item => item.HangMuc)
+                   .SelectMany(groupChild => groupChild.OrderBy(item => item.Flag)
+                   .Select((item, index) => {
+                       return item;
+                   }))).ToList();
+
+                var result = newList
+                .GroupBy(item => new
+                {
+                    item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                    item.TenCongTac,
+                    item.DonVi,
+                    item.HangMuc
+                })
+                .Select(group => group.First())
+                .ToList();
+                return result;
             }
             catch (Exception ex)
             {
@@ -250,6 +269,8 @@ namespace DucAnhERP.Services
                                        select new THKLModel
                                        {
                                            Id = g.Key.Id,
+                                           Flag =g.Key.Flag,
+                                           HangMuc =g.Key.HangMuc,
                                            ThongTinLyTrinh_TuyenDuong = item.ThongTinLyTrinh_TuyenDuong,  // Thông tin cố định từ SQL
                                            ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = g.Key.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop,
                                            PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = g.Key.PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop, // Cố định tên loại từ SQL
@@ -266,8 +287,25 @@ namespace DucAnhERP.Services
 
 
 
+                    var newList = query.GroupBy(item => item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
+                   .SelectMany(group => group.GroupBy(item => item.HangMuc)
+                   .SelectMany(groupChild => groupChild.OrderBy(item => item.Flag)
+                   .Select((item, index) => {
+                       return item;
+                   }))).ToList();
+
+                    var newList1 = newList
+                    .GroupBy(item => new
+                    {
+                        item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                        item.TenCongTac,
+                        item.DonVi,
+                        item.HangMuc
+                    })
+                    .Select(group => group.First())
+                    .ToList();
                     // Thêm kết quả của truy vấn vào danh sách `finalResult`
-                    finalResult.AddRange(query);
+                    finalResult.AddRange(newList1);
                 }
 
                 // Trả về danh sách kết quả cuối cùng
@@ -572,8 +610,29 @@ namespace DucAnhERP.Services
                         if (!string.IsNullOrEmpty(record.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop))
                         {
                             var getOld = await GetById(entity.Id);
-                            var TKLCK_SauCC1 = await GetSumTKLCK_SauCCByLCK(entity.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop);
-                            record.TKLCK_SauCC = (TKLCK_SauCC1 - getOld.TKLCK_SauCC) + entity.TKLCK_SauCC;
+                            
+                            if (getOld.LoaiBeTong == "Bê tông thương phẩm")
+                            {
+                                if (entity.LoaiBeTong == "Bê tông thương phẩm")
+                                {
+                                    var TKLCK_SauCC1 = await GetSumTKLCK_SauCCByLCK(entity.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop);
+                                    record.TKLCK_SauCC = Math.Round((TKLCK_SauCC1 - getOld.TKLCK_SauCC) + entity.TKLCK_SauCC, 4);
+                                }
+                                else
+                                {
+                                    var TKLCK_SauCC1 = await GetSumTKLCK_SauCCByLCK(entity.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop);
+                                    record.TKLCK_SauCC = Math.Round((TKLCK_SauCC1 - getOld.TKLCK_SauCC), 4);
+                                }
+                            }
+                            else
+                            {
+                                if (entity.LoaiBeTong == "Bê tông thương phẩm")
+                                {
+                                    var TKLCK_SauCC1 = await GetSumTKLCK_SauCCByLCK(entity.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop);
+                                    record.TKLCK_SauCC = Math.Round(TKLCK_SauCC1 + entity.TKLCK_SauCC, 4);
+                                }
+
+                            }
                         }
                     }
 

@@ -122,18 +122,36 @@ namespace DucAnhERP.Services
                                           && x.HangMucCongTac == a.HangMucCongTac
                                           && x.TenCongTac == a.TenCongTac)
                                  .Sum(x => x.TKLCK_SauCC)
-                             orderby b.ThongTinTamDanHoGa2_PhanLoaiDayHoGa, a.HangMuc, a.CreateAt
+                             orderby b.ThongTinTamDanHoGa2_PhanLoaiDayHoGa, a.HangMuc
                              select new THKLModel
                              {
+                                 Flag = a.Flag,
+                                 HangMuc = a.HangMuc,
                                  PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? "",
                                  ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = a.ThongTinTamDanHoGa2_PhanLoaiDayHoGa,
                                  HangMucCongTac = a.HangMucCongTac,
                                  TenCongTac = a.TenCongTac,
                                  DonVi = a.DonVi,
-                                 KL1DonVi = kl1Dv,
-
+                                 KL1DonVi = Math.Round(kl1Dv, 4)
                              }).ToList();
-                return query;
+                var newList = query.GroupBy(item => item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
+                   .SelectMany(group => group.GroupBy(item => item.HangMuc)
+                   .SelectMany(groupChild => groupChild.OrderBy(item => item.Flag)
+                   .Select((item, index) => {
+                       return item;
+                   }))).ToList();
+
+                var result = newList
+                .GroupBy(item => new
+                {
+                    item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                    item.TenCongTac,
+                    item.DonVi,
+                    item.HangMuc
+                })
+                .Select(group => group.First())
+                .ToList();
+                return result;
             }
             catch (Exception ex)
             {
@@ -225,6 +243,8 @@ namespace DucAnhERP.Services
                                        select new THKLModel
                                        {
                                            Id = g.Key.Id,
+                                           Flag = g.Key.Flag,
+                                           HangMuc = g.Key.HangMuc,
                                            ThongTinLyTrinh_TuyenDuong = item.ThongTinLyTrinh_TuyenDuong,  // Thông tin cố định từ SQL
                                            ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = g.Key.ThongTinTamDanHoGa2_PhanLoaiDayHoGa,
                                            PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, // Cố định tên loại từ SQL
@@ -240,8 +260,25 @@ namespace DucAnhERP.Services
                                        }).ToListAsync();
 
 
+                    var newList = query.GroupBy(item => item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
+                   .SelectMany(group => group.GroupBy(item => item.HangMuc)
+                   .SelectMany(groupChild => groupChild.OrderBy(item => item.Flag)
+                   .Select((item, index) => {
+                       return item;
+                   }))).ToList();
+
+                    var newList1 = newList
+                    .GroupBy(item => new
+                    {
+                        item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                        item.TenCongTac,
+                        item.DonVi,
+                        item.HangMuc
+                    })
+                    .Select(group => group.First())
+                    .ToList();
                     // Thêm kết quả của truy vấn vào danh sách `finalResult`
-                    finalResult.AddRange(query);
+                    finalResult.AddRange(newList1);
                 }
 
                 // Trả về danh sách kết quả cuối cùng
@@ -558,8 +595,7 @@ namespace DucAnhERP.Services
             if (entity != null)
             {
                 // Kiểm tra điều kiện một lần duy nhất
-                if (entity.HangMuc == "I.Bê tông, vận chuyển, lắp đặt"
-                    && entity.HangMucCongTac.Trim().ToLower() == "Tấm đan hố ga".Trim().ToLower())
+                if (entity.HangMuc == "I.Bê tông, vận chuyển, lắp đặt")
                 {
                     // Lưu trữ giá trị TKLCK_SauCC để sử dụng nhiều lần
                     var TKLCK_SauCC = entity.TKLCK_SauCC;
@@ -591,9 +627,26 @@ namespace DucAnhERP.Services
                         if (!string.IsNullOrEmpty(record.ThongTinTamDanHoGa2_PhanLoaiDayHoGa))
                         {
                             var getOld = await GetById(entity.Id);
-                            var TKLCK_SauCC1 = await GetSumTKLCK_SauCCByLCK(entity.ThongTinTamDanHoGa2_PhanLoaiDayHoGa);
-                            record.TKLCK_SauCC = (TKLCK_SauCC1 - getOld.TKLCK_SauCC) + entity.TKLCK_SauCC;
-
+                            if(getOld.LoaiBeTong == "Bê tông thương phẩm") {
+                                if (entity.LoaiBeTong == "Bê tông thương phẩm")
+                                {
+                                    var TKLCK_SauCC1 = await GetSumTKLCK_SauCCByLCK(entity.ThongTinTamDanHoGa2_PhanLoaiDayHoGa);
+                                    record.TKLCK_SauCC = Math.Round((TKLCK_SauCC1 - getOld.TKLCK_SauCC) + entity.TKLCK_SauCC, 4);
+                                }
+                                else
+                                {
+                                    var TKLCK_SauCC1 = await GetSumTKLCK_SauCCByLCK(entity.ThongTinTamDanHoGa2_PhanLoaiDayHoGa);
+                                    record.TKLCK_SauCC = Math.Round((TKLCK_SauCC1 - getOld.TKLCK_SauCC), 4);
+                                }
+                            } else
+                            {
+                                if (entity.LoaiBeTong == "Bê tông thương phẩm")
+                                {
+                                    var TKLCK_SauCC1 = await GetSumTKLCK_SauCCByLCK(entity.ThongTinTamDanHoGa2_PhanLoaiDayHoGa);
+                                    record.TKLCK_SauCC = Math.Round(TKLCK_SauCC1  + entity.TKLCK_SauCC, 4);
+                                }
+                                
+                            }
                         }
                     }
 

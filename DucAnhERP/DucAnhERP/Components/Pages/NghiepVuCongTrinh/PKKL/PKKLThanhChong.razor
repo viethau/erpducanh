@@ -224,8 +224,10 @@
     <div id="tableContainer ">
         <div class="table-report ">
             <div>
-                <div class=" mt-1">
-                    <h5 class="mt-2">BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01 THANH CHỐNG</h5>
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mt-1">BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01 THANH CHỐNG</h5>
+                    <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
                 </div>
                 <div class=" mt-2">
                     <table id="tb-left" class="table table-hover table-bordered mt-3">
@@ -1058,5 +1060,55 @@
                 break;
         }
         return ChiMuc;
+    }
+
+    private async Task ExportExcel()
+    {
+        var newList = listModel
+        .GroupBy(item => item.LoaiCauKienId) // Nhóm theo LoaiCauKienId
+        .SelectMany(group => group
+            .GroupBy(item => item.HangMuc) // Trong mỗi nhóm LoaiCauKienId, nhóm tiếp theo HangMuc
+            .SelectMany(groupChild => groupChild
+                .OrderBy(item => item.Flag) // Sắp xếp các phần tử trong nhóm con theo Flag
+                .Select((item, index) =>
+                {
+                    return item; // Trả về đối tượng ban đầu
+                })
+            )
+        )
+        .ToList();
+
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.72 PKKL T.Chống",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.PKKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = newList
+                    },
+                }
+            };
+
+        // Xuất Excel
+        var rowSpace = new RowSpace
+            {
+                DataProperty = "LoaiCauKien", // Thuộc tính cần kiểm tra
+                BackgroundColor = System.Drawing.Color.LightGray, // Màu nền của hàng trống
+                Children = new List<RowSpace>
+                {
+                    new RowSpace
+                    {
+                        DataProperty = "HangMuc",
+                        BackgroundColor = System.Drawing.Color.LightGreen
+                    },
+                }
+            };
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        var fileName = "PKKLThanhChong.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
 }

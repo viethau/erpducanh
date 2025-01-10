@@ -191,5 +191,28 @@
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
     }
+    private async Task ExportExcel()
+    {
 
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.7 KTHH T.Đan C.Hộp",
+                Tables = new List<TableInfo<object>>
+                {
+                     new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.KTHHTDCH_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModel.Cast<object>().ToList()
+                    },
+
+                }
+            };
+
+        // Xuất Excel
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        var fileName = "KTHHTDanCHop.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+    }
 }

@@ -17,7 +17,10 @@
 </style>
 <div class="container-fluid">
     <div id="tableContainer " class=" m-2 mt-3">
-        <h5>BẢNG TỔNG HỢP KHỐI LƯỢNG MÓNG CỐNG TRÒN THEO LOẠI MÓNG CỐNG TRÒN THEO TUYẾN</h5>
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mt-2">BẢNG TỔNG HỢP KHỐI LƯỢNG MÓNG CỐNG TRÒN THEO LOẠI MÓNG CỐNG TRÒN THEO TUYẾN</h5>
+            <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
+        </div>
         <div style="white-space:nowrap">
             <div>
                 <div class="row flex-nowrap overflow-auto">
@@ -504,5 +507,37 @@
                 break;
         }
         return ChiMuc;
+    }
+
+    private async Task ExportExcel()
+    {
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.55 THKL móng C.Tròn",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.THKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModel.Cast<object>().ToList()
+                    }
+
+                }
+            };
+        @foreach (var group in THKLByTuyenDuongs.GroupBy(item => item.ThongTinLyTrinh_TuyenDuong))
+        {
+            sheetInfo.Tables.Add(new TableInfo<object>
+                {
+                    Headers = ConstantHeaderExcel.THKL_SUB_HEADERS.Cast<ComplexHeader>().ToList(),
+                    Data = group
+                });
+        }
+
+        // Xuất Excel
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        var fileName = "THKLMongCTron.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
 }

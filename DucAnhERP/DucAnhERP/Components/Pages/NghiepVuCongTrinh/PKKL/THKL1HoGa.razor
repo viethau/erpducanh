@@ -32,14 +32,11 @@
                                 <th>Hạng mục</th>
                                 <th>Tên công tác thực tế</th>
                                 <th>Đơn vị</th>
-                                <th>KL 01 đơn vị</th>
+                                <th>Khối lượng 01 đơn vị trước chiếm chỗ</th>
                                 <th>KL chiếm chỗ</th>
                                 <th>KL tăng thêm</th>
                                 <th>KL sau chiếm chỗ và tăng thêm</th>
                                 <th>Tên công tác theo định mức</th>
-                                <th>KL chiếm chỗ</th>
-                                <th>KL tăng thêm</th>
-                                <th>KL sau chiếm chỗ và tăng thêm</th>
                                 <th> Mã định mức</th>
                                 <th> SL trái</th>
                                 <th> SL phải</th>
@@ -70,12 +67,13 @@
                                         <td>@item.TenCongTac</td>
                                         <td>@item.DonVi</td>
                                         <td>@item.KL1DonVi</td>
-                                        <td>@item.TenCongTacTheoDM  </td>
+                                        
 
                                         <td>@item.KLChiemCho  </td>
                                         <td>@item.KLTangThem  </td>
                                         <td>@item.KLCCVaTT  </td>
 
+                                        <td>@item.TenCongTacTheoDM  </td>
                                         <td>@item.MaDinhMuc</td>
                                         <td>@Format.FormatCurrency(item.SLTrai) </td>
                                         <td>@Format.FormatCurrency(item.SLPhai) </td>
@@ -260,12 +258,12 @@
                 {
                     TenLoaiTruyenDan = group.Key.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
                     TenCongTac = group.Key.TenCongTac,
-                    SLTrai = group.Sum(item => item.SLTrai),
-                    SLPhai = group.Sum(item => item.SLPhai),
-                    SLTong = group.Sum(item => item.SLTrai) + group.Sum(item => item.SLPhai),
-                    KLTrai = group.Sum(item => item.KLTrai),
-                    KLPhai = group.Sum(item => item.KLPhai),
-                    KLTong = group.Sum(item => item.KLTrai) + group.Sum(item => item.KLPhai),
+                    SLTrai = Math.Round(group.Sum(item => item.SLTrai),4),
+                    SLPhai = Math.Round(group.Sum(item => item.SLPhai),4),
+                    SLTong = Math.Round(group.Sum(item => item.SLTrai) + group.Sum(item => item.SLPhai), 4),
+                    KLTrai = Math.Round(group.Sum(item => item.KLTrai), 4),
+                    KLPhai = Math.Round(group.Sum(item => item.KLPhai), 4),
+                    KLTong = Math.Round(group.Sum(item => item.KLTrai) + group.Sum(item => item.KLPhai), 4),
                 })
                 .ToList();
 
@@ -521,53 +519,33 @@
     }
     private async Task ExportExcel()
     {
-        // List<ComplexHeader> rightHeaders = ConstantHeaderExcel.TTHGA_HEADERS.Select(h => new ComplexHeader
-        //     {
-        //         Title = h.Title,
-        //         StartRow = h.StartRow,
-        //         StartCol = h.StartCol,
-        //         EndRow = h.EndRow,
-        //         EndCol = h.EndCol,
-        //         DataProperty = h.DataProperty,
-        //         Alignment = h.Alignment,
-        //         VerticalAlignment = h.VerticalAlignment,
-        //         CapitalizeEachWord = h.CapitalizeEachWord,
-        //         FontName = h.FontName,
-        //         FontSize = h.FontSize,
-        //         IsBold = h.IsBold,
-        //         IsItalic = h.IsItalic,
-        //         IsUnderlined = h.IsUnderlined,
-        //         TextColor = h.TextColor,
-        //         BackgroundColor = h.BackgroundColor,
-        //         WrapText = h.WrapText,
-        //         HasBorder = h.HasBorder,
-        //         BorderStyle = h.BorderStyle,
-        //         DataFormat = h.DataFormat
-        //     }).ToList();
-        // rightHeaders[2].Title = "BẢNG THÔNG TIN TỔNG HỢP HỐ GA NƯỚC MƯA DỌC PHÍA PHẢI";
-        // var sheetInfo = new SheetInfo1<object>
-        //     {
-        //         SheetName = "2. TT H.Ga",
-        //         Tables = new List<TableInfo<object>>
-        //         {
-        //             new TableInfo<object>
-        //             {
-        //                 Headers = ConstantHeaderExcel.TTHGA_HEADERS.Cast<ComplexHeader>().ToList(),
-        //                 Data = listModelLeft.Cast<object>().ToList()
-        //             },
-        //             new TableInfo<object>
-        //             {
-        //                  Headers =rightHeaders,
-        //                 Data = listModelRight.Cast<object>().ToList()
-        //             }
-        //         }
-        //     };
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.16 THKL 01 H.Ga",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.THKL1HG_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModel.Cast<object>().ToList()
+                    }
 
-        // // Xuất Excel
-        // byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
-        // var fileName = "TTH.Ga.xlsx";
-        // using var stream = new MemoryStream(excelBytes);
-        // using var streamRef = new DotNetStreamReference(stream);
-        // await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+                }
+            };
+        @foreach (var group in THKLByTuyenDuongs.GroupBy(item => item.ThongTinLyTrinh_TuyenDuong))
+        {
+            sheetInfo.Tables.Add(new TableInfo<object>
+                {
+                    Headers = ConstantHeaderExcel.THKL_SUB_HEADERS.Cast<ComplexHeader>().ToList(),
+                    Data = group
+                });
+        }
+
+        // Xuất Excel
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        var fileName = "THKL1HGa.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
 }

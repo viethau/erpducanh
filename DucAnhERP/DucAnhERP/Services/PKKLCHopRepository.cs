@@ -124,15 +124,35 @@ namespace DucAnhERP.Services
                              orderby b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai, a.HangMuc, a.Flag
                              select new THKLModel
                              {
+                                 Flag= a.Flag,
+                                 HangMuc= a.HangMuc,
                                  PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = b.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
                                  ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = a.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
                                  HangMucCongTac = a.HangMucCongTac,
                                  TenCongTac = a.TenCongTac,
                                  DonVi = a.DonVi,
-                                 KL1DonVi = kl1Dv,
+                                 KL1DonVi = Math.Round(kl1Dv, 4),
 
                              }).ToList();
-                return query;
+                var newList = query.GroupBy(item => item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
+                  .SelectMany(group => group.GroupBy(item => item.HangMuc)
+                  .SelectMany(groupChild => groupChild.OrderBy(item => item.Flag)
+                  .Select((item, index) => {
+                      return item;
+                  }))).ToList();
+
+                var result = newList
+                .GroupBy(item => new
+                {
+                    item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                    item.TenCongTac,
+                    item.DonVi,
+                    item.HangMuc
+                })
+                .Select(group => group.First())
+                .ToList();
+                return result;
+                
             }
             catch (Exception ex)
             {
@@ -221,10 +241,12 @@ namespace DucAnhERP.Services
                                            a.HangMuc,
                                            a.Flag
                                        } into g
-                                       orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, g.Key.HangMuc, g.Key.Flag
+                                       orderby g.Key.PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai, g.Key.HangMuc
                                        select new THKLModel
                                        {
                                            Id = g.Key.Id,
+                                           Flag= g.Key.Flag,
+                                           HangMuc = g.Key.HangMuc,
                                            ThongTinLyTrinh_TuyenDuong = item.ThongTinLyTrinh_TuyenDuong,  // Thông tin cố định từ SQL
                                            ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai = g.Key.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
                                            PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai = g.Key.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai, // Cố định tên loại từ SQL
@@ -239,10 +261,25 @@ namespace DucAnhERP.Services
                                            KLTong = g.Sum(x => x.c != null ? x.c.TTCDSLCauKienDuongTruyenDan_SlCauKienTinhKl : 0) * g.Key.TKLCK_SauCC ?? 0
                                        }).ToListAsync();
 
+                    var newList = query.GroupBy(item => item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai)
+                   .SelectMany(group => group.GroupBy(item => item.HangMuc)
+                   .SelectMany(groupChild => groupChild.OrderBy(item => item.Flag)
+                   .Select((item, index) => {
+                       return item;
+                   }))).ToList();
 
-
+                    var newList1 = newList
+                    .GroupBy(item => new
+                    {
+                        item.ThongTinDuongTruyenDan_TenLoaiTruyenDanSauPhanLoai,
+                        item.TenCongTac,
+                        item.DonVi,
+                        item.HangMuc
+                    })
+                    .Select(group => group.First())
+                    .ToList();
                     // Thêm kết quả của truy vấn vào danh sách `finalResult`
-                    finalResult.AddRange(query);
+                    finalResult.AddRange(newList1);
                 }
 
                 // Trả về danh sách kết quả cuối cùng

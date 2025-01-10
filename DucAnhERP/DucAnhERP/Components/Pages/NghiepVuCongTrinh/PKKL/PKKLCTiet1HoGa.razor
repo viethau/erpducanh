@@ -560,7 +560,7 @@
         <div class="table-report ">
             <div>
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="mt-2">BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01 Hố GA</h5>
+                    <h5 class="mt-1">BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01 Hố GA</h5>
                     <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
                 </div>
                 <div class=" mt-2">
@@ -569,7 +569,7 @@
                             <tr>
                                 <th rowspan="2"></th>
                                 <th class="text-center" rowspan="2">STT</th>
-                                <th class="text-center" colspan="5">Thông tin cấu kiện</th>
+                                <th class="text-center" colspan="4">Thông tin cấu kiện</th>
                                 <th class="text-center" colspan="3">Thông tin tên công tác thực tế</th>
                                 <th class="text-center" colspan="7">Thông tin KTHH tính khối lượng (m3)</th>
                                 <th class="text-center" colspan="6">Thông tin cạnh tính diện tích (m2)</th>
@@ -583,9 +583,11 @@
                                 <th> Hình thức thi công</th>
                                 <th> Kiểu mũ mố</th>
                                 <th> Loại bê tông</th>
+
                                 <th> Hạng mục công tác</th>
                                 <th> Tên công tác thực tế</th>
                                 <th> Đơn vị</th>
+
                                 <th> D</th>
                                 <th> R</th>
                                 <th> C</th>
@@ -626,7 +628,7 @@
                                                     <td colspan="2">@item.LoaiCauKien</td>
                                                     <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
                                                     <td>@HangMuc &nbsp; @item.LoaiCauKien</td>
-                                                    <td colspan="19"></td>
+                                                    <td colspan="21"></td>
                                                 </tr>
                                             }
                                             <tr>
