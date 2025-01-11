@@ -22,7 +22,10 @@
             </button>
         </div>
     </div>
-    <h5 class="mt-2">BẢNG THỐNG KẾ SỐ LƯỢNG RÃNH XÂY</h5>
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mt-2">BẢNG THỐNG KẾ SỐ LƯỢNG RÃNH XÂY</h5>
+        <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
+    </div>
     <div id="tableContainer ">
         <div class="row mt-3 p-2 our-table">
             <table id="tb1" class="table table-bordered table-hover" cellpadding="1" cellspacing="2">
@@ -198,5 +201,28 @@
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
     }
+    private async Task ExportExcel()
+    {
 
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.16 SL rãnh xây",
+                Tables = new List<TableInfo<object>>
+                {
+                     new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.SLRX_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModel.Cast<object>().ToList()
+                    },
+
+                }
+            };
+
+        // Xuất Excel
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        var fileName = "SLRX.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+    }
 }
