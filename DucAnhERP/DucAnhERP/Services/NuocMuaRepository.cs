@@ -17,7 +17,11 @@ namespace DucAnhERP.Services
         {
             _context = context;
         }
-        public async Task<List<NuocMua>> GetAll()
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
+        public async Task<List<NuocMua>> GetAll(string groupId)
         {
             try
             {
@@ -796,9 +800,8 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex);
                 throw;
             }
-        }
-        
-        public async Task Update(NuocMua nuocMua)
+        }  
+        public async Task Update(NuocMua nuocMua,string userId)
         {
             try
             {
@@ -830,7 +833,7 @@ namespace DucAnhERP.Services
             }
             await context.SaveChangesAsync();
         }
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id,string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
@@ -893,7 +896,7 @@ namespace DucAnhERP.Services
             }
 
         }
-        public async Task Insert(NuocMua entity)
+        public async Task Insert(NuocMua entity, string userId)
         {
             try
             {
@@ -1028,7 +1031,6 @@ namespace DucAnhERP.Services
                 throw new Exception($"Lỗi dữ liệu {ex.Message}!");
             }
         }
-
 
         //báo cáo 
         public async Task<List<NuocMuaModel>> GetBaoCaoTTHoGa(NuocMuaModel nuocMuaModel)

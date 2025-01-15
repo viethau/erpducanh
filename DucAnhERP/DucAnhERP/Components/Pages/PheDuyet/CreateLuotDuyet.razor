@@ -1,4 +1,4 @@
-﻿@page "/createLuotDuyet/{majorId}"
+﻿@page "/createLuotDuyet"
 @using DucAnhERP.Models
 @using DucAnhERP.ViewModel
 @using DucAnhERP.Components.Pages.Common
@@ -11,15 +11,17 @@
 @inject UserManager<IdentityUser> UserManager
 @attribute [Authorize]
 
-<h3>Cài đặt số lượt duyệt</h3>
+<h3>Cài đặt phòng ban duyệt</h3>
 
 <div class="mb-2 text-center">
-    <button class="btn btn-primary" @onclick="AddRow">Thêm dòng</button>
+    <button @onclick="SubmitAll" class="btn btn-primary">Lưu cài đặt</button>
+    <button @onclick="Cancel" class="btn btn-warning">Hủy</button>
 </div>
 
 <div class="custom-table pl-2">
     <div class="table table-bordered table-striped">
         <div class="thead-dark">
+            <button class="btn btn-primary" @onclick="AddRow">Thêm phòng ban</button>
             <div class="row">
                 <div class="col bg-dark text-center border py-3">Chi Nhánh</div>
                 <div class="col bg-dark text-center border py-3">Nghiệp Vụ</div>
@@ -39,50 +41,53 @@
                     <div class="col text-center border py-2">
                         <InputSelect class="form-control" ValueExpression="@(() => item.ApprovalRow.CompanyId)" Value="@item.ApprovalRow.CompanyId" ValueChanged="@((string value) => OnChangeCompany(item, value))">
                             <option value="">Chọn Chi Nhánh</option>
-                            @foreach (var branch in listCompanies)
+                            @foreach (var branch in lisChiNhanhs)
                             {
-                                <option value="@branch.Id">@branch.CompanyName</option>
+                                <option value="@branch.Id">@branch.TenChiNhanh</option>
                             }
                         </InputSelect>
                         <ValidationMessage For="@(() => item.ApprovalRow.CompanyId)" />
                     </div>
                     <div class="col text-center border py-2">
-                        <InputSelect id="parentMajor" disabled class="form-control" @bind-Value="item.ApprovalRow.MajorId">
-                            @if (parentMajor != null)
+                        <InputSelect class="form-control" ValueExpression="@(() => item.ApprovalRow.ParentMajorId)" Value="@item.ApprovalRow.ParentMajorId" ValueChanged="@((string value) => OnChangeParentMajorId(item, value))">
+                            <option value="">Chọn Phân Loại</option>
+                            @foreach (var major in listParentMajor)
                             {
-                                <option selected value="@parentMajor.Id">@parentMajor.MajorName</option>
+                                <option value="@major.Id">@major.MajorName</option>
                             }
                         </InputSelect>
-                        <ValidationMessage For="@(() => item.ApprovalRow.MajorId)" />
+                        <ValidationMessage For="@(() => item.ApprovalRow.ParentMajorId)" />
                     </div>
                     <div class="col text-center border py-2">
-                        <InputSelect class="form-control" ValueExpression="@(() => item.ApprovalRow.ScreenId)" Value="@item.ApprovalRow.ScreenId" ValueChanged="@((string value) => OnChangeScreenId(item, value))">
+                        <InputSelect class="form-control" ValueExpression="@(() => item.ApprovalRow.MajorId)" Value="@item.ApprovalRow.MajorId" ValueChanged="@((string value) => OnChangeMajorId(item, value))">
                             <option value="">Chọn Phân Loại</option>
                             @foreach (var major in listMajor)
                             {
                                 <option value="@major.Id">@major.MajorName</option>
                             }
                         </InputSelect>
-                        <ValidationMessage For="@(() => item.ApprovalRow.ScreenId)" />
+                        <ValidationMessage For="@(() => item.ApprovalRow.MajorId)" />
                     </div>
                     <div class="col text-center border py-2">
                         <InputSelect class="form-control" ValueExpression="@(() => item.ApprovalRow.DeptId)" Value="@item.ApprovalRow.DeptId" ValueChanged="@((string value) => OnChangeDepartment(item, value))">
                             <option value="">Chọn Phòng Ban Duyệt</option>
-                            @foreach (var department in listDept)
+                            @foreach (var department in listStep)
                             {
                                 <option value="@department.Id">@department.DeptName</option>
                             }
                         </InputSelect>
                         <ValidationMessage For="@(() => item.ApprovalRow.DeptId)" />
                     </div>
+                    @* listPermissions *@
                     <div class="col text-center border py-2">
-                        <InputSelect class="form-control" ValueExpression="@(() => item.ApprovalRow.OperationType)" Value="@item.ApprovalRow.OperationType" ValueChanged="@((int value) => OnChangeOperation(item, value))">
-                            <option selected value="0">Chọn Thao Tác</option>
-                            <option value="1">Tạo mới</option>
-                            <option value="2">Chỉnh sửa</option>
-                            <option value="3">Xóa</option>
+                        <InputSelect class="form-control" ValueExpression="@(() => item.ApprovalRow.PermissionId)" Value="@item.ApprovalRow.PermissionId" ValueChanged="@((string value) => OnChangeOperation(item, value))">
+                            <option value="">Chọn thao tác</option>
+                            @foreach (var permission in listPermissions)
+                            {
+                                <option value="@permission.Id">@permission.PermissionName</option>
+                            }
                         </InputSelect>
-                        <ValidationMessage For="@(() => item.ApprovalRow.OperationType)" />
+                        <ValidationMessage For="@(() => item.ApprovalRow.PermissionId)" />
                     </div>
                     <div class="col text-center border py-2">
                         <InputText class="form-control" @bind-Value="item.ApprovalRow.Content" @oninput="(e) => OnInputContent(item, e)" />
@@ -94,7 +99,7 @@
                     </div>
                     <div class="col text-center border py-2">@item.ApprovalRow.ApprovalStep</div>
                     <div class="col text-center border py-2">
-                        <button class="btn btn-danger" @onclick="() => RemoveRow(item)">Xóa dòng</button>
+                        <button class="btn btn-danger" @onclick="() => RemoveRow(item)">Xóa</button>
                     </div>
                 </div>
             </EditForm>
@@ -103,15 +108,12 @@
 </div>
 
 <div class="card card-primary">
-    <div class="card-header">
-        <h3 class="card-title">Cài đặt đang hiệu lực với chi nhánh, nghiệp vụ đã chọn</h3>
-    </div>
     <div class="card-body">
         @if (!listSetApprovalStep.Any())
         {
             <div class="pt-4 pl-4">
                 <div class="callout callout-warning">
-                    <h5>Không có cài đặt tương ứng với chi nhánh, nghiệp vụ đã chọn!</h5>
+                    <h5>Không có cài đặt </h5>
                 </div>
             </div>
         }
@@ -124,7 +126,9 @@
                             <div class="pb-3">No.</div>
                         </th>
                         <th class="text-center" scope="col">
-                            <div class="pb-3">Chi nhánh</div>
+                            <div class="pb-3">
+                                Chi nhánh
+                            </div>
                         </th>
                         <th class="text-center" scope="col">
                             <div class="pb-3">Nghiệp vụ</div>
@@ -141,8 +145,7 @@
                         <th class="text-center" scope="col">
                             <div class="pb-3">Nội dung</div>
                         </th>
-                        <th class="text-center" scope="col">
-                            <div class="pb-3">Thứ tự duyệt</div>
+                        <th class="text-center" rowspan="2">
                         </th>
                     </tr>
                 </thead>
@@ -152,13 +155,22 @@
                     {
                         <tr>
                             <th class="text-center" scope="row">@(listSetApprovalStep.IndexOf(setting) + 1)</th>
-                            <td class="text-center">@setting.CompanyName</td>
-                            <td class="text-center">@setting.MajorName</td>
-                            <td class="text-center">@setting.ScreenName</td>
-                            <td class="text-center">@setting.DeptName</td>
-                            <td class="text-center">@setting.OperationType</td>
+                            <td class="text-center">@setting.CompanyId</td>
+                            <td class="text-center">@setting.ParentMajorId</td>
+                            <td class="text-center">@setting.MajorId</td>
+                            <td class="text-center">@setting.DeptId</td>
+                            <td class="text-center">@setting.PermissionId</td>
                             <td class="text-center">@setting.Content</td>
-                            <td class="text-center">@setting.ApprovalStep</td>
+                            <td class="d-flex flex-column text-center nowrap">
+                                <div class="d-inline-block">
+                                    <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(setting.IdMain)">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(setting.IdMain ,setting.DeptId )">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
                         </tr>
                     }
 
@@ -166,14 +178,7 @@
 
             </table>
         }
-
     </div>
-
-</div>
-
-<div class="mb-2 text-center pt-2">
-    <button @onclick="SubmitAll" class="btn btn-primary">Thiết định</button>
-    <button @onclick="GoToStepSetting" class="btn btn-primary">Đi tới cài đặt người duyệt</button>
 </div>
 
 
@@ -181,28 +186,32 @@
 <ErrorModal @ref="permissionErrorModal" OnResponseClick="CheckPermission"></ErrorModal>
 <SuccessModal @ref="successModal" OnResponseClick="Redirect"></SuccessModal>
 <ConfirmModal @ref="confirmModal" OnResponseClick="CreateSettings"></ConfirmModal>
+<ConfirmModal @ref="confirmDeleteModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
 
 @code {
-    private ApprovalDeptSetting approvalDeptSetting { get; set; } = new();
+    private ApprovalStepSetting approvalStepSetting { get; set; } = new();
 
-    private List<MMajor> listMajor = new List<MMajor>();
+    private List<Major> listParentMajor = new List<Major>();
+    private List<Major> listMajor = new List<Major>();
 
-    private List<MCompany> listCompanies = new List<MCompany>();
+    private List<ChiNhanh> lisChiNhanhs = new List<ChiNhanh>();
 
-    private List<Department> listDept = new List<Department>();
+    private List<Department> listStep = new List<Department>();
+    private List<Permission> listPermissions = new List<Permission>();
 
-    private List<ApprovalStepSettingModel> listSetApprovalStep = new List<ApprovalStepSettingModel>();
-
-    private MMajor parentMajor;
+    private List<ApprovalStepSettingData> listSetApprovalStep = new List<ApprovalStepSettingData>();
 
     private DateTime baseTime;
+    private bool loai;
 
-    private IdentityUser loginUser;
+    private string TitleModal = "Thêm";
 
-    private bool contentCount = true;
-
-    [Parameter, SupplyParameterFromQuery]
+    public string? companyId { get; set; }
+    public string? parentmajorId { get; set; }
     public string? majorId { get; set; }
+    public string? deptId { get; set; }
+    private int deptOrder;
+    public string? permissionId { get; set; }
 
     [Parameter]
     public SuccessModal successModal { get; set; }
@@ -220,34 +229,48 @@
     public ConfirmModal confirmDeleteModal { get; set; }
 
     private List<ApprovalStepWrapper> approvalRowWrappers = new List<ApprovalStepWrapper>();
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    public string mainId { get; set; } = "";
+    public string deleteId { get; set; } = "";
+    public string idChiNhanh { get; set; }
+    public string tenChiNhanh { get; set; }
+    public DateTime createAt { get; set; }
+    private ApplicationUser user;
 
     private void AddRow()
     {
         // Lấy giá trị đã chọn của dòng đầu tiên để gán cho các dòng tiếp theo
-        var companyId = "";
-        var screenId = "";
-        var deptId = "";
-        var operation = 0;
+
+        if (mainId == "")
+        {
+            mainId = Guid.NewGuid().ToString();
+        }
         if (approvalRowWrappers.Count > 0)
         {
             var firstRow = approvalRowWrappers.First().ApprovalRow;
             companyId = firstRow.CompanyId;
-            screenId = firstRow.ScreenId;
-            deptId = firstRow.DeptId;
-            operation = firstRow.OperationType;
-
+            parentmajorId = firstRow.ParentMajorId;
+            majorId = firstRow.MajorId;
+            deptOrder = firstRow.DeptOrder;
+            permissionId = firstRow.PermissionId;
+            createAt = DateTime.Now;
         }
         var newRow = new ApprovalStepSetting
             {
                 Id = Guid.NewGuid().ToString(),
+                IdMain = mainId,
+                GroupId = groupId,
                 CompanyId = companyId == "" ? "" : companyId,
-                ScreenId = screenId == "" ? "" : screenId,
-                DeptId = deptId == "" ? "" : deptId,
-                OperationType = operation == 0 ? 0 : operation,
-                MajorId = majorId,
-                CreateAt = DateTime.Now,
-                CreateBy = loginUser.UserName,
-                IsActive = 1,
+                ParentMajorId = parentmajorId,
+                MajorId = majorId == "" ? "" : majorId,
+                DeptId = deptId,
+                DeptOrder = deptOrder,
+                PermissionId = permissionId,
+                CreateAt = createAt,
+                CreateBy = user.Email,
+                IsActive = 3,
                 ApprovalStep = approvalRowWrappers.Count + 1
             };
         approvalRowWrappers.Add(new ApprovalStepWrapper(newRow));
@@ -264,112 +287,6 @@
         StateHasChanged();
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        var isValid = await LoginService.CheckLogin();
-        if (!isValid)
-        {
-            navigation.NavigateTo("/Account/Login", forceLoad: true);
-        }
-
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var userName = authState.User.Identity.Name;
-        loginUser = await UserManager.FindByNameAsync(userName);
-        parentMajor = await MajorService.GetById(majorId);
-
-        // Check quyền xem màn hình
-        // var permission = await MajorUserPermissionService.CheckPermission("ff9590bc-7b3b-4f9b-a7fd-913c248beadf", "7d3ea4cc-b3dc-4adc-8411-a7f033935284", Constant.VIEW);
-
-        // if (!permission)
-        // {
-        //     permissionErrorModal.Title = "Lỗi!";
-        //     permissionErrorModal.message = "Bạn không có quyền truy cập nội dung này!";
-        //     permissionErrorModal.openModal();
-        //     return;
-        // }
-
-        if (parentMajor != null)
-        {
-            approvalDeptSetting.MajorId = parentMajor.Id;
-        }
-        listMajor = await MajorService.GetMajorByParentId(majorId);
-        listCompanies = await CompanyService.GetAllCompanies();
-        baseTime = DateTime.Now;
-    }
-
-    private async Task OnChangeCompany(ApprovalStepWrapper approvalRow, string value)
-    {
-        // Kiểm tra chi nhánh phải trùng nhau từ dòng thứ 2
-        if (approvalRowWrappers.Count > 1 && approvalRow.ApprovalRow.ApprovalStep != 1)
-        {
-            var companyId = approvalRowWrappers.First().ApprovalRow.CompanyId;
-            if (companyId != value)
-            {
-                errorModal.Title = "Lỗi";
-                errorModal.message = "Chi nhánh giữa các dòng phải giống nhau!";
-                errorModal.openModal();
-                return;
-            }
-        }
-        approvalRow.ApprovalRow.CompanyId = value;
-        listDept = await DepartmentService.GetDepartmentsByCompany(value);
-        await LoadSetData();
-    }
-
-    private async Task OnChangeScreenId(ApprovalStepWrapper approvalRow, string value)
-    {
-        // Kiểm tra phân loại nghiệp vụ phải trùng nhau từ dòng thứ 2
-        if (approvalRowWrappers.Count > 1 && approvalRow.ApprovalRow.ApprovalStep != 1)
-        {
-            var screenId = approvalRowWrappers.First().ApprovalRow.ScreenId;
-            if (screenId != value)
-            {
-                errorModal.Title = "Lỗi";
-                errorModal.message = "Phân loại nghiệp vụ giữa các dòng phải giống nhau!";
-                errorModal.openModal();
-                return;
-            }
-        }
-        approvalRow.ApprovalRow.ScreenId = value;
-        await LoadSetData();
-    }
-
-    private async Task OnChangeDepartment(ApprovalStepWrapper approvalRow, string value)
-    {
-        // Kiểm tra phòng ban phải trùng nhau từ dòng thứ 2
-        if (approvalRowWrappers.Count > 1 && approvalRow.ApprovalRow.ApprovalStep != 1)
-        {
-            var deptId = approvalRowWrappers.First().ApprovalRow.DeptId;
-            if (deptId != value)
-            {
-                errorModal.Title = "Lỗi";
-                errorModal.message = "Phòng ban giữa các dòng phải giống nhau!";
-                errorModal.openModal();
-                return;
-            }
-        }
-        approvalRow.ApprovalRow.DeptId = value;
-        await LoadSetData();
-    }
-
-    private async Task OnChangeOperation(ApprovalStepWrapper approvalRow, int value)
-    {
-        // Kiểm tra thao tác phải trùng nhau từ dòng thứ 2
-        if (approvalRowWrappers.Count > 1 && approvalRow.ApprovalRow.ApprovalStep != 1)
-        {
-            var operation = approvalRowWrappers.First().ApprovalRow.OperationType;
-            if (operation != value)
-            {
-                errorModal.Title = "Lỗi";
-                errorModal.message = "Thao tác giữa các dòng phải giống nhau!";
-                errorModal.openModal();
-                return;
-            }
-        }
-        approvalRow.ApprovalRow.OperationType = value;
-        await LoadSetData();
-    }
-
     private async Task OnInputContent(ApprovalStepWrapper approvalStep, ChangeEventArgs e)
     {
         approvalStep.ApprovalRow.Content = e.Value.ToString();
@@ -379,15 +296,309 @@
             approvalStep.isDuplicate = approvalRowWrappers.Select(wrapper => wrapper.ApprovalRow.Content).Distinct().Count() == approvalRowWrappers.Count;
         }
         StateHasChanged();
+    }
+    private async Task OnChangeOperation(ApprovalStepWrapper approvalRow, string value)
+    {
+        // Kiểm tra thao tác phải trùng nhau từ dòng thứ 2
+        if (approvalRowWrappers.Count > 1)
+        {
+            var sl = (from p in approvalRowWrappers
+                      where p.ApprovalRow.PermissionId != value
+                      select p).Count();
+            if (sl > 0)
+            {
+                foreach (var item in approvalRowWrappers)
+                {
+                    item.ApprovalRow.PermissionId = value;
+                }
+            }
+            else
+            {
+                approvalRow.ApprovalRow.PermissionId = value;
+            }
+        }
+        else
+        {
+            approvalRow.ApprovalRow.PermissionId = value;
+        }
+        permissionId = value;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        var isValid = await LoginService.CheckLogin();
+        if (!isValid)
+        {
+            navigation.NavigateTo("/Account/Login", forceLoad: true);
+        }
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            userName = authState.User.Identity.Name;
+            user = ApplicationUserService.GetByUserName(userName);
+            userId = user.Id;
+            groupId = user.GroupId;
+
+            if (user.CreateBy == "symtem")
+            {
+                userId = user.Id;
+                groupId = user.GroupId;
+
+                // listParentMajor = await MajorService.GetParentMajor();
+
+                // if (parentMajor != null)
+                // {
+                //     approvalStepSetting.MajorId = parentMajor.Id;
+                // }
+
+                // listMajor = await MajorService.GetMajorByParentId(parentmajorId);
+                lisChiNhanhs = await ChiNhanhService.GetAll(groupId);
+                baseTime = DateTime.Now;
+                await LoadSetData();
+            }
+            else
+            {
+                navigation.NavigateTo("/");
+            }
+        }
+    }
+
+    private async Task OnChangeCompany(ApprovalStepWrapper approvalRow, string value)
+    {
+        // Kiểm tra chi nhánh phải trùng nhau từ dòng thứ 2
+        if (approvalRowWrappers.Count > 1)
+        {
+            var sl = (from p in approvalRowWrappers
+                      where p.ApprovalRow.CompanyId != value
+                      select p).Count();
+            if (sl > 0)
+            {
+                foreach (var item in approvalRowWrappers)
+                {
+                    item.ApprovalRow.CompanyId = value;
+                }
+            }
+            else
+            {
+                approvalRow.ApprovalRow.CompanyId = value;
+            }
+        }
+        else
+        {
+            approvalRow.ApprovalRow.CompanyId = value;
+        }
+        companyId = value;
+        listParentMajor = await ApprovalStepSettingService.LoadParentMajors(companyId);
+    }
+
+    private async Task OnChangeParentMajorId(ApprovalStepWrapper approvalRow, string value)
+    {
+        if (approvalRowWrappers.Count() > 0)
+        {
+            foreach (var item in approvalRowWrappers)
+            {
+                item.ApprovalRow.ParentMajorId = value;
+                item.ApprovalRow.MajorId = "";
+            }
+        }
+        else
+        {
+            approvalRow.ApprovalRow.ParentMajorId = value;
+        }
+        parentmajorId = value;
+        listMajor = await ApprovalStepSettingService.LoadMajors(companyId, parentmajorId);
+    }
+
+    private async Task OnChangeMajorId(ApprovalStepWrapper approvalRow, string value)
+    {
+        // Kiểm tra phân loại nghiệp vụ phải trùng nhau từ dòng thứ 2
+        if (approvalRowWrappers.Count > 1)
+        {
+            var sl = (from p in approvalRowWrappers
+                      where p.ApprovalRow.MajorId != value
+                      select p).Count();
+            if (sl > 0)
+            {
+                foreach (var item in approvalRowWrappers)
+                {
+                    item.ApprovalRow.MajorId = value;
+                }
+            }
+            else
+            {
+                approvalRow.ApprovalRow.MajorId = value;
+            }
+        }
+        else
+        {
+            approvalRow.ApprovalRow.MajorId = value;
+        }
+        majorId = value;
+        listStep = await ApprovalStepSettingService.LoadDepartments(companyId, parentmajorId, majorId);
+        listPermissions = await PermissionService.LoadToApproval(majorId);
+    }
+
+    private void OnChangeDepartment(ApprovalStepWrapper approvalRow, string value)
+    {
+        var approvalDept = ApprovalStepSettingService.GetIdApprodeptSetting(companyId, majorId, value);
+        if (approvalDept != null)
+        {
+            deptOrder = approvalDept.ApprovalStep;
+        }
+        if (approvalRowWrappers.Count > 1)
+        {
+            var sl = (from p in approvalRowWrappers
+                      where p.ApprovalRow.DeptId != value
+                      select p).Count();
+            if (sl > 0)
+            {
+                foreach (var item in approvalRowWrappers)
+                {
+                    item.ApprovalRow.DeptId = value;
+                    item.ApprovalRow.DeptOrder = deptOrder;
+                }
+            }
+            else
+            {
+                approvalRow.ApprovalRow.DeptId = value;
+                approvalRow.ApprovalRow.DeptOrder = deptOrder;
+            }
+        }
+        else
+        {
+            approvalRow.ApprovalRow.DeptId = value;
+            approvalRow.ApprovalRow.DeptOrder = deptOrder;
+        }
+        deptId = value;
 
     }
 
     private async Task HandleSubmit(EditContext context)
     {
 
-
     }
 
+    private async Task HandleEdit(string id)
+    {
+        try
+        {
+            createAt = DateTime.Now;
+            // Lấy giá trị đã chọn của dòng đầu tiên để gán cho các dòng tiếp theo
+            var query = await ApprovalStepSettingService.GetByMainId(id);
+            approvalRowWrappers = new List<ApprovalStepWrapper>();
+
+            foreach (var item in query)
+            {
+                companyId = item.CompanyId;
+                parentmajorId = item.ParentMajorId;
+                majorId = item.MajorId;
+                deptId = item.DeptId;
+                deptOrder = item.DeptOrder;
+                permissionId = item.PermissionId;
+
+                listParentMajor = await ApprovalStepSettingService.LoadParentMajors(companyId);
+                listMajor = await ApprovalStepSettingService.LoadMajors(companyId, parentmajorId);
+                listStep = await ApprovalStepSettingService.LoadDepartments(companyId, parentmajorId, majorId);
+                listPermissions = await PermissionService.LoadToApproval(majorId);
+                var newRow = new ApprovalStepSetting
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        IdMain = item.IdMain,
+                        CompanyId = item.CompanyId,
+                        DeptId = item.DeptId,
+                        DeptOrder = item.DeptOrder,
+                        ParentMajorId = item.ParentMajorId,
+                        MajorId = item.MajorId,
+                        PermissionId = item.PermissionId,
+                        Content = item.Content,
+                        ApprovalStep = item.ApprovalStep,
+                        GroupId = item.GroupId,
+                        Ordinarily = item.Ordinarily,
+                        CreateAt = createAt,
+                        CreateBy = item.CreateBy,
+                        IsActive = item.IsActive,
+                        ApprovalUserId = item.ApprovalUserId,
+                        DateApproval = item.DateApproval,
+                        DepartmentId = item.DepartmentId,
+                        DepartmentOrder = item.DepartmentOrder,
+                        ApprovalOrder = item.ApprovalOrder,
+                        ApprovalId = item.ApprovalId,
+                        LastApprovalId = item.LastApprovalId,
+                        IsStatus = item.IsStatus
+                    };
+                approvalRowWrappers.Add(new ApprovalStepWrapper(newRow));
+                StateHasChanged();
+            }
+
+            mainId = id;
+            loai = true;
+        }
+        catch (Exception ex)
+        {
+            // ToastService.ShowToast(
+            // "Thông báo",
+            // ex.Message,
+            // cssClass: "toast-danger",
+            // iconClass: "fa fa-exclamation-circle",
+            // progressBarClass: "bg-info",
+            // duration: 7000
+            // );
+        }
+    }
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        var checkchoduyet = await ApprovalStepSettingService.CheckChoDuyet(id);
+        if (checkchoduyet.Count > 0)
+        {
+            errorModal.Title = "Lỗi!";
+            errorModal.message = "Nghiệp vụ đang chờ duyệt, không thể xóa!";
+            errorModal.openModal();
+        }
+        else
+        {
+            deleteId = id;
+            confirmDeleteModal.Title = "Xác nhận xóa";
+            confirmDeleteModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+            confirmDeleteModal.openModal();
+        }
+    }
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        try
+        {
+            if (confirmed)
+            {
+                if (!string.IsNullOrEmpty(deleteId))
+                {
+                    var query = ApprovalStepSettingService.GetByMainId(deleteId);
+
+                    var choduyet = await ApprovalStepSettingService.CheckChoDuyet(deleteId);
+                    if (choduyet.Count == 0)
+                    {
+                        var isValid = await ApprovalStepSettingService.DeleteApprovalStepSetting(deleteId);
+                        if (isValid)
+                        {
+                            successModal.Title = "Xóa thành công!";
+                            successModal.message = "Đã xóa cài đặt duyệt phòng ban!";
+                            successModal.openModal();
+                        }
+                    }
+                    else
+                    {
+                        errorModal.Title = "Lỗi!";
+                        errorModal.message = "Bạn không thể xóa bản ghi khi nghiệp vụ đang chờ duyệt!";
+                        errorModal.openModal();
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            errorModal.Title = "Lỗi";
+            errorModal.message = ex.Message;
+            errorModal.openModal();
+        }
+    }
     private async Task SubmitAll()
     {
         // Kiểm tra trạng thái tài khoản
@@ -416,10 +627,6 @@
             {
                 return;
             }
-            if (!wrapper.isDuplicate)
-            {
-                return;
-            }
         }
 
         bool allSameCompanyId = approvalRowWrappers.All(wrapper => wrapper.ApprovalRow.CompanyId == approvalRowWrappers.First().ApprovalRow.CompanyId);
@@ -431,7 +638,7 @@
             return;
         }
 
-        bool allSameScreenId = approvalRowWrappers.All(wrapper => wrapper.ApprovalRow.ScreenId == approvalRowWrappers.First().ApprovalRow.ScreenId);
+        bool allSameScreenId = approvalRowWrappers.All(wrapper => wrapper.ApprovalRow.MajorId == approvalRowWrappers.First().ApprovalRow.MajorId);
         if (!allSameScreenId)
         {
             errorModal.Title = "Lỗi";
@@ -440,17 +647,45 @@
             return;
         }
 
-        bool allSameDept = approvalRowWrappers.All(wrapper => wrapper.ApprovalRow.DeptId == approvalRowWrappers.First().ApprovalRow.DeptId);
-        if (!allSameDept)
+        bool allUniqueDept = approvalRowWrappers.All(wrapper => wrapper.ApprovalRow.DeptId == approvalRowWrappers.First().ApprovalRow.DeptId);
+        if (!allUniqueDept)
         {
             errorModal.Title = "Lỗi";
             errorModal.message = "Phòng ban giữa các dòng phải giống nhau!";
             errorModal.openModal();
             return;
         }
-
-        // Kiểm tra xem có yêu cầu phê duyệt nào đang chờ duyệt không
-        // To do
+        bool allUniquePer = approvalRowWrappers.All(wrapper => wrapper.ApprovalRow.PermissionId == approvalRowWrappers.First().ApprovalRow.PermissionId);
+        if (!allUniquePer)
+        {
+            errorModal.Title = "Lỗi";
+            errorModal.message = "Loại thao tác giữa các dòng phải giống nhau!";
+            errorModal.openModal();
+            return;
+        }
+        if (loai == true)
+        {
+            var checkchoduyet = await ApprovalStepSettingService.CheckChoDuyet(mainId);
+            if (checkchoduyet.Count > 0)
+            {
+                errorModal.Title = "Lỗi";
+                errorModal.message = "Nghiệp vụ đang chờ duyệt không thể sửa!";
+                errorModal.openModal();
+                return;
+            }
+        }
+        try
+        {
+            bool checktrung = await ApprovalStepSettingService.CheckSave(companyId, majorId, deptId, permissionId, mainId, loai);
+        }
+        catch (Exception ex)
+        {
+            errorModal.Title = "Lỗi";
+            errorModal.message = ex.Message;
+            errorModal.openModal();
+            return;
+            throw;
+        }
 
         // Hiển thị modal xác nhận đăng ký
         confirmModal.openModal();
@@ -461,9 +696,16 @@
         navigation.NavigateTo("#");
     }
 
-    private void GoToStepSetting()
+    private void Cancel()
     {
-        navigation.NavigateTo($"/createLuotDuyet/{majorId}");
+        loai = false;
+        mainId = "";
+        companyId = "";
+        parentmajorId = "";
+        majorId = "";
+        deptId = "";
+        permissionId = "";
+        approvalRowWrappers = new List<ApprovalStepWrapper>();
     }
 
     private void Redirect()
@@ -482,16 +724,11 @@
 
                 if (result)
                 {
+                    loai = false;
                     successModal.Title = "Thành công!";
-                    successModal.message = "Cài đặt số lượt duyệt thành công!";
+                    successModal.message = "Cài đặt phòng ban duyệt thành công!";
                     successModal.openModal();
                 }
-            }
-            else
-            {
-                errorModal.Title = "Lỗi";
-                errorModal.message = "Cài đặt số lượt duyệt thất bại!";
-                errorModal.openModal();
             }
         }
         catch (Exception ex)
@@ -505,15 +742,10 @@
 
     private async Task LoadSetData()
     {
-        var companyId = approvalRowWrappers.First().ApprovalRow.CompanyId;
-        var majorId = approvalRowWrappers.First().ApprovalRow.MajorId;
-        var deptId = approvalRowWrappers.First().ApprovalRow.DeptId;
-        var operation = approvalRowWrappers.First().ApprovalRow.OperationType;
-        var screenId = approvalRowWrappers.First().ApprovalRow.ScreenId;
+        // var companyId = approvalRowWrappers.First().ApprovalRow.CompanyId;
+        // var parentscreenId = approvalRowWrappers.First().ApprovalRow.ParentMajorId;
+        // var majorId = approvalRowWrappers.First().ApprovalRow.MajorId;
 
-        listSetApprovalStep = await ApprovalStepSettingService.GetSetApprovalStep(companyId, majorId, deptId, operation, screenId);
+        listSetApprovalStep = await ApprovalStepSettingService.GetData(groupId);
     }
-
-
-
 }

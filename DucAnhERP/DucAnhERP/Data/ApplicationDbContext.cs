@@ -21,27 +21,40 @@ namespace DucAnhERP.Data
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
-        public DbSet<MPermission> MPermissions { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
 
-        public DbSet<MMajor> MMajors { get; set; }
-
-        public DbSet<MMajorUserPermission> MMajorUserPermissions { get; set; }
-        public DbSet<MMajorUserPermissionDetail> MMajorUserPermissionDetails { get; set; }
-
-        public DbSet<MPermissionControl> MPermissionControls { get; set; }
-
+        public DbSet<Major> Majors { get; set; }
+        public DbSet<MajorUserPermission> MajorUserPermissions { get; set; }
+        public DbSet<MajorUserPermission_Log> MajorUserPermission_Logs { get; set; }
+        public DbSet<PermissionControl> PermissionControls { get; set; }
+        public DbSet<PermissionControl_Log> PermissionControl_Logs { get; set; }
         public DbSet<MCompany> MCompanies { get; set; }
-
-        public DbSet<Department> MDepartments { get; set; }
-
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Department_Log> Department_Logs { get; set; }
         public DbSet<EmailHistory> EmailHistories { get; set; }
-
         public DbSet<UserSession> UserSessions { get; set; }
 
         public DbSet<ApprovalRequest> ApprovalRequests { get; set; }
         public DbSet<ApprovalDeptSetting> ApprovalDeptSettings { get; set; }
         public DbSet<ApprovalStepSetting> ApprovalStepSettings { get; set; }
         public DbSet<ApprovalStaffSetting> ApprovalStaffSettings { get; set; }
+
+        public DbSet<ChiNhanh> ChiNhanhs { get; set; }
+        public DbSet<ChiNhanh_Log> ChiNhanh_Logs { get; set; }
+        public DbSet<ApprovalControl> ApprovalControls { get; set; }
+        public DbSet<CompanyType> CompanyTypes { get; set; }
+        public DbSet<MajorUserApprovalDetail> MajorUserApprovalDetails { get; set; }
+        public DbSet<Tinh> Tinhs { get; set; }
+        public DbSet<Huyen> Huyens { get; set; }
+        public DbSet<Huyen_Log> Huyen_Logs { get; set; }
+        public DbSet<Xa> Xas { get; set; }
+        public DbSet<KhuHanhChinh> KhuHanhChinhs { get; set; }
+        public DbSet<QD_BoiThuong_Goc> QD_BoiThuong_Gocs { get; set; }
+        public DbSet<QD_BoiThuong_Goc_Log> QD_BoiThuong_Goc_Logs { get; set; }
+        public DbSet<QD_ThuHoiDat_Goc> QD_ThuHoiDat_Gocs { get; set; }
+        public DbSet<QD_ThuHoiDat_Goc_Log> QD_ThuHoiDat_Goc_Logs { get; set; }
+
+
         public DbSet<NhomDanhMuc> DSNhomDanhMuc { get; set; }
         public DbSet<DanhMuc1> DSDanhMuc { get; set; }
         public DbSet<MHopRanhThang> DSHopRanhThang { get; set; }
@@ -107,7 +120,7 @@ namespace DucAnhERP.Data
                 entity.Property(e => e.Receiver)
                     .IsRequired()
                     .IsUnicode(false);
-                entity.Property(e => e.ScreenId)
+                entity.Property(e => e.MajorId)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);

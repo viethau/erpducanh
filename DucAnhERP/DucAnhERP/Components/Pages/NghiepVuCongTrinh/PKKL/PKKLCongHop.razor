@@ -362,6 +362,8 @@
 
 
 @code {
+    string groupId = "";
+    string userId = "";
     private bool isLoadingCaculate = false;
     private bool isLoading = false;
     private bool isModalVisible = false;
@@ -691,7 +693,7 @@
                         bool isValid = await PKKLCHopRepository.CheckExclusive(idss, baseTime);
                         if (isValid)
                         {
-                            await PKKLCHopRepository.Update(Input);
+                            await PKKLCHopRepository.Update(Input,userId);
                             isModalVisible = false;
                             Input = new PKKLCHop();
                             isEdit = false;
@@ -708,7 +710,7 @@
                     }
                     else if (listExist.Count > 0 && listExist[0].Id == Input.Id)
                     {
-                        await PKKLCHopRepository.Update(Input);
+                        await PKKLCHopRepository.Update(Input, userId);
                         isModalVisible = false;
                         Input = new PKKLCHop();
                         isEdit = false;
@@ -758,7 +760,7 @@
                         else
                         {
                             // Thêm mới thông tin
-                            await PKKLCHopRepository.Insert(Input);
+                            await PKKLCHopRepository.Insert(Input, userId);
                             // isModalVisible = false;
                             // Input = new PKKLCHop();
                             Input.Id = Guid.NewGuid().ToString();
@@ -819,7 +821,7 @@
                     if (result)
                     {
                         // Thực hiện hành động xóa
-                        await PKKLCHopRepository.DeleteById(deleteId);
+                        await PKKLCHopRepository.DeleteById(deleteId, userId);
                         ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                         await LoadData();
                     }

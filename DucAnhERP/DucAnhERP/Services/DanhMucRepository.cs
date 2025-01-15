@@ -15,7 +15,11 @@ namespace DucAnhERP.Services
         {
             _context = context;
         }
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
 
+        }
         public async Task<List<DanhMucModel>> GetAllDM(DanhMucModel dm)
         {
             using var context = _context.CreateDbContext();
@@ -44,7 +48,6 @@ namespace DucAnhERP.Services
                 .ToListAsync();
             return data;
         }
-
         public async Task<List<DanhMuc1>> GetDMByIdNhomDanhMuc(string idNhomDanhMuc)
         {
             using var context = _context.CreateDbContext();
@@ -61,7 +64,6 @@ namespace DucAnhERP.Services
             var data = await query.ToListAsync();
             return data;
         }
-
         public async Task<List<DanhMuc1>> GetDMisExist(string idNhomDanhMuc ,string Ten)
         {
             using var context = _context.CreateDbContext();
@@ -114,7 +116,6 @@ namespace DucAnhERP.Services
              isSuccess = data.Any();
             return (isSuccess);
         }
-
         public async Task<string> GetIdDMByTen(string Ten , string? IdNhomDanhMuc)
         {
             using var context = _context.CreateDbContext();
@@ -142,8 +143,7 @@ namespace DucAnhERP.Services
           
             
         }
-
-         public async Task<bool> CheckUsingId(string id)
+        public async Task<bool> CheckUsingId(string id)
         {
             bool isSuccess = false;
             using var context = _context.CreateDbContext();
@@ -161,7 +161,6 @@ namespace DucAnhERP.Services
             isSuccess = data.Any();
             return (isSuccess);
         }
-
         public async Task<bool> CheckExistId(string id)
         {
             bool isSuccess = false;
@@ -175,9 +174,7 @@ namespace DucAnhERP.Services
             isSuccess = data.Any();
             return (isSuccess);
         }
-        
-
-        public async Task<List<DanhMuc1>> GetAll()
+        public async Task<List<DanhMuc1>> GetAll(string groupId)
         {
             try
             {
@@ -192,8 +189,7 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-
-        public async Task Update(DanhMuc1 danhmuc)
+        public async Task Update(DanhMuc1 danhmuc, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(danhmuc.Id);
@@ -206,7 +202,6 @@ namespace DucAnhERP.Services
             context.DSDanhMuc.Update(danhmuc);
             await context.SaveChangesAsync();
         }
-
         public async Task UpdateMulti(DanhMuc1[] danhmuc)
         {
             using var context = _context.CreateDbContext();
@@ -218,8 +213,7 @@ namespace DucAnhERP.Services
             }
             await context.SaveChangesAsync();
         }
-
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             try
             {
@@ -240,7 +234,6 @@ namespace DucAnhERP.Services
                 throw;
             }
         }
-
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
         {
             foreach (var id in ids)
@@ -253,7 +246,6 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-
         public async Task<DanhMuc1> GetById(string id)
         {
             using var context = _context.CreateDbContext();
@@ -266,8 +258,7 @@ namespace DucAnhERP.Services
 
             return entity;
         }
-
-        public async Task Insert(DanhMuc1 entity)
+        public async Task Insert(DanhMuc1 entity, string userId)
         {
             try
             {

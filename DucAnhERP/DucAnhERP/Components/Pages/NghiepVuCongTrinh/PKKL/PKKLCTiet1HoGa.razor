@@ -707,6 +707,8 @@
 
 
 @code {
+    string groupId = "";
+    string userId = "";
     List<DanhMuc1> listDanhMuc = new();
     private bool isLoadingCaculate = false;
     private bool isLoading = false;
@@ -1449,7 +1451,7 @@
             await LoadDataPLHG();
             PhanLoaiHoGaModel plhg = new();
             listPLHGModelS = await PhanLoaiHoGaRepository.GetBaoCaoKTHHHGa(plhg);
-            listDanhMuc = await DanhMucRepository.GetAll();
+            listDanhMuc = await DanhMucRepository.GetAll(groupId);
 
 
             foreach (var item in listPLHGModelS)
@@ -1596,7 +1598,7 @@
                         bool isValid = await PKKLCTietHoGaRepository.CheckExclusive(idss, baseTime);
                         if (isValid)
                         {
-                            await PKKLCTietHoGaRepository.Update(Input);
+                            await PKKLCTietHoGaRepository.Update(Input,userId);
                             isModalVisible = false;
                             Input = new PKKLCTietHoGa();
                             isEdit = false;
@@ -1613,7 +1615,7 @@
                     }
                     else if (listExist.Count > 0 && listExist[0].Id == Input.Id)
                     {
-                        await PKKLCTietHoGaRepository.Update(Input);
+                        await PKKLCTietHoGaRepository.Update(Input, userId);
                         isModalVisible = false;
                         Input = new PKKLCTietHoGa();
                         isEdit = false;
@@ -1664,7 +1666,7 @@
                         else
                         {
                             // Thêm mới thông tin
-                            await PKKLCTietHoGaRepository.Insert(Input);
+                            await PKKLCTietHoGaRepository.Insert(Input, userId);
                             //isModalVisible = false;
                             //Input = new PKKLCTietHoGa();
 
@@ -1725,7 +1727,7 @@
                     if (result)
                     {
                         // Thực hiện hành động xóa
-                        await PKKLCTietHoGaRepository.DeleteById(deleteId);
+                        await PKKLCTietHoGaRepository.DeleteById(deleteId,userId);
                         ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                         await LoadData();
                     }

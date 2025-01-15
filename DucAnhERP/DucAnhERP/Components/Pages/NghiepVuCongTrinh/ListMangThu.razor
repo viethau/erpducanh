@@ -4337,6 +4337,8 @@
     //modal
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới thông tin";
+    string groupId = "";
+    string userId = "";
 
     public List<MangThuModel> listMangThuModel
     {
@@ -4374,7 +4376,7 @@
     private async Task LoadData()
     {
         isLoading = true;
-        listDanhMuc = await DanhMucRepository.GetAll();
+        listDanhMuc = await DanhMucRepository.GetAll(groupId);
 
         var mangThuRepository = await MangThuRepository.GetAllByVM();
         List<MangThuModel> mangThus ;

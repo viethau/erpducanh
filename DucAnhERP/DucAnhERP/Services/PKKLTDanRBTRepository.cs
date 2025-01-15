@@ -14,7 +14,11 @@ namespace DucAnhERP.Services
         {
             _context = context;
         }
-        public async Task<List<PKKLTDanRBT>> GetAll()
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
+        public async Task<List<PKKLTDanRBT>> GetAll(string groupId)
         {
             try
             {
@@ -426,7 +430,6 @@ namespace DucAnhERP.Services
 
             return result;
         }
-
         public async Task<List<PKKLTDanRBT>> GetExist(PKKLTDanRBT searchData)
         {
             try
@@ -471,7 +474,7 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-        public async Task Update(PKKLTDanRBT TKThepDeCong)
+        public async Task Update(PKKLTDanRBT TKThepDeCong,string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(TKThepDeCong.Id);
@@ -485,7 +488,6 @@ namespace DucAnhERP.Services
             await SaveChanges(context);
 
         }
-
         public async Task UpdateMulti(PKKLTDanRBT[] PKKLTDanRBT)
         {
             try
@@ -516,8 +518,7 @@ namespace DucAnhERP.Services
                 throw;
             }
         }
-
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id,string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
@@ -542,7 +543,7 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-        public async Task Insert(PKKLTDanRBT entity)
+        public async Task Insert(PKKLTDanRBT entity, string userId)
         {
             try
             {

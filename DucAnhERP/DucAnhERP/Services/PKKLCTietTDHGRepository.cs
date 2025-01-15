@@ -10,12 +10,16 @@ namespace DucAnhERP.Services
     public class PKKLCTietTDHGRepository :IPKKLCTietTDHGRepository
     {
         private readonly IDbContextFactory<ApplicationDbContext> _context;
-
         public PKKLCTietTDHGRepository(IDbContextFactory<ApplicationDbContext> context)
         {
             _context = context;
         }
-        public async Task<List<PKKLCTietTDHG>> GetAll()
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
+
+        public async Task<List<PKKLCTietTDHG>> GetAll(string groupId)
         {
             try
             {
@@ -359,7 +363,7 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-        public async Task Update(PKKLCTietTDHG TKThepDeCong)
+        public async Task Update(PKKLCTietTDHG TKThepDeCong, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(TKThepDeCong.Id);
@@ -403,7 +407,7 @@ namespace DucAnhERP.Services
             }
         }
 
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
@@ -428,7 +432,7 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-        public async Task Insert(PKKLCTietTDHG entity)
+        public async Task Insert(PKKLCTietTDHG entity, string userId)
         {
             try
             {

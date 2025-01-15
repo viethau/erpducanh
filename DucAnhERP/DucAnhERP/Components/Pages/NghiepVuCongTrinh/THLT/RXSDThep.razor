@@ -22,7 +22,10 @@
             </button>
         </div>
     </div>
-    <h5 class="mt-2">BẢNG THỐNG KÊ RÃNH XÂY CÓ SỬ DỤNG THÉP</h5>
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mt-2">BẢNG THỐNG KÊ RÃNH XÂY CÓ SỬ DỤNG THÉP</h5>
+        <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
+    </div>
     <div id="tableContainer ">
         <div class="row mt-3 p-2 our-table">
             <table id="tb1" class="table table-bordered table-hover" cellpadding="1" cellspacing="2">
@@ -84,7 +87,8 @@
     private bool isEdit = false;
     private bool isLoading = false;
     private DateTime baseTime;
-
+    string groupId = "";
+    string userId = "";
     private string layoutClass = "d-flex justify-content-between";
     private string space = "ml-5";
     private string thumbtack = "";
@@ -112,7 +116,7 @@
     {
         isLoading = true;
         var helper = new DataConversionHelper();
-        listDanhMuc = await DanhMucRepository.GetAll();
+        listDanhMuc = await DanhMucRepository.GetAll(groupId);
         NuocMuaModel nuocMuaModelSearch = new();
 
         var nuocMuaRepository = await NuocMuaRepository.GetBaoCaoRXSDThep();
@@ -190,5 +194,26 @@
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
     }
+    private async Task ExportExcel()
+    {
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.36 R.Xây  có SD thép",
+                Tables = new List<TableInfo<object>>
+                {
+                     new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.RXSDT_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModel.Cast<object>().ToList()
+                    },
+                }
+            };
 
+        // Xuất Excel
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        var fileName = "RXaySDThep.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+    }
 }

@@ -95,7 +95,8 @@
     private bool isEdit = false;
     private bool isLoading = false;
     private DateTime baseTime;
-
+    string groupId = "";
+    string userId = "";
     private string layoutClass = "d-flex justify-content-between";
     private string space = "ml-5";
     private string thumbtack = "";
@@ -121,17 +122,24 @@
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
     {
-        isLoading = true;
-        var helper = new DataConversionHelper();
-        listDanhMuc = await DanhMucRepository.GetAll();
-        SLCKModel nuocMuaModelSearch = new();
+        try
+        {
+            isLoading = true;
+            var helper = new DataConversionHelper();
+            listDanhMuc = await DanhMucRepository.GetAll(groupId);
+            SLCKModel nuocMuaModelSearch = new();
 
-        var nuocMuaRepository = await NuocMuaRepository.GetBaoCaoSLCKCT("Cống hộp");
-        listModel = nuocMuaRepository;
-        listSLCKModel = PagingLeft(nuocMuaRepository);
+            var nuocMuaRepository = await NuocMuaRepository.GetBaoCaoSLCKCT("Cống hộp");
+            listModel = nuocMuaRepository;
+            listSLCKModel = PagingLeft(nuocMuaRepository);
 
-        isLoading = false;
-        baseTime = DateTime.Now;
+            isLoading = false;
+            baseTime = DateTime.Now;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Lỗi tải dữ liệu {ex.Message}");
+        }
     }
 
     public string GetTenDanhMucById(string id)

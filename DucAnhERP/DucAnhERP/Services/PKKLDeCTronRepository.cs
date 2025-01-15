@@ -10,12 +10,15 @@ namespace DucAnhERP.Services
     public class PKKLDeCTronRepository : IPKKLDeCTronRepository
     {
         private readonly IDbContextFactory<ApplicationDbContext> _context;
-
         public PKKLDeCTronRepository(IDbContextFactory<ApplicationDbContext> context)
         {
             _context = context;
         }
-        public async Task<List<PKKLDeCTron>> GetAll()
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
+        public async Task<List<PKKLDeCTron>> GetAll(string groupId)
         {
             try
             {
@@ -304,7 +307,6 @@ namespace DucAnhERP.Services
 
             return result;
         }
-
         public async Task<double> GetSumTKLCK_SauCCByLCK(string id)
         {
             using var context = _context.CreateDbContext();
@@ -316,7 +318,6 @@ namespace DucAnhERP.Services
 
             return result;
         }
-
         public async Task<List<PKKLDeCTron>> GetExist(PKKLDeCTron searchData)
         {
             try
@@ -361,7 +362,7 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-        public async Task Update(PKKLDeCTron TKThepDeCong)
+        public async Task Update(PKKLDeCTron TKThepDeCong, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(TKThepDeCong.Id);
@@ -406,7 +407,7 @@ namespace DucAnhERP.Services
                 throw;
             }
         }
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
@@ -431,7 +432,7 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-        public async Task Insert(PKKLDeCTron entity)
+        public async Task Insert(PKKLDeCTron entity, string userId)
         {
             try
             {
@@ -520,7 +521,6 @@ namespace DucAnhERP.Services
                 return id;
             }
         }
-
 
         //cập nhật lại số liệu
         public async Task SaveChanges(ApplicationDbContext context)

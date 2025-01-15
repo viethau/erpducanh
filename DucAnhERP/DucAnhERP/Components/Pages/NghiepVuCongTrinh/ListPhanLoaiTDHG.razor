@@ -184,6 +184,8 @@
 </div>
 
 @code {
+    string groupId = "";
+    string userId = "";
     private List<PhanLoaiTDHoGa> listPhanLoaiTDHoGa = new List<PhanLoaiTDHoGa>();
     private PhanLoaiTDHoGa Input = new();
     private PhanLoaiTDHoGaModel InputMD = new();
@@ -287,7 +289,7 @@
     {
         isLoading = true;
         dmModel = new();
-        listDanhMuc = await DanhMucRepository.GetAll();
+        listDanhMuc = await DanhMucRepository.GetAll(groupId);
         var plhg = await PhanLoaiTDHoGaRepository.GetAllByVM(InputMD);
         listModel = plhg;
         listPLTDHoGaModel = Paging(plhg);
@@ -316,7 +318,7 @@
                     if (isValid)
                     {
                         // cập nhật
-                        await PhanLoaiTDHoGaRepository.Update(Input);
+                        await PhanLoaiTDHoGaRepository.Update(Input,userId);
                         isModalVisible = false;
                         Input = new PhanLoaiTDHoGa();
                         isEdit = false;
@@ -340,7 +342,7 @@
                     if (isValid)
                     {
                         // cập nhật
-                        await PhanLoaiTDHoGaRepository.Update(Input);
+                        await PhanLoaiTDHoGaRepository.Update(Input, userId);
                         isModalVisible = false;
                         Input = new PhanLoaiTDHoGa();
                         isEdit = false;
@@ -390,7 +392,7 @@
                 }
                 else
                 {
-                    await PhanLoaiTDHoGaRepository.Insert(Input);
+                    await PhanLoaiTDHoGaRepository.Insert(Input, userId);
                     isModalVisible = false;
                     Input = new PhanLoaiTDHoGa();
                     ToastService.ShowToast(
@@ -457,7 +459,7 @@
                 else
                 {
                     // Thực hiện hành động xóa
-                    await PhanLoaiTDHoGaRepository.DeleteById(deleteId);
+                    await PhanLoaiTDHoGaRepository.DeleteById(deleteId, userId);
                     ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                     await LoadData();
                 }

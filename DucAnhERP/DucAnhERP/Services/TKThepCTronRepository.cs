@@ -18,7 +18,12 @@ namespace DucAnhERP.Services
             _context = context;
             _pKKLCTronRepository = new PKKLCTronRepository(context);
         }
-        public async Task<List<TKThepCTron>> GetAll()
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
+
+        public async Task<List<TKThepCTron>> GetAll(string groupId)
         {
             try
             {
@@ -187,7 +192,7 @@ namespace DucAnhERP.Services
             }
 
         }
-        public async Task Update(TKThepCTron TKThepCTron)
+        public async Task Update(TKThepCTron TKThepCTron, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(TKThepCTron.Id);
@@ -238,8 +243,7 @@ namespace DucAnhERP.Services
             // Lưu thay đổi
             await SaveChanges(context);
         }
-
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             try
             {
@@ -275,7 +279,6 @@ namespace DucAnhERP.Services
             }
             
         }
-
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
         {
             foreach (var id in ids)
@@ -288,7 +291,7 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-        public async Task Insert(TKThepCTron entity)
+        public async Task Insert(TKThepCTron entity, string userId)
         {
             try
             {

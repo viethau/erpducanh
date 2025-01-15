@@ -17,7 +17,12 @@ namespace DucAnhERP.Services
             _context = context;
             _pKKLDeCTronRepository = new PKKLDeCTronRepository(context);
         }
-        public async Task<List<TKThepDCong>> GetAll()
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
+
+        public async Task<List<TKThepDCong>> GetAll(string groupId)
         {
             try
             {
@@ -185,7 +190,7 @@ namespace DucAnhERP.Services
             }
 
         }
-        public async Task Update(TKThepDCong TKThepDeCong)
+        public async Task Update(TKThepDCong TKThepDeCong, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(TKThepDeCong.Id);
@@ -235,8 +240,7 @@ namespace DucAnhERP.Services
 
             await SaveChanges(context);
         }
-
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
@@ -269,7 +273,7 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-        public async Task Insert(TKThepDCong entity)
+        public async Task Insert(TKThepDCong entity, string userId)
         {
             try
             {
@@ -360,7 +364,6 @@ namespace DucAnhERP.Services
                 return id;
             }
         }
-
         public async Task SaveChanges(ApplicationDbContext context)
         {
             try
@@ -476,7 +479,6 @@ namespace DucAnhERP.Services
                 }
             }
         }
-
         private async Task HandleEntityDelete(EntityEntry entityEntry)
         {
             var deletedEntity = entityEntry.Entity as TKThepDCong;

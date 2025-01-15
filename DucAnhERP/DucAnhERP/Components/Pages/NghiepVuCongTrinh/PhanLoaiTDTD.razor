@@ -211,6 +211,8 @@
 </div>
 
 @code {
+    string groupId = "";
+    string userId = "";
     private List<PhanLoaiTDanTDan> listPhanLoaiTDanTDan = new List<PhanLoaiTDanTDan>();
     private PhanLoaiTDanTDan Input = new();
     private PhanLoaiTDanTDanModel InputMD = new();
@@ -348,7 +350,7 @@
     {
         isLoading = true;
         dmModel = new();
-        listDanhMuc = await DanhMucRepository.GetAll();
+        listDanhMuc = await DanhMucRepository.GetAll(groupId);
         var plhg = await PhanLoaiTDanTDanRepository.GetAllByVM(InputMD);
         listModel = plhg;
         listPLTDTDModel = Paging(plhg);
@@ -378,7 +380,7 @@
                     if (isValid)
                     {
                         // cập nhật
-                        await PhanLoaiTDanTDanRepository.Update(Input);
+                        await PhanLoaiTDanTDanRepository.Update(Input,userId);
                         isModalVisible = false;
                         Input = new PhanLoaiTDanTDan();
                         isEdit = false;
@@ -401,7 +403,7 @@
                     if (isValid)
                     {
                         // cập nhật
-                        await PhanLoaiTDanTDanRepository.Update(Input);
+                        await PhanLoaiTDanTDanRepository.Update(Input, userId);
                         isModalVisible = false;
                         Input = new PhanLoaiTDanTDan();
                         isEdit = false;
@@ -451,7 +453,7 @@
                 {
 
                     // Thêm mới thông tin
-                    await PhanLoaiTDanTDanRepository.Insert(Input);
+                    await PhanLoaiTDanTDanRepository.Insert(Input, userId);
                     isModalVisible = false;
                     Input = new PhanLoaiTDanTDan();
                     ToastService.ShowToast(
@@ -517,7 +519,7 @@
                 else
                 {
                     // Thực hiện hành động xóa
-                    await PhanLoaiTDanTDanRepository.DeleteById(deleteId);
+                    await PhanLoaiTDanTDanRepository.DeleteById(deleteId, userId);
                     ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success",iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                     await LoadData();
                 }

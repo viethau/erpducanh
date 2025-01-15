@@ -15,7 +15,11 @@ namespace DucAnhERP.Services
             _context = context;
 
         }
-        public async Task<List<PKKLMongCHop>> GetAll()
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
+        public async Task<List<PKKLMongCHop>> GetAll(string groupId)
         {
             try
             {
@@ -318,7 +322,6 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-
         public async Task<List<PKKLMongCHop>> GetExist(PKKLMongCHop searchData)
         {
             try
@@ -363,7 +366,7 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-        public async Task Update(PKKLMongCHop TKThepDeCong)
+        public async Task Update(PKKLMongCHop TKThepDeCong,string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(TKThepDeCong.Id);
@@ -377,7 +380,6 @@ namespace DucAnhERP.Services
             await SaveChanges(context);
 
         }
-
         public async Task UpdateMulti(PKKLMongCHop[] PKKLMongCHop)
         {
             try
@@ -408,8 +410,7 @@ namespace DucAnhERP.Services
                 throw;
             }
         }
-
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
@@ -434,7 +435,7 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-        public async Task Insert(PKKLMongCHop entity)
+        public async Task Insert(PKKLMongCHop entity,string userId)
         {
             try
             {

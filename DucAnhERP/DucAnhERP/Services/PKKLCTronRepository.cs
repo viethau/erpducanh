@@ -17,7 +17,11 @@ namespace DucAnhERP.Services
         {
             _context = context;
         }
-        public async Task<List<PKKLCTron>> GetAll()
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
+        public async Task<List<PKKLCTron>> GetAll(string groupId)
         {
             try
             {
@@ -363,7 +367,7 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-        public async Task Update(PKKLCTron TKThepDeCong)
+        public async Task Update(PKKLCTron TKThepDeCong, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(TKThepDeCong.Id);
@@ -408,7 +412,7 @@ namespace DucAnhERP.Services
                 throw;
             }
         }
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
@@ -433,7 +437,7 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-        public async Task Insert(PKKLCTron entity)
+        public async Task Insert(PKKLCTron entity, string userId)
         {
             try
             {
@@ -713,8 +717,6 @@ namespace DucAnhERP.Services
                 await UpdateMulti(recordsToUpdate1.ToArray());
             }
         }
-
-
 
         private void UpdateRecordWithCalculations(PKKLCTron record, double tklckSauCc)
         {

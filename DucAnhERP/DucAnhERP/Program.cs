@@ -38,10 +38,8 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<ToastService>();
-builder.Services.AddSingleton<ExportExcelService>();
 builder.Services.AddScoped<IMajorRepository, MajorRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPermissionRepository, MPermissionRepository>();
 builder.Services.AddScoped<IPermissionControlRepository, PermissionControlRepository>();
 builder.Services.AddScoped<IMajorUserPermissionRepository, MajorUserPermissionRepository>();
@@ -54,11 +52,26 @@ builder.Services.AddScoped<IApprovalDeptSettingRepository, ApprovalDeptSettingRe
 builder.Services.AddScoped<IApprovalStepSettingRepository, ApprovalStepSettingRepository>();
 builder.Services.AddSingleton<UserState>();
 builder.Services.AddSingleton<ILoginService, LoginService>();
+builder.Services.AddSingleton<ExportExcelService>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+
+builder.Services.AddScoped<IPhanQuyenRepository, PhanQuyenRepository>();
+builder.Services.AddScoped<IChiNhanhRepository, ChiNhanhRepository>();
+
+builder.Services.AddScoped<ICompanyTypeRepository, CompanyTypeRepository>();
+builder.Services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+builder.Services.AddScoped<IApprovalControlRepository, ApprovalControlRepository>();
+builder.Services.AddScoped<ITinhRepository, TinhRepository>();
+builder.Services.AddScoped<IHuyenRepository, HuyenRepository>();
+builder.Services.AddScoped<IXaRepository, XaRepository>();
+builder.Services.AddScoped<IKhuHanhChinhRepository, KhuHanhChinhRepository>();
+builder.Services.AddScoped<IQD_BoiThuong_GocRepository, QD_BoiThuong_GocRepository>();
+builder.Services.AddScoped<IQD_ThuHoiDat_GocRepository, QD_ThuHoiDat_GocRepository>();
+
+builder.Services.AddScoped<IExcelRepository, ExcelRepository>();
 builder.Services.AddScoped<IDanhMucRepository, DanhMucRepository>();
 builder.Services.AddScoped<INhomDanhMucRepository, NhomNhomDanhMucRepository>();
 builder.Services.AddScoped<IHopRanhThangRepository, HopRanhThangRepository>();
-builder.Services.AddScoped<IExcelRepository, ExcelRepository>();
 builder.Services.AddScoped<INuocMuaRepository, NuocMuaRepository>();
 builder.Services.AddScoped<IPhanLoaiHoGaRepository, PhanLoaiHoGaRepository>();
 builder.Services.AddScoped<IPhanLoaiTDHoGaRepository, PhanLoaiTDHoGaRepository>();

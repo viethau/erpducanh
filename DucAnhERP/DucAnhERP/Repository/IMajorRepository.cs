@@ -3,16 +3,17 @@ using DucAnhERP.Models;
 
 namespace DucAnhERP.Repository
 {
-    public interface IMajorRepository : IBaseRepository<MMajor>
+    public interface IMajorRepository : IBaseRepository<Major>
     {
-        Task<List<MMajor>> GetAllParentMajor();
-        Task<List<MMajor>> GetAllChildMajor();
+        Task<List<Major>> GetAllParentMajor();
 
-        Task<MMajor> AddMajor(MMajor mMajor);
+        Task<Major> AddMajor(Major mMajor);
 
-        Task<MMajor> GetMajorByName(string majorName);
-
-        Task<List<MMajor>> GetMajorByParentId(string id);
+        Task<Major> GetMajorByName(string majorName);
+            
+        Task<List<Major>> GetMajorByParentId(string id);
+        List<Major> GetMajorByParentId1(string id);
+        Task<List<Major>> GetParentMajor();
 
         Task<List<MajorModel>> GetAll(MajorModel majorModel);
     }

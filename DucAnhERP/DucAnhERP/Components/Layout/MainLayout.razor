@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@using DucAnhERP.Components.Account
 @using DucAnhERP.Components.Account.Pages
 @using DucAnhERP.Components.Pages.Common
 @using DucAnhERP.Models
@@ -9,6 +10,7 @@
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject SignInManager<IdentityUser> SignInManager
+@inject IdentityRedirectManager RedirectManager
 
 
 <CascadingAuthenticationState>
@@ -17,6 +19,83 @@
         <Authorized>
             @if (isDisplay)
             {
+                <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="Thông báo" Size="modal-lg">
+                    <BodyTemplate>
+                        <div class="modal-body">
+                            @if (!listCategories.Any())
+                            {
+                                <div class="alert alert-warning" role="alert">
+                                    Không có thông báo nào
+                                </div>
+                            }
+                            else if (notificationCount == 0)
+                            {
+                                <div class="alert alert-info alert-autohide" role="alert">
+                                    Bạn đã xem hết thông báo!
+                                </div>
+                            }
+
+                            <div class="row" style="max-height: 630px;">
+                                <div class="col-md-3">
+                                    <div class="list-group">
+                                        @if (listCategories.Any())
+                                        {
+                                            @foreach (var category in listCategories)
+                                            {
+                                                <button class="list-group-item list-group-item-action" @onclick="() => SelectCategory(category.Item1)">
+                                                    @category.Item2
+                                                    @if (@category.Item3 > 0)
+                                                    {
+                                                        <span class="badge badge-danger ml-1"> @category.Item3</span>
+                                                    }
+                                                </button>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="col-md-9" style="max-height: 630px; overflow-y: auto;">
+                                    <table class="table table-bordered table-hover">
+                                        @* <thead>
+                                    <tr>
+                                    <th>Tiêu đề</th>
+                                    </tr>
+                                    </thead> *@
+                                        <tbody>
+                                            @if (listNotificationsByCategory != null)
+                                            {
+                                                @foreach (var notification in listNotificationsByCategory)
+                                                {
+                                                    <tr data-widget="expandable-table" aria-expanded="false">
+                                                        <td class="list-group-item list-group-item-action @((notification.IsRead == 1 ? "" : "list-group-item-danger"))" onclick="@(() => SelectNotification(notification))">@notification.Subject</td>
+                                                    </tr>
+                                                    <tr class="expandable-body d-none">
+                                                        <td>
+                                                            <p style="">
+                                                                @((MarkupString)notification.Content)
+                                                            </p>
+                                                            <div class="row mt-3">
+                                                                <div class="col-md-6">
+                                                                    <!-- Thông tin ngày tạo -->
+                                                                    <p class="text-muted">Ngày tạo: @notification.CreateAt.ToShortDateString() @notification.CreateAt.ToShortTimeString() </p>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <!-- Thông tin người tạo -->
+                                                                    <p class="text-muted">Người tạo: @notification.CreateBy</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </BodyTemplate>
+                </CustomModal>
+
                 <div class="wrapper">
                     <nav class="main-header navbar navbar-expand text-sm navbar-light bg-cyan">
                         <ul class="navbar-nav">
@@ -54,9 +133,10 @@
                     <div id="sidebar-overlay"></div>
                 </div>
 
-            } else
+            }
+            else
             {
-                
+
                 @Body
 
                 <div id="blazor-error-ui">
@@ -67,7 +147,7 @@
             }
         </Authorized>
         <NotAuthorized>
-           
+
             @Body
         </NotAuthorized>
     </AuthorizeView>
@@ -76,37 +156,112 @@
 @code {
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
-
     private ApplicationUser user;
-
     private NotificationModal notifModal;
-
     private Notification notification;
-
     private bool isDisplay = false;
+    private bool isDisplayModal = false;
+    private bool isModalVisible = false;
+    public string userName { get; set; }
 
-    protected async override Task OnInitializedAsync()
-    {
-        var isValid = await LoginService.CheckLogin();
+    [Parameter]
+    public EventCallback<bool> OnResponseClick { get; set; }
+    private List<(string, string, int)> listCategories = new();
+    private List<NotificationModel> listNotifications = new();
+    private List<NotificationModel> listNotificationsByCategory = new();
+    private NotificationModel? notificationModel;
+    private int notificationCount { get; set; }
 
-        isDisplay = isValid ? true : false;
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        if (authState.User.Identity.IsAuthenticated)
-        {
-            var userName = authState.User.Identity.Name;
-            user = UserService.GetByUserName(userName);
-        }
-
-    }
 
     private async Task ShowModal()
     {
-        await notifModal.ShowModal();
+        isModalVisible = true;
+        listNotifications = await EmailService.GetAllNotiByUser(userName);
+        listCategories = await EmailService.GetAllCategoriesByUser(userName);
+        notificationCount = listCategories.Sum(category => category.Item3);
+    }
+
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+    }
+
+    // public async Task ShowModal()
+    // {
+    //     listNotifications = await EmailService.GetAllNotiByUser(userName);
+    //     listCategories = await EmailService.GetAllCategoriesByUser(userName);
+    //     notificationCount = listCategories.Sum(category => category.Item3);
+    //     isDisplayModal = true;
+    //     StateHasChanged();
+    // }
+
+    public void HideModal()
+    {
+        isDisplayModal = false;
+        StateHasChanged();
+    }
+
+    private void SelectCategory(string majorId)
+    {
+        listNotificationsByCategory = listNotifications.Where(x => x.MajorId == majorId).OrderByDescending(x => x.CreateAt).ToList();
+        notificationModel = null;
+    }
+
+    private async Task SelectNotification(NotificationModel notification)
+    {
+        notificationModel = notification;
+        notificationModel.IsRead = 1;
+        await EmailService.Update(notificationModel, "");
+        listCategories = await EmailService.GetAllCategoriesByUser(userName);
+        notificationCount = listCategories.Sum(category => category.Item3);
+        await OnResponseClick.InvokeAsync(true);
+        StateHasChanged();
+    }
+
+    private async Task UpdateStatus()
+    {
+        listNotifications = await EmailService.GetAllNotiByUser(userName);
+        listCategories = await EmailService.GetAllCategoriesByUser(userName);
+        notificationCount = listCategories.Sum(category => category.Item3);
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        try
+        {
+            var isValid = await LoginService.CheckLogin();
+            isDisplay = isValid ? true : false;
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                userName = authState.User.Identity.Name;
+                user = ApplicationUserService.GetByUserName(userName);
+                if (user == null)
+                {
+                    if (HttpContext != null && HttpMethods.IsGet(HttpContext.Request.Method))
+                    {
+                        // Clear the existing external cookie to ensure a clean login process
+                        await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+                    }
+                    await SignInManager.SignOutAsync();
+                    RedirectManager.RedirectTo("Account/login");
+                }
+            }
+        }
+        catch (Exception)
+        {
+            if (HttpContext != null && HttpMethods.IsGet(HttpContext.Request.Method))
+            {
+                // Clear the existing external cookie to ensure a clean login process
+                await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            }
+            await SignInManager.SignOutAsync();
+            RedirectManager.RedirectTo("Account/login");
+        }
     }
 
     private async Task UpdateNotificationCount(bool isUpdate)
     {
         await notification.UpdateNotificationCount();
     }
-
 }

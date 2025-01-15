@@ -16,7 +16,12 @@ namespace DucAnhERP.Services
         {
             _context = context;
         }
-        public async Task<List<PhanLoaiTDHoGa>> GetAll()
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
+
+        public async Task<List<PhanLoaiTDHoGa>> GetAll(string groupId)
         {
             try
             {
@@ -156,7 +161,7 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-        public async Task Update(PhanLoaiTDHoGa PhanLoaiTDHoGa)
+        public async Task Update(PhanLoaiTDHoGa PhanLoaiTDHoGa, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(PhanLoaiTDHoGa.Id);
@@ -180,7 +185,7 @@ namespace DucAnhERP.Services
             }
             await context.SaveChangesAsync();
         }
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
@@ -217,7 +222,7 @@ namespace DucAnhERP.Services
 
             return entity;
         }
-        public async Task Insert(PhanLoaiTDHoGa entity)
+        public async Task Insert(PhanLoaiTDHoGa entity, string userId)
         {
             try
             {
@@ -389,7 +394,6 @@ namespace DucAnhERP.Services
             }
 
         }
-
         public async Task<List<PhanLoaiTDHoGaModel>> GetBaoCaoTDanHGaSDThep(PhanLoaiTDHoGaModel pltdhgaModel)
         {
             try

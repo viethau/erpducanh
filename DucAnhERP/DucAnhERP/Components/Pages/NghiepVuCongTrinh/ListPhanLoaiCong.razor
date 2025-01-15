@@ -369,6 +369,8 @@
 </div>
 
 @code {
+    string groupId = "";
+    string userId = "";
     private List<PhanLoaiCTronHopNhua> listPhanLoaiCTronHopNhua = new List<PhanLoaiCTronHopNhua>();
     private PhanLoaiCTronHopNhua Input = new();
     private PhanLoaiCTronHopNhuaModel InputMD = new();
@@ -513,7 +515,7 @@
     {
         isLoading = true;
         dmModel = new();
-        listDanhMuc = await DanhMucRepository.GetAll();
+        listDanhMuc = await DanhMucRepository.GetAll(groupId);
         var plhg = await PhanLoaiCTronHopNhuaRepository.GetAllByVM(InputMD);
         listModel = plhg;
         listPLCTronHopNhuaModel = Paging(plhg);
@@ -542,7 +544,7 @@
                     if (isValid)
                     {
                         // cập nhật
-                        await PhanLoaiCTronHopNhuaRepository.Update(Input);
+                        await PhanLoaiCTronHopNhuaRepository.Update(Input,userId);
                         isModalVisible = false;
                         Input = new PhanLoaiCTronHopNhua();
                         isEdit = false;
@@ -566,7 +568,7 @@
                     bool isValid = await PhanLoaiCTronHopNhuaRepository.CheckExclusive(ids, baseTime);
                     if (isValid)
                     {
-                        await PhanLoaiCTronHopNhuaRepository.Update(Input);
+                        await PhanLoaiCTronHopNhuaRepository.Update(Input, userId);
                         isModalVisible = false;
                         Input = new PhanLoaiCTronHopNhua();
                         isEdit = false;
@@ -616,7 +618,7 @@
                 else
                 {
                     // Thêm mới thông tin
-                    await PhanLoaiCTronHopNhuaRepository.Insert(Input);
+                    await PhanLoaiCTronHopNhuaRepository.Insert(Input, userId);
                     isModalVisible = false;
                     Input = new PhanLoaiCTronHopNhua();
                     ToastService.ShowToast(
@@ -683,7 +685,7 @@
                 else
                 {
                     // Thực hiện hành động xóa
-                    await PhanLoaiCTronHopNhuaRepository.DeleteById(deleteId);
+                    await PhanLoaiCTronHopNhuaRepository.DeleteById(deleteId, userId);
                     ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                     await LoadData();
                 }

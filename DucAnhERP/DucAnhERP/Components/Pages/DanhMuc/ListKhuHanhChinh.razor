@@ -1,0 +1,569 @@
+﻿@page "/DanhMuc/KhuHanhChinhs"
+@using DucAnhERP.Helpers
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using System.Linq
+@using DucAnhERP.SeedWork
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@inject NavigationManager navigation
+@inject DucAnhERP.Services.ToastService ToastService
+@attribute [Authorize]
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject SignInManager<IdentityUser> SignInManager
+<div class="mx-5 my-2">
+    <h3>Danh sách</h3>
+    <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
+        <BodyTemplate>
+            <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
+                <div class="row">
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="IdTinh">Tỉnh/Thành phố</label>
+                        <Select2 Id="IdTinh" Items="@selectIdTinhInput" OnChange="@OnSelectIdTinhInput"></Select2>
+                        <ValidationMessage For="()=>Input.IdTinh"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="IdHuyen">Huyện/Quận</label>
+                        <Select2 Id="IdHuyen" Items="@selectIdHuyenInput" OnChange="@OnSelectIdHuyenInput"></Select2>
+                        <ValidationMessage For="()=>Input.IdHuyen"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="IdXa">Xã/Phường</label>
+                        <Select2 Id="IdXa" Items="@selectIdXaInput" OnChange="@OnSelectIdXaInput"></Select2>
+                        <ValidationMessage For="()=>Input.IdXa"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="TenKhu">Khu hành chính</label>
+                        <InputText class="form-control" id="TenKhu" @bind-Value="Input.TenKhu" />
+                        <ValidationMessage For="()=>Input.TenKhu"></ValidationMessage>
+                    </div>
+                </div>
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="row mt-5 justify-content-end">
+                    <button class="btn btn-primary mr-2" type="submit">Save</button>
+                    <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+                </div>
+            </EditForm>
+        </BodyTemplate>
+    </CustomModal>
+    <div>
+        <EditForm Model="pageModel" FormName="SearchData" OnValidSubmit="@Search">
+            <DataAnnotationsValidator />
+            <div class="d-flex row">
+                <div class="form-floating col-sm-3 col-md-3">
+                    <label for="IdTinhSearch">Tỉnh/Thành phố</label>
+                    <Select2 Id="IdTinhSearch" Items="@selectIdTinhSearch" OnChange="@OnSelectIdTinhSearch"></Select2>
+                    <ValidationMessage For="()=>pageModel.IdTinh"></ValidationMessage>
+                </div>
+                <div class="form-floating col-sm-3 col-md-3">
+                    <label for="IdHuyenSearch">Huyện/Quận</label>
+                    <Select2 Id="IdHuyenSearch" Items="@selectIdHuyenSearch" OnChange="@OnSelectIdHuyenSearch"></Select2>
+                    <ValidationMessage For="()=>pageModel.IdHuyen"></ValidationMessage>
+                </div>
+                <div class="form-floating col-sm-3 col-md-3">
+                    <label for="IdXaSearch">Xã/Phường</label>
+                    <Select2 Id="IdXaSearch" Items="@selectIdXaSearch" OnChange="@OnSelectIdXaSearch"></Select2>
+                    <ValidationMessage For="()=>pageModel.IdXa"></ValidationMessage>
+                </div>
+                <div class="form-group ml-5">
+                    <label>&nbsp;</label>
+                    <button type="submit" class="btn btn-primary form-control">Tìm kiếm</button>
+                </div>
+                <div class="form-group ml-5">
+                    <label>&nbsp;</label>
+                    <button @onclick="ShowModal" class="btn btn-primary form-control">Tạo mới</button>
+                </div>
+            </div>
+        </EditForm>
+        <div class="row mt-3 our-table">
+            <table class="table table-hover table-bordered">
+                <thead class="bg-info">
+                    <tr>
+                        <th class="text-center" rowspan="2">
+                        </th>
+                        <th class="text-center" rowspan="2" scope="col">
+                            <div class="pb-3">No.</div>
+                        </th>
+                        <th onclick="@(() => SortTable("IdTinh"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Tỉnh/Thành phố</div>
+                            <span class="arrow @(GetSortStyle("IdTinh"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("IdHuyen"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Huyện/Quận</div>
+                            <span class="arrow @(GetSortStyle("IdHuyen"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("IdXa"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Xã/Phường</div>
+                            <span class="arrow @(GetSortStyle("IdXa"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("TenKhu"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Khu hành chính</div>
+                            <span class="arrow @(GetSortStyle("TenKhu"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("IsStatus"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Trạng thái</div>
+                            <span class="arrow @(GetSortStyle("IsStatus"))"></span>
+                        </th>
+                    </tr>
+                </thead>
+                @if (listKhuHanhChinh.Any())
+                {
+                    <tbody>
+                        @{
+                            int stt = 0;
+                        }
+                        @foreach (var item in listKhuHanhChinh)
+                        {
+                            stt++;
+                            <tr>
+                                <td class="d-flex flex-column text-center nowrap">
+                                    <div class="d-inline-block">
+                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.IdHuyen )">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td class="text-center" scope="row">@stt</td>
+                                <td class="text-left">@item.IdTinh</td>
+                                <td class="text-left">@item.IdHuyen</td>
+                                <td class="text-left">@item.IdXa</td>
+                                <td class="text-left">@item.TenKhu</td>
+                                <td class="text-left">@item.IsStatus</td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+                else
+                {
+                    <tbody>
+                        <tr>
+                            <td class="text-danger" colspan="7">Không có dữ liệu</td>
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        </div>
+        @if (listKhuHanhChinh.Any())
+        {
+            <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+        }
+    </div>
+    <SuccessModal @ref="successModal" OnResponseClick="Redirect"></SuccessModal>
+    <ErrorModal @ref="errorModal"></ErrorModal>
+    <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+</div>
+@code {
+    private KhuHanhChinh Input = new();
+    private List<TinhModel> listIdTinhSearch = new();
+    private List<Tinh> listIdTinhInput = new();
+    public string IdTinhText { get; set; } = "";
+    private List<HuyenModel> listIdHuyenSearch = new();
+    private List<Huyen> listIdHuyenInput = new();
+    public string IdHuyenText { get; set; } = "";
+    private List<XaModel> listIdXaSearch = new();
+    private List<Xa> listIdXaInput = new();
+    public string IdXaText { get; set; } = "";
+    private bool isModalVisible = false;
+    private bool isLoading = false;
+    private string TitleModal = "Thêm";
+    private bool isEdit = false;
+    private DateTime baseTime;
+    private string deleteId;
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<SelectedItem> selectIdTinhInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectIdTinhSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private void OnSelectIdTinhInput(SelectedItem selectedItem)
+    {
+        Input.IdTinh = selectedItem.Value;
+        IdTinhText = selectedItem.Text;
+    }
+    private void OnSelectIdTinhSearch(SelectedItem selectedItem)
+    {
+        pageModel.IdTinh = selectedItem.Value;
+    }
+    private List<SelectedItem> selectIdHuyenInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectIdHuyenSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private void OnSelectIdHuyenInput(SelectedItem selectedItem)
+    {
+        Input.IdHuyen = selectedItem.Value;
+        IdHuyenText = selectedItem.Text;
+    }
+    private void OnSelectIdHuyenSearch(SelectedItem selectedItem)
+    {
+        pageModel.IdHuyen = selectedItem.Value;
+    }
+    private List<SelectedItem> selectIdXaInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectIdXaSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private void OnSelectIdXaInput(SelectedItem selectedItem)
+    {
+        Input.IdXa = selectedItem.Value;
+        IdXaText = selectedItem.Text;
+    }
+    private void OnSelectIdXaSearch(SelectedItem selectedItem)
+    {
+        pageModel.IdXa = selectedItem.Value;
+    }
+    [Parameter]
+    public SuccessModal successModal { get; set; }
+    [Parameter]
+    public ErrorModal errorModal { get; set; }
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+    private void ShowModal()
+    {
+        isModalVisible = true;
+        Input = new();
+    }
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+        Input = new();
+        isEdit = false;
+    }
+    private void HandleSave()
+    {
+        isModalVisible = false;
+    }
+    private void HandleCancel()
+    {
+        isModalVisible = false;
+        Input = new();
+        isEdit = false;
+    }
+    public List<KhuHanhChinhModel> listKhuHanhChinh
+    {
+        get;
+        set;
+    } = new();
+    public List<KhuHanhChinhModel> listModel
+    {
+        get;
+        set;
+    } = new();
+    [SupplyParameterFromForm(FormName = "SearchData")]
+    public KhuHanhChinhModel pageModel
+    {
+        get;
+        set;
+    }
+    public MetaData MetaData
+    {
+        get;
+        set;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            userName = authState.User.Identity.Name;
+            user = ApplicationUserService.GetByUserName(userName);
+            userId = user.Id;
+            groupId = user.GroupId;
+        }
+        pageModel = new();
+        await LoadData();
+    }
+    private async Task LoadData()
+    {
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "Chưa có");
+            listIdTinhSearch = await KhuHanhChinhService.GetTinhs(groupId);
+            selectIdTinhSearch = listIdTinhSearch.Select(data => new SelectedItem
+                {
+                    Value = data.Id,
+                    Text = data.TenTinh
+                }).ToList();
+            selectIdTinhSearch.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+            listIdTinhInput = await TinhService.GetAll(groupId);
+            selectIdTinhInput = listIdTinhInput.Select(data => new SelectedItem
+                {
+                    Value = data.Id,
+                    Text = data.TenTinh
+                }).ToList();
+            selectIdTinhInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+            listIdHuyenSearch = await KhuHanhChinhService.GetHuyens(groupId);
+            selectIdHuyenSearch = listIdHuyenSearch.Select(data => new SelectedItem
+                {
+                    Value = data.Id,
+                    Text = data.TenHuyen
+                }).ToList();
+            selectIdHuyenSearch.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+            listIdHuyenInput = await HuyenService.GetAll(groupId);
+            selectIdHuyenInput = listIdHuyenInput.Select(data => new SelectedItem
+                {
+                    Value = data.Id,
+                    Text = data.TenHuyen
+                }).ToList();
+            selectIdHuyenInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+            listIdXaSearch = await KhuHanhChinhService.GetXas(groupId);
+            selectIdXaSearch = listIdXaSearch.Select(data => new SelectedItem
+                {
+                    Value = data.Id,
+                    Text = data.TenXa
+                }).ToList();
+            selectIdXaSearch.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+            listIdXaInput = await XaService.GetAll(groupId);
+            selectIdXaInput = listIdXaInput.Select(data => new SelectedItem
+                {
+                    Value = data.Id,
+                    Text = data.TenXa
+                }).ToList();
+            selectIdXaInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+            baseTime = DateTime.Now;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+            "Thông báo",
+            ex.Message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 7000
+            );
+        }
+    }
+    private async Task HandleEdit(string id)
+    {
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, groupId, user, "Chưa có");
+            TitleModal = "Cập nhật";
+            Input = await KhuHanhChinhService.GetById(id);
+            foreach (var item in selectIdTinhInput)
+            {
+                item.IsSelected = item.Value == Input.IdTinh;
+            }
+            foreach (var item in selectIdHuyenInput)
+            {
+                item.IsSelected = item.Value == Input.IdHuyen;
+            }
+            foreach (var item in selectIdXaInput)
+            {
+                item.IsSelected = item.Value == Input.IdXa;
+            }
+            isEdit = true;
+            isModalVisible = true;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+            "Thông báo",
+            ex.Message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 7000
+            );
+        }
+    }
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        deleteId = id;
+        confirmModal.Title = "Xác nhận xóa";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.openModal();
+    }
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        try
+        {
+            if (confirmed)
+            {
+                if (!string.IsNullOrEmpty(deleteId))
+                {
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, groupId, user, "Chưa có");
+                    string[] ids = { deleteId };
+                    var isValid = await KhuHanhChinhService.CheckExclusive(ids, baseTime);
+                    if (isValid)
+                    {
+                        await KhuHanhChinhService.DeleteById(deleteId, "");
+                        ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                        await LoadData();
+                        await Search();
+                        deleteId = "";
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+            "Thông báo",
+            ex.Message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 7000
+            );
+        }
+    }
+    private async Task ApprovalAction(string id)
+    {
+        try
+        {
+            var entity = await KhuHanhChinhService.GetById(id);
+            var checkquyen = await PhanQuyenService.CheckApproval(entity.GroupId, entity.DepartmentId, user, entity.ApprovalId);
+            if (entity.ApprovalId == entity.LastApprovalId)
+            {
+                entity.IsActive = 3;
+                entity.IsStatus = "Ðã duyệt";
+            }
+            else
+            {
+                var nextApproval = await PhanQuyenService.GetNextApprovalStep(entity.GroupId, "6890504e-38cd-43c6-8e52-da17aaf1ff00", groupId, entity.DepartmentId, entity.DepartmentOrder, entity.ApprovalOrder);
+                entity.DepartmentId = nextApproval.DeptId;
+                entity.IsStatus = nextApproval.Content;
+                entity.ApprovalId = nextApproval.Id;
+                entity.ApprovalOrder = nextApproval.ApprovalStep;
+            }
+            await KhuHanhChinhService.Update(entity, userId);
+            await Search();
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+            "Thông báo",
+            ex.Message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 7000
+            );
+        }
+    }
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            var IdTinhValid = await TinhService.CheckStatus(Input.IdTinh, IdTinhText);
+            var IdHuyenValid = await HuyenService.CheckStatus(Input.IdHuyen, IdHuyenText);
+            var IdXaValid = await XaService.CheckStatus(Input.IdXa, IdXaText);
+            Input.GroupId = groupId;
+            Input.CreateBy = userId;
+            Input.CreateAt = DateTime.Now;
+            bool editcheck = (isEdit && Input.Ordinarily > 0) || (isEdit && Input.Ordinarily == 0 && Input.IsActive == 3);
+            if (editcheck)
+            {
+                string[] ids = { Input.Id };
+                var isValid = await KhuHanhChinhService.CheckExclusive(ids, baseTime);
+                var checkquyen = await PhanQuyenService.CheckPermission(groupId, groupId, user, "Chưa có");
+                if (isValid)
+                {
+                    // var firstApproval = await PhanQuyenService.GetFirstApprovalStep(Input.GroupId, "6890504e-38cd-43c6-8e52-da17aaf1ff00", "Chưa có");
+                    // var lastApproval = await PhanQuyenService.GetLastApprovalStep(Input.GroupId, "6890504e-38cd-43c6-8e52-da17aaf1ff00", "Chưa có");
+                    // Input.DepartmentId = firstApproval.DeptId;
+                    // Input.ApprovalId = firstApproval.Id;
+                    // Input.LastApprovalId = lastApproval.Id;
+                    Input.Ordinarily = Input.IsActive == 3 ? Input.Ordinarily + 1 : Input.Ordinarily;
+                    Input.IsActive = 1;
+                    Input.ApprovalOrder = 1;
+                    // Input.IsStatus = firstApproval.Content;
+                    await KhuHanhChinhService.Update(Input, "");
+                    ToastService.ShowToast(
+                    "Thông báo",
+                    "Cập nhật thành công.",
+                    iconClass: "fa fa-check-circle",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                    );
+                    Input.Id = Guid.NewGuid().ToString();
+                    await LoadData();
+                    await Search();
+                    isEdit = false;
+                    isModalVisible = false;
+                }
+            }
+            else
+            {
+                var checkquyen = await PhanQuyenService.CheckPermission(groupId, groupId, user, "Chưa có");
+                Input.IsActive = 0;
+                // var firstApproval = await PhanQuyenService.GetFirstApprovalStep(Input.GroupId, "6890504e-38cd-43c6-8e52-da17aaf1ff00", "Chưa có");
+                // var lastApproval = await PhanQuyenService.GetLastApprovalStep(Input.GroupId, "6890504e-38cd-43c6-8e52-da17aaf1ff00", "Chưa có");
+                // Input.DepartmentId = firstApproval.DeptId;
+                // Input.ApprovalId = firstApproval.Id;
+                // Input.LastApprovalId = lastApproval.Id;
+                Input.ApprovalOrder = 1;
+                Input.Ordinarily = 0;
+                // Input.IsStatus = firstApproval.Content;
+                await KhuHanhChinhService.Insert(Input, "");
+                ToastService.ShowToast(
+                "Thông báo",
+                "Thêm thành công.",
+                iconClass: "fa fa-check-circle",
+                progressBarClass: "bg-info",
+                duration: 5000
+                );
+                Input.Id = Guid.NewGuid().ToString();
+                await LoadData();
+                await Search();
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+            "Thông báo",
+            ex.Message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 7000
+            );
+        }
+    }
+    public async Task Search()
+    {
+        var checkquyen = await PhanQuyenService.CheckPermission(groupId, groupId, user, "Chưa có");
+        pageModel.PageNumber = 1;
+        listModel = await KhuHanhChinhService.GetAllByVM(pageModel, groupId);
+        listKhuHanhChinh = Paging(listModel);
+    }
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        pageModel.PageNumber = 1;
+        Paging(listModel);
+    }
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+    private void SelectedPage(int page)
+    {
+        pageModel.PageNumber = page;
+        Paging(listModel);
+    }
+    private void ChangePageSize(int pageSize)
+    {
+        pageModel.PageNumber = 1;
+        pageModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+    private List<KhuHanhChinhModel> Paging(List<KhuHanhChinhModel> list)
+    {
+        var count = list.Count();
+        list = list.Skip((pageModel.PageNumber - 1) * pageModel.PageSize).Take(pageModel.PageSize).ToList();
+        listKhuHanhChinh.Clear();
+        foreach (var item in list)
+        {
+            listKhuHanhChinh.Add(item);
+        }
+        var pagelist = new PageList<KhuHanhChinhModel>(listKhuHanhChinh, count, pageModel.PageNumber, pageModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return list;
+    }
+    private void Redirect()
+    {
+        Input = new();
+    }
+}

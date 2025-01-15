@@ -21,6 +21,7 @@ namespace DucAnhERP.Services
 
         public async Task Invoke(HttpContext context)
         {
+            context.Response.Cookies.Delete("AspNetCore.Identity.Application");
             // Kiểm tra trạng thái đăng nhập
             if (!context.Request.Path.StartsWithSegments("/Account"))
             {

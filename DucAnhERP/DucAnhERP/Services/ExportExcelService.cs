@@ -387,7 +387,7 @@ public class ExportExcelService
                                 cellRange.Style.Fill.BackgroundColor.SetColor(header.BackgroundColor.Value);
                             }
 
-                            cellRange.Style.WrapText = header.WrapText;
+                            //cellRange.Style.WrapText = header.WrapText;
 
                             if (header.HasBorder)
                             {
@@ -450,7 +450,7 @@ public class ExportExcelService
                                         secondColumnCell.Style.Font.Bold = true;
                                         secondColumnCell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                                         secondColumnCell.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                                        secondColumnCell.Style.WrapText = true;
+                                        //secondColumnCell.Style.WrapText = true;
                                         // Đặt giá trị cho cột thứ 2
                                         secondColumnCell.Value = $"{currentLoaiCK}";
 
@@ -505,7 +505,7 @@ public class ExportExcelService
                                             mergeRange.Style.Font.Color.SetColor(Color.Red);
                                             mergeRange.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                                             mergeRange.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                                            mergeRange.Style.WrapText = true;
+                                            //mergeRange.Style.WrapText = true;
                                             mergeRange.Value = $"{splitString.Item2} {previousLoaiCK}";
 
                                             rowIndex++; // Tăng chỉ số hàng
@@ -532,7 +532,7 @@ public class ExportExcelService
                                     cell.Style.Fill.BackgroundColor.SetColor(header.BackgroundColor ?? System.Drawing.Color.White); // Màu nền
                                     cell.Style.HorizontalAlignment = header.Alignment; // Căn chỉnh ngang
                                     cell.Style.VerticalAlignment = header.VerticalAlignment; // Căn chỉnh dọc
-                                    cell.Style.WrapText = header.WrapText; // Tự động ngắt dòng
+                                    //cell.Style.WrapText = header.WrapText; // Tự động ngắt dòng
                                     cell.Style.Font.Bold = header.IsBold;
                                     // Áp dụng border nếu có
                                     if (header.HasBorder)
@@ -661,7 +661,7 @@ public class ExportExcelService
                     EndCol = colIndex + colspan - 1,
                     IsBold = cell.Value.Contains("bold"),
                     HasBorder = true,
-                    WrapText = true,
+                    //WrapText = true,
                     Alignment = ExcelHorizontalAlignment.Center,
                     DataProperty = dataProperty,
                 });

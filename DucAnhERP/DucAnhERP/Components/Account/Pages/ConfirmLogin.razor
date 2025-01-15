@@ -101,7 +101,7 @@
                 if (existingSession != null)
                 {
                     // Xóa phiên đăng nhập cũ
-                    await UserSessionService.DeleteById(existingSession.Id);
+                    await UserSessionService.DeleteById(existingSession.Id, "");
                 }
 
                 // Tạo phiên đăng nhập mới
@@ -114,7 +114,7 @@
                         IsActive = 1
                     };
 
-                await UserSessionService.Insert(userSession);
+                await UserSessionService.Insert(userSession, "");
 
                 HttpContext.Session.SetString("sessionId", userSession.Id);
                 HttpContext.Session.SetString("userName", userSession.UserName);

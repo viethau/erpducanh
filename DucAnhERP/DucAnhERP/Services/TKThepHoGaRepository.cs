@@ -21,7 +21,12 @@ namespace DucAnhERP.Services
             _context = context;
             _pPKKLCTietHoGaRepository =  new PKKLCTietHoGaRepository(context);
         }
-        public async Task<List<TKThepHoGa>> GetAll()
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
+
+        public async Task<List<TKThepHoGa>> GetAll(string groupId)
         {
             try
             {
@@ -189,7 +194,7 @@ namespace DucAnhERP.Services
             }
 
         }
-        public async Task Update(TKThepHoGa TKThepHoGa)
+        public async Task Update(TKThepHoGa TKThepHoGa, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(TKThepHoGa.Id);
@@ -225,7 +230,7 @@ namespace DucAnhERP.Services
             }
             await SaveChanges(context);
         }
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await context.TKThepHoGas.FirstOrDefaultAsync(x => x.Id == id);
@@ -248,7 +253,6 @@ namespace DucAnhERP.Services
 
             await SaveChanges(context);
         }
-
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
         {
             foreach (var id in ids)
@@ -261,7 +265,7 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-        public async Task Insert(TKThepHoGa entity)
+        public async Task Insert(TKThepHoGa entity, string userId)
         {
             try
             {
@@ -352,7 +356,6 @@ namespace DucAnhERP.Services
                 return id;
             }
         }
-
         public async Task SaveChanges(ApplicationDbContext context)
         {
             try

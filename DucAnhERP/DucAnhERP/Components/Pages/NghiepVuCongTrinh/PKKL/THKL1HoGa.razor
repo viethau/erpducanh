@@ -162,7 +162,8 @@
 
 
 @code {
-
+    string groupId = "";
+    string userId = "";
     private bool isLoading = false;
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới ";
@@ -346,7 +347,7 @@
                     if (result)
                     {
                         // Thực hiện hành động xóa
-                        await PKKLCTietHoGaRepository.DeleteById(deleteId);
+                        await PKKLCTietHoGaRepository.DeleteById(deleteId,userId);
                         ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                         await LoadData();
                     }

@@ -18,7 +18,12 @@ namespace DucAnhERP.Services
         {
             _context = context;
         }
-        public async Task<List<PhanLoaiHoGa>> GetAll()
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
+
+        public async Task<List<PhanLoaiHoGa>> GetAll(string groupId)
         {
             try
             {
@@ -205,7 +210,6 @@ namespace DucAnhERP.Services
             isSuccess = data.Any();
             return (isSuccess);
         }
-
         public async Task<PhanLoaiHoGa> GetPhanLoaiHoGaByDetail(PhanLoaiHoGa searchData)
         {
             try
@@ -492,7 +496,6 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-
         public async Task<List<SelectedItem>> GetDSPhanLoaiHoGa()
         {
             try
@@ -512,7 +515,7 @@ namespace DucAnhERP.Services
                 throw new Exception("Lỗi load dữ liệu :" + ex.Message);
             }
         }
-        public async Task Update(PhanLoaiHoGa phanloaihoga)
+        public async Task Update(PhanLoaiHoGa phanloaihoga, string userId)
         {
             try
             {
@@ -543,7 +546,7 @@ namespace DucAnhERP.Services
             }
             await context.SaveChangesAsync();
         }
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             try
             {
@@ -734,7 +737,7 @@ namespace DucAnhERP.Services
                 throw new Exception("Lỗi load dữ liệu :" + ex.Message);
             }
         }
-        public async Task Insert(PhanLoaiHoGa entity)
+        public async Task Insert(PhanLoaiHoGa entity, string userId)
         {
             try
             {

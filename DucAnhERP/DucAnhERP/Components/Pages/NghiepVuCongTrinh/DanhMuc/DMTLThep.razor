@@ -146,6 +146,8 @@
 </div>
 
 @code {
+    string groupId = "";
+    string userId = "";
     private List<DanhMuc1> danhMucs = new List<DanhMuc1>();
     private DMThep Input = new DMThep();
 
@@ -265,7 +267,7 @@
                             bool isValid = await DMTLThepRepository.CheckExclusive(idss, baseTime);
                             if (isValid)
                             {
-                                await DMTLThepRepository.Update(Input);
+                                await DMTLThepRepository.Update(Input,userId);
                                 isModalVisible = false;
                                 Input = new();
                                 isEdit = false;
@@ -282,7 +284,7 @@
                         }
                         else if (listExist.Count > 0 && listExist[0].Id == Input.Id)
                         {
-                            await DMTLThepRepository.Update(Input);
+                            await DMTLThepRepository.Update(Input, userId);
                             isModalVisible = false;
                             Input = new();
                             isEdit = false;
@@ -327,7 +329,7 @@
                     {
 
                         // Thêm mới thông tin
-                        await DMTLThepRepository.Insert(Input);
+                        await DMTLThepRepository.Insert(Input, userId);
                         isModalVisible = false;
                         Input = new();
                         ToastService.ShowToast(
@@ -398,7 +400,7 @@
                     else
                     {
                         // Thực hiện hành động xóa
-                        await DMTLThepRepository.DeleteById(deleteId);
+                        await DMTLThepRepository.DeleteById(deleteId, userId);
                         ToastService.ShowToast("Thông báo", "Xóa danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                         await LoadData();
                     }

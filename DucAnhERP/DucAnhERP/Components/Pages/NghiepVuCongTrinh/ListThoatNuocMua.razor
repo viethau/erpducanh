@@ -3103,6 +3103,8 @@
     [SupplyParameterFromForm]
     private MHopRanhThang Input { get; set; } = new();
     public List<DanhMuc1> listDanhMuc = new();
+    string groupId = "";
+    string userId = "";
 
     public List<HopRanhThangModel> listHopRanhThang
     {
@@ -3143,7 +3145,7 @@
     private async Task LoadData()
     {
         var helper = new DataConversionHelper();
-        listDanhMuc = await DanhMucRepository.GetAll();
+        listDanhMuc = await DanhMucRepository.GetAll(groupId);
         var hopranhthangs = await HopRanhThangRepository.GetData();
         var convertDatas = await helper.ConvertDataHopRanhThang(hopranhthangs, listDanhMuc);
         listModel = convertDatas;
@@ -3450,7 +3452,7 @@
             if (isEdit)
             {
                 // Cập nhật thông tin
-                await HopRanhThangRepository.Update(Input);
+                await HopRanhThangRepository.Update(Input,userId);
                 isModalVisible = false;
                 isEdit = false;
                 await ThemTenTheoPL(Input);
@@ -3469,7 +3471,7 @@
             {
                
                 // Thêm mới thông tin
-                await HopRanhThangRepository.Insert(Input);
+                await HopRanhThangRepository.Insert(Input,userId);
                 isModalVisible = false;
                 Input = new MHopRanhThang();
                 ToastService.ShowToast(
@@ -3494,7 +3496,7 @@
             string message = "";
 
             // Lấy danh sách danh mục
-            listDanhMuc = await DanhMucRepository.GetAll();
+            listDanhMuc = await DanhMucRepository.GetAll(groupId);
 
             // Tạo danh sách các biến cần kiểm tra
             var checks = new Dictionary<string, string>
@@ -3579,7 +3581,7 @@
         {
             if (!string.IsNullOrEmpty(deleteId))
             {
-                await HopRanhThangRepository.DeleteById(deleteId);
+                await HopRanhThangRepository.DeleteById(deleteId, userId);
                 await LoadData();
                 ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                 deleteId = null;

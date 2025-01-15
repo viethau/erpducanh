@@ -55,9 +55,9 @@
 
 @code {
     [SupplyParameterFromForm(FormName = "CreateNghiepVu")]
-    private MMajor mmajor { get; set; } = new();
+    private Major mmajor { get; set; } = new();
 
-    private List<MMajor> listParentMajor = new List<MMajor>();
+    private List<Major> listParentMajor = new List<Major>();
 
     [Parameter]
     public SuccessModal successModal { get; set; }

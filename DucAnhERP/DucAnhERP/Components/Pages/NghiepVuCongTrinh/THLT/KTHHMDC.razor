@@ -121,7 +121,8 @@
     private bool isEdit = false;
     private bool isLoading = false;
     private DateTime baseTime;
-
+    string groupId = "";
+    string userId = "";
     private string layoutClass = "d-flex justify-content-between";
     private string space = "ml-5";
     private string thumbtack = "";
@@ -149,7 +150,7 @@
     {
         isLoading = true;
         var helper = new DataConversionHelper();
-        listDanhMuc = await DanhMucRepository.GetAll();
+        listDanhMuc = await DanhMucRepository.GetAll(groupId);
         KTHHMDCModel nuocMuaModelSearch = new();
 
         var nuocMuaRepository = await NuocMuaRepository.GetBaoCaoKTHHMDC();

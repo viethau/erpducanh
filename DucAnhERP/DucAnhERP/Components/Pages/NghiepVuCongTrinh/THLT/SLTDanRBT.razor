@@ -22,7 +22,10 @@
             </button>
         </div>
     </div>
-    <h5 class="mt-2">BẢNG THỐNG KẾ SỐ LƯỢNG TẤM ĐAN RÃNH XÂY</h5>
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mt-2">BẢNG THỐNG KẾ SỐ LƯỢNG TẤM ĐAN RÃNH XÂY</h5>
+        <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
+    </div>
     <div id="tableContainer ">
         <div class="row mt-3 p-2 our-table">
             <table id="tb1" class="table table-bordered table-hover" cellpadding="1" cellspacing="2">
@@ -88,7 +91,8 @@
     private bool isEdit = false;
     private bool isLoading = false;
     private DateTime baseTime;
-
+    string groupId = "";
+    string userId = "";
     private string layoutClass = "d-flex justify-content-between";
     private string space = "ml-5";
     private string thumbtack = "";
@@ -116,7 +120,7 @@
     {
         isLoading = true;
         var helper = new DataConversionHelper();
-        listDanhMuc = await DanhMucRepository.GetAll();
+        listDanhMuc = await DanhMucRepository.GetAll(groupId);
         TKSLModel nuocMuaModelSearch = new();
 
         var nuocMuaRepository = await NuocMuaRepository.GetBaoCaoSLTDan("Rãnh bê tông");
@@ -194,5 +198,29 @@
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
     }
+    private async Task ExportExcel()
+    {
+        var header = ConstantHeaderExcel.SL_HEADERS;
+        header[2].Title = "BẢNG THỐNG KẾ SỐ LƯỢNG TẤM ĐAN RÃNH BÊ TÔNG";
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.28 SL T.Đan rãnh bê tông",
+                Tables = new List<TableInfo<object>>
+                {
+                     new TableInfo<object>
+                    {
+                        Headers = header.ToList(),
+                        Data = listModel.Cast<object>().ToList()
+                    },
 
+                }
+            };
+
+        // Xuất Excel
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        var fileName = "SLTDanRBT.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+    }
 }

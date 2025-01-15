@@ -1,6 +1,14 @@
 ﻿@page "/CaiDatHeThong/listMajor"
-
+@using DucAnhERP.Helpers
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using System.Linq
+@using DucAnhERP.SeedWork
 @using Microsoft.AspNetCore.Authorization
+@inject NavigationManager navigation
+@inject DucAnhERP.Services.ToastService ToastService
+@inject IMajorRepository MajorRepository
 @attribute [Authorize]
 
 <div class="mx-5 my-2">
@@ -12,7 +20,7 @@
 
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="Table">Nghiệp vụ cha</label>
-                        <Select2 disabled="isEdit" Id="ParentId" Items="@selectMMajors" OnChange="@OnSelectParentMajor"></Select2>
+                        <Select2 Id="ParentId" Items="@selectItems" OnChange="@OnSelectChange1"></Select2>
                         <ValidationMessage For="()=>Input.ParentId"></ValidationMessage>
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
@@ -47,9 +55,10 @@
         <EditForm Model="majorModel" FormName="SearchNghiepVu" OnValidSubmit="@Search">
             <DataAnnotationsValidator />
             <div class="d-flex row">
+
                 <div class="form-floating col-sm-3 col-md-3">
                     <label for="Table">Nghiệp vụ cha</label>
-                    <Select2 Id="selectMMajorsSear" Items="@selectMMajorsSear" OnChange="@OnSelectParentMajorSear"></Select2>
+                    <Select2 Id="mySelect2" Items="@selectItems" OnChange="@OnSelectChange"></Select2>
                     <ValidationMessage For="()=>majorModel.ParentId"></ValidationMessage>
                 </div>
                 <div class="form-floating col-sm-3 col-md-3">
@@ -147,6 +156,10 @@
                 }
 
             </table>
+            <SuccessModal @ref="successModal" OnResponseClick="Redirect"></SuccessModal>
+            <ErrorModal @ref="errorModal"></ErrorModal>
+            <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+
         </div>
 
         @if (listMajor.Any())
@@ -155,16 +168,15 @@
         }
 
     </div>
-    <SuccessModal @ref="successModal" OnResponseClick="Redirect"></SuccessModal>
-    <ErrorModal @ref="errorModal"></ErrorModal>
-    <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
 </div>
+
+
 
 
 
 @code {
 
-    private MMajor Input = new();
+    private Major Input = new();
 
     private bool isModalVisible = false;
     private bool isLoading = false;
@@ -172,18 +184,19 @@
     private bool isEdit = false;
     private DateTime baseTime;
 
-    private List<SelectedItem> selectMMajors = new List<SelectedItem>
-    {  new SelectedItem { Value = "", Text = "chọn...",IsSelected=true },};
-    private void OnSelectParentMajor(SelectedItem selectedItem)
-    { Input.ParentId = selectedItem.Value; }
+    private List<SelectedItem> selectItems = new List<SelectedItem>
+    {    new SelectedItem { Value = "", Text = "chọn...",IsSelected=true },
+    };
 
-    private void OnSelectParentMajorSear(SelectedItem selectedItem)
-    { majorModel.ParentId = selectedItem.Value; }
+    private void OnSelectChange(SelectedItem selectedItem)
+    {
+        majorModel.ParentId = selectedItem.Value;
+    }
 
-    private List<SelectedItem> selectMMajorsSear = new List<SelectedItem>
-    {  new SelectedItem { Value = "", Text = "chọn...",IsSelected=true },};
-
-
+    private void OnSelectChange1(SelectedItem selectedItem)
+    {
+        Input.ParentId = selectedItem.Value;
+    }
 
     [Parameter]
     public SuccessModal successModal { get; set; }
@@ -251,7 +264,7 @@
         set;
     }
 
-    private List<MMajor> listParentMajor = new List<MMajor>();
+    private List<Major> listParentMajor = new List<Major>();
 
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
@@ -262,43 +275,23 @@
 
     private async Task LoadData()
     {
-        try
-        {
-            listParentMajor = await MajorService.GetAllParentMajor();
 
-            // Khởi tạo danh sách mới với phần tử mặc định
-            var tempSelectMMajors = new List<SelectedItem>
-        {
-            new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true }
-        };
+        listParentMajor = await MajorService.GetAllParentMajor();
 
-            // Thêm các phần tử từ `listParentMajor`
-            tempSelectMMajors.AddRange(listParentMajor.Select(major => new SelectedItem
-                {
-                    Value = major.Id,
-                    Text = major.MajorName
-                }));
+        selectItems = listParentMajor.Select(major => new SelectedItem
+            {
+                Value = major.Id,
+                Text = major.MajorName
+            }).ToList();
 
-            // Gán danh sách mới vào `selectMMajors`
-            selectMMajors = tempSelectMMajors;
-            selectMMajorsSear = selectMMajors;
+        // Thêm phần tử mặc định "chọn..."
+        selectItems.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
 
-            // Cập nhật danh sách các Major
-            var majors = await MajorService.GetAll(majorModel);
-            listModel = majors;
-            listMajor = Paging(majors);
-
-            baseTime = DateTime.Now;
-
-            await InvokeAsync(StateHasChanged);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            throw;
-        }
+        var majors = await MajorService.GetAll(majorModel);
+        listModel = majors;
+        listMajor = Paging(majors);
+        baseTime = DateTime.Now;
     }
-
     private async Task LoadMajor()
     {
         var majors = await MajorService.GetAll(majorModel);
@@ -314,7 +307,7 @@
             Input = await MajorRepository.GetById(id);
             isEdit = true;
             isModalVisible = true;
-            foreach (var item in selectMMajors)
+            foreach (var item in selectItems)
             {
                 item.IsSelected = item.Value == Input.ParentId;
             }
@@ -356,7 +349,7 @@
                     var isValid = await MajorService.CheckExclusive(ids, baseTime);
                     if (isValid)
                     {
-                        await MajorService.DeleteById(deleteId);
+                        await MajorService.DeleteById(deleteId, "");
                         ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                         await LoadData();
                         deleteId = "";
@@ -382,7 +375,7 @@
 
     private void Refresh()
     {
-        foreach (var item in selectMMajors)
+        foreach (var item in selectItems)
         {
             item.IsSelected = item.Value == "";
         }
@@ -406,7 +399,7 @@
                         var isValid = await MajorService.CheckExclusive(ids, baseTime);
                         if (isValid)
                         {
-                            await MajorService.Update(Input);
+                            await MajorService.Update(Input, "");
                             ToastService.ShowToast(
                                 "Thông báo",
                                 "Cập nhật thành công.",
@@ -444,7 +437,7 @@
                         var isValid = await MajorService.CheckExclusive(ids, baseTime);
                         if (isValid)
                         {
-                            await MajorService.Update(Input);
+                            await MajorService.Update(Input, "");
                             ToastService.ShowToast(
                                 "Thông báo",
                                 "Cập nhật thành công.",
@@ -487,7 +480,7 @@
                     var isValid = await MajorService.CheckExclusive(ids, baseTime);
                     if (isValid)
                     {
-                        await MajorService.Update(Input);
+                        await MajorService.Update(Input, "");
                         ToastService.ShowToast(
                             "Thông báo",
                             "Cập nhật thành công.",

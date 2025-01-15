@@ -17,7 +17,12 @@ namespace DucAnhERP.Services
             _context = context;
             _pKKLTDanRXayRepository = new PKKLTDanRXayRepository(_context); 
         }
-        public async Task<List<TKThepTDanRXay>> GetAll()
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
+
+        public async Task<List<TKThepTDanRXay>> GetAll(string groupId)
         {
             try
             {
@@ -185,7 +190,7 @@ namespace DucAnhERP.Services
             }
 
         }
-        public async Task Update(TKThepTDanRXay TKThepTDanRXay)
+        public async Task Update(TKThepTDanRXay TKThepTDanRXay, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(TKThepTDanRXay.Id);
@@ -235,8 +240,7 @@ namespace DucAnhERP.Services
             await SaveChanges(context);
 
         }
-
-            public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
@@ -269,7 +273,7 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-        public async Task Insert(TKThepTDanRXay entity)
+        public async Task Insert(TKThepTDanRXay entity, string userId)
         {
             try
             {
@@ -360,7 +364,6 @@ namespace DucAnhERP.Services
                 return id;
             }
         }
-
 
         public async Task SaveChanges(ApplicationDbContext context)
         {

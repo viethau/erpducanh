@@ -165,6 +165,8 @@
 </div>
 
 @code {
+    string groupId = "";
+    string userId = "";
     private List<PhanLoaiThanhChong> listPhanLoaiThanhChong = new List<PhanLoaiThanhChong>();
     private PhanLoaiThanhChong Input = new();
     private PhanLoaiThanhChongModel InputMD = new();
@@ -268,7 +270,7 @@
     {
         isLoading = true;
         dmModel = new();
-        listDanhMuc = await DanhMucRepository.GetAll();
+        listDanhMuc = await DanhMucRepository.GetAll(groupId);
         var plhg = await PhanLoaiThanhChongRepository.GetAllByVM(InputMD);
         listModel = plhg;
         listPLCTronHopNhuaModel = Paging(plhg);
@@ -298,7 +300,7 @@
                     if (isValid)
                     {
                         // cập nhật
-                        await PhanLoaiThanhChongRepository.Update(Input);
+                        await PhanLoaiThanhChongRepository.Update(Input,userId);
                         isModalVisible = false;
                         Input = new PhanLoaiThanhChong();
                         isEdit = false;
@@ -322,7 +324,7 @@
                     if (isValid)
                     {
                         // cập nhật
-                        await PhanLoaiThanhChongRepository.Update(Input);
+                        await PhanLoaiThanhChongRepository.Update(Input,userId);
                         isModalVisible = false;
                         Input = new PhanLoaiThanhChong();
                         isEdit = false;
@@ -372,7 +374,7 @@
                 else
                 {
                     // Thêm mới thông tin
-                    await PhanLoaiThanhChongRepository.Insert(Input);
+                    await PhanLoaiThanhChongRepository.Insert(Input,userId);
                     isModalVisible = false;
                     Input = new PhanLoaiThanhChong();
                     ToastService.ShowToast(
@@ -446,7 +448,7 @@
                 else
                 {
                     // Thực hiện hành động xóa
-                    await PhanLoaiThanhChongRepository.DeleteById(deleteId);
+                    await PhanLoaiThanhChongRepository.DeleteById(deleteId, userId);
                     ToastService.ShowToast("Thông báo",
                     "Xóa phân loại thành công.",
                     iconClass: "fa fa-check-circle",

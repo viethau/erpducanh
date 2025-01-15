@@ -139,6 +139,9 @@
 </div>
 
 @code {
+    string groupId = "";
+    string userId = "";
+
     private List<NhomDanhMuc> nhomDanhMucs = new List<NhomDanhMuc>();
     private DanhMuc1 Input = new DanhMuc1();
 
@@ -171,7 +174,7 @@
     {
         baseTime = DateTime.Now;
         dmModel = new();
-        nhomDanhMucs = await NhomDanhMucRepository.GetAll();
+        nhomDanhMucs = await NhomDanhMucRepository.GetAll(groupId);
         foreach (var item in nhomDanhMucs)
         {
             // Kiểm tra xem item đã tồn tại trong danh sách hay chưa
@@ -233,7 +236,7 @@
                 {
                     if (DMisExistEdit[0].Id == Input.Id)
                     {
-                        await DanhMucRepository.Update(Input);
+                        await DanhMucRepository.Update(Input,userId);
                         ToastService.ShowToast("Thông báo", "Cập nhật danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                         await LoadDanhMuc();
                         isModalVisible = false;
@@ -254,7 +257,7 @@
                 }
                 else
                 {
-                    await DanhMucRepository.Update(Input);
+                    await DanhMucRepository.Update(Input, userId);
                     ToastService.ShowToast("Thông báo", "Cập nhật danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                     await LoadDanhMuc();
                     isModalVisible = false;
@@ -278,7 +281,7 @@
                 else
                 {
 
-                    await DanhMucRepository.Insert(Input);
+                    await DanhMucRepository.Insert(Input, userId);
                     ToastService.ShowToast("Thông báo", "Thêm danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                     await LoadDanhMuc();
                     isModalVisible = false;
@@ -320,7 +323,7 @@
                     else
                     {
                         // Thực hiện hành động xóa
-                        await DanhMucRepository.DeleteById(deleteId);
+                        await DanhMucRepository.DeleteById(deleteId, userId);
                         ToastService.ShowToast("Thông báo", "Xóa danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                         await LoadDanhMuc();
                     }

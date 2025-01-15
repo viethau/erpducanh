@@ -21,7 +21,10 @@
             </button>
         </div>
     </div>
-    <h5 class="mt-2">BẢNG THỐNG KẾ SỐ LƯỢNG ĐẾ CỐNG TRÒN THEO TUYẾN</h5>
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mt-2">BẢNG THỐNG KẾ SỐ LƯỢNG ĐẾ CỐNG TRÒN THEO TUYẾN</h5>
+        <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
+    </div>
     <div id="tableContainer ">
         <div class="row mt-3 p-2 our-table">
             <table id="tb1" class="table table-bordered table-hover" cellpadding="1" cellspacing="2">
@@ -31,10 +34,10 @@
                         <th class="text-center"> STT</th>
                         <th class="text-center"> Tuyến đường</th>
                         <th class="text-center">Loại đế cống</th>
-                        <th class="text-center">Đơn vị              </th>
-                        <th class="text-center">Trái                </th>
-                        <th class="text-center">Phải                </th>
-                        <th class="text-center">Tổng                </th>
+                        <th class="text-center">Đơn vị</th>
+                        <th class="text-center">Trái</th>
+                        <th class="text-center">Phải</th>
+                        <th class="text-center">Tổng</th>
 
                     </tr>
                 </thead>
@@ -89,7 +92,8 @@
     private bool isEdit = false;
     private bool isLoading = false;
     private DateTime baseTime;
-
+    string groupId = "";
+    string userId = "";
     private string layoutClass = "d-flex justify-content-between";
     private string space = "ml-5";
     private string thumbtack = "";
@@ -117,7 +121,7 @@
     {
         isLoading = true;
         var helper = new DataConversionHelper();
-        listDanhMuc = await DanhMucRepository.GetAll();
+        listDanhMuc = await DanhMucRepository.GetAll(groupId);
         TKSLTTModel nuocMuaModelSearch = new();
 
         var nuocMuaRepository = await NuocMuaRepository.GetBaoCaoSLDeTT();
@@ -195,5 +199,28 @@
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
     }
+    private async Task ExportExcel()
+    {
+        var header = ConstantHeaderExcel.SLTT_HEADERS;
+        header[2].Title = "BẢNG THỐNG KẾ SỐ LƯỢNG ĐẾ CỐNG THEO TUYẾN";
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.23 SL Đế cống TT",
+                Tables = new List<TableInfo<object>>
+                {
+                     new TableInfo<object>
+                    {
+                        Headers = header.ToList(),
+                        Data = listModel.Cast<object>().ToList()
+                    },
+                }
+            };
 
+        // Xuất Excel
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        var fileName = "SLDeCongTT.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+    }
 }

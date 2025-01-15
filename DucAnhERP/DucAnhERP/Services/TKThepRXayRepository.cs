@@ -17,7 +17,11 @@ namespace DucAnhERP.Services
             _context = context;
             _pKKLRXayRepository = new PKKLRXayRepository(context);
         }
-        public async Task<List<TKThepRXay>> GetAll()
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
+        public async Task<List<TKThepRXay>> GetAll(string groupId)
         {
             try
             {
@@ -185,7 +189,7 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-        public async Task Update(TKThepRXay TKThepRXay)
+        public async Task Update(TKThepRXay TKThepRXay, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(TKThepRXay.Id);
@@ -235,8 +239,7 @@ namespace DucAnhERP.Services
             }
             await SaveChanges(context);
         }
-
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
@@ -269,7 +272,7 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-        public async Task Insert(TKThepRXay entity)
+        public async Task Insert(TKThepRXay entity, string userId)
         {
             try
             {
@@ -360,7 +363,6 @@ namespace DucAnhERP.Services
                 return id;
             }
         }
-
 
         public async Task SaveChanges(ApplicationDbContext context)
         {

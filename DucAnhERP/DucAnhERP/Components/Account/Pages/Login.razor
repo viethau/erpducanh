@@ -8,7 +8,6 @@
 @using DucAnhERP.Data
 @using DucAnhERP.Models
 @using System.Text
-@using DucAnhERP.Shared
 
 @inject SignInManager<IdentityUser> SignInManager
 @inject NavigationManager NavigationManager
@@ -112,14 +111,14 @@
             return;
         }
 
-        var notActiveUser = await UserService.GetById(user.Id, isActive: 0);
+        var notActiveUser = await ApplicationUserService.GetById(user.Id);
 
         // Kiểm tra trạng thái kích hoạt tài khoản
-        if (notActiveUser != null)
+        if (notActiveUser != null && notActiveUser.IsActive == 0)
         {
             errorMessage = "Tài khoản của bạn chưa được kích hoạt! Vui lòng kiểm tra mail để kích hoạt tài khoản.";
             messageClass = Constant.DANGER;
-            await UserManager.AccessFailedAsync(user);
+            // await UserManager.AccessFailedAsync(user);
             return;
         }
 
@@ -135,6 +134,7 @@
             if (await UserManager.GetLockoutEndDateAsync(user) != null)
             {
                 await UserManager.ResetAccessFailedCountAsync(user);
+                await UserManager.SetLockoutEndDateAsync(user, DateTime.Now.AddMinutes(1));
                 RedirectManager.RedirectTo("Account/Lockout");
             }
 
@@ -150,27 +150,42 @@
             }
             return;
         }
+        else if (user.LockoutEnd != null && user.LockoutEnd.Value > DateTimeOffset.Now)
+        {
+            RedirectManager.RedirectTo("Account/Lockout");
+        }
+        else
+        {
+            user.AccessFailedCount = 0;
+            user.LockoutEnd = null;
+            await UserManager.UpdateAsync(user);
+        }
 
         // Nếu tài khoản đã bị khóa thì di chuyển đến màn hình khóa
         if (await UserManager.GetLockoutEndDateAsync(user) != null)
         {
             await UserManager.ResetAccessFailedCountAsync(user);
+            await UserManager.SetLockoutEndDateAsync(user, DateTime.Now.AddMinutes(1));
             RedirectManager.RedirectTo("Account/Lockout");
         }
 
-        var validateUser = await UserService.GetById(user.Id, isActive: 1);
+        var validateUser = await ApplicationUserService.GetById(user.Id);
         // Kiểm tra login lần đầu
-        if (validateUser.IsFirstLogin == 1)
+        if (validateUser.IsFirstLogin == 2)
         {
             UserState.Email = user.Email;
             RedirectManager.RedirectTo("/Account/ChangePassword", new() { ["isFirstLogin"] = "1" });
         }
+        if (validateUser.IsFirstLogin == 1)
+        {
+            warning = $"Tài khoản của bạn đã yêu cầu đổi mật khẩu. Xin vui lòng vào email để xác nhận hoặc liên hệ quản trị viên để thay đổi mật khẩu.";
+        }
 
         // Gửi mã xác thực:
-        // var code = LoginService.GenerateVerificationCode(user.Email);
+        var code = LoginService.GenerateVerificationCode(user.Email);
         UserState.Email = Input.Email;
         UserState.Password = Input.Password;
-        // await SendMail(validateUser, code);
+        await SendMail(validateUser, code);
         RedirectManager.RedirectTo("/Account/ConfirmLogin", new() { ["rememberMe"] = Input.RememberMe, ["returnUrl"] = ReturnUrl });
     }
 
@@ -208,8 +223,9 @@
         emailHistory.Subject = "Mã Xác Nhận Đăng Nhập";
         emailHistory.Content = content;
         emailHistory.CompanyId = user.CompanyId;
-        emailHistory.MajorId = "";
-        emailHistory.ScreenId = "";
+        emailHistory.GroupId = user.CompanyId;
+        emailHistory.MajorId = "dce7329a-e7a1-4ef9-9ece-b45537c4128c";
+        emailHistory.ParentMajorId = "";
         emailHistory.CreateAt = DateTime.Now;
         emailHistory.CreateBy = "System";
 

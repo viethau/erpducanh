@@ -29,7 +29,7 @@
         }
         if (!string.IsNullOrEmpty(sessionId))
         {
-            await UserSessionService.DeleteById(sessionId);
+            await UserSessionService.DeleteById(sessionId, "");
         }
 
         NavigationManager.NavigateTo("/Account/Login");

@@ -18,6 +18,7 @@ namespace DucAnhERP.Models
         public int OperationType { get; set; }
         public int ApprovalSts { get; set; }
         public string Content { get; set; }
+        public string GroupId { get; set; }
         public DateTime CreateAt { get; set; }
         public string CreateBy { get; set; }
         public DateTime UpdateAt { get; set; }

@@ -20,7 +20,11 @@ namespace DucAnhERP.Services
         {
             _context = context;
         }
-        public async Task<List<PKKLCTietHoGa>> GetAll()
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
+        public async Task<List<PKKLCTietHoGa>> GetAll(string groupId)
         {
             try
             {
@@ -123,7 +127,6 @@ namespace DucAnhERP.Services
             }
 
         }
-
         public async Task<List<THKLModel>> GetTHKL1HoGa()
         {
             try
@@ -227,7 +230,6 @@ namespace DucAnhERP.Services
                 throw; // Ném lại lỗi
             }
         }
-
         public async Task<List<THKLModel>> GetTHKLByTuyenDuong(string TuyenDuong)
         {
             try
@@ -578,7 +580,7 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-        public async Task Update(PKKLCTietHoGa TKThepDeCong)
+        public async Task Update(PKKLCTietHoGa TKThepDeCong,string Id)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(TKThepDeCong.Id);
@@ -622,7 +624,7 @@ namespace DucAnhERP.Services
             }
         }
 
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id,string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
@@ -647,7 +649,7 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-        public async Task Insert(PKKLCTietHoGa entity)
+        public async Task Insert(PKKLCTietHoGa entity,string userId)
         {
             try
             {

@@ -6,6 +6,7 @@ using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Text.RegularExpressions;
 
 namespace DucAnhERP.Services
 {
@@ -42,7 +43,11 @@ namespace DucAnhERP.Services
             _tKThepRBTongRepository = new TKThepRBTongRepository(context);
             _tKThepTDRBTongRepository = new TKThepTDRBTongRepository(context);
         }
-        public async Task<List<DMThep>> GetAll()
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
+        public async Task<List<DMThep>> GetAll(string groupId)
         {
             try
             {
@@ -169,7 +174,7 @@ namespace DucAnhERP.Services
 
             return false; 
         }
-        public async Task Update(DMThep DMThep)
+        public async Task Update(DMThep DMThep, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(DMThep.Id);
@@ -194,7 +199,7 @@ namespace DucAnhERP.Services
             }
             await context.SaveChangesAsync();
         }
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id,string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
@@ -219,7 +224,7 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-        public async Task Insert(DMThep entity)
+        public async Task Insert(DMThep entity, string userId)
         {
             try
             {

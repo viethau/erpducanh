@@ -17,7 +17,7 @@ namespace DucAnhERP.Services
             _context = context;
         }
 
-        public async Task<MMajor> AddMajor(MMajor mMajor)
+        public async Task<Major> AddMajor(Major mMajor)
         {
             using var context = _context.CreateDbContext();
             if (mMajor == null) return null;
@@ -27,7 +27,7 @@ namespace DucAnhERP.Services
             mMajor.CreateAt = DateTime.Now;
             mMajor.IsActive = 1;
 
-            var newMajor = context.MMajors.Add(mMajor).Entity;
+            var newMajor = context.Majors.Add(mMajor).Entity;
             await context.SaveChangesAsync();
 
             return newMajor;
@@ -37,12 +37,12 @@ namespace DucAnhERP.Services
         public async Task<List<MajorModel>> GetAll(MajorModel majorModel)
         {
             using var context = _context.CreateDbContext();
-            var query = from major in context.MMajors
-                        join parent in context.MMajors.Where(p => p.IsActive == 1) // Lọc dữ liệu của parent trước khi ghép nối
+            var query = from major in context.Majors
+                        join parent in context.Majors.Where(p => p.IsActive != 100) // Lọc dữ liệu của parent trước khi ghép nối
                         on major.ParentId equals parent.Id into parentGroup
                         from parent in parentGroup.DefaultIfEmpty()
-                        where major.IsActive == 1
-                        orderby major.CreateAt descending
+                        where major.IsActive != 100
+                        orderby major.Order ascending
                         select new MajorModel
                         {
                             Id = major.Id,
@@ -75,11 +75,11 @@ namespace DucAnhERP.Services
             return data;
         }
 
-        public async Task<List<MMajor>> GetAllParentMajor()
+        public async Task<List<Major>> GetAllParentMajor()
         {
             using var context = _context.CreateDbContext();
-            var query = context.MMajors
-                .Select(selectedMajor => new MMajor()
+            var query = context.Majors
+                .Select(selectedMajor => new Major()
                 {
                     Id = selectedMajor.Id,
                     ParentId = selectedMajor.ParentId,
@@ -89,40 +89,23 @@ namespace DucAnhERP.Services
                 })
                 .Where(selectedMajor => selectedMajor.ParentId == null);
 
-            var data = await query.OrderBy(major => major.MajorName).ToListAsync();
+            var data = await query.ToListAsync();
             return data;
         }
 
-        public async Task<List<MMajor>> GetAllChildMajor()
+        public async Task<Major> GetMajorByName(string majorName)
         {
             using var context = _context.CreateDbContext();
-            return await context.MMajors
-                .Where(major => major.ParentId != null)
-                .Select(major => new MMajor
-                {
-                    Id = major.Id,
-                    ParentId = major.ParentId,
-                    MajorName = major.MajorName,
-                    Order = major.Order,
-                    Table = major.Table
-                }).OrderBy(major=> major.MajorName)
-                .ToListAsync();
-        }
-
-
-        public async Task<MMajor> GetMajorByName(string majorName)
-        {
-            using var context = _context.CreateDbContext();
-            var major = await context.MMajors.Where(x => x.MajorName == majorName && x.IsActive == 1).FirstOrDefaultAsync();
+            var major = await context.Majors.Where(x => x.MajorName == majorName && x.IsActive == 1).FirstOrDefaultAsync();
             if (major == null) return null;
 
             return major;
         }
 
-        public async Task<MMajor> GetById(string id)
+        public async Task<Major> GetById(string id)
         {
             using var context = _context.CreateDbContext();
-            var entity = await context.MMajors.Where(x => x.Id.Equals(id) && x.IsActive == 1).FirstOrDefaultAsync();
+            var entity = await context.Majors.Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
 
             if (entity == null)
             {
@@ -132,20 +115,34 @@ namespace DucAnhERP.Services
             return entity;
         }
 
-        public async Task<List<MMajor>> GetMajorByParentId(string id)
+        public async Task<List<Major>> GetMajorByParentId(string id)
         {
             using var context = _context.CreateDbContext();
-            var majors = await context.MMajors.Where(x => x.ParentId == id && x.IsActive == 1).ToListAsync();
+            var majors = await context.Majors.Where(x => x.ParentId == id && x.IsActive != 100).OrderBy(x => x.Order).ToListAsync();
             return majors;
         }
 
-        public async Task<List<MMajor>> GetAll()
+        public List<Major> GetMajorByParentId1(string id)
+        {
+            using var context = _context.CreateDbContext();
+            var majors = context.Majors.Where(x => x.ParentId == id && x.IsActive != 100).OrderBy(x => x.Order).ToList();
+            return majors;
+        }
+
+        public async Task<List<Major>> GetParentMajor()
+        {
+            using var context = _context.CreateDbContext();
+            var majors = await context.Majors.Where(x => x.ParentId == null && x.IsActive != 100).OrderBy(x => x.Order).ToListAsync();
+            return majors;
+        }
+
+        public async Task<List<Major>> GetAll(string groupId)
         {
             try
             {
                 using var context = _context.CreateDbContext();
-                List<MMajor> list = new ();
-                list = await context.MMajors.ToListAsync();
+                List<Major> list = new();
+                list = await context.Majors.ToListAsync();
                 return list;
             }
             catch (Exception ex)
@@ -156,7 +153,7 @@ namespace DucAnhERP.Services
             }
         }
 
-        public async Task Update(MMajor major)
+        public async Task Update(Major major, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(major.Id);
@@ -166,33 +163,33 @@ namespace DucAnhERP.Services
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {major.Id}");
             }
 
-            context.MMajors.Update(major);
+            context.Majors.Update(major);
             await context.SaveChangesAsync();
         }
 
-        public async Task UpdateMulti(MMajor[] entities)
+        public async Task UpdateMulti(Major[] entities)
         {
             using var context = _context.CreateDbContext();
             string[] ids = entities.Select(x => x.Id).ToArray();
-            var listEntities = await context.MMajors.Where(x => ids.Contains(x.Id)).ToListAsync();
+            var listEntities = await context.Majors.Where(x => ids.Contains(x.Id)).ToListAsync();
             foreach (var entity in listEntities)
             {
-                context.MMajors.Update(entity);
+                context.Majors.Update(entity);
             }
             await context.SaveChangesAsync();
         }
 
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
-            var isExist = await context.MMajorUserPermissions.Where(x => x.MajorId == id && x.IsActive == 1).ToListAsync();
-            var isExist1 = await context.MPermissions.Where(x => x.MajorId == id && x.IsActive == 1).ToListAsync();
+            var isExist = await context.MajorUserPermissions.Where(x => x.MajorId == id && x.IsActive == 1).ToListAsync();
+            var isExist1 = await context.Permissions.Where(x => x.MajorId == id && x.IsActive == 1).ToListAsync();
             if (entity == null)
             {
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
             }
-            if (isExist !=null && isExist.Count() >0)
+            if (isExist != null && isExist.Count() > 0)
             {
                 throw new Exception($"Nghiệp vụ :{entity.MajorName} đang được sử dụng !");
             }
@@ -201,7 +198,7 @@ namespace DucAnhERP.Services
                 throw new Exception($"Nghiệp vụ :{entity.MajorName} đang được sử dụng !");
             }
 
-            context.Set<MMajor>().Remove(entity);
+            context.Set<Major>().Remove(entity);
             await context.SaveChangesAsync();
         }
 
@@ -224,7 +221,7 @@ namespace DucAnhERP.Services
             return true;
         }
 
-        public async Task Insert(MMajor entity)
+        public async Task Insert(Major entity, string userId)
         {
             using var context = _context.CreateDbContext();
             if (entity == null)
@@ -232,8 +229,35 @@ namespace DucAnhERP.Services
                 throw new Exception("Không có bản ghi nào để thêm!");
             }
 
-             context.MMajors.Add(entity);
+            context.Majors.Add(entity);
             await context.SaveChangesAsync();
+        }
+
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            using var context = _context.CreateDbContext();
+            var model = await context.Majors.Where(p => p.Id == ids).FirstOrDefaultAsync();
+            if (model == null)
+            {
+                throw new Exception($"Không tìm thấy nghiệp vụ đã chọn");
+            }
+            if (model != null && model.IsActive == 0)
+            {
+                throw new Exception($"Nghiệp vụ đang chờ duyệt thêm mới.");
+            }
+            if (model != null && model.IsActive == 1)
+            {
+                throw new Exception($"Nghiệp vụ đang chờ duyệt sửa.");
+            }
+            if (model != null && model.IsActive == 2)
+            {
+                throw new Exception($"Nghiệp vụ đang chờ duyệt xóa.");
+            }
+            if (model != null && model.MajorName.ToUpper() != name.ToUpper() && name != "")
+            {
+                throw new Exception($"Tên nghiệp vụ đã bị thay đổi.");
+            }
+            return true;
         }
     }
 }

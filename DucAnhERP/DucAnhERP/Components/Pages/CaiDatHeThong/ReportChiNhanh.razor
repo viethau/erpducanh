@@ -1,0 +1,244 @@
+﻿@page "/CaiDatHeThong/Report/ChiNhanhs"
+@using DucAnhERP.Helpers
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using System.Linq
+@using DucAnhERP.SeedWork
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@inject NavigationManager navigation
+@inject DucAnhERP.Services.ToastService ToastService
+@attribute [Authorize]
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject SignInManager<IdentityUser> SignInManager
+
+<div class="mx-5 my-2">
+    <h3>Danh sách</h3>
+    <div>
+        <EditForm Model="pageModel" FormName="SearchData" OnValidSubmit="@Search">
+            <DataAnnotationsValidator />
+            <div class="d-flex row">
+                <div class="form-floating col-sm-3 col-md-3">
+                    <label for="ParentIdSearch">Thuộc tổ chức</label>
+                    <Select2 Id="ParentIdSearch" Items="@selectParentIdSearch" OnChange="@OnSelectParentIdSearch"></Select2>
+                    <ValidationMessage For="()=>pageModel.ParentId"></ValidationMessage>
+                </div>
+                <div class="form-floating col-sm-3 col-md-3">
+                    <label for="CompanyTypeSearch">Loại tổ chức</label>
+                    <Select2 Id="CompanyTypeSearch" Items="@selectCompanyTypeSearch" OnChange="@OnSelectCompanyTypeSearch"></Select2>
+                    <ValidationMessage For="()=>pageModel.CompanyType"></ValidationMessage>
+                </div>
+                <div class="form-group ml-5">
+                    <label>&nbsp;</label>
+                    <button type="submit" class="btn btn-primary form-control">Tìm kiếm</button>
+                </div>
+            </div>
+        </EditForm>
+        <div class="row mt-3 our-table">
+            <table class="table table-hover table-bordered">
+                <thead class="bg-info">
+                    <tr>
+                        <th class="text-center" rowspan="2" scope="col">
+                            <div class="pb-3">No.</div>
+                        </th>
+                        <th onclick="@(() => SortTable("ParentId"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Thuộc tổ chức</div>
+                            <span class="arrow @(GetSortStyle("ParentId"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("TenChiNhanh"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Tên chi nhánh</div>
+                            <span class="arrow @(GetSortStyle("TenChiNhanh"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("CompanyType"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Loại tổ chức</div>
+                            <span class="arrow @(GetSortStyle("CompanyType"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("Phone"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Số điện thoại</div>
+                            <span class="arrow @(GetSortStyle("Phone"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("Email"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Email</div>
+                            <span class="arrow @(GetSortStyle("Email"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("Address"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Địa chỉ</div>
+                            <span class="arrow @(GetSortStyle("Address"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("IsStatus"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Trạng thái</div>
+                            <span class="arrow @(GetSortStyle("IsStatus"))"></span>
+                        </th>
+                    </tr>
+                </thead>
+                @if (listChiNhanh.Any())
+                {
+                    <tbody>
+                        @{
+                            int stt = 0;
+                        }
+                        @foreach (var item in listChiNhanh)
+                        {
+                            stt++;
+                            <tr>
+                                <td class="text-center" scope="row">@stt</td>
+                                <td class="text-left">@item.ParentId</td>
+                                <td class="text-left">@item.TenChiNhanh</td>
+                                <td class="text-left">@item.CompanyType</td>
+                                <td class="text-left">@item.Phone</td>
+                                <td class="text-left">@item.Email</td>
+                                <td class="text-left">@item.Address</td>
+                                <td class="text-left">@item.IsStatus</td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+                else
+                {
+                    <tbody>
+                        <tr>
+                            <td class="text-danger" colspan="7">Không có dữ liệu</td>
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        </div>
+        @if (listChiNhanh.Any())
+        {
+            <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+        }
+    </div>
+</div>
+@code {
+    private List<ChiNhanhModel> listParentIdSearch = new();
+    private List<CompanyTypeModel> listCompanyTypeSearch = new();
+    private DateTime baseTime;
+    private string deleteId;
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<SelectedItem> selectParentIdSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private void OnSelectParentIdSearch(SelectedItem selectedItem)
+    {
+        pageModel.ParentId = selectedItem.Value;
+    }
+    private List<SelectedItem> selectCompanyTypeSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private void OnSelectCompanyTypeSearch(SelectedItem selectedItem)
+    {
+        pageModel.CompanyType = selectedItem.Value;
+    }
+
+    public List<ChiNhanhModel> listChiNhanh
+    {
+        get;
+        set;
+    } = new();
+    public List<ChiNhanhModel> listModel
+    {
+        get;
+        set;
+    } = new();
+    [SupplyParameterFromForm(FormName = "SearchData")]
+    public ChiNhanhModel pageModel
+    {
+        get;
+        set;
+    }
+    public MetaData MetaData
+    {
+        get;
+        set;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            userName = authState.User.Identity.Name;
+            user = ApplicationUserService.GetByUserName(userName);
+            userId = user.Id;
+            groupId = user.GroupId;
+        }
+        pageModel = new();
+        await LoadData();
+    }
+    private async Task LoadData()
+    {
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "f6bcf5de-c8a7-490d-ae50-c9fdb8be9d1c");
+            listParentIdSearch = await ChiNhanhService.GetChiNhanhs(groupId);
+            selectParentIdSearch = listParentIdSearch.Select(data => new SelectedItem
+                {
+                    Value = data.Id,
+                    Text = data.TenChiNhanh
+                }).ToList();
+            selectParentIdSearch.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+
+            listCompanyTypeSearch = await ChiNhanhService.GetCompanyTypes(groupId);
+            selectCompanyTypeSearch = listCompanyTypeSearch.Select(data => new SelectedItem
+                {
+                    Value = data.Id,
+                    Text = data.TenLoaiChiNhanh
+                }).ToList();
+            selectCompanyTypeSearch.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+
+            baseTime = DateTime.Now;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+            "Thông báo",
+            ex.Message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 7000
+            );
+        }
+    }
+    public async Task Search()
+    {
+        var checkquyen = await PhanQuyenService.CheckPermission(groupId, groupId, user, "8ae55373-b63f-4dab-aaaf-2fac80881007");
+        pageModel.PageNumber = 1;
+        listModel = await ChiNhanhService.GetAllByVM(pageModel, groupId);
+        listChiNhanh = Paging(listModel);
+    }
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        pageModel.PageNumber = 1;
+        Paging(listModel);
+    }
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+    private void SelectedPage(int page)
+    {
+        pageModel.PageNumber = page;
+        Paging(listModel);
+    }
+    private void ChangePageSize(int pageSize)
+    {
+        pageModel.PageNumber = 1;
+        pageModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+    private List<ChiNhanhModel> Paging(List<ChiNhanhModel> list)
+    {
+        var count = list.Count();
+        list = list.Skip((pageModel.PageNumber - 1) * pageModel.PageSize).Take(pageModel.PageSize).ToList();
+        listChiNhanh.Clear();
+        foreach (var item in list)
+        {
+            listChiNhanh.Add(item);
+        }
+        var pagelist = new PageList<ChiNhanhModel>(listChiNhanh, count, pageModel.PageNumber, pageModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return list;
+    }
+}
+

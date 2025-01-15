@@ -14,7 +14,12 @@ namespace DucAnhERP.Services
         {
             _context = context;
         }
-        public async Task<List<MaTuong>> GetAll()
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+
+        }
+        public async Task<List<MaTuong>> GetAll(string groupId)
         {
             try
             {
@@ -418,7 +423,7 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-        public async Task Update(MaTuong MaTuong)
+        public async Task Update(MaTuong MaTuong, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(MaTuong.Id);
@@ -442,7 +447,7 @@ namespace DucAnhERP.Services
             }
             await context.SaveChangesAsync();
         }
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
@@ -467,7 +472,7 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-        public async Task Insert(MaTuong entity)
+        public async Task Insert(MaTuong entity, string userId)
         {
             try
             {

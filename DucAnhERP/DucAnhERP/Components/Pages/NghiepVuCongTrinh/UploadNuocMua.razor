@@ -35,6 +35,8 @@
     <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
 </div>
 @code {
+    string groupId = "";
+    string userId = "";
     private List<ExcelData> excelDataList;
     private List<NuocMua> listNuocMua ;
     private List<NuocMua> listNuocMuaRight ;
@@ -43,7 +45,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        listDanhMuc = await DanhMucRepository.GetAll();
+        listDanhMuc = await DanhMucRepository.GetAll(groupId);
     }
 
     private async Task HandleFileSelected(InputFileChangeEventArgs e)

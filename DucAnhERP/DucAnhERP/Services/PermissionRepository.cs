@@ -14,13 +14,13 @@ namespace DucAnhERP.Services
             _context = context;
         }
 
-        public async Task<List<MPermission>> GetExist(MPermission input)
+        public async Task<List<Permission>> GetExist(Permission input)
         {
             using var context = _context.CreateDbContext();
 
             if (input.PermissionType == 6)
             {
-                var query = context.MPermissions
+                var query = context.Permissions
                     .Where(permission =>
                         permission.MajorId == input.MajorId &&
                         permission.PermissionName == input.PermissionName)
@@ -31,7 +31,7 @@ namespace DucAnhERP.Services
             }
             else
             {
-                var query = context.MPermissions
+                var query = context.Permissions
                     .Where(permission =>
                         permission.MajorId == input.MajorId &&
                         permission.PermissionType == input.PermissionType)
@@ -41,9 +41,6 @@ namespace DucAnhERP.Services
                 var data = await query.ToListAsync();
                 return data;
             }
-
-
-            
         }
 
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
@@ -62,55 +59,34 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
-            var isExist = await context.MMajorUserPermissionDetails.Where(x => x.PermissionId.Equals(id)).ToListAsync();
+            var isExist = await context.MajorUserPermissions.Where(x => x.PermissionId.Equals(id)).ToListAsync();
 
             if (entity == null)
             {
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
             }
-            if (isExist != null && isExist.Count() >0 )
+            if (isExist != null && isExist.Count() > 0)
             {
                 throw new Exception($"Không thể xóa bản ghi đang được sử dụng : {id}");
             }
-            context.Set<MPermission>().Remove(entity);
+            context.Set<Permission>().Remove(entity);
             await context.SaveChangesAsync();
         }
         public async Task<List<PermissionModel>> GetAllByVM(PermissionModel permissionModel)
         {
             using var context = _context.CreateDbContext();
-            //var query = from permission in context.MPermissions
-            //            join major in context.MMajors
-            //            on permission.MajorId equals major.Id into majorGroup
-            //            from major in majorGroup.DefaultIfEmpty()
-
-
-            //            orderby permission.CreateAt descending
-            //            select new PermissionModel
-            //            {
-            //                Id = permission.Id,
-            //                MajorId = permission.MajorId,
-            //                MajorName = major.MajorName,
-            //                PermissionType = permission.PermissionType,
-            //                PermissionName = permission.PermissionName,
-            //                CreateAt = permission.CreateAt,
-            //                CreateBy = permission.CreateBy,
-            //                IsActive = permission.IsActive
-            //            };
-            var query = from permission in context.MPermissions
-                        join major in context.MMajors on permission.MajorId equals major.Id into majorGroup
+            var query = from permission in context.Permissions
+                        join major in context.Majors
+                        on permission.MajorId equals major.Id into majorGroup
                         from major in majorGroup.DefaultIfEmpty()
-                        join parent in context.MMajors on major.ParentId equals parent.Id into parentGroup
-                        from parent in parentGroup.DefaultIfEmpty()
                         orderby permission.CreateAt descending
                         select new PermissionModel
                         {
                             Id = permission.Id,
-                            ParentMajorId = major.ParentId??"", // ParentId from MMajors
-                            ParentMajorName = parent.MajorName, // Parent MajorName from MMajors
                             MajorId = permission.MajorId,
                             MajorName = major.MajorName,
                             PermissionType = permission.PermissionType,
@@ -120,12 +96,6 @@ namespace DucAnhERP.Services
                             IsActive = permission.IsActive
                         };
 
-
-            if (!string.IsNullOrEmpty(permissionModel.ParentMajorId))
-            {
-                query = query.Where(m => m.ParentMajorId == permissionModel.ParentMajorId);
-            }
-            
             if (!string.IsNullOrEmpty(permissionModel.MajorId))
             {
                 query = query.Where(m => m.MajorId == permissionModel.MajorId);
@@ -139,15 +109,14 @@ namespace DucAnhERP.Services
             var data = await query.ToListAsync();
             return data;
         }
-
         public async Task<List<PermissionModel>> GetAllCorePermission(string screenId, string companyId)
         {
             using var context = _context.CreateDbContext();
-            var query = from permission in context.MPermissions
-                        join major in context.MMajors
+            var query = from permission in context.Permissions
+                        join major in context.Majors
                         on permission.MajorId equals major.Id into majorGroup
                         from major in majorGroup.DefaultIfEmpty()
-                       
+
                         select new PermissionModel
                         {
                             Id = permission.Id,
@@ -158,19 +127,19 @@ namespace DucAnhERP.Services
 
             return await query.OrderBy(p => p.PermissionType).ToListAsync();
         }
-        public async Task<List<MPermission>> GetAllMPermissions()
+        public async Task<List<Permission>> GetAllMPermissions()
         {
             using var context = _context.CreateDbContext();
-            var query = context.MPermissions.Where(x => x.IsActive == 1);
+            var query = context.Permissions.Where(x => x.IsActive != 100);
             return await query.ToListAsync();
         }
 
-        public async Task<List<MPermission>> GetAll()
+        public async Task<List<Permission>> GetAll(string groupId)
         {
             try
             {
                 using var context = _context.CreateDbContext();
-                var entity = await context.MPermissions.ToListAsync();
+                var entity = await context.Permissions.Where(p => p.IsActive != 100).ToListAsync();
                 return entity;
             }
             catch (Exception ex)
@@ -180,17 +149,41 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-        public async Task<MPermission> GetById(string id)
+        public async Task<List<Permission>> LoadByMajor(string majorId)
         {
             using var context = _context.CreateDbContext();
-            var entity = await context.MPermissions.Where(x => x.Id.Equals(id) && x.IsActive == 1).FirstOrDefaultAsync();
+            var entity = await (from p in context.Permissions
+                                where p.MajorId == majorId
+                                select p).OrderBy(p => p.PermissionType).Distinct().ToListAsync();
+            return entity;
+        }
+        public List<Permission> LoadByMajor1(string majorId)
+        {
+            using var context = _context.CreateDbContext();
+            var entity = (from p in context.Permissions
+                          where p.MajorId == majorId
+                          select p).OrderBy(p => p.PermissionType).Distinct().ToList();
+            return entity;
+        }
+        public async Task<List<Permission>> LoadToApproval(string majorId)
+        {
+            using var context = _context.CreateDbContext();
+            var entity = await (from p in context.Permissions
+                                where p.MajorId == majorId && (p.PermissionType == 3 || p.PermissionType == 4 || p.PermissionType == 5)
+                                select p).OrderBy(p => p.PermissionType).Distinct().ToListAsync();
+            return entity;
+        }
+        public async Task<Permission> GetById(string id)
+        {
+            using var context = _context.CreateDbContext();
+            var entity = await context.Permissions.Where(x => x.Id.Equals(id) && x.IsActive == 1).FirstOrDefaultAsync();
             if (entity == null)
             {
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
             }
             return entity;
         }
-        public async Task Insert(MPermission entity)
+        public async Task Insert(Permission entity, string userId)
         {
             try
             {
@@ -199,7 +192,7 @@ namespace DucAnhERP.Services
                 {
                     throw new Exception("Không có bản ghi nào để thêm!");
                 }
-                context.MPermissions.Add(entity);
+                context.Permissions.Add(entity);
                 await context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -208,7 +201,7 @@ namespace DucAnhERP.Services
                 throw;
             }
         }
-        public async Task Update(MPermission mpermission)
+        public async Task Update(Permission mpermission, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(mpermission.Id);
@@ -216,19 +209,24 @@ namespace DucAnhERP.Services
             {
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {mpermission.Id}");
             }
-            context.MPermissions.Update(mpermission);
+            context.Permissions.Update(mpermission);
             await context.SaveChangesAsync();
         }
-        public async Task UpdateMulti(MPermission[] MPermissions)
+        public async Task UpdateMulti(Permission[] MPermissions)
         {
             using var context = _context.CreateDbContext();
             string[] ids = MPermissions.Select(x => x.Id).ToArray();
-            var listEntities = await context.MPermissions.Where(x => ids.Contains(x.Id)).ToListAsync();
+            var listEntities = await context.Permissions.Where(x => ids.Contains(x.Id)).ToListAsync();
             foreach (var entity in listEntities)
             {
-                context.MPermissions.Update(entity);
+                context.Permissions.Update(entity);
             }
             await context.SaveChangesAsync();
+        }
+
+        public Task<bool> CheckStatus(string ids, string name)
+        {
+            throw new NotImplementedException();
         }
     }
 }

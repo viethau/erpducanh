@@ -16,8 +16,12 @@ namespace DucAnhERP.Services
         {
             _context = context;
         }
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
 
-        public async Task<List<PhanLoaiMongCTron>> GetAll()
+        public async Task<List<PhanLoaiMongCTron>> GetAll(string groupId)
         {
             try
             {
@@ -32,7 +36,6 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-
         public async Task<List<PhanLoaiMongCongModel>> GetAllByVM(PhanLoaiMongCongModel plmModel)
         {
             try
@@ -208,8 +211,7 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-
-        public async Task Update(PhanLoaiMongCTron PhanLoaiMongCTron)
+        public async Task Update(PhanLoaiMongCTron PhanLoaiMongCTron, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(PhanLoaiMongCTron.Id);
@@ -222,7 +224,6 @@ namespace DucAnhERP.Services
             context.PhanLoaiMongCTrons.Update(PhanLoaiMongCTron);
             await context.SaveChangesAsync();
         }
-
         public async Task UpdateMulti(PhanLoaiMongCTron[] PhanLoaiMongCTron)
         {
             using var context = _context.CreateDbContext();
@@ -234,8 +235,7 @@ namespace DucAnhERP.Services
             }
             await context.SaveChangesAsync();
         }
-
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
@@ -248,7 +248,6 @@ namespace DucAnhERP.Services
             context.Set<PhanLoaiMongCTron>().Remove(entity);
             await context.SaveChangesAsync();
         }
-
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
         {
             foreach (var id in ids)
@@ -261,7 +260,6 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-
         public async Task<PhanLoaiMongCTron> GetById(string id)
         {
             using var context = _context.CreateDbContext();
@@ -274,8 +272,7 @@ namespace DucAnhERP.Services
 
             return entity;
         }
-
-        public async Task Insert(PhanLoaiMongCTron entity)
+        public async Task Insert(PhanLoaiMongCTron entity, string userId)
         {
             try
             {
@@ -307,7 +304,6 @@ namespace DucAnhERP.Services
                 Console.WriteLine(ex.ToString());
             }
         }
-
         public async Task<string> InsertLaterFlag(PhanLoaiMongCTron entity ,int FlagLast)
         {
             string id = "";
@@ -372,7 +368,6 @@ namespace DucAnhERP.Services
                 return id;
             }
         }
-
         public async Task<string> InsertId(PhanLoaiMongCTron entity, string LoaiTD , string LoaiM ,string HTM)
         {
             try

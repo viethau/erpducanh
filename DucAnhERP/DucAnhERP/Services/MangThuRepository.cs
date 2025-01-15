@@ -14,8 +14,12 @@ namespace DucAnhERP.Services
         {
             _context = context;
         }
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
 
-        public async Task<List<MangThu>> GetAll()
+        public async Task<List<MangThu>> GetAll(string groupId)
         {
             try
             {
@@ -538,7 +542,7 @@ namespace DucAnhERP.Services
             }
         }
 
-        public async Task Update(MangThu MangThu)
+        public async Task Update(MangThu MangThu, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(MangThu.Id);
@@ -562,7 +566,7 @@ namespace DucAnhERP.Services
             }
             await context.SaveChangesAsync();
         }
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
@@ -605,7 +609,6 @@ namespace DucAnhERP.Services
             return false;
         }
 
-
         public async Task<MangThu> GetById(string id)
         {
             try
@@ -630,7 +633,7 @@ namespace DucAnhERP.Services
 
         }
 
-        public async Task Insert(MangThu entity)
+        public async Task Insert(MangThu entity, string userId)
         {
             try
             {

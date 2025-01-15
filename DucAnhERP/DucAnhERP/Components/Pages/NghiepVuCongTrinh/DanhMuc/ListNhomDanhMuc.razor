@@ -104,6 +104,8 @@
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới nhóm danh mục";
     bool isEdit = false;
+    string groupId = "";
+    string userId = "";
 
     private void ShowModal()
     {
@@ -162,7 +164,7 @@
     {
         baseTime = DateTime.Now;
         dmModel = new();
-        Inputs = await NhomDanhMucRepository.GetAll();
+        Inputs = await NhomDanhMucRepository.GetAll(groupId);
         await LoadNhomDanhMuc();
     }
 
@@ -199,7 +201,7 @@
                     bool isValid = await NhomDanhMucRepository.CheckExclusive(ids,baseTime);
                     if (isValid)
                     {
-                        await NhomDanhMucRepository.Update(Input);
+                        await NhomDanhMucRepository.Update(Input,userId);
                         ToastService.ShowToast("Thông báo", "Cập nhật nhóm danh mục thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                         await LoadNhomDanhMuc();
                         isModalVisible = false;
@@ -208,7 +210,7 @@
                 }
                 else
                 {
-                    await NhomDanhMucRepository.Insert(Input);
+                    await NhomDanhMucRepository.Insert(Input,userId);
                     ToastService.ShowToast("Thông báo", "Thêm nhóm danh mục thành công.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
                     await LoadNhomDanhMuc();
                     isModalVisible = false;

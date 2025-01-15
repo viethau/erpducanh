@@ -41,6 +41,9 @@
             <button class="btn btn-sm btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
+             <button class="btn btn-sm btn-outline-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+            </button>
         </div>
     </div>
 
@@ -9660,6 +9663,8 @@
 
 
 @code {
+    string groupId = "";
+    string userId = "";
     [SupplyParameterFromForm]
     private NuocMua Input { get; set; } = new();
     private NuocMuaModel InputMD = new();
@@ -9669,7 +9674,7 @@
     private bool isLoading = false;
     private DateTime baseTime;
 
-    private string layoutClass = "d-flex justify-content-between";
+    private string layoutClass = "d-block";
     private string space = "ml-5";
     private string thumbtack = "";
 
@@ -9877,7 +9882,7 @@
        try{
             isLoading = true;
             var helper = new DataConversionHelper();
-            listDanhMuc = await DanhMucRepository.GetAll();
+            listDanhMuc = await DanhMucRepository.GetAll(groupId);
 
 
             InputMD.TraiPhai = 0;
@@ -10802,7 +10807,7 @@
                         {
                             // Cập nhật thông tin
                             DSNuocMuaConversionHelper helper = new();
-                            await NuocMuaRepository.Update(Input);
+                            await NuocMuaRepository.Update(Input,userId);
                             isModalVisible = false;
                             isEdit = false;
 
@@ -10847,7 +10852,7 @@
                         }
                         else
                         {
-                            await NuocMuaRepository.Insert(Input);
+                            await NuocMuaRepository.Insert(Input,userId);
                         }
 
                         // Reset trạng thái và thông báo
@@ -10903,7 +10908,7 @@
             string message = "";
 
             // Lấy danh sách danh mục
-            listDanhMuc = await DanhMucRepository.GetAll();
+            listDanhMuc = await DanhMucRepository.GetAll(groupId);
 
             // Tạo danh sách các biến cần kiểm tra
             var checks = new Dictionary<string, string>
@@ -10986,7 +10991,7 @@
                     var isValid = await NuocMuaRepository.CheckExclusive(ids, baseTime);
                     if (isValid)
                     {
-                        await NuocMuaRepository.DeleteById(deleteId);
+                        await NuocMuaRepository.DeleteById(deleteId,userId);
                         await LoadData();
                         ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-bell", progressBarClass: "bg-info", duration: 5000);
 
@@ -11160,7 +11165,7 @@
 
     private void View()
     {
-        space = "";
+        space = "m-0";
         if (viewLeft == "d-block")
         {
             viewLeft = "d-none";
@@ -11178,9 +11183,15 @@
     {
         viewLeft = "d-block";
         viewRight = "d-block";
-        space = "ml-5";
+        if (layoutClass == "d-flex justify-content-between")
+        {
+            space = "ml-5";
+        }
+        else
+        {
+            space = "";
+        }
     }
-
     private void ViewHorizontal()
     {
         layoutClass = "d-flex justify-content-between";
@@ -11190,11 +11201,63 @@
     private void ViewVertical()
     {
         layoutClass = "d-block";
-        space = "m-0";
+        space = "";
     }
     private void ThumbtackHeader()
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
     }
 
+
+    private async Task ExportExcel()
+    {
+        List<ComplexHeader> rightHeaders = ConstantHeaderExcel.TTTHNM_HEADERS.Select(h => new ComplexHeader
+             {
+                 Title = h.Title,
+                 StartRow = h.StartRow,
+                 StartCol = h.StartCol,
+                 EndRow = h.EndRow,
+                 EndCol = h.EndCol,
+                 DataProperty = h.DataProperty,
+                 Alignment = h.Alignment,
+                 VerticalAlignment = h.VerticalAlignment,
+                 CapitalizeEachWord = h.CapitalizeEachWord,
+                 FontName = h.FontName,
+                 FontSize = h.FontSize,
+                 IsBold = h.IsBold,
+                 IsItalic = h.IsItalic,
+                 IsUnderlined = h.IsUnderlined,
+                 TextColor = h.TextColor,
+                 BackgroundColor = h.BackgroundColor,
+                 WrapText = h.WrapText,
+                 HasBorder = h.HasBorder,
+                 BorderStyle = h.BorderStyle,
+                 DataFormat = h.DataFormat
+             }).ToList();
+        rightHeaders[2].Title = "BẢNG TỔNG HỢP THÔNG TIN HỆ THỐNG THOÁT NƯỚC MƯA DỌC PHÍA PHẢI TUYẾN";
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "1. TT T. Hợp NM",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TTTHNM_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelLeft.Cast<object>().ToList()
+                    },
+                    new TableInfo<object>
+                    {
+                         Headers =rightHeaders,
+                        Data = listModelRight.Cast<object>().ToList()
+                    }
+                }
+            };
+
+        // Xuất Excel
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        var fileName = "TTTHopNuocMua.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef); 
+    }
 }

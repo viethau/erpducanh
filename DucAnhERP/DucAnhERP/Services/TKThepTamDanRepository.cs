@@ -17,7 +17,12 @@ namespace DucAnhERP.Services
             _context = context;
             _pPKKLCTietTDHGRepository = new PKKLCTietTDHGRepository(context);
         }
-        public async Task<List<TKThepTamDan>> GetAll()
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
+
+        public async Task<List<TKThepTamDan>> GetAll(string groupId)
         {
             try
             {
@@ -135,7 +140,6 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-
         public async Task<List<SelectedItem>> GetDistinctTenCongTacByPL(string ThongTinTamDanHoGa2_PhanLoaiDayHoGa)
         {
             try
@@ -185,7 +189,7 @@ namespace DucAnhERP.Services
             }
 
         }
-        public async Task Update(TKThepTamDan TKThepTamDan)
+        public async Task Update(TKThepTamDan TKThepTamDan, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(TKThepTamDan.Id);
@@ -235,9 +239,7 @@ namespace DucAnhERP.Services
             // Lưu thay đổi vào cơ sở dữ liệu
             await SaveChanges(context);
         }
-
-
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
@@ -273,7 +275,7 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-        public async Task Insert(TKThepTamDan entity)
+        public async Task Insert(TKThepTamDan entity, string userId)
         {
             try
             {
@@ -364,7 +366,6 @@ namespace DucAnhERP.Services
                 return id;
             }
         }
-
 
         public async Task SaveChanges(ApplicationDbContext context)
         {

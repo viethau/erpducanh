@@ -15,8 +15,11 @@ namespace DucAnhERP.Services
         {
             _context = context;
         }
-
-        public async Task<List<PhanLoaiThanhChong>> GetAll()
+        public async Task<bool> CheckStatus(string ids, string name)
+        {
+            return true;
+        }
+        public async Task<List<PhanLoaiThanhChong>> GetAll(string groupId)
         {
             try
             {
@@ -31,7 +34,6 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-
         public async Task<List<PhanLoaiThanhChongModel>> GetAllByVM(PhanLoaiThanhChongModel pltcModel)
         {
             try
@@ -123,7 +125,6 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-
         public async Task<PhanLoaiThanhChong> GetNumberPhanLoai(PhanLoaiThanhChong searchData)
         {
             try
@@ -146,8 +147,6 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-
-
         public async Task<PhanLoaiThanhChong> GetPhanLoaiThanhChongExist(PhanLoaiThanhChong searchData)
         {
             try
@@ -174,7 +173,7 @@ namespace DucAnhERP.Services
                 throw; // Optionally rethrow the exception
             }
         }
-        public async Task Update(PhanLoaiThanhChong PhanLoaiThanhChong)
+        public async Task Update(PhanLoaiThanhChong PhanLoaiThanhChong, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(PhanLoaiThanhChong.Id);
@@ -187,7 +186,6 @@ namespace DucAnhERP.Services
             context.PhanLoaiThanhChongs.Update(PhanLoaiThanhChong);
             await context.SaveChangesAsync();
         }
-
         public async Task UpdateMulti(PhanLoaiThanhChong[] PhanLoaiThanhChong)
         {
             using var context = _context.CreateDbContext();
@@ -199,8 +197,7 @@ namespace DucAnhERP.Services
             }
             await context.SaveChangesAsync();
         }
-
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id , string userId)
         {
             try
             {
@@ -221,7 +218,6 @@ namespace DucAnhERP.Services
                 throw;
             }
         }
-
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
         {
             foreach (var id in ids)
@@ -234,7 +230,6 @@ namespace DucAnhERP.Services
             }
             return true;
         }
-
         public async Task<PhanLoaiThanhChong> GetById(string id)
         {
             using var context = _context.CreateDbContext();
@@ -247,8 +242,7 @@ namespace DucAnhERP.Services
 
             return entity;
         }
-
-        public async Task Insert(PhanLoaiThanhChong entity)
+        public async Task Insert(PhanLoaiThanhChong entity, string userId)
         {
             try
             {

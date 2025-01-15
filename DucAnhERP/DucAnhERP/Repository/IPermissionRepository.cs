@@ -3,11 +3,14 @@ using DucAnhERP.Models;
 
 namespace DucAnhERP.Repository
 {
-    public interface IPermissionRepository : IBaseRepository<MPermission>
+    public interface IPermissionRepository : IBaseRepository<Permission>
     {
         Task<List<PermissionModel>> GetAllCorePermission(string majorId, string companyId);
-        Task<List<MPermission>> GetAllMPermissions();
+        Task<List<Permission>> GetAllMPermissions();
         Task<List<PermissionModel>> GetAllByVM(PermissionModel permissionModel);
-        Task<List<MPermission>> GetExist(MPermission input);
+        Task<List<Permission>> GetExist(Permission input);
+        Task<List<Permission>> LoadByMajor(string majorId);
+        List<Permission> LoadByMajor1(string majorId);
+        Task<List<Permission>> LoadToApproval(string majorId); 
     }
 }

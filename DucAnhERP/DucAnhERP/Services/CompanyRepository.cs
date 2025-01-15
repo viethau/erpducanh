@@ -2,6 +2,7 @@
 using DucAnhERP.Data;
 using DucAnhERP.Models;
 using Microsoft.EntityFrameworkCore;
+using DucAnhERP.ViewModel;
 
 namespace DucAnhERP.Services
 {
@@ -14,6 +15,11 @@ namespace DucAnhERP.Services
             _context = context;
         }
 
+        public string CheckCondition(MCompany mcompanie, int InputSave)
+        {
+            string s = "";
+            return s;
+        }
         public async Task<bool> CheckExclusive(string[] ids, DateTime baseTime)
         {
             foreach (var id in ids)
@@ -33,7 +39,41 @@ namespace DucAnhERP.Services
             return true;
         }
 
-        public async Task DeleteById(string id)
+        public async Task<List<MCompanyModel>> GetAllByVM()
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var query = from p in context.MCompanies
+                            select new MCompanyModel
+                            {
+                                Id = p.Id,
+                                ParentId = p.ParentId,
+                                CompanyName = p.CompanyName,
+                                CompanyType = p.CompanyType,
+                                Phone = p.Phone,
+                                Email = p.Email,
+                                Address = p.Address,
+                                GroupId = p.GroupId,
+                                CreateAt = p.CreateAt,
+                                CreateBy = p.CreateBy,
+                                IsActive = p.IsActive,
+                                UserId = p.UserId,
+                                DateApproval = p.DateApproval,
+                                IdDepartment = p.IdDepartment,
+                                ApprovalOrder = p.ApprovalOrder
+                            };
+                var data = await query
+                .ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw;
+            }
+        }
+        public async Task DeleteById(string id, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
@@ -42,17 +82,17 @@ namespace DucAnhERP.Services
             {
                 throw new Exception($"Không tìm thấy bản ghi theo ID: {id}");
             }
-            entity.IsActive = 0;
+            entity.IsActive = 3;
             context.MCompanies.Update(entity);
             await context.SaveChangesAsync();
         }
 
-        public async Task<List<MCompany>> GetAll()
+        public async Task<List<MCompany>> GetAll(string groupId)
         {
             try
             {
                 using var context = _context.CreateDbContext();
-                var entity = await context.MCompanies.ToListAsync();
+                var entity = await context.MCompanies.Where(p => p.IsActive != 100 && p.GroupId == groupId).ToListAsync();
                 return entity;
             }
             catch (Exception ex)
@@ -66,14 +106,14 @@ namespace DucAnhERP.Services
         public async Task<List<MCompany>> GetAllCompanies()
         {
             using var context = _context.CreateDbContext();
-            var query =  context.MCompanies.Where(x => x.IsActive == 1);
+            var query = context.MCompanies.Where(x => x.IsActive != 100);
             return await query.ToListAsync();
         }
 
         public async Task<MCompany> GetById(string id)
         {
             using var context = _context.CreateDbContext();
-            var entity = await context.MCompanies.Where(x => x.Id.Equals(id) && x.IsActive == 1).FirstOrDefaultAsync();
+            var entity = await context.MCompanies.Where(x => x.Id.Equals(id)).FirstOrDefaultAsync();
 
             if (entity == null)
             {
@@ -83,7 +123,7 @@ namespace DucAnhERP.Services
             return entity;
         }
 
-        public async Task Insert(MCompany entity)
+        public async Task Insert(MCompany entity, string userId)
         {
             using var context = _context.CreateDbContext();
             if (entity == null)
@@ -95,7 +135,7 @@ namespace DucAnhERP.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task Update(MCompany company)
+        public async Task Update(MCompany company, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(company.Id);
@@ -119,6 +159,11 @@ namespace DucAnhERP.Services
                 context.MCompanies.Update(entity);
             }
             await context.SaveChangesAsync();
+        }
+
+        public Task<bool> CheckStatus(string ids, string name)
+        {
+            throw new NotImplementedException();
         }
     }
 }

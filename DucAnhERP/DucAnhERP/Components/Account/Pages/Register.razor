@@ -95,19 +95,27 @@
 
     public async Task RegisterUser()
     {
-        if (UserService.GetByUserName(Input.Email) != null)
+        if (ApplicationUserService.GetByUserName(Input.Email) != null)
         {
             Message = "Lỗi: Email bạn nhập đã tồn tại trong hệ thống!";
             return;
         }
 
-        if (UserService.IsExistByPhoneNumber(Input.PhoneNumber))
+        if (ApplicationUserService.IsExistByPhoneNumber(Input.PhoneNumber))
         {
             Message = "Lỗi: Số điện thoại bạn nhập đã tồn tại trong hệ thống!";
             return;
         }
-
-        var company = CreateCompany();
+        string groupID = Guid.NewGuid().ToString();
+        string companyTypeId = Guid.NewGuid().ToString();
+        string idIT = Guid.NewGuid().ToString();
+        var company = CreateCompany(groupID);
+        var chinhanh = CreateChiNhanh(groupID);
+        var department = CreateDepartmentDirector(groupID);
+        var departmentit = CreateDepartmentIt(groupID, idIT);
+        var companyType = CreateCompanyType(groupID);
+        var approvalDeptSetting = CreateApprovalDeptSetting(groupID);
+        var approvalDeptSettingIT = CreateApprovalDeptSettingIT(groupID, idIT);
         var user = CreateUser();
         var password = HelperService.GeneratePassword(8);
         await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
@@ -117,10 +125,15 @@
         await lockOutStore.SetLockoutEnabledAsync(user, true, CancellationToken.None);
         var appUser = CreateAppUser(company.Id, user);
 
-
-        await CompanyService.Insert(company);
+        await CompanyService.Insert(company, "");
+        await ChiNhanhService.Insert(chinhanh, "");
+        await DepartmentService.Insert(department, "");
+        await DepartmentService.Insert(departmentit, "");
+        await CompanyTypeService.Insert(companyType, "");
+        await ApprovalDeptSettingService.Insert(approvalDeptSetting, "");
+        await ApprovalDeptSettingService.Insert(approvalDeptSettingIT, "");
         var resultUser = await UserManager.CreateAsync(user, password);
-        await UserService.Insert(appUser);
+        await ApplicationUserService.Insert(appUser, "");
 
         if (!resultUser.Succeeded)
         {
@@ -151,25 +164,31 @@
         try
         {
             var user = Activator.CreateInstance<ApplicationUser>();
-            user.Id = Guid.NewGuid().ToString();
-            user.UserId = iUser.Id;
+            user.Id = iUser.Id;
             user.UserName = iUser.UserName;
             user.Address = Input.Address;
-            user.ContractId = Guid.NewGuid().ToString();
             user.Dob = (DateTime)Input.Dob;
             user.FirstName = Input.FirstName;
             user.LastName = Input.LastName;
             user.PhoneNumber = Input.PhoneNumber;
             user.IsActive = 0;
-            user.IsFirstLogin = 1;
+            user.IsFirstLogin = 2;
             user.CreateAt = DateTime.Now;
-            user.CreateBy = Input.Email;
-            user.UpdateAt = DateTime.Now;
-            user.UpdateBy = Input.Email;
+            user.CreateBy = "symtem";
             user.Email = Input.Email;
             user.CompanyId = companyId;
+            user.GroupId = companyId;
             user.DeptId = "";
 
+            user.Ordinarily = 1;
+            user.ApprovalUserId = "";
+            user.DateApproval = DateTime.Now;
+            user.DepartmentId = "";
+            user.DepartmentOrder = 1;
+            user.ApprovalOrder = 1;
+            user.ApprovalId = "";
+            user.LastApprovalId = "";
+            user.IsStatus = "Chờ kích hoạt";
             return user;
         }
         catch
@@ -250,31 +269,95 @@
         emailHistory.Subject = "Xác Nhận Đăng Ký Tài Khoản";
         emailHistory.Content = content;
         emailHistory.CompanyId = user.CompanyId;
+        emailHistory.GroupId = user.CompanyId;
         emailHistory.MajorId = "";
-        emailHistory.ScreenId = "";
+        emailHistory.ParentMajorId = "";
+        emailHistory.IsRead = 1;
         emailHistory.CreateAt = DateTime.Now;
-        emailHistory.CreateBy = "System";
+        emailHistory.CreateBy = "system";
 
         // Thực hiện gửi mail
         await EmailService.SendEmail(emailHistory);
     }
 
+    private CompanyType CreateCompanyType(string groupID)
+    {
+        try
+        {
+            var chinhanh = Activator.CreateInstance<CompanyType>();
+            chinhanh.Id = groupID;
+            chinhanh.TenLoaiChiNhanh = "Ban giám đốc";
+            chinhanh.GroupId = groupID;
+            chinhanh.Ordinarily = 1;
+            chinhanh.CreateAt = DateTime.Now;
+            chinhanh.CreateBy = "symtem";
+            chinhanh.IsActive = 3;
+            chinhanh.ApprovalUserId = "";
+            chinhanh.DateApproval = DateTime.Now;
+            chinhanh.DepartmentId = "";
+            chinhanh.DepartmentOrder = 1;
+            chinhanh.ApprovalOrder = 1;
+            chinhanh.ApprovalId = "";
+            chinhanh.LastApprovalId = "";
+            chinhanh.IsStatus = "Đã duyệt";
+            return chinhanh;
+        }
+        catch
+        {
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(CompanyType)}'. " +
+                $"Ensure that '{nameof(CompanyType)}' is not an abstract class and has a parameterless constructor.");
+        }
+    }
+    private ChiNhanh CreateChiNhanh(string groupID)
+    {
+        try
+        {
+            var chinhanh = Activator.CreateInstance<ChiNhanh>();
+            chinhanh.Id = groupID;
+            chinhanh.ParentId = groupID;
+            chinhanh.TenChiNhanh = Input.CompanyName;
+            chinhanh.CompanyType = groupID;
+            chinhanh.Phone = Input.PhoneNumber;
+            chinhanh.Email = Input.Email;
+            chinhanh.Address = Input.Address;
+            chinhanh.GroupId = groupID;
+            chinhanh.Ordinarily = 1;
+            chinhanh.CreateAt = DateTime.Now;
+            chinhanh.CreateBy = "symtem";
+            chinhanh.IsActive = 3;
+            chinhanh.ApprovalUserId = "";
+            chinhanh.DateApproval = DateTime.Now;
+            chinhanh.DepartmentId = "";
+            chinhanh.DepartmentOrder = 1;
+            chinhanh.ApprovalOrder = 1;
+            chinhanh.ApprovalId = "";
+            chinhanh.LastApprovalId = "";
+            chinhanh.IsStatus = "Đã duyệt";
+            return chinhanh;
+        }
+        catch
+        {
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(ChiNhanh)}'. " +
+                $"Ensure that '{nameof(ChiNhanh)}' is not an abstract class and has a parameterless constructor.");
+        }
+    }
 
-    private MCompany CreateCompany()
+    private MCompany CreateCompany(string groupID)
     {
         try
         {
             var company = Activator.CreateInstance<MCompany>();
-            company.Id = Guid.NewGuid().ToString();
-            company.ParentId = null;
+            company.Id = groupID;
+            company.ParentId = groupID;
             company.CompanyName = Input.CompanyName;
             company.CompanyType = Constant.HEAD_COMPANY;
             company.Phone = Input.PhoneNumber;
             company.Email = Input.Email;
             company.Address = Input.Address;
+            company.GroupId = groupID;
             company.CreateAt = DateTime.Now;
-            company.CreateBy = "System";
-            company.IsActive = 1;
+            company.CreateBy = "symtem";
+            company.IsActive = 3;
             return company;
         }
         catch
@@ -283,4 +366,167 @@
                 $"Ensure that '{nameof(MCompany)}' is not an abstract class and has a parameterless constructor.");
         }
     }
+
+    private Department CreateDepartmentDirector(string groupID)
+    {
+        try
+        {
+            var department = Activator.CreateInstance<Department>();
+            department.Id = groupID;
+            department.CompanyId = groupID;
+            department.DeptName = "Ban giám đốc";
+            department.Phone = "0975666999";
+            department.Email = "da@gmail.com";
+            department.GroupId = groupID;
+            department.Ordinarily = 0;
+            department.CreateAt = DateTime.Now;
+            department.CreateBy = "symtem";
+            department.IsActive = 3;
+            department.ApprovalUserId = "";
+            department.DateApproval = DateTime.Now;
+            department.DepartmentId = "";
+            department.DepartmentOrder = 1;
+            department.ApprovalOrder = 1;
+            department.ApprovalId = "";
+            department.LastApprovalId = "";
+            department.IsStatus = "Đã duyệt";
+            return department;
+        }
+        catch
+        {
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(Department)}'. " +
+                $"Ensure that '{nameof(Department)}' is not an abstract class and has a parameterless constructor.");
+        }
+    }
+    private Department CreateDepartmentIt(string groupID, string idIT)
+    {
+        try
+        {
+            var department = Activator.CreateInstance<Department>();
+            department.Id = idIT;
+            department.CompanyId = groupID;
+            department.DeptName = "Công nghệ thông tin";
+            department.Phone = "0975666999";
+            department.Email = "viethau.nd@gmail.com";
+            department.GroupId = groupID;
+            department.Ordinarily = 0;
+            department.CreateAt = DateTime.Now;
+            department.CreateBy = "symtem";
+            department.IsActive = 3;
+            department.ApprovalUserId = "";
+            department.DateApproval = DateTime.Now;
+            department.DepartmentId = "";
+            department.DepartmentOrder = 1;
+            department.ApprovalOrder = 1;
+            department.ApprovalId = "";
+            department.LastApprovalId = "";
+            department.IsStatus = "Đã duyệt";
+            return department;
+        }
+        catch
+        {
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(Department)}'. " +
+                $"Ensure that '{nameof(Department)}' is not an abstract class and has a parameterless constructor.");
+        }
+    }
+    private ApprovalDeptSetting CreateApprovalDeptSetting(string groupID)
+    {
+        try
+        {
+            var data = Activator.CreateInstance<ApprovalDeptSetting>();
+            data.Id = groupID;
+            data.IdMain = groupID;
+            data.CompanyId = groupID;
+            data.DeptId = groupID;
+            data.ParentMajorId = "b24864bb-a435-44e4-bbf7-20814a099884";
+            data.MajorId = "2beef307-7f25-4ae2-bd19-8bbfecd42334";
+            data.ApprovalStep = 1;
+            data.GroupId = groupID;
+            data.Ordinarily = 1;
+            data.CreateAt = DateTime.Now;
+            data.CreateBy = "symtem";
+            data.IsActive = 3;
+            data.ApprovalUserId = "";
+            data.DateApproval = DateTime.Now;
+            data.DepartmentId = "";
+            data.DepartmentOrder = 1;
+            data.ApprovalOrder = 1;
+            data.ApprovalId = "";
+            data.LastApprovalId = "";
+            data.IsStatus = "Đã duyệt";
+            return data;
+        }
+        catch
+        {
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(ApprovalDeptSetting)}'. " +
+                $"Ensure that '{nameof(ApprovalDeptSetting)}' is not an abstract class and has a parameterless constructor.");
+        }
+    }
+    private ApprovalDeptSetting CreateApprovalDeptSettingIT(string groupID, string idIT)
+    {
+        try
+        {
+            var data = Activator.CreateInstance<ApprovalDeptSetting>();
+            data.Id = idIT;
+            data.IdMain = groupID;
+            data.CompanyId = groupID;
+            data.DeptId = idIT;
+            data.ParentMajorId = "b24864bb-a435-44e4-bbf7-20814a099884";
+            data.MajorId = "2beef307-7f25-4ae2-bd19-8bbfecd42334";
+            data.ApprovalStep = 2;
+            data.GroupId = groupID;
+            data.Ordinarily = 1;
+            data.CreateAt = DateTime.Now;
+            data.CreateBy = "symtem";
+            data.IsActive = 3;
+            data.ApprovalUserId = "";
+            data.DateApproval = DateTime.Now;
+            data.DepartmentId = "";
+            data.DepartmentOrder = 1;
+            data.ApprovalOrder = 1;
+            data.ApprovalId = "";
+            data.LastApprovalId = "";
+            data.IsStatus = "Đã duyệt";
+            return data;
+        }
+        catch
+        {
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(ApprovalDeptSetting)}'. " +
+                $"Ensure that '{nameof(ApprovalDeptSetting)}' is not an abstract class and has a parameterless constructor.");
+        }
+    }
+    // private ApprovalStepSetting CreateApprovalStepSetting(string groupID)
+    // {
+    //     try
+    //     {
+    //         var data = Activator.CreateInstance<ApprovalStepSetting>();
+    //         data.Id                 =  groupID;
+    //         data.CompanyId          =  groupID;
+    //         data.DeptId = groupID;
+    //         data.ParentMajorId = "f2ee47e5-04b5-4f19-a5ac-3311e0122140";
+    //         data.MajorId = "18688d53-9f67-4a85-a7c1-3e478ae65579";
+    //         data.PermissionId       =  ;
+    //         data.Content            =  ;
+    //         data.ApprovalStep       =  ;
+    //         data.GroupId = groupID;
+    //         data.Ordinarily = 1;
+    //         data.CreateAt = DateTime.Now;
+    //         data.CreateBy = "symtem";
+    //         data.IsActive = 3;
+    //         data.ApprovalUserId = "";
+    //         data.DateApproval = DateTime.Now;
+    //         data.DepartmentId = "";
+    //         data.DepartmentOrder = 1;
+    //         data.ApprovalOrder = 1;
+    //         data.ApprovalId = "";
+    //         data.LastApprovalId = "";
+    //         data.IsStatus = "Đã duyệt";
+    //         return data;
+    //     }
+    //     catch
+    //     {
+    //         throw new InvalidOperationException($"Can't create an instance of '{nameof(ApprovalStepSetting)}'. " +
+    //             $"Ensure that '{nameof(ApprovalStepSetting)}' is not an abstract class and has a parameterless constructor.");
+    //     }
+    // }
 }

@@ -19,7 +19,7 @@ namespace DucAnhERP.Services
             throw new NotImplementedException();
         }
 
-        public async Task DeleteById(string id)
+        public async Task DeleteById(string id, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
@@ -33,7 +33,7 @@ namespace DucAnhERP.Services
             await context.SaveChangesAsync();
         }
 
-        public Task<List<UserSession>> GetAll()
+        public Task<List<UserSession>> GetAll(string groupId)
         {
             throw new NotImplementedException();
         }
@@ -45,7 +45,7 @@ namespace DucAnhERP.Services
             return entity;
         }
 
-        public async Task Insert(UserSession entity)
+        public async Task Insert(UserSession entity, string userId)
         {
             using var context = _context.CreateDbContext();
             if (entity == null)
@@ -64,7 +64,7 @@ namespace DucAnhERP.Services
             return entity;
         }
 
-        public async Task Update(UserSession userSession)
+        public async Task Update(UserSession userSession, string userId)
         {
             using var context = _context.CreateDbContext();
             var entity = GetById(userSession.Id);
@@ -79,6 +79,16 @@ namespace DucAnhERP.Services
         }
 
         public Task UpdateMulti(UserSession[] entities)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> CheckStatus(string[] ids, DateTime baseTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> CheckStatus(string ids, string name)
         {
             throw new NotImplementedException();
         }

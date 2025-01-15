@@ -63,7 +63,7 @@
         }
 
         var user = await UserManager.FindByIdAsync(UserId);
-        var appUser = await UserService.GetById(UserId, 0);
+        var appUser = await ApplicationUserService.GetById(UserId);
         if (user is null || appUser is null)
         {
             HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
@@ -77,17 +77,15 @@
 
             if (isSucceed)
             {
-                appUser.IsActive = 1;
-                appUser.UpdateAt = DateTime.Now;
-                appUser.UpdateBy = "Người quản trị hệ thống";
-                await UserService.Update(appUser);
+                appUser.IsActive = 3;
+                await ApplicationUserService.Update(appUser, "");
             }
             else
             {
                 var company = await CompanyService.GetById(appUser.CompanyId);
                 if (company != null)
                 {
-                    await CompanyService.DeleteById(company.Id);
+                    await CompanyService.DeleteById(company.Id, "");
                 }
             }
 

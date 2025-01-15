@@ -311,7 +311,8 @@
 
 
 @code {
-
+    string groupId = "";
+    string userId = "";
     private bool isLoading = false;
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới ";
@@ -617,7 +618,7 @@
                         bool isValid = await TKThepRBTongRepository.CheckExclusive(idss,baseTime);
                         if (isValid)
                         {
-                            await TKThepRBTongRepository.Update(Input);
+                            await TKThepRBTongRepository.Update(Input, userId);
                             isModalVisible = false;
                             Input = new TKThepRBTong();
                             isEdit = false;
@@ -633,7 +634,7 @@
                         }
                     }else if(listExist.Count >0 && listExist[0].Id == Input.Id)
                     {
-                        await TKThepRBTongRepository.Update(Input);
+                        await TKThepRBTongRepository.Update(Input, userId);
                         isModalVisible = false;
                         Input = new TKThepRBTong();
                         isEdit = false;
@@ -682,7 +683,7 @@
                         else
                         {
                             // Thêm mới thông tin
-                            await TKThepRBTongRepository.Insert(Input);
+                            await TKThepRBTongRepository.Insert(Input, userId);
                             // isModalVisible = false;
                             // Input = new TKThepRBTong();
                             Input.Id = Guid.NewGuid().ToString();
@@ -740,7 +741,7 @@
                 if (result)
                 {
                      // Thực hiện hành động xóa
-                    await TKThepRBTongRepository.DeleteById(deleteId);
+                    await TKThepRBTongRepository.DeleteById(deleteId, userId);
                     ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success",iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                     await LoadData();
                 }

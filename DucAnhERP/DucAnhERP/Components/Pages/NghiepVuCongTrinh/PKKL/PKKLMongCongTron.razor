@@ -364,6 +364,8 @@
 
 
 @code {
+    string groupId = "";
+    string userId = "";
     private bool isLoadingCaculate = false;
     private bool isLoading = false;
     private bool isModalVisible = false;
@@ -698,7 +700,7 @@
                         bool isValid = await PKKLMongCTronRepository.CheckExclusive(idss, baseTime);
                         if (isValid)
                         {
-                            await PKKLMongCTronRepository.Update(Input);
+                            await PKKLMongCTronRepository.Update(Input, userId);
                             isModalVisible = false;
                             Input = new PKKLMongCTron();
                             isEdit = false;
@@ -715,7 +717,7 @@
                     }
                     else if (listExist.Count > 0 && listExist[0].Id == Input.Id)
                     {
-                        await PKKLMongCTronRepository.Update(Input);
+                        await PKKLMongCTronRepository.Update(Input, userId);
                         isModalVisible = false;
                         Input = new PKKLMongCTron();
                         isEdit = false;
@@ -766,7 +768,7 @@
                         else
                         {
                             // Thêm mới thông tin
-                            await PKKLMongCTronRepository.Insert(Input);
+                            await PKKLMongCTronRepository.Insert(Input, userId);
                             Input.Id = Guid.NewGuid().ToString();
                             // isModalVisible = false;
                             // Input = new PKKLMongCTron();
@@ -828,7 +830,7 @@
                     if (result)
                     {
                         // Thực hiện hành động xóa
-                        await PKKLMongCTronRepository.DeleteById(deleteId);
+                        await PKKLMongCTronRepository.DeleteById(deleteId, userId);
                         ToastService.ShowToast("Thông báo", "Xóa phân loại thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
                         await LoadData();
                     }
