@@ -21,6 +21,11 @@
 @using DucAnhERP.Shared
 @inject IJSRuntime JSRuntime
 
+@using Microsoft.AspNetCore.Identity
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager navigation
+@inject UserManager<IdentityUser> UserManager
+
 @inject IMajorRepository MajorService
 @inject ICompanyRepository CompanyService
 @inject IPermissionRepository PermissionService

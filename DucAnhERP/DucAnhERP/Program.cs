@@ -58,6 +58,8 @@ builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuth
 builder.Services.AddScoped<IPhanQuyenRepository, PhanQuyenRepository>();
 builder.Services.AddScoped<IChiNhanhRepository, ChiNhanhRepository>();
 
+builder.Services.AddScoped<IMajorUserApprovalReponsitory, MajorUserApprovalReponsitory>();
+
 builder.Services.AddScoped<ICompanyTypeRepository, CompanyTypeRepository>();
 builder.Services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
 builder.Services.AddScoped<IApprovalControlRepository, ApprovalControlRepository>();

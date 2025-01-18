@@ -39,6 +39,9 @@ namespace DucAnhERP.Data
         public DbSet<ApprovalStepSetting> ApprovalStepSettings { get; set; }
         public DbSet<ApprovalStaffSetting> ApprovalStaffSettings { get; set; }
 
+        public DbSet<MajorUserApproval> MajorUserApprovals { get; set; }
+        public DbSet<MajorUserApproval_Log> MajorUserApproval_Logs { get; set; }
+
         public DbSet<ChiNhanh> ChiNhanhs { get; set; }
         public DbSet<ChiNhanh_Log> ChiNhanh_Logs { get; set; }
         public DbSet<ApprovalControl> ApprovalControls { get; set; }

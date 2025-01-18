@@ -23,6 +23,7 @@ namespace DucAnhERP.Services
                 string sql = "EXEC dbo.proc_ApprovalStepSettings_CheckDuyet @id";
                 var entity = await context.ChiNhanhs.FromSqlRaw<ChiNhanh>(sql, param1).ToListAsync();
                 return entity;
+
             }
             catch (Exception ex)
             {
