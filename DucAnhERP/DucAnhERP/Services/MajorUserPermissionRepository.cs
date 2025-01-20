@@ -446,7 +446,12 @@ namespace DucAnhERP.Services
             {
                 throw new Exception($"Không tìm thấy quản lý quyền theo người dùng, nghiệp vụ đã chọn");
             }
-            context.MajorUserPermissions.Update(data);
+            //context.MajorUserPermissions.Update(data);
+            var recordsToUpdate = context.MajorUserPermissions.Where(m => m.IdMain == data.IdMain).ToList();
+            foreach (var record in recordsToUpdate)
+            {
+                record.IsActive = data.IsActive;
+            }
             if (data.IsActive == 3)
             {
                 var updateLog = await (from p in context.MajorUserPermission_Logs

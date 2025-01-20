@@ -41,6 +41,8 @@ namespace DucAnhERP.Data
 
         public DbSet<MajorUserApproval> MajorUserApprovals { get; set; }
         public DbSet<MajorUserApproval_Log> MajorUserApproval_Logs { get; set; }
+        public DbSet<PhanQuyenCaiDatDuyet> PhanQuyenCaiDatDuyets { get; set; }
+        public DbSet<PhanQuyenCaiDatDuyet_Log> PhanQuyenCaiDatDuyet_Logs { get; set; }
 
         public DbSet<ChiNhanh> ChiNhanhs { get; set; }
         public DbSet<ChiNhanh_Log> ChiNhanh_Logs { get; set; }

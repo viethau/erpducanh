@@ -3,6 +3,7 @@ using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DucAnhERP.Services
 {
@@ -187,6 +188,100 @@ namespace DucAnhERP.Services
             }
             return entity;
         }
+        public async Task<MajorUserApprovalModel> GetDetails(string id)
+        {
+            using var context = _context.CreateDbContext();
+            var data = await (from p1 in context.MajorUserApprovals
+                              join ChiNhanhs1 in context.ChiNhanhs on p1.CompanyId equals ChiNhanhs1.Id
+                              join Majors1 in context.Majors on p1.ParentMajorId equals Majors1.Id
+                              join Majors2 in context.Majors on p1.MajorId equals Majors2.Id
+                              join ApplicationUsers1 in context.ApplicationUsers on p1.UserId equals ApplicationUsers1.Id
+                              join Permissions1 in context.Permissions on p1.ApprovalId equals Permissions1.Id
+                              join createBy in context.ApplicationUsers on p1.CreateBy equals createBy.Id
+                              join a in context.ApplicationUsers on p1.ApprovalId equals a.Id into a1
+                              from approvalUserId in a1.DefaultIfEmpty()
+                              join b in context.Departments on p1.DeptId equals b.Id into b1
+                              from departmentId in b1.DefaultIfEmpty()
+                              where p1.Id == id
+                              select new MajorUserApprovalModel
+                              {
+                                  Id = p1.Id,
+                                  CompanyId = ChiNhanhs1.TenChiNhanh,
+                                  ParentMajorId = Majors1.MajorName,
+                                  MajorId = Majors2.MajorName,
+                                  DeptId = departmentId.DeptName,
+                                  UserId = ApplicationUsers1.Email,
+                                  ApprovalId = Permissions1.PermissionName,
+                                  DayinWeek = p1.DayinWeek,
+                                  GroupId = p1.GroupId,
+                                  CreateAt = p1.CreateAt,
+                                  CreateBy = createBy.Email,
+                                  IsActive = p1.IsActive,
+                              }).FirstOrDefaultAsync();
+            return data;
+        }
+        public async Task<List<MajorUserApprovalModel>> GetHistory(string id)
+        {
+            using var context = _context.CreateDbContext();
+            //var data = await (from p1 in context.MajorUserApproval_Logs
+            //                  join ChiNhanhs1 in context.ChiNhanhs on p1.CompanyId equals ChiNhanhs1.Id
+            //                  join Majors1 in context.Majors on p1.ParentMajorId equals Majors1.Id
+            //                  join Majors2 in context.Majors on p1.MajorId equals Majors2.Id
+            //                  join ApplicationUsers1 in context.ApplicationUsers on p1.UserId equals ApplicationUsers1.Id
+            //                  join Permissions1 in context.Permissions on p1.ApprovalId equals Permissions1.Id
+            //                  join createBy in context.ApplicationUsers on p1.CreateBy equals createBy.Id
+            //                  join a in context.ApplicationUsers on p1.UserId equals a.Id into a1
+            //                  from approvalUserId in a1.DefaultIfEmpty()
+            //                  join b in context.Departments on p1.DeptId equals b.Id into b1
+            //                  from departmentId in b1.DefaultIfEmpty()
+            //                  where p1.IdChung == id
+            //                  orderby p1.CreateAt
+            //                  select new MajorUserApprovalModel
+            //                  {
+            //                      Id = p1.Id,
+            //                      CompanyId = ChiNhanhs1.TenChiNhanh,
+            //                      ParentMajorId = Majors1.MajorName,
+            //                      MajorId = Majors2.MajorName,
+            //                      DeptId = departmentId.DeptName,
+            //                      UserId = approvalUserId.Email,
+            //                      ApprovalId = Permissions1.PermissionName,
+            //                      DayinWeek = p1.DayinWeek,
+            //                      GroupId = p1.GroupId,
+            //                      CreateAt = p1.CreateAt,
+            //                      CreateBy = createBy.Email,
+            //                      IsActive = p1.IsActive,
+            //                  }).ToListAsync();
+            var data = await (from p1 in context.MajorUserApproval_Logs
+                              join ChiNhanhs1 in context.ChiNhanhs on p1.CompanyId equals ChiNhanhs1.Id
+                              join Majors1 in context.Majors on p1.ParentMajorId equals Majors1.Id
+                              join Majors2 in context.Majors on p1.MajorId equals Majors2.Id
+                              join ApplicationUsers1 in context.ApplicationUsers on p1.UserId equals ApplicationUsers1.Id
+                              join Permissions1 in context.Permissions on p1.ApprovalId equals Permissions1.Id
+                              join createBy in context.ApplicationUsers on p1.CreateBy equals createBy.Id
+                              join a in context.ApplicationUsers on p1.UserId equals a.Id into a1
+                              from approvalUserId in a1.DefaultIfEmpty()
+                              join b in context.Departments on p1.DeptId equals b.Id into b1
+                              from departmentId in b1.DefaultIfEmpty()
+                              where p1.IdChung == id
+                              orderby p1.CreateAt
+                              select new MajorUserApprovalModel
+                              {
+                                  Id = p1.Id,
+                                  CompanyId = ChiNhanhs1.TenChiNhanh,
+                                  ParentMajorId = Majors1.MajorName,
+                                  MajorId = Majors2.MajorName,
+                                  DeptId = departmentId != null ? departmentId.DeptName : "",
+                                  UserId = ApplicationUsers1.Email,
+                                  ApprovalId = Permissions1.PermissionName,
+                                  DayinWeek = p1.DayinWeek,
+                                  GroupId = p1.GroupId,
+                                  CreateAt = p1.CreateAt,
+                                  CreateBy = createBy.Email,
+                                  IsActive = p1.IsActive
+                              }).ToListAsync();
+
+            return data;
+        }
         public async Task Insert(MajorUserApproval entity, string userId)
         {
             try
@@ -197,32 +292,24 @@ namespace DucAnhERP.Services
                     throw new Exception("Không có quản lý quyền theo người dùng, nghiệp vụ nào được thêm!");
                 }
                 context.MajorUserApprovals.Add(entity);
-                //var addLog = new MajorUserApproval_Log()
-                //{
-                //    Id = entity.Id,
-                //    CompanyId = entity.CompanyId,
-                //    ParentMajorId = entity.ParentMajorId,
-                //    MajorId = entity.MajorId,
-                //    UserId = entity.UserId,
-                //    PermissionId = entity.PermissionId,
-                //    DayInWeek = entity.DayInWeek,
-                //    GroupId = entity.GroupId,
-                //    Ordinarily = entity.Ordinarily,
-                //    CreateAt = DateTime.Now,
-                //    CreateBy = entity.CreateBy,
-                //    IsActive = entity.IsActive,
-                //    ApprovalUserId = entity.ApprovalUserId,
-                //    DateApproval = entity.DateApproval,
-                //    DepartmentId = entity.DepartmentId,
-                //    DepartmentOrder = entity.DepartmentOrder,
-                //    ApprovalOrder = entity.ApprovalOrder,
-                //    ApprovalId = entity.ApprovalId,
-                //    LastApprovalId = entity.LastApprovalId,
-                //    IsStatus = entity.IsStatus,
-                //    IdChung = entity.Id,
-                //    IsValid = true
-                //};
-                //context.MajorUserApproval_Logs.Add(addLog);
+                var addLog = new MajorUserApproval_Log()
+                {
+                    Id = entity.Id,
+                    CompanyId = entity.CompanyId,
+                    ParentMajorId = entity.ParentMajorId,
+                    MajorId = entity.MajorId,
+                    DeptId = entity.DeptId,
+                    UserId = entity.UserId,
+                    ApprovalId = entity.ApprovalId,
+                    DayinWeek = entity.DayinWeek,
+                    GroupId = entity.GroupId,
+                    CreateAt = DateTime.Now,
+                    CreateBy = entity.CreateBy,
+                    IsActive = entity.IsActive,
+                    IdChung = entity.Id,
+                    IsValid = true
+                };
+                context.MajorUserApproval_Logs.Add(addLog);
                 await context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -282,6 +369,7 @@ namespace DucAnhERP.Services
                 MajorId = entity.MajorId,
                 DeptId = entity.DeptId,
                 UserId = entity.UserId,
+                ApprovalId = entity.ApprovalId,
                 DayinWeek = entity.DayinWeek,
                 GroupId = entity.GroupId,
                 CreateAt = DateTime.Now,

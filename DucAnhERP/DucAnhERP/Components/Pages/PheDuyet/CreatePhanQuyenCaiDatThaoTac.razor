@@ -130,44 +130,32 @@
                         <th class="text-center" scope="col">
                             <div class="pb-3">Người tạo</div>
                         </th>
-                        <th class="text-center" scope="col">
-                            <div class="pb-3">Ngày duyệt</div>
-                        </th>
-                        <th class="text-center" scope="col">
-                            <div class="pb-3">Người duyệt</div>
-                        </th>
-                        <th class="text-center" scope="col">
-                            <div class="pb-3">Phòng ban duyệt</div>
-                        </th>
                     </tr>
                 </thead>
                 @if (listDetails.Any())
                 {
-                    @* <tbody>
+                    <tbody>
                 @{
                 int stt = 0;
                 }
-                @foreach (var item in listDetails)
-                {
-                stt++;
-                <tr>
-                <td class="text-center" scope="row">@stt</td>
-                <td class="text-left">@item.CompanyId</td>
-                <td class="text-left">@item.ParentMajorId</td>
-                <td class="text-left">@item.MajorId</td>
-                <td class="text-left">@item.UserId</td>
-                <td class="text-left">@item.ApprovalId</td>
-                <td class="text-left">@item.DayInWeek</td>
-                <td class="text-left">@item.IdMain</td>
-                <td class="text-left">@item.IsStatus</td>
-                <td class="text-center" scope="row">@item.CreateAt</td>
-                <td class="text-center" scope="row">@item.CreateBy</td>
-                <td class="text-center" scope="row">@item.DateApproval</td>
-                <td class="text-center" scope="row">@item.ApprovalUserId</td>
-                <td class="text-center" scope="row">@item.DepartmentId</td>
-                </tr>
-                }
-                </tbody> *@
+                        @foreach (var item in listDetails)
+                    {
+                    stt++;
+                    <tr>
+                    <td class="text-center" scope="row">@stt</td>
+                    <td class="text-left">@item.CompanyId</td>
+                    <td class="text-left">@item.ParentMajorId</td>
+                    <td class="text-left">@item.MajorId</td>
+                    <td class="text-left">@item.UserId</td>
+                    <td class="text-left">@item.ApprovalId</td>
+                    <td class="text-left">@item.DayinWeek</td>
+                    <td class="text-left">@item.IdMain</td>
+                    <td class="text-left">@item.IsActive</td>
+                    <td class="text-center" scope="row">@item.CreateAt</td>
+                    <td class="text-center" scope="row">@item.CreateBy</td>
+                   </tr>
+                    }
+                </tbody>
                 }
                 else
                 {
@@ -282,9 +270,9 @@
                                         <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.IdMain ,item.ParentMajorId )">
                                             <i class="fas fa-trash"></i>
                                         </button>
-                                        @* <button class="btn btn-sm btn-primary m-1" title="Chi tiết" @onclick="()=>DetailAction(item.IdMain)">
-                                <i class="fa fa-info-circle"></i>
-                                </button> *@
+                                       @*  <button class="btn btn-sm btn-primary m-1" title="Chi tiết" @onclick="()=>DetailAction(item.IdMain)">
+                                            <i class="fa fa-info-circle"></i>
+                                        </button> *@
                                     </div>
                                 </td>
                                 <td class="text-center" scope="row">
@@ -326,8 +314,9 @@
     private List<Major> listParentMajor = new List<Major>();
     private List<Major> listMajor = new List<Major>();
     private List<ChiNhanh> lisChiNhanhs = new List<ChiNhanh>();
-    private List<Department> listStep = new List<Department>();
+    private List<DepartmentModel> listDepartment = new List<DepartmentModel>();
     private List<Permission> listPermissions = new List<Permission>();
+
     private List<ApprovalStepSettingData> listSetApprovalStep = new List<ApprovalStepSettingData>();
     public string CompanyIdText { get; set; } = "";
 
@@ -340,6 +329,7 @@
     public string ApprovalIdText { get; set; } = "";
     public string DayInWeekText { get; set; } = "";
     public string validationMessage = "";
+    public string PermissionIdText = "";
     private List<ApplicationUserModel>? listUserIdSearch = new();
     private List<ApplicationUser> listUserIdInput = new();
     public string UserIdText { get; set; } = "";
@@ -399,56 +389,34 @@
             }).ToList();
         selectParentMajorIdInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
 
-
         //chọn deptId
-        var list = !string.IsNullOrEmpty(Input.CompanyId) ? await DepartmentService.GetAllByVM(new DepartmentModel { CompanyId = Input.CompanyId }, groupId): new();
-        selectMajorIdInput = new();
-        selectApprovalIdInput = new();
-        selectDeptIdInput = new();
-        selectUserIdInput = new();
-        foreach (var item in list)
-        {
-            selectDeptIdInput.Add(new SelectedItem
-                {
-                    Text = item.DeptName,
-                    Value = item.Id,
-                    IsSelected = false
-                });
-        }
-        selectDeptIdInput.Add(new SelectedItem
-            {
-                Text = "",
-                Value = "",
-                IsSelected = true
-            });
-        selectUserIdInput = new();
-        selectUserIdInput.Add(new SelectedItem { Text = "", Value = "", IsSelected = true });
+        listDepartment = !string.IsNullOrEmpty(Input.CompanyId) ? await DepartmentService.GetAllByVM(new DepartmentModel { CompanyId = Input.CompanyId }, groupId) : new();
+        selectMajorIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+        selectApprovalIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+
+        selectDeptIdInput = listDepartment.Select(item => new SelectedItem { Text = item.DeptName, Value = item.Id }).ToList();
+        selectDeptIdInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+        selectUserIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
 
     }
     private async Task OnSelectCompanyIdSearch(SelectedItem selectedItem)
     {
         pageModel.CompanyId = selectedItem.Value;
-        var listpm = await ApprovalStepSettingService.LoadParentMajors(pageModel.CompanyId ?? "");
-        selectParentMajorIdSearch = listpm.Select(data => new SelectedItem
+        listMajor = await ApprovalStepSettingService.LoadParentMajors(pageModel.CompanyId ?? "");
+        selectParentMajorIdSearch = listMajor.Select(data => new SelectedItem
             {
                 Value = data.Id,
                 Text = data.MajorName
             }).ToList();
         selectParentMajorIdSearch.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
         //chọn deptId
-        var listdep = !string.IsNullOrEmpty(pageModel.CompanyId) ? await DepartmentService.GetAllByVM(new DepartmentModel { CompanyId = pageModel.CompanyId }, groupId) : new();
+        listDepartment = !string.IsNullOrEmpty(pageModel.CompanyId) ? await DepartmentService.GetAllByVM(new DepartmentModel { CompanyId = pageModel.CompanyId }, groupId) : new();
         selectMajorIdSearch = new();
         selectApprovalIdInput = new();
         selectDeptIdSearch = new();
         selectUserIdSearch = new();
-        selectDeptIdSearch = listdep.Select(item => new SelectedItem { Text = item.DeptName, Value = item.Id }).ToList();
-
-        selectDeptIdSearch.Add(new SelectedItem
-            {
-                Text = "",
-                Value = "",
-                IsSelected = true
-            });
+        selectDeptIdSearch = listDepartment.Select(item => new SelectedItem { Text = item.DeptName, Value = item.Id }).ToList();
+        selectDeptIdInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
         selectUserIdSearch = new();
         selectUserIdSearch.Add(new SelectedItem { Text = "", Value = "", IsSelected = true });
 
@@ -478,8 +446,8 @@
         selectMajorIdSearch = new();
         pageModel.MajorId = "";
         pageModel.ApprovalId = "";
-        var list = MajorService.GetMajorByParentId1(pageModel.ParentMajorId);
-        selectMajorIdSearch = list.Select(data => new SelectedItem
+        listMajor = MajorService.GetMajorByParentId1(pageModel.ParentMajorId);
+        selectMajorIdSearch = listMajor.Select(data => new SelectedItem
             {
                 Value = data.Id,
                 Text = data.MajorName
@@ -511,6 +479,7 @@
     private async Task OnSelectMajorIdSearch(SelectedItem selectedItem)
     {
         pageModel.MajorId = selectedItem.Value;
+
         var list = await PermissionService.LoadToApproval(pageModel.MajorId);
         selectApprovalIdSearch = new();
         selectApprovalIdSearch = list.Select(item => new SelectedItem { Text = item.PermissionName, Value = item.Id }).ToList();
@@ -522,32 +491,32 @@
     private async Task OnSelectDeptIdInput(SelectedItem selectedItem)
     {
         Input.DeptId = selectedItem.Value;
-        var list = await ApplicationUserService.GetAllByVM(new ApplicationUserModel { DeptId = Input.DeptId }, groupId);
         selectUserIdInput = new();
-        selectUserIdInput = list.Select(item => new SelectedItem { Text = item.UserName, Value = item.Id, }).ToList();
-        selectUserIdInput.Add(new SelectedItem{Text = "",Value = "",IsSelected = true});
+        if (string.IsNullOrEmpty(Input.DeptId))
+        {
+            selectUserIdInput =new List<SelectedItem>{ new SelectedItem { Text = "", Value = "Chọn", IsSelected = true }};
+        }
+        else
+        {
+            listUserIdSearch = await ApplicationUserService.GetAllByVM(new ApplicationUserModel { DeptId = Input.DeptId }, groupId);
+            selectUserIdInput = listUserIdSearch.Select(item => new SelectedItem { Text = item.UserName, Value = item.Id, }).ToList();
+            selectUserIdInput.Add(new SelectedItem { Text = "", Value = "Chọn", IsSelected = true });
+        }
     }
     private async Task OnSelectDeptIdSearch(SelectedItem selectedItem)
     {
         pageModel.DeptId = selectedItem.Value;
         selectUserIdSearch = new();
-        var list = await ApplicationUserService.GetAllByVM(new ApplicationUserModel { DeptId = pageModel.DeptId }, groupId);
-        selectUserIdInput = new();
-        foreach (var item in list)
+        if (string.IsNullOrEmpty(Input.DeptId))
         {
-            selectUserIdSearch.Add(new SelectedItem
-                {
-                    Text = item.UserName,
-                    Value = item.Id,
-                    IsSelected = false
-                });
+            selectUserIdSearch = new List<SelectedItem> { new SelectedItem { Text = "", Value = "Chọn", IsSelected = true } };
         }
-        selectUserIdSearch.Add(new SelectedItem
-            {
-                Text = "",
-                Value = "",
-                IsSelected = true
-            });
+        else
+        {
+            listUserIdSearch = await ApplicationUserService.GetAllByVM(new ApplicationUserModel { DeptId = pageModel.DeptId }, groupId);
+            selectUserIdSearch = listUserIdSearch.Select(item => new SelectedItem { Text = item.UserName, Value = item.Id, }).ToList();
+            selectUserIdSearch.Add(new SelectedItem { Text = "", Value = "", IsSelected = true });
+        }
     }
 
     private List<SelectedItem> selectUserIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
@@ -642,32 +611,15 @@
     }
     private void Refresh()
     {
-        //QuangMinh đặt select2 về mặc định
         foreach (var item in selectCompanyIdInput)
         {
             item.IsSelected = item.Value == "";
         }
-        foreach (var item in selectParentMajorIdInput)
-        {
-            item.IsSelected = item.Value == "";
-        }
-        foreach (var item in selectMajorIdInput)
-        {
-            item.IsSelected = item.Value == "";
-        }
-        foreach (var item in selectUserIdInput)
-        {
-            item.IsSelected = item.Value == "";
-        }
-        foreach (var item in dayInWeekModels)
-        {
-            item.IsCheck = false;
-        }
-        foreach (var item in permissionInputs)
-        {
-            item.IsCheck = false;
-        }
-        permissionInputs = new List<PermissionInput>();
+        selectParentMajorIdInput = new();
+        selectMajorIdInput = new();
+        selectUserIdInput = new();
+        dayInWeekModels = new();
+        permissionInputs = new();
     }
     public List<MajorUserApprovalModel> listMajorUserApproval
     {
@@ -796,7 +748,7 @@
                 {
                     Value = data.Id,
                     Text = data.MajorName,
-                    IsSelected = data.Id == Input.ParentMajorId
+                    IsSelected = data.Id == Input.MajorId
                 }).ToList();
 
             var listdept = !string.IsNullOrEmpty(Input.CompanyId) ? await DepartmentService.GetAllByVM(new DepartmentModel { CompanyId = Input.CompanyId }, groupId) : new();
@@ -806,33 +758,22 @@
             selectUserIdInput = list.Select(item => new SelectedItem { Text = item.UserName, Value = item.Id, IsSelected = item.Id == Input.UserId }).ToList();
   
             listPermissions = await PermissionService.LoadToApproval(Input.MajorId);
-            permissionInputs = new List<PermissionInput>();
-            foreach (var item in listPermissions)
-            {
-                var iteminsert = new PermissionInput()
-                    {
-                        Id = item.Id,
-                        Text = item.PermissionName,
-                        IsCheck = item.Id == Input.ApprovalId
-                    };
-                permissionInputs.Add(iteminsert);
-            }
-           
-            DayInWeekText = "";
-            foreach (var item in dayInWeekModels)
-            {
-                if (item.IsCheck)
+            permissionInputs = listPermissions.Select(item => new PermissionInput
                 {
-                    DayInWeekText += DayInWeekText == "" ? item.Text : ", " + item.Text;
-                }
-                foreach (var data in getData)
-                {
-                    if (item.Id == int.Parse(data.DayinWeek))
-                    {
-                        item.IsCheck = true;
-                    }
-                }
-            }
+                    Id = item.Id,
+                    Text = item.PermissionName,
+                    IsCheck = getData.Any(data => data.ApprovalId == item.Id)
+                }).ToList();
+            PermissionIdText = string.Join(", ", permissionInputs.Where(item => item.IsCheck).Select(item => item.Text));
+            dayInWeekModels.ForEach(item =>
+            {
+            item.IsCheck = getData.Any(data => item.Id == int.Parse(data.DayinWeek));
+            });
+
+            DayInWeekText = string.Join(", ", dayInWeekModels.Where(item => item.IsCheck).Select(item => item.Text));
+
+
+
             isEdit = true;
             isModalVisible = true;
         }
@@ -850,22 +791,22 @@
     }
     private async Task DetailAction(string id)
     {
-        // try
-        // {
-        //     listDetails = await MajorUserApprovalService.GetHistory(id);
-        //     isModalDetail = true;
-        // }
-        // catch (Exception ex)
-        // {
-        //     ToastService.ShowToast(
-        //     "Thông báo",
-        //     ex.Message,
-        //     cssClass: "toast-danger",
-        //     iconClass: "fa fa-exclamation-circle",
-        //     progressBarClass: "bg-info",
-        //     duration: 7000
-        //     );
-        // }
+        try
+        {
+            listDetails = await MajorUserApprovalService.GetHistory(id);
+            isModalDetail = true;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+            "Thông báo",
+            ex.Message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 7000
+            );
+        }
     }
     private async Task ConfirmDelete(string id, string Ten)
     {
@@ -896,23 +837,15 @@
                     }
                     else
                     {
-                        // var checkDelete = await MajorUserApprovalService.CheckDelete(query);
                         var checkquyen = await PhanQuyenService.CheckPermission(groupId, query.CompanyId, user, "6C972B3C-050E-456D-B1AE-6B1C6F110F16");
                         string[] ids = { deleteId };
                         var isValid = await MajorUserApprovalService.CheckExclusive(ids, baseTime);
                         if (isValid)
                         {
-                            // var firstApproval = await PhanQuyenService.GetFirstApprovalStep(query.GroupId, "2d272329-bd6a-462b-96b9-8c9626258199", "6C972B3C-050E-456D-B1AE-6B1C6F110F16");
-                            // var lastApproval = await PhanQuyenService.GetLastApprovalStep(query.GroupId, "2d272329-bd6a-462b-96b9-8c9626258199", "6C972B3C-050E-456D-B1AE-6B1C6F110F16");
-                            // query.DepartmentId = firstApproval.DepartmentId;
-                            // query.ApprovalId = firstApproval.Id;
-                            // query.LastApprovalId = lastApproval.Id;
                             query.IsActive = 100;
                             query.CreateAt = DateTime.Now;
                             query.CreateBy = userId;
-                            // query.IsStatus = firstApproval.Content;
                             await MajorUserApprovalService.Update(query, userId);
-                            // var result = await MajorUserApprovalService.GetDetails(deleteId);
                             string content = "";
                             content += "<h3>Thông tin xóa</h3>";
                             content += "<table class=\"table table-hover table-bordered\">";
@@ -1108,7 +1041,7 @@
                     {
                         Id = Guid.NewGuid().ToString(),
                         Receiver = UserIdText,
-                        Subject = "Quản lý quyền theo người dùng, nghiệp vụ - Sửa.",
+                        Subject = "Phân quyền thao tác theo người dùng, nghiệp vụ - Sửa.",
                         Content = content,
                         CompanyId = Input.CompanyId,
                         UserId = Input.UserId,
