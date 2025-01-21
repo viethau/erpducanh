@@ -59,7 +59,7 @@ builder.Services.AddScoped<IPhanQuyenRepository, PhanQuyenRepository>();
 builder.Services.AddScoped<IChiNhanhRepository, ChiNhanhRepository>();
 
 builder.Services.AddScoped<IMajorUserApprovalReponsitory, MajorUserApprovalReponsitory>();
-builder.Services.AddScoped<IPhanQuyenCaiDatDuyetRepository, PhanQuyenCaiDatDuyetRepository>();
+builder.Services.AddScoped<IApprovalControlRepository, ApprovalControlRepository>();
 
 builder.Services.AddScoped<ICompanyTypeRepository, CompanyTypeRepository>();
 builder.Services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();

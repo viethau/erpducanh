@@ -25,9 +25,11 @@
             </EditForm>
         </BodyTemplate>
     </CustomModal>
-
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mt-2">Danh sách nhóm danh mục</h5>
+        <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
+    </div>
     <button class="btn btn-primary" @onclick="ShowModal">Thêm nhóm danh mục</button>
-    <h3 class="mt-2">Danh sách nhóm danh mục</h3>
 
     <div class="row mt-3">
         <table class="table table-hover table-bordered">
@@ -326,5 +328,25 @@
         MetaData = pagelist.MetaData;
         return nhomdanhmucs;
     }
+    private async Task ExportExcel()
+    {
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "Danh sách nhóm danh mục",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.DSNDM.Cast<ComplexHeader>().ToList(),
+                        Data = listModel.Cast<object>().ToList()
+                    },
+                }
+            };
 
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        var fileName = "DSDanhNhomMuc.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+    }
 }

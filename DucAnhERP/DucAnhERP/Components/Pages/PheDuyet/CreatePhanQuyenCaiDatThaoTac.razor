@@ -212,7 +212,6 @@
                 </div>
             </div>
         </EditForm>
- 
         <div class="row mt-3 our-table">
             <table class="table table-hover table-bordered">
                 <thead class="bg-info">
@@ -310,7 +309,6 @@
 </div>
 @code {
     private MajorUserApproval Input = new();
-
     private List<Major> listParentMajor = new List<Major>();
     private List<Major> listMajor = new List<Major>();
     private List<ChiNhanh> lisChiNhanhs = new List<ChiNhanh>();
@@ -418,7 +416,7 @@
         selectDeptIdSearch = listDepartment.Select(item => new SelectedItem { Text = item.DeptName, Value = item.Id }).ToList();
         selectDeptIdInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
         selectUserIdSearch = new();
-        selectUserIdSearch.Add(new SelectedItem { Text = "", Value = "", IsSelected = true });
+        selectUserIdSearch.Add(new SelectedItem  { Value = "", Text = "Chọn", IsSelected = true });
 
     }
 
@@ -494,13 +492,13 @@
         selectUserIdInput = new();
         if (string.IsNullOrEmpty(Input.DeptId))
         {
-            selectUserIdInput =new List<SelectedItem>{ new SelectedItem { Text = "", Value = "Chọn", IsSelected = true }};
+            selectUserIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
         }
         else
         {
             listUserIdSearch = await ApplicationUserService.GetAllByVM(new ApplicationUserModel { DeptId = Input.DeptId }, groupId);
             selectUserIdInput = listUserIdSearch.Select(item => new SelectedItem { Text = item.UserName, Value = item.Id, }).ToList();
-            selectUserIdInput.Add(new SelectedItem { Text = "", Value = "Chọn", IsSelected = true });
+            selectUserIdInput.Insert(0, new SelectedItem { Value = "",Text = "chọn", IsSelected = true });
         }
     }
     private async Task OnSelectDeptIdSearch(SelectedItem selectedItem)
@@ -509,13 +507,13 @@
         selectUserIdSearch = new();
         if (string.IsNullOrEmpty(Input.DeptId))
         {
-            selectUserIdSearch = new List<SelectedItem> { new SelectedItem { Text = "", Value = "Chọn", IsSelected = true } };
+            selectUserIdSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
         }
         else
         {
             listUserIdSearch = await ApplicationUserService.GetAllByVM(new ApplicationUserModel { DeptId = pageModel.DeptId }, groupId);
             selectUserIdSearch = listUserIdSearch.Select(item => new SelectedItem { Text = item.UserName, Value = item.Id, }).ToList();
-            selectUserIdSearch.Add(new SelectedItem { Text = "", Value = "", IsSelected = true });
+            selectUserIdSearch.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
         }
     }
 
@@ -618,7 +616,10 @@
         selectParentMajorIdInput = new();
         selectMajorIdInput = new();
         selectUserIdInput = new();
-        dayInWeekModels = new();
+        foreach (var item in dayInWeekModels)
+        {
+            item.IsCheck = false;
+        }
         permissionInputs = new();
     }
     public List<MajorUserApprovalModel> listMajorUserApproval

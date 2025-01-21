@@ -5,9 +5,15 @@ namespace DucAnhERP.Repository
     public interface IApprovalControlRepository : IBaseRepository<ApprovalControl>
     {
         Task<List<ApprovalControlModel>> GetAllByVM(ApprovalControlModel dataModel, string groupId);
-        Task<List<ChiNhanhModel>> GetChiNhanhs(string groupId);
-        Task<List<MajorModel>> GetParentMajors(string groupId);
-        Task<List<MajorModel>> GetMMajors(string groupId);
-        Task<List<ApplicationUserModel>> GetApplicationUsers(string groupId);
+        Task<List<ApprovalControlModel>> GetHistoryIsValidEdit(string id);
+        Task<ApprovalControlModel> GetDetails(string id);
+        Task<List<ApprovalControlModel>> GetHistory(string id);
+        Task<List<ChiNhanhModel>>? GetChiNhanhsForCompanyId(string groupId);
+        Task<List<MajorModel>>? GetMajorsForParentMajorId(string groupId);
+        Task<List<MajorModel>>? GetMajorsForMajorId(string groupId);
+        Task<List<ApplicationUserModel>>? GetApplicationUsersForUserId(string groupId);
+        Task<bool> CheckSave(ApprovalControl input);
+        Task<bool> CheckEdit(ApprovalControl input);
+        Task<bool> CheckDelete(ApprovalControl input);
     }
 }

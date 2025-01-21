@@ -1,8 +1,8 @@
-﻿@page "/createPhanQuyenCaiDatDuyet"
+﻿@page "/createApprovalControl"
 
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
-@inject IPhanQuyenCaiDatDuyetRepository PhanQuyenCaiDatDuyetService
+@inject IApprovalControlRepository ApprovalControlService
 
 <div class="mx-5 my-2">
     <h3>Danh sách</h3>
@@ -187,13 +187,13 @@
                         </th> *@
                     </tr>
                 </thead>
-                @if (listPhanQuyenCaiDatDuyetControl.Any())
+                @if (listApprovalControlControl.Any())
                 {
                     <tbody>
                         @{
                             int stt = 0;
                         }
-                        @foreach (var item in listPhanQuyenCaiDatDuyetControl)
+                        @foreach (var item in listApprovalControlControl)
                         {
                             stt++;
                             <tr>
@@ -232,7 +232,7 @@
                 }
             </table>
         </div>
-        @if (listPhanQuyenCaiDatDuyetControl.Any())
+        @if (listApprovalControlControl.Any())
         {
             <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
         }
@@ -242,7 +242,7 @@
     <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
 </div>
 @code {
-    private PhanQuyenCaiDatDuyet Input = new();
+    private ApprovalControl Input = new();
     private List<DepartmentModel> listDepartment = new List<DepartmentModel>();
     private List<Major> listParentMajor = new List<Major>();
     private List<Major> listMajor = new List<Major>();
@@ -291,7 +291,7 @@
         selectDeptIdInput = listDepartment.Select(item => new SelectedItem { Text = item.DeptName, Value = item.Id }).ToList();
         selectDeptIdInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
         selectUserIdInput = new();
-        selectUserIdInput.Add(new SelectedItem { Text = "", Value = "Chọn", IsSelected = true });
+        selectUserIdInput.Add(new SelectedItem  { Value = "", Text = "Chọn", IsSelected = true });
 
     }
     private async Task OnSelectCompanyIdSearch(SelectedItem selectedItem)
@@ -375,7 +375,7 @@
         {
             listUserIdSearch = await ApplicationUserService.GetAllByVM(new ApplicationUserModel { DeptId = Input.DeptId }, groupId);
             selectUserIdInput = listUserIdSearch.Select(item => new SelectedItem { Text = item.UserName, Value = item.Id, }).ToList();
-            selectUserIdInput.Add(new SelectedItem { Text = "", Value = "Chọn", IsSelected = true });
+            selectUserIdInput.Add(new SelectedItem  { Value = "", Text = "Chọn", IsSelected = true });
         }
     }
     private async Task OnSelectDeptIdSearch(SelectedItem selectedItem)
@@ -390,7 +390,7 @@
         {
             listUserIdSearch = await ApplicationUserService.GetAllByVM(new ApplicationUserModel { DeptId = pageModel.DeptId }, groupId);
             selectUserIdSearch = listUserIdSearch.Select(item => new SelectedItem { Text = item.UserName, Value = item.Id, }).ToList();
-            selectUserIdSearch.Add(new SelectedItem { Text = "", Value = "Chọn", IsSelected = true });
+            selectUserIdSearch.Add(new SelectedItem  { Value = "", Text = "Chọn", IsSelected = true });
         }
     }
 
@@ -453,23 +453,23 @@
         selectUserIdInput = new();
         selectDeptIdInput = new();
     }
-    public List<PhanQuyenCaiDatDuyetModel> listPhanQuyenCaiDatDuyetControl
+    public List<ApprovalControlModel> listApprovalControlControl
     {
         get;
         set;
     } = new();
-    public List<PhanQuyenCaiDatDuyetModel> listDetails
+    public List<ApprovalControlModel> listDetails
     {
         get;
         set;
     } = new();
-    public List<PhanQuyenCaiDatDuyetModel> listModel
+    public List<ApprovalControlModel> listModel
     {
         get;
         set;
     } = new();
     [SupplyParameterFromForm(FormName = "SearchData")]
-    public PhanQuyenCaiDatDuyetModel pageModel
+    public ApprovalControlModel pageModel
     {
         get;
         set;
@@ -553,7 +553,7 @@
         {
             var checkquyen = await PhanQuyenService.CheckPermission(groupId, Input.CompanyId, user, "ef6f00e4-347e-471d-a9d9-d7661ca6c1b1");
             TitleModal = "Cập nhật";
-            Input = await PhanQuyenCaiDatDuyetService.GetById(id);
+            Input = await ApprovalControlService.GetById(id);
             selectCompanyIdInput = new();
             selectParentMajorIdInput = new();
             selectMajorIdInput = new();
@@ -608,7 +608,7 @@
     {
         try
         {
-            listDetails = await PhanQuyenCaiDatDuyetService.GetHistory(id);
+            listDetails = await ApprovalControlService.GetHistory(id);
             isModalDetail = true;
         }
         catch (Exception ex)
@@ -638,7 +638,7 @@
             {
                 if (!string.IsNullOrEmpty(deleteId))
                 {
-                    var query = await PhanQuyenCaiDatDuyetService.GetById(deleteId);
+                    var query = await ApprovalControlService.GetById(deleteId);
                     if (query.IsActive == 2)
                     {
                         ToastService.ShowToast(
@@ -652,16 +652,16 @@
                     }
                     else
                     {
-                        var checkDelete = await PhanQuyenCaiDatDuyetService.CheckDelete(query);
+                        var checkDelete = await ApprovalControlService.CheckDelete(query);
                         var checkquyen = await PhanQuyenService.CheckPermission(groupId, query.CompanyId, user, "b4980859-618c-46a8-b0e5-eb27dde628ab");
                         string[] ids = { deleteId };
-                        var isValid = await PhanQuyenCaiDatDuyetService.CheckExclusive(ids, baseTime);
+                        var isValid = await ApprovalControlService.CheckExclusive(ids, baseTime);
                         if (isValid)
                         {
                             query.IsActive = 100;
                             query.CreateAt = DateTime.Now;
                             query.CreateBy = userId;
-                            await PhanQuyenCaiDatDuyetService.Update(query, "");
+                            await ApprovalControlService.Update(query, "");
                             string content = "";
                             content += "<h3>Thông tin xóa</h3>";
                             content += "<table class=\"table table-hover table-bordered\">";
@@ -749,8 +749,8 @@
             if (editcheck)
             {
                 string[] ids = { Input.Id };
-                var isValid = await PhanQuyenCaiDatDuyetService.CheckExclusive(ids, baseTime);
-                var checkEdit = await PhanQuyenCaiDatDuyetService.CheckEdit(Input);
+                var isValid = await ApprovalControlService.CheckExclusive(ids, baseTime);
+                var checkEdit = await ApprovalControlService.CheckEdit(Input);
                 var checkquyen = await PhanQuyenService.CheckPermission(groupId, Input.CompanyId, user, "ef6f00e4-347e-471d-a9d9-d7661ca6c1b1");
                 if (isValid)
                 {
@@ -762,7 +762,7 @@
                     
                     Input.IsActive = 1;
                     // Input.IsStatus = firstApproval.Content;
-                    await PhanQuyenCaiDatDuyetService.Update(Input, "");
+                    await ApprovalControlService.Update(Input, "");
                     string content = "";
                     content += "<h3>Thông tin sửa</h3>";
                     content += "<table class=\"table table-hover table-bordered\">";
@@ -788,7 +788,7 @@
                     content += "</th>";
                     content += "</tr>";
                     content += "</thead>";
-                    var IsValidModel = await PhanQuyenCaiDatDuyetService.GetHistoryIsValidEdit(Input.Id);
+                    var IsValidModel = await ApprovalControlService.GetHistoryIsValidEdit(Input.Id);
                     @if (IsValidModel.Any())
                     {
                         content += "<tbody>";
@@ -859,7 +859,7 @@
             {
                 var checkquyen = await PhanQuyenService.CheckPermission(groupId, Input.CompanyId, user, "6113e06f-6495-42a3-ad65-8ea440510fa0");
                 Input.IsActive = 0;
-                var checkSave = await PhanQuyenCaiDatDuyetService.CheckSave(Input);
+                var checkSave = await ApprovalControlService.CheckSave(Input);
                 // var firstApproval = await PhanQuyenService.GetFirstApprovalStep(Input.GroupId, "cabf898a-1920-47ef-a55b-cd4228e947dd", "6113e06f-6495-42a3-ad65-8ea440510fa0");
                 // var lastApproval = await PhanQuyenService.GetLastApprovalStep(Input.GroupId, "cabf898a-1920-47ef-a55b-cd4228e947dd", "6113e06f-6495-42a3-ad65-8ea440510fa0");
                 // Input.DepartmentId = firstApproval.DepartmentId;
@@ -869,11 +869,11 @@
                 // Input.IsStatus = firstApproval.Content;
                 if (isEdit)
                 {
-                    await PhanQuyenCaiDatDuyetService.Update(Input, "");
+                    await ApprovalControlService.Update(Input, "");
                 }
                 else
                 {
-                    await PhanQuyenCaiDatDuyetService.Insert(Input, "");
+                    await ApprovalControlService.Insert(Input, "");
                 }
                 string content = "";
                 content += "<h3>Thông tin thêm</h3>";
@@ -956,8 +956,8 @@
     {
         var checkquyen = await PhanQuyenService.CheckPermission(groupId, pageModel.CompanyId, user, "9f8a01b1-8c14-4d78-8620-92e631caf03c");
         pageModel.PageNumber = 1;
-        listModel = await PhanQuyenCaiDatDuyetService.GetAllByVM(pageModel, groupId);
-        listPhanQuyenCaiDatDuyetControl = Paging(listModel);
+        listModel = await ApprovalControlService.GetAllByVM(pageModel, groupId);
+        listApprovalControlControl = Paging(listModel);
     }
     private void SortTable(string columnName)
     {
@@ -980,16 +980,16 @@
         pageModel.pageSize = pageSize;
         Paging(listModel);
     }
-    private List<PhanQuyenCaiDatDuyetModel> Paging(List<PhanQuyenCaiDatDuyetModel> list)
+    private List<ApprovalControlModel> Paging(List<ApprovalControlModel> list)
     {
         var count = list.Count();
         list = list.Skip((pageModel.PageNumber - 1) * pageModel.PageSize).Take(pageModel.PageSize).ToList();
-        listPhanQuyenCaiDatDuyetControl.Clear();
+        listApprovalControlControl.Clear();
         foreach (var item in list)
         {
-            listPhanQuyenCaiDatDuyetControl.Add(item);
+            listApprovalControlControl.Add(item);
         }
-        var pagelist = new PageList<PhanQuyenCaiDatDuyetModel>(listPhanQuyenCaiDatDuyetControl, count, pageModel.PageNumber, pageModel.PageSize);
+        var pagelist = new PageList<ApprovalControlModel>(listApprovalControlControl, count, pageModel.PageNumber, pageModel.PageSize);
         MetaData = pagelist.MetaData;
         return list;
     }

@@ -45,8 +45,10 @@
         </BodyTemplate>
     </CustomModal>
 
-    <h3 class="mt-2">Danh mục trọng lượng thép</h3>
-
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mt-2">Danh mục trọng lượng thép</h5>
+        <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
+    </div>
     <EditForm Model="dmModel" FormName="Search" OnValidSubmit="@Search">
         <DataAnnotationsValidator />
         <div class="row ">
@@ -67,7 +69,6 @@
             </div>
         </div>
     </EditForm>
-
     <div class="row mt-3">
         <table class="table table-hover table-bordered">
             <thead class="bg-info">
@@ -519,5 +520,28 @@
     public bool IsInteger(string input)
     {
         return int.TryParse(input, out _);
+    }
+
+    private async Task ExportExcel()
+    {
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "DM Loại thép",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.DMTLT.Cast<ComplexHeader>().ToList(),
+                        Data = listModel.Cast<object>().ToList()
+                    },
+
+                }
+            };
+
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        var fileName = "DMLoaiThep.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
     }
 }

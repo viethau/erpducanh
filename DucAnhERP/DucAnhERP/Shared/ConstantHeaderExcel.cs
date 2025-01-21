@@ -4,6 +4,7 @@ namespace DucAnhERP.Shared
 {
     public class ConstantHeaderExcel
     {
+
         //Danh sach nuoc mua 
         public static List<ComplexHeader> TTTHNM_HEADERS = new List<ComplexHeader>
         {
@@ -638,6 +639,62 @@ namespace DucAnhERP.Shared
                 new ComplexHeader { Title ="y", DataProperty="ToaDoY", StartRow = 18, EndRow = 18, StartCol = 490, EndCol = 490,IsBold=true ,HasBorder = true ,WrapText=true , Alignment = ExcelHorizontalAlignment.Center},
 
         };
+
+        //Danh mục
+        public static List<ComplexHeader> DMTLT = new List<ComplexHeader>
+         {
+                // Dòng tiêu đề chung
+                new ComplexHeader { Title ="CÔNG TY CPXD ĐỨC ANH", StartRow = 1, StartCol = 1, EndRow = 1, EndCol = 5,Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title ="Bảng này dùng để cấp số liệu cho bảng:", StartRow = 2, StartCol = 1, EndRow = 2, EndCol = 5 ,Alignment = ExcelHorizontalAlignment.Center ,IsBold=true},
+                new ComplexHeader { Title ="BẢNG DANH MỤC TRỌNG LƯỢNG THÉP", StartRow = 3, StartCol = 1, EndRow = 3, EndCol = 15, TextColor = System.Drawing.Color.Black, Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title ="", StartRow = 4, StartCol = 1, EndRow = 4, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title ="", StartRow = 5, StartCol = 1, EndRow = 5, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title ="", StartRow = 6, StartCol = 1, EndRow = 6, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+                new ComplexHeader { Title ="", StartRow = 7, StartCol = 1, EndRow = 7, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title ="", StartRow = 8, StartCol = 1, EndRow = 8, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+
+                // Header thông tin chi tiết
+                new ComplexHeader { Title ="STT", DataProperty ="STT", StartRow = 16, EndRow = 16, StartCol = 1, EndCol = 1,  HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title ="Chủng loại thép", DataProperty ="ChungLoaiThep_Name",  StartRow = 16, EndRow = 16, StartCol =2, EndCol =2,  HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title ="Đường kính", DataProperty ="DuongKinh",  StartRow = 16, EndRow = 16, StartCol =3, EndCol =3,  HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title ="Đơn vị", DataProperty ="DonVi",  StartRow = 16, EndRow = 16, StartCol =4, EndCol =4,  HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title ="Trọng lượng", DataProperty ="TrongLuong",  StartRow = 16, EndRow = 16, StartCol =5, EndCol =5,  HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },  
+        };
+        public static List<ComplexHeader> DSDM = new List<ComplexHeader>
+         {
+                // Dòng tiêu đề chung
+                new ComplexHeader { Title ="CÔNG TY CPXD ĐỨC ANH", StartRow = 1, StartCol = 1, EndRow = 1, EndCol = 5,Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title ="", StartRow = 2, StartCol = 1, EndRow = 2, EndCol = 5 ,Alignment = ExcelHorizontalAlignment.Center ,IsBold=true},
+                new ComplexHeader { Title ="", StartRow = 3, StartCol = 1, EndRow = 3, EndCol = 15, TextColor = System.Drawing.Color.Black, Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title ="", StartRow = 4, StartCol = 1, EndRow = 4, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title ="", StartRow = 5, StartCol = 1, EndRow = 5, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title ="", StartRow = 6, StartCol = 1, EndRow = 6, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+                new ComplexHeader { Title ="", StartRow = 7, StartCol = 1, EndRow = 7, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title ="", StartRow = 8, StartCol = 1, EndRow = 8, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+
+                // Header thông tin chi tiết
+                new ComplexHeader { Title ="STT", DataProperty ="STT", StartRow = 16, EndRow = 16, StartCol = 1, EndCol = 1,  HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title ="Nhóm danh mục", DataProperty ="TenNhom",  StartRow = 16, EndRow = 16, StartCol =2, EndCol =2,  HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title ="Tên", DataProperty ="Ten",  StartRow = 16, EndRow = 16, StartCol =3, EndCol =3,  HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title ="Chi chú", DataProperty ="GhiChu",  StartRow = 16, EndRow = 16, StartCol =4, EndCol =4,  HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+        };
+        public static List<ComplexHeader> DSNDM = new List<ComplexHeader>
+         {
+                // Dòng tiêu đề chung
+                new ComplexHeader { Title ="CÔNG TY CPXD ĐỨC ANH", StartRow = 1, StartCol = 1, EndRow = 1, EndCol = 5,Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title ="", StartRow = 2, StartCol = 1, EndRow = 2, EndCol = 5 ,Alignment = ExcelHorizontalAlignment.Center ,IsBold=true},
+                new ComplexHeader { Title ="", StartRow = 3, StartCol = 1, EndRow = 3, EndCol = 15, TextColor = System.Drawing.Color.Black, Alignment = ExcelHorizontalAlignment.Center,IsBold=true },
+                new ComplexHeader { Title ="", StartRow = 4, StartCol = 1, EndRow = 4, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title ="", StartRow = 5, StartCol = 1, EndRow = 5, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title ="", StartRow = 6, StartCol = 1, EndRow = 6, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+                new ComplexHeader { Title ="", StartRow = 7, StartCol = 1, EndRow = 7, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red },
+                new ComplexHeader { Title ="", StartRow = 8, StartCol = 1, EndRow = 8, EndCol = 15, Alignment = ExcelHorizontalAlignment.Center ,TextColor = System.Drawing.Color.Red},
+
+                // Header thông tin chi tiết
+                new ComplexHeader { Title ="STT", DataProperty ="STT", StartRow = 16, EndRow = 16, StartCol = 1, EndCol = 1,  HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+                new ComplexHeader { Title ="Nhóm danh mục", DataProperty ="Ten",  StartRow = 16, EndRow = 16, StartCol =2, EndCol =2,  HasBorder = true, WrapText = true, Alignment = ExcelHorizontalAlignment.Center },
+        };
+
         //Phân loại
         public static List<ComplexHeader> PHANLOAIHOGA_HEADERS = new List<ComplexHeader>
             {

@@ -41,12 +41,12 @@ namespace DucAnhERP.Data
 
         public DbSet<MajorUserApproval> MajorUserApprovals { get; set; }
         public DbSet<MajorUserApproval_Log> MajorUserApproval_Logs { get; set; }
-        public DbSet<PhanQuyenCaiDatDuyet> PhanQuyenCaiDatDuyets { get; set; }
-        public DbSet<PhanQuyenCaiDatDuyet_Log> PhanQuyenCaiDatDuyet_Logs { get; set; }
+        public DbSet<ApprovalControl> ApprovalControls { get; set; }
+        public DbSet<ApprovalControl_Log> ApprovalControl_Logs { get; set; }
 
         public DbSet<ChiNhanh> ChiNhanhs { get; set; }
         public DbSet<ChiNhanh_Log> ChiNhanh_Logs { get; set; }
-        public DbSet<ApprovalControl> ApprovalControls { get; set; }
+       
         public DbSet<CompanyType> CompanyTypes { get; set; }
         public DbSet<MajorUserApprovalDetail> MajorUserApprovalDetails { get; set; }
         public DbSet<Tinh> Tinhs { get; set; }

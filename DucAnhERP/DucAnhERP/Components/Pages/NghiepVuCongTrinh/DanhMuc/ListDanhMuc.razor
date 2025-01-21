@@ -39,8 +39,10 @@
         </BodyTemplate>
     </CustomModal>
 
-    <h3 class="mt-2">Danh sách nhóm danh mục</h3>
-
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mt-2">Danh sách danh mục</h5>
+        <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
+    </div>
     <EditForm Model="dmModel" FormName="Search" OnValidSubmit="@Search">
         <DataAnnotationsValidator />
         <div class="row ">
@@ -78,7 +80,7 @@
                         <div class="pb-3">Tên  <span class="arrow @(GetSortStyle("Ten"))"></span></div>
                     </th>
                     <th onclick="@(() => SortTable("GhiChu"))" class="text-center sortable" scope="col" sortable>
-                        <div class="pb-3">Chi chú  <span class="arrow @(GetSortStyle("GhiChu"))"></span></div>
+                        <div class="pb-3">Chi chú <span class="arrow @(GetSortStyle("GhiChu"))"></span></div>
                     </th>
                     <th class="text-center" colspan="2">
 
@@ -435,5 +437,26 @@
         MetaData = pagelist.MetaData;
         return danhmucs;
     }
+    private async Task ExportExcel()
+    {
+        var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "Danh sách danh mục",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.DSDM.Cast<ComplexHeader>().ToList(),
+                        Data = listModel.Cast<object>().ToList()
+                    },
 
+                }
+            };
+
+        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        var fileName = "DSDanhMuc.xlsx";
+        using var stream = new MemoryStream(excelBytes);
+        using var streamRef = new DotNetStreamReference(stream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+    }
 }
