@@ -1,8 +1,9 @@
-﻿@page "/createApprovalControl"
+﻿@page "/createPhanQuyenCaiDatDuyet"
 
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
 @inject IApprovalControlRepository ApprovalControlService
+@inject IMajorUserApprovalReponsitory MajorUserApprovalService
 
 <div class="mx-5 my-2">
     <h3>Danh sách</h3>
@@ -30,11 +31,25 @@
                         <Select2 Id="DeptId" Items="@selectDeptIdInput" OnChange="@OnSelectDeptIdInput"></Select2>
                         <ValidationMessage For="()=>Input.DeptId"></ValidationMessage>
                     </div>
-                  
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="UserId">Người dùng</label>
                         <Select2 Id="UserId" Items="@selectUserIdInput" OnChange="@OnSelectUserIdInput"></Select2>
                         <ValidationMessage For="()=>Input.UserId"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="PermissionId">Loại quyền</label>
+                        <Select2 Id="PermissionId" Items="@selectPermissionInput" OnChange="@OnSelectPermissionIdInput"></Select2>
+                        <ValidationMessage For="()=>Input.PermissionId"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="ApprovalId">Lượt duyệt</label>
+                        @foreach (var item in approvalStepInputs)
+                        {
+                            <div class="custom-control custom-checkbox">
+                                <InputCheckbox class="custom-control-input" id="@item.Id" @bind-Value="item.IsCheck" onclick="@(() => CheckboxChanged(item.Id))" />
+                                <label for="@item.Id" class="custom-control-label">@item.Text</label>
+                            </div>
+                        }
                     </div>
                 </div>
                 <DataAnnotationsValidator />
@@ -145,10 +160,13 @@
                     <label>&nbsp;</label>
                     <button type="submit" form="SearchData" class="btn btn-primary form-control">Tìm kiếm</button>
                 </div>
-                <div class="form-group ml-5">
-                    <label>&nbsp;</label>
-                    <button type="button" @onclick="ShowModal" class="btn btn-primary form-control">Tạo mới</button>
-                </div>
+                @if (majorUserApprovalToDay.Any(x => x.ApprovalId == "0096270B-2674-40F1-AD70-8F1ED7E5AF48"))
+                {
+                    <div class="form-group ml-5">
+                        <label>&nbsp;</label>
+                        <button type="button" @onclick="ShowModal" class="btn btn-primary form-control">Tạo mới</button>
+                    </div>
+                }
             </div>
         </EditForm>
         <div class="row mt-3 our-table">
@@ -199,12 +217,19 @@
                             <tr>
                                 <td class="d-flex flex-column text-center nowrap">
                                     <div class="d-inline-block">
-                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.UserId )">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
+                                        @if (majorUserApprovalToDay.Any(x => x.ApprovalId == "8868A469-3956-4C61-A6F4-51017F5AD6D2"))
+                                        {
+                                            <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        }
+                                        @if (majorUserApprovalToDay.Any(x => x.ApprovalId == "F033DEF9-2113-4961-B57B-015E3BDF8671"))
+                                        {
+                                            <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.UserId )">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        }
+                                       
                                         <button class="btn btn-sm btn-primary m-1" title="Chi tiết" @onclick="()=>DetailAction(item.Id)">
                                             <i class="fa fa-info-circle"></i>
                                         </button>
@@ -269,13 +294,28 @@
     public string userId { get; set; }
     public string groupId { get; set; }
     private ApplicationUser user;
+    private List<MajorUserApprovalModel> majorUserApprovalToDay = new();
+    private List<Permission> listPermissions = new List<Permission>();
+    private List<ApprovalStepSetting> listApprovalStepSetting = new List<ApprovalStepSetting>();
     private List<SelectedItem> selectCompanyIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
     private List<SelectedItem> selectCompanyIdSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+
+    private List<SelectedItem> selectPermissionInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    List<ApprovalStepInput> approvalStepInputs = new List<ApprovalStepInput>();
+
+    public class ApprovalStepInput
+    {
+        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string Text { get; set; }
+        public bool IsCheck { get; set; }
+    }
+
     private async Task OnSelectCompanyIdInput(SelectedItem selectedItem)
     {
         Input.CompanyId = selectedItem.Value;
         CompanyIdText = selectedItem.Text;
-        listParentMajor = await ApprovalStepSettingService.LoadParentMajors(Input.CompanyId ?? "");
+        string[] parentMajor = majorUserApprovalToDay.Where(p => p.CompanyId == Input.CompanyId).Select(p => p.ParentMajorId).Distinct().ToArray();
+        listParentMajor = await ApprovalStepSettingService.LoadParentMajorsByMajorUserApproval(Input.CompanyId ?? "",parentMajor);
         selectParentMajorIdInput = listParentMajor.Select(data => new SelectedItem
             {
                 Value = data.Id,
@@ -291,14 +331,15 @@
         selectDeptIdInput = listDepartment.Select(item => new SelectedItem { Text = item.DeptName, Value = item.Id }).ToList();
         selectDeptIdInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
         selectUserIdInput = new();
-        selectUserIdInput.Add(new SelectedItem  { Value = "", Text = "Chọn", IsSelected = true });
+        selectUserIdInput.Insert(0, new SelectedItem  { Value = "", Text = "Chọn", IsSelected = true });
 
     }
     private async Task OnSelectCompanyIdSearch(SelectedItem selectedItem)
     {
         pageModel.CompanyId = selectedItem.Value;
-        listMajor = await ApprovalStepSettingService.LoadParentMajors(pageModel.CompanyId ?? "");
-        selectParentMajorIdSearch = listMajor.Select(data => new SelectedItem
+        string[] parentMajor = majorUserApprovalToDay.Where(p => p.CompanyId == Input.CompanyId).Select(p => p.ParentMajorId).Distinct().ToArray();
+        listParentMajor = await ApprovalStepSettingService.LoadParentMajorsByMajorUserApproval(Input.CompanyId ?? "", parentMajor);
+        selectParentMajorIdSearch = listParentMajor.Select(data => new SelectedItem
             {
                 Value = data.Id,
                 Text = data.MajorName
@@ -314,46 +355,60 @@
         selectDeptIdInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
 
         selectUserIdSearch = new();
-        selectUserIdSearch.Add(new SelectedItem { Text = "", Value = "", IsSelected = true });
-
+        selectUserIdSearch.Insert(0, new SelectedItem { Text = "", Value = "", IsSelected = true });
+        StateHasChanged();
     }
 
     private List<SelectedItem> selectParentMajorIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
     private List<SelectedItem> selectParentMajorIdSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
-    private void OnSelectParentMajorIdInput(SelectedItem selectedItem)
+    private async void OnSelectParentMajorIdInput(SelectedItem selectedItem)
     {
         Input.ParentMajorId = selectedItem.Value;
         ParentMajorIdText = selectedItem.Text;
         Input.MajorId = "";
-        listMajorIdInput = MajorService.GetMajorByParentId1(Input.ParentMajorId);
+        string[] majorId = majorUserApprovalToDay.Where(p => p.CompanyId == Input.CompanyId && p.ParentMajorId == Input.ParentMajorId)
+        .Select(p => p.MajorId).Distinct().ToArray();
+        listMajorIdInput = await ApprovalStepSettingService.LoadMajorsByMajorUserApproval(Input.CompanyId,Input.ParentMajorId, majorId);
         selectMajorIdInput = listMajorIdInput.Select(data => new SelectedItem
             {
                 Value = data.Id,
                 Text = data.MajorName
             }).ToList();
         selectMajorIdInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+        StateHasChanged();
     }
-    private void OnSelectParentMajorIdSearch(SelectedItem selectedItem)
+    private async void OnSelectParentMajorIdSearch(SelectedItem selectedItem)
     {
         pageModel.ParentMajorId = selectedItem.Value;
         selectMajorIdSearch = new();
         pageModel.MajorId = "";
-        listMajor = MajorService.GetMajorByParentId1(pageModel.ParentMajorId);
-        selectMajorIdSearch = listMajor.Select(data => new SelectedItem
+        string[] majorId = majorUserApprovalToDay.Where(p => p.CompanyId == Input.CompanyId && p.ParentMajorId == Input.ParentMajorId)
+         .Select(p => p.MajorId).Distinct().ToArray();
+        listMajorIdInput = await ApprovalStepSettingService.LoadMajorsByMajorUserApproval(pageModel.CompanyId, pageModel.ParentMajorId, majorId);
+        selectMajorIdSearch = listMajorIdInput.Select(data => new SelectedItem
             {
                 Value = data.Id,
                 Text = data.MajorName
             }).ToList();
         selectMajorIdSearch.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
-
     }
 
     private List<SelectedItem> selectMajorIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
     private List<SelectedItem> selectMajorIdSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
-    private void OnSelectMajorIdInput(SelectedItem selectedItem)
+    private async void OnSelectMajorIdInput(SelectedItem selectedItem)
     {
         Input.MajorId = selectedItem.Value;
         MajorIdText = selectedItem.Text;
+        listPermissions = await ApprovalStepSettingService.LoadPermissionsByMajorUserApproval(Input);
+        selectPermissionInput = new();
+        selectPermissionInput = listPermissions.Select(item => new SelectedItem()
+            {
+                Value = item.Id,
+                Text = item.PermissionName,
+                IsSelected = false
+            }).ToList();
+        selectPermissionInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+
 
     }
     private void OnSelectMajorIdSearch(SelectedItem selectedItem)
@@ -369,14 +424,15 @@
         selectUserIdInput = new();
         if (string.IsNullOrEmpty(Input.DeptId))
         {
-            selectUserIdInput = new List<SelectedItem> { new SelectedItem { Text = "", Value = "Chọn", IsSelected = true } };
+            selectUserIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
         }
         else
         {
             listUserIdSearch = await ApplicationUserService.GetAllByVM(new ApplicationUserModel { DeptId = Input.DeptId }, groupId);
             selectUserIdInput = listUserIdSearch.Select(item => new SelectedItem { Text = item.UserName, Value = item.Id, }).ToList();
-            selectUserIdInput.Add(new SelectedItem  { Value = "", Text = "Chọn", IsSelected = true });
+            selectUserIdInput.Insert(0, new SelectedItem  { Value = "", Text = "Chọn", IsSelected = true });
         }
+        StateHasChanged();
     }
     private async Task OnSelectDeptIdSearch(SelectedItem selectedItem)
     {
@@ -384,14 +440,15 @@
         selectUserIdSearch = new();
         if (string.IsNullOrEmpty(pageModel.DeptId))
         {
-            selectUserIdInput = new List<SelectedItem> { new SelectedItem { Text = "", Value = "Chọn", IsSelected = true } };
+            selectUserIdSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
         }
         else
         {
             listUserIdSearch = await ApplicationUserService.GetAllByVM(new ApplicationUserModel { DeptId = pageModel.DeptId }, groupId);
             selectUserIdSearch = listUserIdSearch.Select(item => new SelectedItem { Text = item.UserName, Value = item.Id, }).ToList();
-            selectUserIdSearch.Add(new SelectedItem  { Value = "", Text = "Chọn", IsSelected = true });
+            selectUserIdSearch.Insert(0, new SelectedItem  { Value = "", Text = "Chọn", IsSelected = true });
         }
+        StateHasChanged();
     }
 
     private List<SelectedItem> selectUserIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
@@ -404,6 +461,25 @@
     private void OnSelectUserIdSearch(SelectedItem selectedItem)
     {
         pageModel.UserId = selectedItem.Value;
+
+    }
+
+    private async void OnSelectPermissionIdInput(SelectedItem selectedItem)
+    {
+        Input.PermissionId = selectedItem.Value;
+        listApprovalStepSetting = await ApprovalStepSettingService.LoadStepByMajorUserApproval(Input);
+        approvalStepInputs = new();
+        approvalStepInputs = listApprovalStepSetting.Select(item => new ApprovalStepInput
+            {
+                Id = item.Id,
+                Text = item.ApprovalStep +" - "+ item.Content,
+                IsCheck = false
+            }).ToList();
+        StateHasChanged();
+    }
+    private void OnSelectPermissionIdSearch(SelectedItem selectedItem)
+    {
+        // pageModel. = selectedItem.Value;
     }
 
     [Parameter]
@@ -452,6 +528,8 @@
         selectMajorIdInput = new();
         selectUserIdInput = new();
         selectDeptIdInput = new();
+        selectPermissionInput = new();
+        approvalStepInputs = new();
     }
     public List<ApprovalControlModel> listApprovalControlControl
     {
@@ -479,6 +557,19 @@
         get;
         set;
     }
+
+    private void CheckboxChanged(string id)
+    {
+        foreach (var item in approvalStepInputs)
+        {
+            if (item.Id == id)
+            {
+                item.IsCheck = !item.IsCheck;
+            }
+        }
+    }
+
+
     protected override async Task OnInitializedAsync()
     {
 
@@ -495,8 +586,11 @@
             user = ApplicationUserService.GetByUserName(userName);
             userId = user.Id;
             groupId = user.GroupId;
+            //Kiểm tra quyền 
+            majorUserApprovalToDay = await MajorUserApprovalService.GetMajorUserApprovalToDay(user);
 
-            if (user.CreateBy == "symtem")
+
+            if (majorUserApprovalToDay.Count>0)
             {
                 userId = user.Id;
                 groupId = user.GroupId;
@@ -525,7 +619,7 @@
             }
         }
 
-        
+
     }
     private async Task LoadData()
     {
@@ -733,44 +827,171 @@
             );
         }
     }
-    
+
     private async Task HandleValidSubmit()
     {
         try
         {
             var CompanyIdValid = await ChiNhanhService.CheckStatus(Input.CompanyId, CompanyIdText);
-            // var ParentMajorIdValid = await MajorService.CheckStatus(Input.ParentMajorId, ParentMajorIdText);
-            // var MajorIdValid = await MajorService.CheckStatus(Input.MajorId, MajorIdText);
             var UserIdValid = await ApplicationUserService.CheckStatus(Input.UserId, UserIdText);
+
+            majorUserApprovalToDay = await MajorUserApprovalService.GetMajorUserApprovalToDay(user);
+
             Input.GroupId = groupId;
             Input.CreateBy = userId;
             Input.CreateAt = DateTime.Now;
             bool editcheck = (isEdit) || (isEdit == true && Input.IsActive == 3);
             if (editcheck)
             {
-                string[] ids = { Input.Id };
-                var isValid = await ApprovalControlService.CheckExclusive(ids, baseTime);
-                var checkEdit = await ApprovalControlService.CheckEdit(Input);
-                var checkquyen = await PhanQuyenService.CheckPermission(groupId, Input.CompanyId, user, "ef6f00e4-347e-471d-a9d9-d7661ca6c1b1");
-                if (isValid)
+                if (majorUserApprovalToDay.Any(x => x.ApprovalId == "8868A469-3956-4C61-A6F4-51017F5AD6D2"))
                 {
-                    // var firstApproval = await PhanQuyenService.GetFirstApprovalStep(Input.GroupId, "cabf898a-1920-47ef-a55b-cd4228e947dd", "ef6f00e4-347e-471d-a9d9-d7661ca6c1b1");
-                    // var lastApproval = await PhanQuyenService.GetLastApprovalStep(Input.GroupId, "cabf898a-1920-47ef-a55b-cd4228e947dd", "ef6f00e4-347e-471d-a9d9-d7661ca6c1b1");
+                    string[] ids = { Input.Id };
+                    var isValid = await ApprovalControlService.CheckExclusive(ids, baseTime);
+                    var checkEdit = await ApprovalControlService.CheckEdit(Input);
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, Input.CompanyId, user, "ef6f00e4-347e-471d-a9d9-d7661ca6c1b1");
+                    if (isValid)
+                    {
+                        // var firstApproval = await PhanQuyenService.GetFirstApprovalStep(Input.GroupId, "cabf898a-1920-47ef-a55b-cd4228e947dd", "ef6f00e4-347e-471d-a9d9-d7661ca6c1b1");
+                        // var lastApproval = await PhanQuyenService.GetLastApprovalStep(Input.GroupId, "cabf898a-1920-47ef-a55b-cd4228e947dd", "ef6f00e4-347e-471d-a9d9-d7661ca6c1b1");
+                        // Input.DepartmentId = firstApproval.DepartmentId;
+                        // Input.ApprovalId = firstApproval.Id;
+                        // Input.LastApprovalId = lastApproval.Id;
+
+                        Input.IsActive = 1;
+                        // Input.IsStatus = firstApproval.Content;
+                        await ApprovalControlService.Update(Input, "");
+                        string content = "";
+                        content += "<h3>Thông tin sửa</h3>";
+                        content += "<table class=\"table table-hover table-bordered\">";
+                        content += "<thead class=\"bg-info\">";
+                        content += "<tr>";
+                        content += "<th class=\"text-center\" rowspan=\"2\" scope=\"col\">";
+                        content += "<div class=\"pb-3\">No.</div>";
+                        content += "</th>";
+                        content += "<th>";
+                        content += "<div class=\"pb-3\">Chi nhánh</div>";
+                        content += "</th>";
+                        content += "<th>";
+                        content += "<div class=\"pb-3\">Nghiệp vụ cha</div>";
+                        content += "</th>";
+                        content += "<th>";
+                        content += "<div class=\"pb-3\">Nghiệp vụ</div>";
+                        content += "</th>";
+                        content += "<th>";
+                        content += "<div class=\"pb-3\">Phòng ban</div>";
+                        content += "</th>";
+                        content += "<th>";
+                        content += "<div class=\"pb-3\">Người dùng</div>";
+                        content += "</th>";
+                        content += "</tr>";
+                        content += "</thead>";
+                        var IsValidModel = await ApprovalControlService.GetHistoryIsValidEdit(Input.Id);
+                        @if (IsValidModel.Any())
+                        {
+                            content += "<tbody>";
+                            int stt = 0;
+                            @foreach (var item in IsValidModel)
+                            {
+                                stt++;
+                                content += "<tr>";
+                                content += "<td class=\"text-center\" scope=\"row\">";
+                                content += stt == 1 ? "Dữ liệu cũ" : "Dữ liệu mới";
+                                content += "</td>";
+                                content += "<td class=\"text-left\">" + @item.CompanyId + "" + "</td>";
+                                content += "<td class=\"text-left\">" + @item.ParentMajorId + "" + "</td>";
+                                content += "<td class=\"text-left\">" + @item.MajorId + "" + "</td>";
+                                content += "<td class=\"text-left\">" + @item.DeptId + "" + "</td>";
+                                content += "<td class=\"text-left\">" + @item.UserId + "" + "</td>";
+                                content += "</tr>";
+                            };
+                            content += "</tbody>";
+                        }
+                        else
+                        {
+                            content += "<tbody>";
+                            content += "<tr>";
+                            content += "<td class=\"text-danger\" colspan=\"7\">Không có dữ liệu</td>";
+                            content += "</tr>";
+                            content += "</tbody>";
+                        }
+                        content += "</table>";
+
+                        var emailhistory = new EmailHistory()
+                            {
+                                Id = Guid.NewGuid().ToString(),
+                                Receiver = UserIdText,
+                                Subject = "Phân quyền cài đặt duyệt",
+                                Content = content,
+                                CompanyId = Input.CompanyId,
+                                UserId = Input.UserId,
+                                ParentMajorId = Input.ParentMajorId,
+                                MajorId = Input.MajorId,
+                                IdCheck = Input.Id,
+                                IdLog = "",
+                                IsMail = true,
+                                IsNotification = true,
+                                IsSMS = true,
+                                GroupId = groupId,
+                                CreateAt = DateTime.Now,
+                                CreateBy = user.Id,
+                                IsRead = 0
+                            };
+
+                        await EmailService.Insert(emailhistory, "");
+                        ToastService.ShowToast(
+                        "Thông báo",
+                        "Cập nhật thành công.",
+                        iconClass: "fa fa-check-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                        );
+                        Input.Id = Guid.NewGuid().ToString();
+                        await LoadData();
+                        await Search();
+                        isEdit = false;
+                        isModalVisible = false;
+                    }
+                }
+                else
+                {
+                    ToastService.ShowToast(
+                   "Thông báo",
+                   "Không có quyền tạo mới",
+                   cssClass: "toast-danger",
+                   iconClass: "fa fa-exclamation-circle",
+                   progressBarClass: "bg-info",
+                   duration: 7000
+                   );
+                }
+                
+            }
+            else
+            {
+                
+                if (majorUserApprovalToDay.Any(x => x.ApprovalId == "0096270B-2674-40F1-AD70-8F1ED7E5AF48"))
+                {
+                    Input.IsActive = 0;
+                    var checkSave = await ApprovalControlService.CheckSave(Input);
+                    // var firstApproval = await PhanQuyenService.GetFirstApprovalStep(Input.GroupId, "cabf898a-1920-47ef-a55b-cd4228e947dd", "6113e06f-6495-42a3-ad65-8ea440510fa0");
+                    // var lastApproval = await PhanQuyenService.GetLastApprovalStep(Input.GroupId, "cabf898a-1920-47ef-a55b-cd4228e947dd", "6113e06f-6495-42a3-ad65-8ea440510fa0");
                     // Input.DepartmentId = firstApproval.DepartmentId;
                     // Input.ApprovalId = firstApproval.Id;
                     // Input.LastApprovalId = lastApproval.Id;
-                    
-                    Input.IsActive = 1;
+
                     // Input.IsStatus = firstApproval.Content;
-                    await ApprovalControlService.Update(Input, "");
+                    if (isEdit)
+                    {
+                        await ApprovalControlService.Update(Input, "");
+                    }
+                    else
+                    {
+                        await ApprovalControlService.Insert(Input, "");
+                    }
                     string content = "";
-                    content += "<h3>Thông tin sửa</h3>";
+                    content += "<h3>Thông tin thêm</h3>";
                     content += "<table class=\"table table-hover table-bordered\">";
                     content += "<thead class=\"bg-info\">";
                     content += "<tr>";
-                    content += "<th class=\"text-center\" rowspan=\"2\" scope=\"col\">";
-                    content += "<div class=\"pb-3\">No.</div>";
-                    content += "</th>";
                     content += "<th>";
                     content += "<div class=\"pb-3\">Chi nhánh</div>";
                     content += "</th>";
@@ -781,49 +1002,25 @@
                     content += "<div class=\"pb-3\">Nghiệp vụ</div>";
                     content += "</th>";
                     content += "<th>";
-                    content += "<div class=\"pb-3\">Phòng ban</div>";
-                    content += "</th>";
-                    content += "<th>";
                     content += "<div class=\"pb-3\">Người dùng</div>";
                     content += "</th>";
                     content += "</tr>";
                     content += "</thead>";
-                    var IsValidModel = await ApprovalControlService.GetHistoryIsValidEdit(Input.Id);
-                    @if (IsValidModel.Any())
-                    {
-                        content += "<tbody>";
-                        int stt = 0;
-                        @foreach (var item in IsValidModel)
-                        {
-                            stt++;
-                            content += "<tr>";
-                            content += "<td class=\"text-center\" scope=\"row\">";
-                            content += stt == 1 ? "Dữ liệu cũ" : "Dữ liệu mới";
-                            content += "</td>";
-                            content += "<td class=\"text-left\">" + @item.CompanyId + "" + "</td>";
-                            content += "<td class=\"text-left\">" + @item.ParentMajorId + "" + "</td>";
-                            content += "<td class=\"text-left\">" + @item.MajorId + "" + "</td>";
-                            content += "<td class=\"text-left\">" + @item.DeptId + "" + "</td>";
-                            content += "<td class=\"text-left\">" + @item.UserId + "" + "</td>";
-                            content += "</tr>";
-                        };
-                        content += "</tbody>";
-                    }
-                    else
-                    {
-                        content += "<tbody>";
-                        content += "<tr>";
-                        content += "<td class=\"text-danger\" colspan=\"7\">Không có dữ liệu</td>";
-                        content += "</tr>";
-                        content += "</tbody>";
-                    }
+                    content += "<tbody>";
+                    content += "<tr>";
+                    content += "<td class=\"text-left\">" + CompanyIdText + "</td>";
+                    content += "<td class=\"text-left\">" + ParentMajorIdText + "</td>";
+                    content += "<td class=\"text-left\">" + MajorIdText + "</td>";
+                    content += "<td class=\"text-left\">" + UserIdText + "</td>";
+                    content += "</tr>";
+                    content += "</tbody>";
                     content += "</table>";
-                    
+
                     var emailhistory = new EmailHistory()
                         {
                             Id = Guid.NewGuid().ToString(),
                             Receiver = UserIdText,
-                            Subject = "Phân quyền cài đặt duyệt",
+                            Subject = "Phân quyền cài đặt - Thêm",
                             Content = content,
                             CompanyId = Input.CompanyId,
                             UserId = Input.UserId,
@@ -839,11 +1036,11 @@
                             CreateBy = user.Id,
                             IsRead = 0
                         };
-                    
-                    await EmailService.Insert(emailhistory, "");
+
+                    // await EmailService.Insert(emailhistory, "");
                     ToastService.ShowToast(
                     "Thông báo",
-                    "Cập nhật thành công.",
+                    "Lưu thành công.",
                     iconClass: "fa fa-check-circle",
                     progressBarClass: "bg-info",
                     duration: 5000
@@ -854,90 +1051,17 @@
                     isEdit = false;
                     isModalVisible = false;
                 }
-            }
-            else
-            {
-                var checkquyen = await PhanQuyenService.CheckPermission(groupId, Input.CompanyId, user, "6113e06f-6495-42a3-ad65-8ea440510fa0");
-                Input.IsActive = 0;
-                var checkSave = await ApprovalControlService.CheckSave(Input);
-                // var firstApproval = await PhanQuyenService.GetFirstApprovalStep(Input.GroupId, "cabf898a-1920-47ef-a55b-cd4228e947dd", "6113e06f-6495-42a3-ad65-8ea440510fa0");
-                // var lastApproval = await PhanQuyenService.GetLastApprovalStep(Input.GroupId, "cabf898a-1920-47ef-a55b-cd4228e947dd", "6113e06f-6495-42a3-ad65-8ea440510fa0");
-                // Input.DepartmentId = firstApproval.DepartmentId;
-                // Input.ApprovalId = firstApproval.Id;
-                // Input.LastApprovalId = lastApproval.Id;
-               
-                // Input.IsStatus = firstApproval.Content;
-                if (isEdit)
-                {
-                    await ApprovalControlService.Update(Input, "");
-                }
                 else
                 {
-                    await ApprovalControlService.Insert(Input, "");
+                    ToastService.ShowToast(
+                   "Thông báo",
+                   "Không có quyền tạo mới",
+                   cssClass: "toast-danger",
+                   iconClass: "fa fa-exclamation-circle",
+                   progressBarClass: "bg-info",
+                   duration: 7000
+                   );
                 }
-                string content = "";
-                content += "<h3>Thông tin thêm</h3>";
-                content += "<table class=\"table table-hover table-bordered\">";
-                content += "<thead class=\"bg-info\">";
-                content += "<tr>";
-                content += "<th>";
-                content += "<div class=\"pb-3\">Chi nhánh</div>";
-                content += "</th>";
-                content += "<th>";
-                content += "<div class=\"pb-3\">Nghiệp vụ cha</div>";
-                content += "</th>";
-                content += "<th>";
-                content += "<div class=\"pb-3\">Nghiệp vụ</div>";
-                content += "</th>";
-                content += "<th>";
-                content += "<div class=\"pb-3\">Người dùng</div>";
-                content += "</th>";
-                content += "</tr>";
-                content += "</thead>";
-                content += "<tbody>";
-                content += "<tr>";
-                content += "<td class=\"text-left\">" + CompanyIdText + "</td>";
-                content += "<td class=\"text-left\">" + ParentMajorIdText + "</td>";
-                content += "<td class=\"text-left\">" + MajorIdText + "</td>";
-                content += "<td class=\"text-left\">" + UserIdText + "</td>";
-                content += "</tr>";
-                content += "</tbody>";
-                content += "</table>";
-                
-                var emailhistory = new EmailHistory()
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        Receiver = UserIdText,
-                        Subject = "Phân quyền cài đặt - Thêm",
-                        Content = content,
-                        CompanyId = Input.CompanyId,
-                        UserId = Input.UserId,
-                        ParentMajorId = Input.ParentMajorId,
-                        MajorId = Input.MajorId,
-                        IdCheck = Input.Id,
-                        IdLog = "",
-                        IsMail = true,
-                        IsNotification = true,
-                        IsSMS = true,
-                        GroupId = groupId,
-                        CreateAt = DateTime.Now,
-                        CreateBy = user.Id,
-                        IsRead = 0
-                    };
-             
-                // await EmailService.Insert(emailhistory, "");
-                ToastService.ShowToast(
-                "Thông báo",
-                "Lưu thành công.",
-                iconClass: "fa fa-check-circle",
-                progressBarClass: "bg-info",
-                duration: 5000
-                );
-                Input.Id = Guid.NewGuid().ToString();
-                await LoadData();
-                await Search();
-                isEdit = false;
-                isModalVisible = false;
             }
         }
         catch (Exception ex)

@@ -9,6 +9,7 @@ namespace DucAnhERP.Repository
         Task<List<MajorUserApproval>> GetByIdMain(string id);
         MajorUserApprovalModel GetToEdit(string id);
         Task<List<MajorUserApprovalModel>> GetHistory(string id);
+        Task<List<MajorUserApprovalModel>> GetMajorUserApprovalToDay(ApplicationUser user);
         Task UpdateMulti(List<MajorUserApproval> majorUserApprovals, string idMain);
         Task<bool> CheckSave(MajorUserApproval input);
         Task<bool> CheckEdit(MajorUserApproval input);

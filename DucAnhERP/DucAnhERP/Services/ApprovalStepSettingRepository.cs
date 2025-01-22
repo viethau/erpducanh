@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using DucAnhERP.Repository;
 using System.Data;
 using Microsoft.Data.SqlClient;
+using System.Text.RegularExpressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 namespace DucAnhERP.Services
 {
     public class ApprovalStepSettingRepository : IApprovalStepSettingRepository
@@ -127,6 +129,7 @@ namespace DucAnhERP.Services
                                         Id = p2.Id,
                                         TenChiNhanh = p2.TenChiNhanh
                                     }).Distinct().ToListAsync();
+
                 return entity;
             }
             catch (Exception ex)
@@ -216,6 +219,98 @@ namespace DucAnhERP.Services
                                         Id = p2.Id,
                                         MajorName = p2.MajorName
                                     }).Distinct().ToListAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<List<Major>> LoadParentMajorsByMajorUserApproval(string companyId, string[] parentMajorIds)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                var entity = await (from p1 in context.ApprovalDeptSettings
+                                    join p2 in context.Majors on p1.ParentMajorId equals p2.Id
+                                    where p1.CompanyId == companyId
+                                       && p1.IsActive != 100
+                                       && parentMajorIds.Contains(p1.ParentMajorId)
+                                    orderby p2.Order descending
+                                    select new Major
+                                    {
+                                        Id = p2.Id,
+                                        MajorName = p2.MajorName
+                                    }).Distinct().ToListAsync();
+
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw;
+            }
+        }
+        public async Task<List<Major>> LoadMajorsByMajorUserApproval(string companyId, string parentMajorId , string[] majors)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var entity = await (from p1 in context.ApprovalDeptSettings
+                                    join p2 in context.Majors on p1.MajorId equals p2.Id
+                                    where p1.ParentMajorId == parentMajorId && p1.CompanyId == companyId 
+                                    && p1.IsActive != 100 && majors.Contains(p1.MajorId)
+                                    orderby p2.Order descending
+                                    select new Major
+                                    {
+                                        Id = p2.Id,
+                                        MajorName = p2.MajorName
+                                    }).Distinct().ToListAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw;
+            }
+        }
+        public async Task<List<Permission>> LoadPermissionsByMajorUserApproval(ApprovalControl input)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var entity = await (from p1 in context.ApprovalStepSettings
+                                    join p2 in context.Permissions on p1.PermissionId equals p2.Id
+                                    where p1.CompanyId == input.CompanyId && p1.ParentMajorId == input.ParentMajorId && p1.MajorId == input.MajorId
+                                    && p1.IsActive != 100
+                                    orderby p2.PermissionName descending
+                                    select new Permission
+                                    {
+                                        Id = p2.Id,
+                                        PermissionName = p2.PermissionName
+                                    }).Distinct().ToListAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                throw;
+            }
+        }
+        public async Task<List<ApprovalStepSetting>> LoadStepByMajorUserApproval(ApprovalControl input)
+        {
+            try
+            {
+                using var context = _context.CreateDbContext();
+                var entity = await context.ApprovalStepSettings.Where(p => p.IsActive != 100 
+                && p.CompanyId == input.CompanyId 
+                && p.ParentMajorId == input.ParentMajorId
+                && p.MajorId == input.MajorId
+                && p.PermissionId == input.PermissionId
+                ).OrderBy(p => p.ApprovalStep).ToListAsync();
                 return entity;
             }
             catch (Exception ex)

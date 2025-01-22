@@ -23,5 +23,10 @@ namespace DucAnhERP.Repository
         Task<List<Major>> LoadParentMajors(string companyId);
         Task<List<Major>> LoadMajors(string companyId, string parentMajorId);
         Task<List<Department>> LoadDepartments(string companyId, string parentMajorId, string majorId);
+
+        Task<List<Major>> LoadParentMajorsByMajorUserApproval(string companyId, string[] parentMajorIds);
+        Task<List<Major>> LoadMajorsByMajorUserApproval(string companyId, string parentMajorId, string[] majors);
+        Task<List<Permission>> LoadPermissionsByMajorUserApproval(ApprovalControl input);
+        Task<List<ApprovalStepSetting>> LoadStepByMajorUserApproval(ApprovalControl input);
     }
 }

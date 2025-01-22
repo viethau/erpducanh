@@ -14,6 +14,10 @@ public partial class ApprovalControl
     public string DeptId { get; set; } = "";
     [Required(ErrorMessage = "Bạn phải nhập người dùng")]
     public string UserId { get; set; } = "";
+    [Required(ErrorMessage = "Bạn phải nhập loại quyền")]
+    public string PermissionId { get; set; } = "";
+    [Required(ErrorMessage = "Bạn phải nhập lượt duyệt")]
+    public string ApprovalStepId { get; set; } = "";
     public string GroupId { get; set; } = "";
     public int Ordinarily { get; set; } = 0;
     public DateTime CreateAt { get; set; } = DateTime.Now;
@@ -36,6 +40,8 @@ public partial class ApprovalControl_Log
     public string MajorId { get; set; } = "";
     public string DeptId { get; set; } = "";
     public string UserId { get; set; } = "";
+    public string PermissionId { get; set; } = "";
+    public string ApprovalStepId { get; set; } = "";
     public string GroupId { get; set; } = "";
     public int Ordinarily { get; set; } = 0;
     public DateTime CreateAt { get; set; } = DateTime.Now;

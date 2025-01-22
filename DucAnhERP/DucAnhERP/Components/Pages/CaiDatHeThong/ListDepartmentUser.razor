@@ -1,0 +1,884 @@
+﻿@page "/NhanSu/DepartmentUsers"
+@using DucAnhERP.Helpers
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using System.Linq
+@using DucAnhERP.SeedWork
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@inject NavigationManager navigation
+@inject DucAnhERP.Services.ToastService ToastService
+@attribute [Authorize]
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject SignInManager<IdentityUser> SignInManager
+
+<div class="mx-5 my-2">
+    <h3>Danh người dùng theo phòng ban</h3>
+    <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
+        <BodyTemplate>
+            <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
+                <div class="row">
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="CompanyId">Chi nhánh</label>
+                        <Select2 Id="CompanyId" Items="@selectCompanyIdInput" OnChange="@OnSelectCompanyIdInput"></Select2>
+                        <ValidationMessage For="()=>Input.CompanyId"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="DeptName">Tên phòng ban</label>
+                        <InputText class="form-control" id="DeptName" @bind-Value="Input.DeptName" />
+                        <ValidationMessage For="()=>Input.DeptName"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="Phone">Điện thoại</label>
+                        <InputText class="form-control" id="Phone" @bind-Value="Input.Phone" />
+                        <ValidationMessage For="()=>Input.Phone"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="Email">Email</label>
+                        <InputText class="form-control" id="Email" @bind-Value="Input.Email" />
+                        <ValidationMessage For="()=>Input.Email"></ValidationMessage>
+                    </div>
+                </div>
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="row mt-5 justify-content-end">
+                    <button class="btn btn-primary mr-2" type="submit">Save</button>
+                    <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+                </div>
+            </EditForm>
+        </BodyTemplate>
+    </CustomModal>
+    <CustomModal IsVisible="isModalDetail" OnClose="HandleModalDetailClose" Title="Thông tin lịch sử" Size="modal-lg">
+        <BodyTemplate>
+            <table class="table table-hover table-bordered">
+                <thead class="bg-info">
+                    <tr>
+                        <th class="text-center" rowspan="2" scope="col">
+                            <div class="pb-3">No.</div>
+                        </th>
+                        <th onclick="@(() => SortTable("CompanyId"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Chi nhánh</div>
+                            <span class="arrow @(GetSortStyle("CompanyId"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("DeptName"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Tên phòng ban</div>
+                            <span class="arrow @(GetSortStyle("DeptName"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("Phone"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Điện thoại</div>
+                            <span class="arrow @(GetSortStyle("Phone"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("Email"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Email</div>
+                            <span class="arrow @(GetSortStyle("Email"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("IsStatus"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Trạng thái</div>
+                            <span class="arrow @(GetSortStyle("IsStatus"))"></span>
+                        </th>
+                        <th class="text-center" scope="col">
+                            <div class="pb-3">Ngày tạo</div>
+                        </th>
+                        <th class="text-center" scope="col">
+                            <div class="pb-3">Người tạo</div>
+                        </th>
+                        <th class="text-center" scope="col">
+                            <div class="pb-3">Ngày duyệt</div>
+                        </th>
+                        <th class="text-center" scope="col">
+                            <div class="pb-3">Người duyệt</div>
+                        </th>
+                        <th class="text-center" scope="col">
+                            <div class="pb-3">Phòng ban duyệt</div>
+                        </th>
+                    </tr>
+                </thead>
+                @if (listDetails.Any())
+                {
+                    <tbody>
+                        @{
+                            int stt = 0;
+                        }
+                        @foreach (var item in listDetails)
+                        {
+                            stt++;
+                            <tr>
+                                <td class="text-center" scope="row">@stt</td>
+                                <td class="text-left">@item.CompanyId</td>
+                                <td class="text-left">@item.DeptName</td>
+                                <td class="text-left">@item.Phone</td>
+                                <td class="text-left">@item.Email</td>
+                                <td class="text-left">@item.IsStatus</td>
+                                <td class="text-center" scope="row">@item.CreateAt</td>
+                                <td class="text-center" scope="row">@item.CreateBy</td>
+                                <td class="text-center" scope="row">@item.DateApproval</td>
+                                <td class="text-center" scope="row">@item.ApprovalUserId</td>
+                                <td class="text-center" scope="row">@item.DepartmentId</td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+                else
+                {
+                    <tbody>
+                        <tr>
+                            <td class="text-danger" colspan="7">Không có dữ liệu</td>
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        </BodyTemplate>
+    </CustomModal>
+    <div>
+        <EditForm Model="pageModel" FormName="SearchData" OnValidSubmit="@Search">
+            <DataAnnotationsValidator />
+            <div class="d-flex row">
+                <div class="form-floating col-sm-3 col-md-3">
+                    <label for="CompanyIdSearch">Chi nhánh</label>
+                    <Select2 Id="CompanyIdSearch" Items="@selectCompanyIdSearch" OnChange="@OnSelectCompanyIdSearch"></Select2>
+                    <ValidationMessage For="()=>pageModel.CompanyId"></ValidationMessage>
+                </div>
+                <div class="form-group ml-5">
+                    <label>&nbsp;</label>
+                    <button type="submit" class="btn btn-primary form-control">Tìm kiếm</button>
+                </div>
+                <div class="form-group ml-5">
+                    <label>&nbsp;</label>
+                    <button @onclick="ShowModal" class="btn btn-primary form-control">Tạo mới</button>
+                </div>
+            </div>
+        </EditForm>
+        <div class="row mt-3 our-table">
+            <table class="table table-hover table-bordered">
+                <thead class="bg-info">
+                    <tr>
+                        <th class="text-center" rowspan="2">
+                        </th>
+                        <th class="text-center" rowspan="2" scope="col">
+                            <div class="pb-3">No.</div>
+                        </th>
+                        <th onclick="@(() => SortTable("CompanyId"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Chi nhánh</div>
+                            <span class="arrow @(GetSortStyle("CompanyId"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("DeptName"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Tên phòng ban</div>
+                            <span class="arrow @(GetSortStyle("DeptName"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("Phone"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Điện thoại</div>
+                            <span class="arrow @(GetSortStyle("Phone"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("Email"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Email</div>
+                            <span class="arrow @(GetSortStyle("Email"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("IsStatus"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Trạng thái</div>
+                            <span class="arrow @(GetSortStyle("IsStatus"))"></span>
+                        </th>
+                    </tr>
+                </thead>
+                @if (listDepartment.Any())
+                {
+                    <tbody>
+                        @{
+                            int stt = 0;
+                        }
+                        @foreach (var item in listDepartment)
+                        {
+                            stt++;
+                            <tr>
+                                <td class="d-flex flex-column text-center nowrap">
+                                    <div class="d-inline-block">
+                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.DeptName )">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-primary m-1" title="Chi tiết" @onclick="()=>DetailAction(item.Id)">
+                                            <i class="fa fa-info-circle"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td class="text-center" scope="row">
+                                    @if (item.IsActive != 3)
+                                    {
+                                        <button class="btn btn-sm btn-success m-1" title="Duyệt" @onclick="()=>ApprovalAction(item.Id)">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        @stt
+                                    }
+                                </td>
+                                <td class="text-left">@item.CompanyId</td>
+                                <td class="text-left">@item.DeptName</td>
+                                <td class="text-left">@item.Phone</td>
+                                <td class="text-left">@item.Email</td>
+                                <td class="text-left">@item.IsStatus</td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+                else
+                {
+                    <tbody>
+                        <tr>
+                            <td class="text-danger" colspan="7">Không có dữ liệu</td>
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        </div>
+        @if (listDepartment.Any())
+        {
+            <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+        }
+    </div>
+    <SuccessModal @ref="successModal" OnResponseClick="Redirect"></SuccessModal>
+    <ErrorModal @ref="errorModal"></ErrorModal>
+    <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+</div>
+@code {
+    private Department Input = new();
+    private List<ChiNhanhModel>? listCompanyIdSearch = new();
+    private List<ChiNhanh> listCompanyIdInput = new();
+    public string CompanyIdText { get; set; } = "";
+    private bool isModalVisible = false;
+    private bool isModalDetail = false;
+    private bool isLoading = false;
+    private string TitleModal = "Thêm";
+    private bool isEdit = false;
+    private DateTime baseTime;
+    private string deleteId;
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<SelectedItem> selectCompanyIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectCompanyIdSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private void OnSelectCompanyIdInput(SelectedItem selectedItem)
+    {
+        Input.CompanyId = selectedItem.Value;
+        CompanyIdText = selectedItem.Text;
+    }
+    private void OnSelectCompanyIdSearch(SelectedItem selectedItem)
+    {
+        pageModel.CompanyId = selectedItem.Value;
+    }
+
+    [Parameter]
+    public SuccessModal successModal { get; set; }
+
+    [Parameter]
+    public ErrorModal errorModal { get; set; }
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+
+    private void ShowModal()
+    {
+        isModalVisible = true;
+        Input = new();
+    }
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+        Input = new();
+        isEdit = false;
+    }
+    private void HandleModalDetailClose(bool isVisible)
+    {
+        isModalDetail = isVisible;
+    }
+    private void HandleSave()
+    {
+        isModalVisible = false;
+    }
+    private void HandleCancel()
+    {
+        isModalVisible = false;
+        Input = new();
+        isEdit = false;
+    }
+    public List<DepartmentModel> listDepartment
+    {
+        get;
+        set;
+    } = new();
+    public List<DepartmentModel> listDetails
+    {
+        get;
+        set;
+    } = new();
+    public List<DepartmentModel> listModel
+    {
+        get;
+        set;
+    } = new();
+    [SupplyParameterFromForm(FormName = "SearchData")]
+    public DepartmentModel pageModel
+    {
+        get;
+        set;
+    }
+    public MetaData MetaData
+    {
+        get;
+        set;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            userName = authState.User.Identity.Name;
+            user = ApplicationUserService.GetByUserName(userName);
+            userId = user.Id;
+            groupId = user.GroupId;
+        }
+        pageModel = new();
+        await LoadData();
+    }
+    private async Task LoadData()
+    {
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "074feeb0-058c-4f2f-a664-46830393bac2");
+            listCompanyIdSearch = await DepartmentService.GetChiNhanhsForCompanyId(groupId);
+            selectCompanyIdSearch = listCompanyIdSearch.Select(data => new SelectedItem
+                {
+                    Value = data.Id,
+                    Text = data.TenChiNhanh
+                }).ToList();
+            selectCompanyIdSearch.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+
+            listCompanyIdInput = await ChiNhanhService.GetAll(groupId);
+            selectCompanyIdInput = listCompanyIdInput.Select(data => new SelectedItem
+                {
+                    Value = data.Id,
+                    Text = data.TenChiNhanh
+                }).ToList();
+            selectCompanyIdInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+
+            baseTime = DateTime.Now;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+            "Thông báo",
+            ex.Message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 7000
+            );
+        }
+    }
+    private async Task HandleEdit(string id)
+    {
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, Input.CompanyId, user, "41566fcc-d0e8-482d-9408-e1744399ee9a");
+            TitleModal = "Cập nhật";
+            Input = await DepartmentService.GetById(id);
+            var selectEditText = DepartmentService.GetToEdit(id);
+            if (selectEditText != null)
+            {
+                CompanyIdText = selectEditText.CompanyId;
+            }
+            foreach (var item in selectCompanyIdInput)
+            {
+                item.IsSelected = item.Value == Input.CompanyId;
+            }
+            isEdit = true;
+            isModalVisible = true;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+            "Thông báo",
+            ex.Message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 7000
+            );
+        }
+    }
+    private async Task DetailAction(string id)
+    {
+        try
+        {
+            listDetails = await DepartmentService.GetHistory(id);
+            isModalDetail = true;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+            "Thông báo",
+            ex.Message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 7000
+            );
+        }
+    }
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        deleteId = id;
+        confirmModal.Title = "Xác nhận xóa";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.openModal();
+    }
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        try
+        {
+            if (confirmed)
+            {
+                if (!string.IsNullOrEmpty(deleteId))
+                {
+                    var query = await DepartmentService.GetById(deleteId);
+                    if (query.IsActive == 2)
+                    {
+                        ToastService.ShowToast(
+                        "Thông báo",
+                        "Thông tin bạn chọn đang chờ ",
+                        cssClass: "toast-success",
+                        iconClass: "fa fa-exclamation-circle",
+                        progressBarClass: "bg-info",
+                        duration: 7000
+                        );
+                    }
+                    else
+                    {
+                        var checkDelete = await DepartmentService.CheckDelete(query);
+                        var checkquyen = await PhanQuyenService.CheckPermission(groupId, query.CompanyId, user, "558d30b4-baf0-4bbf-add4-23ab42b53701");
+                        string[] ids = { deleteId };
+                        var isValid = await DepartmentService.CheckExclusive(ids, baseTime);
+                        if (isValid)
+                        {
+                            var firstApproval = await PhanQuyenService.GetFirstApprovalStep(query.GroupId, "2beef307-7f25-4ae2-bd19-8bbfecd42334", "558d30b4-baf0-4bbf-add4-23ab42b53701");
+                            var lastApproval = await PhanQuyenService.GetLastApprovalStep(query.GroupId, "2beef307-7f25-4ae2-bd19-8bbfecd42334", "558d30b4-baf0-4bbf-add4-23ab42b53701");
+                            query.DepartmentId = firstApproval.DepartmentId;
+                            query.ApprovalId = firstApproval.Id;
+                            query.LastApprovalId = lastApproval.Id;
+                            query.IsActive = 2;
+                            query.ApprovalOrder = 1;
+                            query.DepartmentOrder = 1;
+                            query.CreateAt = DateTime.Now;
+                            query.CreateBy = userId;
+                            query.IsStatus = firstApproval.Content;
+                            await DepartmentService.Update(query, "");
+                            var result = await DepartmentService.GetDetails(deleteId);
+                            string content = "";
+                            content += "<h3>Thông tin xóa</h3>";
+                            content += "<table class=\"table table-hover table-bordered\">";
+                            content += "<thead class=\"bg-info\">";
+                            content += "<tr>";
+                            content += "<th>";
+                            content += "<div class=\"pb-3\">Chi nhánh</div>";
+                            content += "</th>";
+                            content += "<th>";
+                            content += "<div class=\"pb-3\">Tên phòng ban</div>";
+                            content += "</th>";
+                            content += "<th>";
+                            content += "<div class=\"pb-3\">Điện thoại</div>";
+                            content += "</th>";
+                            content += "<th>";
+                            content += "<div class=\"pb-3\">Email</div>";
+                            content += "</th>";
+                            content += "</tr>";
+                            content += "</thead>";
+                            content += "<tbody>";
+                            content += "<tr>";
+                            content += "<td class=\"text-left\">" + result.CompanyId + "</td>";
+                            content += "<td class=\"text-left\">" + result.DeptName + "</td>";
+                            content += "<td class=\"text-left\">" + result.Phone + "</td>";
+                            content += "<td class=\"text-left\">" + result.Email + "</td>";
+                            content += "</tr>";
+                            content += "</tbody>";
+                            content += "</table>";
+                            var listEmail = await EmailService.GetUserPermission(query.CompanyId, firstApproval.Id);
+                            var listInsert = new List<EmailHistory>();
+                            foreach (var item in listEmail)
+                            {
+                                var emailhistory = new EmailHistory()
+                                    {
+                                        Id = Guid.NewGuid().ToString(),
+                                        Receiver = item.Mail,
+                                        Subject = "Phòng ban - Xóa",
+                                        Content = content,
+                                        CompanyId = query.CompanyId,
+                                        UserId = item.UserId,
+                                        ParentMajorId = item.ParentMajorId,
+                                        MajorId = item.MajorId,
+                                        IdCheck = query.Id,
+                                        IdLog = "",
+                                        IsMail = true,
+                                        IsNotification = true,
+                                        IsSMS = true,
+                                        GroupId = groupId,
+                                        CreateAt = DateTime.Now,
+                                        CreateBy = user.Id,
+                                        IsRead = 0
+                                    };
+                                listInsert.Add(emailhistory);
+                            }
+                            await EmailService.InsertMulti(listInsert);
+                            ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                            await LoadData();
+                            await Search();
+                            deleteId = "";
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+            "Thông báo",
+            ex.Message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 7000
+            );
+        }
+    }
+    private async Task ApprovalAction(string id)
+    {
+        try
+        {
+            var entity = await DepartmentService.GetById(id);
+            var checkquyen = await PhanQuyenService.CheckApproval(entity.GroupId, entity.DepartmentId, user, entity.ApprovalId);
+            string thongbao = entity.IsStatus;
+            if (entity.IsActive != 3)
+            {
+                if (entity.ApprovalId == entity.LastApprovalId)
+                {
+                    if (entity.IsActive == 0 || entity.IsActive == 1)
+                    {
+                        entity.IsActive = 3;
+                        entity.IsStatus = "Ðã duyệt";
+                    }
+                    else if (entity.IsActive == 2)
+                    {
+                        entity.IsActive = 100;
+                        entity.IsStatus = "Ðã duyệt xóa";
+                    }
+                }
+                else
+                {
+                    var nextApproval = await PhanQuyenService.GetNextApprovalStep(entity.CompanyId, "2beef307-7f25-4ae2-bd19-8bbfecd42334",
+                    entity.IsActive == 0 ? "93ec3a5d-ce6f-41ed-b187-2f45ae048bd8" : entity.IsActive == 1 ? "41566fcc-d0e8-482d-9408-e1744399ee9a" : entity.IsActive == 2 ? "558d30b4-baf0-4bbf-add4-23ab42b53701" : ""
+                    , entity.DepartmentId, entity.DepartmentOrder, entity.ApprovalOrder);
+                    entity.DepartmentId = nextApproval.DeptId;
+                    entity.IsStatus = nextApproval.Content;
+                    entity.ApprovalId = nextApproval.Id;
+                    entity.ApprovalOrder = nextApproval.ApprovalStep;
+                    entity.DepartmentOrder = nextApproval.DeptOrder;
+                    entity.ApprovalUserId = userId;
+                }
+
+                await DepartmentService.Update(entity, userId);
+                ToastService.ShowToast(
+                "Thông báo",
+                "Đã duyệt " + thongbao.ToLower(),
+                cssClass: "toast-success",
+                iconClass: "fa fa-exclamation-circle",
+                progressBarClass: "bg-info",
+                duration: 7000
+                );
+            }
+            await Search();
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+            "Thông báo",
+            ex.Message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 7000
+            );
+        }
+    }
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            var CompanyIdValid = await ChiNhanhService.CheckStatus(Input.CompanyId, CompanyIdText);
+            Input.GroupId = groupId;
+            Input.CreateBy = userId;
+            Input.CreateAt = DateTime.Now;
+            bool editcheck = (isEdit && Input.Ordinarily > 0) || (isEdit && Input.Ordinarily == 0 && Input.IsActive == 3);
+            if (editcheck)
+            {
+                string[] ids = { Input.Id };
+                var isValid = await DepartmentService.CheckExclusive(ids, baseTime);
+                var checkEdit = await DepartmentService.CheckEdit(Input);
+                var checkquyen = await PhanQuyenService.CheckPermission(groupId, Input.CompanyId, user, "41566fcc-d0e8-482d-9408-e1744399ee9a");
+                if (isValid)
+                {
+                    var firstApproval = await PhanQuyenService.GetFirstApprovalStep(Input.GroupId, "2beef307-7f25-4ae2-bd19-8bbfecd42334", "41566fcc-d0e8-482d-9408-e1744399ee9a");
+                    var lastApproval = await PhanQuyenService.GetLastApprovalStep(Input.GroupId, "2beef307-7f25-4ae2-bd19-8bbfecd42334", "41566fcc-d0e8-482d-9408-e1744399ee9a");
+                    Input.DepartmentId = firstApproval.DepartmentId;
+                    Input.ApprovalId = firstApproval.Id;
+                    Input.LastApprovalId = lastApproval.Id;
+                    Input.Ordinarily = Input.IsActive == 3 ? Input.Ordinarily + 1 : Input.Ordinarily;
+                    Input.IsActive = 1;
+                    Input.ApprovalOrder = 1;
+                    Input.DepartmentOrder = 1;
+                    Input.IsStatus = firstApproval.Content;
+                    await DepartmentService.Update(Input, "");
+                    string content = "";
+                    content += "<h3>Thông tin sửa</h3>";
+                    content += "<table class=\"table table-hover table-bordered\">";
+                    content += "<thead class=\"bg-info\">";
+                    content += "<tr>";
+                    content += "<th class=\"text-center\" rowspan=\"2\" scope=\"col\">";
+                    content += "<div class=\"pb-3\">No.</div>";
+                    content += "</th>";
+                    content += "<th>";
+                    content += "<div class=\"pb-3\">Chi nhánh</div>";
+                    content += "</th>";
+                    content += "<th>";
+                    content += "<div class=\"pb-3\">Tên phòng ban</div>";
+                    content += "</th>";
+                    content += "<th>";
+                    content += "<div class=\"pb-3\">Điện thoại</div>";
+                    content += "</th>";
+                    content += "<th>";
+                    content += "<div class=\"pb-3\">Email</div>";
+                    content += "</th>";
+                    content += "</tr>";
+                    content += "</thead>";
+                    var IsValidModel = await DepartmentService.GetHistoryIsValidEdit(Input.Id);
+                    @if (IsValidModel.Any())
+                    {
+                        content += "<tbody>";
+                        int stt = 0;
+                        @foreach (var item in IsValidModel)
+                        {
+                            stt++;
+                            content += "<tr>";
+                            content += "<td class=\"text-center\" scope=\"row\">";
+                            content += stt == 1 ? "Dữ liệu cũ" : "Dữ liệu mới";
+                            content += "</td>";
+                            content += "<td class=\"text-left\">" + @item.CompanyId + "" + "</td>";
+                            content += "<td class=\"text-left\">" + @item.DeptName + "" + "</td>";
+                            content += "<td class=\"text-left\">" + @item.Phone + "" + "</td>";
+                            content += "<td class=\"text-left\">" + @item.Email + "" + "</td>";
+                            content += "</tr>";
+                        };
+                        content += "</tbody>";
+                    }
+                    else
+                    {
+                        content += "<tbody>";
+                        content += "<tr>";
+                        content += "<td class=\"text-danger\" colspan=\"7\">Không có dữ liệu</td>";
+                        content += "</tr>";
+                        content += "</tbody>";
+                    }
+                    content += "</table>";
+                    var listEmail = await EmailService.GetUserPermission(Input.CompanyId, firstApproval.Id);
+                    var listInsert = new List<EmailHistory>();
+                    foreach (var item in listEmail)
+                    {
+                        var emailhistory = new EmailHistory()
+                            {
+                                Id = Guid.NewGuid().ToString(),
+                                Receiver = item.Mail,
+                                Subject = "Phòng ban - Sửa.",
+                                Content = content,
+                                CompanyId = Input.CompanyId,
+                                UserId = item.UserId,
+                                ParentMajorId = item.ParentMajorId,
+                                MajorId = item.MajorId,
+                                IdCheck = Input.Id,
+                                IdLog = "",
+                                IsMail = true,
+                                IsNotification = true,
+                                IsSMS = true,
+                                GroupId = groupId,
+                                CreateAt = DateTime.Now,
+                                CreateBy = user.Id,
+                                IsRead = 0
+                            };
+                        listInsert.Add(emailhistory);
+                    }
+                    await EmailService.InsertMulti(listInsert);
+                    ToastService.ShowToast(
+                    "Thông báo",
+                    "Cập nhật thành công.",
+                    iconClass: "fa fa-check-circle",
+                    progressBarClass: "bg-info",
+                    duration: 5000
+                    );
+                    Input.Id = Guid.NewGuid().ToString();
+                    await LoadData();
+                    await Search();
+                    isEdit = false;
+                    isModalVisible = false;
+                }
+            }
+            else
+            {
+                var checkquyen = await PhanQuyenService.CheckPermission(groupId, Input.CompanyId, user, "93ec3a5d-ce6f-41ed-b187-2f45ae048bd8");
+                Input.IsActive = 0;
+                var checkSave = await DepartmentService.CheckSave(Input);
+                var firstApproval = await PhanQuyenService.GetFirstApprovalStep(Input.GroupId, "2beef307-7f25-4ae2-bd19-8bbfecd42334", "93ec3a5d-ce6f-41ed-b187-2f45ae048bd8");
+                var lastApproval = await PhanQuyenService.GetLastApprovalStep(Input.GroupId, "2beef307-7f25-4ae2-bd19-8bbfecd42334", "93ec3a5d-ce6f-41ed-b187-2f45ae048bd8");
+                Input.DepartmentId = firstApproval.DepartmentId;
+                Input.ApprovalId = firstApproval.Id;
+                Input.LastApprovalId = lastApproval.Id;
+                Input.ApprovalOrder = 1;
+                Input.DepartmentOrder = 1;
+                Input.Ordinarily = 0;
+                Input.IsStatus = firstApproval.Content;
+                if (isEdit)
+                {
+                    await DepartmentService.Update(Input, "");
+                }
+                else
+                {
+                    await DepartmentService.Insert(Input, "");
+                }
+                string content = "";
+                content += "<h3>Thông tin thêm</h3>";
+                content += "<table class=\"table table-hover table-bordered\">";
+                content += "<thead class=\"bg-info\">";
+                content += "<tr>";
+                content += "<th>";
+                content += "<div class=\"pb-3\">Chi nhánh</div>";
+                content += "</th>";
+                content += "<th>";
+                content += "<div class=\"pb-3\">Tên phòng ban</div>";
+                content += "</th>";
+                content += "<th>";
+                content += "<div class=\"pb-3\">Điện thoại</div>";
+                content += "</th>";
+                content += "<th>";
+                content += "<div class=\"pb-3\">Email</div>";
+                content += "</th>";
+                content += "</tr>";
+                content += "</thead>";
+                content += "<tbody>";
+                content += "<tr>";
+                content += "<td class=\"text-left\">" + CompanyIdText + "</td>";
+                content += "<td class=\"text-left\">" + Input.DeptName + "</td>";
+                content += "<td class=\"text-left\">" + Input.Phone + "</td>";
+                content += "<td class=\"text-left\">" + Input.Email + "</td>";
+                content += "</tr>";
+                content += "</tbody>";
+                content += "</table>";
+                var listEmail = await EmailService.GetUserPermission(Input.CompanyId, firstApproval.Id);
+                var listInsert = new List<EmailHistory>();
+                foreach (var item in listEmail)
+                {
+                    var emailhistory = new EmailHistory()
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            Receiver = item.Mail,
+                            Subject = "Phòng ban - Thêm",
+                            Content = content,
+                            CompanyId = Input.CompanyId,
+                            UserId = item.UserId,
+                            ParentMajorId = item.ParentMajorId,
+                            MajorId = item.MajorId,
+                            IdCheck = Input.Id,
+                            IdLog = "",
+                            IsMail = true,
+                            IsNotification = true,
+                            IsSMS = true,
+                            GroupId = groupId,
+                            CreateAt = DateTime.Now,
+                            CreateBy = user.Id,
+                            IsRead = 0
+                        };
+                    listInsert.Add(emailhistory);
+                }
+                await EmailService.InsertMulti(listInsert);
+                ToastService.ShowToast(
+                "Thông báo",
+                "Lưu thành công.",
+                iconClass: "fa fa-check-circle",
+                progressBarClass: "bg-info",
+                duration: 5000
+                );
+                Input.Id = Guid.NewGuid().ToString();
+                await LoadData();
+                await Search();
+                isEdit = false;
+                isModalVisible = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+            "Thông báo",
+            ex.Message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 7000
+            );
+        }
+    }
+    public async Task Search()
+    {
+        var checkquyen = await PhanQuyenService.CheckPermission(groupId, pageModel.CompanyId, user, "921a1aeb-ce9e-477e-89dd-5551c42346e5");
+        pageModel.PageNumber = 1;
+        listModel = await DepartmentService.GetAllByVM(pageModel, groupId);
+        listDepartment = Paging(listModel);
+    }
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        pageModel.PageNumber = 1;
+        Paging(listModel);
+    }
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+    private void SelectedPage(int page)
+    {
+        pageModel.PageNumber = page;
+        Paging(listModel);
+    }
+    private void ChangePageSize(int pageSize)
+    {
+        pageModel.PageNumber = 1;
+        pageModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+    private List<DepartmentModel> Paging(List<DepartmentModel> list)
+    {
+        var count = list.Count();
+        list = list.Skip((pageModel.PageNumber - 1) * pageModel.PageSize).Take(pageModel.PageSize).ToList();
+        listDepartment.Clear();
+        foreach (var item in list)
+        {
+            listDepartment.Add(item);
+        }
+        var pagelist = new PageList<DepartmentModel>(listDepartment, count, pageModel.PageNumber, pageModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return list;
+    }
+    private void Redirect()
+    {
+        Input = new();
+    }
+}
+

@@ -282,6 +282,56 @@ namespace DucAnhERP.Services
 
             return data;
         }
+        public async Task<List<MajorUserApprovalModel>> GetMajorUserApprovalToDay(ApplicationUser user)
+        {
+            using var context = _context.CreateDbContext();
+            var today = (int)DateTime.Now.DayOfWeek;
+            
+            var data = await (from p1 in context.MajorUserApprovals
+                              join ChiNhanhs1 in context.ChiNhanhs on p1.CompanyId equals ChiNhanhs1.Id
+                              join Majors1 in context.Majors on p1.ParentMajorId equals Majors1.Id
+                              join Majors2 in context.Majors on p1.MajorId equals Majors2.Id
+                              join ApplicationUsers1 in context.ApplicationUsers on p1.UserId equals ApplicationUsers1.Id
+                              join Permissions1 in context.Permissions on p1.ApprovalId equals Permissions1.Id
+                              join createBy in context.ApplicationUsers on p1.CreateBy equals createBy.Id
+                              join a in context.ApplicationUsers on p1.ApprovalId equals a.Id into a1
+                              from approvalUserId in a1.DefaultIfEmpty()
+                              join b in context.Departments on p1.DeptId equals b.Id into b1
+                              from departmentId in b1.DefaultIfEmpty()
+                              where p1.CompanyId == user.CompanyId &&
+                                p1.UserId == user.Id &&
+                                p1.DayinWeek == today.ToString() && 
+                                p1.IsActive == 1
+                              select new MajorUserApprovalModel
+                              {
+                                  Id = p1.Id,
+                                  CompanyId = p1.CompanyId,
+                                  CompanyName = ChiNhanhs1.TenChiNhanh,
+                                  ParentMajorId = p1.ParentMajorId,
+                                  ParentMajorName = Majors1.MajorName,
+                                  MajorId = p1.MajorId,
+                                  MajorName = Majors2.MajorName,
+                                  DeptId = p1.DeptId,
+                                  DeptName = departmentId.DeptName,
+                                  UserId = p1.UserId,
+                                  UserName = ApplicationUsers1.Email,
+                                  ApprovalId = p1.ApprovalId,
+                                  ApprovalName = Permissions1.PermissionName,
+                                  DayinWeek = p1.DayinWeek,
+                                  DayInWeekText = int.Parse(p1.DayinWeek) == 0 ? "Chủ nhật" :
+                                      int.Parse(p1.DayinWeek) == 1 ? "Thứ 2" :
+                                      int.Parse(p1.DayinWeek) == 2 ? "Thứ 3" :
+                                      int.Parse(p1.DayinWeek) == 3 ? "Thứ 4" :
+                                      int.Parse(p1.DayinWeek) == 4 ? "Thứ 5" :
+                                      int.Parse(p1.DayinWeek) == 5 ? "Thứ 6" :
+                                      int.Parse(p1.DayinWeek) == 6 ? "Thứ 7" : "",
+                                  GroupId = p1.GroupId,
+                                  CreateAt = p1.CreateAt,
+                                  CreateBy = createBy.Email,
+                                  IsActive = p1.IsActive,
+                              }).ToListAsync();
+            return data;
+        }
         public async Task Insert(MajorUserApproval entity, string userId)
         {
             try
