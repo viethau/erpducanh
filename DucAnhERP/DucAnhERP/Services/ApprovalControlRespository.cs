@@ -4,6 +4,7 @@ using DucAnhERP.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using DucAnhERP.Repository;
 using System.Data;
+using System.Net.NetworkInformation;
 namespace DucAnhERP.Services
 {
     public class ApprovalControlRepository : IApprovalControlRepository
@@ -31,6 +32,10 @@ namespace DucAnhERP.Services
             {
                 query = query.Where(m => m.MajorId == dataModel.MajorId);
             }
+            if (!string.IsNullOrEmpty(dataModel.DeptId))
+            {
+                query = query.Where(m => m.DeptId == dataModel.DeptId);
+            }
             if (!string.IsNullOrEmpty(dataModel.UserId))
             {
                 query = query.Where(m => m.UserId == dataModel.UserId);
@@ -41,8 +46,10 @@ namespace DucAnhERP.Services
                               join Majors2 in context.Majors on p1.MajorId equals Majors2.Id
                               join ApplicationUsers1 in context.ApplicationUsers on p1.UserId equals ApplicationUsers1.Id
                               join Department1 in context.Departments on ApplicationUsers1.DeptId equals Department1.Id
+                              join Permission1 in context.Permissions on p1.PermissionId  equals Permission1.Id
+                              join AproSetting in context.ApprovalStepSettings on p1.ApprovalStepId equals AproSetting.Id
                               where p1.GroupId == groupId
-                              orderby p1.CreateAt descending
+                              orderby Permission1.PermissionName, AproSetting.ApprovalStep ascending
                               select new ApprovalControlModel
                               {
                                   Id = p1.Id,
@@ -51,9 +58,12 @@ namespace DucAnhERP.Services
                                   MajorId = Majors2.MajorName,
                                   DeptId = Department1.DeptName,
                                   UserId = ApplicationUsers1.UserName,
+                                  PermissionId = Permission1.PermissionName,
+                                  ApprovalStepId = AproSetting.Content,
                                   CreateAt = p1.CreateAt,
                                   CreateBy = p1.CreateBy,
                                   IsActive = p1.IsActive,
+                                  ApprovalOrder = AproSetting.ApprovalStep,
 
                               }).ToListAsync();
             return data;
@@ -251,6 +261,16 @@ namespace DucAnhERP.Services
             }
             return entity;
         }
+        public async Task<ApprovalControl> GeByApprovalId(string ApprovalId)
+        {
+            using var context = _context.CreateDbContext();
+            var entity = await context.ApprovalControls.Where(x => x.ApprovalId.Equals(ApprovalId) && x.IsActive != 100).FirstOrDefaultAsync();
+            if (entity == null)
+            {
+                throw new Exception($"Không tìm thấy phân quyền duyệt đã chọn.");
+            }
+            return entity;
+        }
         public async Task Insert(ApprovalControl entity, string userId)
         {
             try
@@ -258,7 +278,7 @@ namespace DucAnhERP.Services
                 using var context = _context.CreateDbContext();
                 if (entity == null)
                 {
-                    throw new Exception("Không có phân quyền cài đặt nào được thêm!");
+                    throw new Exception("Không có phân quyền cài đặt duyệt nào được thêm!");
                 }
                 context.ApprovalControls.Add(entity);
                 var addLog = new ApprovalControl_Log()
@@ -269,11 +289,20 @@ namespace DucAnhERP.Services
                     MajorId = entity.MajorId,
                     DeptId = entity.DeptId,
                     UserId = entity.UserId,
+                    PermissionId = entity.PermissionId,
+                    ApprovalStepId = entity.ApprovalId,
                     GroupId = entity.GroupId,
+                    Ordinarily = entity.Ordinarily,
                     CreateAt = DateTime.Now,
                     CreateBy = entity.CreateBy,
                     IsActive = entity.IsActive,
-
+                    ApprovalUserId = entity.ApprovalId,
+                    DepartmentId = entity.DepartmentId,
+                    DepartmentOrder = entity.DepartmentOrder,
+                    ApprovalOrder= entity.ApprovalOrder,
+                    ApprovalId = entity.ApprovalId,
+                    LastApprovalId = entity.LastApprovalId,
+                    IsStatus = entity.IsStatus,
                     IdChung = entity.Id,
                     IsValid = true
                 };
@@ -288,60 +317,67 @@ namespace DucAnhERP.Services
         }
         public async Task Update(ApprovalControl data, string userId)
         {
-            using var context = _context.CreateDbContext();
-            var entity = await GetById(data.Id);
-            if (entity == null)
+            try
             {
-                throw new Exception($"Không tìm thấy phân quyền cài đặt đã chọn");
-            }
-            context.ApprovalControls.Update(data);
-            if (data.IsActive == 3)
-            {
-                var updateLog = await (from p in context.ApprovalControl_Logs
-                                       where p.IdChung == entity.Id && p.IsValid == true
-                                       select p).ToListAsync();
-                updateLog.ForEach(p => p.IsValid = false);
-                context.ApprovalControl_Logs.UpdateRange(updateLog);
-            }
-            else if (data.IsActive == 100)
-            {
-                var updateLog = await (from p in context.ApprovalControl_Logs
-                                       where p.IdChung == entity.Id && p.IsValid == true
-                                       select p).ToListAsync();
-                updateLog.ForEach(p => p.IsValid = false);
-                context.ApprovalControl_Logs.UpdateRange(updateLog);
-            }
-            else if (entity.IsActive != 3)
-            {
-                var updateLog = await (from p in context.ApprovalControl_Logs
-                                       where p.IdChung == entity.Id
-                                       select p).OrderByDescending(p => p.CreateAt)
-                .FirstOrDefaultAsync();
-                if (updateLog != null)
+                using var context = _context.CreateDbContext();
+                var entity = await GetById(data.Id);
+                if (entity == null)
                 {
-                    updateLog.IsValid = false;
-                    context.ApprovalControl_Logs.Update(updateLog);
+                    throw new Exception($"Không tìm thấy phân quyền cài đặt đã chọn");
                 }
+                context.ApprovalControls.Update(data);
+                if (data.IsActive == 3)
+                {
+                    var updateLog = await (from p in context.ApprovalControl_Logs
+                                           where p.IdChung == entity.Id && p.IsValid == true
+                                           select p).ToListAsync();
+                    updateLog.ForEach(p => p.IsValid = false);
+                    context.ApprovalControl_Logs.UpdateRange(updateLog);
+                }
+                else if (data.IsActive == 100)
+                {
+                    var updateLog = await (from p in context.ApprovalControl_Logs
+                                           where p.IdChung == entity.Id && p.IsValid == true
+                                           select p).ToListAsync();
+                    updateLog.ForEach(p => p.IsValid = false);
+                    context.ApprovalControl_Logs.UpdateRange(updateLog);
+                }
+                else if (entity.IsActive != 3)
+                {
+                    var updateLog = await (from p in context.ApprovalControl_Logs
+                                           where p.IdChung == entity.Id
+                                           select p).OrderByDescending(p => p.CreateAt).FirstOrDefaultAsync();
+                    if (updateLog != null)
+                    {
+                        updateLog.IsValid = false;
+                        context.ApprovalControl_Logs.Update(updateLog);
+                    }
+                }
+                var addLog = new ApprovalControl_Log()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    CompanyId = entity.CompanyId,
+                    ParentMajorId = entity.ParentMajorId,
+                    MajorId = entity.MajorId,
+                    DeptId = entity.DeptId,
+                    UserId = entity.UserId,
+                    GroupId = entity.GroupId,
+
+                    CreateAt = DateTime.Now,
+                    CreateBy = entity.CreateBy,
+                    IsActive = entity.IsActive,
+
+                    IdChung = data.Id,
+                    IsValid = data.IsActive == 100 ? false : true
+                };
+                context.ApprovalControl_Logs.Add(addLog);
+                await context.SaveChangesAsync();
             }
-            var addLog = new ApprovalControl_Log()
+            catch (Exception ex)
             {
-                Id = Guid.NewGuid().ToString(),
-                CompanyId = entity.CompanyId,
-                ParentMajorId = entity.ParentMajorId,
-                MajorId = entity.MajorId,
-                DeptId = entity.DeptId,
-                UserId = entity.UserId,
-                GroupId = entity.GroupId,
-
-                CreateAt = DateTime.Now,
-                CreateBy = entity.CreateBy,
-                IsActive = entity.IsActive,
-
-                IdChung = data.Id,
-                IsValid = data.IsActive == 100 ? false : true
-            };
-            context.ApprovalControl_Logs.Add(addLog);
-            await context.SaveChangesAsync();
+                Console.WriteLine(ex.Message);
+                throw;
+            }
         }
         public async Task UpdateMulti(ApprovalControl[] ApprovalControls)
         {
@@ -352,6 +388,22 @@ namespace DucAnhERP.Services
             {
                 context.ApprovalControls.Update(entity);
             }
+            await context.SaveChangesAsync();
+        }
+
+        public async Task UpdateMulti(List<ApprovalControl> approvalControls, string PermissionId)
+        {
+            using var context = _context.CreateDbContext();
+
+            var updatePermissionId = from p in context.ApprovalControls
+                               where p.PermissionId == PermissionId
+                               select p;
+            if (updatePermissionId != null)
+            {
+                await updatePermissionId.ForEachAsync(p => p.IsActive = 100);
+                context.ApprovalControls.UpdateRange(updatePermissionId);
+            }
+            await context.ApprovalControls.AddRangeAsync(approvalControls);
             await context.SaveChangesAsync();
         }
         public async Task DeleteById(string id, string userId)
@@ -420,24 +472,30 @@ namespace DucAnhERP.Services
             try
             {
                 using var context = _context.CreateDbContext();
-                var model = await (from p in context.ApprovalControl_Logs
-                                   where p.IdChung != input.Id && p.IsValid == true && p.IsActive != 100
-                                   && p.CompanyId == input.CompanyId
-                                   && p.ParentMajorId == input.ParentMajorId
-                                   && p.MajorId == input.MajorId
-                                   && p.UserId == input.UserId
-                                   //&& p.SoApprovalControl == input.SoApprovalControl
-                                   select p).CountAsync();
-                if (model > 0)
+
+                List<ApprovalControl> checkexist = new();
+                checkexist = await (from p in context.ApprovalControls
+                              where p.PermissionId == input.PermissionId && p.UserId == input.UserId && p.ApprovalStepId == input.ApprovalStepId
+                                  && p.IsActive != 100
+                                  select p).ToListAsync();
+
+                if (checkexist.Count() > 0)
                 {
-                    throw new Exception($"Thông tin bạn nhập đã tồn tại.");
+                    if (checkexist[0].Id != input.Id)
+                    {
+
+                        throw new Exception($"Thông tin bạn nhập đã tồn tại.");
+                    }
                 }
+
                 return true;
             }
             catch (Exception ex)
             {
                 throw new Exception($"Error: " + ex.Message);
             }
+
+
         }
         public async Task<bool> CheckDelete(ApprovalControl input)
         {

@@ -223,34 +223,6 @@ namespace DucAnhERP.Services
         public async Task<List<MajorUserApprovalModel>> GetHistory(string id)
         {
             using var context = _context.CreateDbContext();
-            //var data = await (from p1 in context.MajorUserApproval_Logs
-            //                  join ChiNhanhs1 in context.ChiNhanhs on p1.CompanyId equals ChiNhanhs1.Id
-            //                  join Majors1 in context.Majors on p1.ParentMajorId equals Majors1.Id
-            //                  join Majors2 in context.Majors on p1.MajorId equals Majors2.Id
-            //                  join ApplicationUsers1 in context.ApplicationUsers on p1.UserId equals ApplicationUsers1.Id
-            //                  join Permissions1 in context.Permissions on p1.ApprovalId equals Permissions1.Id
-            //                  join createBy in context.ApplicationUsers on p1.CreateBy equals createBy.Id
-            //                  join a in context.ApplicationUsers on p1.UserId equals a.Id into a1
-            //                  from approvalUserId in a1.DefaultIfEmpty()
-            //                  join b in context.Departments on p1.DeptId equals b.Id into b1
-            //                  from departmentId in b1.DefaultIfEmpty()
-            //                  where p1.IdChung == id
-            //                  orderby p1.CreateAt
-            //                  select new MajorUserApprovalModel
-            //                  {
-            //                      Id = p1.Id,
-            //                      CompanyId = ChiNhanhs1.TenChiNhanh,
-            //                      ParentMajorId = Majors1.MajorName,
-            //                      MajorId = Majors2.MajorName,
-            //                      DeptId = departmentId.DeptName,
-            //                      UserId = approvalUserId.Email,
-            //                      ApprovalId = Permissions1.PermissionName,
-            //                      DayinWeek = p1.DayinWeek,
-            //                      GroupId = p1.GroupId,
-            //                      CreateAt = p1.CreateAt,
-            //                      CreateBy = createBy.Email,
-            //                      IsActive = p1.IsActive,
-            //                  }).ToListAsync();
             var data = await (from p1 in context.MajorUserApproval_Logs
                               join ChiNhanhs1 in context.ChiNhanhs on p1.CompanyId equals ChiNhanhs1.Id
                               join Majors1 in context.Majors on p1.ParentMajorId equals Majors1.Id
@@ -331,6 +303,32 @@ namespace DucAnhERP.Services
                                   IsActive = p1.IsActive,
                               }).ToListAsync();
             return data;
+        }
+        public async Task<bool> CheckPermission(string groupId, string companyId, ApplicationUser user, string ApprovalId)
+        {
+            using var context = _context.CreateDbContext();
+            try
+            {
+                if (user.CreateBy == "symtem" && user.GroupId == groupId)
+                {
+                    return true;
+                }
+                else
+                {
+                    var result = await (from a in context.MajorUserApprovals
+                                        where a.UserId.Equals(user)
+                                              && a.GroupId.Equals(groupId)
+                                              && a.CompanyId.Equals(companyId)
+                                              && a.ApprovalId.Equals(ApprovalId)
+                                              && a.DayinWeek.Equals(DateTime.Now.DayOfWeek)
+                                        select a.Id).CountAsync();
+                    return result > 0;
+                }
+            }
+            catch (Exception)
+            {
+                throw new Exception($"Bạn không có quyền để thực hiện hành động này");
+            }
         }
         public async Task Insert(MajorUserApproval entity, string userId)
         {

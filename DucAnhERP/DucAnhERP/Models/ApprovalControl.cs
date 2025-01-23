@@ -57,5 +57,4 @@ public partial class ApprovalControl_Log
     public string IsStatus { get; set; } = "";
     public string IdChung { get; set; }= "";
     public bool IsValid { get; set; } = false;
-
 }

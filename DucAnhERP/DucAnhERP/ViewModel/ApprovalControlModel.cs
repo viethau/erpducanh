@@ -8,6 +8,8 @@ public partial class ApprovalControlModel : PagingParameters
     public string MajorId { get; set; }
     public string DeptId { get; set; }
     public string UserId { get; set; }
+    public string PermissionId { get; set; } = "";
+    public string ApprovalStepId { get; set; } = "";
     public string GroupId { get; set; }
     public int Ordinarily { get; set; }
     public DateTime CreateAt { get; set; }

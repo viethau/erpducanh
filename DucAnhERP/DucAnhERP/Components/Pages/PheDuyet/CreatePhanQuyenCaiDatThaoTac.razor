@@ -22,27 +22,27 @@
                 <div class="row">
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="CompanyId">Chi nhánh</label>
-                        <Select2 Id="CompanyId" Items="@selectCompanyIdInput" OnChange="@OnSelectCompanyIdInput"></Select2>
+                        <Select2 Id="CompanyId"  Items="@selectCompanyIdInput" OnChange="@OnSelectCompanyIdInput"></Select2>
                         <ValidationMessage For="()=>Input.CompanyId"></ValidationMessage>
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="ParentMajorId">Nghiệp vụ</label>
-                        <Select2 Id="ParentMajorId" Items="@selectParentMajorIdInput" OnChange="@OnSelectParentMajorIdInput"></Select2>
+                        <Select2 Id="ParentMajorId" disabled="@(string.IsNullOrEmpty(Input.CompanyId))" Items="@selectParentMajorIdInput" OnChange="@OnSelectParentMajorIdInput"></Select2>
                         <ValidationMessage For="()=>Input.ParentMajorId"></ValidationMessage>
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="MajorId">Phân loại nghiệp vụ</label>
-                        <Select2 Id="MajorId" Items="@selectMajorIdInput" OnChange="@OnSelectMajorIdInput"></Select2>
+                        <Select2 Id="MajorId" disabled="@(string.IsNullOrEmpty(Input.ParentMajorId))" Items="@selectMajorIdInput" OnChange="@OnSelectMajorIdInput"></Select2>
                         <ValidationMessage For="()=>Input.MajorId"></ValidationMessage>
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="DeptId">Phòng ban</label>
-                        <Select2 Id="DeptId" Items="@selectDeptIdInput" OnChange="@OnSelectDeptIdInput"></Select2>
+                        <Select2 Id="DeptId" disabled="@(string.IsNullOrEmpty(Input.CompanyId))" Items="@selectDeptIdInput" OnChange="@OnSelectDeptIdInput"></Select2>
                         <ValidationMessage For="()=>Input.DeptId"></ValidationMessage>
                     </div>
                     <div class="form-floating col-sm-6 col-md-3">
                         <label for="UserId">Người dùng</label>
-                        <Select2 Id="UserId" Items="@selectUserIdInput" OnChange="@OnSelectUserIdInput"></Select2>
+                        <Select2 Id="UserId" disabled="@(string.IsNullOrEmpty(Input.DeptId))" Items="@selectUserIdInput" OnChange="@OnSelectUserIdInput"></Select2>
                         <ValidationMessage For="()=>Input.UserId"></ValidationMessage>
                     </div>
 

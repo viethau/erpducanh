@@ -12,6 +12,7 @@ namespace DucAnhERP.Repository
         Task<List<MajorModel>>? GetMajorsForParentMajorId(string groupId);
         Task<List<MajorModel>>? GetMajorsForMajorId(string groupId);
         Task<List<ApplicationUserModel>>? GetApplicationUsersForUserId(string groupId);
+        Task UpdateMulti(List<ApprovalControl> approvalControls, string PermissionId);
         Task<bool> CheckSave(ApprovalControl input);
         Task<bool> CheckEdit(ApprovalControl input);
         Task<bool> CheckDelete(ApprovalControl input);
