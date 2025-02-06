@@ -1,0 +1,1235 @@
+﻿@page "/PheDuyet/MajorUserApprovals"
+@using System.Text;
+@using DucAnhERP.Helpers
+@using DucAnhERP.ViewModel
+@using DucAnhERP.Models
+@using DucAnhERP.Components.Pages.Common
+@using System.Linq
+@using DucAnhERP.SeedWork
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@inject NavigationManager navigation
+@inject DucAnhERP.Services.ToastService ToastService
+@attribute [Authorize]
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject SignInManager<IdentityUser> SignInManager
+@inject IMajorUserApprovalReponsitory MajorUserApprovalService
+
+<div class="mx-5 my-2">
+    <h3>Danh sách phân quyền cài đặt duyệt</h3>
+    <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
+        <BodyTemplate>
+            <EditForm Model="Input" id="formInput" OnValidSubmit="HandleValidSubmit">
+                <div class="row">
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="CompanyId">Chi nhánh</label>
+                        <Select2 Id="CompanyId"  Items="@selectCompanyIdInput" OnChange="@OnSelectCompanyIdInput"></Select2>
+                        <ValidationMessage For="()=>Input.CompanyId"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="ParentMajorId">Nghiệp vụ</label>
+                        <Select2 Id="ParentMajorId" disabled="@(string.IsNullOrEmpty(Input.CompanyId))" Items="@selectParentMajorIdInput" OnChange="@OnSelectParentMajorIdInput"></Select2>
+                        <ValidationMessage For="()=>Input.ParentMajorId"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="MajorId">Phân loại nghiệp vụ</label>
+                        <Select2 Id="MajorId" disabled="@(string.IsNullOrEmpty(Input.ParentMajorId))" Items="@selectMajorIdInput" OnChange="@OnSelectMajorIdInput"></Select2>
+                        <ValidationMessage For="()=>Input.MajorId"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="DeptId">Phòng ban</label>
+                        <Select2 Id="DeptId" disabled="@(string.IsNullOrEmpty(Input.CompanyId))" Items="@selectDeptIdInput" OnChange="@OnSelectDeptIdInput"></Select2>
+                        <ValidationMessage For="()=>Input.DeptId"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="UserId">Người dùng</label>
+                        <Select2 Id="UserId" disabled="@(string.IsNullOrEmpty(Input.DeptId))" Items="@selectUserIdInput" OnChange="@OnSelectUserIdInput"></Select2>
+                        <ValidationMessage For="()=>Input.UserId"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="PermissionId">Loại quyền</label>
+                        <Select2 Id="PermissionId" disabled="@(string.IsNullOrEmpty(Input.MajorId))" Items="@selectPermissionIdInput" OnChange="@OnSelectPermissionIdInput"></Select2>
+                        <ValidationMessage For="()=>Input.PermissionId"></ValidationMessage>
+                    </div>
+                    
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="ApprovalStepId">Duyệt</label>
+                        @foreach (var item in approvalStepIdInputs)
+                        {
+                            <div class="custom-control custom-checkbox">
+                                <InputCheckbox class="custom-control-input" id="@item.Id" @bind-Value="item.IsCheck" onclick="@(() => CheckboxChanged(item.Id))" />
+                                <label for="@item.Id" class="custom-control-label">@item.Text</label>
+                            </div>
+                        }
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <label for="DayInWeek">Ngày trong tuần</label>
+                        @foreach (var item in dayInWeekModels)
+                        {
+                            <div class="custom-control custom-checkbox">
+                                <InputCheckbox class="custom-control-input" id="@item.Id" @bind-Value="item.IsCheck" onclick="@(() => DIWCheckboxChanged(item.Id))" />
+                                <label for="@item.Id" class="custom-control-label">@item.Text</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                @if (!string.IsNullOrEmpty(validationMessage))
+                {
+                    <div class=" mt-1 text-danger" role="alert">
+                        @validationMessage
+                    </div>
+                }
+            </EditForm>
+        </BodyTemplate>
+        <FooterTemplate>
+            <div class="d-flex justify-content-end pr-5 py-3 modal-footer-with-border">
+                <button class="btn btn-primary mr-2" form="formInput" type="submit">Save</button>
+                <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+            </div>
+        </FooterTemplate>
+    </CustomModal>
+    <CustomModal IsVisible="isModalDetail" OnClose="HandleModalDetailClose" Title="Thông tin lịch sử" Size="modal-lg">
+        <BodyTemplate>
+            <table class="table table-hover table-bordered">
+                <thead class="bg-info">
+                    <tr>
+                        <th class="text-center" rowspan="2" scope="col">
+                            <div class="pb-3">No.</div>
+                        </th>
+                        <th onclick="@(() => SortTable("CompanyId"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Chi nhánh</div>
+                            <span class="arrow @(GetSortStyle("CompanyId"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("ParentMajorId"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Nghiệp vụ cha</div>
+                            <span class="arrow @(GetSortStyle("ParentMajorId"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("MajorId"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Nghiệp vụ</div>
+                            <span class="arrow @(GetSortStyle("MajorId"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("UserId"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Người dùng</div>
+                            <span class="arrow @(GetSortStyle("UserId"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("PermissionId"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Loại quyền</div>
+                            <span class="arrow @(GetSortStyle("PermissionId"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("DayInWeek"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Ngày trong tuần</div>
+                            <span class="arrow @(GetSortStyle("DayInWeek"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("IdMain"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">IdMain</div>
+                            <span class="arrow @(GetSortStyle("IdMain"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("IsStatus"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Trạng thái</div>
+                            <span class="arrow @(GetSortStyle("IsStatus"))"></span>
+                        </th>
+                        <th class="text-center" scope="col">
+                            <div class="pb-3">Ngày tạo</div>
+                        </th>
+                        <th class="text-center" scope="col">
+                            <div class="pb-3">Người tạo</div>
+                        </th>
+                    </tr>
+                </thead>
+                @if (listDetails.Any())
+                {
+                    <tbody>
+                @{
+                int stt = 0;
+                }
+                        @foreach (var item in listDetails)
+                    {
+                    stt++;
+                    <tr>
+                    <td class="text-center" scope="row">@stt</td>
+                    <td class="text-left">@item.CompanyId</td>
+                    <td class="text-left">@item.ParentMajorId</td>
+                    <td class="text-left">@item.MajorId</td>
+                    <td class="text-left">@item.UserId</td>
+                    <td class="text-left">@item.PermissionId</td>
+                    <td class="text-left">@item.DayinWeek</td>
+                    <td class="text-left">@item.IdMain</td>
+                    <td class="text-left">@item.IsActive</td>
+                    <td class="text-center" scope="row">@item.CreateAt</td>
+                    <td class="text-center" scope="row">@item.CreateBy</td>
+                   </tr>
+                    }
+                </tbody>
+                }
+                else
+                {
+                    <tbody>
+                        <tr>
+                            <td class="text-danger" colspan="7">Không có dữ liệu</td>
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        </BodyTemplate>
+    </CustomModal>
+    <div>
+        <EditForm Model="pageModel" FormName="SearchData" id="SearchData" OnValidSubmit="@Search">
+            <DataAnnotationsValidator />
+            <div class="d-flex row">
+                <div class="form-floating col-sm-3 col-md-3">
+                    <label for="CompanyIdSearch">Chi nhánh</label>
+                    <Select2 Id="CompanyIdSearch" Items="@selectCompanyIdSearch" OnChange="@OnSelectCompanyIdSearch"></Select2>
+                    <ValidationMessage For="()=>pageModel.CompanyId"></ValidationMessage>
+                </div>
+                <div class="form-floating col-sm-3 col-md-3">
+                    <label for="ParentMajorIdSearch">Nghiệp vụ cha</label>
+                    <Select2 Id="ParentMajorIdSearch" Items="@selectParentMajorIdSearch" OnChange="@OnSelectParentMajorIdSearch"></Select2>
+                    <ValidationMessage For="()=>pageModel.ParentMajorId"></ValidationMessage>
+                </div>
+                <div class="form-floating col-sm-3 col-md-3">
+                    <label for="MajorIdSearch">Nghiệp vụ</label>
+                    <Select2 Id="MajorIdSearch" Items="@selectMajorIdSearch" OnChange="@OnSelectMajorIdSearch"></Select2>
+                    <ValidationMessage For="()=>pageModel.MajorId"></ValidationMessage>
+                </div>
+                <div class="form-floating col-sm-3 col-md-3">
+                    <label for="DeptId">Bộ phận</label>
+                    <Select2 Id="DeptId" Items="@selectDeptIdSearch" OnChange="@OnSelectDeptIdSearch"></Select2>
+                    <ValidationMessage For="()=>pageModel.DeptId"></ValidationMessage>
+                </div>
+                <div class="form-floating col-sm-3 col-md-3">
+                    <label for="UserIdSearch">Người dùng</label>
+                    <Select2 Id="UserIdSearch" Items="@selectUserIdSearch" OnChange="@OnSelectUserIdSearch"></Select2>
+                    <ValidationMessage For="()=>pageModel.UserId"></ValidationMessage>
+                </div>
+                <div class="form-floating col-sm-3 col-md-3">
+                    <label for="PermissionId">Loại quyền</label>
+                    <Select2 Id="PermissionId" Items="@selectPermissionIdSearch" OnChange="@OnselectPermissionIdSearch"></Select2>
+                    <ValidationMessage For="()=>pageModel.PermissionId"></ValidationMessage>
+                </div>
+                <div class="form-group ml-5">
+                    <label>&nbsp;</label>
+                    <button type="submit" form="SearchData" class="btn btn-primary form-control">Tìm kiếm</button>
+                </div>
+                <div class="form-group ml-5">
+                    <label>&nbsp;</label>
+                    <button type="button" @onclick="ShowModal" class="btn btn-primary form-control">Tạo mới</button>
+                </div>
+            </div>
+        </EditForm>
+        <div class="row mt-3 our-table">
+            <table class="table table-hover table-bordered">
+                <thead class="bg-info">
+                    <tr>
+                        <th class="text-center" rowspan="2">
+                        </th>
+                        <th class="text-center" rowspan="2" scope="col">
+                            <div class="pb-3">No.</div>
+                        </th>
+                        <th onclick="@(() => SortTable("CompanyId"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Chi nhánh</div>
+                            <span class="arrow @(GetSortStyle("CompanyId"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("ParentMajorId"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Nghiệp vụ cha</div>
+                            <span class="arrow @(GetSortStyle("ParentMajorId"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("MajorId"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Nghiệp vụ</div>
+                            <span class="arrow @(GetSortStyle("MajorId"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("DeptId"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Bộ phận</div>
+                            <span class="arrow @(GetSortStyle("DeptId"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("UserId"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Người dùng</div>
+                            <span class="arrow @(GetSortStyle("UserId"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("PermissionId"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Loại quyền</div>
+                            <span class="arrow @(GetSortStyle("PermissionId"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("ApprovalStepId"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Duyệt</div>
+                            <span class="arrow @(GetSortStyle("ApprovalStepId"))"></span>
+                        </th>
+                        <th onclick="@(() => SortTable("DayInWeek"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Ngày trong tuần</div>
+                            <span class="arrow @(GetSortStyle("DayInWeek"))"></span>
+                        </th>
+                    </tr>
+                </thead>
+                @if (listMajorUserApproval.Any())
+                {
+                    <tbody>
+                        @{
+                            int stt = 0;
+                        }
+                        @foreach (var item in listMajorUserApproval)
+                        {
+                            stt++;
+                            <tr>
+                                <td class="d-flex flex-column text-center nowrap">
+                                    <div class="d-inline-block">
+                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.IdMain)">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.IdMain ,item.ParentMajorId )">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                       @*  <button class="btn btn-sm btn-primary m-1" title="Chi tiết" @onclick="()=>DetailAction(item.IdMain)">
+                                            <i class="fa fa-info-circle"></i>
+                                        </button> *@
+                                    </div>
+                                </td>
+                                <td class="text-center" scope="row">
+                                    @stt
+                                </td>
+                                <td class="text-left">@item.CompanyId</td>
+                                <td class="text-left">@item.ParentMajorId</td>
+                                <td class="text-left">@item.MajorId</td>
+                                <td class="text-left">@item.DeptId</td>
+                                <td class="text-left">@item.UserId</td>
+                                <td class="text-left">@item.PermissionId</td>
+                                <td class="text-left">@item.ApprovalStepId</td>
+                                <td class="text-left">@item.DayInWeekText</td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+                else
+                {
+                    <tbody>
+                        <tr>
+                            <td class="text-danger" colspan="7">Không có dữ liệu</td>
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        </div>
+        @if (listMajorUserApproval.Any())
+        {
+            <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+        }
+    </div>
+    <SuccessModal @ref="successModal" OnResponseClick="Redirect"></SuccessModal>
+    <ErrorModal @ref="errorModal"></ErrorModal>
+    <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+</div>
+@code {
+    private MajorUserApproval Input = new();
+    private List<Major> listParentMajor = new List<Major>();
+    private List<Major> listMajor = new List<Major>();
+    private List<ChiNhanh> lisChiNhanhs = new List<ChiNhanh>();
+    private List<DepartmentModel> listDepartment = new List<DepartmentModel>();
+    private List<Permission> listPermissions = new List<Permission>();
+
+    private List<ApprovalStepSettingData> listSetApprovalStep = new List<ApprovalStepSettingData>();
+    public string CompanyIdText { get; set; } = "";
+
+    private List<MajorModel>? listParentMajorIdSearch = new();
+    private List<Major> listParentMajorIdInput = new();
+    public string ParentMajorIdText { get; set; } = "";
+    private List<MajorModel>? listMajorIdSearch = new();
+    private List<Major> listMajorIdInput = new();
+    public string MajorIdText { get; set; } = "";
+    public string PermissionIdText { get; set; } = "";
+    public string DayInWeekText { get; set; } = "";
+    public string validationMessage = "";
+    public string PermissionText = "";
+    private List<ApplicationUserModel>? listUserIdSearch = new();
+    private List<ApplicationUser> listUserIdInput = new();
+    public string UserIdText { get; set; } = "";
+    private List<PermissionModel>? listPermissionIdSearch = new();
+    private List<Permission> listPermissionIdInput = new();
+    private bool isModalVisible = false;
+    private bool isModalDetail = false;
+    private bool isLoading = false;
+    private string TitleModal = "Thêm";
+    private bool isEdit = false;
+    private DateTime baseTime;
+    private string idMain = "";
+    private string deleteId;
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<ApprovalStepSetting> listApprovalStepSetting = new List<ApprovalStepSetting>();
+    private List<SelectedItem> selectCompanyIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectCompanyIdSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+
+
+    List<ApprovalStepIdInput> approvalStepIdInputs = new List<ApprovalStepIdInput>();
+
+    public class ApprovalStepIdInput
+    {
+        public string Id { get; set; } = Guid.NewGuid().ToString();
+        public string Text { get; set; }
+        public bool IsCheck { get; set; }
+    }
+
+    public class DayInWeekModel
+    {
+        public int Id { get; set; }
+        public string Text { get; set; }
+        public bool IsCheck { get; set; }
+    }
+    List<DayInWeekModel> dayInWeekModels = new List<DayInWeekModel>
+    {
+        new DayInWeekModel { Id = 1, Text = "Thứ 2", IsCheck = false },
+        new DayInWeekModel { Id = 2, Text = "Thứ 3", IsCheck = false },
+        new DayInWeekModel { Id = 3, Text = "Thứ 4", IsCheck = false },
+        new DayInWeekModel { Id = 4, Text = "Thứ 5", IsCheck = false },
+        new DayInWeekModel { Id = 5, Text = "Thứ 6", IsCheck = false },
+        new DayInWeekModel { Id = 6, Text = "Thứ 7", IsCheck = false },
+        new DayInWeekModel { Id = 0, Text = "Chủ nhật", IsCheck = false }
+    };
+
+    private async Task OnSelectCompanyIdInput(SelectedItem selectedItem)
+    {
+        Input.CompanyId = selectedItem.Value;
+        Input.DeptId = "";
+        Input.ParentMajorId = "";
+        Input.MajorId = "";
+        Input.UserId = "";
+        Input.PermissionId = "";
+        Input.ApprovalStepId = "";
+        CompanyIdText = selectedItem.Text;
+        listParentMajor = await ApprovalStepSettingService.LoadParentMajors(Input.CompanyId ?? "");
+        selectParentMajorIdInput = listParentMajor.Select(data => new SelectedItem
+            {
+                Value = data.Id,
+                Text = data.MajorName
+            }).ToList();
+        selectParentMajorIdInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+
+        //chọn deptId
+        listDepartment = !string.IsNullOrEmpty(Input.CompanyId) ? await DepartmentService.GetAllByVM(new DepartmentModel { CompanyId = Input.CompanyId }, groupId) : new();
+        selectDeptIdInput = listDepartment.Select(item => new SelectedItem { Text = item.DeptName, Value = item.Id }).ToList();
+        selectDeptIdInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+
+        selectMajorIdInput = new() { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+        selectPermissionIdInput = new() { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+        selectUserIdInput = new() { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+
+    }
+    private async Task OnSelectCompanyIdSearch(SelectedItem selectedItem)
+    {
+        pageModel.CompanyId = selectedItem.Value;
+        listMajor = await ApprovalStepSettingService.LoadParentMajors(pageModel.CompanyId ?? "");
+        selectParentMajorIdSearch = listMajor.Select(data => new SelectedItem
+            {
+                Value = data.Id,
+                Text = data.MajorName
+            }).ToList();
+        selectParentMajorIdSearch.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+        //chọn deptId
+        listDepartment = !string.IsNullOrEmpty(pageModel.CompanyId) ? await DepartmentService.GetAllByVM(new DepartmentModel { CompanyId = pageModel.CompanyId }, groupId) : new();
+        selectDeptIdSearch = new();
+        selectDeptIdSearch = listDepartment.Select(item => new SelectedItem { Text = item.DeptName, Value = item.Id }).ToList();
+        selectDeptIdSearch.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+
+        selectMajorIdSearch = new();
+        selectPermissionIdInput = new();
+        selectUserIdSearch = new();
+        selectUserIdSearch = new();
+        selectUserIdSearch.Add(new SelectedItem  { Value = "", Text = "Chọn", IsSelected = true });
+
+    }
+
+    private List<SelectedItem> selectParentMajorIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectParentMajorIdSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private void OnSelectParentMajorIdInput(SelectedItem selectedItem)
+    {
+        Input.ParentMajorId = selectedItem.Value;
+        ParentMajorIdText = selectedItem.Text;
+        Input.MajorId = "";
+        Input.PermissionId = "";
+
+        approvalStepIdInputs = new List<ApprovalStepIdInput>();
+        listMajorIdInput = MajorService.GetMajorByParentId1(Input.ParentMajorId);
+        selectMajorIdInput = listMajorIdInput.Select(data => new SelectedItem
+            {
+                Value = data.Id,
+                Text = data.MajorName
+            }).ToList();
+        selectMajorIdInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+    }
+    private void OnSelectParentMajorIdSearch(SelectedItem selectedItem)
+    {
+        pageModel.ParentMajorId = selectedItem.Value;
+        selectMajorIdSearch = new();
+        pageModel.MajorId = "";
+        pageModel.PermissionId = "";
+        listMajor = MajorService.GetMajorByParentId1(pageModel.ParentMajorId);
+        selectMajorIdSearch = listMajor.Select(data => new SelectedItem
+            {
+                Value = data.Id,
+                Text = data.MajorName
+            }).ToList();
+        selectMajorIdSearch.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+
+    }
+    private List<SelectedItem> selectMajorIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectMajorIdSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private async Task OnSelectMajorIdInput(SelectedItem selectedItem)
+    {
+        Input.MajorId = selectedItem.Value;
+        MajorIdText = selectedItem.Text;
+        Input.PermissionId = "";
+        listPermissions = await ApprovalStepSettingService.LoadPermissionsByMajorUserApproval(Input);
+        selectPermissionIdInput = new();
+        selectPermissionIdInput = listPermissions.Select(item => new SelectedItem()
+            {
+                Value = item.Id,
+                Text = item.PermissionName,
+                IsSelected = false
+            }).ToList();
+        selectPermissionIdInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+
+        StateHasChanged();
+    }
+
+    private async Task OnSelectMajorIdSearch(SelectedItem selectedItem)
+    {
+        pageModel.MajorId = selectedItem.Value;
+
+        var list = await PermissionService.LoadToApproval(pageModel.MajorId);
+        selectPermissionIdSearch = new();
+        selectPermissionIdSearch = list.Select(item => new SelectedItem { Text = item.PermissionName, Value = item.Id }).ToList();
+        selectPermissionIdSearch.Add(new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+    }
+
+    private List<SelectedItem> selectDeptIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectDeptIdSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private async Task OnSelectDeptIdInput(SelectedItem selectedItem)
+    {
+
+        Input.DeptId = selectedItem.Value;
+        Input.PermissionId = "";
+
+        selectPermissionIdInput = new();
+        selectUserIdInput = new();
+        if (string.IsNullOrEmpty(Input.DeptId))
+        {
+            selectUserIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+            selectPermissionIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+            StateHasChanged();
+        }
+        else
+        {
+            listUserIdSearch = await ApplicationUserService.GetAllByVM(new ApplicationUserModel { DeptId = Input.DeptId }, groupId);
+            selectUserIdInput = listUserIdSearch.Select(item => new SelectedItem { Text = item.UserName, Value = item.Id, }).ToList();
+            selectUserIdInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+
+            listPermissions = await ApprovalStepSettingService.LoadPermissionsByMajorUserApproval(Input);
+            selectPermissionIdInput = listPermissions.Select(item => new SelectedItem() { Value = item.Id, Text = item.PermissionName, }).ToList();
+            selectPermissionIdInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+            StateHasChanged();
+        }
+        approvalStepIdInputs = new();
+        StateHasChanged();
+    }
+    private async Task OnSelectDeptIdSearch(SelectedItem selectedItem)
+    {
+        pageModel.DeptId = selectedItem.Value;
+        selectUserIdSearch = new();
+        if (string.IsNullOrEmpty(pageModel.DeptId))
+        {
+            selectUserIdSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+        }
+        else
+        {
+            listUserIdSearch = await ApplicationUserService.GetAllByVM(new ApplicationUserModel { DeptId = pageModel.DeptId }, groupId);
+            selectUserIdSearch = listUserIdSearch.Select(item => new SelectedItem { Text = item.UserName, Value = item.Id, }).ToList();
+            selectUserIdSearch.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+        }
+    }
+
+    private List<SelectedItem> selectUserIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectUserIdSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private void OnSelectUserIdInput(SelectedItem selectedItem)
+    {
+        Input.UserId = selectedItem.Value;
+        UserIdText = selectedItem.Text;
+    }
+    private void OnSelectUserIdSearch(SelectedItem selectedItem)
+    {
+        pageModel.UserId = selectedItem.Value;
+    }
+    private List<SelectedItem> selectPermissionIdInput = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectPermissionIdSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private async void OnSelectPermissionIdInput(SelectedItem selectedItem)
+    {
+        Input.PermissionId = selectedItem.Value;
+        PermissionIdText = selectedItem.Text;
+
+        listApprovalStepSetting = await ApprovalStepSettingService.LoadStepByMajorUserApproval(Input);
+        approvalStepIdInputs = new List<ApprovalStepIdInput>();
+        foreach (var item in listApprovalStepSetting)
+        {
+            var iteminsert = new ApprovalStepIdInput()
+                {
+                    Id = item.Id,
+                    Text = item.ApprovalStep + ". " + item.Content,
+                    IsCheck = false
+                };
+            approvalStepIdInputs.Add(iteminsert);
+        };
+        StateHasChanged();
+    }
+    private void OnselectPermissionIdSearch(SelectedItem selectedItem)
+    {
+        pageModel.PermissionId = selectedItem.Value;
+    }
+    private void CheckboxChanged(string id)
+    {
+        PermissionIdText = "";
+        foreach (var item in approvalStepIdInputs)
+        {
+            if (item.Id == id)
+            {
+                item.IsCheck = !item.IsCheck;
+            }
+            if (item.IsCheck)
+            {
+                PermissionIdText += PermissionIdText == "" ? item.Text : ", " + item.Text;
+            }
+        }
+    }
+    private void DIWCheckboxChanged(int id)
+    {
+        DayInWeekText = "";
+        foreach (var item in dayInWeekModels)
+        {
+            if (item.Id == id)
+            {
+                item.IsCheck = !item.IsCheck;
+            }
+            if (item.IsCheck)
+            {
+                DayInWeekText += DayInWeekText == "" ? item.Text : ", " + item.Text;
+            }
+        }
+    }
+
+    [Parameter]
+    public SuccessModal successModal { get; set; }
+
+    [Parameter]
+    public ErrorModal errorModal { get; set; }
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+
+    private void ShowModal()
+    {
+        isModalVisible = true;
+        Input = new();
+        validationMessage = "";
+        Refresh();
+    }
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+        Input = new();
+        isEdit = false;
+        Refresh();
+    }
+    private void HandleModalDetailClose(bool isVisible)
+    {
+        isModalDetail = isVisible;
+        Refresh();
+    }
+    private void HandleSave()
+    {
+        isModalVisible = false;
+    }
+    private void HandleCancel()
+    {
+        isModalVisible = false;
+        Input = new();
+        isEdit = false;
+        Refresh();
+    }
+    private void Refresh()
+    {
+        foreach (var item in selectCompanyIdInput)
+        {
+            item.IsSelected = item.Value == "";
+        }
+        selectParentMajorIdInput = new();
+        selectMajorIdInput = new();
+        selectUserIdInput = new();
+        selectPermissionIdInput = new();
+        selectDeptIdInput = new();
+        foreach (var item in dayInWeekModels)
+        {
+            item.IsCheck = false;
+        }
+        approvalStepIdInputs = new();
+        StateHasChanged();
+    }
+    public List<MajorUserApprovalModel> listMajorUserApproval
+    {
+        get;
+        set;
+    } = new();
+    public List<MajorUserApprovalModel> listDetails
+    {
+        get;
+        set;
+    } = new();
+    public List<MajorUserApprovalModel> listModel
+    {
+        get;
+        set;
+    } = new();
+    [SupplyParameterFromForm(FormName = "SearchData")]
+    public MajorUserApprovalModel pageModel
+    {
+        get;
+        set;
+    }
+    public MetaData MetaData
+    {
+        get;
+        set;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        var isValid = await LoginService.CheckLogin();
+        if (!isValid)
+        {
+            navigation.NavigateTo("/Account/Login", forceLoad: true);
+        }
+        pageModel = new();
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            userName = authState.User.Identity.Name;
+            user = ApplicationUserService.GetByUserName(userName);
+            userId = user.Id;
+            groupId = user.GroupId;
+        }
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        try
+        {
+            var checkquyen = await MajorUserApprovalService.CheckPermission(groupId, "", user, "c8182fa9-8c57-4709-aa4f-9b5b460dd22b");
+            baseTime = DateTime.Now;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+            "Thông báo",
+            ex.Message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 7000
+            );
+        }
+    }
+    private async Task HandleEdit(string id)
+    {
+        try
+        {
+            var checkquyen = await MajorUserApprovalService.CheckPermission(groupId, Input.CompanyId, user, "06ff3867-749b-4350-bb5c-bdb46fc97ed4");
+            TitleModal = "Cập nhật";
+            Input = await MajorUserApprovalService.GetById(id);
+            var getData = await MajorUserApprovalService.GetByIdMain(id);
+            var dataselect = MajorUserApprovalService.GetToEdit(id);
+            selectCompanyIdInput = new();
+            selectParentMajorIdInput = new();
+            selectMajorIdInput = new();
+            selectDeptIdInput = new();
+            selectUserIdInput = new();
+            idMain = Input.IdMain;
+            lisChiNhanhs = await ChiNhanhService.GetAll(groupId);
+            selectCompanyIdInput = lisChiNhanhs.Select(data => new SelectedItem
+                {
+                    Value = data.Id,
+                    Text = data.TenChiNhanh,
+                    IsSelected = data.Id == Input.CompanyId
+                }).ToList();
+            selectCompanyIdInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = false });
+            var listpm = await ApprovalStepSettingService.LoadParentMajors(Input.CompanyId ?? "");
+            selectParentMajorIdInput = listpm.Select(data => new SelectedItem
+                {
+                    Value = data.Id,
+                    Text = data.MajorName,
+                    IsSelected = data.Id == Input.ParentMajorId
+                }).ToList();
+
+            listMajorIdInput = MajorService.GetMajorByParentId1(Input.ParentMajorId);
+            selectMajorIdInput = listMajorIdInput.Select(data => new SelectedItem
+                {
+                    Value = data.Id,
+                    Text = data.MajorName,
+                    IsSelected = data.Id == Input.MajorId
+                }).ToList();
+
+            var listdept = !string.IsNullOrEmpty(Input.CompanyId) ? await DepartmentService.GetAllByVM(new DepartmentModel { CompanyId = Input.CompanyId }, groupId) : new();
+            selectDeptIdInput = listdept.Select(item => new SelectedItem { Text = item.DeptName, Value = item.Id, IsSelected = item.Id == Input.DeptId }).ToList();
+
+            var list = await ApplicationUserService.GetAllByVM(new ApplicationUserModel { DeptId = Input.DeptId }, groupId);
+            selectUserIdInput = list.Select(item => new SelectedItem { Text = item.UserName, Value = item.Id, IsSelected = item.Id == Input.UserId }).ToList();
+
+
+            listPermissions = await ApprovalStepSettingService.LoadPermissionsByMajorUserApproval(Input);
+            selectPermissionIdInput = new();
+            selectPermissionIdInput = listPermissions.Select(item => new SelectedItem()
+                {
+                    Value = item.Id,
+                    Text = item.PermissionName,
+                    IsSelected = item.Id == Input.PermissionId
+                }).ToList();
+            selectPermissionIdInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+
+
+            listApprovalStepSetting = await ApprovalStepSettingService.LoadStepByMajorUserApproval(Input);
+            approvalStepIdInputs = new List<ApprovalStepIdInput>();
+            foreach (var item in listApprovalStepSetting)
+            {
+                var iteminsert = new ApprovalStepIdInput()
+                    {
+                        Id = item.Id,
+                        Text = item.ApprovalStep + ". " + item.Content,
+                        IsCheck = getData.Any(data => item.Id == data.ApprovalStepId)
+                    };
+                approvalStepIdInputs.Add(iteminsert);
+            };
+
+
+
+            dayInWeekModels.ForEach(item =>
+            {
+                item.IsCheck = getData.Any(data => item.Id == int.Parse(data.DayinWeek));
+            });
+
+            DayInWeekText = string.Join(", ", dayInWeekModels.Where(item => item.IsCheck).Select(item => item.Text));
+
+
+
+            isEdit = true;
+            isModalVisible = true;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+            "Thông báo",
+            ex.Message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 7000
+            );
+        }
+    }
+    private async Task DetailAction(string id)
+    {
+        try
+        {
+            listDetails = await MajorUserApprovalService.GetHistory(id);
+            isModalDetail = true;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+            "Thông báo",
+            ex.Message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 7000
+            );
+        }
+    }
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        deleteId = id;
+        confirmModal.Title = "Xác nhận xóa";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.openModal();
+    }
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        try
+        {
+            if (confirmed)
+            {
+                if (!string.IsNullOrEmpty(deleteId))
+                {
+                    var query = await MajorUserApprovalService.GetById(deleteId);
+                    if (query.IsActive == 2)
+                    {
+                        ToastService.ShowToast(
+                        "Thông báo",
+                        "Thông tin bạn chọn đang chờ ",
+                        cssClass: "toast-success",
+                        iconClass: "fa fa-exclamation-circle",
+                        progressBarClass: "bg-info",
+                        duration: 7000
+                        );
+                    }
+                    else
+                    {
+                        var checkquyen = await MajorUserApprovalService.CheckPermission(groupId, query.CompanyId, user, "2125f876-ed7b-47be-90bb-48241c8c369a");
+                        string[] ids = { deleteId };
+                        var isValid = await MajorUserApprovalService.CheckExclusive(ids, baseTime);
+                        if (isValid)
+                        {
+                            query.IsActive = 100;
+                            query.CreateAt = DateTime.Now;
+                            query.CreateBy = userId;
+                            await MajorUserApprovalService.Update(query, userId);
+                            // StringBuilder content1 = new StringBuilder();
+                            // content1.AppendLine($@"
+                            // <h3>Thông tin xóa</h3>
+                            // <table class='table table-hover table-bordered'>
+                            //     <thead class='bg-info'>
+                            //         <tr>
+                            //             <th><div class='pb-3'>Chi nhánh</div></th>
+                            //             <th><div class='pb-3'>Nghiệp vụ cha</div></th>
+                            //             <th><div class='pb-3'>Nghiệp vụ</div></th>
+                            //             <th><div class='pb-3'>Phòng ban</div></th>
+                            //             <th><div class='pb-3'>Người dùng</div></th>
+                            //             <th><div class='pb-3'>Loại quyền</div></th>
+                            //             <th><div class='pb-3'>Duyệt</div></th>
+                            //             <th><div class='pb-3'>Ngày trong tuần</div></th>
+                            //             <th><div class='pb-3'>IdMain</div></th>
+                            //         </tr>
+                            //     <tr>
+                            //         <td class='text-left'>{query.CompanyId}</td>
+                            //         <td class='text-left'>{query.ParentMajorId}</td>
+                            //         <td class='text-left'>{query.MajorId}</td>
+                            //         <td class='text-left'>{query.DeptId}</td>
+                            //         <td class='text-left'>{query.UserId}</td>
+                            //         <td class='text-left'>{query.PermissionId}</td>
+                            //         <td class='text-left'>{query.ApprovalStepId}</td>
+                            //         <td class='text-left'>{query.DayinWeek}</td>
+                            //         <td class='text-left'>{query.IdMain}</td>
+                            //     </tr>
+                            // </table>
+                            // ");
+                            string content = "";
+                            content += "<h3>Thông tin xóa</h3>";
+                            content += "<table class=\"table table-hover table-bordered\">";
+                            content += "<thead class=\"bg-info\">";
+                            content += "<tr>";
+                            content += "<th>";
+                            content += "<div class=\"pb-3\">Chi nhánh</div>";
+                            content += "</th>";
+                            content += "<th>";
+                            content += "<div class=\"pb-3\">Nghiệp vụ cha</div>";
+                            content += "</th>";
+                            content += "<th>";
+                            content += "<div class=\"pb-3\">Nghiệp vụ</div>";
+                            content += "</th>";
+                            content += "<th>";
+                            content += "<div class=\"pb-3\">Phòng ban</div>";
+                            content += "</th>";
+                            content += "<th>";
+                            content += "<div class=\"pb-3\">Người dùng</div>";
+                            content += "</th>";
+                            content += "<th>";
+                            content += "<div class=\"pb-3\">Loại quyền</div>";
+                            content += "</th>";
+                            content += "<th>";
+                            content += "<div class=\"pb-3\">Ngày trong tuần</div>";
+                            content += "</th>";
+                            content += "<th>";
+                            content += "<div class=\"pb-3\">Duyệt</div>";
+                            content += "</th>";
+                            content += "<th>";
+                            content += "<div class=\"pb-3\">IdMain</div>";
+                            content += "</th>";
+                            content += "</tr>";
+                            content += "</thead>";
+                            content += "<tbody>";
+                            content += "<tr>";
+                            content += "<td class=\"text-left\">" + query.CompanyId + "</td>";
+                            content += "<td class=\"text-left\">" + query.ParentMajorId + "</td>";
+                            content += "<td class=\"text-left\">" + query.MajorId + "</td>";
+                            content += "<td class=\"text-left\">" + query.DeptId + "</td>";
+                            content += "<td class=\"text-left\">" + query.UserId + "</td>";
+                            content += "<td class=\"text-left\">" + query.PermissionId + "</td>";
+                            content += "<td class=\"text-left\">" + query.ApprovalStepId + "</td>";
+                            content += "<td class=\"text-left\">" + query.DayinWeek + "</td>";
+                            content += "<td class=\"text-left\">" + query.IdMain + "</td>";
+                            content += "</tr>";
+                            content += "</tbody>";
+                            content += "</table>";
+
+                            var emailsent = await ApplicationUserService.GetById(query.UserId);
+
+                            var emailhistory = new EmailHistory()
+                                {
+                                    Id = Guid.NewGuid().ToString(),
+                                    Receiver = emailsent.Email,
+                                    Subject = "Quản lý quyền thao tác theo người dùng, nghiệp vụ - Xóa",
+                                    Content = content,
+                                    CompanyId = query.CompanyId,
+                                    UserId = query.UserId,
+                                    ParentMajorId = query.ParentMajorId,
+                                    MajorId = query.MajorId,
+                                    IdCheck = query.Id,
+                                    IdLog = "",
+                                    IsMail = true,
+                                    IsNotification = true,
+                                    IsSMS = true,
+                                    GroupId = groupId,
+                                    CreateAt = DateTime.Now,
+                                    CreateBy = user.Id,
+                                    IsRead = 0
+                                };
+                            await EmailService.Insert(emailhistory, "");
+                            ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                            await LoadData();
+                            await Search();
+                            deleteId = "";
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+            "Thông báo",
+            ex.Message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 7000
+            );
+        }
+    }
+    private EditContext editContext;
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+
+           if (IsValid())
+            {
+                idMain = idMain == "" ? Guid.NewGuid().ToString() : idMain;
+                var CompanyIdValid = await ChiNhanhService.CheckStatus(Input.CompanyId, CompanyIdText);
+                // var ParentMajorIdValid = await MajorService.CheckStatus(Input.ParentMajorId, ParentMajorIdText);
+                // var MajorIdValid = await MajorService.CheckStatus(Input.MajorId, MajorIdText);
+                var UserIdValid = await ApplicationUserService.CheckStatus(Input.UserId, UserIdText);
+                // var PermissionIdValid = await PermissionService.CheckStatus(Input.PermissionId, PermissionIdText);
+                Input.GroupId = groupId;
+                Input.CreateBy = userId;
+                Input.CreateAt = DateTime.Now;
+                Input.IdMain = idMain;
+                var checkEdit = await MajorUserApprovalService.CheckEdit(Input);
+                var checkquyen = await MajorUserApprovalService.CheckPermission(groupId, Input.CompanyId, user, "06ff3867-749b-4350-bb5c-bdb46fc97ed4");
+               
+                Input.IsActive = 1;
+               
+                // Input.IsStatus = firstApproval.Content;
+
+                var listAdd = new List<MajorUserApproval>();
+                foreach (var item in approvalStepIdInputs)
+                {
+                    if (item.IsCheck)
+                    {
+                        foreach (var diw in dayInWeekModels)
+                        {
+                            if (diw.IsCheck)
+                            {
+                                var addItem = new MajorUserApproval()
+                                    {
+                                        Id = Guid.NewGuid().ToString(),
+                                        CompanyId = Input.CompanyId,
+                                        ParentMajorId = Input.ParentMajorId,
+                                        MajorId = Input.MajorId,
+                                        DeptId = Input.DeptId,
+                                        UserId = Input.UserId,
+                                        PermissionId = Input.PermissionId,
+                                        ApprovalStepId = item.Id,
+                                        DayinWeek = diw.Id.ToString(),
+                                        IdMain = Input.Id,
+                                        GroupId = Input.GroupId,
+                                        CreateAt = Input.CreateAt,
+                                        CreateBy = Input.CreateBy,
+                                        IsActive = Input.IsActive,
+                                    };
+                                listAdd.Add(addItem);
+                            }
+                        }
+                    }
+                }
+
+                await MajorUserApprovalService.UpdateMulti(listAdd, idMain);
+                string content = "";
+                content += "<h3>Thông tin sửa</h3>";
+                content += "<table class=\"table table-hover table-bordered\">";
+                content += "<thead class=\"bg-info\">";
+                content += "<tr>";
+                content += "<th class=\"text-center\" rowspan=\"2\" scope=\"col\">";
+                content += "<div class=\"pb-3\">No.</div>";
+                content += "</th>";
+                content += "<th>";
+                content += "<div class=\"pb-3\">Chi nhánh</div>";
+                content += "</th>";
+                content += "<th>";
+                content += "<div class=\"pb-3\">Nghiệp vụ cha</div>";
+                content += "</th>";
+                content += "<th>";
+                content += "<div class=\"pb-3\">Nghiệp vụ</div>";
+                content += "</th>";
+                content += "<th>";
+                content += "<div class=\"pb-3\">Người dùng</div>";
+                content += "</th>";
+                content += "<th>";
+                content += "<div class=\"pb-3\">Loại quyền</div>";
+                content += "</th>";
+                content += "<th>";
+                content += "<div class=\"pb-3\">Ngày trong tuần</div>";
+                content += "</th>";
+                content += "</tr>";
+                content += "</thead>";
+
+                content += "<tbody>";
+
+                content += "<tr>";
+                content += "<td class=\"text-center\" scope=\"row\">";
+                content += "</td>";
+                content += "<td class=\"text-left\">" + CompanyIdText + "" + "</td>";
+                content += "<td class=\"text-left\">" + ParentMajorIdText + "" + "</td>";
+                content += "<td class=\"text-left\">" + MajorIdText + "" + "</td>";
+                content += "<td class=\"text-left\">" + UserIdText + "" + "</td>";
+                content += "<td class=\"text-left\">" + PermissionIdText + "" + "</td>";
+                content += "<td class=\"text-left\">" + DayInWeekText + "" + "</td>";
+                content += "</tr>";
+                content += "</tbody>";
+
+                content += "</table>";
+
+                var emailhistory = new EmailHistory()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Receiver = UserIdText,
+                        Subject = "Phân quyền thao tác theo người dùng, nghiệp vụ - Sửa.",
+                        Content = content,
+                        CompanyId = Input.CompanyId,
+                        UserId = Input.UserId,
+                        ParentMajorId = Input.ParentMajorId,
+                        MajorId = Input.MajorId,
+                        IdCheck = Input.Id,
+                        IdLog = "",
+                        IsMail = true,
+                        IsNotification = true,
+                        IsSMS = true,
+                        GroupId = groupId,
+                        CreateAt = DateTime.Now,
+                        CreateBy = user.Id,
+                        IsRead = 0
+                    };
+
+                // await EmailService.Insert(emailhistory, "");
+                ToastService.ShowToast(
+                "Thông báo",
+                "Cập nhật thành công.",
+                iconClass: "fa fa-check-circle",
+                progressBarClass: "bg-info",
+                duration: 5000
+                );
+                Input.Id = Guid.NewGuid().ToString();
+                await LoadData();
+                await Search();
+                isEdit = false;
+                isModalVisible = false;
+             }
+
+        }catch (Exception ex)
+        {
+            ToastService.ShowToast(
+            "Thông báo",
+            ex.Message,
+            cssClass: "toast-danger",
+            iconClass: "fa fa-exclamation-circle",
+            progressBarClass: "bg-info",
+            duration: 7000
+            );
+        }
+    }
+
+    private bool IsValid()
+    {
+        bool isValid = false;
+
+        bool hasCheckedDayInWeek = dayInWeekModels.Any(item => item.IsCheck);
+        bool hasCheckedApprovalStep = approvalStepIdInputs.Any(item => item.IsCheck);
+
+        if (hasCheckedDayInWeek)
+        {
+            if (hasCheckedApprovalStep)
+            {
+                isValid = true;
+            }
+            else
+            {
+                validationMessage = "Bạn phải chọn ít nhất 1 loại duyệt!";
+            }
+        }
+        else
+        {
+            validationMessage = "Bạn phải chọn ít nhất 1 ngày trong tuần.";
+        }
+        return isValid;
+    }
+    public async Task Search()
+    {
+        var checkquyen = await MajorUserApprovalService.CheckPermission(groupId, pageModel.CompanyId, user, "9c4a138b-1eda-4ab7-b7ad-52b9672b4619");
+        pageModel.PageNumber = 1;
+        listModel = await MajorUserApprovalService.GetAllByVM(pageModel, groupId);
+        listMajorUserApproval = Paging(listModel);
+    }
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        pageModel.PageNumber = 1;
+        Paging(listModel);
+    }
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+    private void SelectedPage(int page)
+    {
+        pageModel.PageNumber = page;
+        Paging(listModel);
+    }
+    private void ChangePageSize(int pageSize)
+    {
+        pageModel.PageNumber = 1;
+        pageModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+    private List<MajorUserApprovalModel> Paging(List<MajorUserApprovalModel> list)
+    {
+        var count = list.Count();
+        list = list.Skip((pageModel.PageNumber - 1) * pageModel.PageSize).Take(pageModel.PageSize).ToList();
+        listMajorUserApproval.Clear();
+        foreach (var item in list)
+        {
+            listMajorUserApproval.Add(item);
+        }
+        var pagelist = new PageList<MajorUserApprovalModel>(listMajorUserApproval, count, pageModel.PageNumber, pageModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return list;
+    }
+    private void Redirect()
+    {
+        Input = new();
+    }
+}

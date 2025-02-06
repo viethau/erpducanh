@@ -46,7 +46,7 @@ namespace DucAnhERP.Services
                               join Majors2 in context.Majors on p1.MajorId equals Majors2.Id
                               join ApplicationUsers1 in context.ApplicationUsers on p1.UserId equals ApplicationUsers1.Id
                               join Department1 in context.Departments on ApplicationUsers1.DeptId equals Department1.Id
-                              join Permission1 in context.Permissions on p1.PermissionId  equals Permission1.Id
+                              join Permission1 in context.Permissions on p1.PermissionId equals Permission1.Id
                               join AproSetting in context.ApprovalStepSettings on p1.ApprovalStepId equals AproSetting.Id
                               where p1.GroupId == groupId
                               orderby Permission1.PermissionName, AproSetting.ApprovalStep ascending
@@ -299,7 +299,7 @@ namespace DucAnhERP.Services
                     ApprovalUserId = entity.ApprovalId,
                     DepartmentId = entity.DepartmentId,
                     DepartmentOrder = entity.DepartmentOrder,
-                    ApprovalOrder= entity.ApprovalOrder,
+                    ApprovalOrder = entity.ApprovalOrder,
                     ApprovalId = entity.ApprovalId,
                     LastApprovalId = entity.LastApprovalId,
                     IsStatus = entity.IsStatus,
@@ -396,8 +396,8 @@ namespace DucAnhERP.Services
             using var context = _context.CreateDbContext();
 
             var updatePermissionId = from p in context.ApprovalControls
-                               where p.PermissionId == PermissionId
-                               select p;
+                                     where p.PermissionId == PermissionId
+                                     select p;
             if (updatePermissionId != null)
             {
                 await updatePermissionId.ForEachAsync(p => p.IsActive = 100);
@@ -475,9 +475,9 @@ namespace DucAnhERP.Services
 
                 List<ApprovalControl> checkexist = new();
                 checkexist = await (from p in context.ApprovalControls
-                              where p.PermissionId == input.PermissionId && p.UserId == input.UserId && p.ApprovalStepId == input.ApprovalStepId
-                                  && p.IsActive != 100
-                                  select p).ToListAsync();
+                                    where p.PermissionId == input.PermissionId && p.UserId == input.UserId && p.ApprovalStepId == input.ApprovalStepId
+                                        && p.IsActive != 100
+                                    select p).ToListAsync();
 
                 if (checkexist.Count() > 0)
                 {

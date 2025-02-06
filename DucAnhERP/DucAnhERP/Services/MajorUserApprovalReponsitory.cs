@@ -1,4 +1,4 @@
-﻿ using DucAnhERP.Data;
+﻿using DucAnhERP.Data;
 using DucAnhERP.Models;
 using DucAnhERP.Repository;
 using DucAnhERP.ViewModel;
@@ -56,31 +56,29 @@ namespace DucAnhERP.Services
                 {
                     query = query.Where(m => m.UserId == dataModel.UserId);
                 }
-                if (!string.IsNullOrEmpty(dataModel.ApprovalId))
+                if (!string.IsNullOrEmpty(dataModel.PermissionId))
                 {
-                    query = query.Where(m => m.ApprovalId == dataModel.ApprovalId);
+                    query = query.Where(m => m.PermissionId == dataModel.PermissionId);
                 }
                 var data = await (from p1 in query
                                   join ChiNhanhs1 in context.ChiNhanhs on p1.CompanyId equals ChiNhanhs1.Id
                                   join Majors1 in context.Majors on p1.ParentMajorId equals Majors1.Id
                                   join Majors2 in context.Majors on p1.MajorId equals Majors2.Id
                                   join ApplicationUsers1 in context.ApplicationUsers on p1.UserId equals ApplicationUsers1.Id
-                                  join Permissions1 in context.Permissions on p1.ApprovalId equals Permissions1.Id
+                                  join Permissions1 in context.Permissions on p1.PermissionId equals Permissions1.Id
                                   join Department1 in context.Departments on p1.DeptId equals Department1.Id
+                                  join AproSetting in context.ApprovalStepSettings on p1.ApprovalStepId equals AproSetting.Id
                                   select new MajorUserApprovalModel
                                   {
                                       IdMain = p1.IdMain,
                                       CompanyId = ChiNhanhs1.TenChiNhanh,
-                                     
                                       ParentMajorId = Majors1.MajorName,
-                                    
                                       MajorId = Majors2.MajorName,
-                                      
                                       UserId = ApplicationUsers1.Email,
-                                      
                                       DeptId = Department1.DeptName,
-
-                                      ApprovalId = Permissions1.PermissionName,
+                                      PermissionId = Permissions1.PermissionName,
+                                      ApprovalStepId = AproSetting.Content,
+                                      ApprovalOrder = AproSetting.ApprovalStep,
                                       DayinWeek = p1.DayinWeek,
                                       DayInWeekText = int.Parse(p1.DayinWeek) == 0 ? "Chủ nhật" :
                                       int.Parse(p1.DayinWeek) == 1 ? "Thứ 2" :
@@ -91,7 +89,7 @@ namespace DucAnhERP.Services
                                       int.Parse(p1.DayinWeek) == 6 ? "Thứ 7" : ""
                                   }).Distinct().OrderBy(p => p.IdMain).OrderBy(p => p.DayinWeek).ToListAsync();
 
-                var result = data.GroupBy(p => new { p.IdMain, p.CompanyId, p.ParentMajorId, p.MajorId,p.DeptId, p.UserId, p.ApprovalId }).Select(g => new
+                var result = data.GroupBy(p => new { p.IdMain, p.CompanyId, p.ParentMajorId, p.MajorId,p.DeptId, p.UserId, p.PermissionId, p.ApprovalStepId }).Select(g => new
                 {
                     g.Key.IdMain,
                     g.Key.CompanyId,
@@ -99,10 +97,11 @@ namespace DucAnhERP.Services
                     g.Key.MajorId,
                     g.Key.DeptId,
                     g.Key.UserId,
-                    g.Key.ApprovalId,
+                    g.Key.PermissionId,
+                    g.Key.ApprovalStepId,
                     DayInWeekText = string.Join(" => ", g.Select(i => i.DayInWeekText))
                 }).Distinct();
-                result = result.GroupBy(p => new { p.IdMain, p.CompanyId, p.ParentMajorId, p.MajorId,p.DeptId, p.UserId, p.DayInWeekText }).Select(g => new
+                result = result.GroupBy(p => new { p.IdMain, p.CompanyId, p.ParentMajorId, p.MajorId,p.DeptId, p.UserId, p.DayInWeekText, p.PermissionId }).Select(g => new
                 {
                     g.Key.IdMain,
                     g.Key.CompanyId,
@@ -110,7 +109,8 @@ namespace DucAnhERP.Services
                     g.Key.MajorId,
                     g.Key.DeptId,
                     g.Key.UserId,
-                    ApprovalId = string.Join(" => ", g.Select(i => i.ApprovalId)),
+                    g.Key.PermissionId,
+                    ApprovalStepId = string.Join(" => ", g.Select(i => i.ApprovalStepId)),
                     g.Key.DayInWeekText
                 }).Distinct();
                 var vlus = new List<MajorUserApprovalModel>();
@@ -125,7 +125,8 @@ namespace DucAnhERP.Services
                         DeptId = item.DeptId,
                         UserId = item.UserId,
                         DayInWeekText = item.DayInWeekText,
-                        ApprovalId = item.ApprovalId
+                        PermissionId = item.PermissionId,
+                        ApprovalStepId = item.ApprovalStepId
                     };
                     vlus.Add(additem);
                 }
@@ -154,7 +155,7 @@ namespace DucAnhERP.Services
                          join Majors1 in context.Majors on p1.ParentMajorId equals Majors1.Id
                          join Majors2 in context.Majors on p1.MajorId equals Majors2.Id
                          join ApplicationUsers1 in context.ApplicationUsers on p1.UserId equals ApplicationUsers1.Id
-                         join Permissions1 in context.Permissions on p1.ApprovalId equals Permissions1.Id
+                         join Permissions1 in context.Permissions on p1.PermissionId equals Permissions1.Id
                          join Department1 in context.Departments on p1.DeptId equals Department1.Id
                          where p1.IdMain == id && p1.IsActive != 100
                          select new MajorUserApprovalModel
@@ -165,7 +166,7 @@ namespace DucAnhERP.Services
                              MajorId = Majors2.MajorName,
                              DeptId = Department1.DeptName,
                              UserId = ApplicationUsers1.Email,
-                             ApprovalId = Permissions1.PermissionName,
+                             PermissionId = Permissions1.PermissionName,
                              DayinWeek = p1.DayinWeek,
                              DayInWeekText = int.Parse(p1.DayinWeek) == 0 ? "Chủ nhật" :
                                   int.Parse(p1.DayinWeek) == 1 ? "Thứ 2" :
@@ -174,7 +175,7 @@ namespace DucAnhERP.Services
                                   int.Parse(p1.DayinWeek) == 4 ? "Thứ 5" :
                                   int.Parse(p1.DayinWeek) == 5 ? "Thứ 6" :
                                   int.Parse(p1.DayinWeek) == 6 ? "Thứ 7" : ""
-                         }).Distinct().OrderBy(p => p.IdMain).OrderBy(p => p.DayinWeek).OrderBy(p => p.ApprovalId).FirstOrDefault();
+                         }).Distinct().OrderBy(p => p.IdMain).OrderBy(p => p.DayinWeek).OrderBy(p => p.PermissionId).FirstOrDefault();
 
             return query;
         }
@@ -196,9 +197,9 @@ namespace DucAnhERP.Services
                               join Majors1 in context.Majors on p1.ParentMajorId equals Majors1.Id
                               join Majors2 in context.Majors on p1.MajorId equals Majors2.Id
                               join ApplicationUsers1 in context.ApplicationUsers on p1.UserId equals ApplicationUsers1.Id
-                              join Permissions1 in context.Permissions on p1.ApprovalId equals Permissions1.Id
+                              join Permissions1 in context.Permissions on p1.PermissionId equals Permissions1.Id
                               join createBy in context.ApplicationUsers on p1.CreateBy equals createBy.Id
-                              join a in context.ApplicationUsers on p1.ApprovalId equals a.Id into a1
+                              join a in context.ApplicationUsers on p1.PermissionId equals a.Id into a1
                               from approvalUserId in a1.DefaultIfEmpty()
                               join b in context.Departments on p1.DeptId equals b.Id into b1
                               from departmentId in b1.DefaultIfEmpty()
@@ -211,7 +212,7 @@ namespace DucAnhERP.Services
                                   MajorId = Majors2.MajorName,
                                   DeptId = departmentId.DeptName,
                                   UserId = ApplicationUsers1.Email,
-                                  ApprovalId = Permissions1.PermissionName,
+                                  PermissionId = Permissions1.PermissionName,
                                   DayinWeek = p1.DayinWeek,
                                   GroupId = p1.GroupId,
                                   CreateAt = p1.CreateAt,
@@ -228,7 +229,7 @@ namespace DucAnhERP.Services
                               join Majors1 in context.Majors on p1.ParentMajorId equals Majors1.Id
                               join Majors2 in context.Majors on p1.MajorId equals Majors2.Id
                               join ApplicationUsers1 in context.ApplicationUsers on p1.UserId equals ApplicationUsers1.Id
-                              join Permissions1 in context.Permissions on p1.ApprovalId equals Permissions1.Id
+                              join Permissions1 in context.Permissions on p1.PermissionId equals Permissions1.Id
                               join createBy in context.ApplicationUsers on p1.CreateBy equals createBy.Id
                               join a in context.ApplicationUsers on p1.UserId equals a.Id into a1
                               from approvalUserId in a1.DefaultIfEmpty()
@@ -244,7 +245,7 @@ namespace DucAnhERP.Services
                                   MajorId = Majors2.MajorName,
                                   DeptId = departmentId != null ? departmentId.DeptName : "",
                                   UserId = ApplicationUsers1.Email,
-                                  ApprovalId = Permissions1.PermissionName,
+                                  PermissionId = Permissions1.PermissionName,
                                   DayinWeek = p1.DayinWeek,
                                   GroupId = p1.GroupId,
                                   CreateAt = p1.CreateAt,
@@ -264,9 +265,9 @@ namespace DucAnhERP.Services
                               join Majors1 in context.Majors on p1.ParentMajorId equals Majors1.Id
                               join Majors2 in context.Majors on p1.MajorId equals Majors2.Id
                               join ApplicationUsers1 in context.ApplicationUsers on p1.UserId equals ApplicationUsers1.Id
-                              join Permissions1 in context.Permissions on p1.ApprovalId equals Permissions1.Id
+                              join Permissions1 in context.Permissions on p1.PermissionId equals Permissions1.Id
                               join createBy in context.ApplicationUsers on p1.CreateBy equals createBy.Id
-                              join a in context.ApplicationUsers on p1.ApprovalId equals a.Id into a1
+                              join a in context.ApplicationUsers on p1.PermissionId equals a.Id into a1
                               from approvalUserId in a1.DefaultIfEmpty()
                               join b in context.Departments on p1.DeptId equals b.Id into b1
                               from departmentId in b1.DefaultIfEmpty()
@@ -287,7 +288,7 @@ namespace DucAnhERP.Services
                                   DeptName = departmentId.DeptName,
                                   UserId = p1.UserId,
                                   UserName = ApplicationUsers1.Email,
-                                  ApprovalId = p1.ApprovalId,
+                                  PermissionId = p1.PermissionId,
                                   ApprovalName = Permissions1.PermissionName,
                                   DayinWeek = p1.DayinWeek,
                                   DayInWeekText = int.Parse(p1.DayinWeek) == 0 ? "Chủ nhật" :
@@ -304,7 +305,7 @@ namespace DucAnhERP.Services
                               }).ToListAsync();
             return data;
         }
-        public async Task<bool> CheckPermission(string groupId, string companyId, ApplicationUser user, string ApprovalId)
+        public async Task<bool> CheckPermission(string groupId, string companyId, ApplicationUser user, string PermissionId)
         {
             using var context = _context.CreateDbContext();
             try
@@ -316,10 +317,10 @@ namespace DucAnhERP.Services
                 else
                 {
                     var result = await (from a in context.MajorUserApprovals
-                                        where a.UserId.Equals(user)
+                                        where a.UserId.Equals(user.Id)
                                               && a.GroupId.Equals(groupId)
                                               && a.CompanyId.Equals(companyId)
-                                              && a.ApprovalId.Equals(ApprovalId)
+                                              && a.PermissionId.Equals(PermissionId)
                                               && a.DayinWeek.Equals(DateTime.Now.DayOfWeek)
                                         select a.Id).CountAsync();
                     return result > 0;
@@ -348,7 +349,7 @@ namespace DucAnhERP.Services
                     MajorId = entity.MajorId,
                     DeptId = entity.DeptId,
                     UserId = entity.UserId,
-                    ApprovalId = entity.ApprovalId,
+                    PermissionId = entity.PermissionId,
                     DayinWeek = entity.DayinWeek,
                     GroupId = entity.GroupId,
                     CreateAt = DateTime.Now,
@@ -417,7 +418,7 @@ namespace DucAnhERP.Services
                 MajorId = entity.MajorId,
                 DeptId = entity.DeptId,
                 UserId = entity.UserId,
-                ApprovalId = entity.ApprovalId,
+                PermissionId = entity.PermissionId,
                 DayinWeek = entity.DayinWeek,
                 GroupId = entity.GroupId,
                 CreateAt = DateTime.Now,
@@ -437,18 +438,26 @@ namespace DucAnhERP.Services
         }
         public async Task UpdateMulti(List<MajorUserApproval> majorUserApprovals, string idMain)
         {
-            using var context = _context.CreateDbContext();
-
-            var updateIdMain = from p in context.MajorUserApprovals
-                               where p.IdMain == idMain
-                               select p;
-            if (updateIdMain != null)
+            try
             {
-                await updateIdMain.ForEachAsync(p => p.IsActive = 100);
-                context.MajorUserApprovals.UpdateRange(updateIdMain);
+                using var context = _context.CreateDbContext();
+
+                var updateIdMain = from p in context.MajorUserApprovals
+                                   where p.IdMain == idMain
+                                   select p;
+                if (updateIdMain != null)
+                {
+                    await updateIdMain.ForEachAsync(p => p.IsActive = 100);
+                    context.MajorUserApprovals.UpdateRange(updateIdMain);
+                }
+                await context.MajorUserApprovals.AddRangeAsync(majorUserApprovals);
+                await context.SaveChangesAsync();
             }
-            await context.MajorUserApprovals.AddRangeAsync(majorUserApprovals);
-            await context.SaveChangesAsync();
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception($"Lỗi cập nhật dữ liệu."); ;
+            }
         }
         public async Task UpdateMulti(MajorUserApproval[] MajorUserApprovals)
         {
@@ -510,7 +519,7 @@ namespace DucAnhERP.Services
                                    && p.ParentMajorId == input.ParentMajorId
                                    && p.MajorId == input.MajorId
                                    && p.UserId == input.UserId
-                                   && p.ApprovalId == input.ApprovalId
+                                   && p.PermissionId == input.PermissionId
                                    select p).CountAsync();
                 if (model > 0)
                 {
@@ -539,6 +548,7 @@ namespace DucAnhERP.Services
                                  where p.IsActive != 100
                                  && p.CompanyId == input.CompanyId
                                  && p.MajorId == input.MajorId
+                                 && p.PermissionId == input.PermissionId
                                  && p.UserId == input.UserId
                                  select p).Count();
                     if (model > 0)
@@ -552,6 +562,7 @@ namespace DucAnhERP.Services
                                  where p.IsActive != 100 && p.IdMain != input.IdMain
                                  && p.CompanyId == input.CompanyId
                                  && p.MajorId == input.MajorId
+                                 && p.PermissionId == input.PermissionId
                                  && p.UserId == input.UserId
                                  select p).Count();
                     if (model > 0)

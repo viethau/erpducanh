@@ -15,7 +15,8 @@ namespace DucAnhERP.ViewModel
         public string DeptName { get; set; }
         public string UserId { get; set; }
         public string UserName { get; set; }
-        public string ApprovalId { get; set; }
+        public string PermissionId { get; set; }
+        public string ApprovalStepId { get; set; }
         public string ApprovalName { get; set; }
         public string IdMain { get; set; }
         public string DayinWeek { get; set; }
@@ -23,6 +24,14 @@ namespace DucAnhERP.ViewModel
         public string GroupId { get; set; }
         public DateTime CreateAt { get; set; } = DateTime.Now;
         public string CreateBy { get; set; } = "test.vp@gmail.com";
-        public int IsActive { get; set; } = 1;
+        public int IsActive { get; set; } = 0;
+        public string ApprovalUserId { get; set; } = "";
+        public DateTime DateApproval { get; set; } = DateTime.Now;
+        public string DepartmentId { get; set; } = "";
+        public int DepartmentOrder { get; set; } = 0;
+        public int ApprovalOrder { get; set; } = 0;
+        public string ApprovalId { get; set; }
+        public string LastApprovalId { get; set; } = "";
+        public string IsStatus { get; set; } = "";
     }
 }
