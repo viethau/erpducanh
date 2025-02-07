@@ -118,6 +118,10 @@
                             <div class="pb-3">Loại quyền</div>
                             <span class="arrow @(GetSortStyle("PermissionId"))"></span>
                         </th>
+                        <th onclick="@(() => SortTable("ApprovalStepId"))" rowspan="2" class="text-center sortable" scope="col">
+                            <div class="pb-3">Duyệt</div>
+                            <span class="arrow @(GetSortStyle("ApprovalStepId"))"></span>
+                        </th>
                         <th onclick="@(() => SortTable("DayInWeek"))" rowspan="2" class="text-center sortable" scope="col">
                             <div class="pb-3">Ngày trong tuần</div>
                             <span class="arrow @(GetSortStyle("DayInWeek"))"></span>
@@ -154,6 +158,7 @@
                     <td class="text-left">@item.MajorId</td>
                     <td class="text-left">@item.UserId</td>
                     <td class="text-left">@item.PermissionId</td>
+                    <td class="text-left">@item.ApprovalStepId</td>
                     <td class="text-left">@item.DayinWeek</td>
                     <td class="text-left">@item.IdMain</td>
                     <td class="text-left">@item.IsActive</td>
@@ -167,7 +172,7 @@
                 {
                     <tbody>
                         <tr>
-                            <td class="text-danger" colspan="7">Không có dữ liệu</td>
+                            <td class="text-danger" colspan="8">Không có dữ liệu</td>
                         </tr>
                     </tbody>
                 }

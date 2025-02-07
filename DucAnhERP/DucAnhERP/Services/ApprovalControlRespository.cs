@@ -87,9 +87,19 @@ namespace DucAnhERP.Services
                                   MajorId = Majors2.MajorName,
                                   UserId = ApplicationUsers1.UserName,
                                   DeptId = Department1.DeptName,
+                                  PermissionId = p1.PermissionId,
+                                  ApprovalStepId = p1.ApprovalStepId,
                                   CreateAt = p1.CreateAt,
                                   CreateBy = p1.CreateBy,
-                                  IsActive = p1.IsActive
+                                  IsActive = p1.IsActive,
+                                  ApprovalUserId = p1.ApprovalUserId,
+                                  DateApproval = p1.DateApproval,
+                                  DepartmentId = p1.DepartmentId,
+                                  DepartmentOrder = p1.DepartmentOrder,
+                                  ApprovalOrder = p1.ApprovalOrder,
+                                  ApprovalId = p1.ApprovalId,
+                                  LastApprovalId = p1.LastApprovalId,
+                                  IsStatus = p1.IsStatus
                               }).ToListAsync();
             return data;
         }
