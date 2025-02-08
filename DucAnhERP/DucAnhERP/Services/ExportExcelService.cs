@@ -628,6 +628,28 @@ public class ExportExcelService
 
     }
 
+
+    public static byte[] MergeExcelFiles(params byte[][] excelFiles)
+    {
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+        using var mergedPackage = new ExcelPackage();
+
+        foreach (var file in excelFiles)
+        {
+            using var stream = new MemoryStream(file);
+            using var package = new ExcelPackage(stream);
+
+            foreach (var sheet in package.Workbook.Worksheets)
+            {
+                // Tạo một sheet mới trong file đích với tên giống sheet gốc
+                var newSheet = mergedPackage.Workbook.Worksheets.Add(sheet.Name, sheet);
+            }
+        }
+
+        return mergedPackage.GetAsByteArray();
+    }
+
     public List<ComplexHeader> ParseHtmlToComplexHeaders(string html)
     {
         var headers = new List<ComplexHeader>();

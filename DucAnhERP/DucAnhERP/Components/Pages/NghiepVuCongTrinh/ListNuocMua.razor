@@ -35,15 +35,25 @@
             <button class="btn btn-sm btn-primary me-2" @onclick="ViewHorizontal" title="Xem theo chiều ngang">
                 <i class="fas fa-arrows-alt-h"></i>
             </button>
-            <button class="btn btn-sm btn-secondary" @onclick="ViewVertical" title="Xem theo chiều dọc">
+            <button class="btn btn-sm btn-primary me-2" @onclick="ViewVertical" title="Xem theo chiều dọc">
                 <i class="fas fa-arrows-alt-v"></i>
             </button>
-            <button class="btn btn-sm btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
+            <button class="btn btn-sm btn-primary me-2 mr-1" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
-             <button class="btn btn-sm btn-outline-primary me-2" @onclick="ExportExcel" title="Download file excel">
-                <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
-            </button>
+            @if(Download)
+            {
+                <button class="btn btn-sm btn-primary" type="button" disabled>
+                    <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                   downloading...
+                </button>
+            }
+            else
+            {
+                <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                    <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                </button>
+            }
         </div>
     </div>
 
@@ -11208,10 +11218,245 @@
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
     }
 
+    bool Download = false;
+    public List<NhomDanhMucModel> listModelNDM{get;set;} = new();
+    public List<DanhMucModel> listModelDM { get; set; } = new();
+    public List<DMTLThepModel> listModelDMT { get; set; } = new();
+
+    public List<PhanLoaiHoGaModel> listModelPLHG{get;set;} = new();
+    public List<PhanLoaiTDHoGaModel> listModelTDHG {get;set;} = new();
+    public List<PhanLoaiCTronHopNhuaModel> listModelPLCong { get; set; } = new();
+    public List<PhanLoaiMongCongModel> listModelPLMong {get;set;} = new();
+    public List<PhanLoaiDeCongModel> listModelPLDCong {get;set;} = new();
+    public List<PhanLoaiThanhChongModel> listModelTChong {get;set;} = new();
+
+    public List<NuocMuaModel> listNMModelBCLeft { get; set; } = new();
+    public List<NuocMuaModel> listNMModelBCRight { get; set; } = new();
 
     private async Task ExportExcel()
     {
-        List<ComplexHeader> rightHeaders = ConstantHeaderExcel.TTTHNM_HEADERS.Select(h => new ComplexHeader
+        Download = true;
+        StateHasChanged();
+        //Danh muc
+        var taskSheetNDM = Task.Run(async () =>
+        {
+            listModelNDM = await NhomDanhMucRepository.GetAllNDM();
+            var sheetInfo = new SheetInfo1<object>
+                {
+                    SheetName = "Danh sách nhóm danh mục",
+                    Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.DSNDM.Cast<ComplexHeader>().ToList(),
+                        Data = listModelNDM.Cast<object>().ToList()
+                    },
+                }
+                };
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+        var taskSheetDM = Task.Run(async () =>
+        {
+            listModelDM = await DanhMucRepository.GetAllDM(new DanhMucModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "Danh sách danh mục",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.DSDM.Cast<ComplexHeader>().ToList(),
+                        Data = listModelDM.Cast<object>().ToList()
+                    },
+                }
+            };
+
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+        var taskSheetDMT  = Task.Run(async () =>
+        {
+            listModelDMT = await DMTLThepRepository.GetAllByVM(new DMTLThepModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "DM Loại thép",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.DMTLT.Cast<ComplexHeader>().ToList(),
+                        Data = listModelDMT.Cast<object>().ToList()
+                    },
+
+                }
+            };
+
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        }) ;
+
+        var taskSheetTTTNM = Task.Run(async () =>
+        {
+            List<ComplexHeader> rightHeaders = ConstantHeaderExcel.TTTHNM_HEADERS.Select(h => new ComplexHeader
+            {
+                Title = h.Title,
+                StartRow = h.StartRow,
+                StartCol = h.StartCol,
+                EndRow = h.EndRow,
+                EndCol = h.EndCol,
+                DataProperty = h.DataProperty,
+                Alignment = h.Alignment,
+                VerticalAlignment = h.VerticalAlignment,
+                CapitalizeEachWord = h.CapitalizeEachWord,
+                FontName = h.FontName,
+                FontSize = h.FontSize,
+                IsBold = h.IsBold,
+                IsItalic = h.IsItalic,
+                IsUnderlined = h.IsUnderlined,
+                TextColor = h.TextColor,
+                BackgroundColor = h.BackgroundColor,
+                WrapText = h.WrapText,
+                HasBorder = h.HasBorder,
+                BorderStyle = h.BorderStyle,
+                DataFormat = h.DataFormat
+            }).ToList();
+
+            rightHeaders[2].Title = "BẢNG TỔNG HỢP THÔNG TIN HỆ THỐNG THOÁT NƯỚC MƯA DỌC PHÍA PHẢI TUYẾN";
+
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "1. TT T. Hợp NM",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TTTHNM_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelLeft.Cast<object>().ToList()
+                    },
+                    new TableInfo<object>
+                    {
+                        Headers = rightHeaders,
+                        Data = listModelRight.Cast<object>().ToList()
+                    }
+                }
+            };
+
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+        //Phân loại
+        var taskSheetPlHoGa = Task.Run(async() =>{
+            listModelPLHG = await PhanLoaiHoGaRepository.GetAllByVM(new PhanLoaiHoGaModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+               SheetName = "1.1 PL H.Ga",
+               Tables = new List<TableInfo<object>>
+               {
+                  new TableInfo<object>
+                   {
+                      Headers = ConstantHeaderExcel.PHANLOAIHOGA_HEADERS.Cast<ComplexHeader>().ToList(),
+                      Data = listModelPLHG.Cast<object>().ToList()
+                   },
+               }
+            };
+
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+        var taskSheetPLTDHG = Task.Run(async () =>
+        {
+            listModelTDHG = await PhanLoaiTDHoGaRepository.GetAllByVM(new PhanLoaiTDHoGaModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "1.2 PL T.Đan H.Ga",
+                Tables = new List<TableInfo<object>>
+               {
+                  new TableInfo<object>
+                   {
+                      Headers = ConstantHeaderExcel.PHANLOAITDHG_HEADERS.Cast<ComplexHeader>().ToList(),
+                      Data = listModelTDHG.Cast<object>().ToList()
+                   },
+               }
+            };
+
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+        var taskSheetPLCong = Task.Run(async () =>
+        {
+            listModelPLCong = await PhanLoaiCTronHopNhuaRepository.GetAllByVM(new PhanLoaiCTronHopNhuaModel());
+
+            var sheetInfoPLCong = new SheetInfo1<object>
+            {
+                SheetName = "1.3 PL C.Tròn+hộp+Ô.Nhựa 1.4 PL rãnh xây+B.Tông",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.PHANLOAICONG_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelPLCong.Cast<object>().ToList()
+                    },
+                }                        
+
+            };
+
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfoPLCong });
+        });
+        var taskSheetPLMong = Task.Run(async () =>
+        {
+            listModelPLMong = await PhanLoaiMongCTronRepository.GetAllByVM(new PhanLoaiMongCongModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+               SheetName = "1.5 PL móng C.Tròn 1.6 PL móng C.Hộp",
+               Tables = new List<TableInfo<object>>
+               {
+                  new TableInfo<object>
+                   {
+                      Headers = ConstantHeaderExcel.PHANLOAIMONG_HEADERS.Cast<ComplexHeader>().ToList(),
+                      Data = listModelPLMong.Cast<object>().ToList()
+                   },
+               }
+            };
+
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+        var taskSheetPLDCong = Task.Run(async () =>
+        {
+            listModelPLDCong =  await PhanLoaiDeCongRepository.GetAllByVM(new PhanLoaiDeCongModel());
+            var sheetInfo = new SheetInfo1<object>
+                {
+                    SheetName = "1.7 PL Đế Cống",
+                    Tables = new List<TableInfo<object>>
+                    {
+                        new TableInfo<object>
+                        {
+                            Headers = ConstantHeaderExcel.PHANLOAIDECONG_HEADERS.Cast<ComplexHeader>().ToList(),
+                            Data = listModelPLDCong.Cast<object>().ToList()
+                        },
+                    }
+                };
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+
+        var taskSheetPLTChong = Task.Run(async () =>{
+            listModelTChong = await PhanLoaiThanhChongRepository.GetAllByVM(new PhanLoaiThanhChongModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "1.8 PL thanh chống",
+                Tables = new List<TableInfo<object>>
+               {
+                  new TableInfo<object>
+                   {
+                      Headers = ConstantHeaderExcel.PHANLOAITHANHCHONG_HEADERS.Cast<ComplexHeader>().ToList(),
+                      Data = listModelTChong.Cast<object>().ToList()
+                   },
+               }
+            };
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+
+        //báo cáo
+        var taskSheetTTHGa =  Task.Run(async ()=>{
+
+            listNMModelBCLeft = await NuocMuaRepository.GetBaoCaoTTHoGa(new NuocMuaModel{TraiPhai = 0});
+            listNMModelBCRight = await NuocMuaRepository.GetBaoCaoTTHoGa(new NuocMuaModel{TraiPhai = 1});
+
+            List<ComplexHeader> rightHeaders = ConstantHeaderExcel.TTHGA_HEADERS.Select(h => new ComplexHeader
              {
                  Title = h.Title,
                  StartRow = h.StartRow,
@@ -11234,30 +11479,154 @@
                  BorderStyle = h.BorderStyle,
                  DataFormat = h.DataFormat
              }).ToList();
-        rightHeaders[2].Title = "BẢNG TỔNG HỢP THÔNG TIN HỆ THỐNG THOÁT NƯỚC MƯA DỌC PHÍA PHẢI TUYẾN";
-        var sheetInfo = new SheetInfo1<object>
+            rightHeaders[2].Title = "BẢNG THÔNG TIN TỔNG HỢP HỐ GA NƯỚC MƯA DỌC PHÍA PHẢI";
+            var sheetInfo = new SheetInfo1<object>
+                {
+                    SheetName = "2. TT H.Ga",
+                    Tables = new List<TableInfo<object>>
+                    {
+                        new TableInfo<object>
+                        {
+                            Headers = ConstantHeaderExcel.TTHGA_HEADERS.Cast<ComplexHeader>().ToList(),
+                            Data = listNMModelBCLeft.Cast<object>().ToList()
+                        },
+                        new TableInfo<object>
+                        {
+                             Headers =rightHeaders,
+                            Data = listNMModelBCRight.Cast<object>().ToList()
+                        }
+                    }
+                };
+
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+
+        var taskSheetKLBPDHG = Task.Run(async () =>
+        {
+            listNMModelBCLeft = await NuocMuaRepository.GetBaoCaoKLBPhapHGa(new NuocMuaModel{TraiPhai=0});
+
+            listNMModelBCRight = await NuocMuaRepository.GetBaoCaoKLBPhapHGa(new NuocMuaModel{TraiPhai = 1});
+
+            List<ComplexHeader> rightHeaders = ConstantHeaderExcel.TTHKLBPD_HEADERS.Select(h => new ComplexHeader
             {
-                SheetName = "1. TT T. Hợp NM",
+                Title = h.Title,
+                StartRow = h.StartRow,
+                StartCol = h.StartCol,
+                EndRow = h.EndRow,
+                EndCol = h.EndCol,
+                DataProperty = h.DataProperty,
+                Alignment = h.Alignment,
+                VerticalAlignment = h.VerticalAlignment,
+                CapitalizeEachWord = h.CapitalizeEachWord,
+                FontName = h.FontName,
+                FontSize = h.FontSize,
+                IsBold = h.IsBold,
+                IsItalic = h.IsItalic,
+                IsUnderlined = h.IsUnderlined,
+                TextColor = h.TextColor,
+                BackgroundColor = h.BackgroundColor,
+                WrapText = h.WrapText,
+                HasBorder = h.HasBorder,
+                BorderStyle = h.BorderStyle,
+                DataFormat = h.DataFormat
+            }).ToList();
+            rightHeaders[2].Title = "BẢNG THÔNG TIN TỔNG HỢP ĐÀO BIỆN PHÁP HỐ GA NƯỚC MƯA DỌC PHÍA PHẢI";
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.1 KL đào B.Pháp H.Ga",
                 Tables = new List<TableInfo<object>>
                 {
                     new TableInfo<object>
                     {
-                        Headers = ConstantHeaderExcel.TTTHNM_HEADERS.Cast<ComplexHeader>().ToList(),
-                        Data = listModelLeft.Cast<object>().ToList()
+                        Headers = ConstantHeaderExcel.TTHKLBPD_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listNMModelBCLeft.Cast<object>().ToList()
                     },
                     new TableInfo<object>
                     {
                          Headers =rightHeaders,
-                        Data = listModelRight.Cast<object>().ToList()
+                        Data = listNMModelBCRight.Cast<object>().ToList()
                     }
                 }
             };
 
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+
+        var taskSheetCTCHG = Task.Run( async() => {
+            listModelCTCHG = await PhanLoaiHoGaRepository.GetBaoCaoCTaoCHungHGa(new PhanLoaiHoGaModel());
+            var sheetInfo = new SheetInfo1<object>
+                {
+                    SheetName = "2.2 C.Tạo chung H.Ga",
+                    Tables = new List<TableInfo<object>>
+                    {
+                        new TableInfo<object>
+                        {
+                            Headers = ConstantHeaderExcel.CTCHG_HEADERS.Cast<ComplexHeader>().ToList(),
+                            Data = listModelCTCHG.Cast<object>().ToList()
+                        },
+                    }
+                };
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+
+        var taskSheetKHHGTD =Task.Run(async()=>{
+            listModelTDHG = await PhanLoaiTDHoGaRepository.GetBaoCaoKTHHTDanHGa(new PhanLoaiTDHoGaModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.4 K.Hợp H.Ga và T.Đan",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.KHHGTD_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTDHG.Cast<object>().ToList()
+                    },
+                }
+            };
         // Xuất Excel
         byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
-        var fileName = "TTTHopNuocMua.xlsx";
-        using var stream = new MemoryStream(excelBytes);
-        using var streamRef = new DotNetStreamReference(stream);
-        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef); 
+        });
+
+        var taskSheetKHTDHG =Task.Run(async()=>{
+            listNMModel = await NuocMuaRepository.GetBaoCaoKHopHGaTDan(new NuocMuaModel());
+           var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.5 KTHH T.Đan H.Ga",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.KTHHTDHG_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listNMModel.Cast<object>().ToList()
+                    },
+                }
+            };
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+
+        
+
+        // Chờ task hoàn thành
+        var results = await Task.WhenAll(taskSheetNDM, taskSheetDM ,taskSheetDMT,taskSheetTTTNM,
+            taskSheetPlHoGa,taskSheetPLTDHG, taskSheetPLCong,taskSheetPLMong,taskSheetPLDCong,taskSheetPLTChong,
+            taskSheetTTHGa,taskSheetKLBPDHG,taskSheetCTCHG,taskSheetKHHGTD,taskSheetKHTDHG
+        );
+
+        // Gộp sheet vào một file Excel duy nhất
+        byte[] mergedExcelBytes = ExportExcelService.MergeExcelFiles(results[0], results[1],
+            results[2],results[3],results[4],results[5],results[6],results[7],results[8],results[9]
+            ,results[10],results[11],results[12],results[13],results[14]
+        );
+
+        // Tải xuống file Excel đã gộp
+        var finalFileName = "Mẫu PKKL nước mưa + nước thải dọc 30.08.2024.xlsx";
+        using var finalStream = new MemoryStream(mergedExcelBytes);
+        using var finalStreamRef = new DotNetStreamReference(finalStream);
+        await JSRuntime.InvokeVoidAsync("downloadFileFromStream", finalFileName, finalStreamRef);
+
+        Download = false;
+        StateHasChanged(); // Cập nhật lại giao diện sau khi hoàn thành
     }
+    public List<PhanLoaiHoGaModel> listModelCTCHG { get; set; } = new();
+    public List<NuocMuaModel> listNMModel { get; set; } = new();
 }

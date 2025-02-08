@@ -795,6 +795,7 @@
 
                 var isValid = await ApprovalControlService.CheckExclusive(ids, baseTime);
                 var checkEdit = await ApprovalControlService.CheckEdit(Input);
+                //PhanQuyenService.CheckPermission
                 var checkquyen = await MajorUserApprovalService.CheckPermission(groupId, pageModel.CompanyId, user, "b54436c7-2bd0-47b0-a10f-afa7508c61d5");
                 if (isValid)
                 {

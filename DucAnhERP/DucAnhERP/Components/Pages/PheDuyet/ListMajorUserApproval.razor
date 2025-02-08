@@ -718,6 +718,16 @@
             user = ApplicationUserService.GetByUserName(userName);
             userId = user.Id;
             groupId = user.GroupId;
+
+            var lisChiNhanhs = await ChiNhanhService.GetAll(groupId);
+            selectCompanyIdInput = lisChiNhanhs.Select(data => new SelectedItem
+                {
+                    Value = data.Id,
+                    Text = data.TenChiNhanh
+                }).ToList();
+            selectCompanyIdInput.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+            selectCompanyIdSearch = selectCompanyIdInput;
+            baseTime = DateTime.Now;
         }
         await LoadData();
     }
@@ -978,7 +988,7 @@
                                 {
                                     Id = Guid.NewGuid().ToString(),
                                     Receiver = emailsent.Email,
-                                    Subject = "Quản lý quyền thao tác theo người dùng, nghiệp vụ - Xóa",
+                                    Subject = "Phân quyền cài đặt duyệt theo người dùng, nghiệp vụ - Xóa",
                                     Content = content,
                                     CompanyId = query.CompanyId,
                                     UserId = query.UserId,
@@ -1035,6 +1045,7 @@
                 Input.CreateAt = DateTime.Now;
                 Input.IdMain = idMain;
                 var checkEdit = await MajorUserApprovalService.CheckEdit(Input);
+                //PhanQuyenService.CheckPermission
                 var checkquyen = await MajorUserApprovalService.CheckPermission(groupId, Input.CompanyId, user, "06ff3867-749b-4350-bb5c-bdb46fc97ed4");
                
                 Input.IsActive = 1;
@@ -1123,7 +1134,7 @@
                     {
                         Id = Guid.NewGuid().ToString(),
                         Receiver = UserIdText,
-                        Subject = "Phân quyền thao tác theo người dùng, nghiệp vụ - Sửa.",
+                        Subject = "Phân quyền cài đặt duyệt theo người dùng, nghiệp vụ - Sửa.",
                         Content = content,
                         CompanyId = Input.CompanyId,
                         UserId = Input.UserId,
@@ -1140,7 +1151,7 @@
                         IsRead = 0
                     };
 
-                // await EmailService.Insert(emailhistory, "");
+                await EmailService.Insert(emailhistory, "");
                 ToastService.ShowToast(
                 "Thông báo",
                 "Cập nhật thành công.",
