@@ -11233,6 +11233,28 @@
     public List<NuocMuaModel> listNMModelBCLeft { get; set; } = new();
     public List<NuocMuaModel> listNMModelBCRight { get; set; } = new();
 
+    public List<NuocMuaModel> listNMModel { get; set; } = new();
+    public List<PLHGBaoCaoModel> listModelPLHGBC { get; set; } = new();
+    public List<PLHGBaoCaoSLHGTTModel> listModelPLHGTT { get; set; } = new();
+    public List<PLTDHGBaoCaoTSLTDHGModel> listModelTSLTDHG { get; set; } = new();
+    public List<PLTDHGBaoCaoTSLTDHGTTModel> listModelTSLTDHGTT { get; set; } = new();
+    public List<PhanLoaiTDHoGaModel> listModelTDHGSDT { get; set; } = new();
+    public List<TKThepHoGaModel> listModelTKTHG { get; set; } = new();
+    public List<TKThepTamDanModel> listModelTKTTD { get; set; } = new();
+    public List<TKThepCTronModel> listModelTKTCT { get; set; } = new();
+    public List<TKThepMongCTronModel> listModelTKTMCT { get; set; } = new();
+    public List<TKThepDCongModel> listModelTKTDC { get; set; } = new();
+    public List<TKThepCHopModel> listModelTKTCH { get; set; } = new();
+    public List<TKThepMongCHopModel> listModelTKMCH { get; set; } = new();
+    public List<TKThepTDanCHopModel> listModelTKTTDCH { get; set; } = new();
+    public List<TKThepRXayModel> listModelTKTRX { get; set; } = new();
+    public List<TKThepTDanRXayModel> listModelTKTTDRX { get; set; } = new();
+    public List<TKThepTChongModel> listModelTKTTC { get; set; } = new();
+    public List<TKThepRBTongModel> listModelTKTRBT { get; set; } = new();
+    public List<TKThepTDRBTongModel> listModelTKTDRBT { get; set; } = new();
+
+    public List<PKKLCTietHoGaModel> listModelPKKLCT1HG { get; set; } = new();
+
     private async Task ExportExcel()
     {
         Download = true;
@@ -11553,7 +11575,7 @@
         });
 
         var taskSheetCTCHG = Task.Run( async() => {
-            listModelCTCHG = await PhanLoaiHoGaRepository.GetBaoCaoCTaoCHungHGa(new PhanLoaiHoGaModel());
+            listModelPLHG = await PhanLoaiHoGaRepository.GetBaoCaoCTaoCHungHGa(new PhanLoaiHoGaModel());
             var sheetInfo = new SheetInfo1<object>
                 {
                     SheetName = "2.2 C.Tạo chung H.Ga",
@@ -11562,7 +11584,7 @@
                         new TableInfo<object>
                         {
                             Headers = ConstantHeaderExcel.CTCHG_HEADERS.Cast<ComplexHeader>().ToList(),
-                            Data = listModelCTCHG.Cast<object>().ToList()
+                            Data = listModelPLHG.Cast<object>().ToList()
                         },
                     }
                 };
@@ -11570,7 +11592,7 @@
         });
 
         var taskSheetKHHGTD =Task.Run(async()=>{
-            listModelTDHG = await PhanLoaiTDHoGaRepository.GetBaoCaoKTHHTDanHGa(new PhanLoaiTDHoGaModel());
+            listNMModel = await NuocMuaRepository.GetBaoCaoKHopHGaTDan(new NuocMuaModel());
             var sheetInfo = new SheetInfo1<object>
             {
                 SheetName = "2.4 K.Hợp H.Ga và T.Đan",
@@ -11579,24 +11601,6 @@
                     new TableInfo<object>
                     {
                         Headers = ConstantHeaderExcel.KHHGTD_HEADERS.Cast<ComplexHeader>().ToList(),
-                        Data = listModelTDHG.Cast<object>().ToList()
-                    },
-                }
-            };
-        // Xuất Excel
-        byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
-        });
-
-        var taskSheetKHTDHG =Task.Run(async()=>{
-            listNMModel = await NuocMuaRepository.GetBaoCaoKHopHGaTDan(new NuocMuaModel());
-           var sheetInfo = new SheetInfo1<object>
-            {
-                SheetName = "2.5 KTHH T.Đan H.Ga",
-                Tables = new List<TableInfo<object>>
-                {
-                    new TableInfo<object>
-                    {
-                        Headers = ConstantHeaderExcel.KTHHTDHG_HEADERS.Cast<ComplexHeader>().ToList(),
                         Data = listNMModel.Cast<object>().ToList()
                     },
                 }
@@ -11604,18 +11608,1123 @@
             return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
         });
 
-        
+        var taskSheetKHTDHG =Task.Run(async()=>{
+            listModelTDHG = await PhanLoaiTDHoGaRepository.GetBaoCaoKTHHTDanHGa(new PhanLoaiTDHoGaModel());;
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.5 KTHH T.Đan H.Ga",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.KTHHTDHG_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTDHG.Cast<object>().ToList()
+                    },
+                }
+            };
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+
+        var taskSheetTSLHG = Task.Run(async()=>{
+            listModelPLHGBC = await NuocMuaRepository.GetBaoCaoTongSLHGa();
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.6 Tổng SL H.Ga",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TONGSLHG_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelPLHGBC.Cast<object>().ToList()
+                    },
+                }
+            };
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+
+        var taskSheetTSLHGTT = Task.Run(async () =>
+        {
+            listModelPLHGTT = await NuocMuaRepository.GetBaoCaoTongSLHGaTTuyen();
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.7 Tổng SL H.Ga T.Tuyến",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TONGSLHGTT_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelPLHGTT.Cast<object>().ToList()
+                    },
+                }
+            };
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+        var taskSheetTSLTDHG = Task.Run(async ()=>{
+            listModelTSLTDHG = await NuocMuaRepository.GetBaoCaoTongSLTDanHGa();
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.8 Tổng SL T.Đan H.Ga",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TONGSLTDHG_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTSLTDHG.Cast<object>().ToList()
+                    },
+                }
+            };
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+
+        var taskSheetTSLTDHGTT = Task.Run(async () =>
+        {
+            listModelTSLTDHGTT = await NuocMuaRepository.GetBaoCaoSLTDanHGaTTuyen();
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.9 SL T.Đan H.Ga T.Tuyến",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TONGSLTDHGTT_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTSLTDHGTT.Cast<object>().ToList()
+                    },
+                }
+            };
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+
+        var taskSheetHGSDT = Task.Run(async()=>{
+            listModelPLHG = await PhanLoaiHoGaRepository.GetBaoCaoHGaSDThep(new PhanLoaiHoGaModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.10 H.Ga sử dụng thép",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.HGASDTHEP_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelPLHG.Cast<object>().ToList()
+                    },
+                }
+            };
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+        var taskSheetTDHGSDT = Task.Run(async ()=>
+        {
+            listModelTDHGSDT = await PhanLoaiTDHoGaRepository.GetBaoCaoTDanHGaSDThep(new PhanLoaiTDHoGaModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.11 T.Đan H.Ga S.Dụng thép",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TDHGSDT_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTDHGSDT.Cast<object>().ToList()
+                    },
+                }
+            };
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+        var taskSheetKTHHHG = Task.Run(async () =>
+        {
+            listModelPLHG = await PhanLoaiHoGaRepository.GetBaoCaoKTHHHGa(new PhanLoaiHoGaModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.3 KTHH H.Ga",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.KTHHHG_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelPLHG.Cast<object>().ToList()
+                    },
+                }
+            };
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+        //Thống kê
+        var taskSheetTKTHG = Task.Run(async () =>{
+            listModelTKTHG = await TKThepHoGaRepository.GetAllByVM(new TKThepHoGaModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.12 TK thép H.Ga",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TKTHG_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTKTHG.Cast<object>().ToList()
+                    },
+
+                }
+            };
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "ThongTinChungHoGa_TenHoGaSauPhanLoai_Name", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray // Màu nền của hàng trống
+                };
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        var taskSheetTKTTD = Task.Run(async () => {
+            listModelTKTTD = await TKThepTamDanRepository.GetAllByVM(new TKThepTamDanModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.13 TK thép T.Đan",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TKTTD_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTKTTD.Cast<object>().ToList()
+                    },
+
+                }
+            };
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "ThongTinTamDanHoGa2_PhanLoaiDayHoGa_Name", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray // Màu nền của hàng trống
+                };
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        var taskSheetTKTCT =  Task.Run(async()=>{
+            listModelTKTCT = await TKThepCTronRepository.GetAllByVM(new TKThepCTronModel());
+            var sheetInfo = new SheetInfo1<object>
+                {
+                    SheetName = "3.41 TK thép C.Tròn",
+                    Tables = new List<TableInfo<object>>
+                    {
+                        new TableInfo<object>
+                        {
+                            Headers = ConstantHeaderExcel.TKTCT_HEADERS.Cast<ComplexHeader>().ToList(),
+                            Data = listModelTKTCT.Cast<object>().ToList()
+                        },
+                    }
+                };
+
+            // Xuất Excel
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray // Màu nền của hàng trống
+                };
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        var taskSheetTKMCT = Task.Run(async () =>{
+            listModelTKTMCT = await TKThepMongCTronRepository.GetAllByVM(new TKThepMongCTronModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.42 TK thép móng C.Tròn ",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TKTMCT_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTKTMCT.Cast<object>().ToList()
+                    },
+
+                }
+            };
+
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray // Màu nền của hàng trống
+                };
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        var taskSheetTKTDC = Task.Run(async () =>
+        {
+            listModelTKTDC = await TKThepDeCongRepository.GetAllByVM(new TKThepDCongModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.43 TK thép đế cống",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TKTDC_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTKTDC.Cast<object>().ToList()
+                    },
+                }
+            };
+
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "PhanLoaiDeCong_TenLoaiDeCong", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray // Màu nền của hàng trống
+                };
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+
+        var taskSheetTKTCH = Task.Run(async()=>{
+            listModelTKTCH = await TKThepCHopRepository.GetAllByVM(new TKThepCHopModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.44 TK thép C.Hộp",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TKTCH_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTKTCH.Cast<object>().ToList()
+                    },
+                }
+            };
+
+            // Xuất Excel
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray // Màu nền của hàng trống
+                };
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        var taskSheetTKTMCH = Task.Run(async()=>{
+            listModelTKMCH = await TKThepMongCHopRepository.GetAllByVM(new TKThepMongCHopModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.45 TK thép móng C.Hộp",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TKTMCH_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTKMCH.Cast<object>().ToList()
+                    },
+                }
+            };
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "PhanLoaiMongCTron_PhanLoaiMongCongTronCongHop", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray // Màu nền của hàng trống
+                };
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        var taskSheetTKTTDCH = Task.Run(async () =>
+        {
+            listModelTKTTDCH =await TKThepTDanCHopRepository.GetAllByVM(new TKThepTDanCHopModel()); 
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.46 TK thép T.Đan C.Hộp",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TKTHG_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTKTTDCH.Cast<object>().ToList()
+                    },
+                }
+            };
+
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray // Màu nền của hàng trống
+                };
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        var taskSheetTKTRX = Task.Run(async () =>
+        {
+            listModelTKTRX = await TKThepRXayRepository.GetAllByVM(new TKThepRXayModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.47 TK thép R.Xây",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TKTRX_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTKTRX.Cast<object>().ToList()
+                    },
+                }
+            };
+
+            // Xuất Excel
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray // Màu nền của hàng trống
+                };
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        var taskSheetTKTTDRX = Task.Run(async()=>{
+            listModelTKTTDRX = await TKThepTDanRXayRepository.GetAllByVM(new TKThepTDanRXayModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.48 TK thép T.Đan R.Xây",
+                Tables = new List<TableInfo<object>>
+                    {
+                        new TableInfo<object>
+                        {
+                            Headers = ConstantHeaderExcel.TKTTDRX_HEADERS.Cast<ComplexHeader>().ToList(),
+                            Data = listModelTKTTDRX.Cast<object>().ToList()
+                        },
+                    }
+            };
+
+            // Xuất Excel
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray // Màu nền của hàng trống
+                };
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        var taskSheetTKTTC = Task.Run(async()=>{
+            listModelTKTTC = await TKThepTChongRepository.GetAllByVM(new TKThepTChongModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.49 TK thép T.Chống",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TKTTC_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTKTTC.Cast<object>().ToList()
+                    },
+                }
+            };
+
+            // Xuất Excel
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "PhanLoaiThanhChong_LoaiThanhChong", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray // Màu nền của hàng trống
+                };
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        var taskSheetTKTRBT = Task.Run(async()=>{
+            listModelTKTRBT = await TKThepRBTongRepository.GetAllByVM(new TKThepRBTongModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.50 TK thép Rãnh B.Tông ",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TKTRBT_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTKTRBT.Cast<object>().ToList()
+                    },
+                }
+            };
+
+            // Xuất Excel
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "PhanLoaiCTronHopNhua_TenLoaiTruyenDanSauPhanLoai", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray // Màu nền của hàng trống
+                };
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+
+        var taskSheetTKTTDRBT = Task.Run(async()=>{
+            listModelTKTDRBT = await TKThepTDRBTongRepository.GetAllByVM(new TKThepTDRBTongModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.51 TK thép T.Đan R.B.Tông",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.TKTTDRBT_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTKTDRBT.Cast<object>().ToList()
+                    },
+                }
+            };
+
+            // Xuất Excel
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "PhanLoaiTDanTDan_TenLoaiTamDanTieuChuan", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray // Màu nền của hàng trống
+                };
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        //PKKL
+        var taskSheetPKKLCT1HG = Task.Run(async()=>{
+            listModelPKKLCT1HG = await PKKLCTietHoGaRepository.GetAllByVM(new PKKLCTietHoGaModel());
+            var newList = listModelPKKLCT1HG
+            .GroupBy(item => item.LoaiCauKienId) 
+            .SelectMany(group => group
+                .GroupBy(item => item.HangMuc) 
+                .SelectMany(groupChild => groupChild
+                    .OrderBy(item => item.Flag) 
+                    .Select((item, index) =>
+                    {
+                        return item; 
+                    })
+                )
+            ).ToList();
+
+            var sheetInfo = new SheetInfo1<object>
+                {
+                    SheetName = "2.14 PKKL C.Tiết 01 H.Ga",
+                    Tables = new List<TableInfo<object>>
+                    {
+                        new TableInfo<object>
+                        {
+                            Headers = ConstantHeaderExcel.PKKLCT1HG_HEADERS.Cast<ComplexHeader>().ToList(),
+                            Data = newList
+                        },
+                    }
+                };
+
+            // Xuất Excel
+            var rowSpace = new RowSpace{
+                    DataProperty = "LoaiCauKien", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray, // Màu nền của hàng trống
+                    Children = new List<RowSpace>
+                    {
+                        new RowSpace
+                        {
+                            DataProperty = "HangMuc",
+                            BackgroundColor = System.Drawing.Color.LightGreen
+                        },
+                    }
+                };
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        var taskSheetChatMaTuong = Task.Run(async()=>{
+            listModelChatMaTuong = await ChatMaTuongRepository.GetAllByVM(new MaTuongModel());
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.15 PKKL chát má tường+VK",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.PKKLCCMT_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelChatMaTuong.Cast<object>().ToList()
+                    },
+                }
+            };
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "PKKLChatMaTuong", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray, // Màu nền của hàng trống
+                };
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+
+        listTuyenDuong = await NuocMuaRepository.GetDSTuyenDuong();
+        var taskSheetTHKL1HG = Task.Run(async () =>
+        {
+            listModelTHKL1HG = await PKKLCTietHoGaRepository.GetTHKL1HoGa1();
+            THKL1HGByTuyenDuongs = await PKKLCTietHoGaRepository.GetTHKLByTuyenDuong1(listTuyenDuong);
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.16 THKL 01 H.Ga",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.THKL1HG_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTHKL1HG.Cast<object>().ToList()
+                    }
+                }
+            };
+            foreach (var group in THKL1HGByTuyenDuongs.GroupBy(item => item.ThongTinLyTrinh_TuyenDuong))
+            {
+                sheetInfo.Tables.Add(new TableInfo<object>
+                {
+                    Headers = ConstantHeaderExcel.THKL_SUB_HEADERS.Cast<ComplexHeader>().ToList(),
+                    Data = group.Cast<object>().ToList() 
+                });
+            }
+
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+        var taskSheetPKKLCTTDHG = Task.Run(async()=>{
+            listModelPKKL = await PKKLCTietTDHGRepository.GetAllByVM(new PKKLModel());
+            var newList = listModelPKKL
+            .GroupBy(item => item.LoaiCauKienId) 
+            .SelectMany(group => group
+                .GroupBy(item => item.HangMuc) 
+                .SelectMany(groupChild => groupChild
+                    .OrderBy(item => item.Flag) 
+                    .Select((item, index) =>
+                    {
+                        return item; 
+                    })
+                )
+            ).ToList();
+
+            var sheetInfo = new SheetInfo1<object>
+                {
+                    SheetName = "2.17 PKKL C.Tiết T.Đan H.Ga",
+                    Tables = new List<TableInfo<object>>
+                    {
+                        new TableInfo<object>
+                        {
+                            Headers = ConstantHeaderExcel.PKKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                            Data = newList
+                        },
+                    }
+             };
+
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "LoaiCauKien", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray, // Màu nền của hàng trống
+                    Children = new List<RowSpace>
+                    {
+                        new RowSpace
+                        {
+                            DataProperty = "HangMuc",
+                            BackgroundColor = System.Drawing.Color.LightGreen
+                        },
+                    }
+                };
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        var taskSheetTHKL1TDHG = Task.Run(async () =>
+        {
+            listModelTHKL = await PKKLCTietTDHGRepository.GetTHKLCTietTDHG();
+            THKLByTuyenDuongs = await PKKLCTietTDHGRepository.GetTHKLByTuyenDuong(listTuyenDuong);
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "2.18 THKL 01 T.Đan H.Ga",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.THKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTHKL.Cast<object>().ToList()
+                    }
+
+                }
+            };
+            foreach(var group in THKLByTuyenDuongs.GroupBy(item => item.ThongTinLyTrinh_TuyenDuong))
+            {
+                sheetInfo.Tables.Add(new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.THKL_SUB_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = group.Cast<object>().ToList()
+                    });
+            }
+
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+        var  taskSheetPKKLCT = Task.Run(async() =>
+        {
+            listModelPKKL =await PKKLCTronRepository.GetAllByVM(new PKKLModel());
+            var newList = listModelPKKL
+            .GroupBy(item => item.LoaiCauKienId) 
+            .SelectMany(group => group
+                .GroupBy(item => item.HangMuc) 
+                .SelectMany(groupChild => groupChild
+                    .OrderBy(item => item.Flag) 
+                    .Select((item, index) =>
+                    {
+                        return item; 
+                    })
+                )
+            )
+            .ToList();
+
+            var sheetInfo = new SheetInfo1<object>
+                {
+                    SheetName = "3.52 PKKL C.Tròn",
+                    Tables = new List<TableInfo<object>>
+                    {
+                        new TableInfo<object>
+                        {
+                            Headers = ConstantHeaderExcel.PKKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                            Data = newList
+                        },
+                    }
+                };
+
+            // Xuất Excel
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "LoaiCauKien", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray, // Màu nền của hàng trống
+                    Children = new List<RowSpace>
+                    {
+                        new RowSpace
+                        {
+                            DataProperty = "HangMuc",
+                            BackgroundColor = System.Drawing.Color.LightGreen
+                        },
+                    }
+                };
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+
+        var taskSheetTHKLCT = Task.Run(async()=>{
+            listModelTHKL = await PKKLCTronRepository.GetTHKLCongTron();
+            THKLByTuyenDuongs = await PKKLCTronRepository.GetTHKLByTuyenDuong(listTuyenDuong);
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.53 THKL cống tròn",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.THKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTHKL.Cast<object>().ToList()
+                    }
+
+                }
+            };
+            foreach (var group in THKLByTuyenDuongs.GroupBy(item => item.ThongTinLyTrinh_TuyenDuong))
+            {
+                sheetInfo.Tables.Add(new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.THKL_SUB_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = group.Cast<object>().ToList()
+                    });
+            }
+
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+        var taskSheetPKKLMCT = Task.Run(async()=>{
+            listModelPKKL =    await PKKLMongCTronRepository.GetAllByVM(new PKKLModel());
+            var newList = listModelPKKL
+            .GroupBy(item => item.LoaiCauKienId) 
+            .SelectMany(group => group
+                .GroupBy(item => item.HangMuc) 
+                .SelectMany(groupChild => groupChild
+                    .OrderBy(item => item.Flag) 
+                    .Select((item, index) =>
+                    {
+                        return item; 
+                    })
+                )
+            )
+            .ToList();
+
+            var sheetInfo = new SheetInfo1<object>
+                {
+                    SheetName = "3.54 PKKL móng C.Tròn",
+                    Tables = new List<TableInfo<object>>
+                    {
+                        new TableInfo<object>
+                        {
+                            Headers = ConstantHeaderExcel.PKKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                            Data = newList
+                        },
+                    }
+                };
+
+            // Xuất Excel
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "LoaiCauKien", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray, // Màu nền của hàng trống
+                    Children = new List<RowSpace>
+                    {
+                        new RowSpace
+                        {
+                            DataProperty = "HangMuc",
+                            BackgroundColor = System.Drawing.Color.LightGreen
+                        },
+                    }
+                };
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        var taskSheetTHKLMCT = Task.Run(async()=>{
+            listModelTHKL =  await PKKLMongCTronRepository.GetTHKLMongCongTron(); 
+            THKLByTuyenDuongs = await PKKLMongCTronRepository.GetTHKLByTuyenDuong(listTuyenDuong);   
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.55 THKL móng C.Tròn",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.THKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTHKL.Cast<object>().ToList()
+                    }
+                }
+            };
+            foreach (var group in THKLByTuyenDuongs.GroupBy(item => item.ThongTinLyTrinh_TuyenDuong))
+            {
+                sheetInfo.Tables.Add(new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.THKL_SUB_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = group.Cast<object>().ToList()
+                    });
+            }
+
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+
+        var taskSheetPKKLDCT = Task.Run(async()=>{
+            listModelPKKL = await PKKLDeCTronRepository.GetAllByVM(new PKKLModel());
+            var newList = listModelPKKL
+        .GroupBy(item => item.LoaiCauKienId) 
+        .SelectMany(group => group
+            .GroupBy(item => item.HangMuc) 
+            .SelectMany(groupChild => groupChild
+                .OrderBy(item => item.Flag) 
+                .Select((item, index) =>
+                {
+                    return item; 
+                })
+            )
+        ).ToList();
+
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.56 PKKL đế cống",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.PKKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = newList
+                    },
+                }
+            };
+
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "LoaiCauKien", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray, // Màu nền của hàng trống
+                    Children = new List<RowSpace>
+                    {
+                        new RowSpace
+                        {
+                            DataProperty = "HangMuc",
+                            BackgroundColor = System.Drawing.Color.LightGreen
+                        },
+                    }
+                };
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        var taskSheetTHKLDC = Task.Run(async()=>{
+            listModelTHKL = await PKKLDeCTronRepository.GetTHKLDeCongTron();
+            THKLByTuyenDuongs = await PKKLDeCTronRepository.GetTHKLByTuyenDuong(listTuyenDuong);
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.57 THKL đế cống",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.THKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTHKL.Cast<object>().ToList()
+                    }
+
+                }
+            };
+            foreach (var group in THKLByTuyenDuongs.GroupBy(item => item.ThongTinLyTrinh_TuyenDuong))
+            {
+                sheetInfo.Tables.Add(new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.THKL_SUB_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = group.Cast<object>().ToList()
+                    });
+            }
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+        var taskSheetPKKLCH = Task.Run(async()=>{
+            listModelPKKL = await PKKLCHopRepository.GetAllByVM(new PKKLModel());
+            var newList = listModelPKKL
+            .GroupBy(item => item.LoaiCauKienId) 
+            .SelectMany(group => group
+                .GroupBy(item => item.HangMuc) 
+                .SelectMany(groupChild => groupChild
+                    .OrderBy(item => item.Flag) 
+                    .Select((item, index) =>
+                    {
+                        return item; 
+                    })
+                )
+            )
+            .ToList();
+
+            var sheetInfo = new SheetInfo1<object>
+                {
+                    SheetName = "3.58 PKKL C.Hộp",
+                    Tables = new List<TableInfo<object>>
+                    {
+                        new TableInfo<object>
+                        {
+                            Headers = ConstantHeaderExcel.PKKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                            Data = newList
+                        },
+                    }
+                };
+
+            // Xuất Excel
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "LoaiCauKien", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray, // Màu nền của hàng trống
+                    Children = new List<RowSpace>
+                    {
+                        new RowSpace
+                        {
+                            DataProperty = "HangMuc",
+                            BackgroundColor = System.Drawing.Color.LightGreen
+                        },
+                    }
+                };
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        var taskSheetTHKLCH = Task.Run(async()=>{
+            listModelTHKL = await PKKLCHopRepository.GetTHKLCongHop();
+            THKLByTuyenDuongs = await PKKLCHopRepository.GetTHKLByTuyenDuong(listTuyenDuong);
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.59 THKL C.hộp",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.THKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = listModelTHKL.Cast<object>().ToList()
+                    }
+                }
+            };
+            foreach (var group in THKLByTuyenDuongs.GroupBy(item => item.ThongTinLyTrinh_TuyenDuong))
+            {
+                sheetInfo.Tables.Add(new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.THKL_SUB_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = group.Cast<object>().ToList()
+                    });
+            }
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+        var taskSheetPKKLMCH = Task.Run(async () =>
+        {
+            listModelPKKL =  await PKKLMongCHopRepository.GetAllByVM(new PKKLModel());
+            var newList = listModelPKKL
+            .GroupBy(item => item.LoaiCauKienId) 
+            .SelectMany(group => group
+                .GroupBy(item => item.HangMuc) 
+                .SelectMany(groupChild => groupChild
+                    .OrderBy(item => item.Flag) 
+                    .Select((item, index) =>
+                    {
+                        return item; 
+                    })
+                )
+            )
+            .ToList();
+
+            var sheetInfo = new SheetInfo1<object>
+            {
+                SheetName = "3.60 PKKL móng C.hộp",
+                Tables = new List<TableInfo<object>>
+                {
+                    new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.PKKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = newList
+                    },
+                }
+            };
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "LoaiCauKien", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray, // Màu nền của hàng trống
+                    Children = new List<RowSpace>
+                    {
+                        new RowSpace
+                        {
+                            DataProperty = "HangMuc",
+                            BackgroundColor = System.Drawing.Color.LightGreen
+                        },
+                    }
+                };
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        var taskSheetTHKLMCH = Task.Run(async()=>{
+            listModelTHKL = await PKKLMongCHopRepository.GetTHKLMongCongHop();
+            THKLByTuyenDuongs = await PKKLMongCHopRepository.GetTHKLByTuyenDuong(listTuyenDuong);
+            var sheetInfo = new SheetInfo1<object>
+                {
+                    SheetName = "3.61 THKL Móng C.Hộp",
+                    Tables = new List<TableInfo<object>>
+                    {
+                         new TableInfo<object>
+                            {
+                                Headers = ConstantHeaderExcel.THKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                                Data = listModelTHKL.Cast<object>().ToList()
+                            }
+                       }
+                };
+            foreach (var group in THKLByTuyenDuongs.GroupBy(item => item.ThongTinLyTrinh_TuyenDuong))
+            {
+                sheetInfo.Tables.Add(new TableInfo<object>
+                        {
+                            Headers = ConstantHeaderExcel.THKL_SUB_HEADERS.Cast<ComplexHeader>().ToList(),
+                            Data = group.Cast<object>().ToList()
+                        });
+            }
+
+            return  ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+        var taskSheetPKKLTDCH = Task.Run(async()=>{
+            listModelPKKL =  await PKKLTDanCHopRepository.GetAllByVM(new PKKLModel());
+            var newList = listModelPKKL
+                .GroupBy(item => item.LoaiCauKienId) 
+                .SelectMany(group => group
+                    .GroupBy(item => item.HangMuc) 
+                    .SelectMany(groupChild => groupChild
+                        .OrderBy(item => item.Flag) 
+                        .Select((item, index) =>
+                        {
+                            return item; 
+                        })
+                    )
+                )
+                .ToList();
+
+            var sheetInfo = new SheetInfo1<object>
+                {
+                    SheetName = "3.62 PKKL T.Đan C.Hộp",
+                    Tables = new List<TableInfo<object>>
+                    {
+                        new TableInfo<object>
+                        {
+                            Headers = ConstantHeaderExcel.PKKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                            Data = newList
+                        },
+                    }
+                };
+
+            // Xuất Excel
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "LoaiCauKien", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray, // Màu nền của hàng trống
+                    Children = new List<RowSpace>
+                    {
+                        new RowSpace
+                        {
+                            DataProperty = "HangMuc",
+                            BackgroundColor = System.Drawing.Color.LightGreen
+                        },
+                    }
+                };
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        var taskSheetTHKLTDCH = Task.Run( async() =>{
+            listModelTHKL =  await PKKLTDanCHopRepository.GetTHKLTDanCHop();
+            var sheetInfo = new SheetInfo1<object>
+                {
+                    SheetName = "3.63 THKL T.Đan C.hộp",
+                    Tables = new List<TableInfo<object>>
+                    {
+                        new TableInfo<object>
+                        {
+                            Headers = ConstantHeaderExcel.THKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                            Data = listModelTHKL.Cast<object>().ToList()
+                        }
+                    }
+                };
+            foreach (var group in THKLByTuyenDuongs.GroupBy(item => item.ThongTinLyTrinh_TuyenDuong))
+            {
+                sheetInfo.Tables.Add(new TableInfo<object>
+                        {
+                            Headers = ConstantHeaderExcel.THKL_SUB_HEADERS.Cast<ComplexHeader>().ToList(),
+                            Data = group.Cast<object>().ToList()
+                        });
+            }
+
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
+        var  taskSheetPKKLRBT = Task.Run(async () =>
+        {
+            listModelPKKL =  await PKKLRanhBTRepository.GetAllByVM(InputMD);
+            var newList = listModelPKKL
+            .GroupBy(item => item.LoaiCauKienId) // Nhóm theo LoaiCauKienId
+            .SelectMany(group => group
+                .GroupBy(item => item.HangMuc) // Trong mỗi nhóm LoaiCauKienId, nhóm tiếp theo HangMuc
+                .SelectMany(groupChild => groupChild
+                    .OrderBy(item => item.Flag) // Sắp xếp các phần tử trong nhóm con theo Flag
+                    .Select((item, index) =>
+                    {
+                        return item; // Trả về đối tượng ban đầu
+                    })
+                )
+            )
+            .ToList();
+
+            var sheetInfo = new SheetInfo1<object>
+                {
+                    SheetName = "3.64 PKKL Rãnh BT",
+                    Tables = new List<TableInfo<object>>
+                    {
+                        new TableInfo<object>
+                        {
+                            Headers = ConstantHeaderExcel.PKKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                            Data = newList
+                        },
+                    }
+                };
+
+            // Xuất Excel
+            var rowSpace = new RowSpace
+                {
+                    DataProperty = "LoaiCauKien", // Thuộc tính cần kiểm tra
+                    BackgroundColor = System.Drawing.Color.LightGray, // Màu nền của hàng trống
+                    Children = new List<RowSpace>
+                    {
+                        new RowSpace
+                        {
+                            DataProperty = "HangMuc",
+                            BackgroundColor = System.Drawing.Color.LightGreen
+                        },
+                    }
+                };
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo }, rowSpace);
+        });
+        var taskSheetTHKLRBT = Task.Run(async()=>{
+            listModelTHKL = await PKKLRanhBTRepository.GetTHKLRanhBT();
+            THKLByTuyenDuongs = await PKKLRanhBTRepository.GetTHKLByTuyenDuong(listTuyenDuong); 
+            var sheetInfo = new SheetInfo1<object>
+                {
+                    SheetName = "3.65 THKL Rãnh BT",
+                    Tables = new List<TableInfo<object>>
+                    {
+                        new TableInfo<object>
+                        {
+                            Headers = ConstantHeaderExcel.THKL_HEADERS.Cast<ComplexHeader>().ToList(),
+                            Data = listModelTHKL.Cast<object>().ToList()
+                        }
+
+                    }
+            };
+            foreach (var group in THKLByTuyenDuongs.GroupBy(item => item.ThongTinLyTrinh_TuyenDuong))
+            {
+                sheetInfo.Tables.Add(new TableInfo<object>
+                    {
+                        Headers = ConstantHeaderExcel.THKL_SUB_HEADERS.Cast<ComplexHeader>().ToList(),
+                        Data = group..Cast<object>().ToList()
+                    });
+            }
+
+            return ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });
+        });
 
         // Chờ task hoàn thành
         var results = await Task.WhenAll(taskSheetNDM, taskSheetDM ,taskSheetDMT,taskSheetTTTNM,
             taskSheetPlHoGa,taskSheetPLTDHG, taskSheetPLCong,taskSheetPLMong,taskSheetPLDCong,taskSheetPLTChong,
-            taskSheetTTHGa,taskSheetKLBPDHG,taskSheetCTCHG,taskSheetKHHGTD,taskSheetKHTDHG
+            taskSheetTTHGa, taskSheetKLBPDHG, taskSheetCTCHG, taskSheetKTHHHG, taskSheetKHHGTD, taskSheetKHTDHG, taskSheetTSLHG,taskSheetTSLHGTT, 
+            taskSheetTSLTDHG,taskSheetTSLTDHGTT,taskSheetHGSDT,taskSheetTDHGSDT,
+            taskSheetTKTHG,taskSheetTKTTD,taskSheetTKTCT,taskSheetTKMCT,taskSheetTKTDC,taskSheetTKTCH,taskSheetTKTMCH,taskSheetTKTTDCH,taskSheetTKTRX,
+            taskSheetTKTTDRX,taskSheetTKTTC,taskSheetTKTRBT,taskSheetTKTTDRBT,taskSheetPKKLCT1HG,taskSheetChatMaTuong,taskSheetTHKL1HG,
+            taskSheetPKKLCTTDHG,taskSheetTHKL1TDHG,taskSheetPKKLCT,taskSheetTHKLCT,taskSheetPKKLMCT,taskSheetTHKLMCT,taskSheetPKKLDCT,taskSheetTHKLDC,
+            taskSheetPKKLCH,taskSheetTHKLCH,taskSheetPKKLMCH,taskSheetTHKLMCH,taskSheetPKKLTDCH,taskSheetTHKLTDCH,taskSheetPKKLRBT,taskSheetTHKLRBT
         );
 
         // Gộp sheet vào một file Excel duy nhất
         byte[] mergedExcelBytes = ExportExcelService.MergeExcelFiles(results[0], results[1],
             results[2],results[3],results[4],results[5],results[6],results[7],results[8],results[9]
-            ,results[10],results[11],results[12],results[13],results[14]
+            ,results[10],results[11],results[12],results[13],results[14],results[15],results[16],results[17],results[18],results[19],results[20]
+            ,results[21],results[22],results[23],results[24],results[25],results[26],results[27],results[28],results[29],results[30],results[31]
+            ,results[32],results[33],results[34],results[35],results[36],results[37],results[38],results[39],results[40],results[41],results[42]
+            ,results[43],results[44],results[45],results[46],results[47],results[48],results[49],results[50],results[51],results[52],results[53]
         );
 
         // Tải xuống file Excel đã gộp
@@ -11627,6 +12736,12 @@
         Download = false;
         StateHasChanged(); // Cập nhật lại giao diện sau khi hoàn thành
     }
-    public List<PhanLoaiHoGaModel> listModelCTCHG { get; set; } = new();
-    public List<NuocMuaModel> listNMModel { get; set; } = new();
+    public List<MaTuongModel> listModelChatMaTuong { get; set; } = new();
+    public List<THKL1HGModel> listModelTHKL1HG { get; set; } = new();
+    public List<THKL1HGModel> THKL1HGByTuyenDuongs { get; set; } = new();
+    public List<NuocMuaModel> listTuyenDuong { get; set; } = new();
+    
+    public List<PKKLModel> listModelPKKL { get; set; } = new();
+    public List<THKLModel> listModelTHKL { get; set; } = new();
+    public List<THKLModel> THKLByTuyenDuongs { get; set; } = new();
 }

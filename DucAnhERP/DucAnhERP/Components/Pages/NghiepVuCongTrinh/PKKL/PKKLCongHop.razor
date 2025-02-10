@@ -650,13 +650,10 @@
             tKThepHoGaModel = new();
             var repository = await PKKLCHopRepository.GetAllByVM(InputMD);
             listModel = repository;
-
             listPKKLCHopModel = Paging(listModel);
-
         }
         catch (Exception)
         {
-
             throw;
         }
         isLoading = false;
