@@ -17,7 +17,7 @@
     <div class="row m-2 d-flex justify-content-end">
          <div class="col-md-3 col-sm-6 text-end">
              <!-- Nút hiển thị bảng trái -->
-           <button class="btn btn-primary me-2" @onclick="View" title="@(viewLeft == "d-block" ? "Xem bảng phải" : "Xem bảng trái")">
+            <button class="btn btn-primary me-2" @onclick="View" title="@(viewLeft == "d-block" ? "Xem bảng phải" : "Xem bảng trái")">
                 @if (viewLeft == "d-block")
                 {
                     <i class="fas fa-arrow-right"></i>
@@ -38,9 +38,23 @@
             <button class="btn btn-secondary" @onclick="ViewVertical" title="Xem theo chiều dọc">
                 <i class="fas fa-arrows-alt-v"></i>
             </button>
-            <button class="btn btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
+            <button class="btn btn-outline-primary me-2 mr-1" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
+            @if (Download)
+            {
+                <button class="btn btn-sm btn-primary" type="button" disabled>
+                    <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                    downloading...
+                </button>
+            }
+            else
+            {
+                <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                    <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                </button>
+            }
+
         </div>
     </div>
      <div id="tableContainer ">
@@ -48,7 +62,7 @@
             <div class="@viewLeft" >
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mt-2">BẢNG THÔNG TIN TỔNG HỢP LÝ TRÌNH TUYẾN NƯỚC MƯA DỌC PHÍA TRÁI TUYẾN</h5>
-                    <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
+                   
                 </div>
                 <div class="mt-2">
                     <table id="tb-left" class="table table-bordered table-hover" cellpadding="1" cellspacing="2">
@@ -592,7 +606,7 @@
         nuocMuaModel.PageNumber = 1;
         PagingLeft(listModelLeft);
     }
-     private void SortTableRight(string columnName)
+    private void SortTableRight(string columnName)
     {
         listModelRight = SortService.SortTable(listModelRight, columnName);
         nuocMuaModel.PageNumber = 1;
@@ -647,7 +661,7 @@
         return nuocMuaModels;
     }
     // Xử lý paging right
-     private List<NuocMuaModel> PagingRight(List<NuocMuaModel> nuocMuaModels)
+    private List<NuocMuaModel> PagingRight(List<NuocMuaModel> nuocMuaModels)
     {
         // Đếm số bản ghi thỏa mãn
         var count = nuocMuaModels.Count();
@@ -671,7 +685,7 @@
         return nuocMuaModels;
     }
 
-  
+
     private string viewLeft = "d-block";
     private string viewRight = "d-none";
 
@@ -719,9 +733,11 @@
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
     }
-
+    bool Download = false;
     private async Task ExportExcel()
     {
+        Download = true;
+        StateHasChanged();
         List<ComplexHeader> rightHeaders = ConstantHeaderExcel.THLTTD_HEADERS.Select(h => new ComplexHeader
             {
                 Title = h.Title,
@@ -770,6 +786,8 @@
         using var stream = new MemoryStream(excelBytes);
         using var streamRef = new DotNetStreamReference(stream);
         await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+        Download = false;
+        StateHasChanged();
     }
 
 }

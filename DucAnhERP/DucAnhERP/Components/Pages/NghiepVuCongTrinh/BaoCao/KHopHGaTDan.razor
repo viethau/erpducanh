@@ -15,9 +15,22 @@
 <div class="container-fluid">
     <div class="row m-2 justify-content-end">
         <div class="col-md-3 col-sm-6 text-end">
-            <button class="btn btn-sm btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
+            <button class="btn btn-sm btn-outline-primary me-2 mr-1" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
+            @if (Download)
+            {
+                <button class="btn btn-sm btn-primary" type="button" disabled>
+                    <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                    downloading...
+                </button>
+            }
+            else
+            {
+                <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                    <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                </button>
+            }
         </div>
     </div>
     <EditForm Model="Input" FormName="Search" OnValidSubmit="@Search">
@@ -41,7 +54,6 @@
             <div>
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mt-2">BẢNG KẾT HỢP HỐ GA VÀ TẤM ĐAN</h5>
-                    <i @onclick="ExportExcel" class="fa fa-download accent-blue mr-2" title="Download file excel" aria-hidden="true" style="cursor: pointer;"></i>
                 </div>
                 <div class=" mt-2">
                     <table id="tb-left" class="table table-hover table-bordered mt-3">
@@ -280,9 +292,12 @@
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
     }
-
+    bool Download = false;
     private async Task ExportExcel()
     {
+        Download = true;
+        StateHasChanged();
+
         var sheetInfo = new SheetInfo1<object>
             {
                 SheetName = "2.4 K.Hợp H.Ga và T.Đan",
@@ -301,5 +316,8 @@
         using var stream = new MemoryStream(excelBytes);
         using var streamRef = new DotNetStreamReference(stream);
         await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+        Download = false;
+        StateHasChanged();
+
     }
 }

@@ -34,12 +34,22 @@
             <button class="btn btn-sm btn-secondary" @onclick="ViewVertical" title="Xem theo chiều dọc">
                 <i class="fas fa-arrows-alt-v"></i>
             </button>
-            <button class="btn btn-sm btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
+            <button class="btn btn-sm btn-outline-primary me-2 mr-1" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
-            <button class="btn btn-sm btn-outline-primary me-2" @onclick="ExportExcel" title="Download file excel">
-                <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
-            </button>
+            @if (Download)
+            {
+                <button class="btn btn-sm btn-primary" type="button" disabled>
+                    <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                    downloading...
+                </button>
+            }
+            else
+            {
+                <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                    <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                </button>
+            }
            
         </div>
     </div>
@@ -754,9 +764,11 @@
     {
         thumbtack = thumbtack == "flex-header" ? "" : "flex-header";
     }
-
+    bool Download = false;
     private async Task ExportExcel()
     {
+        Download = true;
+        StateHasChanged();
         List<ComplexHeader> rightHeaders = ConstantHeaderExcel.TTHGA_HEADERS.Select(h => new ComplexHeader
              {
                  Title = h.Title,
@@ -806,8 +818,8 @@
         using var streamRef = new DotNetStreamReference(stream);
         await JSRuntime.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
 
-
-        
+        Download = false;
+        StateHasChanged();
     }
 
 }
