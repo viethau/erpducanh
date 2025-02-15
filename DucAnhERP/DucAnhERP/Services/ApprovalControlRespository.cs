@@ -288,7 +288,7 @@ namespace DucAnhERP.Services
                 using var context = _context.CreateDbContext();
                 if (entity == null)
                 {
-                    throw new Exception("Không có phân quyền cài đặt duyệt nào được thêm!");
+                    throw new Exception("Không có phân quyền cài thao tác nào được thêm!");
                 }
                 context.ApprovalControls.Add(entity);
                 var addLog = new ApprovalControl_Log()

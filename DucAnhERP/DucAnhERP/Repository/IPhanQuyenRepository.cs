@@ -7,6 +7,7 @@ namespace DucAnhERP.Repository
     public interface IPhanQuyenRepository
     {
         Task<bool> CheckPermission(string groupId, string companyId, ApplicationUser user, string permissionId);
+        Task<List<PermissionModel>> getAllPermissionByMajor(string groupId, string companyId, ApplicationUser user, string majorId);
         Task<bool> CheckApproval(string companyId, string deptId, ApplicationUser user, string approvalId);
         Task<ApprovalStepSetting> GetApprovalStepSettingById(string id);
         Task<ApprovalStepSetting> GetFirstApprovalStep(string companyId, string majorId, string permissionId);

@@ -94,28 +94,76 @@ namespace DucAnhERP.Services
             using var context = _context.CreateDbContext();
             try
             {
+
                 if (user.CreateBy == "symtem" && user.GroupId == groupId)
+                {
+                    return true;
+                }
+
+                int currentDayOfWeek = (int)DateTime.Now.DayOfWeek;
+                bool hasPermission = await context.MajorUserPermissions.AnyAsync(a =>
+                    a.UserId == user.Id &&
+                    a.GroupId == groupId &&
+                    a.CompanyId == user.CompanyId &&
+                    a.PermissionId == permissionId &&
+                    a.DayInWeek == currentDayOfWeek
+                );
+
+                if (hasPermission)
                 {
                     return true;
                 }
                 else
                 {
-                    var result = await (from a in context.MajorUserPermissions
-                                        where a.UserId.Equals(user)
-                                              && a.GroupId.Equals(groupId)
-                                              && a.CompanyId.Equals(companyId)
-                                              && a.PermissionId.Equals(permissionId)
-                                              && a.DayInWeek.Equals(DateTime.Now.DayOfWeek)
-                                        select a.Id).CountAsync();
-                    return result > 0;
+                    throw new Exception("Bạn không có quyền thực hiện hành động này");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception($"Bạn không có quyền để thực hiện hành động này");
+                // Ghi log exception nếu cần, sau đó ném ra ngoại lệ
+                throw new Exception("Bạn không có quyền thực hiện hành động này", ex);
             }
         }
 
+        public async Task<List<PermissionModel>> getAllPermissionByMajor(string groupId, string companyId, ApplicationUser user, string majorId)
+        {
+            List<PermissionModel> listPer = new List<PermissionModel>();
+            using var context = _context.CreateDbContext();
+
+            try
+            {
+                int currentDay = (int)DateTime.Now.DayOfWeek;
+
+                var result = from mu in context.MajorUserPermissions
+                             join p in context.Permissions on mu.PermissionId equals p.Id
+                             join pm in context.Majors on mu.ParentMajorId equals pm.Id
+                             join m in context.Majors on mu.MajorId equals m.Id
+                             where mu.IsActive != 100
+                                   && mu.DayInWeek == currentDay
+                                   && mu.GroupId == groupId
+                                   && mu.CompanyId == user.CompanyId
+                                   && mu.MajorId == majorId
+                             orderby p.PermissionType ascending
+                             select new PermissionModel
+                             {
+                                 Id = p.Id,
+                                 ParentMajorId = pm.Id,
+                                 ParentMajorName = pm.MajorName,
+                                 MajorId = m.Id,
+                                 MajorName = m.MajorName,
+                                 PermissionType = p.PermissionType,
+                                 PermissionName = p.PermissionName,
+                                 IsActive =p.IsActive
+                             };
+                listPer =  await result.ToListAsync();
+                return listPer;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi hàm getAllPermissionByMajor "+ex.Message);
+                return listPer;
+            }
+        }
         public async Task<ApprovalStepSetting> GetFirstApprovalStep(string companyId, string majorId, string permissionId)
         {
             using var context = _context.CreateDbContext();

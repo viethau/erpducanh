@@ -104,10 +104,14 @@
                 <label>&nbsp;</label>
                 <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
             </div>
-            <div class="col-sm-4 col-md-1">
-                <label>&nbsp;</label>
-                <button type="button" @onclick="ShowModal" class="btn btn-info w-100">Tạo mới</button>
-            </div>
+            @if(listPer.Any(p => p.PermissionType == 10))
+            {
+                 <div class="col-sm-4 col-md-1">
+                    <label>&nbsp;</label>
+                    <button type="button" @onclick="ShowModal" class="btn btn-info w-100">Tạo mới</button>
+                </div>
+            }
+           
         </div>
     </EditForm>
 
@@ -9686,8 +9690,10 @@
 
 
 @code {
-    string groupId = "";
-    string userId = "";
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
     [SupplyParameterFromForm]
     private NuocMua Input { get; set; } = new();
     private NuocMuaModel InputMD = new();
@@ -9700,7 +9706,7 @@
     private string layoutClass = "d-block";
     private string space = "ml-5";
     private string thumbtack = "";
-
+    private List<PermissionModel> listPer = new();
     public List<NuocMuaModel> listNuocMuaModelLeft { get; set; } = new();
     public List<NuocMuaModel> listNuocMuaModelRight { get; set; } = new();
     public List<NuocMuaModel> listModelLeft { get; set; } = new();
@@ -9744,6 +9750,15 @@
         baseTime = DateTime.Now;
         nuocMuaModel = new();
         InputMD = new();
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            userName = authState.User.Identity.Name;
+            user = ApplicationUserService.GetByUserName(userName);
+            userId = user.Id;
+            groupId = user.GroupId;
+        }
+        listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "0d996abe-ff3c-484b-b9e5-3f57896d688f");
         await LoadData();
         foreach (var item in listDanhMuc)
         {
@@ -9903,6 +9918,8 @@
     private async Task LoadData()
     {
        try{
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "0ccd6842-a6f2-46d7-89ea-07aa5fb5b3d0");
+
             isLoading = true;
             var helper = new DataConversionHelper();
             listDanhMuc = await DanhMucRepository.GetAll(groupId);

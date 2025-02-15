@@ -3,8 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\components\\pages\\pheduyet\\listapprovalcontrol.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\components\\pages\\pheduyet\\listapprovalcontrol.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\components\\pages\\nghiepvucongtrinh\\listnuocmua.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\components\\pages\\nghiepvucongtrinh\\listnuocmua.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\services\\phanquyenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\services\\phanquyenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\repository\\iphanquyenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\repository\\iphanquyenrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|c:\\users\\qminh\\source\\erpducanh\\ducanherp\\ducanherp\\viewmodel\\permissionmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1BCEC7BD-BEDC-4649-B955-CC5F8FB3D698}|DucAnhERP\\DucAnhERP.csproj|solutionrelative:ducanherp\\viewmodel\\permissionmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -19,14 +31,53 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ListApprovalControl.razor",
-              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\PheDuyet\\ListApprovalControl.razor",
-              "RelativeDocumentMoniker": "DucAnhERP\\Components\\Pages\\PheDuyet\\ListApprovalControl.razor",
-              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\PheDuyet\\ListApprovalControl.razor",
-              "RelativeToolTip": "DucAnhERP\\Components\\Pages\\PheDuyet\\ListApprovalControl.razor",
-              "ViewState": "AQIAABsAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Title": "ListNuocMua.razor",
+              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
+              "RelativeDocumentMoniker": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
+              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
+              "RelativeToolTip": "DucAnhERP\\Components\\Pages\\NghiepVuCongTrinh\\ListNuocMua.razor",
+              "ViewState": "AQIAABImAAAAAAAAAAAewCEmAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-12T09:19:32.697Z",
+              "WhenOpened": "2025-02-15T06:16:18.432Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IPhanQuyenRepository.cs",
+              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Repository\\IPhanQuyenRepository.cs",
+              "RelativeDocumentMoniker": "DucAnhERP\\Repository\\IPhanQuyenRepository.cs",
+              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Repository\\IPhanQuyenRepository.cs",
+              "RelativeToolTip": "DucAnhERP\\Repository\\IPhanQuyenRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-15T02:57:03.387Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PermissionModel.cs",
+              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\ViewModel\\PermissionModel.cs",
+              "RelativeDocumentMoniker": "DucAnhERP\\ViewModel\\PermissionModel.cs",
+              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\ViewModel\\PermissionModel.cs",
+              "RelativeToolTip": "DucAnhERP\\ViewModel\\PermissionModel.cs",
+              "ViewState": "AQIAAAIAAAAAAAAAAAAxwAsAAAAgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-15T01:35:12.501Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PhanQuyenRepository.cs",
+              "DocumentMoniker": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Services\\PhanQuyenRepository.cs",
+              "RelativeDocumentMoniker": "DucAnhERP\\Services\\PhanQuyenRepository.cs",
+              "ToolTip": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\Services\\PhanQuyenRepository.cs",
+              "RelativeToolTip": "DucAnhERP\\Services\\PhanQuyenRepository.cs",
+              "ViewState": "AQIAAIsAAAAAAAAAAAAQwKQAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-14T01:31:33.75Z",
               "EditorCaption": ""
             }
           ]
