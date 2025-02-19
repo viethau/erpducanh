@@ -63,7 +63,7 @@ namespace DucAnhERP.Services
         {
             using var context = _context.CreateDbContext();
             var entity = await GetById(id);
-            var isExist = await context.MajorUserPermissions.Where(x => x.PermissionId.Equals(id)).ToListAsync();
+            var isExist = await context.MajorUserPermissions.Where(x => x.PermissionId.Equals(id) && x.IsActive !=100).ToListAsync();
 
             if (entity == null)
             {

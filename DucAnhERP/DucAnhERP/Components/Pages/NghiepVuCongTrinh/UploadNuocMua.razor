@@ -22,7 +22,10 @@
 <div class="container-fluid p-3">
 
     <div class="d-inline">
-        <InputFile class="my-2" OnChange="HandleFileSelected" title="Upload file excel"> Upload </InputFile>
+        @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 6))
+         {
+            <InputFile class="my-2" OnChange="HandleFileSelected" title="Upload file excel"> Upload </InputFile>
+         }
         <a href="/files/file_mau_nuocmua.xlsx" download="file_mau_nuocmua.xlsx" class="btn btn-link  my-3">Tải về file mẫu</a>
     </div>
 
@@ -35,21 +38,37 @@
     <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
 </div>
 @code {
-    string groupId = "";
-    string userId = "";
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<PermissionModel> listPer = new();
+
     private List<ExcelData> excelDataList;
     private List<NuocMua> listNuocMua ;
     private List<NuocMua> listNuocMuaRight ;
     public List<DanhMuc1> listDanhMuc = new();
     private bool isLoading = false;
+    
 
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            userName = authState.User.Identity.Name;
+            user = ApplicationUserService.GetByUserName(userName);
+            userId = user.Id;
+            groupId = user.GroupId;
+        }
+        listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "2879ca17-7a4d-4423-a61c-41a6f776e501");
         listDanhMuc = await DanhMucRepository.GetAll(groupId);
+        
     }
 
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
     {
+        var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "dc94d903-373a-4c0a-a76d-962914b0326d");
         isLoading = true;
         var file = e.File;
         if (file != null)

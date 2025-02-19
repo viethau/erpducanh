@@ -2,21 +2,24 @@
 
 <div class="container-fluid">
     <div class="row m-2 justify-content-end">
-        <div class="col-md-3 col-sm-6 text-end">
-            @if (Download)
-            {
-                <button class="btn btn-sm btn-primary" type="button" disabled>
-                    <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
-                    downloading...
-                </button>
-            }
-            else
-            {
-                <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
-                    <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
-                </button>
-            }
-        </div>
+        @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
+        {
+            <div class="col-md-3 col-sm-6 text-end">
+                    @if (Download)
+                    {
+                        <button class="btn btn-sm btn-primary" type="button" disabled>
+                            <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                            downloading...
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                            <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                        </button>
+                    }
+              </div>
+        }
     </div>
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
         <BodyTemplate>
@@ -45,8 +48,10 @@
     <div class="d-flex justify-content-between align-items-center">
         <h5 class="mt-2">Danh sách nhóm danh mục</h5>
     </div>
-    <button class="btn btn-primary" @onclick="ShowModal">Thêm nhóm danh mục</button>
-
+    @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 3))
+     {
+        <button class="btn btn-primary" @onclick="ShowModal">Thêm nhóm danh mục</button>
+     }
     <div class="row mt-3">
         <table class="table table-hover table-bordered">
             <thead class="bg-info">
@@ -77,16 +82,20 @@
                             <td class="text-center">@stt</td>
                             <td >@ndm.Ten</td>
                             <td class="text-center">
-                                <button class="btn btn-sm btn-primary" @onclick="()=>Edit(ndm.Id)">
-                                    <i class="fas fa-edit"></i>
-                                </button>
+                                @if (listPer.Any(p => p.PermissionType == 4))
+                                {
+                                    <button class="btn btn-sm btn-primary" @onclick="()=>Edit(ndm.Id)">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                }
                             </td>
                             <td class="text-center">
-
-                                <button class="btn btn-sm btn-danger" @onclick="()=>ConfirmDelete(ndm.Id,ndm.Ten)">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-
+                                @if (listPer.Any(p => p.PermissionType == 5))
+                                {
+                                    <button class="btn btn-sm btn-danger" @onclick="()=>ConfirmDelete(ndm.Id,ndm.Ten)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                }
                             </td>
                         </tr>
                         stt++;
@@ -115,6 +124,12 @@
 </div>
 
 @code {
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<PermissionModel> listPer = new();
+
     private List<NhomDanhMuc> Inputs = new List<NhomDanhMuc>();
     private NhomDanhMuc Input = new();
     private DateTime baseTime;
@@ -122,8 +137,6 @@
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới nhóm danh mục";
     bool isEdit = false;
-    string groupId = "";
-    string userId = "";
 
     private void ShowModal()
     {
@@ -180,6 +193,16 @@
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            userName = authState.User.Identity.Name;
+            user = ApplicationUserService.GetByUserName(userName);
+            userId = user.Id;
+            groupId = user.GroupId;
+        }
+        listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "543e23ae-9fc0-4bff-814b-0b7f54b21221");
+
         baseTime = DateTime.Now;
         dmModel = new();
         Inputs = await NhomDanhMucRepository.GetAll(groupId);
@@ -189,7 +212,8 @@
 
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadNhomDanhMuc()
-    {
+    {   
+        var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "539f1553-3ce2-4c48-be9b-7098b4967311");
         var nhomdanhmucs = await NhomDanhMucRepository.GetAllNDM();
         listModel = nhomdanhmucs;
         listNhomDanhMuc = Paging(nhomdanhmucs);
@@ -213,8 +237,10 @@
             }
             else
             {
+               
                 if (isEdit)
                 {
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "950143f2-1a38-4371-b611-4b5c88a4575c");
                     string[] ids= { Input.Id };
                     bool isValid = await NhomDanhMucRepository.CheckExclusive(ids,baseTime);
                     if (isValid)
@@ -228,6 +254,7 @@
                 }
                 else
                 {
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "bc2fe235-cee3-40df-b868-cd776ab9e7ef");
                     await NhomDanhMucRepository.Insert(Input,userId);
                     ToastService.ShowToast("Thông báo", "Thêm nhóm danh mục thành công.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
                     await LoadNhomDanhMuc();
@@ -258,6 +285,7 @@
     {
         if (confirmed)
         {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "f198e69b-4e83-475e-94f0-21369a0ab189");
             if (!string.IsNullOrEmpty(deleteId))
             {
 

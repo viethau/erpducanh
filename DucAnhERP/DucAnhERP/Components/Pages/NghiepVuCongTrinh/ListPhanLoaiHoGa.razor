@@ -3,21 +3,24 @@
 
 <div class="container-fluid">
     <div class="row m-2 justify-content-end">
-        <div class="col-md-3 col-sm-6 text-end">
-            @if (Download)
-            {
-                <button class="btn btn-sm btn-primary" type="button" disabled>
-                    <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
-                    downloading...
-                </button>
-            }
-            else
-            {
-                <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
-                    <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
-                </button>
-            }
-        </div>
+        @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
+        {
+            <div class="col-md-3 col-sm-6 text-end">
+                @if (Download)
+                {
+                    <button class="btn btn-sm btn-primary" type="button" disabled>
+                        <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                        downloading...
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                        <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                    </button>
+                }
+            </div>
+        }
     </div>
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
         <BodyTemplate>
@@ -562,10 +565,13 @@
                 <label>&nbsp;</label>
                 <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
             </div>
-            <div class="col-sm-4 col-md-1 mb-1">
-                <label>&nbsp;</label>
-                <button @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
-            </div>
+            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 3))
+            {
+                <div class="col-sm-4 col-md-1 mb-1">
+                    <label>&nbsp;</label>
+                    <button @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
+                </div>
+            }
         </div>
     </EditForm>
 
@@ -753,20 +759,27 @@
                         <tr>
                             <td class="d-flex nowrap">
                                 <div class="d-inline-block">
-                                    
-                                  
-                                    <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
+                                    @if (listPer.Any(p => p.PermissionType == 3))
+                                    {
+                                        <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    }
                                     @{
                                         if (item.IsEdit == 0)
                                         {
-                                            <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.ThongTinChungHoGa_TenHoGaSauPhanLoai)">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
+                                            @if (listPer.Any(p => p.PermissionType == 4))
+                                            {
+                                                <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                            }
+                                            @if (listPer.Any(p => p.PermissionType == 5))
+                                            {
+                                                <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.ThongTinChungHoGa_TenHoGaSauPhanLoai)">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            }
                                         }
                                     }
                                     
@@ -874,8 +887,12 @@
 </div>
 
 @code {
-    string groupId = "";
-    string userId = "";
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<PermissionModel> listPer = new();
+
     private List<PhanLoaiHoGa> listPhanLoaiHoGa = new List<PhanLoaiHoGa>();
     private PhanLoaiHoGa Input = new();
     public List<DanhMuc1> listDanhMuc = new();
@@ -968,9 +985,19 @@
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            userName = authState.User.Identity.Name;
+            user = ApplicationUserService.GetByUserName(userName);
+            userId = user.Id;
+            groupId = user.GroupId;
+        }
+        listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "df8b346c-6230-41b3-b96e-8b747948687b");
+
+
         InputMD = new();
         baseTime = DateTime.Now;
-        await LoadData();
         foreach (var item in listDanhMuc)
         {
             // Kiểm tra xem item đã tồn tại trong danh sách hay chưa
@@ -1041,6 +1068,8 @@
         selectKCT.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
         selectHTMHG.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
         selectKCM.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+
+        await LoadData();
     }
 
     // Truy vấn data theo điều kiện tìm kiếm
@@ -1049,6 +1078,7 @@
         try
         {
             isLoading = true;
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "df5b4593-6f88-4f0c-8e69-a91730e86371");
             dmModel = new();
             listDanhMuc = await DanhMucRepository.GetAll(groupId);
             var plhg = await PhanLoaiHoGaRepository.GetAllByVM(InputMD);
@@ -1089,6 +1119,7 @@
             existName = await PhanLoaiHoGaRepository.CheckUsingName(Input.ThongTinChungHoGa_TenHoGaSauPhanLoai);
             if (isEdit)
             {
+                var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "dfc463ee-0cc2-4d3c-b433-8bcec9f49d7b");
                 if (phanLoaiHoGaExist == null)
                 {
                     string[] ids = { Input.Id };
@@ -1148,6 +1179,7 @@
             }
             else
             {
+                var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "e26cb23b-89e2-4eb4-9d75-fff71c834cbc");
                 if (phanLoaiHoGaExist == null)
                 {
                     if (Flag > 0)
@@ -1225,6 +1257,7 @@
     {
         if (confirmed)
         {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "c4437644-ff95-4d52-bbef-0b53b19ca7cd");
             if (!string.IsNullOrEmpty(deleteId))
             {
 
