@@ -109,20 +109,22 @@
              <button class="btn btn-sm btn-outline-primary me-2 mr-1" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
-            @if (Download)
-        {
-            <button class="btn btn-sm btn-primary" type="button" disabled>
-                <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
-                downloading...
-            </button>
-        }
-        else
-        {
-            <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
-                <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
-            </button>
-        }
-
+            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
+            {
+                @if (Download)
+                {
+                    <button class="btn btn-sm btn-primary" type="button" disabled>
+                        <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                        downloading...
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                        <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                    </button>
+                }
+            }
          </div>
      </div>
 
@@ -144,10 +146,13 @@
                         <label>&nbsp;</label>
                         <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
                     </div>
-                     <div class="col-sm-4 col-md-1 mb-1">
-                        <label>&nbsp;</label>
-                        <button type="button" @onclick="ShowModal" class="btn btn-info w-100">Tạo mới</button>
-                    </div>
+                    @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 3))
+                    {
+                        <div class="col-sm-4 col-md-1 mb-1">
+                            <label>&nbsp;</label>
+                            <button type="button" @onclick="ShowModal" class="btn btn-info w-100">Tạo mới</button>
+                        </div>
+                    }
                 </div>
     </EditForm>
 
@@ -265,19 +270,27 @@
                                     }
                                     <tr>
                                         <td class="d-flex nowrap">
-                                                <div class="d-inline-block">
-                                                    <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                     <div class="btn btn-sm p-0">
-                                                        <div class="d-flex flex-column align-items-center">
-                                                            <i class="fa fa-angle-up btn-top" @onclick="()=>InsertLaterFlag(item ,true)" title="Thêm vào trước" aria-hidden="true"></i>
-                                                            <i class="fa fa-angle-down btn-down" @onclick="()=>InsertLaterFlag(item,false)" title="Thêm vào sau" aria-hidden="true"></i>
+                                            <div class="d-inline-block">
+                                                    @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 4))
+                                                    {
+                                                        <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                    }
+                                                    @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 5))
+                                                    {
+                                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    }
+                                                    @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 3)){
+                                                        <div class="btn btn-sm p-0">
+                                                            <div class="d-flex flex-column align-items-center">
+                                                                <i class="fa fa-angle-up btn-top" @onclick="()=>InsertLaterFlag(item ,true)" title="Thêm vào trước" aria-hidden="true"></i>
+                                                                <i class="fa fa-angle-down btn-down" @onclick="()=>InsertLaterFlag(item,false)" title="Thêm vào sau" aria-hidden="true"></i>
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    }
                                                 </div>
                                          </td>
                                         <td>@stt</td>
@@ -323,8 +336,12 @@
 
 
 @code {
-    string groupId = "";
-    string userId = "";
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<PermissionModel> listPer = new();
+
     private bool isLoading = false;
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới ";
@@ -528,8 +545,16 @@
     {
         try
         {
-
-            await LoadData();
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                userName = authState.User.Identity.Name;
+                user = ApplicationUserService.GetByUserName(userName);
+                userId = user.Id;
+                groupId = user.GroupId;
+            }
+            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "342f961b-29ef-4974-a400-87d14ce128ae");
+            
             var repository = await NuocMuaRepository.GetBaoCaoTCSDThep();
             selectLCK = new();
             foreach (var item in repository)
@@ -561,10 +586,18 @@
             }
             selectLoaiThep.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
             selectSearchLoaiThep = selectLoaiThep;
+            await LoadData();
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            ToastService.ShowToast(
+               "Thông báo",
+               ex.Message,
+               cssClass: "toast-danger",
+                iconClass: "fa fa-exclamation-circle",
+               progressBarClass: "bg-info",
+               duration: 5000
+           );
         }
     }
     // Truy vấn data theo điều kiện tìm kiếm
@@ -572,6 +605,8 @@
     {
         try
         {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "5325bd2b-2436-430d-9d8f-65fb14124a55");
+
             isLoading = true;
             tKThepHoGaModel = new();
             var repository = await TKThepTChongRepository.GetAllByVM(InputMD);
@@ -592,8 +627,6 @@
                 }
             }
             listTKThepTChongModel = Paging(listModel);
-
-            
         }
         catch (Exception)
         {
@@ -628,9 +661,9 @@
             {
                 if (isEdit)
                 {
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "0606a274-db7c-4261-ab05-2ac84459c92b");
+
                     string[] idss = { Input.Id }; 
-
-
                     if(listExist == null || listExist.Count ==0 )
                     {
                         bool isValid = await TKThepTChongRepository.CheckExclusive(idss,baseTime);
@@ -679,6 +712,8 @@
                 }
                 else
                 {
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "d0c09e9c-e90f-41bb-b736-38974abb2a5b");
+
                     if( listExist== null||listExist.Count == 0)
                     {
                         if (insertFlagItem.Flag > 0)
@@ -752,6 +787,7 @@
     {
         if (confirmed)
         {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "0902bd12-1d3b-4532-bbff-bdbd07a6d596");
             if (!string.IsNullOrEmpty(deleteId))
             {
                 string[] ids = { deleteId };

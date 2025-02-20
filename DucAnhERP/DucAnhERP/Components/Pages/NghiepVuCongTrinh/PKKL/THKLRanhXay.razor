@@ -18,18 +18,21 @@
 <div class="container-fluid">
     <div class="row m-2 justify-content-end">
         <div class="col-md-3 col-sm-6 text-end">
-            @if (Download)
+            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
             {
-                <button class="btn btn-sm btn-primary" type="button" disabled>
-                    <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
-                    downloading...
-                </button>
-            }
-            else
-            {
-                <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
-                    <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
-                </button>
+                if (Download)
+                {
+                    <button class="btn btn-sm btn-primary" type="button" disabled>
+                        <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                        downloading...
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                        <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                    </button>
+                }
             }
         </div>
     </div>
@@ -171,8 +174,12 @@
 
 
 @code {
-    string groupId = "";
-    string userId = "";
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<PermissionModel> listPer = new();
+
     private bool isLoading = false;
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới ";
@@ -213,12 +220,29 @@
     {
         try
         {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                userName = authState.User.Identity.Name;
+                user = ApplicationUserService.GetByUserName(userName);
+                userId = user.Id;
+                groupId = user.GroupId;
+            }
+            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "03cecf12-0bdb-4cc4-ab7a-4460c44a6c3c");
+
             await LoadData();
             listTuyenDuongSelect = listTuyenDuong;
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            ToastService.ShowToast(
+              "Thông báo",
+              ex.Message,
+              cssClass: "toast-danger",
+               iconClass: "fa fa-exclamation-circle",
+              progressBarClass: "bg-info",
+              duration: 5000
+          );
         }
     }
     // Truy vấn data theo điều kiện tìm kiếm
@@ -226,12 +250,12 @@
     {
         try
         {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "e3aa1e7c-9313-42a0-aa7a-1f08a2da2850");
+
             isLoading = true;
             tKThepHoGaModel = new();
             var repository = await PKKLRXayRepository.GetTHKLRanhXay();
             listModel = repository;
-
-
             listTuyenDuong = await NuocMuaRepository.GetDSTuyenDuong();
 
             foreach (var item in listTuyenDuong)

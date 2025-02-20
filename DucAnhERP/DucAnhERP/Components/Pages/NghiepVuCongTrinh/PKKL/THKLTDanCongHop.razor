@@ -18,18 +18,21 @@
 <div class="container-fluid">
     <div class="row m-2 justify-content-end">
         <div class="col-md-3 col-sm-6 text-end">
-            @if (Download)
+            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
             {
-                <button class="btn btn-sm btn-primary" type="button" disabled>
-                    <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
-                    downloading...
-                </button>
-            }
-            else
-            {
-                <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
-                    <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
-                </button>
+                if (Download)
+                {
+                    <button class="btn btn-sm btn-primary" type="button" disabled>
+                        <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                        downloading...
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                        <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                    </button>
+                }
             }
         </div>
     </div>
@@ -167,10 +170,13 @@
     <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
 </div>
 
-
 @code {
-    string groupId = "";
-    string userId = "";
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<PermissionModel> listPer = new();
+
     private bool isLoading = false;
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới ";
@@ -211,12 +217,29 @@
     {
         try
         {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                userName = authState.User.Identity.Name;
+                user = ApplicationUserService.GetByUserName(userName);
+                userId = user.Id;
+                groupId = user.GroupId;
+            }
+            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "7f121223-27e7-4c4f-b31f-dad860b54543");
+
             await LoadData();
             listTuyenDuongSelect = listTuyenDuong;
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            ToastService.ShowToast(
+              "Thông báo",
+              ex.Message,
+              cssClass: "toast-danger",
+               iconClass: "fa fa-exclamation-circle",
+              progressBarClass: "bg-info",
+              duration: 5000
+          );
         }
     }
     // Truy vấn data theo điều kiện tìm kiếm
@@ -224,14 +247,13 @@
     {
         try
         {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "12881689-ac67-4277-9025-f8625b7ea266");
+
             isLoading = true;
             tKThepHoGaModel = new();
             var repository = await PKKLTDanCHopRepository.GetTHKLTDanCHop();
             listModel = repository;
-
-
             listTuyenDuong = await NuocMuaRepository.GetDSTuyenDuong();
-
             foreach (var item in listTuyenDuong)
             {
                 // Kiểm tra và thêm item

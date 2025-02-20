@@ -18,18 +18,21 @@
             <button class="btn btn-outline-primary me-2 mr-1" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
-            @if (Download)
+            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
             {
-                <button class="btn btn-sm btn-primary" type="button" disabled>
-                    <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
-                    downloading...
-                </button>
-            }
-            else
-            {
-                <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
-                    <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
-                </button>
+                if (Download)
+                {
+                    <button class="btn btn-sm btn-primary" type="button" disabled>
+                        <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                        downloading...
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                        <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                    </button>
+                }
             }
         </div>
     </div>
@@ -227,10 +230,13 @@
                         <label>&nbsp;</label>
                         <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
                     </div>
-                     <div class="col-sm-4 col-md-2 mb-2">
-                        <label>&nbsp;</label>
-                        <button type="button" @onclick="ShowModal" class="btn btn-info w-100">Tạo mới</button>
-                    </div>
+                     @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 3))
+                    {
+                        <div class="col-sm-4 col-md-2 mb-2">
+                            <label>&nbsp;</label>
+                            <button type="button" @onclick="ShowModal" class="btn btn-info w-100">Tạo mới</button>
+                        </div>
+                    }
                 </div>
             </EditForm>
         </div>
@@ -241,7 +247,6 @@
                 
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mt-1">BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01 CỐNG TRÒN</h5>
-                    
                 </div>
                 <div class=" mt-2">
                     <table id="tb-left" class="table table-hover table-bordered mt-3">
@@ -309,19 +314,28 @@
                                             <tr>
                                                 <td class="d-flex nowrap">
                                                     <div class="d-inline-block">
-                                                        <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                        <button class="btn btn-sm btn-primary m-1" title="Sửa" @onclick="()=>HandleEdit(item.Id)">
-                                                            <i class="fas fa-edit"></i>
-                                                        </button>
-                                                        <div class="btn btn-sm p-0">
-                                                            <div class="d-flex flex-column align-items-center">
-                                                                <i class="fa fa-angle-up btn-top" @onclick="()=>InsertLaterFlag(item ,true)" title="Thêm vào trước" aria-hidden="true"></i>
-                                                                <i class="fa fa-angle-down btn-down" @onclick="()=>InsertLaterFlag(item,false)" title="Thêm vào sau" aria-hidden="true"></i>
+                                                        @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 5))
+                                                        {
+                                                            <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        }
+                                                        @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 4))
+                                                        {
+                                                            <button class="btn btn-sm btn-primary m-1" title="Sửa" @onclick="()=>HandleEdit(item.Id)">
+                                                                <i class="fas fa-edit"></i>
+                                                            </button>
+                                                        }
+                                                        @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 3))
+                                                        {
+                                                            <div class="btn btn-sm p-0">
+                                                                <div class="d-flex flex-column align-items-center">
+                                                                    <i class="fa fa-angle-up btn-top" @onclick="()=>InsertLaterFlag(item ,true)" title="Thêm vào trước" aria-hidden="true"></i>
+                                                                    <i class="fa fa-angle-down btn-down" @onclick="()=>InsertLaterFlag(item,false)" title="Thêm vào sau" aria-hidden="true"></i>
 
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        }
                                                     </div>
                                                 </td>
                                                 <td>@stt</td>
@@ -379,8 +393,12 @@
 
 
 @code {
-    string groupId = "";
-    string userId = "";
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<PermissionModel> listPer = new();
+
     private bool isLoadingCaculate = false;
     private bool isLoading = false;
     private bool isModalVisible = false;
@@ -589,7 +607,6 @@
           });
     }
 
-
     private void ShowModal()
     {
         isModalVisible = true;
@@ -633,7 +650,16 @@
     {
         try
         {
-            await LoadData();
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                userName = authState.User.Identity.Name;
+                user = ApplicationUserService.GetByUserName(userName);
+                userId = user.Id;
+                groupId = user.GroupId;
+            }
+            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "48a7b7b5-e0b1-4a3a-8534-148bd9bfaebc");
+
             var repository = await NuocMuaRepository.GetBaoCaoKTHHMDC();
             selectLCK = new();
             foreach (var item in repository)
@@ -650,11 +676,18 @@
             }
             selectLCK.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
             selectSearchLCK = selectLCK;
-
+            await LoadData();
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            ToastService.ShowToast(
+              "Thông báo",
+              ex.Message,
+              cssClass: "toast-danger",
+               iconClass: "fa fa-exclamation-circle",
+              progressBarClass: "bg-info",
+              duration: 5000
+          );
         }
     }
     // Truy vấn data theo điều kiện tìm kiếm
@@ -662,16 +695,24 @@
     {
         try
         {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "2dddd6ab-5b7b-4ec0-b52e-2843e4955e8d");
+
             isLoading = true;
             tKThepHoGaModel = new();
             var repository = await PKKLCTronRepository.GetAllByVM(InputMD);
             listModel = repository;
             listPKKLCTronModel = Paging(listModel);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-
-            throw;
+            ToastService.ShowToast(
+               "Thông báo",
+               ex.Message,
+               cssClass: "toast-danger",
+                iconClass: "fa fa-exclamation-circle",
+               progressBarClass: "bg-info",
+               duration: 5000
+           );
         }
         isLoading = false;
     }
@@ -680,14 +721,12 @@
     {
         tKThepHoGaModel.PageNumber = 1;
         await LoadData();
-
     }
 
     private async Task HandleInValidSubmit()
     {
         await JSRuntime.InvokeVoidAsync("scrollToFirstError");
     }
-
 
     private async Task HandleValidSubmit()
     {
@@ -702,8 +741,9 @@
             {
                 if (isEdit)
                 {
-                    string[] idss = { Input.Id }; 
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "c27dce6d-2899-46f4-999d-c6c3ff97d963");
 
+                    string[] idss = { Input.Id }; 
                     if(listExist == null || listExist.Count ==0 )
                     {
                         bool isValid = await PKKLCTronRepository.CheckExclusive(idss,baseTime);
@@ -752,6 +792,7 @@
                 }
                 else
                 {
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "07e5f87f-9c72-4109-aa67-1464b6731bbd");
                     if( listExist== null||listExist.Count == 0)
                     {
                         if (insertFlagItem.Flag > 0)
@@ -827,6 +868,7 @@
         {
             if (confirmed)
             {
+                var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "4b5db6fc-aa41-437e-ac21-9a97533cfc6d");
                 if (!string.IsNullOrEmpty(deleteId))
                 {
                     string[] ids = { deleteId };
