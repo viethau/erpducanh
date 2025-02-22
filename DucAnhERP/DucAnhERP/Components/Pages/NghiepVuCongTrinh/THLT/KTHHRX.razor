@@ -20,18 +20,21 @@
             <button class="btn btn-outline-primary me-2 mr-1" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
-            @if (Download)
+            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
             {
-                <button class="btn btn-sm btn-primary" type="button" disabled>
-                    <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
-                    downloading...
-                </button>
-            }
-            else
-            {
-                <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
-                    <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
-                </button>
+                if (Download)
+                {
+                    <button class="btn btn-sm btn-primary" type="button" disabled>
+                        <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                        downloading...
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                        <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                    </button>
+                }
             }
         </div>
     </div>
@@ -135,14 +138,18 @@
 
 
 @code {
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<PermissionModel> listPer = new();
+
     [SupplyParameterFromForm]
     private NuocMua Input { get; set; } = new();
     public List<DanhMuc1> listDanhMuc = new();
     private bool isEdit = false;
     private bool isLoading = false;
     private DateTime baseTime;
-    string groupId = "";
-    string userId = "";
     private string layoutClass = "d-flex justify-content-between";
     private string space = "ml-5";
     private string thumbtack = "";
@@ -160,28 +167,67 @@
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
-        baseTime = DateTime.Now;
-        nuocMuaModel = new();
-        await LoadData();
+        try
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                userName = authState.User.Identity.Name;
+                user = ApplicationUserService.GetByUserName(userName);
+                userId = user.Id;
+                groupId = user.GroupId;
+            }
+            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "207b2211-a751-4093-83bc-6c3862947bd8");
+
+            baseTime = DateTime.Now;
+            nuocMuaModel = new();
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                       "Thông báo",
+                       ex.Message,
+                       cssClass: "toast-danger",
+                        iconClass: "fa fa-exclamation-circle",
+                       progressBarClass: "bg-info",
+                       duration: 5000
+                   );
+        }
     }
 
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
     {
-        isLoading = true;
-        var helper = new DataConversionHelper();
-        listDanhMuc = await DanhMucRepository.GetAll(groupId);
-        NuocMuaModel nuocMuaModelSearch = new();
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "397381f6-5711-4053-8fe8-7bb747c3763b");
 
-        var nuocMuaRepository = await NuocMuaRepository.GetBaoCaoKTHHRX();
-        List<NuocMuaModel> nuocMuaConvert;
-        nuocMuaConvert = await ConvertDanhMuc(nuocMuaRepository);
+            isLoading = true;
+            var helper = new DataConversionHelper();
+            listDanhMuc = await DanhMucRepository.GetAll(groupId);
+            NuocMuaModel nuocMuaModelSearch = new();
 
-        listModel = nuocMuaConvert;
-        listNuocMuaModel = Paging(nuocMuaConvert);
+            var nuocMuaRepository = await NuocMuaRepository.GetBaoCaoKTHHRX();
+            List<NuocMuaModel> nuocMuaConvert;
+            nuocMuaConvert = await ConvertDanhMuc(nuocMuaRepository);
+            listModel = nuocMuaConvert;
+            listNuocMuaModel = Paging(nuocMuaConvert);
+            isLoading = false;
+            baseTime = DateTime.Now;
+        }
+        catch (Exception ex)
+        {
 
-        isLoading = false;
-        baseTime = DateTime.Now;
+            ToastService.ShowToast(
+                       "Thông báo",
+                       ex.Message,
+                       cssClass: "toast-danger",
+                        iconClass: "fa fa-exclamation-circle",
+                       progressBarClass: "bg-info",
+                       duration: 5000
+                   );
+        }
     }
     public async Task<List<NuocMuaModel>> ConvertDanhMuc(List<NuocMuaModel> listNuocMua)
     {

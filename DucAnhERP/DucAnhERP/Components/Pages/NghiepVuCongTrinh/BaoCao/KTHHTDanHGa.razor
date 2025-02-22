@@ -19,18 +19,21 @@
             <button class="btn btn-sm btn-outline-primary me-2 mr-1" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
-            @if (Download)
+            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
             {
-                <button class="btn btn-sm btn-primary" type="button" disabled>
-                    <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
-                    downloading...
-                </button>
-            }
-            else
-            {
-                <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
-                    <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
-                </button>
+                if (Download)
+                {
+                    <button class="btn btn-sm btn-primary" type="button" disabled>
+                        <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                        downloading...
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                        <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                    </button>
+                }
             }
 
         </div>
@@ -160,10 +163,14 @@
 
 
 @code {
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<PermissionModel> listPer = new();
 
     private bool isLoading = false;
     private PhanLoaiTDHoGaModel Input = new PhanLoaiTDHoGaModel();
-
     private List<SelectedItem> selectPLDHG = new();
 
     private string layoutClass = "d-flex justify-content-between";
@@ -184,34 +191,77 @@
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
-        phanLoaiTDHoGaModel = new();
-
-        await LoadData();
-        selectPLDHG = new();
-
-        foreach (var item in listModel)
+       
+        try
         {
-            // Kiểm tra và thêm item
-            if (!string.IsNullOrEmpty(item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa) && !selectPLDHG.Any(x => x.Value == item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa))
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "914b20c8-0348-46a9-a898-f0dc3c554a96");
+
+            phanLoaiTDHoGaModel = new();
+            await LoadData();
+            selectPLDHG = new();
+
+            foreach (var item in listModel)
             {
-                selectPLDHG.Add(new SelectedItem
-                    {
-                        Value = item.Id,
-                        Text = item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? ""
-                    });
+                // Kiểm tra và thêm item
+                if (!string.IsNullOrEmpty(item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa) && !selectPLDHG.Any(x => x.Value == item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa))
+                {
+                    selectPLDHG.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.ThongTinTamDanHoGa2_PhanLoaiDayHoGa ?? ""
+                        });
+                }
             }
+            selectPLDHG.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
         }
-        selectPLDHG.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        catch (Exception ex)
+        {
+
+            ToastService.ShowToast(
+                       "Thông báo",
+                       ex.Message,
+                       cssClass: "toast-danger",
+                        iconClass: "fa fa-exclamation-circle",
+                       progressBarClass: "bg-info",
+                       duration: 5000
+                   );
+        }
     }
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
     {
-        isLoading = true;
-        listModel = new();
-        var repository = await PhanLoaiTDHoGaRepository.GetBaoCaoKTHHTDanHGa(Input);
-        listModel = repository;
-        listPhanLoaiTDHoGaModel = Paging(listModel);
-        isLoading = false;
+        try
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                userName = authState.User.Identity.Name;
+                user = ApplicationUserService.GetByUserName(userName);
+                userId = user.Id;
+                groupId = user.GroupId;
+            }
+            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "9e9b06a4-dfd4-4cbb-b3b2-c33482a6cefe");
+
+
+            isLoading = true;
+            listModel = new();
+            var repository = await PhanLoaiTDHoGaRepository.GetBaoCaoKTHHTDanHGa(Input);
+            listModel = repository;
+            listPhanLoaiTDHoGaModel = Paging(listModel);
+            isLoading = false;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                        "Thông báo",
+                        ex.Message,
+                        cssClass: "toast-danger",
+                         iconClass: "fa fa-exclamation-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000
+                    );
+        }
+        
     }
 
     public async Task Search()

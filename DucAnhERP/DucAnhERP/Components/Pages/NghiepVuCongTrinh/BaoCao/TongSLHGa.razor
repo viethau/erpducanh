@@ -14,18 +14,21 @@
 <div class="container-fluid">
     <div class="row m-2 justify-content-end">
         <div class="col-md-3 col-sm-6 text-end">
-            @if (Download)
+            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
             {
-                <button class="btn btn-sm btn-primary" type="button" disabled>
-                    <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
-                    downloading...
-                </button>
-            }
-            else
-            {
-                <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
-                    <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
-                </button>
+                if (Download)
+                {
+                    <button class="btn btn-sm btn-primary" type="button" disabled>
+                        <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                        downloading...
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                        <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                    </button>
+                }
             }
         </div>
     </div>
@@ -120,6 +123,11 @@
 
 
 @code {
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<PermissionModel> listPer = new();
 
     private bool isLoading = false;
     private List<SelectedItem> selectPLDHG = new();
@@ -134,30 +142,73 @@
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
-        sLHGaModel = new();
+        
+        try
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                userName = authState.User.Identity.Name;
+                user = ApplicationUserService.GetByUserName(userName);
+                userId = user.Id;
+                groupId = user.GroupId;
+            }
+            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "2bf986da-0543-48ad-a21d-de0d08fb922b");
 
-        await LoadData();
+            sLHGaModel = new();
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+
+            ToastService.ShowToast(
+                       "Thông báo",
+                       ex.Message,
+                       cssClass: "toast-danger",
+                        iconClass: "fa fa-exclamation-circle",
+                       progressBarClass: "bg-info",
+                       duration: 5000
+                   );
+        }
 
     }
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
     {
-        isLoading = true;
-        listModel = new();
-        var repository = await NuocMuaRepository.GetBaoCaoTongSLHGa();
-        listModel = repository;
-        listPLHGBaoCaoModel = Paging(listModel);
-        if (listModel.Count >0)
+        try
         {
-            foreach(var item in listModel)
-            {
-                countTrai = (countTrai + item.countTrai);
-                countPhai = (countPhai + item.countPhai);
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "d96a590e-f9bb-4553-addc-9bb57f8d3d27");
 
+            isLoading = true;
+            listModel = new();
+            var repository = await NuocMuaRepository.GetBaoCaoTongSLHGa();
+            listModel = repository;
+            listPLHGBaoCaoModel = Paging(listModel);
+            if (listModel.Count > 0)
+            {
+                foreach (var item in listModel)
+                {
+                    countTrai = (countTrai + item.countTrai);
+                    countPhai = (countPhai + item.countPhai);
+
+                }
+                Tong = countTrai + countPhai;
             }
-            Tong = countTrai + countPhai;
+            isLoading = false;
         }
-        isLoading = false;
+        catch (Exception ex)
+        {
+
+            ToastService.ShowToast(
+                       "Thông báo",
+                       ex.Message,
+                       cssClass: "toast-danger",
+                        iconClass: "fa fa-exclamation-circle",
+                       progressBarClass: "bg-info",
+                       duration: 5000
+                   );
+        }
+        
     }
 
     public async Task Search()

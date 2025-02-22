@@ -42,20 +42,22 @@
             <button class="btn btn-outline-primary me-2 mr-1" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
-            @if (Download)
+            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
             {
-                <button class="btn btn-sm btn-primary" type="button" disabled>
-                    <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
-                    downloading...
-                </button>
+                if (Download)
+                {
+                    <button class="btn btn-sm btn-primary" type="button" disabled>
+                        <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                        downloading...
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                        <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                    </button>
+                }
             }
-            else
-            {
-                <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
-                    <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
-                </button>
-            }
-
         </div>
     </div>
     <div id="tableContainer ">
@@ -559,6 +561,12 @@
 
 
 @code {
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<PermissionModel> listPer = new();
+
     [SupplyParameterFromForm]
     private NuocMua Input { get; set; } = new();
     public List<DanhMuc1> listDanhMuc = new();
@@ -566,8 +574,6 @@
     private NuocMuaModel nuocMuaVM;
     private bool isLoading = false;
     private DateTime baseTime;
-    string groupId = "";
-    string userId = "";
     private string layoutClass = "d-block";
     private string space = "ml-5";
     private string thumbtack = "";
@@ -586,36 +592,79 @@
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
-        baseTime = DateTime.Now;
-        nuocMuaModel = new();
-        await LoadData();
+        try
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                userName = authState.User.Identity.Name;
+                user = ApplicationUserService.GetByUserName(userName);
+                userId = user.Id;
+                groupId = user.GroupId;
+            }
+            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "885afd70-cba0-4189-b017-346b6008d9d3");
+
+            baseTime = DateTime.Now;
+            nuocMuaModel = new();
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                       "Thông báo",
+                       ex.Message,
+                       cssClass: "toast-danger",
+                        iconClass: "fa fa-exclamation-circle",
+                       progressBarClass: "bg-info",
+                       duration: 5000
+                   );
+        }
     }
 
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
     {
-        isLoading = true;
-        var helper = new DataConversionHelper();
-        listDanhMuc = await DanhMucRepository.GetAll(groupId);
-        NuocMuaModel nuocMuaModelSearch = new();
 
-        nuocMuaModelSearch.TraiPhai = 0;
-        var nuocMuaRepositoryLeft = await NuocMuaRepository.GetAllByVM(nuocMuaModelSearch);
-        List<NuocMuaModel> nuocmuasLeft;
-        nuocmuasLeft = await ConvertDanhMuc(nuocMuaRepositoryLeft);
-        listModelLeft = nuocmuasLeft;
-        listNuocMuaModelLeft = PagingLeft(nuocmuasLeft);
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "3441ada8-985e-4f4d-8169-ba867c243a3c");
 
-        nuocMuaModelSearch.TraiPhai = 1;
-        var nuocMuaRepositoryRight = await NuocMuaRepository.GetAllByVM(nuocMuaModelSearch);
-        List<NuocMuaModel> nuocmuasRight;
-        nuocmuasRight = await ConvertDanhMuc(nuocMuaRepositoryRight);
-        listModelRight = nuocmuasRight;
-        listNuocMuaModelRight = PagingRight(nuocmuasRight);
+            isLoading = true;
+            var helper = new DataConversionHelper();
+            listDanhMuc = await DanhMucRepository.GetAll(groupId);
+            NuocMuaModel nuocMuaModelSearch = new();
+
+            nuocMuaModelSearch.TraiPhai = 0;
+            var nuocMuaRepositoryLeft = await NuocMuaRepository.GetAllByVM(nuocMuaModelSearch);
+            List<NuocMuaModel> nuocmuasLeft;
+            nuocmuasLeft = await ConvertDanhMuc(nuocMuaRepositoryLeft);
+            listModelLeft = nuocmuasLeft;
+            listNuocMuaModelLeft = PagingLeft(nuocmuasLeft);
+
+            nuocMuaModelSearch.TraiPhai = 1;
+            var nuocMuaRepositoryRight = await NuocMuaRepository.GetAllByVM(nuocMuaModelSearch);
+            List<NuocMuaModel> nuocmuasRight;
+            nuocmuasRight = await ConvertDanhMuc(nuocMuaRepositoryRight);
+            listModelRight = nuocmuasRight;
+            listNuocMuaModelRight = PagingRight(nuocmuasRight);
 
 
-        isLoading = false;
-        baseTime = DateTime.Now;
+            isLoading = false;
+            baseTime = DateTime.Now;
+        }
+        catch (Exception ex)
+        {
+
+            ToastService.ShowToast(
+                       "Thông báo",
+                       ex.Message,
+                       cssClass: "toast-danger",
+                        iconClass: "fa fa-exclamation-circle",
+                       progressBarClass: "bg-info",
+                       duration: 5000
+                   );
+        }
+        
     }
 
     public async Task<List<NuocMuaModel>> ConvertDanhMuc(List<NuocMuaModel> listNuocMua)

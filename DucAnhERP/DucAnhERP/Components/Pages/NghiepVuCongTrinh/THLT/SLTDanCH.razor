@@ -20,20 +20,22 @@
             <button class="btn btn-outline-primary me-2 mr-1" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
-            @if (Download)
+            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
             {
-                <button class="btn btn-sm btn-primary" type="button" disabled>
-                    <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
-                    downloading...
-                </button>
+                if (Download)
+                {
+                    <button class="btn btn-sm btn-primary" type="button" disabled>
+                        <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                        downloading...
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                        <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                    </button>
+                }
             }
-            else
-            {
-                <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
-                    <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
-                </button>
-            }
-
         </div>
     </div>
     <div class="d-flex justify-content-between align-items-center">
@@ -98,14 +100,18 @@
 
 
 @code {
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<PermissionModel> listPer = new();
+
     [SupplyParameterFromForm]
     private NuocMua Input { get; set; } = new();
     public List<DanhMuc1> listDanhMuc = new();
     private bool isEdit = false;
     private bool isLoading = false;
     private DateTime baseTime;
-    string groupId = "";
-    string userId = "";
     private string layoutClass = "d-flex justify-content-between";
     private string space = "ml-5";
     private string thumbtack = "";
@@ -123,25 +129,51 @@
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
-        baseTime = DateTime.Now;
-        nuocMuaModel = new();
-        await LoadData();
+        try
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                userName = authState.User.Identity.Name;
+                user = ApplicationUserService.GetByUserName(userName);
+                userId = user.Id;
+                groupId = user.GroupId;
+            }
+            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "fa2e4f9b-6ec6-4a42-a9a5-b2a9d9a74e1d");
+
+            baseTime = DateTime.Now;
+            nuocMuaModel = new();
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
     }
 
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
     {
-        isLoading = true;
-        var helper = new DataConversionHelper();
-        listDanhMuc = await DanhMucRepository.GetAll(groupId);
-        TKSLModel nuocMuaModelSearch = new();
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "021e6abb-981f-4f1d-aea7-0571869ceaa0");
 
-        var nuocMuaRepository = await NuocMuaRepository.GetBaoCaoSLTDan("Cống hộp");
-        listModel = nuocMuaRepository;
-        listTKSLModel = PagingLeft(nuocMuaRepository);
+            isLoading = true;
+            var helper = new DataConversionHelper();
+            listDanhMuc = await DanhMucRepository.GetAll(groupId);
+            TKSLModel nuocMuaModelSearch = new();
 
-        isLoading = false;
-        baseTime = DateTime.Now;
+            var nuocMuaRepository = await NuocMuaRepository.GetBaoCaoSLTDan("Cống hộp");
+            listModel = nuocMuaRepository;
+            listTKSLModel = PagingLeft(nuocMuaRepository);
+
+            isLoading = false;
+            baseTime = DateTime.Now;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
     }
 
     public string GetTenDanhMucById(string id)

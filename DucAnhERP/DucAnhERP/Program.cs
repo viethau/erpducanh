@@ -38,6 +38,8 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<ToastService>();
+builder.Services.AddScoped<PermissionService>();
+
 builder.Services.AddScoped<IMajorRepository, MajorRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IPermissionRepository, MPermissionRepository>();
@@ -56,6 +58,7 @@ builder.Services.AddSingleton<ExportExcelService>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 
 builder.Services.AddScoped<IPhanQuyenRepository, PhanQuyenRepository>();
+builder.Services.AddScoped<PhanQuyenRepository>();
 builder.Services.AddScoped<IChiNhanhRepository, ChiNhanhRepository>();
 
 builder.Services.AddScoped<IMajorUserApprovalReponsitory, MajorUserApprovalReponsitory>();

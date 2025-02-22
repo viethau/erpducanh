@@ -977,7 +977,6 @@
     {
         try
         {
-
             if (IsValid())
             {
                 idMain = idMain == "" ? Guid.NewGuid().ToString() : idMain;
@@ -1125,7 +1124,7 @@
                 await LoadData();
                 await Search();
                 isEdit = false;
-                isModalVisible = false;
+                // isModalVisible = false;
             }
 
         }

@@ -24,18 +24,21 @@
             <button class="btn btn-sm btn-outline-primary me-2 mr-1" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
-            @if (Download)
+            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
             {
-                <button class="btn btn-sm btn-primary" type="button" disabled>
-                    <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
-                    downloading...
-                </button>
-            }
-            else
-            {
-                <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
-                    <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
-                </button>
+                if (Download)
+                {
+                    <button class="btn btn-sm btn-primary" type="button" disabled>
+                        <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                        downloading...
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                        <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                    </button>
+                }
             }
 
         </div>
@@ -372,6 +375,11 @@
 
 
 @code {
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<PermissionModel> listPer = new();
 
     private bool isLoading = false;
     private PhanLoaiHoGaModel Input = new PhanLoaiHoGaModel();
@@ -396,36 +404,76 @@
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
-        phanLoaiHoGaModel = new();
-
-        await LoadData();
-        selectHTHG = new();
-        foreach (var item in listModel)
+        try
         {
-
-            // Kiểm tra và thêm item
-            if (!string.IsNullOrEmpty(item.ThongTinChungHoGa_HinhThucHoGa) && !selectHTHG.Any(x => x.Value == item.ThongTinChungHoGa_HinhThucHoGa))
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
             {
-                selectHTHG.Add(new SelectedItem
-                    {
-                        Value = item.ThongTinChungHoGa_HinhThucHoGa,
-                        Text = item.ThongTinChungHoGa_HinhThucHoGa_Name ?? ""
-                    });
+                userName = authState.User.Identity.Name;
+                user = ApplicationUserService.GetByUserName(userName);
+                userId = user.Id;
+                groupId = user.GroupId;
+            }
+            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "d8bc7996-287d-4409-8db5-288d813dc46c");
+
+            phanLoaiHoGaModel = new();
+            await LoadData();
+            selectHTHG = new();
+            foreach (var item in listModel)
+            {
+
+                // Kiểm tra và thêm item
+                if (!string.IsNullOrEmpty(item.ThongTinChungHoGa_HinhThucHoGa) && !selectHTHG.Any(x => x.Value == item.ThongTinChungHoGa_HinhThucHoGa))
+                {
+                    selectHTHG.Add(new SelectedItem
+                        {
+                            Value = item.ThongTinChungHoGa_HinhThucHoGa,
+                            Text = item.ThongTinChungHoGa_HinhThucHoGa_Name ?? ""
+                        });
+                }
+
+
             }
 
-
+            selectHTHG.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
         }
-
-        selectHTHG.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+              "Thông báo",
+              ex.Message,
+              cssClass: "toast-danger",
+               iconClass: "fa fa-exclamation-circle",
+              progressBarClass: "bg-info",
+              duration: 5000
+          );
+        }
+        
     }
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
     {
-        isLoading = true;
-        var repository = await PhanLoaiHoGaRepository.GetBaoCaoKTHHHGa(Input);
-        listModel = repository;
-        listPhanLoaiHoGaModel = Paging(listModel);
-        isLoading = false;
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "0b8eaca9-88fa-4481-94ee-3a958c75a2d7");
+            isLoading = true;
+            var repository = await PhanLoaiHoGaRepository.GetBaoCaoKTHHHGa(Input);
+            listModel = repository;
+            listPhanLoaiHoGaModel = Paging(listModel);
+            isLoading = false;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+              "Thông báo",
+              ex.Message,
+              cssClass: "toast-danger",
+               iconClass: "fa fa-exclamation-circle",
+              progressBarClass: "bg-info",
+              duration: 5000
+          );
+        }
+       
     }
 
     public async Task Search()

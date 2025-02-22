@@ -77,10 +77,13 @@
                 <label>&nbsp;</label>
                 <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
             </div>
-            <div class="col-sm-6 col-md-2 mb-2">
-                <label>&nbsp;</label>
-                <button @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
-            </div>
+            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 3))
+            {
+                <div class="col-sm-6 col-md-2 mb-2">
+                    <label>&nbsp;</label>
+                    <button @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
+                </div>
+            }
         </div>
     </EditForm>
 

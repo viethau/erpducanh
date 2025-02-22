@@ -39,18 +39,21 @@
             <button class="btn btn-sm btn-outline-primary me-2 mr-1" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
-            @if (Download)
+            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
             {
-                <button class="btn btn-sm btn-primary" type="button" disabled>
-                    <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
-                    downloading...
-                </button>
-            }
-            else
-            {
-                <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
-                    <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
-                </button>
+                    if (Download)
+                    {
+                        <button class="btn btn-sm btn-primary" type="button" disabled>
+                            <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                            downloading...
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                            <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                        </button>
+                    }
             }
 
         </div>
@@ -539,6 +542,11 @@
 
 
 @code {
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<PermissionModel> listPer = new();
 
     private bool isLoading = false;
     private NuocMuaModel Input = new NuocMuaModel();
@@ -569,13 +577,22 @@
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            userName = authState.User.Identity.Name;
+            user = ApplicationUserService.GetByUserName(userName);
+            userId = user.Id;
+            groupId = user.GroupId;
+        }
+        listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "e9e99f51-b1a2-49af-8f6e-4c91e641f53c");
+
         nuocMuaModelLeft = new();
         nuocMuaModelRight = new();
         await LoadData();
         selectLoaiVLDao = new();
         foreach (var item in listModelLeft)
         {
-
             // Kiểm tra và thêm item vào selectLoaiVLDao nếu chưa tồn tại
             if (!string.IsNullOrEmpty(item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao) &&
                 !selectLoaiVLDao.Any(x => x.Value == item.ThongTinVatLieuDaoHoGa_LoaiVatLieuDao))
@@ -609,17 +626,33 @@
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
     {
-        isLoading = true;
-        Input.TraiPhai = 0;
-        var nuocMuaRepositoryLeft = await NuocMuaRepository.GetBaoCaoKLBPhapHGa(Input);
-        listModelLeft = nuocMuaRepositoryLeft;
-        listNuocMuaModelLeft = PagingLeft(listModelLeft, listNuocMuaModelLeft);
-        Input.TraiPhai = 1;
-        var nuocMuaRepositoryRight = await NuocMuaRepository.GetBaoCaoKLBPhapHGa(Input);
-        listModelRight = nuocMuaRepositoryRight;
-        listNuocMuaModelRight = PagingRight(listModelRight, listNuocMuaModelRight);
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "1b56c5f8-d772-4ef2-ac76-e71e618e46fa");
+            isLoading = true;
+            Input.TraiPhai = 0;
+            var nuocMuaRepositoryLeft = await NuocMuaRepository.GetBaoCaoKLBPhapHGa(Input);
+            listModelLeft = nuocMuaRepositoryLeft;
+            listNuocMuaModelLeft = PagingLeft(listModelLeft, listNuocMuaModelLeft);
+            Input.TraiPhai = 1;
+            var nuocMuaRepositoryRight = await NuocMuaRepository.GetBaoCaoKLBPhapHGa(Input);
+            listModelRight = nuocMuaRepositoryRight;
+            listNuocMuaModelRight = PagingRight(listModelRight, listNuocMuaModelRight);
+            isLoading = false;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+              "Thông báo",
+              ex.Message,
+              cssClass: "toast-danger",
+               iconClass: "fa fa-exclamation-circle",
+              progressBarClass: "bg-info",
+              duration: 5000
+          );
+        }
 
-        isLoading = false;
+        
     }
     public async Task Search()
     {

@@ -1,24 +1,25 @@
 ﻿@page "/NghiepVuCongTrinh/NhomDanhMuc"
+@inject PermissionService PermissionService
 
 <div class="container-fluid">
     <div class="row m-2 justify-content-end">
-        @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
+        @if (PermissionService.HasPermission(2))
         {
             <div class="col-md-3 col-sm-6 text-end">
-                    @if (Download)
-                    {
-                        <button class="btn btn-sm btn-primary" type="button" disabled>
-                            <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
-                            downloading...
-                        </button>
-                    }
-                    else
-                    {
-                        <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
-                            <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
-                        </button>
-                    }
-              </div>
+                @if (Download)
+                {
+                    <button class="btn btn-sm btn-primary" type="button" disabled>
+                        <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                        downloading...
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                        <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                    </button>
+                }
+            </div>
         }
     </div>
     <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
@@ -48,7 +49,7 @@
     <div class="d-flex justify-content-between align-items-center">
         <h5 class="mt-2">Danh sách nhóm danh mục</h5>
     </div>
-    @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 3))
+    @if (PermissionService.HasPermission(3))
      {
         <button class="btn btn-primary" @onclick="ShowModal">Thêm nhóm danh mục</button>
      }
@@ -82,7 +83,7 @@
                             <td class="text-center">@stt</td>
                             <td >@ndm.Ten</td>
                             <td class="text-center">
-                                @if (listPer.Any(p => p.PermissionType == 4))
+                                @if (PermissionService.HasPermission(4))
                                 {
                                     <button class="btn btn-sm btn-primary" @onclick="()=>Edit(ndm.Id)">
                                         <i class="fas fa-edit"></i>
@@ -90,7 +91,7 @@
                                 }
                             </td>
                             <td class="text-center">
-                                @if (listPer.Any(p => p.PermissionType == 5))
+                                @if (PermissionService.HasPermission(5))
                                 {
                                     <button class="btn btn-sm btn-danger" @onclick="()=>ConfirmDelete(ndm.Id,ndm.Ten)">
                                         <i class="fas fa-trash"></i>
@@ -200,6 +201,16 @@
             user = ApplicationUserService.GetByUserName(userName);
             userId = user.Id;
             groupId = user.GroupId;
+        }
+        // Đảm bảo rằng groupId, user, và majorId không null
+        if (!string.IsNullOrEmpty(groupId) && user != null)
+        {
+            await PermissionService.InitializePermissions(groupId, user, "543e23ae-9fc0-4bff-814b-0b7f54b21221");
+        }
+        else
+        {
+            // Log hoặc xử lý lỗi nếu cần
+            Console.WriteLine("Invalid parameters for InitializePermissions");
         }
         listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "543e23ae-9fc0-4bff-814b-0b7f54b21221");
 

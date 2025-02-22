@@ -94,14 +94,18 @@
 
 
 @code {
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+    private List<PermissionModel> listPer = new();
+
     [SupplyParameterFromForm]
     private NuocMua Input { get; set; } = new();
     public List<DanhMuc1> listDanhMuc = new();
     private bool isEdit = false;
     private bool isLoading = false;
     private DateTime baseTime;
-    string groupId = "";
-    string userId = "";
     private string layoutClass = "d-flex justify-content-between";
     private string space = "ml-5";
     private string thumbtack = "";
@@ -119,25 +123,53 @@
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
-        baseTime = DateTime.Now;
-        nuocMuaModel = new();
-        await LoadData();
+        try
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                userName = authState.User.Identity.Name;
+                user = ApplicationUserService.GetByUserName(userName);
+                userId = user.Id;
+                groupId = user.GroupId;
+            }
+            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "e929df25-9d90-481b-8a01-961fc32aba7b");
+
+            baseTime = DateTime.Now;
+            nuocMuaModel = new();
+            await LoadData();
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+
     }
 
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
     {
-        isLoading = true;
-        var helper = new DataConversionHelper();
-        listDanhMuc = await DanhMucRepository.GetAll(groupId);
-        NuocMuaModel nuocMuaModelSearch = new();
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "854a4236-a5a1-4fa8-9beb-ee8dd5b11cc6");
 
-        var nuocMuaRepository = await NuocMuaRepository.GetBaoCaoRBTSDThep();
-        listModel = nuocMuaRepository;
-        listNuocMuaModel = PagingLeft(nuocMuaRepository);
+            isLoading = true;
+            var helper = new DataConversionHelper();
+            listDanhMuc = await DanhMucRepository.GetAll(groupId);
+            NuocMuaModel nuocMuaModelSearch = new();
 
-        isLoading = false;
-        baseTime = DateTime.Now;
+            var nuocMuaRepository = await NuocMuaRepository.GetBaoCaoRBTSDThep();
+            listModel = nuocMuaRepository;
+            listNuocMuaModel = PagingLeft(nuocMuaRepository);
+
+            isLoading = false;
+            baseTime = DateTime.Now;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+
     }
 
     public string GetTenDanhMucById(string id)
