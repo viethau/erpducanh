@@ -1,21 +1,27 @@
 ﻿@page "/NghiepVuCongTrinh/DMTLThep"
+@using DucAnhERP.Models.NghiepVuCongTrinh
+@using DucAnhERP.Repository.NghiepVuCongTrinh
+@using DucAnhERP.ViewModel.NghiepVuCongTrinh
 @* @using Microsoft.AspNetCore.Authorization *@
 
 <div class="container-fluid">
     <div class="row m-2 justify-content-end">
         <div class="col-md-3 col-sm-6 text-end">
-            @if (Download)
+            @if (CheckQuyenService.HasPermission(2))
             {
-                <button class="btn btn-sm btn-primary" type="button" disabled>
-                    <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
-                    downloading...
-                </button>
-            }
-            else
-            {
-                <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
-                    <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
-                </button>
+                if (Download)
+                {
+                    <button class="btn btn-sm btn-primary" type="button" disabled>
+                        <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                        downloading...
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                        <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                    </button>
+                }
             }
         </div>
     </div>
@@ -79,10 +85,13 @@
                 <label>&nbsp;</label>
                 <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
             </div>
-            <div class="form-floating col-sm-4 col-md-3">
-                <label>&nbsp;</label>
-                <button @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
-            </div>
+            @if (CheckQuyenService.HasPermission(3))
+            {
+                <div class="form-floating col-sm-4 col-md-3">
+                    <label>&nbsp;</label>
+                    <button @onclick="ShowModal" class="btn btn-info form-control">Tạo mới</button>
+                </div>
+            }
         </div>
     </EditForm>
     <div class="row mt-3">
@@ -113,7 +122,6 @@
             </thead>
             @if (listDanhMuc.Any())
             {
-
                 <tbody>
                     @{
                         int stt = 1;
@@ -128,14 +136,20 @@
                             <td class="text-center">@dm.DonVi</td>
                             <td class="text-center">@dm.TrongLuong</td>
                             <td class="text-center">
-                                <button class="btn btn-sm btn-primary" @onclick="()=>Edit(dm.Id)">
-                                    <i class="fas fa-edit"></i>
-                                </button>
+                                @if (CheckQuyenService.HasPermission(4))
+                                {
+                                    <button class="btn btn-sm btn-primary" @onclick="()=>Edit(dm.Id)">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                }
                             </td>
                             <td class="text-center">
-                                <button class="btn btn-sm btn-danger" @onclick="()=>ConfirmDelete(dm)">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                                @if (CheckQuyenService.HasPermission(5))
+                                {
+                                    <button class="btn btn-sm btn-danger" @onclick="()=>ConfirmDelete(dm)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                }
                             </td>
                         </tr>
                         stt++;
@@ -163,14 +177,25 @@
 </div>
 
 @code {
-    string groupId = "";
-    string userId = "";
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+
     private List<DanhMuc1> danhMucs = new List<DanhMuc1>();
     private DMThep Input = new DMThep();
-
     private bool isModalVisible = false;
     private string TitleModal = "Thêm mới" ;
     bool isEdit = false;
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+
+    public List<DMTLThepModel> listDanhMuc { get; set; } = new();
+    public List<DMTLThepModel> listModel { get; set; } = new();
+    public MetaData MetaData { get; set; }
+    public DMTLThepModel dmModel { get; set; } = new();
+    private DateTime baseTime;
 
     private List<SelectedItem> selectCLDM = new();
     private List<SelectedItem> selectSearchCLDM = new();
@@ -183,53 +208,65 @@
         Input.ChungLoaiThep = selectedItem.Value;
     }
 
-    [Parameter]
-    public ConfirmModal confirmModal { get; set; }
-
-    public List<DMTLThepModel> listDanhMuc { get; set; } = new();
-    public List<DMTLThepModel> listModel { get; set; } = new();
-    public MetaData MetaData { get; set; }
-    public DMTLThepModel dmModel { get; set; }
-    private DateTime baseTime;
 
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
-        baseTime = DateTime.Now;
-        dmModel = new();
-        danhMucs = await DanhMucRepository.GetDMByIdNhomDanhMuc("DMThep");
-        foreach (var item in danhMucs)
+       try
         {
-            // Kiểm tra xem item đã tồn tại trong danh sách hay chưa
-            if (!selectCLDM.Any(x => x.Value == item.Id))
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
             {
-                if (!string.IsNullOrEmpty(item.Id))
+                userName = authState.User.Identity.Name;
+                user = ApplicationUserService.GetByUserName(userName);
+                userId = user.Id;
+                groupId = user.GroupId;
+            }
+            if (!string.IsNullOrEmpty(groupId) && user != null)
+            {
+                await CheckQuyenService.InitializePermissions(groupId, user, "2f5efd04-6dd6-4047-a6c7-12ed545e0f99");
+            }
+
+            baseTime = DateTime.Now;
+            dmModel = new();
+            danhMucs = await DanhMucRepository.GetDMByIdNhomDanhMuc("DMThep");
+            foreach (var item in danhMucs)
+            {
+                // Kiểm tra xem item đã tồn tại trong danh sách hay chưa
+                if (!selectCLDM.Any(x => x.Value == item.Id))
                 {
-                    // Nếu chưa tồn tại, thêm item vào danh sách
-                    selectCLDM.Add(new SelectedItem
-                        {
-                            Value = item.Id,
-                            Text = item.Ten
-                        });
+                    if (!string.IsNullOrEmpty(item.Id))
+                    {
+                        // Nếu chưa tồn tại, thêm item vào danh sách
+                        selectCLDM.Add(new SelectedItem
+                            {
+                                Value = item.Id,
+                                Text = item.Ten
+                            });
+                    }
+                }
+                if (!selectSearchCLDM.Any(x => x.Value == item.Id))
+                {
+                    if (!string.IsNullOrEmpty(item.Id))
+                    {
+                        // Nếu chưa tồn tại, thêm item vào danh sách
+                        selectSearchCLDM.Add(new SelectedItem
+                            {
+                                Value = item.Id,
+                                Text = item.Ten
+                            });
+                    }
                 }
             }
-            if (!selectSearchCLDM.Any(x => x.Value == item.Id))
-            {
-                if (!string.IsNullOrEmpty(item.Id))
-                {
-                    // Nếu chưa tồn tại, thêm item vào danh sách
-                    selectSearchCLDM.Add(new SelectedItem
-                        {
-                            Value = item.Id,
-                            Text = item.Ten
-                        });
-                }
-            }
+            // Thêm phần tử mặc định "chọn..."
+            selectCLDM.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            selectSearchCLDM.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
+            await LoadData();
         }
-        // Thêm phần tử mặc định "chọn..."
-        selectCLDM.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
-        selectSearchCLDM.Insert(0, new SelectedItem { Value = "", Text = "Chọn...", IsSelected = true });
-        await LoadData();
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
     }
     public async Task Search()
     {
@@ -240,12 +277,18 @@
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadData()
     {
-        var danhmucs = await DMTLThepRepository.GetAllByVM(dmModel);
-        listModel = danhmucs;
-        listDanhMuc = Paging(danhmucs);
-        Console.WriteLine(listDanhMuc);
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "ff6b3b85-0272-41ae-9aed-1beef7be3eef");
+            var danhmucs = await DMTLThepRepository.GetAllByVM(dmModel);
+            listModel = danhmucs;
+            listDanhMuc = Paging(danhmucs);
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
     }
-
 
     private async Task HandleValidSubmit()
     {
@@ -259,6 +302,7 @@
             {
                 if (isEdit)
                 {
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "ca0cb8d1-8bb1-465e-9460-377bba31e66a");
                     bool isValidDuongKinh = false;
                     if (IsInteger(editDMThep))
                     {
@@ -342,6 +386,7 @@
                 }
                 else
                 {
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "662b2d7e-3097-4535-b7c5-47bfd0b870d0");
                     if (listExist == null || listExist.Count == 0)
                     {
 
@@ -405,6 +450,7 @@
         {
             if (confirmed)
             {
+                var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "0a68abc3-efdd-49e7-9bb0-88df763a0d27");
                 if (!string.IsNullOrEmpty(deleteId))
                 {
                     //kiểm tra xem có đang sử dụng
@@ -430,7 +476,6 @@
         {
             ToastService.ShowToast("Thông báo", ex.Message, cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
         }
-
     }
     bool isUsing = false;
     string editDMThep ="" ;

@@ -1,4 +1,6 @@
 ﻿@page "/PKKL/THKLRanhBeTong"
+@using DucAnhERP.Repository.NghiepVuCongTrinh
+@using DucAnhERP.ViewModel.NghiepVuCongTrinh
 
 <style>
     table {
@@ -18,7 +20,7 @@
 <div class="container-fluid">
     <div class="row m-2 justify-content-end">
         <div class="col-md-3 col-sm-6 text-end">
-            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
+            @if(CheckQuyenService.HasPermission(2))
             {
                 if (Download)
                 {
@@ -170,7 +172,6 @@
     <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
 </div>
 
-
 @code {
     public string userName { get; set; }
     public string userId { get; set; }
@@ -226,8 +227,11 @@
                 userId = user.Id;
                 groupId = user.GroupId;
             }
-            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "b9aff247-bd0c-4030-bcd7-61cf8738b047");
-
+            if (!string.IsNullOrEmpty(groupId) && user != null)
+            {
+                await CheckQuyenService.InitializePermissions(groupId, user, "b9aff247-bd0c-4030-bcd7-61cf8738b047");
+            }
+            
             await LoadData();
             listTuyenDuongSelect = listTuyenDuong;
         }

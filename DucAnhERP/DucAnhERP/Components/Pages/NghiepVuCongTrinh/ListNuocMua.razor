@@ -1,4 +1,7 @@
 ﻿@page "/NghiepVuCongtrinh/ListNuocMua"
+@using DucAnhERP.Models.NghiepVuCongTrinh
+@using DucAnhERP.Repository.NghiepVuCongTrinh
+@using DucAnhERP.ViewModel.NghiepVuCongTrinh
 
 
 @* @attribute [Authorize] *@
@@ -41,7 +44,7 @@
             <button class="btn btn-sm btn-primary me-2 mr-1" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
-            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
+            @if(CheckQuyenService.HasPermission(2))
             {
                 @if(DownloadNM)
                 {
@@ -107,7 +110,7 @@
                 <label>&nbsp;</label>
                 <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
             </div>
-            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 3))
+            @if(CheckQuyenService.HasPermission(3))
             {
                  <div class="col-sm-4 col-md-1">
                     <label>&nbsp;</label>
@@ -5867,19 +5870,19 @@
                                     stt++;
                                     <tr>
                                         <td>
-                                            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 4))
+                                            @if(CheckQuyenService.HasPermission(4))
                                             {
                                                 <button class="btn btn-sm  btn-primary" title="Chỉnh sửa" @onclick="()=>HandleEdit( item,item.Id)">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
                                             }
-                                            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 3))
+                                            @if(CheckQuyenService.HasPermission(3))
                                             {   
                                             <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag ,0)">
                                                 <i class="fas fa-plus"></i>
                                             </button>
                                             }
-                                            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 5))
+                                            @if(CheckQuyenService.HasPermission(5))
                                            {
                                             <button class="btn btn-sm  btn-danger" title="Xóa" @onclick="()=>ConfirmDelete(item.Id)">
                                                 <i class="fas fa-trash"></i>
@@ -9700,7 +9703,6 @@
     <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
 </div>
 
-
 @code {
     public string userName { get; set; }
     public string userId { get; set; }
@@ -9718,7 +9720,7 @@
     private string layoutClass = "d-block";
     private string space = "ml-5";
     private string thumbtack = "";
-    private List<PermissionModel> listPer = new();
+
     public List<NuocMuaModel> listNuocMuaModelLeft { get; set; } = new();
     public List<NuocMuaModel> listNuocMuaModelRight { get; set; } = new();
     public List<NuocMuaModel> listModelLeft { get; set; } = new();
@@ -9770,7 +9772,11 @@
             userId = user.Id;
             groupId = user.GroupId;
         }
-        listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "0d996abe-ff3c-484b-b9e5-3f57896d688f");
+        if (!string.IsNullOrEmpty(groupId) && user != null)
+        {
+            await CheckQuyenService.InitializePermissions(groupId, user, "0d996abe-ff3c-484b-b9e5-3f57896d688f");
+        }
+  
         await LoadData();
         foreach (var item in listDanhMuc)
         {

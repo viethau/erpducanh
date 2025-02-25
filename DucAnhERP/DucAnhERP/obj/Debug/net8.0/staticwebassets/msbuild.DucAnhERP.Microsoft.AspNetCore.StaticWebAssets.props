@@ -39240,6 +39240,24 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\files\file_mau_nuocmua.xlsx'))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\files\KCNCK- Giá trị đền bù theo luật mới 22.10.2024 (7).xlsx'))">
+      <SourceType>Package</SourceType>
+      <SourceId>DucAnhERP</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/DucAnhERP</BasePath>
+      <RelativePath>files/KCNCK- Giá trị đền bù theo luật mới 22.10.2024 (7).xlsx</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>mtaio6ko4q</Fingerprint>
+      <Integrity>SjczITePIo8Zkv7DIniVYgiyZvgOpLN3UjLRtRNwjBs=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\files\KCNCK- Giá trị đền bù theo luật mới 22.10.2024 (7).xlsx'))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\files\Minh2024.bak'))">
       <SourceType>Package</SourceType>
       <SourceId>DucAnhERP</SourceId>
@@ -39252,8 +39270,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>t9i6ajr1uk</Fingerprint>
-      <Integrity>//fd6QCy2PiK1ualu3M7msc8R/S7flPK60vWQpSxMR8=</Integrity>
+      <Fingerprint>wyu6hs8reg</Fingerprint>
+      <Integrity>uDxGKmaPEFTeyNzwAjKcFLLawVE/tMuohdkCzUwkNVU=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\files\Minh2024.bak'))</OriginalItemSpec>
@@ -39311,6 +39329,24 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\select2Blazor.js'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\json\vietnamAddress.json'))">
+      <SourceType>Package</SourceType>
+      <SourceId>DucAnhERP</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/DucAnhERP</BasePath>
+      <RelativePath>json/vietnamAddress.json</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>xird8f959z</Fingerprint>
+      <Integrity>Z78FT8m92efbDYdUMkEuqotpz2XzaOMecAZfbrgjp+U=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\json\vietnamAddress.json'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\templates\change_password.html'))">
       <SourceType>Package</SourceType>

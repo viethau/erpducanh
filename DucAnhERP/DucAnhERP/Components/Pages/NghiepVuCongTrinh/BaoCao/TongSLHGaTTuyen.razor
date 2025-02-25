@@ -1,4 +1,6 @@
 ﻿@page "/BaoCao/TongSLHGaTTuyen"
+@using DucAnhERP.Repository.NghiepVuCongTrinh
+@using DucAnhERP.ViewModel.NghiepVuCongTrinh
 
 
 @inject DucAnhERP.Services.ToastService ToastService
@@ -17,7 +19,7 @@
 <div class="container-fluid">
     <div class="row m-2 justify-content-end">
         <div class="col-md-3 col-sm-6 text-end">
-            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
+            @if(CheckQuyenService.HasPermission(2))
             {
                 @if (Download)
                 {
@@ -38,7 +40,6 @@
     <div id="tableContainer ">
         <div class="table-report ">
             <div>
-
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="mt-2">BẢNG THỐNG KÊ SỐ LƯỢNG HỐ GA THEO TUYẾN</h5>
                 </div>
@@ -137,7 +138,6 @@
     public string userId { get; set; }
     public string groupId { get; set; }
     private ApplicationUser user;
-    private List<PermissionModel> listPer = new();
 
     private bool isLoading = false;
     private List<SelectedItem> selectPLDHG = new();
@@ -162,14 +162,16 @@
                 userId = user.Id;
                 groupId = user.GroupId;
             }
-            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "5092f089-35e9-4508-81b2-92cf172d8497");
+            if (!string.IsNullOrEmpty(groupId) && user != null)
+            {
+                await CheckQuyenService.InitializePermissions(groupId, user, "5092f089-35e9-4508-81b2-92cf172d8497");
+            }
 
             sLHGaTraiTuyenModel = new();
             await LoadData();
         }
         catch (Exception ex)
         {
-    
             ToastService.ShowToast(
                        "Thông báo",
                        ex.Message,

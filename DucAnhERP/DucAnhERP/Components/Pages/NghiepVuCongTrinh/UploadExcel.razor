@@ -1,8 +1,10 @@
 ﻿@page "/NghiepVuCongtrinh/UploadExcel"
+@using DucAnhERP.Models
+@using DucAnhERP.Models.NghiepVuCongTrinh
+@using DucAnhERP.Repository;
+@using DucAnhERP.Repository.NghiepVuCongTrinh
 @using DucAnhERP.SeedWork;
 @using Microsoft.AspNetCore.Components.Forms
-@using DucAnhERP.Models
-@using DucAnhERP.Repository;
 @inject IDanhMucRepository DanhMucRepository ;
 @inject IHopRanhThangRepository HopRanhThangRepository ;
 @inject IExcelRepository ExcelRepository;

@@ -1,18 +1,20 @@
 ﻿@page "/THLT/RBTSDThep"
+@using DucAnhERP.Models.NghiepVuCongTrinh
+@using DucAnhERP.Repository.NghiepVuCongTrinh
 
 @* @using Microsoft.AspNetCore.Authorization *@
 @* @attribute [Authorize] *@
 
 <style>
     table {
-        position: relative;
+    position: relative;
     }
 
-        table thead tr td {
-            /*   white-space: nowrap; */
-            text-align: center;
-            padding: 2px 5px;
-        }
+    table thead tr td {
+    /*   white-space: nowrap; */
+    text-align: center;
+    padding: 2px 5px;
+    }
 </style>
 <div class="container-fluid">
     <div class="row m-2 d-flex justify-content-end">
@@ -20,18 +22,21 @@
             <button class="btn btn-outline-primary me-2 mr-1" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
-            @if (Download)
+            @if (CheckQuyenService.HasPermission(2))
             {
-                <button class="btn btn-sm btn-primary" type="button" disabled>
-                    <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
-                    downloading...
-                </button>
-            }
-            else
-            {
-                <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
-                    <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
-                </button>
+                if (Download)
+                {
+                    <button class="btn btn-sm btn-primary" type="button" disabled>
+                        <span class="spinner-border-sm" role="status" aria-hidden="true"></span>
+                        downloading...
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-sm btn-primary me-2" @onclick="ExportExcel" title="Download file excel">
+                        <i class="fa fa-download accent-blue" aria-hidden="true" style="cursor: pointer;"></i>
+                    </button>
+                }
             }
         </div>
     </div>
@@ -98,7 +103,6 @@
     public string userId { get; set; }
     public string groupId { get; set; }
     private ApplicationUser user;
-    private List<PermissionModel> listPer = new();
 
     [SupplyParameterFromForm]
     private NuocMua Input { get; set; } = new();
@@ -133,8 +137,11 @@
                 userId = user.Id;
                 groupId = user.GroupId;
             }
-            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "e929df25-9d90-481b-8a01-961fc32aba7b");
-
+            if (!string.IsNullOrEmpty(groupId) && user != null)
+            {
+                await CheckQuyenService.InitializePermissions(groupId, user, "e929df25-9d90-481b-8a01-961fc32aba7b");
+            }
+    
             baseTime = DateTime.Now;
             nuocMuaModel = new();
             await LoadData();

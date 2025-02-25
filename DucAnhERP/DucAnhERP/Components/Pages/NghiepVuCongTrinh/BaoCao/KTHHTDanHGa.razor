@@ -1,4 +1,6 @@
 ﻿@page "/BaoCao/KTHHTDanHGa"
+@using DucAnhERP.Repository.NghiepVuCongTrinh
+@using DucAnhERP.ViewModel.NghiepVuCongTrinh
 
 <style>
     table {
@@ -13,13 +15,12 @@
 
 </style>
 <div class="container-fluid">
-    
     <div class="row m-2 justify-content-end">
         <div class="col-md-3 col-sm-6 text-end">
             <button class="btn btn-sm btn-outline-primary me-2 mr-1" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
-            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
+            @if(CheckQuyenService.HasPermission(2))
             {
                 if (Download)
                 {
@@ -161,13 +162,11 @@
     <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
 </div>
 
-
 @code {
     public string userName { get; set; }
     public string userId { get; set; }
     public string groupId { get; set; }
     private ApplicationUser user;
-    private List<PermissionModel> listPer = new();
 
     private bool isLoading = false;
     private PhanLoaiTDHoGaModel Input = new PhanLoaiTDHoGaModel();
@@ -194,7 +193,18 @@
        
         try
         {
-            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "914b20c8-0348-46a9-a898-f0dc3c554a96");
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                userName = authState.User.Identity.Name;
+                user = ApplicationUserService.GetByUserName(userName);
+                userId = user.Id;
+                groupId = user.GroupId;
+            }
+            if (!string.IsNullOrEmpty(groupId) && user != null)
+            {
+                await CheckQuyenService.InitializePermissions(groupId, user, "9e9b06a4-dfd4-4cbb-b3b2-c33482a6cefe");
+            }
 
             phanLoaiTDHoGaModel = new();
             await LoadData();
@@ -232,16 +242,7 @@
     {
         try
         {
-            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            if (authState.User.Identity.IsAuthenticated)
-            {
-                userName = authState.User.Identity.Name;
-                user = ApplicationUserService.GetByUserName(userName);
-                userId = user.Id;
-                groupId = user.GroupId;
-            }
-            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "9e9b06a4-dfd4-4cbb-b3b2-c33482a6cefe");
-
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "914b20c8-0348-46a9-a898-f0dc3c554a96");
 
             isLoading = true;
             listModel = new();

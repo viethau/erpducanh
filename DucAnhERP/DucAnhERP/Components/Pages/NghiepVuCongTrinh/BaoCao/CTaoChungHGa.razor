@@ -1,4 +1,6 @@
 ﻿@page "/BaoCao/CTaoChungHGa"
+@using DucAnhERP.Repository.NghiepVuCongTrinh
+@using DucAnhERP.ViewModel.NghiepVuCongTrinh
 
 <style>
     table {
@@ -18,7 +20,7 @@
             <button class="btn btn-sm btn-outline-primary me-2 mr-1" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
-            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
+            @if(CheckQuyenService.HasPermission(2))
             {
                 if (Download)
                 {
@@ -209,7 +211,6 @@
     public string userId { get; set; }
     public string groupId { get; set; }
     private ApplicationUser user;
-    private List<PermissionModel> listPer = new();
 
     private bool isLoading = false;
     private PhanLoaiHoGaModel Input = new PhanLoaiHoGaModel();
@@ -260,10 +261,12 @@
             userId = user.Id;
             groupId = user.GroupId;
         }
-        listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "72d553c4-bcba-4495-a7b9-2aaa5f853827");
-
+        if (!string.IsNullOrEmpty(groupId) && user != null)
+        {
+            await CheckQuyenService.InitializePermissions(groupId, user, "72d553c4-bcba-4495-a7b9-2aaa5f853827");
+        }
+       
         phanLoaiHoGaModel = new();
-
         await LoadData();
         selectHTHG = new();
         selectKCMM = new();

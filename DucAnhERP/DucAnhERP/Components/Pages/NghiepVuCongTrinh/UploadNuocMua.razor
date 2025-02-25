@@ -1,11 +1,13 @@
 ﻿@page "/NghiepVuCongtrinh/UploadNuocMua"
-@using DucAnhERP.SeedWork;
-@using Microsoft.AspNetCore.Components.Forms
-@using DucAnhERP.Models
-@using DucAnhERP.Repository;
+@using System.Reflection
 @using DucAnhERP.Components.Pages.Common
 @using DucAnhERP.Helpers
-@using System.Reflection
+@using DucAnhERP.Models
+@using DucAnhERP.Models.NghiepVuCongTrinh
+@using DucAnhERP.Repository;
+@using DucAnhERP.Repository.NghiepVuCongTrinh
+@using DucAnhERP.SeedWork;
+@using Microsoft.AspNetCore.Components.Forms
 @inject IDanhMucRepository DanhMucRepository ;
 @inject INuocMuaRepository NuocMuaRepository ;
 @inject IExcelRepository ExcelRepository;
@@ -22,7 +24,7 @@
 <div class="container-fluid p-3">
 
     <div class="d-inline">
-        @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 6))
+        @if(CheckQuyenService.HasPermission( 6))
          {
             <InputFile class="my-2" OnChange="HandleFileSelected" title="Upload file excel"> Upload </InputFile>
          }
@@ -61,9 +63,12 @@
             userId = user.Id;
             groupId = user.GroupId;
         }
-        listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "2879ca17-7a4d-4423-a61c-41a6f776e501");
+        if (!string.IsNullOrEmpty(groupId) && user != null)
+        {
+            await CheckQuyenService.InitializePermissions(groupId, user, "2879ca17-7a4d-4423-a61c-41a6f776e501");
+        }
+
         listDanhMuc = await DanhMucRepository.GetAll(groupId);
-        
     }
 
     private async Task HandleFileSelected(InputFileChangeEventArgs e)

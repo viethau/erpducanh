@@ -1,9 +1,12 @@
 ﻿@page "/NghiepVuCongTrinh/PhanLoaiMong"
+@using DucAnhERP.Models.NghiepVuCongTrinh
+@using DucAnhERP.Repository.NghiepVuCongTrinh
+@using DucAnhERP.ViewModel.NghiepVuCongTrinh
 
 
 <div class="container-fluid">
     <div class="row m-2 justify-content-end">
-        @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
+        @if(CheckQuyenService.HasPermission(2))
         { <div class="col-md-3 col-sm-6 text-end">
                 @if (Download)
                 {
@@ -136,7 +139,7 @@
                 <label>&nbsp;</label>
                 <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
             </div>
-            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 3))
+            @if(CheckQuyenService.HasPermission(3))
             {
                 <div class="col-sm-4 col-md-1 mb-1">
                     <label>&nbsp;</label>
@@ -204,7 +207,7 @@
                         <tr>
                             <td class="d-flex nowrap">
                                 <div class="d-inline-block">
-                                    @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 3))
+                                    @if(CheckQuyenService.HasPermission(3))
                                     {
                                         <button class="btn btn-sm btn-primary m-1" title="Thêm vào sau" @onclick="()=>InsertLaterFlag(item.Flag)">
                                             <i class="fas fa-plus"></i>
@@ -213,13 +216,13 @@
                                     @{
                                         if (item.IsEdit == 0)
                                         {
-                                            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 4))
+                                            @if(CheckQuyenService.HasPermission(4))
                                             {
                                                 <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
                                             }
-                                            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 5))
+                                            @if(CheckQuyenService.HasPermission(5))
                                             {
                                                 <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.ThongTinMongDuongTruyenDan_PhanLoaiMongCongTronCongHop )">
                                                     <i class="fas fa-trash"></i>
@@ -373,8 +376,11 @@
             userId = user.Id;
             groupId = user.GroupId;
         }
-        listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "7a9bf0de-0f99-42b3-ab1d-491010f2b968");
-
+        if (!string.IsNullOrEmpty(groupId) && user != null)
+        {
+            await CheckQuyenService.InitializePermissions(groupId, user, "7a9bf0de-0f99-42b3-ab1d-491010f2b968");
+        }
+        
         baseTime = DateTime.Now;
         foreach (var item in listDanhMuc)
         {

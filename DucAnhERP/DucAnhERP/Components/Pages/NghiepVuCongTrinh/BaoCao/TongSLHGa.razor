@@ -1,4 +1,6 @@
 ﻿@page "/BaoCao/TongSLHGa"
+@using DucAnhERP.Repository.NghiepVuCongTrinh
+@using DucAnhERP.ViewModel.NghiepVuCongTrinh
 
 <style>
     table {
@@ -14,7 +16,7 @@
 <div class="container-fluid">
     <div class="row m-2 justify-content-end">
         <div class="col-md-3 col-sm-6 text-end">
-            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
+            @if(CheckQuyenService.HasPermission(2))
             {
                 if (Download)
                 {
@@ -142,7 +144,6 @@
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
-        
         try
         {
             var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -153,14 +154,16 @@
                 userId = user.Id;
                 groupId = user.GroupId;
             }
-            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "2bf986da-0543-48ad-a21d-de0d08fb922b");
-
+            if (!string.IsNullOrEmpty(groupId) && user != null)
+            {
+                await CheckQuyenService.InitializePermissions(groupId, user, "2bf986da-0543-48ad-a21d-de0d08fb922b");
+            }
+          
             sLHGaModel = new();
             await LoadData();
         }
         catch (Exception ex)
         {
-
             ToastService.ShowToast(
                        "Thông báo",
                        ex.Message,

@@ -1,9 +1,12 @@
 ﻿@page "/NghiepVuCongTrinh/NhomDanhMuc"
-@inject PermissionService PermissionService
+@using DucAnhERP.Models.NghiepVuCongTrinh
+@using DucAnhERP.Repository.NghiepVuCongTrinh
+@using DucAnhERP.ViewModel.NghiepVuCongTrinh
+
 
 <div class="container-fluid">
     <div class="row m-2 justify-content-end">
-        @if (PermissionService.HasPermission(2))
+        @if (CheckQuyenService.HasPermission(2))
         {
             <div class="col-md-3 col-sm-6 text-end">
                 @if (Download)
@@ -28,7 +31,6 @@
                 <DataAnnotationsValidator />
                 <ValidationSummary />
                 <div class="row">
-
                     <div class="col-6">
                         <div class="form-group">
                             <label for="Ten">Tên nhóm danh mục <span class="text-danger">*</span></label>
@@ -37,7 +39,6 @@
 
                         </div>
                     </div>
-
                 </div>
                 <div class="row justify-content-end">
                     <button class="btn btn-primary mr-2" type="submit">Save</button>
@@ -49,7 +50,7 @@
     <div class="d-flex justify-content-between align-items-center">
         <h5 class="mt-2">Danh sách nhóm danh mục</h5>
     </div>
-    @if (PermissionService.HasPermission(3))
+    @if (CheckQuyenService.HasPermission(3))
      {
         <button class="btn btn-primary" @onclick="ShowModal">Thêm nhóm danh mục</button>
      }
@@ -83,7 +84,7 @@
                             <td class="text-center">@stt</td>
                             <td >@ndm.Ten</td>
                             <td class="text-center">
-                                @if (PermissionService.HasPermission(4))
+                                @if (CheckQuyenService.HasPermission(4))
                                 {
                                     <button class="btn btn-sm btn-primary" @onclick="()=>Edit(ndm.Id)">
                                         <i class="fas fa-edit"></i>
@@ -91,7 +92,7 @@
                                 }
                             </td>
                             <td class="text-center">
-                                @if (PermissionService.HasPermission(5))
+                                @if (CheckQuyenService.HasPermission(5))
                                 {
                                     <button class="btn btn-sm btn-danger" @onclick="()=>ConfirmDelete(ndm.Id,ndm.Ten)">
                                         <i class="fas fa-trash"></i>
@@ -114,7 +115,6 @@
             }
 
         </table>
-
     </div>
 
     @if (listNhomDanhMuc.Any())
@@ -129,7 +129,6 @@
     public string userId { get; set; }
     public string groupId { get; set; }
     private ApplicationUser user;
-    private List<PermissionModel> listPer = new();
 
     private List<NhomDanhMuc> Inputs = new List<NhomDanhMuc>();
     private NhomDanhMuc Input = new();
@@ -147,7 +146,6 @@
     private void HandleModalClose(bool isVisible)
     {
         isModalVisible = isVisible;
-
     }
 
     private void HandleSave()
@@ -191,7 +189,7 @@
     }
 
 
-    // Khởi tạo màn hình
+    // Khởi tạo màn hình 
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -202,34 +200,33 @@
             userId = user.Id;
             groupId = user.GroupId;
         }
-        // Đảm bảo rằng groupId, user, và majorId không null
         if (!string.IsNullOrEmpty(groupId) && user != null)
         {
-            await PermissionService.InitializePermissions(groupId, user, "543e23ae-9fc0-4bff-814b-0b7f54b21221");
+            await CheckQuyenService.InitializePermissions(groupId, user, "543e23ae-9fc0-4bff-814b-0b7f54b21221");
         }
-        else
-        {
-            // Log hoặc xử lý lỗi nếu cần
-            Console.WriteLine("Invalid parameters for InitializePermissions");
-        }
-        listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "543e23ae-9fc0-4bff-814b-0b7f54b21221");
 
         baseTime = DateTime.Now;
         dmModel = new();
-        Inputs = await NhomDanhMucRepository.GetAll(groupId);
-        await LoadNhomDanhMuc();
+        await Task.WhenAll(LoadNhomDanhMuc());
     }
 
 
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task LoadNhomDanhMuc()
     {   
-        var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "539f1553-3ce2-4c48-be9b-7098b4967311");
-        var nhomdanhmucs = await NhomDanhMucRepository.GetAllNDM();
-        listModel = nhomdanhmucs;
-        listNhomDanhMuc = Paging(nhomdanhmucs);
-        Console.WriteLine(listNhomDanhMuc);
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "539f1553-3ce2-4c48-be9b-7098b4967311");
+            var nhomdanhmucs = await NhomDanhMucRepository.GetAllNDM();
+            listModel = nhomdanhmucs;
+            listNhomDanhMuc = Paging(nhomdanhmucs);
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
     }
+
 
     private async Task HandleValidSubmit()
     {
@@ -387,18 +384,17 @@
     private async Task ExportExcel()
     {
         Download = true;
-        StateHasChanged();
         var sheetInfo = new SheetInfo1<object>
             {
                 SheetName = "Danh sách nhóm danh mục",
                 Tables = new List<TableInfo<object>>
-                {
-                    new TableInfo<object>
-                    {
-                        Headers = ConstantHeaderExcel.DSNDM.Cast<ComplexHeader>().ToList(),
-                        Data = listModel.Cast<object>().ToList()
-                    },
-                }
+        {
+            new TableInfo<object>
+            {
+                Headers = ConstantHeaderExcel.DSNDM.Cast<ComplexHeader>().ToList(),
+                Data = listModel.Cast<object>().ToList()
+            },
+        }
             };
 
         byte[] excelBytes = ExportExcelService.ExportToExcelWithMultipleTables(new List<SheetInfo1<object>> { sheetInfo });

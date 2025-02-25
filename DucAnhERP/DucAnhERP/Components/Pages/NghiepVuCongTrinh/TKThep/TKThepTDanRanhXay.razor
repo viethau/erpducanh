@@ -1,4 +1,7 @@
 ﻿@page "/TKThep/TKThepTDanRanhXay"
+@using DucAnhERP.Models.NghiepVuCongTrinh
+@using DucAnhERP.Repository.NghiepVuCongTrinh
+@using DucAnhERP.ViewModel.NghiepVuCongTrinh
 
 <style>
     table {
@@ -103,13 +106,12 @@
             </FooterTemplate>
         </CustomModal>
     </div>
-
       <div class="row m-2 justify-content-end">
          <div class="col-md-3 col-sm-6 text-end">
             <button class="btn btn-sm btn-outline-primary me-2 mr-1" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
-            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
+            @if(CheckQuyenService.HasPermission(2))
             {
                 @if (Download)
                 {
@@ -145,7 +147,7 @@
                         <label>&nbsp;</label>
                         <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
                     </div>
-                    @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 3))
+                    @if(CheckQuyenService.HasPermission(3))
                     {
                         <div class="col-sm-4 col-md-1 mb-1">
                             <label>&nbsp;</label>
@@ -270,19 +272,19 @@
                                     <tr>
                                         <td class="d-flex nowrap">
                                             <div class="d-inline-block">
-                                                @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 4))
+                                                @if(CheckQuyenService.HasPermission(4))
                                                 {
                                                     <button class="btn btn-sm btn-primary m-1" title="Chỉnh sửa" @onclick="()=>HandleEdit(item.Id)">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                 }
-                                                @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 5))
+                                                @if(CheckQuyenService.HasPermission(5))
                                                 {
                                                     <button class="btn btn-sm btn-danger m-1" title="Xóa" @onclick="()=>ConfirmDelete(item.Id ,item.TenCongTac)">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 }
-                                                @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 3))
+                                                @if(CheckQuyenService.HasPermission(3))
                                                 {
                                                     <div class="btn btn-sm p-0">
                                                         <div class="d-flex flex-column align-items-center">
@@ -378,7 +380,6 @@
         Input.LoaiThep = selectedItem.Value;
         LoaiThep = selectedItem.Text;
         selectDuongKinh = new();
-
         if (!string.IsNullOrEmpty(selectedItem.Value))
         {
             DmThepMDs = await DMTLThepRepository.GetAllByVM(new DMTLThepModel { ChungLoaiThep = selectedItem.Value });
@@ -426,7 +427,6 @@
                          duration: 5000);
             isSelectLoaiThep = true;
         }
-
     }
 
     private async Task OnSelectChangeDuongKinh(SelectedItem selectedItem)
@@ -554,7 +554,10 @@
                 userId = user.Id;
                 groupId = user.GroupId;
             }
-            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "962b9c61-2059-4e89-b2ae-04ab6072897a");
+            if (!string.IsNullOrEmpty(groupId) && user != null)
+            {
+                await CheckQuyenService.InitializePermissions(groupId, user, "962b9c61-2059-4e89-b2ae-04ab6072897a");
+            }
             
             var repository = await NuocMuaRepository.GetBaoCaoTDRXSDThep();
             selectLCK = new();

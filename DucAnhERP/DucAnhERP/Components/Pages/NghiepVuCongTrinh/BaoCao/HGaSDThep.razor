@@ -1,4 +1,6 @@
 ﻿@page "/BaoCao/HGaSDThep"
+@using DucAnhERP.Repository.NghiepVuCongTrinh
+@using DucAnhERP.ViewModel.NghiepVuCongTrinh
 
 <style>
     table {
@@ -18,7 +20,7 @@
             <button class="btn btn-sm btn-outline-primary me-2 mr-1" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
-            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
+            @if(CheckQuyenService.HasPermission(2))
             {
                 if (Download)
                 {
@@ -149,7 +151,6 @@
     public string userId { get; set; }
     public string groupId { get; set; }
     private ApplicationUser user;
-    private List<PermissionModel> listPer = new();
 
     private bool isLoading = false;
     private PhanLoaiHoGaModel Input = new PhanLoaiHoGaModel();
@@ -176,12 +177,10 @@
         Input.ThongTinChungHoGa_KetCauMong = selectedItem.Value;
     }
 
-
     public List<PhanLoaiHoGaModel> listPhanLoaiHoGaModel { get; set; } = new();
     public List<PhanLoaiHoGaModel> listModel { get; set; } = new();
     public MetaData MetaData { get; set; }
     public PhanLoaiHoGaModel phanLoaiHoGaModel { get; set; }
-
 
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
@@ -196,7 +195,10 @@
                 userId = user.Id;
                 groupId = user.GroupId;
             }
-            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "af771879-a0ae-4955-863d-74cc6c60f7e1");
+            if (!string.IsNullOrEmpty(groupId) && user != null)
+            {
+                await CheckQuyenService.InitializePermissions(groupId, user, "af771879-a0ae-4955-863d-74cc6c60f7e1");
+            }
 
             phanLoaiHoGaModel = new();
             await LoadData();

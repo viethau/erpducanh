@@ -1,24 +1,25 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
+@using System.Text.Json
+@using DucAnhERP
+@using DucAnhERP.Components
+@using DucAnhERP.Components.Pages.Common
+@using DucAnhERP.Helpers
+@using DucAnhERP.Models
 @using DucAnhERP.Repository
+@using DucAnhERP.Repository.NghiepVuCongTrinh
+@using DucAnhERP.SeedWork
 @using DucAnhERP.Services
+@using DucAnhERP.Shared
+@using DucAnhERP.ViewModel
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
-@using static Microsoft.AspNetCore.Components.Web.RenderMode
 @using Microsoft.AspNetCore.Components.Web.Virtualization
-@using Microsoft.JSInterop
-@using DucAnhERP
-@using DucAnhERP.Components
-@using DucAnhERP.Helpers
-@using DucAnhERP.ViewModel
-@using DucAnhERP.Models
-@using DucAnhERP.Components.Pages.Common
-@using DucAnhERP.SeedWork
 @using Microsoft.AspNetCore.Mvc.Rendering
-@using System.Text.Json
-@using DucAnhERP.Shared
+@using Microsoft.JSInterop
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
 @inject IJSRuntime JSRuntime
 
 @using Microsoft.AspNetCore.Identity
@@ -44,6 +45,7 @@
 @inject IApprovalStepSettingRepository ApprovalStepSettingService
 
 @inject IPhanQuyenRepository PhanQuyenService
+@inject PermissionService CheckQuyenService
 @inject ICompanyTypeRepository CompanyTypeService
 @inject IChiNhanhRepository ChiNhanhService
 
@@ -54,7 +56,6 @@
 @inject IKhuHanhChinhRepository KhuHanhChinhService
 @inject IQD_BoiThuong_GocRepository QD_BoiThuong_GocService
 @inject IQD_ThuHoiDat_GocRepository QD_ThuHoiDat_GocService
-
 @inject DucAnhERP.Services.ToastService ToastService
 @inject IMajorRepository MajorRepository
 @inject IDanhMucRepository DanhMucRepository

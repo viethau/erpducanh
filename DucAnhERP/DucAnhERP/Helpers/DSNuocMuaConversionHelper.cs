@@ -1,5 +1,5 @@
 ﻿using DucAnhERP.Components.Pages.NghiepVuCongTrinh;
-using DucAnhERP.Models;
+using DucAnhERP.Models.NghiepVuCongTrinh;
 using DucAnhERP.ViewModel;
 using System;
 using System.Collections.Generic;

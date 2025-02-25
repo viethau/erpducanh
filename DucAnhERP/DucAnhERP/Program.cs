@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore;
 using DucAnhERP.Models;
 using OfficeOpenXml;
 using Microsoft.AspNetCore.Http.Features;
+using DucAnhERP.Services.NghiepVuCongTrinh;
+using DucAnhERP.Repository.NghiepVuCongTrinh;
 
 var builder = WebApplication.CreateBuilder(args);
 

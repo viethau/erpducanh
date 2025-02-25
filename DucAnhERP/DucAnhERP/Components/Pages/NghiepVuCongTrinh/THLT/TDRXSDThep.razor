@@ -1,4 +1,6 @@
 ﻿@page "/THLT/TDRXSDThep"
+@using DucAnhERP.Models.NghiepVuCongTrinh
+@using DucAnhERP.Repository.NghiepVuCongTrinh
 
 @* @using Microsoft.AspNetCore.Authorization *@
 @* @attribute [Authorize] *@
@@ -20,7 +22,7 @@
             <button class="btn btn-outline-primary me-2" @onclick="ThumbtackHeader" title="Ghim tiêu đề bảng">
                 <i class="fas fa-thumbtack"></i>
             </button>
-            @if (user.CreateBy == "symtem" || listPer.Any(p => p.PermissionType == 2))
+            @if(CheckQuyenService.HasPermission(2))
             {
                 if (Download)
                 {
@@ -98,13 +100,11 @@
     <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
 </div>
 
-
 @code {
     public string userName { get; set; }
     public string userId { get; set; }
     public string groupId { get; set; }
     private ApplicationUser user;
-    private List<PermissionModel> listPer = new();
 
     [SupplyParameterFromForm]
     private NuocMua Input { get; set; } = new();
@@ -139,8 +139,11 @@
                 userId = user.Id;
                 groupId = user.GroupId;
             }
-            listPer = await PhanQuyenService.getAllPermissionByMajor(groupId, "", user, "5775c74e-2c90-47bb-9869-be458c6c7e4d");
-
+            if (!string.IsNullOrEmpty(groupId) && user != null)
+            {
+                await CheckQuyenService.InitializePermissions(groupId, user, "5775c74e-2c90-47bb-9869-be458c6c7e4d");
+            }
+           
             baseTime = DateTime.Now;
             nuocMuaModel = new();
             await LoadData();

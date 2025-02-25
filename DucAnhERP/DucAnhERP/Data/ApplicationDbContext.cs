@@ -1,6 +1,7 @@
 ﻿using DucAnhERP.Components.Pages.NghiepVuCongTrinh.DanhMuc;
 using DucAnhERP.Components.Pages.NghiepVuCongTrinh.PKKL;
 using DucAnhERP.Models;
+using DucAnhERP.Models.NghiepVuCongTrinh;
 using DucAnhERP.Services.SignalR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
