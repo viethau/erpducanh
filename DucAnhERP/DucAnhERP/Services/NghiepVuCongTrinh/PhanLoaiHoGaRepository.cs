@@ -3,7 +3,6 @@ using DucAnhERP.Data;
 using DucAnhERP.Helpers;
 using DucAnhERP.Models.NghiepVuCongTrinh;
 using DucAnhERP.Repository.NghiepVuCongTrinh;
-using DucAnhERP.ViewModel;
 using DucAnhERP.ViewModel.NghiepVuCongTrinh;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;

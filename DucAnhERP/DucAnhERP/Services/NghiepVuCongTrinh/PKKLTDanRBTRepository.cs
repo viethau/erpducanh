@@ -1,5 +1,4 @@
 ﻿using DucAnhERP.Data;
-using DucAnhERP.ViewModel;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore;
 using DucAnhERP.Models.NghiepVuCongTrinh;

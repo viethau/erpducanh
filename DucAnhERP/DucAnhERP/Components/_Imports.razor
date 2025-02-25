@@ -6,12 +6,17 @@
 @using DucAnhERP.Components.Pages.Common
 @using DucAnhERP.Helpers
 @using DucAnhERP.Models
+@using DucAnhERP.Models.NghiepVuCongTrinh
+@using DucAnhERP.Models.BoiThuong
 @using DucAnhERP.Repository
+@using DucAnhERP.Repository.BoiThuong
 @using DucAnhERP.Repository.NghiepVuCongTrinh
 @using DucAnhERP.SeedWork
 @using DucAnhERP.Services
 @using DucAnhERP.Shared
 @using DucAnhERP.ViewModel
+@using DucAnhERP.ViewModel.NghiepVuCongTrinh
+@using DucAnhERP.ViewModel.BoiThuong
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
@@ -27,7 +32,8 @@
 @inject NavigationManager navigation
 @inject UserManager<IdentityUser> UserManager
 
-
+@* Bồi thường *@
+@inject ILoaiChungTuRepository LoaiChungTuService
 
 @inject IMajorRepository MajorService
 @inject ICompanyRepository CompanyService

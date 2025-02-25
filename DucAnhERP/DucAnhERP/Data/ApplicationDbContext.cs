@@ -103,6 +103,8 @@ namespace DucAnhERP.Data
         public DbSet<PKKLCTietHoGa> PKKLCTietHoGas { get; set; }
         public DbSet<PKKLCTietTDHG> PKKLCTietTDHGs { get; set; }
 
+        //BoiThuong
+        public DbSet<BT_DM_LoaiChungTu> BT_DM_LoaiChungTus { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

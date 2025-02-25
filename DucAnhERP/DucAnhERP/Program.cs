@@ -13,6 +13,8 @@ using OfficeOpenXml;
 using Microsoft.AspNetCore.Http.Features;
 using DucAnhERP.Services.NghiepVuCongTrinh;
 using DucAnhERP.Repository.NghiepVuCongTrinh;
+using DucAnhERP.Repository.BoiThuong;
+using DucAnhERP.Services.BoiThuong;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -117,6 +119,8 @@ builder.Services.AddScoped<IPKKLTDanRXayRepository, PKKLTDanRXayRepository>();
 builder.Services.AddScoped<IPKKLTChongRepository, PKKLTChongRepository>();
 builder.Services.AddScoped<IPKKLCTietHoGaRepository, PKKLCTietHoGaRepository>();
 builder.Services.AddScoped<IPKKLCTietTDHGRepository, PKKLCTietTDHGRepository>();
+//BoiThuong
+builder.Services.AddScoped<ILoaiChungTuRepository, LoaiChungTuRepository>();
 
 
 builder.Services.AddAuthentication(options =>

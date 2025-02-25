@@ -1,0 +1,100 @@
+﻿@using DucAnhERP.Models.BoiThuong
+@if (IsLoading)
+{
+    <div class="text-center">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Đang tải...</span>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <!-- Chọn tỉnh -->
+        <div class="col-md-4">
+            <label for="province" class="form-label">Chọn tỉnh/thành</label>
+            <select id="province" class="form-select" @onchange="OnProvinceChange">
+                <option value="">-- Chọn tỉnh/thành --</option>
+                @foreach (var province in Provinces)
+                {
+                    <option value="@province.Id">@province.Name</option>
+                }
+            </select>
+        </div>
+
+        <!-- Chọn huyện -->
+        <div class="col-md-4">
+            <label for="district" class="form-label">Chọn huyện/quận</label>
+            <select id="district" class="form-select" @onchange="OnDistrictChange" disabled="@(!Districts.Any())">
+                <option value="">-- Chọn huyện/quận --</option>
+                @foreach (var district in Districts)
+                {
+                    <option value="@district.Id">@district.Name</option>
+                }
+            </select>
+        </div>
+
+        <!-- Chọn xã -->
+        <div class="col-md-4">
+            <label for="ward" class="form-label">Chọn xã/phường</label>
+            <select id="ward" class="form-select" @onchange="OnWardChange" disabled="@(!Wards.Any())">
+                <option value="">-- Chọn xã/phường --</option>
+                @foreach (var ward in Wards)
+                {
+                    <option value="@ward.Id">@ward.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter] public EventCallback<AddressSelection> OnSelectionChanged { get; set; }
+
+    private List<Province> Provinces = new();
+    private List<District> Districts = new();
+    private List<Ward> Wards = new();
+
+    private AddressSelection Selection = new();
+    private bool IsLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500); // Giả lập tải dữ liệu
+        var json = await File.ReadAllTextAsync("wwwroot/json/vietnamAddress.json");
+        Provinces = JsonSerializer.Deserialize<List<Province>>(json) ?? new();
+        IsLoading = false;
+    }
+
+    private async Task OnProvinceChange(ChangeEventArgs e)
+    {
+        var provinceId = e.Value.ToString();
+        Selection.SelectedProvince = Provinces.FirstOrDefault(p => p.Id == provinceId);
+        Districts = Selection.SelectedProvince?.Districts ?? new();
+        Wards.Clear();
+        Selection.SelectedDistrict = null;
+        Selection.SelectedWard = null;
+
+        await OnSelectionChanged.InvokeAsync(Selection);
+    }
+
+    private async Task OnDistrictChange(ChangeEventArgs e)
+    {
+        var districtId = e.Value.ToString();
+        Selection.SelectedDistrict = Districts.FirstOrDefault(d => d.Id == districtId);
+        Wards = Selection.SelectedDistrict?.Wards ?? new();
+        Selection.SelectedWard = null;
+
+        await OnSelectionChanged.InvokeAsync(Selection);
+    }
+
+    private async Task OnWardChange(ChangeEventArgs e)
+    {
+        var wardId = e.Value.ToString();
+        Selection.SelectedWard = Wards.FirstOrDefault(w => w.Id == wardId);
+
+        await OnSelectionChanged.InvokeAsync(Selection);
+    }
+}
+

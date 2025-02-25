@@ -1,6 +1,5 @@
 ﻿using DucAnhERP.Helpers;
 using DucAnhERP.Models.NghiepVuCongTrinh;
-using DucAnhERP.ViewModel;
 using DucAnhERP.ViewModel.NghiepVuCongTrinh;
 
 namespace DucAnhERP.Repository.NghiepVuCongTrinh

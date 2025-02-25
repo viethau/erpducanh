@@ -1,0 +1,26 @@
+﻿@page "/BoiThuong/CTietPAnBThuong"
+@using DucAnhERP.Models.BoiThuong
+
+<div class="container mt-4">
+    <h3 class="text-primary">Chọn địa chỉ</h3>
+
+    <AddressSelector OnSelectionChanged="OnAddressChanged" />
+
+    <hr />
+
+    <h4 class="text-success">Địa chỉ đã chọn:</h4>
+    <div class="alert alert-info">
+        <p><strong>Tỉnh/Thành:</strong> @SelectedAddress?.SelectedProvince?.Name</p>
+        <p><strong>Huyện/Quận:</strong> @SelectedAddress?.SelectedDistrict?.Name</p>
+        <p><strong>Xã/Phường:</strong> @SelectedAddress?.SelectedWard?.Name</p>
+    </div>
+</div>
+
+@code {
+    private AddressSelection SelectedAddress = new();
+
+    private void OnAddressChanged(AddressSelection selection)
+    {
+        SelectedAddress = selection;
+    }
+}
