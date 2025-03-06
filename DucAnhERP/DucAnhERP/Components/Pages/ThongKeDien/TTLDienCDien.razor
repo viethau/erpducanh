@@ -127,7 +127,7 @@
             <EditForm id="editFormId" Model="Input" OnInvalidSubmit="HandleInValidSubmit" OnValidSubmit="HandleValidSubmit" >
                 <DataAnnotationsValidator />
                 <ValidationSummary />
-                <p>Thông tin lý trình</p>
+                <h5>Thông tin lý trình</h5>
                 <div class="row">
                     <div class="form-floating col-sm-6 col-md-3">
                         <div class="form-group">
@@ -287,13 +287,13 @@
         <DataAnnotationsValidator />
         <div class="d-flex row">
             <div class="form-floating col-sm-6 col-md-2">
-                <label for="TuyenDuong">Tuyến đường</label>
-                <Select2 Id="TuyenDuong" Items="@selectTuyenDuongS" OnChange="@OnSelectTuyenDuongS"></Select2>
+                <label for="TuyenDuongS">Tuyến đường</label>
+                <Select2 Id="TuyenDuongS" Items="@selectTuyenDuongS" OnChange="@OnSelectTuyenDuongS"></Select2>
                 <ValidationMessage For="()=>pageModel.TuyenDuong"></ValidationMessage>
             </div>
             <div class="form-floating col-sm-6 col-md-2">
-                <label for="TuCot">Từ cột</label>
-                <Select2 Id="TuCot" Items="@selectTuCotS" OnChange="@OnSelectTuCotS"></Select2>
+                <label for="TuCotS">Từ cột</label>
+                <Select2 Id="TuCotS" Items="@selectTuCotS" OnChange="@OnSelectTuCotS"></Select2>
                 <ValidationMessage For="()=>pageModel.TuCot"></ValidationMessage>
             </div>
             <div class="form-floating col-sm-6 col-md-2">
@@ -302,29 +302,29 @@
                 <ValidationMessage For="()=>pageModel.TuLyTrinh"></ValidationMessage>
             </div>
 
-             <div class="form-floating col-sm-6 col-md-2">
-                <label for="Id_DM_TuDien">Thông tin côt, tủ điện</label>
-                <Select2 Id="Id_DM_TuDien" Items="@selectDM_TuDienS" OnChange="@OnSelectDM_TuDienS"></Select2>
+            <div class="form-floating col-sm-6 col-md-2">
+                <label for="Id_DM_TuDienS">Thông tin côt, tủ điện</label>
+                <Select2 Id="Id_DM_TuDienS" Items="@selectDM_TuDienS" OnChange="@OnSelectDM_TuDienS"></Select2>
                 <ValidationMessage For="()=>pageModel.Id_DM_TuDien"></ValidationMessage>
             </div>
             <div class="form-floating col-sm-6 col-md-2">
-                <label for="Id_DM_BuLong">Thông tin bu lông</label>
-                <Select2 Id="Id_DM_BuLong" Items="@selectDM_BuLongS" OnChange="@OnSelectDM_BuLongS"></Select2>
+                <label for="Id_DM_BuLongS">Thông tin bu lông</label>
+                <Select2 Id="Id_DM_BuLongS" Items="@selectDM_BuLongS" OnChange="@OnSelectDM_BuLongS"></Select2>
                 <ValidationMessage For="()=>pageModel.Id_DM_BuLong"></ValidationMessage>
             </div>
-             <div class="form-floating col-sm-6 col-md-2">
-                <label for="Id_DM_TiepDia">Thông tin tiếp địa</label>
-                <Select2 Id="Id_DM_TiepDia" Items="@selectDM_TiepDiaS" OnChange="@OnSelectDM_TiepDiaS"></Select2>
+            <div class="form-floating col-sm-6 col-md-2">
+                <label for="Id_DM_TiepDiaS">Thông tin tiếp địa</label>
+                <Select2 Id="Id_DM_TiepDiaS" Items="@selectDM_TiepDiaS" OnChange="@OnSelectDM_TiepDiaS"></Select2>
                 <ValidationMessage For="()=>pageModel.Id_DM_TiepDia"></ValidationMessage>
             </div>
             <div class="form-floating col-sm-6 col-md-2">
-                <label for="Id_DM_BongDen">Thông tin bóng đèn</label>
-                <Select2 Id="Id_DM_BongDen" Items="@selectDM_BongDenS" OnChange="@OnSelectDM_BongDenS"></Select2>
+                <label for="Id_DM_BongDenS">Thông tin bóng đèn</label>
+                <Select2 Id="Id_DM_BongDenS" Items="@selectDM_BongDenS" OnChange="@OnSelectDM_BongDenS"></Select2>
                 <ValidationMessage For="()=>pageModel.Id_DM_BongDen"></ValidationMessage>
             </div>
             <div class="form-floating col-sm-6 col-md-2">
-                <label for="Id_DM_DayDen">Thông tin dây lên đèn</label>
-                <Select2 Id="Id_DM_DayDen" Items="@selectDM_DayDenS" OnChange="@OnSelectDM_DayDenS"></Select2>
+                <label for="Id_DM_DayDenS">Thông tin dây lên đèn</label>
+                <Select2 Id="Id_DM_DayDenS" Items="@selectDM_DayDenS" OnChange="@OnSelectDM_DayDenS"></Select2>
                 <ValidationMessage For="()=>pageModel.Id_DM_DayDen"></ValidationMessage>
             </div>
 
@@ -464,10 +464,10 @@
                             <td>@ndm.DM_DayDen</td>
                             <td>@ndm.LoaiDayDien</td>
                             <td>@ndm.CDaiDay</td>
-                    
+
                             <td>@ndm.ToaDoX</td>
                             <td>@ndm.ToaDoY</td>
-                           
+
                         </tr>
                         stt++;
                     }
@@ -513,6 +513,7 @@
         isEdit = false;
         isModalVisible = true;
         dmModel = new();
+        Refresh();
     }
     private void HandleModalClose(bool isVisible)
     {
@@ -614,109 +615,117 @@
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
-        pageModel = new();
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        if (authState.User.Identity.IsAuthenticated)
+        try
         {
-            userName = authState.User.Identity.Name;
-            user = ApplicationUserService.GetByUserName(userName);
-            userId = user.Id;
-            groupId = user.GroupId;
-        }
-        if (!string.IsNullOrEmpty(groupId) && user != null)
-        {
-            await CheckQuyenService.InitializePermissions(groupId, user, "6f85445f-398d-47d6-bbea-04c267299535");
-        }
-        var DM_LoaiKLs = await DM_LoaiKLService.GetByVM(groupId, new DM_LoaiKLModel());
-        foreach (var item in DM_LoaiKLs)
-        {
-            if (!selectTuDienSearch.Any(x => x.Value == item.Id))
+            pageModel = new();
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
             {
-                selectTuDienSearch.Add(new SelectedItem
-                    {
-                        Value = item.Id,
-                        Text = item.LoaiKhoiLuong
-                    });
+                userName = authState.User.Identity.Name;
+                user = ApplicationUserService.GetByUserName(userName);
+                userId = user.Id;
+                groupId = user.GroupId;
             }
-            selectBuLongSearch = selectTuDienSearch;
-            selectTiepDiaSearch = selectTuDienSearch;
-            selectBongDenSearch = selectTuDienSearch;
-            selectDayDenSearch = selectTuDienSearch;
-        }
+            if (!string.IsNullOrEmpty(groupId) && user != null)
+            {
+                await CheckQuyenService.InitializePermissions(groupId, user, "6f85445f-398d-47d6-bbea-04c267299535");
+            }
+            var DM_LoaiKLs = await DM_LoaiKLService.GetByVM(groupId, new DM_LoaiKLModel());
+            foreach (var item in DM_LoaiKLs)
+            {
+                if (!selectTuDienSearch.Any(x => x.Value == item.Id))
+                {
+                    selectTuDienSearch.Add(new SelectedItem
+                        {
+                            Value = item.Id,
+                            Text = item.LoaiKhoiLuong
+                        });
+                }
+                selectBuLongSearch = selectTuDienSearch;
+                selectTiepDiaSearch = selectTuDienSearch;
+                selectBongDenSearch = selectTuDienSearch;
+                selectDayDenSearch = selectTuDienSearch;
+            }
 
-        var TTLDienCDiens = await D_TTLDienCDienService.GetByVM(groupId, new D_TTLDienCDienModel());
-        foreach (var item in TTLDienCDiens)
-        {
-            if (!selectTuyenDuongS.Any(x => x.Value == item.Id_DM_TuyenDuong))
+            var TTLDienCDiens = await D_TTLDienCDienService.GetByVM(groupId, new D_TTLDienCDienModel());
+            foreach (var item in TTLDienCDiens)
             {
-                selectTuyenDuongS.Add(new SelectedItem
-                    {
-                        Value = item.Id_DM_TuyenDuong,
-                        Text = item.TuyenDuong
-                    });
+                if (!selectTuyenDuongS.Any(x => x.Value == item.Id_DM_TuyenDuong))
+                {
+                    selectTuyenDuongS.Add(new SelectedItem
+                        {
+                            Value = item.Id_DM_TuyenDuong,
+                            Text = item.TuyenDuong
+                        });
+                }
+                if (!selectTuCotS.Any(x => x.Value == item.TuCot))
+                {
+                    selectTuCotS.Add(new SelectedItem
+                        {
+                            Value = item.TuCot,
+                            Text = item.TuCot
+                        });
+                }
+                if (!selectTuLyTrinhS.Any(x => x.Value == item.TuLyTrinh))
+                {
+                    selectTuLyTrinhS.Add(new SelectedItem
+                        {
+                            Value = item.TuLyTrinh,
+                            Text = item.TuLyTrinh
+                        });
+                }
+                if (!selectDM_TuDienS.Any(x => x.Value == item.Id_DM_TuDien))
+                {
+                    selectDM_TuDienS.Add(new SelectedItem
+                        {
+                            Value = item.Id_DM_TuDien,
+                            Text = item.DM_TuDien
+                        });
+                }
+                if (!selectDM_BuLongS.Any(x => x.Value == item.Id_DM_BuLong))
+                {
+                    selectDM_BuLongS.Add(new SelectedItem
+                        {
+                            Value = item.Id_DM_BuLong,
+                            Text = item.DM_BuLong
+                        });
+                }
+                if (!selectDM_TiepDiaS.Any(x => x.Value == item.Id_DM_TiepDia))
+                {
+                    selectDM_TiepDiaS.Add(new SelectedItem
+                        {
+                            Value = item.Id_DM_TiepDia,
+                            Text = item.DM_TiepDia
+                        });
+                }
+                if (!selectDM_BongDenS.Any(x => x.Value == item.Id_DM_BongDen))
+                {
+                    selectDM_BongDenS.Add(new SelectedItem
+                        {
+                            Value = item.Id_DM_BongDen,
+                            Text = item.DM_BongDen
+                        });
+                }
+                if (!selectDM_DayDenS.Any(x => x.Value == item.Id_DM_DayDen))
+                {
+                    selectDM_DayDenS.Add(new SelectedItem
+                        {
+                            Value = item.Id_DM_DayDen,
+                            Text = item.DM_DayDen
+                        });
+                }
             }
-            if (!selectTuCotS.Any(x => x.Value == item.TuCot))
-            {
-                selectTuCotS.Add(new SelectedItem
-                    {
-                        Value = item.TuCot,
-                        Text = item.TuCot
-                    });
-            }
-            if (!selectTuLyTrinhS.Any(x => x.Value == item.TuLyTrinh))
-            {
-                selectTuLyTrinhS.Add(new SelectedItem
-                    {
-                        Value = item.TuLyTrinh,
-                        Text = item.TuLyTrinh
-                    });
-            }
-            if (!selectDM_TuDienS.Any(x => x.Value == item.Id_DM_TuDien))
-            {
-                selectDM_TuDienS.Add(new SelectedItem
-                    {
-                        Value = item.Id_DM_TuDien,
-                        Text = item.DM_TuDien
-                    });
-            }
-            if (!selectDM_BuLongS.Any(x => x.Value == item.Id_DM_BuLong))
-            {
-                selectDM_BuLongS.Add(new SelectedItem
-                    {
-                        Value = item.Id_DM_BuLong,
-                        Text = item.DM_BuLong
-                    });
-            }
-            if (!selectDM_TiepDiaS.Any(x => x.Value == item.Id_DM_TiepDia))
-            {
-                selectDM_TiepDiaS.Add(new SelectedItem
-                    {
-                        Value = item.Id_DM_TiepDia,
-                        Text = item.DM_TiepDia
-                    });
-            }
-            if (!selectDM_BongDenS.Any(x => x.Value == item.Id_DM_BongDen))
-            {
-                selectDM_BongDenS.Add(new SelectedItem
-                    {
-                        Value = item.Id_DM_BongDen,
-                        Text = item.DM_BongDen
-                    });
-            }
-            if (!selectDM_DayDenS.Any(x => x.Value == item.Id_DM_DayDen))
-            {
-                selectDM_DayDenS.Add(new SelectedItem
-                    {
-                        Value = item.Id_DM_DayDen,
-                        Text = item.DM_DayDen
-                    });
-            }
+
+            StateHasChanged();
+
+            baseTime = DateTime.Now;
+            await Task.WhenAll(Search());
         }
-
-        StateHasChanged();
-
-        baseTime = DateTime.Now;
-        await Task.WhenAll(Search());
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            throw;
+        }
     }
     // Truy vấn data theo điều kiện tìm kiếm
     private async Task Search()
@@ -825,7 +834,7 @@
         {
             TitleModal = "Cập nhật !";
             Input = await D_TTLDienCDienService.GetById(id);
-            
+
             selectTuDienSearch.ForEach(item => item.IsSelected = item.Value == Input.Id_DM_TuDien);
             selectBuLongSearch.ForEach(item => item.IsSelected = item.Value == Input.Id_DM_BuLong);
             selectTiepDiaSearch.ForEach(item => item.IsSelected = item.Value == Input.Id_DM_TiepDia);
@@ -847,7 +856,19 @@
             ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
         }
     }
-    
+    private void Refresh()
+    {
+        selectTuDienSearch.ForEach(item => item.IsSelected = item.Value == "");
+        selectBuLongSearch.ForEach(item => item.IsSelected = item.Value == "");
+        selectTiepDiaSearch.ForEach(item => item.IsSelected = item.Value == "");
+        selectBongDenSearch.ForEach(item => item.IsSelected = item.Value == "");
+        selectDayDenSearch.ForEach(item => item.IsSelected = item.Value == "");
+        Input = new();
+        pageModel = new();
+        StateHasChanged();
+    }
+
+
     // Sắp xếp data
     private void SortTable(string columnName)
     {

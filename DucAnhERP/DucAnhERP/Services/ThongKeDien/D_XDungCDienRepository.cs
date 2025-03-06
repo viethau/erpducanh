@@ -24,7 +24,14 @@ namespace DucAnhERP.Services.BoiThuong
             var result = from p1 in query
                               join chinhanh in context.ChiNhanhs on p1.CompanyId equals chinhanh.Id
                              join tuyenduong in context.D_DM_TuyenDuongs on p1.Id_DM_TuyenDuong equals tuyenduong.Id
-                             where p1.CompanyId == groupId
+                             join kllm_hm in context.D_DM_HangMucKLs on p1.Id_DM_HangMucLotMong equals kllm_hm.Id
+                             join klm_hm in context.D_DM_HangMucKLs on p1.ID_DM_HangMucMong equals klm_hm.Id
+
+                             join LoaiKL_LMXD in context.D_DM_LoaiKLs on p1.Id_DM_LoaiKL_LMXD equals LoaiKL_LMXD.Id
+                             join LoaiKLLotMong_VK in context.D_DM_LoaiKLs on p1.Id_DM_LoaiKLLotMong_VK equals LoaiKLLotMong_VK.Id
+                             join LoaiKL_MXD in context.D_DM_LoaiKLs on p1.Id_DM_LoaiKL_MXD equals LoaiKL_MXD.Id
+                             join LoaiKL_VK in context.D_DM_LoaiKLs on p1.Id_DM_LoaiKL_VK equals LoaiKL_VK.Id
+                         where p1.CompanyId == groupId
                               orderby p1.CreateAt descending
                               select new D_XDungCDienModel
                               {
@@ -37,6 +44,35 @@ namespace DucAnhERP.Services.BoiThuong
                                   TuLyTrinh = tuyenduong.TuLyTrinh,
                                   DenLyTrinh = tuyenduong.DenLyTrinh,
 
+                                  Id_DM_HangMucLotMong = p1.Id_DM_HangMucLotMong,
+                                  DM_HangMucLotMong = kllm_hm.Ten,
+                                  Id_DM_LoaiKL_LMXD = p1.Id_DM_LoaiKL_LMXD,
+                                  DM_LoaiKL_LMXD = LoaiKL_LMXD.LoaiKhoiLuong,
+                                  KLLM_XD_Dai = p1.KLLM_XD_Dai,
+                                  KLLM_XD_Rong = p1.KLLM_XD_Rong,
+                                  KLLM_XD_Cao = p1.KLLM_XD_Cao,
+                                  KLLM_XD_KL = p1.KLLM_XD_KL,
+
+                                  Id_DM_LoaiKLLotMong_VK = p1.Id_DM_LoaiKLLotMong_VK,
+                                  DM_LoaiKLLotMong_VK = LoaiKLLotMong_VK.LoaiKhoiLuong,
+                                  KLLM_VK_SLCD = p1.KLLM_VK_SLCD,
+                                  KLLM_VK_SLCR =p1.KLLM_VK_SLCR,
+                                  KLLM_VK_KL = p1.KLLM_VK_KL,
+
+                                  ID_DM_HangMucMong = p1.ID_DM_HangMucMong,
+                                  DM_HangMucMong = klm_hm.Ten,
+                                  Id_DM_LoaiKL_MXD = p1.Id_DM_LoaiKL_MXD,
+                                  DM_LoaiKL_MXD = LoaiKL_MXD.LoaiKhoiLuong,
+                                  KLM_XD_Dai = p1.KLM_XD_Dai,
+                                  KLM_XD_Rong = p1.KLM_XD_Rong,
+                                  KLM_XD_Cao =p1.KLM_XD_Cao,
+                                  KLM_XD_KL = p1.KLM_XD_KL,
+
+                                  Id_DM_LoaiKL_VK =p1.Id_DM_LoaiKL_VK,
+                                  DM_LoaiKL_VK = LoaiKL_VK.LoaiKhoiLuong,
+                                  KLM_VK_SLCD = p1.KLM_VK_SLCD,
+                                  KLM_VK_SLCR = p1.KLM_VK_SLCR,
+                                  KLM_VK_KL =p1.KLM_VK_KL,
 
                                   CreateAt = p1.CreateAt,
                                   CreateBy = p1.CreateBy,
@@ -103,15 +139,27 @@ namespace DucAnhERP.Services.BoiThuong
             using var context = _context.CreateDbContext();
             return await context.D_XDungCDiens
                 .AnyAsync(x => x.Id != id &&
-                               x.CompanyId == input.CompanyId 
-                               //&&
-                               //x.TuyenDuong == input.TuyenDuong &&
-                               //x.TuCot == input.TuCot &&
-                               //x.DenCot == input.DenCot &&
-                               //x.TuLyTrinh == input.TuLyTrinh &&
-                               //x.DenLyTrinh == input.DenLyTrinh &&
-                               //x.ToaDoX == input.ToaDoX &&
-                               //x.ToaDoY == input.ToaDoY
+                               x.CompanyId == input.CompanyId &&
+                               x.Id_DM_TuyenDuong == input.Id_DM_TuyenDuong &&
+                               x.Id_DM_HangMucLotMong == input.Id_DM_HangMucLotMong &&
+                               x.Id_DM_LoaiKL_LMXD == input.Id_DM_LoaiKL_LMXD &&
+                               x.KLLM_XD_Dai == input.KLLM_XD_Dai &&
+                               x.KLLM_XD_Rong == input.KLLM_XD_Rong &&
+                               x.KLLM_XD_Cao == input.KLLM_XD_Cao &&
+                               x.KLLM_XD_KL == input.KLLM_XD_KL &&
+                               x.Id_DM_LoaiKLLotMong_VK == input.Id_DM_LoaiKLLotMong_VK &&
+                               x.KLLM_VK_SLCD == input.KLLM_VK_SLCD &&
+                               x.KLLM_VK_KL == input.KLLM_VK_KL &&
+                               x.ID_DM_HangMucMong == input.ID_DM_HangMucMong &&
+                               x.Id_DM_LoaiKL_MXD == input.Id_DM_LoaiKL_MXD &&
+                               x.KLM_XD_Dai == input.KLM_XD_Dai &&
+                               x.KLM_XD_Rong == input.KLM_XD_Rong &&
+                               x.KLM_XD_Cao == input.KLM_XD_Cao &&
+                               x.KLM_XD_KL == input.KLM_XD_KL &&
+                               x.Id_DM_LoaiKL_VK == input.Id_DM_LoaiKL_VK &&
+                               x.KLM_VK_SLCD == input.KLM_VK_SLCD &&
+                               x.KLM_VK_SLCR == input.KLM_VK_SLCR &&
+                               x.KLM_VK_KL == input.KLM_VK_KL
                                );
         }
         public async Task<bool> IsIdInUse(string id)
