@@ -39252,8 +39252,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>qib5rxmo6m</Fingerprint>
-      <Integrity>kkh2HJ/kNk5V1REAmaxUVD6RJaWKepUo/eVx6k9VEZM=</Integrity>
+      <Fingerprint>jeyzf90jh4</Fingerprint>
+      <Integrity>FXRWQwH7+I+0TXwfN8hua9D56EFshnpVjo6NDxk+ZwQ=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\files\KCNCK- Giá trị đền bù theo luật mới 22.10.2024 (7).xlsx'))</OriginalItemSpec>
@@ -39270,8 +39270,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>wyu6hs8reg</Fingerprint>
-      <Integrity>uDxGKmaPEFTeyNzwAjKcFLLawVE/tMuohdkCzUwkNVU=</Integrity>
+      <Fingerprint>wqvzmjnhm8</Fingerprint>
+      <Integrity>iMLVgFKsLX/nkyQAH9U1mybgnuWHK8mnTQEBkImpphA=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\files\Minh2024.bak'))</OriginalItemSpec>
@@ -39401,6 +39401,60 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\templates\register_mail.html'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\upload_img\66862dcd-89e1-4512-b2f8-bccee366b777_Capture.PNG'))">
+      <SourceType>Package</SourceType>
+      <SourceId>DucAnhERP</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/DucAnhERP</BasePath>
+      <RelativePath>upload_img/66862dcd-89e1-4512-b2f8-bccee366b777_Capture.PNG</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>kztm6rvwd7</Fingerprint>
+      <Integrity>sLyil+F7/FadpOtpRRhCimID0Jpl+gh5/zAQ9dZ9XKs=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\upload_img\66862dcd-89e1-4512-b2f8-bccee366b777_Capture.PNG'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\upload_img\7710126a-a3ac-4759-b6ea-deea9d9170bd_Capture1.PNG'))">
+      <SourceType>Package</SourceType>
+      <SourceId>DucAnhERP</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/DucAnhERP</BasePath>
+      <RelativePath>upload_img/7710126a-a3ac-4759-b6ea-deea9d9170bd_Capture1.PNG</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>9xdg416ewe</Fingerprint>
+      <Integrity>g005YFsM5Ee6Lo+GuK82FYrJsXhKahvwKEieX78/cmg=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\upload_img\7710126a-a3ac-4759-b6ea-deea9d9170bd_Capture1.PNG'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\upload_img\db42f0ea-b86d-4dc6-8ce8-ad4321bc527a_aa.PNG'))">
+      <SourceType>Package</SourceType>
+      <SourceId>DucAnhERP</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/DucAnhERP</BasePath>
+      <RelativePath>upload_img/db42f0ea-b86d-4dc6-8ce8-ad4321bc527a_aa.PNG</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>49hrb519re</Fingerprint>
+      <Integrity>6AC7pkcbyGC2DIpY1QDndAbrIhSrEfSE756YXPSf/hM=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\upload_img\db42f0ea-b86d-4dc6-8ce8-ad4321bc527a_aa.PNG'))</OriginalItemSpec>
     </StaticWebAsset>
   </ItemGroup>
 </Project>

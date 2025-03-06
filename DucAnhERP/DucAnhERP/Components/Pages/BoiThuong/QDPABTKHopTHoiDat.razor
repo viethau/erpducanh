@@ -1,0 +1,460 @@
+﻿@page "/BoiThuong/QDPABTKHopTHoiDat"
+
+<div class="container-fluid">
+    <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
+        <BodyTemplate>
+            <EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="row">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="form-group">
+                            <label for="Id_DM_QDThuhoiDatGoc">Quyết định thu hồi đất gốc<span class="text-danger">*</span></label>
+                            <Select2 Id="Id_DM_QDThuhoiDatGoc" Items="@selectQDThuhoiDatGoc" OnChange="OnQDThuhoiDatGocChange" />
+                            <ValidationMessage For="() => Input.Id_DM_QDThuhoiDatGoc" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">N/T/N QĐ thu hồi đất gốc<span class="text-danger">*</span></label>
+                            <InputDate readonly id="NTNPABTGoc" class="form-control" @bind-Value="InputModel.NTNPABTGoc" />
+                            <ValidationMessage For="() => InputModel.NTNPABTGoc" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="form-group">
+                            <label for="Id_DM_QDCVChiPhiHoiDong">Quyết định PABT gốc<span class="text-danger">*</span></label>
+                            <Select2 Id="Id_DM_QDCVChiPhiHoiDong" Items="@selectQDCVChiPhiHoiDong" OnChange="OnQDCVChiPhiHoiDongChange" />
+                            <ValidationMessage For="() => Input.Id_DM_QDCVChiPhiHoiDong" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">N/T/N QĐ phê duyệt PABT gốc<span class="text-danger">*</span></label>
+                            <InputDate readonly id="NTNGPMBNhanhGoc" class="form-control" @bind-Value="InputModel.NTNGPMBNhanhGoc" />
+                            <ValidationMessage For="() => InputModel.NTNGPMBNhanhGoc" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-end">
+                    <button class="btn btn-primary mr-2" type="submit">Save</button>
+                    <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+                </div>
+            </EditForm>
+        </BodyTemplate>
+    </CustomModal>
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mt-2">Danh sách số quyết định</h5>
+    </div>
+    @if (CheckQuyenService.HasPermission(3))
+    {
+        <button class="btn btn-primary" @onclick="ShowModal">Thêm số quyết định</button>
+    }
+    <div class="row mt-3">
+        <table class="table table-hover table-bordered">
+            <thead class="bg-info">
+                <tr>
+                    <th class="text-center" scope="col">
+                        <div class="pb-3">STT  </div>
+                    </th>
+                    <th onclick="@(() => SortTable("SoQDBTGoc"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Số quyết định bồi thường gốc  <span class="arrow @(GetSortStyle("SoQDBTGoc"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("NTNPABTGoc"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">N/T/N QĐ bồi thường gốc<span class="arrow @(GetSortStyle("NTNPABTGoc"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("SoQDThuongGPMBNhanhGoc"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">QĐ thưởng GPMB nhanh gốc <span class="arrow @(GetSortStyle("SoQDThuongGPMBNhanhGoc"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("NTNGPMBNhanhGoc"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">N/T/N QĐ thưởng GPMB nhanh gốc <span class="arrow @(GetSortStyle("NTNGPMBNhanhGoc"))"></span></div>
+                    </th>
+                    <th class="text-center" colspan="2">
+
+                    </th>
+                </tr>
+            </thead>
+            @if (listPABTKetHopGPMBModel.Any())
+            {
+                <tbody>
+                    @{
+                        int stt = 1;
+                    }
+                    @foreach (var ndm in listPABTKetHopGPMBModel)
+                    {
+                        <tr>
+                            <td class="text-center">@stt</td>
+                            <td>@ndm.SoQDBTGoc</td>
+                            <td>@ndm.NTNPABTGoc?.ToString("dd/MM/yyyy")</td>
+                            <td>@ndm.SoQDThuongGPMBNhanhGoc</td>
+                            <td>@ndm.NTNGPMBNhanhGoc?.ToString("dd/MM/yyyy")</td>
+                            <td class="text-center">
+                                @if (CheckQuyenService.HasPermission(4))
+                                {
+                                    <button class="btn btn-sm btn-primary" @onclick="()=>Edit(ndm.Id)">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (CheckQuyenService.HasPermission(5))
+                                {
+                                    <button class="btn btn-sm btn-danger" @onclick="()=>ConfirmDelete(ndm.Id,ndm.SoQDBTGoc)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                        stt++;
+                    }
+
+                </tbody>
+            }
+            else
+            {
+                <tbody>
+                    <tr>
+                        <td colspan="6"> Không có dữ liệu</td>
+                    </tr>
+                </tbody>
+            }
+
+        </table>
+    </div>
+
+    @if (listPABTKetHopGPMBModel.Any())
+    {
+        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+    }
+    <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+</div>
+
+@code {
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+
+    private BT_QDPABTKHopTHoiDat Input = new();
+    private PABTKetHopGPMBModel InputModel = new();
+    private DateTime baseTime;
+
+    private bool isModalVisible = false;
+    private string TitleModal = "Thêm mới";
+    bool isEdit = false;
+
+    public List<DMPABTModel> listQDThuhoiDatGocs = new();
+    public List<DMPABTModel> listQDCVChiPhiHoiDongs = new();
+
+    private List<SelectedItem> selectQDThuhoiDatGoc = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectQDCVChiPhiHoiDong = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+
+    private void ShowModal()
+    {
+        isEdit = false;
+        isModalVisible = true;
+        InputModel = new();
+        Refresh();
+    }
+
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+    }
+
+    private void HandleSave()
+    {
+        // Logic for saving
+        isModalVisible = false;
+    }
+
+    private void HandleCancel()
+    {
+        // Logic for canceling
+        isModalVisible = false;
+        Input = new();
+    }
+
+    private void OnQDThuhoiDatGocChange(SelectedItem selectedItem)
+    {
+        Input.Id_DM_QDThuhoiDatGoc = selectedItem.Value;
+
+        var selectedQDThuhoiDatGoc = listQDThuhoiDatGocs.FirstOrDefault(item => item.Id == selectedItem.Value);
+        if (selectedQDThuhoiDatGoc != null)
+        {
+            InputModel.NTNPABTGoc = selectedQDThuhoiDatGoc.NTN;
+        }
+        else
+        {
+            InputModel.NTNPABTGoc = null;
+        }
+    }
+    private void OnQDCVChiPhiHoiDongChange(SelectedItem selectedItem)
+    {
+        Input.Id_DM_QDCVChiPhiHoiDong = selectedItem.Value;
+
+        var selectedQDCVChiPhiHoiDongs = listQDCVChiPhiHoiDongs.FirstOrDefault(item => item.Id == selectedItem.Value);
+        if (selectedQDCVChiPhiHoiDongs != null)
+        {
+            InputModel.NTNGPMBNhanhGoc = selectedQDCVChiPhiHoiDongs.NTN;
+        }
+        else
+        {
+            InputModel.NTNGPMBNhanhGoc = null;
+        }
+    }
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+
+    public List<PABTKetHopGPMBModel> listPABTKetHopGPMBModel
+    {
+        get;
+        set;
+    } = new();
+
+    public List<PABTKetHopGPMBModel> listModel
+    {
+        get;
+        set;
+    } = new();
+
+    public MetaData MetaData
+    {
+        get;
+        set;
+    }
+
+    public PABTKetHopGPMBModel dmModel
+    {
+        get;
+        set;
+    }
+
+
+    // Khởi tạo màn hình 
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            userName = authState.User.Identity.Name;
+            user = ApplicationUserService.GetByUserName(userName);
+            userId = user.Id;
+            groupId = user.GroupId;
+        }
+        if (!string.IsNullOrEmpty(groupId) && user != null)
+        {
+            await CheckQuyenService.InitializePermissions(groupId, user, "6f85445f-398d-47d6-bbea-04c267299535");
+        }
+
+        baseTime = DateTime.Now;
+        dmModel = new();
+
+        listQDThuhoiDatGocs = await DM_QDThuHoiDatGocService.GetByVM(groupId);
+        selectQDThuhoiDatGoc = listQDThuhoiDatGocs.Select(data => new SelectedItem
+            {
+                Value = data.Id,
+                Text = data.SoQD
+            }).ToList();
+        selectQDThuhoiDatGoc.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+
+        listQDCVChiPhiHoiDongs = await DM_QDCVChiPhiHoiDongService.GetByVM(groupId);
+        selectQDCVChiPhiHoiDong = listQDCVChiPhiHoiDongs.Select(data => new SelectedItem
+            {
+                Value = data.Id,
+                Text = data.SoQD
+            }).ToList();
+        selectQDCVChiPhiHoiDong.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+
+        await Task.WhenAll(LoadData());
+    }
+
+    // Truy vấn data theo điều kiện tìm kiếm
+    private async Task LoadData()
+    {   
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "dac0c890-7c4b-40e4-91f3-fd8b9fb4e517");
+            var BT_DM_QDThuHoiDatGoccs = await QDPABTKHopTHoiDatService.GetByVM(groupId,new PABTKetHopGPMBModel());
+            listModel = BT_DM_QDThuHoiDatGoccs;
+            listPABTKetHopGPMBModel = Paging(BT_DM_QDThuHoiDatGoccs);
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            Input.CreateBy = userName;
+            Input.CompanyId = groupId;
+            var isExist = await QDPABTKHopTHoiDatService.CheckExist(Input.Id,Input);
+            if (isExist)
+            {
+                ToastService.ShowToast(
+                   "Thông báo",
+                    "Số quyết định đã tồn tại.",
+                    cssClass: "toast-danger",
+                    iconClass: "fa fa-exclamation-circle",
+                    progressBarClass: "bg-info",
+                    duration: 5000);
+            }
+            else
+            {
+                if (isEdit)
+                {
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "40acc55a-b536-4068-b946-217da164d118");
+                    string[] ids= { Input.Id };
+                    bool isValid = await QDPABTKHopTHoiDatService.CheckExclusive(ids,baseTime);
+                    if (isValid)
+                    {
+                        await QDPABTKHopTHoiDatService.Update(Input,userId);
+                        ToastService.ShowToast("Thông báo", "Cập nhật số quyết định thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                        await LoadData();
+                        isModalVisible = false;
+                        Input = new ();
+                    }
+                }
+                else
+                {
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "353cc305-7b22-48c8-97c4-b1b9ed87d405");
+                    await QDPABTKHopTHoiDatService.Insert(Input,userId);
+                    ToastService.ShowToast("Thông báo", "Thêm số quyết định thành công.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+                    await LoadData();
+                    isModalVisible = false;
+                    Input = new ();
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+
+    }
+
+    private string deleteId;
+
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        deleteId = id;
+        confirmModal.Title = "Xác nhận xóa";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.openModal();
+
+    }
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        if (confirmed)
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "69f91ed2-1a06-4956-bef3-8ea3df8fe486");
+            if (!string.IsNullOrEmpty(deleteId))
+            {
+                bool isInUse = await QDPABTKHopTHoiDatService.IsIdInUse(deleteId);
+                if (isInUse)
+                {
+                    ToastService.ShowToast("Thông báo", "Không thể xóa loại danh mục đang được sử dụng.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+                }
+                else
+                {
+                    await QDPABTKHopTHoiDatService.DeleteById(deleteId, userId);
+                    ToastService.ShowToast("Thông báo", "Xóa số quyết định thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                    await LoadData();
+                    deleteId = "";
+                }
+            }
+        }
+    }
+    private async Task Edit(string id)
+    {
+        try
+        {
+            TitleModal = "Cập nhật số quyết định !";
+            Input = await QDPABTKHopTHoiDatService.GetById(id);
+            foreach (var item in selectQDThuhoiDatGoc)
+            {
+                item.IsSelected = item.Value == Input.Id_DM_QDThuhoiDatGoc;
+            }
+            foreach (var item in selectQDCVChiPhiHoiDong)
+            {
+                item.IsSelected = item.Value == Input.Id_DM_QDCVChiPhiHoiDong;
+            }
+            isEdit = true;
+            isModalVisible = true;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+    }
+
+    private void Refresh()
+    {
+        foreach (var item in selectQDThuhoiDatGoc)
+        {
+            item.IsSelected = item.Value == "";
+        }
+        foreach (var item in selectQDCVChiPhiHoiDong)
+        {
+            item.IsSelected = item.Value == "";
+        }
+        StateHasChanged();
+    }
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        dmModel.PageNumber = 1;
+        Paging(listModel);
+    }
+
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        dmModel.PageNumber = page;
+        Paging(listModel);
+    }
+
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+
+        dmModel.PageNumber = 1;
+        dmModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+    // Xử lý paging
+    private List<PABTKetHopGPMBModel> Paging(List<PABTKetHopGPMBModel> BT_DM_QDThuHoiDatGoccs)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = BT_DM_QDThuHoiDatGoccs.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        BT_DM_QDThuHoiDatGoccs = BT_DM_QDThuHoiDatGoccs.Skip((dmModel.PageNumber - 1) * dmModel.PageSize).Take(dmModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listPABTKetHopGPMBModel.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var ndm in BT_DM_QDThuHoiDatGoccs)
+        {
+            listPABTKetHopGPMBModel.Add(ndm);
+        }
+
+        // Tạo pagelist mới
+        var pagelist = new PageList<PABTKetHopGPMBModel>(listPABTKetHopGPMBModel, count, dmModel.PageNumber, dmModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return BT_DM_QDThuHoiDatGoccs;
+    }
+}
