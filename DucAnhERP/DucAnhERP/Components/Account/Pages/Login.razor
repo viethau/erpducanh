@@ -1,13 +1,14 @@
 ﻿@page "/Account/Login"
 
 @using System.ComponentModel.DataAnnotations
+@using System.Text
+@using DucAnhERP.Data
+@using DucAnhERP.Models
+
 @using DucAnhERP.Shared
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
-@using DucAnhERP.Data
-@using DucAnhERP.Models
-@using System.Text
 
 @inject SignInManager<IdentityUser> SignInManager
 @inject NavigationManager NavigationManager

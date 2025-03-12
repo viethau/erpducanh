@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Components\Pages\NghiepVuCongTrinh\Test.razor~RF29bcef.TMP" />
     <None Remove="ViewModel\PKKLCTronModel.cs~RF14fdfb70.TMP" />
   </ItemGroup>
 
@@ -29,11 +28,18 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.5" />
     <PackageReference Include="Z.Blazor.Diagrams" Version="3.0.2" />
+	<PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
     <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\upload_qlnv\" />
+    <Folder Include="wwwroot\upload_img\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Services\QLNV\QLNV_NhomNhanVienRepository.cs" />
   </ItemGroup>
 
 </Project>

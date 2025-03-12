@@ -1,10 +1,11 @@
 ﻿@page "/CaiDatHeThong/MajorUserPermissions"
-@using DucAnhERP.Helpers
-@using DucAnhERP.ViewModel
-@using DucAnhERP.Models
-@using DucAnhERP.Components.Pages.Common
 @using System.Linq
+@using DucAnhERP.Components.Pages.Common
+@using DucAnhERP.Helpers
+@using DucAnhERP.Models
+
 @using DucAnhERP.SeedWork
+@using DucAnhERP.ViewModel
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
 @inject NavigationManager navigation
@@ -977,7 +978,6 @@
     {
         try
         {
-
             if (IsValid())
             {
                 idMain = idMain == "" ? Guid.NewGuid().ToString() : idMain;
@@ -1125,7 +1125,7 @@
                 await LoadData();
                 await Search();
                 isEdit = false;
-                isModalVisible = false;
+                // isModalVisible = false;
             }
 
         }

@@ -6,7 +6,7 @@ namespace DucAnhERP.Models
     {
         [Required(ErrorMessage = "Bạn phải nhập email!")]
         [EmailAddress]
-        public string Email { get; set; } = "viethau.nd@gmail.com";
+        public string Email { get; set; } = "qminh97ictu@gmail.com";
 
         [Required(ErrorMessage = "Bạn phải nhập mật khẩu!")]
         [DataType(DataType.Password)]

@@ -1,12 +1,13 @@
 ﻿@inherits LayoutComponentBase
+@using System.ComponentModel.DataAnnotations
 @using DucAnhERP.Components.Account
 @using DucAnhERP.Components.Account.Pages
 @using DucAnhERP.Components.Pages.Common
-@using DucAnhERP.Models
-@using Microsoft.AspNetCore.Identity
-@using System.ComponentModel.DataAnnotations
-@using Microsoft.AspNetCore.Authentication
 @using DucAnhERP.Data
+@using DucAnhERP.Models
+
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Identity
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject SignInManager<IdentityUser> SignInManager

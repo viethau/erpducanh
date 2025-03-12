@@ -1,4 +1,5 @@
-﻿@implements IDisposable
+﻿
+@implements IDisposable
 
 @inject NavigationManager NavigationManager
 
@@ -13,7 +14,6 @@
     <div class="sidebar os-theme-dark">
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column text-sm" data-widget="treeview" role="menu" data-accordion="false">
-
                 @* Hệ thống *@
                 <li class="nav-item">
                     <a class="nav-link">
@@ -68,8 +68,48 @@
 
                     </ul>
                 </li>
-
-
+                @* Quản lý nhân viên *@
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>
+                            Quản lý nhân viên
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview" style="display: none;">
+                        <li class="nav-item">
+                            <NavLink href="QLNV/Nhanvien" class="nav-link">
+                                <p class="pl-4">Nhân viên</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="QLNV/NhomNhanVien" class="nav-link">
+                                <p class="pl-4">Nhóm nhân viên</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="QLNV/QuanLyNhanVien" class="nav-link">
+                                <p class="pl-4">Quản lý nhân viên</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="QLNV/CongViec" class="nav-link">
+                                <p class="pl-4">Công việc</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="QLNV/DanhGia" class="nav-link">
+                                <p class="pl-4">Đánh giá</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="QLNV/CongViecDuocGiao" class="nav-link">
+                                <p class="pl-4">Công việc được giao</p>
+                            </NavLink>
+                        </li>
+                    </ul>
+                </li>
                 @* GPMB *@
                 <li class="nav-item">
                     <a class="nav-link">
@@ -95,6 +135,93 @@
                     </ul>
                 </li>
 
+                @* Bồi thường 26/02/2025 *@
+                <li class="nav-item">
+                    <a class="nav-link">
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>
+                            Bồi thường
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview" style="display: none;">
+                         <li class="nav-item">
+                            <NavLink href="BoiThuong/QDPABTKHopGPMBNhanh" class="nav-link">
+                                <p class="pl-4">1. QĐ PABT K.hợp GPMBN</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="BoiThuong/QDPABTKHopTHoiDat" class="nav-link">
+                                <p class="pl-4">1.1 QĐ PABT K.Hợp TH Đ</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="BoiThuong/QDPABTDChinh" class="nav-link">
+                                <p class="pl-4">2. QĐ PABT Đ.Chỉnh</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="BoiThuong/QDGPMBNhanhDChinh" class="nav-link">
+                                <p class="pl-4">2.1 QĐ GPMB nhanh ĐC</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="BoiThuong/QDTHoiDatDChinh" class="nav-link">
+                                <p class="pl-4">2.2 QĐ T.Hồi đất ĐC</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="BoiThuong/CTietPAnBThuong" class="nav-link">
+                                <p class="pl-4">4. C.Tiết P.Án B.Thường</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item" style="padding: .4rem .8rem;">
+                            <a href="#" class="nav-link">
+                                <p>
+                                    Danh Mục
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <NavLink href="/BoiThuong/DanhMuc/LoaiChungTu" class="nav-link">
+                                        <p class="pl-4">Loại chứng từ</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="/BoiThuong/DanhMuc/HinhThucThuChi" class="nav-link">
+                                        <p class="pl-4">Hình thức thu chi</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="/BoiThuong/DanhMuc/HangMucChi" class="nav-link">
+                                        <p class="pl-4">Hạng mục chi</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="/BoiThuong/DanhMuc/QDBoiThuongGoc" class="nav-link">
+                                        <p class="pl-4">Số QĐ bồi thường gốc</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="/BoiThuong/DanhMuc/QDThuHoiDatGoc" class="nav-link">
+                                        <p class="pl-4">Số QĐ thu hồi đất gốc</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="/BoiThuong/DanhMuc/QDTGPMBNhanhGoc" class="nav-link">
+                                        <p class="pl-4">Số QĐ thưởng GPMB nhanh gốc</p>
+                                    </NavLink>
+                                </li>
+                                <li class="nav-item">
+                                    <NavLink href="/BoiThuong/DanhMuc/QDCVChiPhiHoiDong" class="nav-link">
+                                        <p class="pl-4">Số QĐ/CV chi phí hội đồng</p>
+                                    </NavLink>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
                 @* Nhân sự *@
                 <li class="nav-item">
                     <a class="nav-link">
@@ -190,34 +317,34 @@
                     </ul>
                 </li>
 
-                @* Nghiệp vụ công trình qminh-12/08/2024 *@
+                @*Thống kê điện*@
                 <li class="nav-item">
                     <a class="nav-link">
-                        <i class="nav-icon fas  fa-road"></i>
+                        <i class="nav-icon fas fa-bolt"></i>
                         <p>
-                            Nghiệp vụ công trình
+                            Thống kê điện
                             <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <NavLink href="/NghiepVuCongtrinh/listNuocMua" class="nav-link">
-                                <p class="pl-4">DS nước mưa </p>
-                            </NavLink>
-                        </li>
-                       @*  <li class="nav-item">
-                            <NavLink href="/NghiepVuCongtrinh/listMangThu" class="nav-link">
-                                <p class="pl-4">DS Máng thu </p>
+                       <li class="nav-item">
+                            <NavLink href="/ThongKeDien/TTLDienCDien" class="nav-link">
+                                <p class="pl-4">1.T.Tin L.Đặt C.Điện</p>
                             </NavLink>
                         </li>
                         <li class="nav-item">
-                            <NavLink href="/NghiepVuCongtrinh/Test" class="nav-link">
-                                <p class="pl-4">Test </p>
+                            <NavLink href="/ThongKeDien/XDungCDien" class="nav-link">
+                                <p class="pl-4">1.1 X.Dựng C.Điện</p>
                             </NavLink>
-                        </li> *@
+                        </li>
                         <li class="nav-item">
-                            <NavLink href="/NghiepVuCongtrinh/UploadNuocMua" class="nav-link">
-                                <p class="pl-4">Upload nước mưa</p>
+                            <NavLink href="/ThongKeDien/CDoCDien" class="nav-link">
+                                <p class="pl-4">1.2 C.Độ C.Điện</p>
+                            </NavLink>
+                        </li>
+                        <li class="nav-item">
+                            <NavLink href="/ThongKeDien/DaoCDien" class="nav-link">
+                                <p class="pl-4">1.3 Đào C.Điện</p>
                             </NavLink>
                         </li>
                         <li class="nav-item" style="padding: .4rem .8rem;">
@@ -229,582 +356,28 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <NavLink href="/NghiepVuCongtrinh/DanhMuc" class="nav-link">
-                                        <p class="pl-4">DS Danh mục</p>
+                                    <NavLink href="/ThongKeDien/DanhMuc/DM_TuyenDuong" class="nav-link">
+                                        <p class="pl-4">DM Tuyến đường</p>
                                     </NavLink>
                                 </li>
                                 <li class="nav-item">
-                                    <NavLink href="/NghiepVuCongtrinh/NhomDanhMuc" class="nav-link">
-                                        <p class="pl-4">Nhóm danh mục</p>
+                                    <NavLink href="/ThongKeDien/DanhMuc/DM_HangMucKL" class="nav-link">
+                                        <p class="pl-4">HM khối lượng</p>
                                     </NavLink>
                                 </li>
                                 <li class="nav-item">
-                                    <NavLink href="/NghiepVuCongtrinh/DMTLThep" class="nav-link">
-                                        <p class="pl-4">DM trọng lượng thép</p>
-                                    </NavLink>
-                                </li>
-
-                            </ul>
-                        </li>
-                       
-                        <li class="nav-item" style="padding: .4rem .8rem;">
-                            <a href="#" class="nav-link">
-                                <p>
-                                    Phân loại
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <NavLink href="/NghiepVuCongtrinh/PhanLoaiHoGa" class="nav-link">
-                                        <p class="pl-4">Phân loại hố ga</p>
-                                    </NavLink>
-
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/NghiepVuCongtrinh/PhanLoaiCong" class="nav-link">
-                                        <p class="pl-4">Phân loại cống</p>
+                                    <NavLink href="/ThongKeDien/DanhMuc/DM_LoaiKL" class="nav-link">
+                                        <p class="pl-4">Loại khối lượng</p>
                                     </NavLink>
                                 </li>
                                 <li class="nav-item">
-                                    <NavLink href="/NghiepVuCongtrinh/PhanLoaiMong" class="nav-link">
-                                        <p class="pl-4">Phân loại móng</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/NghiepVuCongtrinh/PhanLoaiDeCong" class="nav-link">
-                                        <p class="pl-4">Phân loại đế cống</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/NghiepVuCongtrinh/PhanLoaiThanhChong" class="nav-link">
-                                        <p class="pl-4">Phân loại thanh chống</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/NghiepVuCongtrinh/PhanLoaiTDHG" class="nav-link">
-                                        <p class="pl-4">Phân loại TĐan HGa</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/NghiepVuCongtrinh/PhanLoaiTDTD" class="nav-link">
-                                        <p class="pl-4">Phân loại TĐan T.Dẫn</p>
-                                    </NavLink>
-                                </li>
-
-                            </ul>
-                        </li>
-
-                        <li class="nav-item" style="padding: .4rem .8rem;">
-                            <a href="#" class="nav-link">
-                                <p>
-                                    Báo cáo
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <NavLink href="/BaoCao/TTHoGa" class="nav-link">
-                                        <p class="pl-4">2.TT Hố Ga</p>
-                                    </NavLink>
-
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/BaoCao/KLDaoBPhapHGa" class="nav-link">
-                                        <p class="pl-4">2.1 KL đào B.Pháp H.Ga</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/BaoCao/CTaoChungHGa" class="nav-link">
-                                        <p class="pl-4">2.2 C.Tạo chung H.Ga</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/BaoCao/KTHHHGa" class="nav-link">
-                                        <p class="pl-4">2.3 KTHH H.Ga</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/BaoCao/KHopHGaTDan" class="nav-link">
-                                        <p class="pl-4">2.4 K.Hợp H.Ga và T.Đan</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/BaoCao/KTHHTDanHGa" class="nav-link">
-                                        <p class="pl-4">2.5 KTHH T.Đan H.Ga</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/BaoCao/TongSLHGa" class="nav-link">
-                                        <p class="pl-4">2.6 Tổng SL H.Ga</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/BaoCao/TongSLHGaTTuyen" class="nav-link">
-                                        <p class="pl-4">2.7 Tổng SL H.Ga T.Tuyến</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/BaoCao/TongSLTDanHGa" class="nav-link">
-                                        <p class="pl-4">2.8 Tổng SL T.Đan H.Ga</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/BaoCao/TongSLTDanHGaTTuyen" class="nav-link">
-                                        <p class="pl-4">2.9 SL T.Đan H.Ga T.Tuyến</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/BaoCao/HGaSDThep" class="nav-link">
-                                        <p class="pl-4">2.10 H.Ga sử dụng thép</p>
-                                    </NavLink>
-                                </li>
-                                 <li class="nav-item">
-                                    <NavLink href="/BaoCao/TDanHGaSDThep" class="nav-link">
-                                        <p class="pl-4">2.11 T.Đan H.Ga SD thép</p>
+                                    <NavLink href="/ThongKeDien/DanhMuc/DM_ThongTinVatTu" class="nav-link">
+                                        <p class="pl-4">Thông tin vật tư</p>
                                     </NavLink>
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item" style="padding: .4rem .8rem;">
-                            <a href="#" class="nav-link">
-                                <p>
-                                    Thống kê thép
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <NavLink href="/ThongKe/TKThepHGa" class="nav-link">
-                                        <p class="pl-4">2.12 TK thép H.Ga</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/ThongKe/TKThepTDan" class="nav-link">
-                                        <p class="pl-4">2.13 TK thép T.Đan</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/TKThep/TKThepCongTron" class="nav-link" title="BẢNG THỐNG KÊ THÉP CỐNG TRÒN">
-                                        <p class="pl-4">3.41 TK thép C.Tròn</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/TKThep/TKThepMongCongTron" class="nav-link" title="BẢNG THỐNG KÊ THÉP MÓNG CỐNG TRÒN">
-                                        <p class="pl-4">3.42 TK thép móng C.Tròn</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/TKThep/TKThepDeCong" class="nav-link" title="BẢNG THỐNG KÊ THÉP ĐẾ CỐNG">
-                                        <p class="pl-4">3.43 TK thép đế cống</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/TKThep/TKThepCongHop" class="nav-link" title="BẢNG THỐNG KÊ THÉP CỐNG HỘP">
-                                        <p class="pl-4">3.44 TK thép C.Hộp</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/TKThep/TKThepMongCongHop" class="nav-link" title="BẢNG THỐNG KÊ THÉP MÓNG CỐNG HỘP">
-                                        <p class="pl-4">3.45 TK thép móng C.Hộp</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/TKThep/TKThepTDanCongHop" class="nav-link" title="BẢNG THỐNG KÊ THÉP TẤM ĐAN CỐNG HỘP">
-                                        <p class="pl-4">3.46 TK thép T.Đan C.Hộp</p>
-                                    </NavLink>
-                                </li>
-                               
-                                <li class="nav-item">
-                                    <NavLink href="/TKThep/TKThepRanhXay" class="nav-link" title="BẢNG THỐNG KÊ 01M THÉP RÃNH XÂY">
-                                        <p class="pl-4">3.47 TK thép R.Xây</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/TKThep/TKThepTDanRanhXay" class="nav-link" title="BẢNG THỐNG KÊ THÉP 01 TẤM ĐAN RÃNH XÂY">
-                                        <p class="pl-4">3.48 TK thép T.Đan R.Xây</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/TKThep/TKThepThanhChong" class="nav-link" title="BẢNG THỐNG KÊ THÉP THANH CHỐNG">
-                                        <p class="pl-4">3.49 TK thép T.Chống</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/TKThep/TKThepRanhBTong" class="nav-link" title="BẢNG THỐNG KÊ 01M THÉP RÃNH BÊ TÔNG">
-                                        <p class="pl-4">3.50 TK thép Rãnh B.Tông </p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/TKThep/TKThepTDanRBTong" class="nav-link" title="BẢNG THỐNG KÊ THÉP 01 TẤM ĐAN RÃNH BÊ TÔNG">
-                                        <p class="pl-4">3.51 TK thép TĐanRBTông </p>
-                                    </NavLink>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item" style="padding: .4rem .8rem;">
-                            <a href="#" class="nav-link">
-                                <p>
-                                    PKKL
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/PKKLCTiet1HoGa" class="nav-link">
-                                        <p class="pl-4">2.14 C.Tiết 1 Hố ga</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/ChatMaTuong" class="nav-link">
-                                        <p class="pl-4">2.15 Chát má tường +VK</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/THKL1HoGa" class="nav-link">
-                                        <p class="pl-4">2.16 THKL 01 H.Ga</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/PKKLCTietTDanHoGa" class="nav-link">
-                                        <p class="pl-4">2.17 PKKL C.Tiết TDHG </p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/THKL1TDanHoGa" class="nav-link">
-                                        <p class="pl-4">2.18 THKL 01 T.Đan H.Ga</p>
-                                    </NavLink>
-                                </li>
-
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/PKKLCongTron" class="nav-link" title="BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01 CỐNG TRÒN">
-                                        <p class="pl-4">3.52 PKKL C.Tròn</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/THKLCongtron" class="nav-link" title="BẢNG TỔNG HỢP KHỐI LƯỢNG CỐNG TRÒN THEO LOẠI CỐNG TRÒN THEO TUYẾN">
-                                        <p class="pl-4">3.53 THKL cống tròn</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/PKKLMongCongTron" class="nav-link" title="BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01M MÓNG CỐNG TRÒN">
-                                        <p class="pl-4">3.54 PKKL móng C.Tròn</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/THKLMongCongtron" class="nav-link" title="BẢNG TỔNG HỢP KHỐI LƯỢNG MÓNG CỐNG TRÒN THEO LOẠI MÓNG CỐNG TRÒN THEO TUYẾN">
-                                        <p class="pl-4">3.55 THKL móng C.Tròn</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/PKKLDeCongTron" class="nav-link" title="BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01 ĐẾ CỐNG">
-                                        <p class="pl-4">3.56 PKKL đế cống</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/THKLDeCong" class="nav-link" title="BẢNG TỔNG HỢP KHỐI LƯỢNG ĐẾ CỐNG THEO LOẠI ĐẾ CỐNG THEO TUYẾN">
-                                        <p class="pl-4">3.57 THKL đế cống</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/PKKLCongHop" class="nav-link" title="BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01 CỐNG HỘP LẮP ĐẶT">
-                                        <p class="pl-4">3.58 PKKL C.Hộp</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/THKLCongHop" class="nav-link" title="BẢNG TỔNG HỢP KHỐI LƯỢNG CỐNG HỘP LẮP ĐẶT THEO LOẠI CỐNG HỘP LẮP ĐẶT THEO TUYẾN">
-                                        <p class="pl-4">3.59 THKL C.hộp</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/PKKLMongCongHop" class="nav-link" title="BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01M MÓNG CỐNG HỘP LẮP ĐẶT">
-                                        <p class="pl-4">3.60 PKKL móng C.hộp</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/THKLMongCongHop" class="nav-link" title="BẢNG TỔNG HỢP KHỐI LƯỢNG MÓNG CỐNG HỘP LẮP ĐẶT THEO LOẠI MÓNG CỐNG HỘP LẮP ĐẶT THEO TUYẾN">
-                                        <p class="pl-4">3.61 THKL Móng C.Hộp</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/PKKLTDanCongHop" class="nav-link" title="BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01 TẤM ĐAN CỐNG HỘP LẮP ĐẶT">
-                                        <p class="pl-4">3.62 PKKL T.Đan C.Hộp</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/THKLTDanCongHop" class="nav-link" title="BẢNG TỔNG HỢP KHỐI LƯỢNG TẤM ĐAN CỐNG HỘP LẮP ĐẶT THEO LOẠI TẤM ĐAN CỐNG HỘP LẮP ĐẶT THEO TUYẾN">
-                                        <p class="pl-4">3.63 THKL T.Đan C.hộp</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/PKKLRanhBeTong" class="nav-link" title="BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01M RÃNH BÊ TÔNG">
-                                        <p class="pl-4">3.64 PKKL Rãnh BT</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/THKLRanhBeTong" class="nav-link" title="BẢNG TỔNG HỢP KHỐI LƯỢNG RÃNH BỂ TÔNG THEO LOẠI RÃNH BÊ TÔNG THEO TUYẾN">
-                                        <p class="pl-4">3.65 THKL Rãnh BT</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/PKKLTDanRanhBT" class="nav-link" title="BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01 TẤM ĐAN RÃNH BÊ TÔNG">
-                                        <p class="pl-4">3.66 PKKL T.Đan RB.Tông</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/THKLTDanRanhBT" class="nav-link" title="BẢNG TỔNG HỢP KHỐI LƯỢNG TẤM ĐAN RÃNH BỂ TÔNG THEO LOẠI  TẤM ĐAN RÃNH BÊ TÔNG THEO TUYẾN">
-                                        <p class="pl-4">3.67 THKL T.Đan RB.Tông</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/PKKLRanhXay" class="nav-link" title="BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01M RÃNH XÂY">
-                                        <p class="pl-4">3.68 PKKL Rãnh xây</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/THKLRanhXay" class="nav-link" title="BẢNG TỔNG HỢP KHỐI LƯỢNG RÃNH XÂY THEO LOẠI  RÃNH XÂY THEO TUYẾN">
-                                        <p class="pl-4">3.69 THKL rãnh xây</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/PKKLTDanRanhXay" class="nav-link" title="BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01 TẤM ĐAN RÃNH XÂY">
-                                        <p class="pl-4">3.70 PKKL T.Đan rãnh xây</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/THKLTDanRanhXay" class="nav-link" title="BẢNG TỔNG HỢP KHỐI LƯỢNG TẤM ĐAN RÃNH XÂY THEO LOẠI  TẤM ĐAN RÃNH XÂY THEO TUYẾN">
-                                        <p class="pl-4">3.71 THKL T.Đan R.Xây</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/PKKLThanhChong" class="nav-link" title="BẢNG PHÂN KHAI KHỐI LƯỢNG CHI TIẾT 01 THANH CHỐNG">
-                                        <p class="pl-4">3.72 PKKL T.Chống</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item">
-                                    <NavLink href="/PKKL/THKLThanhChong" class="nav-link" title="BẢNG TỔNG HỢP KHỐI LƯỢNG THANH CHỐNG THEO LOẠI  THANH CHỐNG THEO TUYẾN">
-                                        <p class="pl-4">3.73 THKL T.Chống</p>
-                                    </NavLink>
-                                </li>
-
-                            </ul>
-                        </li>
-                        <li class="nav-item" style="padding: .4rem .8rem;">
-                            <a href="#" class="nav-link">
-                                <p>
-                                    THLT T.Dẫn
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item" title="BẢNG THÔNG TIN TỔNG HỢP LÝ TRÌNH TUYẾN NƯỚC MƯA ">
-                                    <NavLink href="/THLT/THLTTDan" class="nav-link">
-                                        <p class="pl-4">3. TH L.Trình T.Dẫn</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THÔNG TIN CAO ĐỘ TUYẾN NƯỚC MƯA ">
-                                    <NavLink href="/THLT/THTTCDo" class="nav-link">
-                                        <p class="pl-4">3.1 TH thông tin C.Độ</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THÔNG TIN ĐẤT ĐÀO BIỆN PHÁP TUYẾN NƯỚC MƯA">
-                                    <NavLink href="/THLT/KLDaoBPhap" class="nav-link">
-                                        <p class="pl-4">3.2 KL đào B.Pháp</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THÔNG TIN ĐẮP CÁT TUYẾN NƯỚC MƯA DỌC">
-                                    <NavLink href="/THLT/KLDapCat" class="nav-link">
-                                        <p class="pl-4">3.3 KL đắp cát</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THÔNG TIN CẤU TẠO VÀ KÍCH THƯỚC HÌNH HỌC CỐNG TRÒN, MÓNG CỐNG TRÒN, MÓNG CỐNG HỘP, ĐẾ CỐNG TRÒN">
-                                    <NavLink href="/THLT/KTHHMDC" class="nav-link">
-                                        <p class="pl-4">3.4 KTHH MDCH</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THÔNG TIN CẤU TẠO VÀ KÍCH THƯỚC HÌNH HỌC ỐNG NHỰA">
-                                    <NavLink href="/THLT/KTHHONhua" class="nav-link">
-                                        <p class="pl-4">3.5 KTHH Ô.Nhựa</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THÔNG TIN CẤU TẠO VÀ KÍCH THƯỚC HÌNH HỌC CỐNG HỘP">
-                                    <NavLink href="/THLT/KTHHCHop" class="nav-link">
-                                        <p class="pl-4">3.6 KTHH C.Hộp</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THÔNG TIN CẤU TẠO VÀ KÍCH THƯỚC HÌNH HỌC TẤM ĐAN CỐNG HỘP">
-                                    <NavLink href="/THLT/KTHHTDCH" class="nav-link">
-                                        <p class="pl-4">3.7 KTHH T.Đan C.Hộp</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THÔNG TIN CẤU TẠO VÀ KÍCH THƯỚC HÌNH HỌC RÃNH XÂY">
-                                    <NavLink href="/THLT/KTHHRX" class="nav-link">
-                                        <p class="pl-4">3.8 KTHH RX</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THÔNG TIN CẤU TẠO VÀ KÍCH THƯỚC HÌNH HỌC THANH CHỐNG">
-                                    <NavLink href="/THLT/KTHHTC" class="nav-link">
-                                        <p class="pl-4">3.9 KTHH T.Chống</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THÔNG TIN CẤU TẠO VÀ KÍCH THƯỚC HÌNH HỌC TẤM ĐAN RÃNH XÂY">
-                                    <NavLink href="/THLT/KTHHTDRX" class="nav-link">
-                                        <p class="pl-4">3.10 KTHH TDRX</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THÔNG TIN CẤU TẠO VÀ KÍCH THƯỚC HÌNH HỌC RÃNH BÊ TÔNG">
-                                    <NavLink href="/THLT/KTHHRBT" class="nav-link">
-                                        <p class="pl-4">3.11 KTHH RBT</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THÔNG TIN CẤU TẠO VÀ KÍCH THƯỚC HÌNH HỌC TẤM ĐAN RÃNH BÊ TÔNG">
-                                    <NavLink href="/THLT/KTHHTDRBT" class="nav-link">
-                                        <p class="pl-4">3.12 KTHH TDRBT</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KẾ SỐ LƯỢNG CẤU KIỆN CỐNG TRÒN">
-                                    <NavLink href="/THLT/SLCKCTron" class="nav-link">
-                                        <p class="pl-4">3.13 SL C.Tròn</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KẾ SỐ LƯỢNG ỐNG NHỰA">
-                                    <NavLink href="/THLT/SLCKONhua" class="nav-link">
-                                        <p class="pl-4">3.14 SL Ô.Nhựa</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KẾ SỐ LƯỢNG CẤU KIỆN CỐNG HỘP">
-                                    <NavLink href="/THLT/SLCKCHop" class="nav-link">
-                                        <p class="pl-4">3.15 SL C.Hộp</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KẾ SỐ LƯỢNG RÃNH XÂY">
-                                    <NavLink href="/THLT/SLCKRXay" class="nav-link">
-                                        <p class="pl-4">3.16 SL rãnh xây</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KẾ SỐ LƯỢNG RÃNH BÊ TÔNG">
-                                    <NavLink href="/THLT/SLCKRBT" class="nav-link">
-                                        <p class="pl-4">3.17 SL rãnh B.Tông</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KẾ SỐ LƯỢNG CẤU KIỆN TRUYỀN DẪN THEO TUYẾN">
-                                    <NavLink href="/THLT/SLTDanTTuyen" class="nav-link">
-                                        <p class="pl-4">3.18 SL T.Dẫn T.Tuyến</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KẾ SỐ LƯỢNG MÓNG CỐNG TRÒN">
-                                    <NavLink href="/THLT/SLMongCTron" class="nav-link">
-                                        <p class="pl-4">3.19 SL móng C.Tròn</p>
-                                    </NavLink>
-                                </li> 
-                                <li class="nav-item" title="BẢNG THỐNG KẾ SỐ LƯỢNG MÓNG CỐNG HỘP">
-                                    <NavLink href="/THLT/SLMongCHop" class="nav-link">
-                                        <p class="pl-4">3.20 SL móng C.Hộp</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KẾ SỐ LƯỢNG MÓNG CỐNG TRÒN + CỐNG HỘP THEO TUYẾN">
-                                    <NavLink href="/THLT/SLMongTH" class="nav-link">
-                                        <p class="pl-4">3.21 SL móng C.Tròn+Hộp</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KẾ SỐ LƯỢNG ĐẾ CỐNG TRÒN">
-                                    <NavLink href="/THLT/SLDeCong" class="nav-link">
-                                        <p class="pl-4">3.22 SL Đế cống</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KẾ SỐ LƯỢNG ĐẾ CỐNG TRÒN THEO TUYẾN">
-                                    <NavLink href="/THLT/SLDeCongTT" class="nav-link">
-                                        <p class="pl-4">3.23 SL Đế cống TT</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KẾ SỐ LƯỢNG THANH CHỐNG">
-                                    <NavLink href="/THLT/SLThanhChong" class="nav-link">
-                                        <p class="pl-4">3.24 SL Thanh chống</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KẾ SỐ LƯỢNG THANH CHỐNG">
-                                    <NavLink href="/THLT/SLThanhChongTT" class="nav-link">
-                                        <p class="pl-4">3.25 SL Thanh chống TT</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KẾ SỐ LƯỢNG TẤM ĐAN CỐNG HỘP">
-                                    <NavLink href="/THLT/SLTDanCH" class="nav-link">
-                                        <p class="pl-4">3.26 SL T.Đan C.Hộp</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KẾ SỐ LƯỢNG TẤM ĐAN RÃNH XÂY">
-                                    <NavLink href="/THLT/SLTDanRX" class="nav-link">
-                                        <p class="pl-4">3.27 SL T.Đan R.Xây</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KẾ SỐ LƯỢNG TẤM ĐAN RÃNH BÊ TÔNG">
-                                    <NavLink href="/THLT/SLTDanRBT" class="nav-link">
-                                        <p class="pl-4">3.28 SL T.Đan RBT</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KẾ SỐ LƯỢNG TẤM ĐAN CỐNG HỘP, RÃNH THEO TUYẾN">
-                                    <NavLink href="/THLT/SLTDanTT" class="nav-link">
-                                        <p class="pl-4">3.29 SL TDTD TT</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KẾ MÓNG CỐNG TRÒN CÓ SỬ DỤNG THÉP">
-                                    <NavLink href="/THLT/MongCTSDThep" class="nav-link">
-                                        <p class="pl-4">3.30 Móng CTSD thép</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KÊ CỐNG TRÒN CÓ SỬ DỤNG THÉP">
-                                    <NavLink href="/THLT/CongTronSDThep" class="nav-link">
-                                        <p class="pl-4">3.31 C.Tròn S.Dụng Thép</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KÊ ĐẾ CỐNG CÓ SỬ DỤNG THÉP">
-                                    <NavLink href="/THLT/DeCongSDThep" class="nav-link">
-                                        <p class="pl-4">3.32 Đ.Cống sử dụng thép</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KÊ CỐNG HỘP CÓ SỬ DỤNG THÉP">
-                                    <NavLink href="/THLT/CongHopSDThep" class="nav-link">
-                                        <p class="pl-4">3.33 C.Hộp sử dụng thép</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KẾ MÓNG CỐNG HỘP CÓ SỬ DỤNG THÉP">
-                                    <NavLink href="/THLT/MongCongHopSDThep" class="nav-link">
-                                        <p class="pl-4">3.34 Móng C.hộp SD thép</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KÊ TẤM ĐAN CỐNG HỘP CÓ SỬ DỤNG THÉP">
-                                    <NavLink href="/THLT/TDCHSDThep" class="nav-link">
-                                        <p class="pl-4">3.35 T.Đan C.Hộp SD thép</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KÊ RÃNH XÂY CÓ SỬ DỤNG THÉP">
-                                    <NavLink href="/THLT/RXSDThep" class="nav-link">
-                                        <p class="pl-4">3.36 R.Xây SD thép</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KÊ TẤM ĐAN RÃNH XÂY CÓ SỬ DỤNG THÉP">
-                                    <NavLink href="/THLT/TDRXSDThep" class="nav-link">
-                                        <p class="pl-4">3.37 T.Đan R.Xây SD thép</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KÊ THANH CHỐNG CÓ SỬ DỤNG THÉP">
-                                    <NavLink href="/THLT/TCSDThep" class="nav-link">
-                                        <p class="pl-4">3.38 T.Chống S.Dụng thép</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KÊ RÃNH BÊ TÔNG CÓ SỬ DỤNG THÉP">
-                                    <NavLink href="/THLT/RBTSDThep" class="nav-link">
-                                        <p class="pl-4">3.39 Rãnh BT có SD thép</p>
-                                    </NavLink>
-                                </li>
-                                <li class="nav-item" title="BẢNG THỐNG KÊ TÂM ĐAN RÃNH BÊ TÔNG CÓ SỬ DỤNG THÉP">
-                                    <NavLink href="/THLT/TDRBTSDThep" class="nav-link">
-                                        <p class="pl-4">3.40 T.Đan ranh BT SD thép</p>
-                                    </NavLink>
-                                </li>
-                            </ul>
-                        </li>
-                       
+                      
                     </ul>
                 </li>
 

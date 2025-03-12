@@ -1,30 +1,71 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
+@using System.Text.Json
+@using DucAnhERP
+@using DucAnhERP.Components
+@using DucAnhERP.Components.Pages.Common
+@using DucAnhERP.Helpers
+@using DucAnhERP.Models
+@using DucAnhERP.Models.ThongKeDien
+@using DucAnhERP.Models.BoiThuong
+@using DucAnhERP.Models.QLNV
 @using DucAnhERP.Repository
+@using DucAnhERP.Repository.BoiThuong
+@using DucAnhERP.Repository.QLNV
+
+@using DucAnhERP.SeedWork
 @using DucAnhERP.Services
+@using DucAnhERP.Shared
+@using DucAnhERP.ViewModel
+@using DucAnhERP.ViewModel.ThongKeDien
+@using DucAnhERP.ViewModel.BoiThuong
+@using DucAnhERP.ViewModel.QLNV
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
-@using static Microsoft.AspNetCore.Components.Web.RenderMode
 @using Microsoft.AspNetCore.Components.Web.Virtualization
-@using Microsoft.JSInterop
-@using DucAnhERP
-@using DucAnhERP.Components
-@using DucAnhERP.Helpers
-@using DucAnhERP.ViewModel
-@using DucAnhERP.Models
-@using DucAnhERP.Components.Pages.Common
-@using DucAnhERP.SeedWork
 @using Microsoft.AspNetCore.Mvc.Rendering
-@using System.Text.Json
-@using DucAnhERP.Shared
+@using Microsoft.JSInterop
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
 @inject IJSRuntime JSRuntime
 
 @using Microsoft.AspNetCore.Identity
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager navigation
 @inject UserManager<IdentityUser> UserManager
+
+@* Quản lý nhân viên *@
+@inject IQLNV_NhanVienRepository QLNV_NhanVienService
+@inject IQLNV_NhomNhanVienRepository QLNV_NhomNhanVienService
+@inject IQLNV_QuanLyNhanVienRepository QLNV_QuanLyNhanVienService
+@inject IQLNV_CongViecRepository QLNV_CongViecService
+@inject IQLNV_DanhGiaRepository QLNV_DanhGiaService
+
+@* Bồi thường *@
+@inject IDM_LoaiChungTuRepository DM_LoaiChungTuService
+@inject IDM_HinhThucThuChiRepository DM_HinhThucThuChiService
+@inject IDM_HangMucChiRepository DM_HangMucChiService
+@inject IDM_QDBoiThuongGocRepository DM_QDBoiThuongGocService
+@inject IDM_QDThuHoiDatGocRepository DM_QDThuHoiDatGocService
+@inject IDM_QDTGPMBNhanhGocRepository DM_QDTGPMBNhanhGocService
+@inject IDM_QDCVChiPhiHoiDongRepository DM_QDCVChiPhiHoiDongService
+@inject ICTietPAnBThuongRepository CTietPAnBThuongService
+@inject IQDPABTDChinhRepository QDPABTDChinhService
+@inject IQDGPMBNhanhDChinhRepository QDGPMBNhanhDChinhService
+@inject IQDTHoiDatDChinhRepository QDTHoiDatDChinhService
+@inject IQDPABTKHopGPMBNhanhRepository QDPABTKHopGPMBNhanhService
+@inject IQDPABTKHopTHoiDatRepository QDPABTKHopTHoiDatService
+
+@* Thống kê điện *@
+@inject ID_DM_TuyenDuongRepository DM_TuyenDuongService
+@inject ID_DM_HangMucKLRepository DM_HangMucKLService
+@inject ID_DM_LoaiKLRepository DM_LoaiKLService
+@inject ID_DM_ThongTinVatTuRepository DM_ThongTinVatTuService
+@inject ID_TTLDienCDienRepository D_TTLDienCDienService
+@inject ID_XDungCDienRepository D_XDungCDienService
+@inject ID_CDoCDienRepository D_CDoCDienService
+@inject ID_DaoCDienRepository D_DaoCDienService
 
 @inject IMajorRepository MajorService
 @inject ICompanyRepository CompanyService
@@ -42,6 +83,7 @@
 @inject IApprovalStepSettingRepository ApprovalStepSettingService
 
 @inject IPhanQuyenRepository PhanQuyenService
+@inject PermissionService CheckQuyenService
 @inject ICompanyTypeRepository CompanyTypeService
 @inject IChiNhanhRepository ChiNhanhService
 
@@ -52,49 +94,9 @@
 @inject IKhuHanhChinhRepository KhuHanhChinhService
 @inject IQD_BoiThuong_GocRepository QD_BoiThuong_GocService
 @inject IQD_ThuHoiDat_GocRepository QD_ThuHoiDat_GocService
-
 @inject DucAnhERP.Services.ToastService ToastService
 @inject IMajorRepository MajorRepository
-@inject IDanhMucRepository DanhMucRepository
-@inject IDMTLThepRepository DMTLThepRepository
 @inject IMajorUserPermissionRepository MajorUserPermissionRepository
-@inject IPhanLoaiHoGaRepository PhanLoaiHoGaRepository
-@inject INuocMuaRepository NuocMuaRepository
-@inject IPhanLoaiTDHoGaRepository PhanLoaiTDHoGaRepository
-@inject INhomDanhMucRepository NhomDanhMucRepository
-@inject IChatMaTuongRepository ChatMaTuongRepository
-@inject IPKKLCHopRepository PKKLCHopRepository
-@inject ITKThepCHopRepository TKThepCHopRepository
-@inject IPhanLoaiCTronHopNhuaRepository PhanLoaiCTronHopNhuaRepository
-@inject IPKKLCTronRepository PKKLCTronRepository
-@inject ITKThepCTronRepository TKThepCTronRepository
-@inject IPKKLCTietHoGaRepository PKKLCTietHoGaRepository
-@inject ITKThepHoGaRepository TKThepHoGaRepository
-@inject IPKKLCTietTDHGRepository PKKLCTietTDHGRepository
-@inject ITKThepTamDanRepository TKThepTamDanRepository
-@inject IPKKLDeCTronRepository PKKLDeCTronRepository
-@inject ITKThepDeCongRepository TKThepDeCongRepository
-@inject IPhanLoaiDeCongRepository PhanLoaiDeCongRepository
-@inject IPKKLMongCHopRepository PKKLMongCHopRepository
-@inject ITKThepMongCHopRepository TKThepMongCHopRepository
-@inject IPhanLoaiMongCTronRepository PhanLoaiMongCTronRepository
-@inject IPKKLMongCTronRepository PKKLMongCTronRepository
-@inject ITKThepMongCTronRepository TKThepMongCTronRepository
-@inject IPKKLRanhBTRepository PKKLRanhBTRepository
-@inject ITKThepRBTongRepository TKThepRBTongRepository
-@inject IPKKLRXayRepository PKKLRXayRepository
-@inject ITKThepRXayRepository TKThepRXayRepository
-@inject IPKKLTDanCHopRepository PKKLTDanCHopRepository
-@inject ITKThepTDanCHopRepository TKThepTDanCHopRepository
-@inject IPhanLoaiTDanTDanRepository PhanLoaiTDanTDanRepository
-@inject IPKKLTDanRBTRepository PKKLTDanRBTRepository
-@inject ITKThepTDRBTongRepository TKThepTDRBTongRepository
-@inject IPKKLTDanRXayRepository PKKLTDanRXayRepository
-@inject ITKThepTDanRXayRepository TKThepTDanRXayRepository
-@inject IPKKLTChongRepository PKKLTChongRepository
-@inject ITKThepTChongRepository TKThepTChongRepository
-@inject IPhanLoaiThanhChongRepository PhanLoaiThanhChongRepository
-@inject IPKKLTChongRepository PKKLTChongRepository
 @inject ExportExcelService ExportExcelService
 @using OfficeOpenXml.Style;
 

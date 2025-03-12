@@ -1,34 +1,52 @@
-@using DucAnhERP.Helpers
-@inject IJSRuntime JSRuntime
+ï»¿@using Microsoft.JSInterop
 
-<select id="@Id" class="form-control" multiple="multiple">
-    @if (Items != null && Items.Any())
-    {
-        @foreach (var item in Items)
+<div class="form-group">
+    <select id="@SelectId" class="form-control select2" multiple="multiple">
+        @foreach (var option in Options)
         {
-            <option value="@item.Value" selected="@item.IsSelected">@item.Text</option>
+            <option value="@option.Value" selected="@option.IsSelected">
+                @option.Text
+            </option>
         }
-    }
-</select>
+    </select>
+</div>
 
 @code {
-    [Parameter] public string Id { get; set; }
-    [Parameter] public List<SelectedItem> Items { get; set; } = new List<SelectedItem>();
-    [Parameter] public EventCallback<List<string>> OnChange { get; set; }
+    [Parameter]
+    public List<SelectedItem> Options { get; set; } = new();
 
-    private async Task HandleChange(ChangeEventArgs e)
+    [Parameter]
+    public EventCallback<List<string>> SelectedValuesChanged { get; set; }
+
+    [Inject]
+    public IJSRuntime JS { get; set; } = default!;
+
+    private string SelectId = $"select2-{Guid.NewGuid()}";
+    private DotNetObjectReference<MultipleSelect2>? dotNetRef;
+
+    [JSInvokable]
+    public async Task OnSelect2Change(string[] selectedValues)
     {
-        // L?y danh sách các giá tr? ?ã ch?n
-        var selectedValues = ((string[])e.Value).ToList();
-        await OnChange.InvokeAsync(selectedValues);
+        foreach (var option in Options)
+        {
+            option.IsSelected = selectedValues.Contains(option.Value);
+        }
+
+        var selected = Options.Where(o => o.IsSelected).Select(o => o.Value).ToList();
+        await SelectedValuesChanged.InvokeAsync(selected);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            // G?i JavaScript ?? kh?i t?o Select2 v?i multiple
-            await JSRuntime.InvokeVoidAsync("select2Blazor.initMultipleSelect2", Id);
+            dotNetRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("initializeSelect2", SelectId, dotNetRef);
         }
+    }
+
+    public void Dispose()
+    {
+        dotNetRef?.Dispose();
     }
 }

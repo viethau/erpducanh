@@ -1,0 +1,158 @@
+﻿@using DucAnhERP.Models.BoiThuong
+@if (IsLoading)
+{
+    <div class="text-center">
+        <div class="spinner-border" role="status"></div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <!-- Chọn tỉnh -->
+        <div class="col-md-3 col-sm-6">
+            <div class="form-group">
+                <label for="province" class="form-label">Chọn tỉnh/thành</label>
+                <select id="province" class="form-control" @onchange="OnProvinceChange">
+                    <option value="">-- Chọn tỉnh/thành --</option>
+                    @foreach (var province in Provinces)
+                    {
+                        <option value="@province.Name">@province.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <!-- Chọn huyện -->
+        <div class="col-md-3 col-sm-6">
+            <div class="form-group">
+                <label for="district" class="form-label">Chọn huyện/quận</label>
+                <select id="district" class="form-control" @onchange="OnDistrictChange" disabled="@(!Districts.Any())">
+                    <option value="">-- Chọn huyện/quận --</option>
+                    @foreach (var district in Districts)
+                    {
+                        <option value="@district.Name">@district.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <!-- Chọn xã -->
+        <div class="col-md-3 col-sm-6">
+            <div class="form-group">
+                <label for="ward" class="form-label">Chọn xã/phường</label>
+                <select id="ward" class="form-control" @onchange="OnWardChange" disabled="@(!Wards.Any())">
+                    <option value="">-- Chọn xã/phường --</option>
+                    @foreach (var ward in Wards)
+                    {
+                        <option value="@ward.Name">@ward.Name</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <!-- Nhập thôn/xóm -->
+        <div class="col-md-3 col-sm-6">
+            <div class="form-group">
+                <label for="hamlet" class="form-label">Nhập thôn/xóm</label>
+                <input id="hamlet" class="form-control" @bind="Selection.HamletName" @bind:event="oninput" disabled="@(!IsWardSelected)" />
+                @if (ShowHamletError)
+                {
+                    <div class="text-danger">Vui lòng nhập thôn/xóm.</div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public EventCallback<AddressSelection> OnSelectionChanged { get; set; }
+    [Parameter] public AddressSelection InitialSelection { get; set; }
+
+    private List<Province> Provinces = new();
+    private List<District> Districts = new();
+    private List<Ward> Wards = new();
+
+    private AddressSelection Selection = new();
+    private bool IsLoading = true;
+    private bool ShowHamletError = false;
+    private bool IsWardSelected = false; // Biến kiểm tra xem xã/phường đã được chọn hay chưa
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500); // Giả lập tải dữ liệu
+        var json = await File.ReadAllTextAsync("wwwroot/json/vietnamAddress.json");
+        Provinces = JsonSerializer.Deserialize<List<Province>>(json) ?? new();
+        IsLoading = false;
+
+        if (InitialSelection != null)
+        {
+            Selection = InitialSelection;
+            await LoadInitialSelection();
+        }
+    }
+
+    private async Task LoadInitialSelection()
+    {
+        if (!string.IsNullOrEmpty(Selection.SelectedProvince?.Name))
+        {
+            await OnProvinceChange(new ChangeEventArgs { Value = Selection.SelectedProvince.Name });
+        }
+        if (!string.IsNullOrEmpty(Selection.SelectedDistrict?.Name))
+        {
+            await OnDistrictChange(new ChangeEventArgs { Value = Selection.SelectedDistrict.Name });
+        }
+        if (!string.IsNullOrEmpty(Selection.SelectedWard?.Name))
+        {
+            await OnWardChange(new ChangeEventArgs { Value = Selection.SelectedWard.Name });
+        }
+    }
+
+    private async Task OnProvinceChange(ChangeEventArgs e)
+    {
+        var provinceName = e.Value.ToString();
+        Selection.SelectedProvince = Provinces.FirstOrDefault(p => p.Name == provinceName);
+        Districts = Selection.SelectedProvince?.Districts ?? new();
+        Wards.Clear();
+        Selection.SelectedDistrict = null;
+        Selection.SelectedWard = null;
+        Selection.HamletName = string.Empty;
+        ShowHamletError = false;
+        IsWardSelected = false; // Reset biến khi chọn tỉnh/thành
+
+        await OnSelectionChanged.InvokeAsync(Selection);
+    }
+
+    private async Task OnDistrictChange(ChangeEventArgs e)
+    {
+        var districtName = e.Value.ToString();
+        Selection.SelectedDistrict = Districts.FirstOrDefault(d => d.Name == districtName);
+        Wards = Selection.SelectedDistrict?.Wards ?? new();
+        Selection.SelectedWard = null;
+        Selection.HamletName = string.Empty;
+        ShowHamletError = false;
+        IsWardSelected = false; // Reset biến khi chọn huyện/quận
+
+        await OnSelectionChanged.InvokeAsync(Selection);
+    }
+
+    private async Task OnWardChange(ChangeEventArgs e)
+    {
+        var wardName = e.Value.ToString();
+        Selection.SelectedWard = Wards.FirstOrDefault(w => w.Name == wardName);
+        Selection.HamletName = string.Empty;
+        ShowHamletError = false; // Disable HamletName
+        IsWardSelected = true; // Đặt biến thành true khi chọn xã/phường
+
+        await OnSelectionChanged.InvokeAsync(Selection);
+    }
+
+    private async Task ValidateHamlet()
+    {
+        if (string.IsNullOrWhiteSpace(Selection.HamletName))
+        {
+            ShowHamletError = true;
+        }
+        else
+        {
+            ShowHamletError = false;
+            await OnSelectionChanged.InvokeAsync(Selection);
+        }
+    }
+}

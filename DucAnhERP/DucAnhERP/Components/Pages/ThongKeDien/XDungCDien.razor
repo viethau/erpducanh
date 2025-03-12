@@ -1,0 +1,1218 @@
+﻿@page "/ThongKeDien/XDungCDien"
+
+<div class="container-fluid">
+    <CustomModal IsVisible="isModalVisibleS" zIndex="1055" OnClose="HandleModalCloseS" Title="Chọn tuyến đường" Size="modal-lg">
+        <BodyTemplate>
+            <EditForm Model="pageModelS" FormName="SearchData" id="SearchData" OnValidSubmit="@LoadDataS">
+                <DataAnnotationsValidator />
+                <div class="d-flex row">
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="TuyenDuong">Tuyến đường</label>
+                        <Select2 Id="TuyenDuong" Items="@selectTuyenDuongSearch" OnChange="@OnSelectTuyenDuongSearch"></Select2>
+                        <ValidationMessage For="()=>pageModelS.TuyenDuong"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="TuCot">Từ cột</label>
+                        <Select2 Id="TuCot" Items="@selectTuCotSearch" OnChange="@OnSelectTuCotSearch"></Select2>
+                        <ValidationMessage For="()=>pageModelS.TuCot"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="DenCot">Đến cột</label>
+                        <Select2 Id="DenCot" Items="@selectDenCotSearch" OnChange="@OnSelectDenCotSearch"></Select2>
+                        <ValidationMessage For="()=>pageModelS.DenCot"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="TuLyTrinh">Từ lý trình</label>
+                        <Select2 Id="TuLyTrinh" Items="@selectTuLyTrinhSearch" OnChange="@OnSelectTuLyTrinhSearch"></Select2>
+                        <ValidationMessage For="()=>pageModelS.TuLyTrinh"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="DenLyTrinh">Đên lý trình</label>
+                        <Select2 Id="DenLyTrinh" Items="@selectDenLyTrinhSearch" OnChange="@OnSelectDenLyTrinhSearch"></Select2>
+                        <ValidationMessage For="()=>pageModelS.DenLyTrinh"></ValidationMessage>
+                    </div>
+
+                    <div class="form-group ml-5">
+                        <label>&nbsp;</label>
+                        <button type="submit" form="SearchData" class="btn btn-primary form-control">Tìm kiếm</button>
+                    </div>
+                </div>
+            </EditForm>
+            <div id="tableContainer " style="min-height:300px">
+                <div class="row mt-3">
+                    <table class="table table-hover table-bordered">
+                        <thead class="bg-info">
+                            <tr>
+                                <th rowspan="2"></th>
+                                <th rowspan="2" class="text-center">STT</th>
+                                <th colspan="5" class="text-center">Thông tin tuyến đường</th>
+                                <th colspan="2" class="text-center">Tọa độ</th>
+                            </tr>
+                            <tr>
+                                <th onclick="@(() => SortTableS("TuyenDuong"))" class="text-center sortable" scope="col" sortable>
+                                    <div class="pb-3">Tuyến đường  <span class="arrow @(GetSortStyle("TuyenDuong"))"></span></div>
+                                </th>
+                                <th onclick="@(() => SortTableS("TuCot"))" class="text-center sortable" scope="col" sortable>
+                                    <div class="pb-3">Từ cột  <span class="arrow @(GetSortStyle("TuCot"))"></span></div>
+                                </th>
+                                <th onclick="@(() => SortTableS("DenCot"))" class="text-center sortable" scope="col" sortable>
+                                    <div class="pb-3">Đến cột  <span class="arrow @(GetSortStyle("DenCot"))"></span></div>
+                                </th>
+                                <th onclick="@(() => SortTableS("TuLyTrinh"))" class="text-center sortable" scope="col" sortable>
+                                    <div class="pb-3">Từ lý trình  <span class="arrow @(GetSortStyle("TuLyTrinh"))"></span></div>
+                                </th>
+                                <th onclick="@(() => SortTableS("DenLyTrinh"))" class="text-center sortable" scope="col" sortable>
+                                    <div class="pb-3">Đến lý trình <span class="arrow @(GetSortStyle("DenLyTrinh"))"></span></div>
+                                </th>
+                                <th onclick="@(() => SortTableS("ToaDoX"))" class="text-center sortable" scope="col" sortable>
+                                    <div class="pb-3">X <span class="arrow @(GetSortStyle("ToaDoX"))"></span></div>
+                                </th>
+                                <th onclick="@(() => SortTableS("ToaDoY"))" class="text-center sortable" scope="col" sortable>
+                                    <div class="pb-3">Y <span class="arrow @(GetSortStyle("ToaDoY"))"></span></div>
+                                </th>
+
+                            </tr>
+                        </thead>
+                        @if (listDM_TuyenDuongModel.Any())
+                        {
+                            <tbody>
+                                @{
+                                    int stt = 1;
+                                }
+                                @foreach (var item_td in listDM_TuyenDuongModel)
+                                {
+                                    <tr>
+                                        <td class="d-flex nowrap justify-content-center">
+                                            <div class="d-inline-block">
+                                                <button type="button" class="btn btn-sm btn-info m-1" title="Lựa chọn" @onclick="()=>HandleChooseId(item_td)">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">@stt</td>
+                                        <td>@item_td.TuyenDuong</td>
+                                        <td>@item_td.TuCot</td>
+                                        <td>@item_td.DenCot</td>
+                                        <td>@item_td.TuLyTrinh</td>
+                                        <td>@item_td.DenLyTrinh</td>
+                                        <td>@item_td.ToaDoX</td>
+                                        <td>@item_td.ToaDoY</td>
+                                    </tr>
+                                    stt++;
+                                }
+
+                            </tbody>
+                        }
+                        else
+                        {
+                            <tbody>
+                                <tr>
+                                    <td colspan="8"> Không có dữ liệu</td>
+                                </tr>
+                            </tbody>
+                        }
+
+                    </table>
+                </div>
+
+                @if (listDM_TuyenDuongModel.Any())
+                {
+                    <Pagination MetaData="MetaDataS" Spread="2" SelectedPage="SelectedPageS" ChangePageSize="ChangePageSizeS"></Pagination>
+                }
+            </div>
+        </BodyTemplate>
+    </CustomModal>
+    <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
+        <BodyTemplate>
+            <EditForm id="editFormId" Model="Input" OnInvalidSubmit="HandleInValidSubmit" OnValidSubmit="HandleValidSubmit" >
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <h5>Thông tin lý trình</h5>
+                <div class="row">
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="Id_DM_TuyenDuong">Tuyến đường <span class="text-danger">*</span></label>
+                            <button type="button" @onclick="ShowModalS" class="btn btn-outline-info form-control">Chọn @dmModel.TuyenDuong</button>
+                            <ValidationMessage For="() => Input.Id_DM_TuyenDuong" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="TuCot">Từ cột <span class="text-danger">*</span></label>
+                            <InputText id="TuCot" readonly class="form-control" @bind-Value="dmModel.TuCot" />
+                            <ValidationMessage For="() => dmModel.TuCot" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="TuLyTrinh">Từ lý trình<span class="text-danger">*</span></label>
+                            <InputText id="TuLyTrinh" readonly class="form-control" @bind-Value="dmModel.TuLyTrinh" />
+                            <ValidationMessage For="() => dmModel.TuLyTrinh" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+                <h5>KL lót móng</h5>
+                <h6>KL xây dựng</h6>
+                <div class="row">
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="ID_DM_HangMucMong">Hạng mục<span class="text-danger">*</span></label>
+                            <Select2 Id="ID_DM_HangMucMong" Items="@selectHangMucKLSearch" OnChange="@OnSelectHangMucKLSearch"></Select2>
+                            <ValidationMessage For="() => Input.ID_DM_HangMucMong" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="Id_DM_LoaiKL_LMXD">Loại KL<span class="text-danger">*</span></label>
+                            <Select2 Id="Id_DM_LoaiKL_LMXD" Items="@selectLoaiKL_LMXDSearch" OnChange="@OnSelectLoaiKL_LMXDSearch"></Select2>
+                            <ValidationMessage For="() => Input.Id_DM_LoaiKL_LMXD" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="KLLM_XD_Dai">Dài<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" id="KLLM_XD_Dai" class="form-control" @bind-Value="Input.KLLM_XD_Dai" />
+                            <ValidationMessage For="() => Input.KLLM_XD_Dai" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="KLLM_XD_Rong">Rộng<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" id="KLLM_XD_Rong" class="form-control" @bind-Value="Input.KLLM_XD_Rong" />
+                            <ValidationMessage For="() => Input.KLLM_XD_Rong" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="KLLM_XD_Cao">Cao<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" id="KLLM_XD_Cao" class="form-control" @bind-Value="Input.KLLM_XD_Cao" />
+                            <ValidationMessage For="() => Input.KLLM_XD_Cao" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="KLLM_XD_KL">KL<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" id="KLLM_XD_KL" readonly class="form-control" @bind-Value="Input.KLLM_XD_KL" />
+                            <ValidationMessage For="() => Input.KLLM_XD_KL" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+                <h6>KL ván khuân</h6>
+                <div class="row">
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="Id_DM_LoaiKLLotMong_VK">Loại KL<span class="text-danger">*</span></label>
+                            <Select2 Id="Id_DM_LoaiKLLotMong_VK" Items="@selectLoaiKLLotMong_VKSearch" OnChange="@OnSelectLoaiKLLotMong_VKSearch"></Select2>
+                            <ValidationMessage For="() => Input.Id_DM_LoaiKLLotMong_VK" class="text-danger" /> 
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="KLLM_VK_SLCD">SL C.Dài<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" id="KLLM_VK_SLCD" class="form-control" @bind-Value="Input. KLLM_VK_SLCD" />
+                            <ValidationMessage For="() => Input. KLLM_VK_SLCD" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="KLLM_VK_SLCR">SL C.Rộng<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" id="KLLM_VK_SLCR" class="form-control" @bind-Value="Input.KLLM_VK_SLCR" />
+                            <ValidationMessage For="() => Input.KLLM_VK_SLCR" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="KLLM_VK_KL">KL<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" id="KLLM_VK_KL" readonly class="form-control" @bind-Value="Input.KLLM_VK_KL" />
+                            <ValidationMessage For="() => Input.KLLM_VK_KL" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+
+                <h5>KL móng</h5>
+                <h6>KL xây dựng</h6>
+                <div class="row">
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="ID_DM_HangMucMong">Hạng mục<span class="text-danger">*</span></label>
+                            <Select2 Id="ID_DM_HangMucMong" Items="@selectHangMucMongSearch" OnChange="@OnSelectHangMucMongSearch"></Select2>
+                            <ValidationMessage For="() => Input.ID_DM_HangMucMong" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="Id_DM_LoaiKL_MXD">Loại KL<span class="text-danger">*</span></label>
+                            <Select2 Id="Id_DM_LoaiKL_MXD" Items="@selectLoaiKL_MXDSearch" OnChange="@OnSelectLoaiKL_MXDSearch"></Select2>
+                            <ValidationMessage For="() => Input.Id_DM_LoaiKL_MXD" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="KLM_XD_Dai">Dài<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" id="KLM_XD_Dai" class="form-control" @bind-Value="Input.KLM_XD_Dai" />
+                            <ValidationMessage For="() => Input.KLM_XD_Dai" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="KLM_XD_Rong">Rộng<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" id="KLM_XD_Rong" class="form-control" @bind-Value="Input.KLM_XD_Rong" />
+                            <ValidationMessage For="() => Input.KLM_XD_Rong" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="KLM_XD_Cao">Cao<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" id="KLM_XD_Cao" class="form-control" @bind-Value="Input.KLM_XD_Cao" />
+                            <ValidationMessage For="() => Input.KLM_XD_Cao" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="KLM_XD_KL">KL<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" id="KLM_XD_KL" readonly class="form-control" @bind-Value="Input.KLM_XD_KL" />
+                            <ValidationMessage For="() => Input.KLM_XD_KL" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+                <h6>KL ván khuân</h6>
+                <div class="row">
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="Id_DM_LoaiKL_VK">Loại KL<span class="text-danger">*</span></label>
+                            <Select2 Id="Id_DM_LoaiKL_VK" Items="@selectLoaiKL_VKSearch" OnChange="@OnSelectLoaiKL_VKSearch"></Select2>
+                            <ValidationMessage For="() => Input.Id_DM_LoaiKL_VK" class="text-danger" />
+                        </div>
+                    </div>
+
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for=" KLM_VK_SLCD">SL C.Dài<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" id="KLM_VK_SLCD" class="form-control" @bind-Value="Input.KLM_VK_SLCD" />
+                            <ValidationMessage For="() => Input.KLM_VK_SLCD" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="KLM_VK_SLCR">SL C.Rộng<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" id="KLM_VK_SLCR" class="form-control" @bind-Value="Input.KLM_VK_SLCR" />
+                            <ValidationMessage For="() => Input.KLM_VK_SLCR" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="KLM_VK_KL">KL<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" id="KLM_VK_KL" readonly class="form-control" @bind-Value="Input.KLM_VK_KL" />
+                            <ValidationMessage For="() => Input.KLM_VK_KL" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+            </EditForm>
+        </BodyTemplate>
+        <FooterTemplate>
+            <div class="d-flex justify-content-end pr-5 py-3 modal-footer-with-border">
+                <button class="btn btn-primary mr-2" type="submit" form="editFormId">Save</button>
+                <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+            </div>
+        </FooterTemplate>
+    </CustomModal>
+
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mt-2">Danh sách</h5>
+    </div>
+    <EditForm Model="pageModel" FormName="SearchDataS" id="SearchDataS" OnValidSubmit="@Search">
+        <DataAnnotationsValidator />
+        <div class="d-flex row">
+            <div class="form-floating col-sm-6 col-md-2">
+                <label for="TuyenDuongS">Tuyến đường</label>
+                <Select2 Id="TuyenDuongS" Items="@selectTuyenDuongS" OnChange="@OnSelectTuyenDuongS"></Select2>
+                <ValidationMessage For="()=>pageModel.TuyenDuong"></ValidationMessage>
+            </div>
+            <div class="form-floating col-sm-6 col-md-2">
+                <label for="TuCotS">Từ cột</label>
+                <Select2 Id="TuCotS" Items="@selectTuCotS" OnChange="@OnSelectTuCotS"></Select2>
+                <ValidationMessage For="()=>pageModel.TuCot"></ValidationMessage>
+            </div>
+            <div class="form-floating col-sm-6 col-md-2">
+                <label for="TuLyTrinhS">Từ lý trình</label>
+                <Select2 Id="TuLyTrinhS" Items="@selectTuLyTrinhS" OnChange="@OnSelectTuLyTrinhS"></Select2>
+                <ValidationMessage For="()=>pageModel.TuLyTrinh"></ValidationMessage>
+            </div>
+            <div class="form-floating col-sm-6 col-md-2">
+                <label for="Id_DM_HangMucLotMongS">KL lót móng, hạng mục</label>
+                <Select2 Id="Id_DM_HangMucLotMongS" Items="@selectDM_HangMucLotMongS" OnChange="@OnSelectDM_HangMucLotMongS"></Select2>
+                <ValidationMessage For="()=>pageModel.Id_DM_HangMucLotMong"></ValidationMessage>
+            </div>
+            <div class="form-floating col-sm-6 col-md-2">
+                <label for="Id_DM_LoaiKL_LMXDS">KL lót móng KL xây dựng</label>
+                <Select2 Id="Id_DM_LoaiKL_LMXDS" Items="@selectOnSelectDM_LoaiKL_LMXDS" OnChange="@OnSelectDM_LoaiKL_LMXDS"></Select2>
+                <ValidationMessage For="()=>pageModel.Id_DM_LoaiKL_LMXD"></ValidationMessage>
+            </div>
+            <div class="form-floating col-sm-6 col-md-2">
+                <label for="Id_DM_LoaiKLLotMong_VKS">KL lót móng KL ván khuân</label>
+                <Select2 Id="Id_DM_LoaiKLLotMong_VKS" Items="@selectDM_LoaiKLLotMong_VKS" OnChange="@OnSelectDM_LoaiKLLotMong_VKS"></Select2>
+                <ValidationMessage For="()=>pageModel.Id_DM_LoaiKLLotMong_VK"></ValidationMessage>
+            </div>
+            <div class="form-floating col-sm-6 col-md-2">
+                <label for="ID_DM_HangMucMongS">KL móng KL xây dựng</label>
+                <Select2 Id="ID_DM_HangMucMongS" Items="@selectDM_HangMucMongS" OnChange="@OnSelectDM_HangMucMongS"></Select2>
+                <ValidationMessage For="()=>pageModel.ID_DM_HangMucMong"></ValidationMessage>
+            </div>
+            <div class="form-floating col-sm-6 col-md-2">
+                <label for="Id_DM_LoaiKL_VKS">KL móng KL ván khuân</label>
+                <Select2 Id="Id_DM_LoaiKL_VKS" Items="@selectDM_LoaiKL_VKS" OnChange="@OnSelectDM_LoaiKL_VKS"></Select2>
+                <ValidationMessage For="()=>pageModel.Id_DM_LoaiKL_VK"></ValidationMessage>
+            </div>
+
+            <div class="form-group ml-5">
+                <label>&nbsp;</label>
+                <button type="submit" form="SearchDataS" class="btn btn-primary form-control">Tìm kiếm</button>
+            </div>
+            @if (CheckQuyenService.HasPermission(3))
+            {
+                <div class="form-group ml-5">
+                    <label>&nbsp;</label>
+                    <button class="btn btn-default form-control" @onclick="ShowModal">Thêm mới</button>
+                </div>
+
+            }
+        </div>
+    </EditForm>
+
+    <div class="row mt-3 our-table">
+        <table class="table table-hover table-bordered">
+            <thead class="bg-info">
+                <tr>
+                    <th class="text-center" colspan="2" rowspan="3"></th>
+                    <th rowspan="3" class="text-center" >STT</th>
+                    <th rowspan="2" colspan="3" class="text-center">Thông tin lý trình</th>
+                    <th colspan="10" class="text-center">KL lót móng</th>
+                    <th colspan="10" class="text-center">KL móng</th>
+                </tr>
+                <tr>
+                    <th colspan="6" class="text-center">KL xây dựng</th>
+                    <th colspan="4" class="text-center">KL ván khuân</th>
+                    <th colspan="6" class="text-center">KL xây dựng</th>
+                    <th colspan="4" class="text-center">KL ván khuân</th>
+                </tr>
+                <tr>
+                    <th onclick="@(() => SortTable("TuyenDuong"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Tuyến đường <span class="arrow @(GetSortStyle("TuyenDuong"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("DenCot"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Đến cột  <span class="arrow @(GetSortStyle("DenCot"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("TuLyTrinh"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Từ lý trình  <span class="arrow @(GetSortStyle("TuLyTrinh"))"></span></div>
+                    </th>
+
+                    <th onclick="@(() => SortTable("DM_HangMucLotMong"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Hạng mục <span class="arrow @(GetSortStyle("DM_HangMucLotMong"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("DM_LoaiKL_LMXD"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Loại KL<span class="arrow @(GetSortStyle("DM_LoaiKL_LMXD"))"></span></div>
+                    </th>
+
+                    <th onclick="@(() => SortTable("KLLM_XD_Dai"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Dài<span class="arrow @(GetSortStyle("KLLM_XD_Dai"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("KLLM_XD_Rong"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Rộng<span class="arrow @(GetSortStyle("KLLM_XD_Rong"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("KLLM_XD_Cao"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Cao<span class="arrow @(GetSortStyle("KLLM_XD_Cao"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("KLLM_XD_KL"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">KL<span class="arrow @(GetSortStyle("KLLM_XD_KL"))"></span></div>
+                    </th>
+
+                    <th onclick="@(() => SortTable("DM_LoaiKLLotMong_VK"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Loại KL <span class="arrow @(GetSortStyle("DM_LoaiKLLotMong_VK"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable(" KLLM_VK_SLCD"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">SL C.Dài<span class="arrow @(GetSortStyle(" KLLM_VK_SLCD"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("KLLM_VK_SLCR"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">SL C.Rộng <span class="arrow @(GetSortStyle("KLLM_VK_SLCR"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("KLLM_VK_KL"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">KL<span class="arrow @(GetSortStyle("KLLM_VK_KL"))"></span></div>
+                    </th>
+
+                    <th onclick="@(() => SortTable("DM_HangMucMong"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Hạng mục<span class="arrow @(GetSortStyle("DM_HangMucMong"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("DM_LoaiKL_MXD"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Loại KL<span class="arrow @(GetSortStyle("DM_LoaiKL_MXD"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("KLM_XD_Dai"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Dài<span class="arrow @(GetSortStyle("KLM_XD_Dai"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("KLM_XD_Rong"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Rộng<span class="arrow @(GetSortStyle("KLM_XD_Rong"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("KLM_XD_Cao"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Cao<span class="arrow @(GetSortStyle("KLM_XD_Cao"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("KLM_XD_KL"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">KL<span class="arrow @(GetSortStyle("KLM_XD_KL"))"></span></div>
+                    </th>
+
+                    <th onclick="@(() => SortTable("Id_DM_LoaiKL_VK"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Loại KL <span class="arrow @(GetSortStyle("Id_DM_LoaiKL_VK"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("KLM_VK_SLCD"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">SL C.Dài <span class="arrow @(GetSortStyle("KLM_VK_SLCD"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("KLM_VK_SLCR"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">SL C.Rộng <span class="arrow @(GetSortStyle("KLM_VK_SLCR"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("KLM_VK_KL"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">KL <span class="arrow @(GetSortStyle("KLM_VK_KL"))"></span></div>
+                    </th>
+                </tr>
+            </thead>
+            @if (listD_XDungCDienModel.Any())
+            {
+                <tbody>
+                    @{
+                        int stt = 1;
+                    }
+                    @foreach (var ndm in listD_XDungCDienModel)
+                    {
+                        <tr>
+                            <td class="text-center">
+                                @if (CheckQuyenService.HasPermission(4))
+                                {
+                                    <button class="btn btn-sm btn-primary" @onclick="()=>Edit(ndm.Id)">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (CheckQuyenService.HasPermission(5))
+                                {
+                                    <button class="btn btn-sm btn-danger" @onclick="()=>ConfirmDelete(ndm.Id,ndm.TuyenDuong)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                }
+                            </td>
+                            <td class="text-center">@stt</td>
+                            <td>@ndm.TuyenDuong</td>
+                            <td>@ndm.TuCot</td>
+                            <td>@ndm.TuLyTrinh</td>
+
+                            <td>@ndm.DM_HangMucLotMong</td>
+                            <td>@ndm.DM_LoaiKL_LMXD</td>
+                            <td>@ndm.KLLM_XD_Dai</td>
+                            <td>@ndm.KLLM_XD_Rong</td>
+                            <td>@ndm.KLLM_XD_Cao</td>
+                            <td>@ndm.KLLM_XD_KL</td>
+
+                            <td>@ndm.DM_LoaiKLLotMong_VK</td>
+                            <td>@ndm.KLLM_VK_SLCD</td>
+                            <td>@ndm.KLLM_VK_SLCR</td>
+                            <td>@ndm.KLLM_VK_KL</td>
+
+                            <td>@ndm.DM_HangMucMong</td>
+                            <td>@ndm.DM_LoaiKL_MXD</td>
+                            <td>@ndm.KLM_XD_Dai</td>
+                            <td>@ndm.KLM_XD_Rong</td>
+                            <td>@ndm.KLM_XD_Cao</td>
+                            <td>@ndm.KLM_XD_KL</td>
+
+                            <td>@ndm.DM_LoaiKL_VK</td>
+                            <td>@ndm.KLM_VK_SLCD</td>
+                            <td>@ndm.KLM_VK_SLCR</td>
+                            <td>@ndm.KLM_VK_KL</td>
+                        </tr>
+                        stt++;
+                    }
+
+                </tbody>
+            }
+            else
+            {
+                <tbody>
+                    <tr>
+                        <td colspan="24"> Không có dữ liệu</td>
+                    </tr>
+                </tbody>
+            }
+
+        </table>
+    </div>
+
+    @if (listD_XDungCDienModel.Any())
+    {
+        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+    }
+    <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+    <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
+</div>
+
+@code {
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+
+    private D_XDungCDien Input = new();
+    private DateTime baseTime;
+
+    private bool isLoading = false;
+    private bool isModalVisible = false;
+    private string TitleModal = "Thêm mới ";
+    bool isEdit = false;
+
+    private void ShowModal()
+    {
+        isEdit = false;
+        isModalVisible = true;
+        dmModel = new();
+        Refresh();
+    }
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+    }
+    private void HandleSave()
+    {
+        // Logic for saving
+        isModalVisible = false;
+    }
+    private void HandleCancel()
+    {
+        // Logic for canceling
+        isModalVisible = false;
+        Input = new();
+    }
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+    public List<D_XDungCDienModel> listD_XDungCDienModel{get;set;} = new();
+    public List<D_XDungCDienModel> listModel{get;set;} = new();
+    public MetaData MetaData{get;set;}
+    public D_XDungCDienModel dmModel { get; set; } = new();
+    [SupplyParameterFromForm(FormName = "SearchData")]
+    public D_XDungCDienModel pageModel { get; set; } = new();
+
+    private List<SelectedItem> selectTuyenDuongS = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectTuCotS = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectTuLyTrinhS = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectDM_HangMucLotMongS = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectOnSelectDM_LoaiKL_LMXDS = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectDM_LoaiKLLotMong_VKS = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectDM_HangMucMongS = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectDM_LoaiKL_VKS = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+
+    private List<SelectedItem> selectHangMucKLSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectHangMucMongSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectLoaiKL_LMXDSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectLoaiKLLotMong_VKSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectLoaiKL_MXDSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectLoaiKL_VKSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+
+
+    private async Task OnSelectHangMucKLSearch(SelectedItem selectedItem)
+    {
+        Input.Id_DM_HangMucLotMong = selectedItem.Value;
+    }
+    private async Task OnSelectHangMucMongSearch(SelectedItem selectedItem)
+    {
+        Input.ID_DM_HangMucMong = selectedItem.Value;
+    }
+    private async Task OnSelectLoaiKL_LMXDSearch(SelectedItem selectedItem)
+    {
+        Input.Id_DM_LoaiKL_LMXD = selectedItem.Value;
+    }
+    private async Task OnSelectLoaiKLLotMong_VKSearch(SelectedItem selectedItem)
+    {
+        Input.Id_DM_LoaiKLLotMong_VK = selectedItem.Value;
+    }
+    private async Task OnSelectLoaiKL_MXDSearch(SelectedItem selectedItem)
+    {
+        Input.Id_DM_LoaiKL_MXD = selectedItem.Value;
+    }
+    private async Task OnSelectLoaiKL_VKSearch(SelectedItem selectedItem)
+    {
+        Input.Id_DM_LoaiKL_VK = selectedItem.Value;
+    }
+
+
+    //Search pageModel
+    private async Task OnSelectTuyenDuongS(SelectedItem selectedItem)
+    {
+        pageModel.TuyenDuong = selectedItem.Value;
+    }
+    private async Task OnSelectTuCotS(SelectedItem selectedItem)
+    {
+        pageModel.TuCot = selectedItem.Value;
+    }
+    private async Task OnSelectTuLyTrinhS(SelectedItem selectedItem)
+    {
+        pageModel.TuLyTrinh = selectedItem.Value;
+    }
+    private async Task OnSelectDM_HangMucLotMongS(SelectedItem selectedItem)
+    {
+        pageModel.Id_DM_HangMucLotMong = selectedItem.Value;
+    }
+    private async Task OnSelectDM_LoaiKL_LMXDS(SelectedItem selectedItem)
+    {
+        pageModel.Id_DM_LoaiKL_LMXD = selectedItem.Value;
+    }
+    private async Task OnSelectDM_LoaiKLLotMong_VKS(SelectedItem selectedItem)
+    {
+        pageModel.Id_DM_LoaiKLLotMong_VK = selectedItem.Value;
+    }
+    private async Task OnSelectDM_HangMucMongS(SelectedItem selectedItem)
+    {
+        pageModel.ID_DM_HangMucMong = selectedItem.Value;
+    }
+    private async Task OnSelectDM_LoaiKL_VKS(SelectedItem selectedItem)
+    {
+        pageModel.Id_DM_LoaiKL_VK = selectedItem.Value;
+    }
+
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        pageModel = new();
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            userName = authState.User.Identity.Name;
+            user = ApplicationUserService.GetByUserName(userName);
+            userId = user.Id;
+            groupId = user.GroupId;
+        }
+        if (!string.IsNullOrEmpty(groupId) && user != null)
+        {
+            await CheckQuyenService.InitializePermissions(groupId, user, "6f85445f-398d-47d6-bbea-04c267299535");
+        }
+
+        var DM_HangMucKLs = await DM_HangMucKLService.GetByVM(groupId, new DM_HangMucKLModel());
+        foreach (var item in DM_HangMucKLs)
+        {
+            if (!selectHangMucKLSearch.Any(x => x.Value == item.Id))
+            {
+                selectHangMucKLSearch.Add(new SelectedItem
+                    {
+                        Value = item.Id,
+                        Text = item.Ten
+                    });
+                selectHangMucMongSearch = selectHangMucKLSearch;
+            }
+
+        }
+
+        var DM_LoaiKLs = await DM_LoaiKLService.GetByVM(groupId, new DM_LoaiKLModel());
+        foreach (var item in DM_LoaiKLs)
+        {
+            if (!selectLoaiKL_LMXDSearch.Any(x => x.Value == item.Id))
+            {
+                selectLoaiKL_LMXDSearch.Add(new SelectedItem
+                    {
+                        Value = item.Id,
+                        Text = item.LoaiKhoiLuong
+                    });
+            }
+
+            selectLoaiKLLotMong_VKSearch = selectLoaiKL_LMXDSearch;
+            selectLoaiKL_MXDSearch = selectLoaiKL_LMXDSearch;
+            selectLoaiKL_VKSearch = selectLoaiKL_LMXDSearch;
+        }
+
+        var TTLDienCDiens = await D_XDungCDienService.GetByVM(groupId, new D_XDungCDienModel());
+        foreach (var item in TTLDienCDiens)
+        {
+            if (!selectTuyenDuongS.Any(x => x.Value == item.Id_DM_TuyenDuong))
+            {
+                selectTuyenDuongS.Add(new SelectedItem
+                    {
+                        Value = item.Id_DM_TuyenDuong,
+                        Text = item.TuyenDuong
+                    });
+            }
+            if (!selectTuCotS.Any(x => x.Value == item.TuCot))
+            {
+                selectTuCotS.Add(new SelectedItem
+                    {
+                        Value = item.TuCot,
+                        Text = item.TuCot
+                    });
+            }
+            if (!selectTuLyTrinhS.Any(x => x.Value == item.TuLyTrinh))
+            {
+                selectTuLyTrinhS.Add(new SelectedItem
+                    {
+                        Value = item.TuLyTrinh,
+                        Text = item.TuLyTrinh
+                    });
+            }
+            if (!selectDM_HangMucLotMongS.Any(x => x.Value == item.Id_DM_HangMucLotMong))
+            {
+                selectDM_HangMucLotMongS.Add(new SelectedItem
+                    {
+                        Value = item.Id_DM_HangMucLotMong,
+                        Text = item.DM_HangMucLotMong
+                    });
+            }
+            if (!selectOnSelectDM_LoaiKL_LMXDS.Any(x => x.Value == item.Id_DM_LoaiKL_LMXD))
+            {
+                selectOnSelectDM_LoaiKL_LMXDS.Add(new SelectedItem
+                    {
+                        Value = item.Id_DM_LoaiKL_LMXD,
+                        Text = item.DM_LoaiKL_LMXD
+                    });
+            }
+            if (!selectDM_LoaiKLLotMong_VKS.Any(x => x.Value == item.Id_DM_LoaiKLLotMong_VK))
+            {
+                selectDM_LoaiKLLotMong_VKS.Add(new SelectedItem
+                    {
+                        Value = item.Id_DM_LoaiKLLotMong_VK,
+                        Text = item.DM_LoaiKLLotMong_VK
+                    });
+            }
+            if (!selectDM_HangMucMongS.Any(x => x.Value == item.ID_DM_HangMucMong))
+            {
+                selectDM_HangMucMongS.Add(new SelectedItem
+                    {
+                        Value = item.ID_DM_HangMucMong,
+                        Text = item.DM_HangMucMong
+                    });
+            }
+            if (!selectDM_LoaiKL_VKS.Any(x => x.Value == item.Id_DM_LoaiKL_VK))
+            {
+                selectDM_LoaiKL_VKS.Add(new SelectedItem
+                    {
+                        Value = item.Id_DM_LoaiKL_VK,
+                        Text = item.DM_LoaiKL_VK
+                    });
+            }
+        }
+
+        StateHasChanged();
+
+        baseTime = DateTime.Now;
+        await Task.WhenAll(Search());
+    }
+    // Truy vấn data theo điều kiện tìm kiếm
+    private async Task Search()
+    {
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "dac0c890-7c4b-40e4-91f3-fd8b9fb4e517");
+            var DM_TuyenDuongs = await D_XDungCDienService.GetByVM(groupId, pageModel);
+            listModel = DM_TuyenDuongs;
+            listD_XDungCDienModel = Paging(DM_TuyenDuongs);
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+    }
+    private async Task HandleInValidSubmit()
+    {
+        await JSRuntime.InvokeVoidAsync("scrollToFirstError");
+    }
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            Input.CreateBy = userName;
+            Input.CompanyId = groupId;
+            var isExist = await D_XDungCDienService.CheckExist(Input.Id, Input);
+            if (isExist)
+            {
+                ToastService.ShowToast(
+                   "Thông báo",
+                    "Đã tồn tại.",
+                    cssClass: "toast-danger",
+                    iconClass: "fa fa-exclamation-circle",
+                    progressBarClass: "bg-info",
+                    duration: 5000);
+            }
+            else
+            {
+                if (isEdit)
+                {
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "40acc55a-b536-4068-b946-217da164d118");
+                    string[] ids = { Input.Id };
+                    bool isValid = await D_XDungCDienService.CheckExclusive(ids, baseTime);
+                    if (isValid)
+                    {
+                        await D_XDungCDienService.Update(Input, userId);
+                        ToastService.ShowToast("Thông báo", "Cập nhật thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                        await Search();
+                        isModalVisible = false;
+                        Input = new();
+                    }
+                }
+                else
+                {
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "353cc305-7b22-48c8-97c4-b1b9ed87d405");
+                    await D_XDungCDienService.Insert(Input, userId);
+                    ToastService.ShowToast("Thông báo", "Thêm thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                    await Search();
+                    isModalVisible = false;
+                    Input = new();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+
+    }
+    private string deleteId;
+
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        deleteId = id;
+        confirmModal.Title = "Xác nhận xóa";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.openModal();
+
+    }
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        if (confirmed)
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "69f91ed2-1a06-4956-bef3-8ea3df8fe486");
+            if (!string.IsNullOrEmpty(deleteId))
+            {
+                bool isInUse = await D_XDungCDienService.IsIdInUse(deleteId);
+                if (isInUse)
+                {
+                    ToastService.ShowToast("Thông báo", "Không thể xóa loại danh mục đang được sử dụng.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+                }
+                else
+                {
+                    await D_XDungCDienService.DeleteById(deleteId, userId);
+                    ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                    await Search();
+                    deleteId = "";
+                }
+            }
+        }
+    }
+    private async Task Edit(string id)
+    {
+        try
+        {
+            TitleModal = "Cập nhật !";
+            Input = await D_XDungCDienService.GetById(id);
+
+            selectHangMucKLSearch.ForEach(item => item.IsSelected = item.Value == Input.Id_DM_HangMucLotMong);
+            selectLoaiKL_LMXDSearch.ForEach(item => item.IsSelected = item.Value == Input.Id_DM_LoaiKL_LMXD);
+            selectLoaiKLLotMong_VKSearch.ForEach(item => item.IsSelected = item.Value == Input.Id_DM_LoaiKLLotMong_VK);
+            selectHangMucMongSearch.ForEach(item => item.IsSelected = item.Value == Input.ID_DM_HangMucMong);
+            selectLoaiKL_LMXDSearch.ForEach(item => item.IsSelected = item.Value == Input.Id_DM_LoaiKL_MXD);
+            selectLoaiKL_VKSearch.ForEach(item => item.IsSelected = item.Value == Input.Id_DM_LoaiKL_VK);
+
+            var DM_TuyenDuong = await DM_TuyenDuongService.GetById(Input.Id_DM_TuyenDuong);
+            dmModel.TuyenDuong = DM_TuyenDuong.TuyenDuong;
+            dmModel.TuCot = DM_TuyenDuong.TuCot;
+            dmModel.DenCot = DM_TuyenDuong.DenCot;
+            dmModel.TuLyTrinh = DM_TuyenDuong.TuLyTrinh;
+            dmModel.DenLyTrinh = DM_TuyenDuong.DenLyTrinh;
+
+            isEdit = true;
+            isModalVisible = true;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+    }
+    private void Refresh()
+    {
+        selectHangMucKLSearch.ForEach(item => item.IsSelected = item.Value == "");
+        selectLoaiKL_LMXDSearch.ForEach(item => item.IsSelected = item.Value == "");
+        selectLoaiKLLotMong_VKSearch.ForEach(item => item.IsSelected = item.Value == "");
+        selectHangMucMongSearch.ForEach(item => item.IsSelected = item.Value == "");
+        selectLoaiKL_MXDSearch.ForEach(item => item.IsSelected = item.Value == "");
+        selectLoaiKL_VKSearch.ForEach(item => item.IsSelected = item.Value == "");
+        Input = new();
+        pageModel = new();
+        StateHasChanged();
+    }
+
+
+    // Hàm xử lý logic khi người dùng dừng nhập
+    //bắt sự kiện khi thay đổi
+    private System.Timers.Timer _typingTimer;
+    private int _debounceDelay = 1000; // Thời gian đợi sau khi người dùng dừng nhập (ms)
+
+    // Hàm được gọi sau khi bind-value hoàn tất
+    private void OnValueChanged()
+    {
+        // Dừng Timer cũ nếu đang chạy
+        _typingTimer?.Stop();
+
+        // Khởi động Timer mới
+        _typingTimer = new System.Timers.Timer(_debounceDelay);
+        _typingTimer.Elapsed += async (_, _) =>
+        {
+            _typingTimer.Stop();
+            await InvokeAsync(OnTypingStopped); // Gọi hàm xử lý khi người dùng dừng nhập
+        };
+        _typingTimer.AutoReset = false;
+        _typingTimer.Start();
+    }
+    private async Task OnTypingStopped()
+    {
+        await Caculate();
+    }
+    public async Task Caculate()
+    {
+        Input.KLLM_XD_KL = KLLM_XD_KL(Input.KLLM_XD_Dai, Input.KLLM_XD_Rong, Input.KLLM_XD_Cao);
+        Input.KLLM_VK_KL = KLLM_VK_KL(Input.KLLM_XD_Dai, Input.KLLM_XD_Cao, Input.KLLM_VK_SLCD, Input.KLLM_XD_Rong, Input.KLLM_VK_SLCR);
+        Input.KLM_XD_KL = KLM_XD_KL(Input.KLM_XD_Dai, Input.KLM_XD_Rong, Input.KLM_XD_Cao);
+        Input.KLM_VK_KL = KLM_VK_KL(Input.KLM_XD_Dai, Input.KLM_XD_Cao, Input.KLM_VK_SLCD, Input.KLM_XD_Rong, Input.KLM_VK_SLCR);
+        await InvokeAsync(() =>{ StateHasChanged(); });
+    }
+    private double KLLM_XD_KL(double KLLM_XD_Dai, double KLLM_XD_Rong, double KLLM_XD_Cao)
+    {
+        double result = Math.Round((KLLM_XD_Dai * KLLM_XD_Rong * KLLM_XD_Cao),4);
+        return Math.Ceiling(result * 100) / 100;
+    }
+    private double KLLM_VK_KL(double KLLM_XD_Dai, double KLLM_XD_Cao, double KLLM_VK_SLCD, double KLLM_XD_Rong, double KLLM_VK_SLCR)
+    {
+        double result = Math.Round((KLLM_XD_Dai * KLLM_XD_Cao * KLLM_VK_SLCD) + (KLLM_XD_Rong * KLLM_XD_Cao * KLLM_VK_SLCR),4);
+        result = Math.Ceiling(result * 100) / 100;
+        return result;
+    }
+    private double KLM_XD_KL(double KLM_XD_Dai, double KLM_XD_Rong, double KLM_XD_Cao)
+    {
+        double result = Math.Round((KLM_XD_Dai * KLM_XD_Rong * KLM_XD_Cao),4);
+        return Math.Ceiling(result  * 100) / 100;
+
+    }
+    private double KLM_VK_KL(double KLM_XD_Dai, double KLM_XD_Cao, double KLM_VK_SLCD, double KLM_XD_Rong, double KLM_VK_SLCR)
+    {
+        double result = Math.Round((KLM_XD_Dai * KLM_XD_Cao * KLM_VK_SLCD) + (KLM_XD_Rong * KLM_XD_Cao * KLM_VK_SLCR),4);
+        result = Math.Ceiling(result * 100) / 100;
+        return result;
+    }
+
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        dmModel.PageNumber = 1;
+        Paging(listModel);
+    }
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        dmModel.PageNumber = page;
+        Paging(listModel);
+    }
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+        dmModel.PageNumber = 1;
+        dmModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+    // Xử lý paging
+    private List<D_XDungCDienModel> Paging(List<D_XDungCDienModel> DM_TuyenDuongs)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = DM_TuyenDuongs.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        DM_TuyenDuongs = DM_TuyenDuongs.Skip((dmModel.PageNumber - 1) * dmModel.PageSize).Take(dmModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listD_XDungCDienModel.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var ndm in DM_TuyenDuongs)
+        {
+            listD_XDungCDienModel.Add(ndm);
+        }
+
+        // Tạo pagelist mới
+        var pagelist = new PageList<D_XDungCDienModel>(listD_XDungCDienModel, count, dmModel.PageNumber, dmModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return DM_TuyenDuongs;
+    }
+
+
+    //model search tuyến đường
+    private bool isModalVisibleS = false;
+    public List<DM_TuyenDuongModel> listDM_TuyenDuongModel { get; set; } = new();
+    public List<DM_TuyenDuongModel> listModelS { get; set; } = new();
+    public MetaData MetaDataS { get; set; }
+    public DM_TuyenDuongModel dmModelS { get; set; } = new();
+    public DM_TuyenDuongModel pageModelS { get; set; } = new();
+
+    private List<SelectedItem> selectTuyenDuongSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectTuCotSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectDenCotSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectTuLyTrinhSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectDenLyTrinhSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+
+    private async Task ShowModalS()
+    {
+        var DM_TuyenDuongs = await DM_TuyenDuongService.GetByVM(groupId, new DM_TuyenDuongModel());
+        foreach (var item in DM_TuyenDuongs)
+        {
+            if (!selectTuyenDuongSearch.Any(x => x.Value == item.TuyenDuong))
+            {
+                selectTuyenDuongSearch.Add(new SelectedItem
+                    {
+                        Value = item.TuyenDuong,
+                        Text = item.TuyenDuong
+                    });
+            }
+            if (!selectTuCotSearch.Any(x => x.Value == item.TuCot))
+            {
+                selectTuCotSearch.Add(new SelectedItem
+                    {
+                        Value = item.TuCot,
+                        Text = item.TuCot
+                    });
+            }
+            if (!selectDenCotSearch.Any(x => x.Value == item.DenCot))
+            {
+                selectDenCotSearch.Add(new SelectedItem
+                    {
+                        Value = item.DenCot,
+                        Text = item.DenCot
+                    });
+            }
+            if (!selectTuLyTrinhSearch.Any(x => x.Value == item.TuLyTrinh))
+            {
+                selectTuLyTrinhSearch.Add(new SelectedItem
+                    {
+                        Value = item.TuLyTrinh,
+                        Text = item.TuLyTrinh
+                    });
+            }
+            if (!selectDenLyTrinhSearch.Any(x => x.Value == item.DenLyTrinh))
+            {
+                selectDenLyTrinhSearch.Add(new SelectedItem
+                    {
+                        Value = item.DenLyTrinh,
+                        Text = item.DenLyTrinh
+                    });
+            }
+        }
+        StateHasChanged();
+        LoadDataS();
+        isModalVisibleS = true;
+    }
+    private void HandleModalCloseS(bool isVisible)
+    {
+        isModalVisibleS = isVisible;
+    }
+    private async Task OnSelectTuyenDuongSearch(SelectedItem selectedItem)
+    {
+        pageModelS.TuyenDuong = selectedItem.Value;
+    }
+    private async Task OnSelectTuCotSearch(SelectedItem selectedItem)
+    {
+        pageModelS.TuCot = selectedItem.Value;
+    }
+    private async Task OnSelectDenCotSearch(SelectedItem selectedItem)
+    {
+        pageModelS.DenCot = selectedItem.Value;
+    }
+    private async Task OnSelectTuLyTrinhSearch(SelectedItem selectedItem)
+    {
+        pageModelS.TuLyTrinh = selectedItem.Value;
+    }
+    private async Task OnSelectDenLyTrinhSearch(SelectedItem selectedItem)
+    {
+        pageModelS.DenLyTrinh = selectedItem.Value;
+    }
+    private void SortTableS(string columnName)
+    {
+        listModelS = SortService.SortTable(listModelS, columnName);
+        dmModelS.PageNumber = 1;
+        PagingS(listModelS);
+    }
+    private string GetSortStyleS(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+    private void SelectedPageS(int page)
+    {
+        dmModelS.PageNumber = page;
+        PagingS(listModelS);
+    }
+    private void ChangePageSizeS(int pageSize)
+    {
+        dmModelS.PageNumber = 1;
+        dmModelS.pageSize = pageSize;
+        PagingS(listModelS);
+    }
+    private async Task LoadDataS()
+    {
+        try
+        {
+            isLoading = true;
+            var DM_TuyenDuongs = await DM_TuyenDuongService.GetByVM(groupId, pageModelS);
+            listModelS = DM_TuyenDuongs;
+            listDM_TuyenDuongModel = PagingS(DM_TuyenDuongs);
+            isLoading = false;
+            await InvokeAsync(() =>{StateHasChanged();});
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+    }
+    private List<DM_TuyenDuongModel> PagingS(List<DM_TuyenDuongModel> DM_TuyenDuongs)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = DM_TuyenDuongs.Count();
+        // Lọc bản ghi theo page hiện tại và page size
+        DM_TuyenDuongs = DM_TuyenDuongs.Skip((dmModelS.PageNumber - 1) * dmModelS.PageSize).Take(dmModelS.PageSize).ToList();
+        // Xóa danh sách đang hiển thị trên màn hình
+        listDM_TuyenDuongModel.Clear();
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var ndm in DM_TuyenDuongs)
+        {
+            listDM_TuyenDuongModel.Add(ndm);
+        }
+        // Tạo pagelist mới
+        var pagelist = new PageList<DM_TuyenDuongModel>(listDM_TuyenDuongModel, count, dmModelS.PageNumber, dmModelS.PageSize);
+        MetaDataS= pagelist.MetaData;
+        return DM_TuyenDuongs;
+    }
+    private async Task HandleChooseId(DM_TuyenDuongModel item)
+    {
+        try
+        {
+            Input.Id_DM_TuyenDuong = item.Id;
+            dmModel.TuyenDuong = item.TuyenDuong;
+            dmModel.TuCot = item.TuCot;
+            dmModel.DenCot = item.DenCot;
+            dmModel.TuLyTrinh = item.TuLyTrinh;
+            dmModel.DenLyTrinh = item.DenLyTrinh;
+            isModalVisibleS = false;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                       "Thông báo",
+                        ex.Message,
+                        cssClass: "toast-danger",
+                        iconClass: "fa fa-exclamation-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000);
+        }
+
+    }
+}

@@ -1,12 +1,14 @@
-﻿using DucAnhERP.Components.Pages.NghiepVuCongTrinh.DanhMuc;
-using DucAnhERP.Components.Pages.NghiepVuCongTrinh.PKKL;
-using DucAnhERP.Models;
+﻿using DucAnhERP.Models;
+using DucAnhERP.Models.BoiThuong;
+using DucAnhERP.Models.QLNV;
+using DucAnhERP.Models.ThongKeDien;
 using DucAnhERP.Services.SignalR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata;
+using static DucAnhERP.ViewModel.BoiThuong.BT_CTietPAnBThuongModel;
 
 namespace DucAnhERP.Data
 {
@@ -59,48 +61,38 @@ namespace DucAnhERP.Data
         public DbSet<QD_ThuHoiDat_Goc> QD_ThuHoiDat_Gocs { get; set; }
         public DbSet<QD_ThuHoiDat_Goc_Log> QD_ThuHoiDat_Goc_Logs { get; set; }
 
+        //QLNV
+        public DbSet<QLNV_NhanVien> QLNV_NhanViens { get; set; }
+        public DbSet<QLNV_NhomNhanVien> QLNV_NhomNhanViens { get; set; }
+        public DbSet<QLNV_QuanLyNhanVien> QLNV_QuanLyNhanViens { get; set; }
+        public DbSet<QLNV_CongViec> QLNV_CongViecs { get; set; }
+        public DbSet<QLNV_CongViecCon> QLNV_CongViecCons { get; set; }
+        public DbSet<QLNV_DanhGia> QLNV_DanhGias { get; set; }
 
-        public DbSet<NhomDanhMuc> DSNhomDanhMuc { get; set; }
-        public DbSet<DanhMuc1> DSDanhMuc { get; set; }
-        public DbSet<MHopRanhThang> DSHopRanhThang { get; set; }
-        public DbSet<NuocMua> DSNuocMua { get; set; }
-        public DbSet<PhanLoaiHoGa> PhanLoaiHoGas { get; set; }
-        public DbSet<PhanLoaiHoGaDetail> PhanLoaiHoGaDetails { get; set; }
-        public DbSet<PhanLoaiTDHoGa> PhanLoaiTDHoGas { get; set; }
-        public DbSet<PhanLoaiCTronHopNhua> PhanLoaiCTronHopNhuas { get; set; }
-        public DbSet<PhanLoaiMongCTron> PhanLoaiMongCTrons { get; set; }
-        public DbSet<PhanLoaiDeCong> PhanLoaiDeCongs { get; set; }
-        public DbSet<PhanLoaiThanhChong> PhanLoaiThanhChongs { get; set; }
-        public DbSet<PhanLoaiTDanTDan> PhanLoaiTDanTDans { get; set; }
-        public DbSet<MangThu> MangThus { get; set; }
-        public DbSet<TKThepHoGa> TKThepHoGas { get; set; }
-        public DbSet<TKThepTamDan> TKThepTamDans { get; set; }
-        public DbSet<DMThep> DMTLTheps { get; set; }
-        public DbSet<MaTuong> MaTuongs { get; set; }
-        public DbSet<TKThepCTron> TKThepCTrons { get; set; }
-        public DbSet<TKThepMongCTron> TKThepMongCTrons { get; set; }
-        public DbSet<TKThepDCong> TKThepDeCongs { get; set; }
-        public DbSet<TKThepCHop> TKThepCHops { get; set; }
-        public DbSet<TKThepMongCHop> TKThepMongCHops { get; set; }
-        public DbSet<TKThepTDanCHop> TKThepTDanCHops { get; set; }
-        public DbSet<TKThepRXay> TKThepRXays { get; set; }
-        public DbSet<TKThepTDanRXay> TKThepTDanRXays { get; set; }
-        public DbSet<TKThepTChong> TKThepTChongs { get; set; }
-        public DbSet<TKThepRBTong> TKThepRBTongs { get; set; }
-        public DbSet<TKThepTDRBTong> TKThepTDRBTongs { get; set; }
-        public DbSet<PKKLCTron> PKKLCTrons { get; set; }
-        public DbSet<PKKLMongCTron> PKKLMongCTrons { get; set; }
-        public DbSet<PKKLDeCTron> PKKLDeCTrons { get; set; }
-        public DbSet<PKKLCHop> PKKLCHops { get; set; }
-        public DbSet<PKKLMongCHop> PKKLMongCHops { get; set; }
-        public DbSet<PKKLTDanCHop> PKKLTDanCHops { get; set; }
-        public DbSet<PKKLRanhBT> PKKLRanhBTs { get; set; }
-        public DbSet<PKKLTDanRBT> PKKLTDanRBTs { get; set; }
-        public DbSet<PKKLRXay> PKKLRXays { get; set; }
-        public DbSet<PKKLTDanRXay> PKKLTDanRXays { get; set; }
-        public DbSet<PKKLTChong> PKKLTChongs { get; set; }
-        public DbSet<PKKLCTietHoGa> PKKLCTietHoGas { get; set; }
-        public DbSet<PKKLCTietTDHG> PKKLCTietTDHGs { get; set; }
+        //BoiThuong
+        public DbSet<BT_DM_LoaiChungTu> BT_DM_LoaiChungTus { get; set; }
+        public DbSet<BT_DM_HTThuChi> BT_DM_HTThuChis { get; set; }
+        public DbSet<BT_DM_HMChi> BT_DM_HMChis { get; set; }
+        public DbSet<BT_DM_QDBoiThuongGoc> BT_DM_QDBoiThuongGocs { get; set; }
+        public DbSet<BT_DM_QDThuHoiDatGoc> BT_DM_QDThuHoiDatGocs { get; set; }
+        public DbSet<BT_DM_QDTGPMBNhanhGoc> BT_DM_QDTGPMBNhanhGocs { get; set; }
+        public DbSet<BT_DM_QDCVChiPhiHoiDong> BT_DM_QDCVChiPhiHoiDongs { get; set; }
+        public DbSet<BT_CTietPAnBThuong> BT_CTietPAnBThuongs { get; set; }
+        public DbSet<BT_QDPABTDChinh> BT_QDPABTDChinhs { get; set; }
+        public DbSet<BT_QDGPMBNhanhDChinh> BT_QDGPMBNhanhDChinhs { get; set; }
+        public DbSet<BT_QDTHoiDatDChinh> BT_QDTHoiDatDChinhs { get; set; }
+        public DbSet<BT_QDPABTKHopGPMBNhanh> BT_QDPABTKHopGPMBNhanhs { get; set; }
+        public DbSet<BT_QDPABTKHopTHoiDat> BT_QDPABTKHopTHoiDats { get; set; }
+
+        //Thống kê điện
+        public DbSet<D_DM_TuyenDuong> D_DM_TuyenDuongs { get; set; }
+        public DbSet<D_DM_HangMucKL> D_DM_HangMucKLs { get; set; }
+        public DbSet<D_DM_LoaiKL> D_DM_LoaiKLs { get; set; }
+        public DbSet<D_DM_ThongTinVatTu> D_DM_ThongTinVatTus { get; set; }
+        public DbSet<D_TTLDienCDien> D_TTLDienCDiens { get; set; }
+        public DbSet<D_XDungCDien> D_XDungCDiens { get; set; }
+        public DbSet<D_CDoCDien> D_CDoCDiens { get; set; }
+        public DbSet<D_DaoCDien> D_DaoCDiens { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -131,82 +123,6 @@ namespace DucAnhERP.Data
                     .IsUnicode(false);
                 entity.Property(e => e.Subject).IsRequired();
 
-
-                modelBuilder.Entity<NuocMua>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PhanLoaiHoGa>()
-               .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PhanLoaiCTronHopNhua>()
-               .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PhanLoaiMongCTron>()
-               .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PhanLoaiDeCong>()
-               .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PhanLoaiThanhChong>()
-               .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PhanLoaiTDHoGa>()
-               .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PhanLoaiTDanTDan>()
-               .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<DanhMuc1>()
-               .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<NhomDanhMuc>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<DMThep>()
-               .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PKKLCHop>()
-               .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PKKLCTietHoGa>()
-               .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PKKLCTietTDHG>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PKKLCTron>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PKKLDeCTron>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PKKLMongCHop>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PKKLMongCTron>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PKKLRanhBT>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PKKLRXay>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PKKLTChong>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PKKLTDanCHop>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PKKLTDanRBT>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<PKKLTDanRXay>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-
-                modelBuilder.Entity<TKThepCHop>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<TKThepCTron>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<TKThepDCong>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<TKThepHoGa>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<TKThepMongCHop>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<TKThepMongCTron>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<TKThepRBTong>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<TKThepRXay>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<TKThepTamDan>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<TKThepTChong>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<TKThepCHop>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<TKThepTDanRXay>()
-                .ToTable(tb => tb.UseSqlOutputClause(false));
-                modelBuilder.Entity<TKThepTDRBTong>()
-               .ToTable(tb => tb.UseSqlOutputClause(false));
             });
 
             OnModelCreatingPartial(modelBuilder);

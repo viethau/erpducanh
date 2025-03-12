@@ -1,0 +1,797 @@
+﻿@page "/BoiThuong/CTietPAnBThuong"
+<div class="container-fluid">
+    <CustomModal IsVisible="isModalVisible"  OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
+        <BodyTemplate>
+            <EditForm Model="Input" id="editFormId" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <h5>Thêm mới</h5>
+                <div class="row">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="form-group">
+                            <label for="Id_DM_QDBoiThuongGoc">Số QĐ bồi thường gốc<span class="text-danger">*</span></label>
+                            <Select2 Id="Id_DM_QDBoiThuongGoc" Items="@selectQDBoiThuongGoc" OnChange="OnQDBoiThuongGocChange" />
+                            <ValidationMessage For="() => Input.Id_DM_QDBoiThuongGoc" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">N/T/N QĐ bồi thường gốc<span class="text-danger">*</span></label>
+                            <InputDate readonly id="NTNQDBoiThuongGoc" class="form-control" @bind-Value="InputModel.NTNQDBoiThuongGoc" />
+                            <ValidationMessage For="() => InputModel.NTNQDBoiThuongGoc" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="form-group">
+                            <label for="Id_QDPABTDChinh">Số QĐ PABT chính<span class="text-danger">*</span></label>
+                            <Select2 Id="Id_QDPABTDChinh" Items="@selectQDPABTDChinh" OnChange="OnQDPABTDChinhChange" />
+                            <ValidationMessage For="() => Input.Id_QDPABTDChinh" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">N/T/N QĐ bồi thường điều chỉnh<span class="text-danger">*</span></label>
+                            <InputDate readonly id="NTNQDPABTDChinh" class="form-control" @bind-Value="InputModel.NTNQDPABTDChinh" />
+                            <ValidationMessage For="() => InputModel.NTNQDPABTDChinh" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="form-group">
+                            <label for="Id_QDPABTKHopGPMBNhanh">Số QĐ thưởng GPMB nhanh gốc<span class="text-danger">*</span></label>
+                            <Select2 Id="Id_QDPABTKHopGPMBNhanh" Items="@selectQDPABTKHopGPMBNhanh" OnChange="OnQDPABTKHopGPMBNhanhChange" />
+                            <ValidationMessage For="() => Input.Id_QDPABTKHopGPMBNhanh" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">N/T/N QĐ GPMB nhanh gốc<span class="text-danger">*</span></label>
+                            <InputDate readonly id="NTNQDPABTKHopGPMBNhanh" class="form-control" @bind-Value="InputModel.NTNQDPABTKHopGPMBNhanh" />
+                            <ValidationMessage For="() => InputModel.NTNQDPABTKHopGPMBNhanh" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="form-group">
+                            <label for="Id_QDGPMBNhanhDChinh">Số QĐ thưởng GPMB nhanh điều chỉnh<span class="text-danger">*</span></label>
+                            <Select2 Id="Id_QDGPMBNhanhDChinh" Items="@selectQDGPMBNhanhDChinh" OnChange="OnQDGPMBNhanhDChinhChange" />
+                            <ValidationMessage For="() => Input.Id_QDGPMBNhanhDChinh" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">N/T/N QĐ GPMB nhanh điều chỉnh<span class="text-danger">*</span></label>
+                            <InputDate readonly id="NTNQDGPMBNhanhDChinh" class="form-control" @bind-Value="InputModel.NTNQDGPMBNhanhDChinh" />
+                            <ValidationMessage For="() => InputModel.NTNQDGPMBNhanhDChinh" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <h5>Thông tin chủ hộ</h5>
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">Họ và tên chủ hộ<span class="text-danger">*</span></label>
+                            <InputText id="HoVaTenChuHo" class="form-control" @bind-Value="Input.HoVaTenChuHo" />
+                            <ValidationMessage For="() => Input.HoVaTenChuHo" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">CCD<span class="text-danger">*</span></label>
+                            <InputNumber id="CCCD" class="form-control" @bind-Value="Input.CCCD" />
+                            <ValidationMessage For="() => Input.CCCD" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <AddressSelector InitialSelection="SelectedAddress" OnSelectionChanged="OnAddressChanged" />
+                    </div>
+                </div>
+
+                <hr />
+                <h5>Giá trị theo quyết định</h5>
+                <div class="row">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">Bồi thưởng giải phóng mặt bằng<span class="text-danger"></span></label>
+                            <InputNumber id="BTGPMB" class="form-control" @bind-Value="Input.BTGPMB" />
+                            <ValidationMessage For="() => Input.BTGPMB" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">Thưởng giải phóng mặt bằng nhanh<span class="text-danger"></span></label>
+                            <InputNumber id="ThuongGPMBNhanh" class="form-control" @bind-Value="Input.ThuongGPMBNhanh" />
+                            <ValidationMessage For="() => Input.ThuongGPMBNhanh" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">Tổng giá trị<span class="text-danger"></span></label>
+                            <InputNumber id="TongGiaTri" class="form-control" @bind-Value="Input.TongGiaTri" />
+                            <ValidationMessage For="() => Input.TongGiaTri" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <h5>Thông tin diện tích</h5>
+                <div class="row">
+                    <div class="col-md-2 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">Tổng diện tích thu hồi<span class="text-danger"></span></label>
+                            <InputNumber id="TongDTThuHoi" class="form-control" @bind-Value="Input.TongDTThuHoi" />
+                            <ValidationMessage For="() => Input.TongDTThuHoi" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">LUC<span class="text-danger"></span></label>
+                            <InputNumber id="LUC" class="form-control" @bind-Value="Input.LUC" />
+                            <ValidationMessage For="() => Input.LUC" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">LUK<span class="text-danger"></span></label>
+                            <InputNumber id="LUK" class="form-control" @bind-Value="Input.LUK" />
+                            <ValidationMessage For="() => Input.LUK" class="text-danger" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">BHK<span class="text-danger"></span></label>
+                            <InputNumber id="BHK" class="form-control" @bind-Value="Input.BHK" />
+                            <ValidationMessage For="() => Input.BHK" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">NTS<span class="text-danger"></span></label>
+                            <InputNumber id="NTS" class="form-control" @bind-Value="Input.NTS" />
+                            <ValidationMessage For="() => Input.NTS" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">RSX<span class="text-danger"></span></label>
+                            <InputNumber id="RSX" class="form-control" @bind-Value="Input.RSX" />
+                            <ValidationMessage For="() => Input.RSX" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">ONT<span class="text-danger"></span></label>
+                            <InputNumber id="ONT" class="form-control" @bind-Value="Input.ONT" />
+                            <ValidationMessage For="() => Input.ONT" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">CLN<span class="text-danger"></span></label>
+                            <InputNumber id="CLN" class="form-control" @bind-Value="Input.CLN" />
+                            <ValidationMessage For="() => Input.CLN" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">CLN (vườn)<span class="text-danger"></span></label>
+                            <InputNumber id="CLNV" class="form-control" @bind-Value="Input.CLNV" />
+                            <ValidationMessage For="() => Input.CLNV" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">BCS<span class="text-danger"></span></label>
+                            <InputNumber id="BCS" class="form-control" @bind-Value="Input.BCS" />
+                            <ValidationMessage For="() => Input.BCS" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">DTL<span class="text-danger"></span></label>
+                            <InputNumber id="DTL" class="form-control" @bind-Value="Input.DTL" />
+                            <ValidationMessage For="() => Input.DTL" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">DGT<span class="text-danger"></span></label>
+                            <InputNumber id="DGT" class="form-control" @bind-Value="Input.DGT" />
+                            <ValidationMessage For="() => Input.DGT" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">DCS<span class="text-danger"></span></label>
+                            <InputNumber id="DCS" class="form-control" @bind-Value="Input.DCS" />
+                            <ValidationMessage For="() => Input.DCS" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">NTD<span class="text-danger"></span></label>
+                            <InputNumber id="NTD" class="form-control" @bind-Value="Input.NTD" />
+                            <ValidationMessage For="() => Input.NTD" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-6">
+                        <div class="form-group">
+                            <label for="Ten">MNC<span class="text-danger"></span></label>
+                            <InputNumber id="MNC" class="form-control" @bind-Value="Input.MNC" />
+                            <ValidationMessage For="() => Input.MNC" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+            </EditForm>
+        </BodyTemplate>
+        <FooterTemplate>
+            <div class="d-flex justify-content-end pr-5 py-3 modal-footer-with-border">
+                <button class="btn btn-primary mr-2" type="submit" form="editFormId">Save</button>
+                <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+            </div>
+        </FooterTemplate>
+    </CustomModal>
+    <div class="d-flex justify-content-between align-items-center mt-2">
+        <h6 class="mt-2">BẢNG CHI TIẾT BỒI THƯỜNG, GIẢI PHÓNG MẶT BẰNG NHANH CỦA ĐỐI TƯỢNG THEO QUYẾT ĐỊNH BỒI THƯỜNG + GIẢI PHÓNG MẶT BẰNG NHANH GỐC VÀ ĐIỀU CHỈNH</h6>
+    </div>
+    @if (CheckQuyenService.HasPermission(3))
+    {
+        <button class="btn btn-primary" @onclick="ShowModal">Thêm mới</button>
+    }
+    <div class="row m-1 our-table">
+        <table class="table table-hover table-bordered">
+            <thead class="bg-info">
+                <tr>
+                    <th class="text-center" rowspan="2">
+                    </th>
+                    <th class="text-center" rowspan="2">
+                        <div class="pb-3">STT  </div>
+                    </th>
+                    <th class="text-center" colspan="4">
+                        <div class="pb-3">Thông tin QĐ phương án bồi thường  </div>
+                    </th>
+                    <th class="text-center" colspan="4">
+                        <div class="pb-3">Thông tin QĐ thưởng GPMB nhanh </div>
+                    </th>
+                    <th class="text-center" colspan="4">
+                        <div class="pb-3">Thông tin chủ hộ  </div>
+                    </th>
+                    <th class="text-center" colspan="3">
+                        <div class="pb-3">Giá trị theo quyết định  </div>
+                    </th>
+                    <th class="text-center" colspan="15">
+                        <div class="pb-3">Thông tin diện tích  </div>
+                    </th>
+                </tr>
+                <tr>
+
+                    <th onclick="@(() => SortTable("Ten"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Số QĐ bồi thường gốc  <span class="arrow @(GetSortStyle("Ten"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("Ten"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">N/T/N QĐ bồi thường gốc  <span class="arrow @(GetSortStyle("Ten"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("Ten"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Số QĐ bồi thường điều chỉnh  <span class="arrow @(GetSortStyle("Ten"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("Ten"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">N/T/N QĐ bồi thường điều chỉnh  <span class="arrow @(GetSortStyle("Ten"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("Ten"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Số QĐ thưởng GPMB nhanh gốc  <span class="arrow @(GetSortStyle("Ten"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("Ten"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">N/T/N QĐ GPMB nhanh gốc  <span class="arrow @(GetSortStyle("Ten"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("Ten"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Số QĐ thưởng GPMB nhanh điều chỉnh  <span class="arrow @(GetSortStyle("Ten"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("Ten"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">N/T/N QĐ GPMB nhanh điều chỉnh  <span class="arrow @(GetSortStyle("Ten"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("HoVaTenChuHo"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Họ và tên chủ hộ  <span class="arrow @(GetSortStyle("HoVaTenChuHo"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("XaPhuong"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Xã/phường  <span class="arrow @(GetSortStyle("XaPhuong"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("KhuThon"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Khu/thôn  <span class="arrow @(GetSortStyle("KhuThon"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("CCCD"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">CMT/CCCD  <span class="arrow @(GetSortStyle("CCCD"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("BTGPMB"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Bồi thưởng giải phóng mặt bằng <span class="arrow @(GetSortStyle("BTGPMB"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("ThuongGPMBNhanh"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Thưởng giải phóng mặt bằng nhanh<span class="arrow @(GetSortStyle("ThuongGPMBNhanh"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("TongGiaTri"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Tổng giá trị  <span class="arrow @(GetSortStyle("TongGiaTri"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("TongDTThuHoi"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Tổng diện tích thu hồi <span class="arrow @(GetSortStyle("TongDTThuHoi"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("LUC"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">LUC <span class="arrow @(GetSortStyle("LUC"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("LUK"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">LUK  <span class="arrow @(GetSortStyle("LUK"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("BHK"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">BHK<span class="arrow @(GetSortStyle("BHK"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("NTS"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">NTS<span class="arrow @(GetSortStyle("NTS"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("RSX"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">RSX<span class="arrow @(GetSortStyle("RSX"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("ONT"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">ONT <span class="arrow @(GetSortStyle("ONT"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("CLN"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">CLN <span class="arrow @(GetSortStyle("CLN"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("CLNV"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">CLN (vườn) <span class="arrow @(GetSortStyle("CLNV"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("BCS"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">BCS <span class="arrow @(GetSortStyle("BCS"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("DTL"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">DTL <span class="arrow @(GetSortStyle("DTL"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("DGT"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">DGT <span class="arrow @(GetSortStyle("DGT"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("DCS"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">DCS <span class="arrow @(GetSortStyle("DCS"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("NTD"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">NTD <span class="arrow @(GetSortStyle("NTD"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("MNC"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">MNC <span class="arrow @(GetSortStyle("MNC"))"></span></div>
+                    </th>
+
+                </tr>
+            </thead>
+            @if (listBT_CTietPAnBThuongModel.Any())
+            {
+                <tbody>
+                    @{
+                        int stt = 1;
+                    }
+                    @foreach (var item in listBT_CTietPAnBThuongModel)
+                    {
+                        <tr>
+                            <td class="text-center">
+                                @if (CheckQuyenService.HasPermission(4))
+                                {
+                                    <button class="btn btn-sm btn-primary" @onclick="()=>Edit(item.Id)">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                }
+                                @if (CheckQuyenService.HasPermission(5))
+                                {
+                                    <button class="btn btn-sm btn-danger" @onclick="()=>ConfirmDelete(item.Id,item.Id)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                }
+                            </td>
+                            <td class="text-center">@stt</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                            <td>@item.HoVaTenChuHo</td>
+                        </tr>
+                        stt++;
+                    }
+                </tbody>
+            }
+            else
+            {
+                <tbody>
+                    <tr>
+                        <td colspan="4"> Không có dữ liệu</td>
+                    </tr>
+                </tbody>
+            }
+        </table>
+    </div>
+    @if (listBT_CTietPAnBThuongModel.Any())
+    {
+        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+    }
+    <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+</div>
+
+@code {
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+
+    private BT_CTietPAnBThuong Input = new();
+    private BT_CTietPAnBThuongModel InputModel = new();
+    private DateTime baseTime;
+
+    private bool isModalVisible = false;
+    private string TitleModal = "Thêm mới";
+    bool isEdit = false;
+    private AddressSelection SelectedAddress = new();
+    public List<DMPABTModel> listQDBoiThuongGocs = new();
+    public List<QDPABTModel> listQDPABTDChinhs = new();
+    public List<QDPABTModel> listQDGPMBNhanhDChinhs = new();
+
+    private List<SelectedItem> selectQDBoiThuongGoc = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true }};
+    private List<SelectedItem> selectQDPABTDChinh = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true }};
+    private List<SelectedItem> selectQDPABTKHopGPMBNhanh = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true }};
+    private List<SelectedItem> selectQDGPMBNhanhDChinh = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true }};
+
+    private void OnAddressChanged(AddressSelection selection)
+    {
+        SelectedAddress = selection;
+    }
+
+    private void ShowModal()
+    {
+        isModalVisible = true;
+        isEdit = false;
+    }
+
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+    }
+
+    private void HandleSave()
+    {
+        // Logic for saving
+        isModalVisible = false;
+    }
+
+    private void HandleCancel()
+    {
+        // Logic for canceling
+        isModalVisible = false;
+        Input = new();
+    }
+
+    private async Task  OnQDBoiThuongGocChange(SelectedItem selectedItem)
+    {
+        if (!string.IsNullOrEmpty(selectedItem.Value))
+        {
+            Input.Id_DM_QDBoiThuongGoc = selectedItem.Value;
+
+            var selectedQDBoiThuongGoc = listQDBoiThuongGocs.FirstOrDefault(item => item.Id == selectedItem.Value);
+            if (selectedQDBoiThuongGoc != null)
+            {
+                InputModel.NTNQDBoiThuongGoc = selectedQDBoiThuongGoc.NTN;
+            }
+            else
+            {
+                InputModel.NTNQDBoiThuongGoc = null;
+            }
+            //sheet 2. theo cột Tạm Ứng
+            listQDPABTDChinhs = await QDPABTDChinhService.GetByVM(groupId, new QDPABTModel { Id_DM_QD = Input.Id_DM_QDBoiThuongGoc });
+            selectQDPABTDChinh = listQDPABTDChinhs.Select(data => new SelectedItem
+                {
+                    Value = data.Id,
+                    Text = data.SoQDDC + (data.NTNDC.HasValue ? $" ({data.NTNDC.Value.ToString("dd/MM/yyyy")})" : "")
+                }).ToList();
+            selectQDPABTDChinh.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+            
+            //sheet 1. theo cột Tạm Ứng
+
+            //2.1 theo cột Tạm Ứng
+            listQDGPMBNhanhDChinhs = await QDGPMBNhanhDChinhService.GetByVM(groupId, new QDPABTModel { Id_DM_QD = Input.Id_DM_QDBoiThuongGoc });
+            selectQDGPMBNhanhDChinh = listQDGPMBNhanhDChinhs.Select(data => new SelectedItem
+                {
+                    Value = data.Id,
+                    Text = data.SoQDDC + (data.NTNDC.HasValue ? $" ({data.NTNDC.Value.ToString("dd/MM/yyyy")})" : "")
+                }).ToList();
+
+
+        }
+
+    }
+
+    private void OnQDPABTDChinhChange(SelectedItem selectedItem)
+    {
+        if (!string.IsNullOrEmpty(selectedItem.Value))
+        {
+            Input.Id_QDPABTDChinh = selectedItem.Value;
+            var selectedQDPABTDChinh = listQDPABTDChinhs.FirstOrDefault(item => item.Id == selectedItem.Value);
+            if (selectedQDPABTDChinh != null)
+            {
+                InputModel.NTNQDPABTDChinh = selectedQDPABTDChinh.NTN;
+            }
+            else
+            {
+                InputModel.NTNQDPABTDChinh = null;
+            }
+        }
+    }
+
+    private void OnQDPABTKHopGPMBNhanhChange(SelectedItem selectedItem)
+    {
+        // Logic to handle change
+    }
+
+    private void OnQDGPMBNhanhDChinhChange(SelectedItem selectedItem)
+    {
+        // Logic to handle change
+    }
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+
+    public List<BT_CTietPAnBThuongModel> listBT_CTietPAnBThuongModel
+    {
+        get;
+        set;
+    } = new();
+
+    public List<BT_CTietPAnBThuongModel> listModel
+    {
+        get;
+        set;
+    } = new();
+
+    public MetaData MetaData
+    {
+        get;
+        set;
+    }
+
+    public BT_CTietPAnBThuongModel dmModel
+    {
+        get;
+        set;
+    }
+    
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                userName = authState.User.Identity.Name;
+                user = ApplicationUserService.GetByUserName(userName);
+                userId = user.Id;
+                groupId = user.GroupId;
+            }
+            if (!string.IsNullOrEmpty(groupId) && user != null)
+            {
+                await CheckQuyenService.InitializePermissions(groupId, user, "41bffa77-5469-47e2-8734-f00a2946c266");
+            }
+
+            baseTime = DateTime.Now;
+            dmModel = new();
+
+            listQDBoiThuongGocs = await DM_QDBoiThuongGocService.GetByVM(groupId);
+            selectQDBoiThuongGoc = listQDBoiThuongGocs.Select(data => new SelectedItem
+                {
+                    Value = data.Id,
+                    Text = data.SoQD
+                }).ToList();
+            selectQDBoiThuongGoc.Insert(0, new SelectedItem { Value = "", Text = "Chọn", IsSelected = true });
+            await Task.WhenAll(LoadData());
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+    }
+
+    // Truy vấn data theo điều kiện tìm kiếm
+    private async Task LoadData()
+    {
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "9475fa3d-76af-4ec5-bf67-dc8aba51efb3");
+            var BT_DM_HinhThucThuChis = await CTietPAnBThuongService.GetByVM(groupId);
+            listModel = BT_DM_HinhThucThuChis;
+            listBT_CTietPAnBThuongModel = Paging(BT_DM_HinhThucThuChis);
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            Input.CreateBy = userName;
+            Input.CompanyId = groupId;
+            var isExist = await CTietPAnBThuongService.CheckExist(Input.Id, Input.Id_QDPABTDChinh);
+            if (isExist)
+            {
+                ToastService.ShowToast(
+                   "Thông báo",
+                    "Hình thức thu chi đã tồn tại.",
+                    cssClass: "toast-danger",
+                    iconClass: "fa fa-exclamation-circle",
+                    progressBarClass: "bg-info",
+                    duration: 5000);
+            }
+            else
+            {
+                if (isEdit)
+                {
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "73436af2-bd21-4a02-9534-04e94cbbf2f4");
+                    string[] ids = { Input.Id };
+                    bool isValid = await CTietPAnBThuongService.CheckExclusive(ids, baseTime);
+                    if (isValid)
+                    {
+                        await CTietPAnBThuongService.Update(Input, userId);
+                        ToastService.ShowToast("Thông báo", "Cập nhật Hình thức thu chi thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                        await LoadData();
+                        isModalVisible = false;
+                        Input = new();
+                    }
+                }
+                else
+                {
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "4f05d7a1-7773-429b-ad8e-66e2f21ad1a3");
+                    await CTietPAnBThuongService.Insert(Input, userId);
+                    ToastService.ShowToast("Thông báo", "Thêm Hình thức thu chi thành công.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+                    await LoadData();
+                    isModalVisible = false;
+                    Input = new();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+    }
+
+    private string deleteId;
+
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        deleteId = id;
+        confirmModal.Title = "Xác nhận xóa";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.openModal();
+    }
+
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        if (confirmed)
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "f0ac583c-344c-4aa8-8c7c-50162b4cc5a9");
+            if (!string.IsNullOrEmpty(deleteId))
+            {
+                bool isInUse = await CTietPAnBThuongService.IsIdInUse(deleteId);
+                if (isInUse)
+                {
+                    ToastService.ShowToast("Thông báo", "Không thể xóa", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+                }
+                else
+                {
+                    await CTietPAnBThuongService.DeleteById(deleteId, userId);
+                    ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                    await LoadData();
+                    deleteId = "";
+                }
+            }
+        }
+    }
+
+    private async Task Edit(string id)
+    {
+        try
+        {
+            TitleModal = "Cập nhật Hình thức thu chi !";
+            Input = await CTietPAnBThuongService.GetById(id);
+            isEdit = true;
+            isModalVisible = true;
+
+            // Set initial address selection
+            SelectedAddress = new AddressSelection
+                {
+                    SelectedProvince = new Province { Name = Input.Tinh },
+                    SelectedDistrict = new District { Name = Input.Huyen },
+                    SelectedWard = new Ward { Name = Input.XaPhuong },
+                    HamletName = Input.KhuThon
+                };
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+    }
+
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        dmModel.PageNumber = 1;
+        Paging(listModel);
+    }
+
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        dmModel.PageNumber = page;
+        Paging(listModel);
+    }
+
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+        dmModel.PageNumber = 1;
+        dmModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+
+    // Xử lý paging
+    private List<BT_CTietPAnBThuongModel> Paging(List<BT_CTietPAnBThuongModel> BT_DM_HinhThucThuChis)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = BT_DM_HinhThucThuChis.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        BT_DM_HinhThucThuChis = BT_DM_HinhThucThuChis.Skip((dmModel.PageNumber - 1) * dmModel.PageSize).Take(dmModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listBT_CTietPAnBThuongModel.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var ndm in BT_DM_HinhThucThuChis)
+        {
+            listBT_CTietPAnBThuongModel.Add(ndm);
+        }
+
+        // Tạo pagelist mới
+        var pagelist = new PageList<BT_CTietPAnBThuongModel>(listBT_CTietPAnBThuongModel, count, dmModel.PageNumber, dmModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return BT_DM_HinhThucThuChis;
+    }
+}

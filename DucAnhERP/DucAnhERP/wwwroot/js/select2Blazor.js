@@ -1,6 +1,4 @@
-﻿
-
-window.select2Blazor = {
+﻿window.select2Blazor = {
     initSelect2: function (id, dotNetHelper) {
         $('#' + id).select2(); // Khởi tạo Select2
 
@@ -22,4 +20,3 @@ window.select2Blazor = {
         }
     }
 };
-

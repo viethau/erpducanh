@@ -2,7 +2,6 @@
 @inject IJSRuntime JSRuntime
 @rendermode InteractiveServer
 
-
 <select id="@Id" class="form-control" disabled="@disabled">
     @if (Items != null && Items.Any())
     {
@@ -19,61 +18,58 @@
     [Parameter] public EventCallback<SelectedItem> OnChange { get; set; }
     [Parameter] public bool disabled { get; set; } = false;
 
-    private DotNetObjectReference<Select2> objRef;
+    private DotNetObjectReference<Select2>? objRef;
     private int previousItemCount = 0;
+    private bool _isDisposed = false;
 
-    protected override bool ShouldRender()
+    // Khi danh sách Items thay đổi, reset Select2
+    protected override async Task OnParametersSetAsync()
     {
-        // Render lại nếu số lượng Items thay đổi
-        return Items.Count != previousItemCount;
+        if (_isDisposed) return;
+
+        if (Items.Count != previousItemCount)
+        {
+            await ResetSelect2();
+            previousItemCount = Items.Count;
+        }
     }
 
-    private CancellationTokenSource? cts;
-
-    
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    private async Task ResetSelect2()
     {
         try
         {
-            if (firstRender || Items.Count != previousItemCount)
-            {
-                // Xóa Select2 cũ
-                await JSRuntime.InvokeVoidAsync("select2Blazor.destroySelect2", Id);
-
-                // Tạo Select2 mới
-                objRef?.Dispose();
-                objRef = DotNetObjectReference.Create(this);
-                await JSRuntime.InvokeVoidAsync("select2Blazor.initSelect2", Id, objRef);
-
-                // Cập nhật số lượng Items
-                previousItemCount = Items.Count;
-            }
+            await JSRuntime.InvokeVoidAsync("select2Blazor.destroySelect2", Id);
+            objRef?.Dispose();
+            objRef = DotNetObjectReference.Create(this);
+            await JSRuntime.InvokeVoidAsync("select2Blazor.initSelect2", Id, objRef);
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            throw;
         }
     }
-
 
     [JSInvokable]
     public async Task OnChangeHandlerFromJS(string value)
     {
         if (!disabled)
         {
-            SelectedItem selectedItem = Items.FirstOrDefault(item => item.Value == value);
-
+            var selectedItem = Items.FirstOrDefault(item => item.Value == value);
             if (selectedItem != null)
             {
                 await OnChange.InvokeAsync(selectedItem);
             }
         }
-        
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
+        if (_isDisposed) return;
+        _isDisposed = true;
+
         objRef?.Dispose();
+        objRef = null;
+
+        await JSRuntime.InvokeVoidAsync("select2Blazor.destroySelect2", Id);
     }
 }

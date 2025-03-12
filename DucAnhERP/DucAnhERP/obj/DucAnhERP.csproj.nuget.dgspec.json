@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\DucAnhERP.csproj": {}
+    "E:\\DucAnh\\erpducanh\\DucAnhERP\\DucAnhERP\\DucAnhERP.csproj": {}
   },
   "projects": {
-    "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\DucAnhERP.csproj": {
+    "E:\\DucAnh\\erpducanh\\DucAnhERP\\DucAnhERP\\DucAnhERP.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\DucAnhERP.csproj",
+        "projectUniqueName": "E:\\DucAnh\\erpducanh\\DucAnhERP\\DucAnhERP\\DucAnhERP.csproj",
         "projectName": "DucAnhERP",
-        "projectPath": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\DucAnhERP.csproj",
-        "packagesPath": "C:\\Users\\qminh\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\qminh\\source\\erpducanh\\DucAnhERP\\DucAnhERP\\obj\\",
+        "projectPath": "E:\\DucAnh\\erpducanh\\DucAnhERP\\DucAnhERP\\DucAnhERP.csproj",
+        "packagesPath": "C:\\Users\\hminh\\.nuget\\packages\\",
+        "outputPath": "E:\\DucAnh\\erpducanh\\DucAnhERP\\DucAnhERP\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\qminh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\hminh\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -78,6 +78,10 @@
               "target": "Package",
               "version": "[8.0.5, )"
             },
+            "SixLabors.ImageSharp": {
+              "target": "Package",
+              "version": "[2.1.3, )"
+            },
             "Z.Blazor.Diagrams": {
               "target": "Package",
               "version": "[3.0.2, )"
@@ -102,7 +106,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

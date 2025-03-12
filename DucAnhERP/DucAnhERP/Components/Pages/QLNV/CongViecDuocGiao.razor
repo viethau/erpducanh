@@ -1,0 +1,428 @@
+﻿@page "/QLNV/CongViecDuocGiao"
+
+@* <div class="container-fluid">
+    <div class="card mt-3">
+        <div class="card-header">
+            <h3 class="card-title">Danh sách </h3>
+        </div>
+        <div class="card-body">
+            <EditForm Model="pageModel" FormName="SearchData" id="SearchData" OnValidSubmit="@Search">
+                <DataAnnotationsValidator />
+                <div class="d-flex row">
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="Id_NguoiThucHienS">Tên nhân viên</label>
+                        <Select2 Id="Id_NguoiThucHienS" Items="@selectTenNguoiThucHien" OnChange="@OnSelectTenNguoiThucHien"></Select2>
+                        <ValidationMessage For="()=>pageModel.Id_NguoiThucHien"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="TenNhomS">Tên nhóm</label>
+                        <Select2 Id="TenNhomS" Items="@selectTenNhom" OnChange="@OnSelectTenNhom"></Select2>
+                        <ValidationMessage For="()=>pageModel.TenNhom"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="MDUT">Mức độ ưu tiên</label>
+                        <Select2 Id="MDUT" Items="@selectMDUT" OnChange="@OnSelectMDUT"></Select2>
+                        <ValidationMessage For="()=>pageModel.MucDoUuTien"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="NDCV">Nội dung công việc</label>
+                        <Select2 Id="NDCV" Items="@selectNDCV" OnChange="@OnSelectNDCV"></Select2>
+                        <ValidationMessage For="()=>pageModel.NoiDungCongViec"></ValidationMessage>
+                    </div>
+                    <div class="form-group ml-5">
+                        <label>&nbsp;</label>
+                        <button type="submit" form="SearchData" class="btn btn-primary form-control">Tìm kiếm</button>
+                    </div>
+
+                </div>
+            </EditForm>
+            <div class="row our-table">
+                <table class="table table-hover table-bordered">
+                    <thead class="bg-info">
+                        <tr>
+                            <th class="text-center" rowspan="2"></th>
+                            <th class="text-center sortable" scope="col">
+                                STT
+                            </th>
+                            <th onclick="@(() => SortTable("Id_NguoiGiaoViec"))" class="text-center sortable" scope="col" sortable>
+                                <div class="pb-3">Người giao việc <span class="arrow @(GetSortStyle("Id_NguoiGiaoViec"))"></span></div>
+                            </th>
+                            <th onclick="@(() => SortTable("NguoiThucHien"))" class="text-center sortable" scope="col" sortable>
+                                <div class="pb-3">Người thực hiện <span class="arrow @(GetSortStyle("NguoiThucHien"))"></span></div>
+                            </th>
+                            <th onclick="@(() => SortTable("TenNhom"))" class="text-center sortable" scope="col" sortable>
+                                <div class="pb-3">Tên nhóm<span class="arrow @(GetSortStyle("TenNhom"))"></span></div>
+                            </th>
+                            <th onclick="@(() => SortTable("NgayBatDau"))" class="text-center sortable" scope="col" sortable>
+                                <div class="pb-3">Ngày bắt đầu<span class="arrow @(GetSortStyle("NgayBatDau"))"></span></div>
+                            </th>
+                            <th onclick="@(() => SortTable("NgayKetThuc"))" class="text-center sortable" scope="col" sortable>
+                                <div class="pb-3">Ngày kết thúc <span class="arrow @(GetSortStyle("NgayKetThuc"))"></span></div>
+                            </th>
+                            <th onclick="@(() => SortTable("MucDoUuTien"))" class="text-center sortable" scope="col" sortable>
+                                <div class="pb-3">Mức độ ưu tiên <span class="arrow @(GetSortStyle("MucDoUuTien"))"></span></div>
+                            </th>
+                            <th onclick="@(() => SortTable("TuDanhGia"))" class="text-center sortable" scope="col" sortable>
+                                <div class="pb-3">Tự đánh giá <span class="arrow @(GetSortStyle("TuDanhGia"))"></span></div>
+                            </th>
+                            <th onclick="@(() => SortTable("TienDo"))" class="text-center sortable" scope="col" sortable>
+                                <div class="pb-3">Tiến độ<span class="arrow @(GetSortStyle("TienDo"))"></span></div>
+                            </th>
+                            <th onclick="@(() => SortTable("LapLai"))" class="text-center sortable" scope="col" sortable>
+                                <div class="pb-3">Lặp lại<span class="arrow @(GetSortStyle("TienDo"))"></span></div>
+                            </th>
+                            <th onclick="@(() => SortTable("NoiDungCongViec"))" class="text-center sortable" scope="col" sortable>
+                                <div class="pb-3">Nội dung công việc <span class="arrow @(GetSortStyle("NoiDungCongViec"))"></span></div>
+                            </th>
+                            <th>
+                                <div class="pb-3">File đính kèm</div>
+                            </th>
+                        </tr>
+
+                    </thead>
+                    @if (listQLNV_CongViecModel.Any())
+                    {
+                        <tbody>
+                            @{
+                                int stt = 1;
+                                var groupedData = listQLNV_CongViecModel
+                                .GroupBy(x => x.Id_Task)
+                                .Select(g => new
+                                {
+                                    Id_Task = g.Key,
+                                    Id_NguoiGiaoViec = g.First().Id_NguoiGiaoViec,
+                                    NguoiThucHien = string.Join(", ", g.Select(x => x.NguoiThucHien)),
+                                    TenNhom = g.First().TenNhom,
+                                    NgayBatDau = g.First().NgayBatDau,
+                                    NgayKetThuc = g.First().NgayKetThuc,
+                                    MucDoUuTien = g.First().MucDoUuTien,
+                                    TuDanhGia = g.First().TuDanhGia,
+                                    TienDo = g.First().TienDo,
+                                    LapLai = g.First().LapLai,
+                                    NoiDungCongViec = g.First().NoiDungCongViec,
+                                    FileDinhKem = g.First().FileDinhKem,
+                                    Id = g.First().Id
+                                }).ToList();
+                            }
+
+                            @foreach (var ndm in groupedData)
+                            {
+                                <tr>
+                                    <td class="text-center align-middle">
+                                        <div class="btn-group">
+
+                                        </div>
+                                    </td>
+                                    <td class="text-center align-middle">@stt</td>
+                                    <td class="align-middle readonly-cell">@ndm.Id_NguoiGiaoViec</td>
+                                    <td class="align-middle readonly-cell">@ndm.NguoiThucHien</td>
+                                    <td class="align-middle readonly-cell">@ndm.TenNhom</td>
+                                    <td class="align-middle readonly-cell">@ndm.NgayBatDau</td>
+                                    <td class="align-middle readonly-cell">@ndm.NgayKetThuc</td>
+                                    <td class="align-middle readonly-cell">@ndm.MucDoUuTien</td>
+
+                                    <td class="align-middle">
+                                        <InputText @bind="@ndm.TuDanhGia" class="form-control border-0" @bind:event="onchange" @onchange="() => OnValueChanged(ndm)" />
+                                    </td>
+                                    <td class="align-middle">
+                                        <InputNumber @bind="@ndm.TienDo" class="form-control border-0" @bind:event="onchange" @onchange="() => OnValueChanged(ndm)" />
+                                    </td>
+
+
+                                    <td class="align-middle readonly-cell">@ndm.LapLai</td>
+                                    <td class="align-middle readonly-cell">@ndm.NoiDungCongViec</td>
+                                    <td class="align-middle">
+                                        @if (!string.IsNullOrEmpty(ndm.FileDinhKem))
+                                        {
+                                            <a href="@ndm.FileDinhKem" class="btn btn-link" title="@ndm.NoiDungCongViec" download>
+                                                <i class="fas fa-download"></i> Tải file
+                                            </a>
+                                        }
+                                    </td>
+                                </tr>
+
+                                @if (listCVC.Any(x => x.Id_Task == ndm.Id_Task))
+                                {
+                                    <tr class="bg-light">
+                                        <td colspan="13" class="text-bold">🔹 Công việc con</td>
+                                    </tr>
+                                }
+
+                                int sttcvc = 1;
+                                @foreach (var cvc in listCVC.Where(x => x.Id_Task == ndm.Id_Task))
+                                {
+                                    <tr class="bg-light">
+                                        <td class="text-center align-middle">
+
+                                        </td>
+                                        <td class="align-middle">@sttcvc</td>
+                                        <td class="align-middle" colspan="10">@cvc.NoiDungCongViec</td>
+                                        <td class="align-middle">
+                                            @if (!string.IsNullOrEmpty(cvc.FileDinhKem))
+                                            {
+                                                <a href="@cvc.FileDinhKem" class="btn btn-link" title="@cvc.NoiDungCongViec" download>
+                                                    <i class="fas fa-download"></i> Tải file
+                                                </a>
+                                            }
+                                        </td>
+                                    </tr>
+                                    sttcvc++;
+                                }
+
+                                stt++;
+                            }
+                        </tbody>
+                    }
+                    else
+                    {
+                        <tbody>
+                            <tr>
+                                <td colspan="5"> Không có dữ liệu</td>
+                            </tr>
+                        </tbody>
+                    }
+
+                </table>
+            </div>
+            @if (listQLNV_CongViecModel.Any())
+            {
+                <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+            }
+        </div>
+    </div>
+
+</div> *@
+
+@* @code {
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+
+    private QLNV_CongViec Input = new();
+    private QLNV_CongViecCon InputCVC = new();
+    private DateTime baseTime;
+
+
+
+    private List<SelectedItem> selectNguoiThucHien = new ();
+    private List<SelectedItem> selectNhom = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectLapLai = new List<SelectedItem> { 
+        new SelectedItem { Value = "", Text = "Chọn", IsSelected = true },
+        new SelectedItem { Value = "Hàng ngày", Text = "Hàng ngày"},
+        new SelectedItem { Value = "Hàng tuần", Text = "Hàng tuần"},
+        new SelectedItem { Value = "Hàng tháng", Text = "Hàng tháng"},
+        new SelectedItem { Value = "Không lặp lại", Text = "Không lặp lại"},
+    };
+
+    private List<SelectedItem> selectTenNguoiThucHien = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectTenNhom = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectNDCV = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectMDUT = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+
+
+
+    [Parameter]
+
+    public List<QLNV_CongViecModel> listQLNV_CongViecModel{get;set;} = new();
+    public List<QLNV_CongViecModel> listModel{get;set;} = new();
+    public List<QLNV_CongViecCon> listCVC{get;set;} = new();
+    public MetaData MetaData {get;set; }
+    [SupplyParameterFromForm(FormName = "SearchData")]
+    public QLNV_CongViecModel pageModel { get;set;}
+    public QLNV_CongViecModel dmModel { get; set; } = new();
+
+
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        pageModel = new();
+        dmModel = new();
+        Input = new();
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            userName = authState.User.Identity.Name;
+            user = ApplicationUserService.GetByUserName(userName);
+            userId = user.Id;
+            groupId = user.GroupId;
+        }
+        if (!string.IsNullOrEmpty(groupId) && user != null)
+        {
+            await CheckQuyenService.InitializePermissions(groupId, user, "6f85445f-398d-47d6-bbea-04c267299535");
+        }
+
+        var cvs = await QLNV_CongViecService.GetByVM(new QLNV_CongViecModel());
+        foreach (var item in cvs)
+        {
+            if (!selectTenNhom.Any(x => x.Value == item.NhomCongViec))
+            {
+                selectTenNhom.Add(new SelectedItem
+                    {
+                        Value = item.NhomCongViec,
+                        Text = item.TenNhom
+                    });
+            }
+            if (!selectTenNguoiThucHien.Any(x => x.Value == item.Id_NguoiThucHien))
+            {
+                selectTenNguoiThucHien.Add(new SelectedItem
+                    {
+                        Value = item.Id_NguoiThucHien,
+                        Text = item.NguoiThucHien
+                    });
+            }
+            if (!selectNDCV.Any(x => x.Value == item.NoiDungCongViec))
+            {
+                selectNDCV.Add(new SelectedItem
+                    {
+                        Value = item.NoiDungCongViec,
+                        Text = item.NoiDungCongViec
+                    });
+            } 
+            if (!selectMDUT.Any(x => x.Value == item.MucDoUuTien))
+            {
+                selectMDUT.Add(new SelectedItem
+                    {
+                        Value = item.MucDoUuTien,
+                        Text = item.MucDoUuTien
+                    });
+            }
+        }
+
+        StateHasChanged();
+        baseTime = DateTime.Now;
+
+        await Task.WhenAll(Search());
+    }
+    // Truy vấn data theo điều kiện tìm kiếm
+    private async Task Search()
+    {
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "dac0c890-7c4b-40e4-91f3-fd8b9fb4e517");
+            var DM_LoaiKLs = await QLNV_CongViecService.GetByVM(pageModel);
+            listModel = DM_LoaiKLs;
+            listQLNV_CongViecModel = Paging(DM_LoaiKLs);
+            listCVC = await QLNV_CongViecService.GetAllCVC();
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+    }
+    //bắt sự kiện khi thay đổi
+    private System.Timers.Timer _typingTimer;
+    private int _debounceDelay = 1000; // Thời gian đợi sau khi người dùng dừng nhập (ms)
+
+    // Hàm được gọi sau khi bind-value hoàn tất
+    
+    private void OnValueChanged(QLNV_CongViecModel cv)
+    {
+        dmModel = cv;
+        // Dừng Timer cũ nếu đang chạy
+        _typingTimer?.Stop();
+
+        // Khởi động Timer mới
+        _typingTimer = new System.Timers.Timer(_debounceDelay);
+        _typingTimer.Elapsed += async (_, _) =>
+        {
+            _typingTimer.Stop();
+            await InvokeAsync(OnTypingStopped); // Gọi hàm xử lý khi người dùng dừng nhập
+        };
+        _typingTimer.AutoReset = false;
+        _typingTimer.Start();
+    }
+
+    // Hàm xử lý logic khi người dùng dừng nhập
+    private async Task OnTypingStopped()
+    {
+        await saveOnChange();
+    }
+
+    private async Task saveOnChange()
+    {
+        Console.WriteLine("Id: " + Id);
+    }
+
+
+    
+    private void Refresh()
+    {
+       
+        Input = new();
+        selectNhom.ForEach(item => item.IsSelected = item.Value == "");
+        selectNguoiThucHien= new();
+        selectLapLai.ForEach(item => item.IsSelected = item.Value == "");
+        Input.Id_NguoiGiaoViec = user.UserName;
+        pageModel = new();
+        StateHasChanged();
+    }
+
+    private async Task OnSelectTenNguoiThucHien(SelectedItem selectedItem)
+    {
+        pageModel.Id_NguoiThucHien = selectedItem.Value;
+    }
+    private async Task OnSelectTenNhom(SelectedItem selectedItem)
+    {
+        pageModel.NhomCongViec = selectedItem.Value;
+    }
+    private async Task OnSelectNDCV(SelectedItem selectedItem)
+    {
+        pageModel.NoiDungCongViec = selectedItem.Value;
+    }
+    private async Task OnSelectMDUT(SelectedItem selectedItem)
+    {
+        pageModel.MucDoUuTien = selectedItem.Value;
+    }
+
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        dmModel.PageNumber = 1;
+        Paging(listModel);
+    }
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        dmModel.PageNumber = page;
+        Paging(listModel);
+    }
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+
+        dmModel.PageNumber = 1;
+        dmModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+    // Xử lý paging
+    private List<QLNV_CongViecModel> Paging(List<QLNV_CongViecModel> DM_LoaiKLs)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = DM_LoaiKLs.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        DM_LoaiKLs = DM_LoaiKLs.Skip((dmModel.PageNumber - 1) * dmModel.PageSize).Take(dmModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listQLNV_CongViecModel.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var ndm in DM_LoaiKLs)
+        {
+            listQLNV_CongViecModel.Add(ndm);
+        }
+
+        // Tạo pagelist mới
+        var pagelist = new PageList<QLNV_CongViecModel>(listQLNV_CongViecModel, count, dmModel.PageNumber, dmModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return DM_LoaiKLs;
+    }
+}
+ *@

@@ -1,0 +1,24 @@
+﻿@inject IJSRuntime JS
+
+<div id="calendar"></div>
+
+@code {
+    [Parameter] public List<EventModel> Events { get; set; } = new();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var formattedEvents = Events.Select(e => new
+            {
+                title = e.Title,
+                start = e.DateStart.ToString("yyyy-MM-ddTHH:mm:ss"), // Chuyển về định dạng ISO 8601
+                end = e.DateEnd.ToString("yyyy-MM-ddTHH:mm:ss")
+            }).ToList();
+
+            Console.WriteLine($"Dữ liệu sự kiện gửi sang JS: {System.Text.Json.JsonSerializer.Serialize(formattedEvents)}"); // Log dữ liệu
+
+            await JS.InvokeVoidAsync("initFullCalendar", formattedEvents);
+        }
+    }
+}

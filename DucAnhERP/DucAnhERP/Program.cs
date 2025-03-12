@@ -11,6 +11,11 @@ using Microsoft.EntityFrameworkCore;
 using DucAnhERP.Models;
 using OfficeOpenXml;
 using Microsoft.AspNetCore.Http.Features;
+using DucAnhERP.Repository.BoiThuong;
+using DucAnhERP.Repository.QLNV;
+using DucAnhERP.Services.BoiThuong;
+using DucAnhERP.Components.Pages.BoiThuong;
+using DucAnhERP.Services.QLNV;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +43,8 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<ToastService>();
+builder.Services.AddScoped<PermissionService>();
+
 builder.Services.AddScoped<IMajorRepository, MajorRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IPermissionRepository, MPermissionRepository>();
@@ -56,6 +63,7 @@ builder.Services.AddSingleton<ExportExcelService>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 
 builder.Services.AddScoped<IPhanQuyenRepository, PhanQuyenRepository>();
+builder.Services.AddScoped<PhanQuyenRepository>();
 builder.Services.AddScoped<IChiNhanhRepository, ChiNhanhRepository>();
 
 builder.Services.AddScoped<IMajorUserApprovalReponsitory, MajorUserApprovalReponsitory>();
@@ -72,46 +80,38 @@ builder.Services.AddScoped<IQD_BoiThuong_GocRepository, QD_BoiThuong_GocReposito
 builder.Services.AddScoped<IQD_ThuHoiDat_GocRepository, QD_ThuHoiDat_GocRepository>();
 
 builder.Services.AddScoped<IExcelRepository, ExcelRepository>();
-builder.Services.AddScoped<IDanhMucRepository, DanhMucRepository>();
-builder.Services.AddScoped<INhomDanhMucRepository, NhomNhomDanhMucRepository>();
-builder.Services.AddScoped<IHopRanhThangRepository, HopRanhThangRepository>();
-builder.Services.AddScoped<INuocMuaRepository, NuocMuaRepository>();
-builder.Services.AddScoped<IPhanLoaiHoGaRepository, PhanLoaiHoGaRepository>();
-builder.Services.AddScoped<IPhanLoaiTDHoGaRepository, PhanLoaiTDHoGaRepository>();
-builder.Services.AddScoped<IPhanLoaiCTronHopNhuaRepository, PhanLoaiCTronHopNhuaRepository>();
-builder.Services.AddScoped<IPhanLoaiMongCTronRepository, PhanLoaiMongCTronRepository>();
-builder.Services.AddScoped<IPhanLoaiDeCongRepository, PhanLoaiDeCongRepository>();
-builder.Services.AddScoped<IPhanLoaiThanhChongRepository, PhanLoaiThanhChongRepository>();
-builder.Services.AddScoped<IPhanLoaiTDanTDanRepository, PhanLoaiTDanTDanRepository>();
-builder.Services.AddScoped<IMangThuRepository, MangThuRepository>();
-builder.Services.AddScoped<ITKThepHoGaRepository, TKThepHoGaRepository>();
-builder.Services.AddScoped<ITKThepTamDanRepository, TKThepTamDanRepository>();
-builder.Services.AddScoped<IDMTLThepRepository, DMTLThepRepository>();
-builder.Services.AddScoped<IChatMaTuongRepository, ChatMaTuongRepository>();
-builder.Services.AddScoped<ITKThepCTronRepository, TKThepCTronRepository>();
-builder.Services.AddScoped<ITKThepMongCTronRepository, TKThepMongCTronRepository>();
-builder.Services.AddScoped<ITKThepDeCongRepository, TKThepDeCongRepository>();
-builder.Services.AddScoped<ITKThepCHopRepository, TKThepCHopRepository>();
-builder.Services.AddScoped<ITKThepMongCHopRepository, TKThepMongCHopRepository>();
-builder.Services.AddScoped<ITKThepTDanCHopRepository, TKThepTDanCHopRepository>();
-builder.Services.AddScoped<ITKThepRXayRepository, TKThepRXayRepository>();
-builder.Services.AddScoped<ITKThepTDanRXayRepository, TKThepTDanRXayRepository>();
-builder.Services.AddScoped<ITKThepTChongRepository, TKThepTChongRepository>();
-builder.Services.AddScoped<ITKThepRBTongRepository, TKThepRBTongRepository>();
-builder.Services.AddScoped<ITKThepTDRBTongRepository, TKThepTDRBTongRepository>();
-builder.Services.AddScoped<IPKKLCTronRepository, PKKLCTronRepository>();
-builder.Services.AddScoped<IPKKLMongCTronRepository, PKKLMongCTronRepository>();
-builder.Services.AddScoped<IPKKLDeCTronRepository, PKKLDeCTronRepository>();
-builder.Services.AddScoped<IPKKLCHopRepository, PKKLCHopRepository>();
-builder.Services.AddScoped<IPKKLMongCHopRepository, PKKLMongCHopRepository>();
-builder.Services.AddScoped<IPKKLTDanCHopRepository, PKKLTDanCHopRepository>();
-builder.Services.AddScoped<IPKKLRanhBTRepository, PKKLRanhBTRepository>();
-builder.Services.AddScoped<IPKKLTDanRBTRepository, PKKLTDanRBTRepository>();
-builder.Services.AddScoped<IPKKLRXayRepository, PKKLRXayRepository>();
-builder.Services.AddScoped<IPKKLTDanRXayRepository, PKKLTDanRXayRepository>();
-builder.Services.AddScoped<IPKKLTChongRepository, PKKLTChongRepository>();
-builder.Services.AddScoped<IPKKLCTietHoGaRepository, PKKLCTietHoGaRepository>();
-builder.Services.AddScoped<IPKKLCTietTDHGRepository, PKKLCTietTDHGRepository>();
+
+//BoiThuong
+builder.Services.AddScoped<IDM_LoaiChungTuRepository, DM_LoaiChungTuRepository>();
+builder.Services.AddScoped<IDM_HinhThucThuChiRepository, DM_HinhThucThuChiRepository>();
+builder.Services.AddScoped<IDM_HangMucChiRepository, DM_HangMucChiRepository>();
+builder.Services.AddScoped<IDM_QDBoiThuongGocRepository, DM_QDBoiThuongGocRepository>();
+builder.Services.AddScoped<IDM_QDThuHoiDatGocRepository, DM_QDThuHoiDatGocRepository>();
+builder.Services.AddScoped<IDM_QDTGPMBNhanhGocRepository, DM_QDTGPMBNhanhGocRepository>();
+builder.Services.AddScoped<IDM_QDCVChiPhiHoiDongRepository, DM_QDCVChiPhiHoiDongRepository>();
+builder.Services.AddScoped<ICTietPAnBThuongRepository, CTietPAnBThuongRepository>();
+builder.Services.AddScoped<IQDPABTDChinhRepository, QDPABTDChinhRepository>();
+builder.Services.AddScoped<IQDGPMBNhanhDChinhRepository, QDGPMBNhanhDChinhRepository>();
+builder.Services.AddScoped<IQDTHoiDatDChinhRepository, QDTHoiDatDChinhRepository>();
+builder.Services.AddScoped<IQDPABTKHopGPMBNhanhRepository, QDPABTKHopGPMBNhanhRepository>();
+builder.Services.AddScoped<IQDPABTKHopTHoiDatRepository, QDPABTKHopTHoiDatRepository>();
+
+//ThongKeDien
+builder.Services.AddScoped<ID_DM_TuyenDuongRepository, DM_TuyenDuongRepository>();
+builder.Services.AddScoped<ID_DM_HangMucKLRepository, DM_HangMucKLRepository>();
+builder.Services.AddScoped<ID_DM_LoaiKLRepository, DM_LoaiKLRepository>();
+builder.Services.AddScoped<ID_DM_ThongTinVatTuRepository, DM_ThongTinVatTuRepository>();
+builder.Services.AddScoped<ID_TTLDienCDienRepository, D_TTLDienCDienRepository>();
+builder.Services.AddScoped<ID_XDungCDienRepository, D_XDungCDienRepository>();
+builder.Services.AddScoped<ID_CDoCDienRepository, D_CDoCDienRepository>();
+builder.Services.AddScoped<ID_DaoCDienRepository, D_DaoCDienRepository>();
+
+//QLNV
+builder.Services.AddScoped<IQLNV_NhanVienRepository, QLNV_NhanVienRepository>();
+builder.Services.AddScoped<IQLNV_NhomNhanVienRepository, QLNV_NhomNhanVienRepository>();
+builder.Services.AddScoped<IQLNV_QuanLyNhanVienRepository, QLNV_QuanLyNhanVienRepository>();
+builder.Services.AddScoped<IQLNV_CongViecRepository, QLNV_CongViecRepository>();
+builder.Services.AddScoped<IQLNV_DanhGiaRepository, QLNV_DanhGiaRepository>();
 
 
 builder.Services.AddAuthentication(options =>

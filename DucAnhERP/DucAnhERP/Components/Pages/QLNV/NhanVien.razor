@@ -1,0 +1,580 @@
+﻿@page "/QLNV/NhanVien"
+@inject NavigationManager Navigation
+
+
+<div class="container-fluid">
+    <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
+        <BodyTemplate>
+            <EditForm Model="Input" id="editFormId" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <p class="accent-danger">@Message</p>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="Ten">Tên nhân viên <span class="text-danger">*</span></label>
+                            <InputText id="TenNhanVien" class="form-control" @bind-Value="Input.TenNhanVien" />
+                            <ValidationMessage For="() => Input.TenNhanVien" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="Ten">Tài khoản<span class="text-danger">*</span></label>
+                            <InputText id="TaiKhoan" readonly="@isEdit" class="form-control" @bind-Value="Input.TaiKhoan" />
+                            <ValidationMessage For="() => Input.TaiKhoan" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+            </EditForm>
+        </BodyTemplate>
+        <FooterTemplate>
+            <div class="d-flex justify-content-end pr-5 py-3 modal-footer-with-border">
+                <button class="btn btn-primary mr-2" type="submit" form="editFormId">Save</button>
+                <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+            </div>
+        </FooterTemplate>
+    </CustomModal>
+    <div class="card mt-3">
+        <div class="card-header">
+            <h3 class="card-title">Danh sách </h3>
+        </div>
+        <div class="card-body">
+            <EditForm Model="pageModel" FormName="SearchData" id="SearchData" OnValidSubmit="@Search">
+                <DataAnnotationsValidator />
+                <div class="d-flex row">
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="TenNhanVien">Tên nhân viên</label>
+                        <Select2 Id="TenNhanVien" Items="@selectTenNhanVien" OnChange="@OnSelectTenNhanVien"></Select2>
+                        <ValidationMessage For="()=>pageModel.TenNhanVien"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="TaiKhoan">Tài khoản</label>
+                        <Select2 Id="TaiKhoan" Items="@selectTaiKhoan" OnChange="@OnSelectTaiKhoan"></Select2>
+                        <ValidationMessage For="()=>pageModel.TaiKhoan"></ValidationMessage>
+                    </div>
+                    <div class="form-group ml-5">
+                        <label>&nbsp;</label>
+                        <button type="submit" form="SearchData" class="btn btn-primary form-control">Tìm kiếm</button>
+                    </div>
+                    @if (CheckQuyenService.HasPermission(3))
+                    {
+                        <div class="form-group ml-5">
+                            <label>&nbsp;</label>
+                            <button class="btn btn-default form-control" @onclick="ShowModal">Thêm mới</button>
+                        </div>
+
+                    }
+                </div>
+            </EditForm>
+            <div class="row our-table">
+                <table class="table table-hover table-bordered">
+                    <thead class="bg-info">
+                        <tr>
+                            <th class="text-center">STT</th>
+                            <th class="text-center">Tên nhân viên</th>
+                            <th class="text-center">Tài khoản</th>
+                            <th class="text-center" colspan="2" rowspan="2"></th>
+                        </tr>
+
+                    </thead>
+                    @if (listQLNV_NhanVienModel.Any())
+                    {
+                        <tbody>
+                            @{
+                                int stt = 1;
+                            }
+                            @foreach (var ndm in listQLNV_NhanVienModel)
+                            {
+                                <tr>
+                                    <td class="text-center">@stt</td>
+                                    <td>@ndm.TenNhanVien (@ndm.TaiKhoan)</td>
+                                    <td>@ndm.TaiKhoan</td>
+                                    <td class="text-center">
+                                        <div class="btn-group">
+                                            @if (CheckQuyenService.HasPermission(4))
+                                            {
+                                                <button class="btn btn-sm btn-primary" @onclick="()=>Edit(ndm.Id)">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                            }
+                                            @if (CheckQuyenService.HasPermission(5))
+                                            {
+                                                <button class="btn btn-sm btn-danger" @onclick="()=>ConfirmDelete(ndm.Id,ndm.TenNhanVien)">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            }
+                                        </div>
+                                    </td>
+
+                                </tr>
+                                stt++;
+                            }
+
+                        </tbody>
+                    }
+                    else
+                    {
+                        <tbody>
+                            <tr>
+                                <td colspan="5"> Không có dữ liệu</td>
+                            </tr>
+                        </tbody>
+                    }
+
+                </table>
+            </div>
+            @if (listQLNV_NhanVienModel.Any())
+            {
+                <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+            }
+        </div>
+    </div>
+    <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+</div>
+
+@code {
+
+
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+
+    private QLNV_NhanVien Input = new();
+    private DateTime baseTime;
+
+    private bool isModalVisible = false;
+    private string TitleModal = "Thêm mới ";
+    bool isEdit = false;
+
+    private List<SelectedItem> selectTenNhanVien = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectTaiKhoan = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+
+    private void ShowModal()
+    {
+        isEdit = false;
+        isModalVisible = true;
+    }
+
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+    }
+
+    private void HandleSave()
+    {
+        // Logic for saving
+        isModalVisible = false;
+    }
+
+    private void HandleCancel()
+    {
+        // Logic for canceling
+        isModalVisible = false;
+        Input = new();
+    }
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+    public List<QLNV_NhanVienModel> listQLNV_NhanVienModel
+    {
+        get;
+        set;
+    } = new();
+    public List<QLNV_NhanVienModel> listModel
+    {
+        get;
+        set;
+    } = new();
+    public MetaData MetaData {get;set; }
+    [SupplyParameterFromForm(FormName = "SearchData")]
+    public QLNV_NhanVienModel pageModel { get;set;}
+    public QLNV_NhanVienModel dmModel{get;set;}
+
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        pageModel = new();
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            userName = authState.User.Identity.Name;
+            user = ApplicationUserService.GetByUserName(userName);
+            userId = user.Id;
+            groupId = user.GroupId;
+        }
+        if (!string.IsNullOrEmpty(groupId) && user != null)
+        {
+            await CheckQuyenService.InitializePermissions(groupId, user, "02797a75-39f3-4cb6-914f-b670c4cfd660");
+        }
+
+        var DM_LoaiKLs = await QLNV_NhanVienService.GetByVM(new QLNV_NhanVienModel());
+        foreach(var item in DM_LoaiKLs)
+        {
+            if (!selectTenNhanVien.Any(x => x.Value == item.TenNhanVien))
+            {
+                selectTenNhanVien.Add(new SelectedItem
+                    {
+                        Value = item.TenNhanVien,
+                        Text = item.TenNhanVien
+                    });
+            }
+            if (!selectTaiKhoan.Any(x => x.Value == item.TaiKhoan))
+            {
+                selectTaiKhoan.Add(new SelectedItem
+                    {
+                        Value = item.TaiKhoan,
+                        Text = item.TaiKhoan
+                    });
+            }
+        }
+        StateHasChanged();
+
+        baseTime = DateTime.Now;
+        dmModel = new();
+        await Task.WhenAll(Search());
+    }
+    // Truy vấn data theo điều kiện tìm kiếm
+    private async Task Search()
+    {
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "295935cf-f21e-4500-b59f-eefedebd50d7");
+            var DM_LoaiKLs = await QLNV_NhanVienService.GetByVM(pageModel);
+            listModel = DM_LoaiKLs;
+            listQLNV_NhanVienModel = Paging(DM_LoaiKLs);
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            Input.CreateBy = userName;
+            var isExist = await QLNV_NhanVienService.CheckExist(Input.Id, Input);
+            if (isExist)
+            {
+                ToastService.ShowToast(
+                   "Thông báo",
+                    "Đã tồn tại.",
+                    cssClass: "toast-danger",
+                    iconClass: "fa fa-exclamation-circle",
+                    progressBarClass: "bg-info",
+                    duration: 5000);
+            }
+            else
+            {
+
+                if (isEdit)
+                {
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "f08e2d74-528b-487c-98d3-33c988878947");
+                    string[] ids = { Input.Id };
+                    bool isValid = await QLNV_NhanVienService.CheckExclusive(ids, baseTime);
+                    if (isValid)
+                    {
+                        await QLNV_NhanVienService.Update(Input, userId);
+                        ToastService.ShowToast("Thông báo", "Cập nhật thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                        await Search();
+                        isModalVisible = false;
+                        Input = new();
+                    }
+                }
+                else
+                {
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "be25c8c3-5728-43ed-b82a-ab29d3fe4a61");
+                    if (ApplicationUserService.GetByUserName(Input.TaiKhoan) != null)
+                    {
+                        
+                        await QLNV_NhanVienService.Insert(Input, userId);
+                        ToastService.ShowToast("Thông báo", "Thêm thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                        await Search();
+                        isModalVisible = false;
+                        Input = new();
+                    }
+                    else
+                    {
+                        if (await RegisterUser())
+                        {
+                            await QLNV_NhanVienService.Insert(Input, userId);
+                            ToastService.ShowToast("Thông báo", "Thêm thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                            await Search();
+                            isModalVisible = false;
+                            Input = new();
+                        }
+                    }
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+
+    }
+
+    string Message = "";
+    public async Task<bool> RegisterUser()
+    {
+
+        var existingUser = await UserManager.FindByNameAsync(Input.TaiKhoan);
+        if (existingUser != null)
+        {
+            var deleteResult = await UserManager.DeleteAsync(existingUser);
+            if (!deleteResult.Succeeded)
+            {
+                Message = "Lỗi khi xóa tài khoản cũ!";
+                return false;
+            }
+        }
+
+        var password = HelperService.GeneratePassword(8);
+        var iUser = new IdentityUser
+            {
+                UserName = Input.TaiKhoan,
+                Email = Input.TaiKhoan,
+                EmailConfirmed = true
+            };
+        var result = await UserManager.CreateAsync(iUser, password);
+        if (!result.Succeeded)
+        {
+            Message = "Lỗi tạo tài khoản!";
+            return false;
+        }
+        var appUser = CreateAppUser(user.CompanyId, iUser);
+        await ApplicationUserService.Insert(appUser, "");
+        var callbackUrl = new Uri(new Uri(Navigation.BaseUri), "Account/Login").ToString();
+
+        // Gửi mail xác nhận đăng ký
+        await SendMail(appUser, callbackUrl, password);
+        return true;
+
+    }
+
+    private ApplicationUser CreateAppUser(string companyId, IdentityUser iUser)
+    {
+        try
+        {
+            var user = Activator.CreateInstance<ApplicationUser>();
+            user.Id = iUser.Id;
+            user.UserName = iUser.UserName;
+            user.Address = "";
+            user.Dob = DateTime.Now;
+            user.FirstName = Input.TenNhanVien;
+            user.LastName = "";
+            user.PhoneNumber = "0000000000";
+            user.IsActive = 0;
+            user.IsFirstLogin = 1;
+            user.CreateAt = DateTime.Now;
+            user.CreateBy = "symtem";
+            user.Email = iUser.Email;
+            user.CompanyId = companyId;
+            user.GroupId = companyId;
+            user.DeptId = "";
+
+            user.Ordinarily = 1;
+            user.ApprovalUserId = "";
+            user.DateApproval = DateTime.Now;
+            user.DepartmentId = "";
+            user.DepartmentOrder = 1;
+            user.ApprovalOrder = 1;
+            user.ApprovalId = "";
+            user.LastApprovalId = "";
+            user.IsStatus = "Chờ kích hoạt";
+            user.IsActive = 3;
+            user.CreateBy = userName;
+            return user;
+        }
+        catch
+        {
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
+                $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor.");
+        }
+    }
+
+    private async Task SendMail(ApplicationUser user, string callBackUrl, string randomPassword)
+    {
+        // Tạo mới đối tượng
+        var emailHistory = new EmailHistory();
+
+        // Nội dung mail
+        string content = "";
+
+        content += "<div class=\"email-container\">";
+        content += "<div class=\"header\">";
+        content += "<h1>Tài khoản sử dụng hệ thống</h1>";
+        content += "</div>";
+        content += "<div class=\"content\">";
+        content += "";
+        content += "<p>Xin chào,</p>";
+        content += "<p>Bạn đã đăng ký sử dụng hệ thống quản lý doanh nghiệp thành công. Tài khoản của bạn là:</p>";
+        content += "<p><strong>Tài khoản:</strong> " + user.Email + "</p>";
+        content += "<p><strong>Mật khẩu:</strong> " + System.Net.WebUtility.HtmlEncode(randomPassword) + "</p>";
+        content += "<p>Vui lòng truy cập theo đường dẫn dưới đây";
+        content += "<p><a href=\"" + callBackUrl + "\">Click vào đây để sử dụng hệ thống</a></p>";
+        content += "<p>Xin chân thành cảm ơn!</p>";
+        content += "<p>Đây là email được gửi tự động từ hệ thống, vui lòng không trả lời vào địa chỉ này. Mọi thông tin thắc mắc xin vui lòng liên hệ: <a href=\"mailto:xxxxxxxx@gmail.com\">xxxxxxxx@gmail.com</a></p>";
+        content += "</div>";
+        content += "<div class=\"footer\">";
+        content += "";
+        content += "<p>Trân trọng,</p>";
+        content += "<p>Công ty cổ phần xây dựng Đức Anh</p>";
+        content += "</div>";
+        content += "</div>";
+
+        // Gán giá trị cho các thuộc tính
+        emailHistory.Id = Guid.NewGuid().ToString();
+        emailHistory.Receiver = user.Email;
+        emailHistory.Subject = "Tài Khoản sử dụng hệ thống";
+        emailHistory.Content = content;
+        emailHistory.CompanyId = user.CompanyId;
+        emailHistory.GroupId = user.CompanyId;
+        emailHistory.MajorId = "";
+        emailHistory.ParentMajorId = "";
+        emailHistory.IsRead = 1;
+        emailHistory.CreateAt = DateTime.Now;
+        emailHistory.CreateBy = "system";
+
+        // Thực hiện gửi mail
+        await EmailService.SendEmail(emailHistory);
+    }
+
+
+
+
+
+    private string deleteId;
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        deleteId = id;
+        confirmModal.Title = "Xác nhận xóa";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.openModal();
+
+    }
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        try
+        {
+            if (confirmed)
+            {
+                var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "4e3af927-cca3-4390-a718-64a4a4c20b5a");
+                if (!string.IsNullOrEmpty(deleteId))
+                {
+                    bool isInUse = await QLNV_NhanVienService.IsIdInUse(deleteId);
+                    if (isInUse)
+                    {
+                        ToastService.ShowToast("Thông báo", "Không thể xóa nhân viên đang được sử dụng.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+                    }
+                    else
+                    {
+                        var nhanvien = await QLNV_NhanVienService.GetById(deleteId);
+                        await QLNV_NhanVienService.DeleteById(deleteId, userId);
+
+                        var existingUser = await UserManager.FindByNameAsync(nhanvien.TaiKhoan);
+                        if (existingUser != null)
+                        {
+
+                            var deleteResult = await UserManager.DeleteAsync(existingUser);
+                            if (deleteResult.Succeeded)
+                            {
+                                ApplicationUser applicationUser = new();
+                                applicationUser = await ApplicationUserService.GetById(existingUser.Id);
+                                if (applicationUser.CreateBy != "symtem")
+                                {
+                                    await ApplicationUserService.DeleteById(existingUser.Id, userId);
+                                }
+                               
+                            }
+                        }
+                        ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                        await Search();
+                        deleteId = "";
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
+        }
+    }
+    private async Task Edit(string id)
+    {
+        try
+        {
+            TitleModal = "Cập nhật !";
+            Input = await QLNV_NhanVienService.GetById(id);
+            isEdit = true;
+            isModalVisible = true;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+    }
+
+    private async Task OnSelectTenNhanVien(SelectedItem selectedItem)
+    {
+        pageModel.TenNhanVien = selectedItem.Value;
+    }
+    private async Task OnSelectTaiKhoan(SelectedItem selectedItem)
+    {
+        pageModel.TaiKhoan = selectedItem.Value;
+    }
+
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        dmModel.PageNumber = 1;
+        Paging(listModel);
+    }
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        dmModel.PageNumber = page;
+        Paging(listModel);
+    }
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+
+        dmModel.PageNumber = 1;
+        dmModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+    // Xử lý paging
+    private List<QLNV_NhanVienModel> Paging(List<QLNV_NhanVienModel> DM_LoaiKLs)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = DM_LoaiKLs.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        DM_LoaiKLs = DM_LoaiKLs.Skip((dmModel.PageNumber - 1) * dmModel.PageSize).Take(dmModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listQLNV_NhanVienModel.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var ndm in DM_LoaiKLs)
+        {
+            listQLNV_NhanVienModel.Add(ndm);
+        }
+
+        // Tạo pagelist mới
+        var pagelist = new PageList<QLNV_NhanVienModel>(listQLNV_NhanVienModel, count, dmModel.PageNumber, dmModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return DM_LoaiKLs;
+    }
+}

@@ -1,0 +1,904 @@
+﻿@page "/ThongKeDien/CDoCDien"
+
+<div class="container-fluid">
+    <CustomModal IsVisible="isModalVisibleS" zIndex="1055" OnClose="HandleModalCloseS" Title="Chọn tuyến đường" Size="modal-lg">
+        <BodyTemplate>
+            <EditForm Model="pageModelS" FormName="SearchData" id="SearchData" OnValidSubmit="@LoadDataS">
+                <DataAnnotationsValidator />
+                <div class="d-flex row">
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="TuyenDuong">Tuyến đường</label>
+                        <Select2 Id="TuyenDuong" Items="@selectTuyenDuongSearch" OnChange="@OnSelectTuyenDuongSearch"></Select2>
+                        <ValidationMessage For="()=>pageModelS.TuyenDuong"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="TuCot">Từ cột</label>
+                        <Select2 Id="TuCot" Items="@selectTuCotSearch" OnChange="@OnSelectTuCotSearch"></Select2>
+                        <ValidationMessage For="()=>pageModelS.TuCot"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="DenCot">Đến cột</label>
+                        <Select2 Id="DenCot" Items="@selectDenCotSearch" OnChange="@OnSelectDenCotSearch"></Select2>
+                        <ValidationMessage For="()=>pageModelS.DenCot"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="TuLyTrinh">Từ lý trình</label>
+                        <Select2 Id="TuLyTrinh" Items="@selectTuLyTrinhSearch" OnChange="@OnSelectTuLyTrinhSearch"></Select2>
+                        <ValidationMessage For="()=>pageModelS.TuLyTrinh"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="DenLyTrinh">Đên lý trình</label>
+                        <Select2 Id="DenLyTrinh" Items="@selectDenLyTrinhSearch" OnChange="@OnSelectDenLyTrinhSearch"></Select2>
+                        <ValidationMessage For="()=>pageModelS.DenLyTrinh"></ValidationMessage>
+                    </div>
+
+                    <div class="form-group ml-5">
+                        <label>&nbsp;</label>
+                        <button type="submit" form="SearchData" class="btn btn-primary form-control">Tìm kiếm</button>
+                    </div>
+                </div>
+            </EditForm>
+            <div id="tableContainer " style="min-height:300px">
+                <div class="row mt-3">
+                    <table class="table table-hover table-bordered">
+                        <thead class="bg-info">
+                            <tr>
+                                <th rowspan="2"></th>
+                                <th rowspan="2" class="text-center">STT</th>
+                                <th colspan="5" class="text-center">Thông tin tuyến đường</th>
+                                <th colspan="2" class="text-center">Tọa độ</th>
+                            </tr>
+                            <tr>
+                                <th onclick="@(() => SortTableS("TuyenDuong"))" class="text-center sortable" scope="col" sortable>
+                                    <div class="pb-3">Tuyến đường  <span class="arrow @(GetSortStyle("TuyenDuong"))"></span></div>
+                                </th>
+                                <th onclick="@(() => SortTableS("TuCot"))" class="text-center sortable" scope="col" sortable>
+                                    <div class="pb-3">Từ cột  <span class="arrow @(GetSortStyle("TuCot"))"></span></div>
+                                </th>
+                                <th onclick="@(() => SortTableS("TuCot"))" class="text-center sortable" scope="col" sortable>
+                                    <div class="pb-3">Đến cột  <span class="arrow @(GetSortStyle("TuCot"))"></span></div>
+                                </th>
+                                <th onclick="@(() => SortTableS("TuLyTrinh"))" class="text-center sortable" scope="col" sortable>
+                                    <div class="pb-3">Từ lý trình  <span class="arrow @(GetSortStyle("TuLyTrinh"))"></span></div>
+                                </th>
+                                <th onclick="@(() => SortTableS("DenLyTrinh"))" class="text-center sortable" scope="col" sortable>
+                                    <div class="pb-3">Đến lý trình <span class="arrow @(GetSortStyle("DenLyTrinh"))"></span></div>
+                                </th>
+                                <th onclick="@(() => SortTableS("ToaDoX"))" class="text-center sortable" scope="col" sortable>
+                                    <div class="pb-3">X <span class="arrow @(GetSortStyle("ToaDoX"))"></span></div>
+                                </th>
+                                <th onclick="@(() => SortTableS("ToaDoY"))" class="text-center sortable" scope="col" sortable>
+                                    <div class="pb-3">Y <span class="arrow @(GetSortStyle("ToaDoY"))"></span></div>
+                                </th>
+
+                            </tr>
+                        </thead>
+                        @if (listDM_TuyenDuongModel.Any())
+                        {
+                            <tbody>
+                                @{
+                                    int stt = 1;
+                                }
+                                @foreach (var item_td in listDM_TuyenDuongModel)
+                                {
+                                    <tr>
+                                        <td class="d-flex nowrap justify-content-center">
+                                            <div class="d-inline-block">
+                                                <button type="button" class="btn btn-sm btn-info m-1" title="Lựa chọn" @onclick="()=>HandleChooseId(item_td)">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">@stt</td>
+                                        <td>@item_td.TuyenDuong</td>
+                                        <td>@item_td.TuCot</td>
+                                        <td>@item_td.TuCot</td>
+                                        <td>@item_td.TuLyTrinh</td>
+                                        <td>@item_td.DenLyTrinh</td>
+                                        <td>@item_td.ToaDoX</td>
+                                        <td>@item_td.ToaDoY</td>
+                                    </tr>
+                                    stt++;
+                                }
+
+                            </tbody>
+                        }
+                        else
+                        {
+                            <tbody>
+                                <tr>
+                                    <td colspan="8"> Không có dữ liệu</td>
+                                </tr>
+                            </tbody>
+                        }
+
+                    </table>
+                </div>
+
+                @if (listDM_TuyenDuongModel.Any())
+                {
+                    <Pagination MetaData="MetaDataS" Spread="2" SelectedPage="SelectedPageS" ChangePageSize="ChangePageSizeS"></Pagination>
+                }
+            </div>
+        </BodyTemplate>
+    </CustomModal>
+    <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
+        <BodyTemplate>
+            <EditForm id="editFormId" Model="Input" OnInvalidSubmit="HandleInValidSubmit" OnValidSubmit="HandleValidSubmit" >
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <h5>Thông tin lý trình</h5>
+                <div class="row">
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="Id_DM_TuyenDuong">Tuyến đường <span class="text-danger">*</span></label>
+                            <button type="button" @onclick="ShowModalS" class="btn btn-outline-info form-control">Chọn @dmModel.TuyenDuong</button>
+                            <ValidationMessage For="() => Input.Id_DM_TuyenDuong" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="TuCot">Từ cột <span class="text-danger">*</span></label>
+                            <InputText id="TuCot" readonly class="form-control" @bind-Value="dmModel.TuCot" />
+                            <ValidationMessage For="() => dmModel.TuCot" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="TuLyTrinh">Từ lý trình<span class="text-danger">*</span></label>
+                            <InputText id="TuLyTrinh" readonly class="form-control" @bind-Value="dmModel.TuLyTrinh" />
+                            <ValidationMessage For="() => dmModel.TuLyTrinh" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+                <h5>Cao độ</h5>
+                <div class="row">
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="HienTrangTKD">H.Trạng trước khi đào<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" id="HienTrangTKD" class="form-control" @bind-Value="Input.HienTrangTKD" />
+                            <ValidationMessage For="() => Input.HienTrangTKD" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="CCTKDDDinhMong">C.cao trước khi đào đến đỉnh móng<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" id="CCTKDDDinhMong" class="form-control" @bind-Value="Input.CCTKDDDinhMong" />
+                            <ValidationMessage For="() => Input.CCTKDDDinhMong" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="DinhMong">Đỉnh móng<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" readonly id="DinhMong" class="form-control" @bind-Value="Input.DinhMong" />
+                            <ValidationMessage For="() => Input.DinhMong" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="CDMong">C.Dày móng<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" id="CDMong" class="form-control" @bind-Value="Input.CDMong" />
+                            <ValidationMessage For="() => Input.CDMong" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="DinhLotMong">Đỉnh lót móng<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" readonly id="DinhLotMong" class="form-control" @bind-Value="Input.DinhLotMong" />
+                            <ValidationMessage For="() => Input.DinhLotMong" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="CDLotMong">C.Dầy lót móng<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" id="CDLotMong" class="form-control" @bind-Value="Input.CDLotMong" />
+                            <ValidationMessage For="() => Input.CDLotMong" class="text-danger" />
+                        </div>
+                    </div><div class="form-floating col-sm-6 col-md-3">
+                        <div class="form-group">
+                            <label for="DinhDayDao">Đỉnh đáy đào<span class="text-danger">*</span></label>
+                            <InputNumber @bind-Value:after="OnValueChanged" readonly id="DinhDayDao" class="form-control" @bind-Value="Input.DinhDayDao" />
+                            <ValidationMessage For="() => Input.DinhDayDao" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+
+                <h5>Tọa độ</h5>
+                <div class="row">
+                    <div class="col-6 col-md-6 col-sm-6">
+                        <div class="form-group">
+                            <label for="ToaDoX">X <span class="text-danger">*</span></label>
+                            <InputNumber id="ToaDoX" class="form-control" @bind-Value="Input.ToaDoX" />
+                            <ValidationMessage For="() => Input.ToaDoX" class="text-danger" />
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-6 col-sm-6">
+                        <div class="form-group">
+                            <label for="ToaDoY">Y <span class="text-danger">*</span></label>
+                            <InputNumber id="ToaDoY" class="form-control" @bind-Value="Input.ToaDoY" />
+                            <ValidationMessage For="() => Input.ToaDoY" class="text-danger" />
+                        </div>
+                    </div>
+                </div>
+            </EditForm>
+        </BodyTemplate>
+        <FooterTemplate>
+            <div class="d-flex justify-content-end pr-5 py-3 modal-footer-with-border">
+                <button class="btn btn-primary mr-2" type="submit" form="editFormId">Save</button>
+                <button class="btn btn-secondary" @onclick="HandleCancel">Cancel</button>
+            </div>
+        </FooterTemplate>
+    </CustomModal>
+
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mt-2">Danh sách</h5>
+    </div>
+    <EditForm Model="pageModel" FormName="SearchDataS" id="SearchDataS" OnValidSubmit="@Search">
+        <DataAnnotationsValidator />
+        <div class="d-flex row">
+            <div class="form-floating col-sm-6 col-md-2">
+                <label for="TuyenDuongS">Tuyến đường</label>
+                <Select2 Id="TuyenDuongS" Items="@selectTuyenDuongS" OnChange="@OnSelectTuyenDuongS"></Select2>
+                <ValidationMessage For="()=>pageModel.TuyenDuong"></ValidationMessage>
+            </div>
+            <div class="form-floating col-sm-6 col-md-2">
+                <label for="TuCotS">Từ cột</label>
+                <Select2 Id="TuCotS" Items="@selectTuCotS" OnChange="@OnSelectTuCotS"></Select2>
+                <ValidationMessage For="()=>pageModel.TuCot"></ValidationMessage>
+            </div>
+            <div class="form-floating col-sm-6 col-md-2">
+                <label for="TuLyTrinhS">Từ cột</label>
+                <Select2 Id="TuLyTrinhS" Items="@selectTuLyTrinhS" OnChange="@OnSelectTuLyTrinhS"></Select2>
+                <ValidationMessage For="()=>pageModel.TuLyTrinh"></ValidationMessage>
+            </div>
+            <div class="form-group ml-5">
+                <label>&nbsp;</label>
+                <button type="submit" form="SearchDataS" class="btn btn-primary form-control">Tìm kiếm</button>
+            </div>
+            @if (CheckQuyenService.HasPermission(3))
+            {
+                <div class="form-group ml-5">
+                    <label>&nbsp;</label>
+                    <button class="btn btn-default form-control" @onclick="ShowModal">Thêm mới</button>
+                </div>
+
+            }
+        </div>
+    </EditForm>
+
+    <div class="row mt-3 our-table">
+        <table class="table table-hover table-bordered">
+            <thead class="bg-info">
+                <tr>
+                    <th class="text-center" colspan="2" rowspan="2"></th>
+                    <th rowspan="2" class="text-center" >STT</th>
+                    <th colspan="3" class="text-center">Thông tin lý trình</th>
+                    <th colspan="7" class="text-center">Cao độ</th>
+                    <th class="text-center" colspan="2">Tọa độ</th>
+                </tr>
+                <tr>
+                    <th onclick="@(() => SortTable("TuyenDuong"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Tuyến đường <span class="arrow @(GetSortStyle("TuyenDuong"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("TuCot"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Từ cột <span class="arrow @(GetSortStyle("TuCot"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("TuLyTrinh"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Từ lý trình  <span class="arrow @(GetSortStyle("TuLyTrinh"))"></span></div>
+                    </th>
+
+                    <th onclick="@(() => SortTable("HienTrangTKD"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">H.Trạng trước khi đào <span class="arrow @(GetSortStyle("HienTrangTKD"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("CCTKDDDinhMong"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">C.cao trước khi đào đến đỉnh móng <span class="arrow @(GetSortStyle("CCTKDDDinhMong"))"></span></div>
+                    </th>
+
+                    <th onclick="@(() => SortTable("DinhMong"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Đỉnh móng <span class="arrow @(GetSortStyle("DinhMong"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("CDMong"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">C.Dày móng<span class="arrow @(GetSortStyle("CDMong"))"></span></div>
+                    </th>
+
+                    <th onclick="@(() => SortTable("DinhLotMong"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Đỉnh lót móng <span class="arrow @(GetSortStyle("DinhLotMong"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("CDLotMong"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">C.Dầy lót móng<span class="arrow @(GetSortStyle("CDLotMong"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("DinhDayDao"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Đỉnh đáy đào <span class="arrow @(GetSortStyle("DinhDayDao"))"></span></div>
+                    </th>
+
+                    <th onclick="@(() => SortTable("ToaDoX"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">X <span class="arrow @(GetSortStyle("ToaDoX"))"></span></div>
+                    </th>
+                    <th onclick="@(() => SortTable("ToaDoY"))" class="text-center sortable" scope="col" sortable>
+                        <div class="pb-3">Y <span class="arrow @(GetSortStyle("ToaDoY"))"></span></div>
+                    </th>
+
+                </tr>
+            </thead>
+            @if (listD_CDoCDienModel.Any())
+            {
+                <tbody>
+                    @{
+                        int stt = 1;
+                    }
+                    @foreach (var ndm in listD_CDoCDienModel)
+                    {
+                        <tr>
+                            <td class="text-center">
+                                @if (CheckQuyenService.HasPermission(4))
+                                {
+                                    <button class="btn btn-sm btn-primary" @onclick="()=>Edit(ndm.Id)">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (CheckQuyenService.HasPermission(5))
+                                {
+                                    <button class="btn btn-sm btn-danger" @onclick="()=>ConfirmDelete(ndm.Id,ndm.TuyenDuong)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                }
+                            </td>
+                            <td class="text-center">@stt</td>
+                            <td>@ndm.TuyenDuong</td>
+                            <td>@ndm.TuCot</td>
+                            <td>@ndm.TuLyTrinh</td>
+
+                            <td>@ndm.HienTrangTKD</td>
+                            <td>@ndm.CCTKDDDinhMong</td>
+                            <td>@ndm.DinhMong</td>
+                            <td>@ndm.CDMong</td>
+                            <td>@ndm.DinhLotMong</td>
+                            <td>@ndm.CDLotMong</td>
+                            <td>@ndm.DinhDayDao</td>
+
+                            <td>@ndm.ToaDoX</td>
+                            <td>@ndm.ToaDoY</td>
+
+                        </tr>
+                        stt++;
+                    }
+
+                </tbody>
+            }
+            else
+            {
+                <tbody>
+                    <tr>
+                        <td colspan="8"> Không có dữ liệu</td>
+                    </tr>
+                </tbody>
+            }
+
+        </table>
+    </div>
+
+    @if (listD_CDoCDienModel.Any())
+    {
+        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+    }
+    <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
+    <Loading IsLoading="@isLoading" LoadingText="Đang tải dữ liệu..." />
+</div>
+
+@code {
+    public string userName { get; set; }
+    public string userId { get; set; }
+    public string groupId { get; set; }
+    private ApplicationUser user;
+
+    private D_CDoCDien Input = new();
+    private DateTime baseTime;
+
+    private bool isLoading = false;
+    private bool isModalVisible = false;
+    private string TitleModal = "Thêm mới ";
+    bool isEdit = false;
+
+    private void ShowModal()
+    {
+        isEdit = false;
+        isModalVisible = true;
+        dmModel = new();
+        Refresh();
+    }
+    private void HandleModalClose(bool isVisible)
+    {
+        isModalVisible = isVisible;
+    }
+    private void HandleSave()
+    {
+        // Logic for saving
+        isModalVisible = false;
+    }
+    private void HandleCancel()
+    {
+        // Logic for canceling
+        isModalVisible = false;
+        Input = new();
+    }
+
+    [Parameter]
+    public ConfirmModal confirmModal { get; set; }
+    public List<D_CDoCDienModel> listD_CDoCDienModel{get;set;} = new();
+    public List<D_CDoCDienModel> listModel{get;set;} = new();
+    public MetaData MetaData{get;set;}
+    public D_CDoCDienModel dmModel { get; set; } = new();
+    [SupplyParameterFromForm(FormName = "SearchData")]
+    public D_CDoCDienModel pageModel { get; set; } = new();
+
+    private List<SelectedItem> selectTuyenDuongS = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectTuCotS = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectTuLyTrinhS = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+
+
+    //Search pageModel
+    private async Task OnSelectTuyenDuongS(SelectedItem selectedItem)
+    {
+        pageModel.TuyenDuong = selectedItem.Value;
+    }
+    private async Task OnSelectTuCotS(SelectedItem selectedItem)
+    {
+        pageModel.TuCot = selectedItem.Value;
+    }
+    private async Task OnSelectTuLyTrinhS(SelectedItem selectedItem)
+    {
+        pageModel.TuLyTrinh = selectedItem.Value;
+    }
+
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            pageModel = new();
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (authState.User.Identity.IsAuthenticated)
+            {
+                userName = authState.User.Identity.Name;
+                user = ApplicationUserService.GetByUserName(userName);
+                userId = user.Id;
+                groupId = user.GroupId;
+            }
+            if (!string.IsNullOrEmpty(groupId) && user != null)
+            {
+                await CheckQuyenService.InitializePermissions(groupId, user, "6f85445f-398d-47d6-bbea-04c267299535");
+            }
+            var DM_LoaiKLs = await DM_LoaiKLService.GetByVM(groupId, new DM_LoaiKLModel());
+
+            var TTLDienCDiens = await D_CDoCDienService.GetByVM(groupId, new D_CDoCDienModel());
+            foreach (var item in TTLDienCDiens)
+            {
+                if (!selectTuyenDuongS.Any(x => x.Value == item.Id_DM_TuyenDuong))
+                {
+                    selectTuyenDuongS.Add(new SelectedItem
+                        {
+                            Value = item.Id_DM_TuyenDuong,
+                            Text = item.TuyenDuong
+                        });
+                }
+                if (!selectTuCotS.Any(x => x.Value == item.TuCot))
+                {
+                    selectTuCotS.Add(new SelectedItem
+                        {
+                            Value = item.TuCot,
+                            Text = item.TuCot
+                        });
+                }
+                if (!selectTuLyTrinhS.Any(x => x.Value == item.TuLyTrinh))
+                {
+                    selectTuLyTrinhS.Add(new SelectedItem
+                        {
+                            Value = item.TuLyTrinh,
+                            Text = item.TuLyTrinh
+                        });
+                }
+            }
+            StateHasChanged();
+
+            baseTime = DateTime.Now;
+            await Task.WhenAll(Search());
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            throw;
+        }
+    }
+    // Truy vấn data theo điều kiện tìm kiếm
+    private async Task Search()
+    {
+        try
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "dac0c890-7c4b-40e4-91f3-fd8b9fb4e517");
+            var DM_TuyenDuongs = await D_CDoCDienService.GetByVM(groupId, pageModel);
+            listModel = DM_TuyenDuongs;
+            listD_CDoCDienModel = Paging(DM_TuyenDuongs);
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+    }
+    private async Task HandleInValidSubmit()
+    {
+        await JSRuntime.InvokeVoidAsync("scrollToFirstError");
+    }
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            Input.CreateBy = userName;
+            Input.CompanyId = groupId;
+            var isExist = await D_CDoCDienService.CheckExist(Input.Id, Input);
+            if (isExist)
+            {
+                ToastService.ShowToast(
+                   "Thông báo",
+                    "Đã tồn tại.",
+                    cssClass: "toast-danger",
+                    iconClass: "fa fa-exclamation-circle",
+                    progressBarClass: "bg-info",
+                    duration: 5000);
+            }
+            else
+            {
+                if (isEdit)
+                {
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "40acc55a-b536-4068-b946-217da164d118");
+                    string[] ids = { Input.Id };
+                    bool isValid = await D_CDoCDienService.CheckExclusive(ids, baseTime);
+                    if (isValid)
+                    {
+                        await D_CDoCDienService.Update(Input, userId);
+                        ToastService.ShowToast("Thông báo", "Cập nhật thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                        await Search();
+                        isModalVisible = false;
+                        Input = new();
+                    }
+                }
+                else
+                {
+                    var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "353cc305-7b22-48c8-97c4-b1b9ed87d405");
+                    await D_CDoCDienService.Insert(Input, userId);
+                    ToastService.ShowToast("Thông báo", "Thêm thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                    await Search();
+                    isModalVisible = false;
+                    Input = new();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+
+    }
+    private string deleteId;
+
+    private async Task ConfirmDelete(string id, string Ten)
+    {
+        deleteId = id;
+        confirmModal.Title = "Xác nhận xóa";
+        confirmModal.message = $"Bạn có chắc chắn muốn xóa: {Ten}?";
+        confirmModal.openModal();
+
+    }
+    private async Task HandleResponseClick(bool confirmed)
+    {
+        if (confirmed)
+        {
+            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "69f91ed2-1a06-4956-bef3-8ea3df8fe486");
+            if (!string.IsNullOrEmpty(deleteId))
+            {
+                bool isInUse = await D_CDoCDienService.IsIdInUse(deleteId);
+                if (isInUse)
+                {
+                    ToastService.ShowToast("Thông báo", "Không thể xóa loại danh mục đang được sử dụng.", cssClass: "toast-danger", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+                }
+                else
+                {
+                    await D_CDoCDienService.DeleteById(deleteId, userId);
+                    ToastService.ShowToast("Thông báo", "Xóa thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 5000);
+                    await Search();
+                    deleteId = "";
+                }
+            }
+        }
+    }
+    private async Task Edit(string id)
+    {
+        try
+        {
+            TitleModal = "Cập nhật !";
+            Input = await D_CDoCDienService.GetById(id);
+
+
+            var DM_TuyenDuong = await DM_TuyenDuongService.GetById(Input.Id_DM_TuyenDuong);
+            dmModel.TuyenDuong = DM_TuyenDuong.TuyenDuong;
+            dmModel.TuCot = DM_TuyenDuong.TuCot;
+            dmModel.DenCot = DM_TuyenDuong.DenCot;
+            dmModel.TuLyTrinh = DM_TuyenDuong.TuLyTrinh;
+            dmModel.DenLyTrinh = DM_TuyenDuong.DenLyTrinh;
+
+            isEdit = true;
+            isModalVisible = true;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+    }
+    private void Refresh()
+    {
+        Input = new();
+        pageModel = new();
+        StateHasChanged();
+    }
+
+    // Hàm xử lý logic khi người dùng dừng nhập
+    //bắt sự kiện khi thay đổi
+    private System.Timers.Timer _typingTimer;
+    private int _debounceDelay = 1000; // Thời gian đợi sau khi người dùng dừng nhập (ms)
+
+    // Hàm được gọi sau khi bind-value hoàn tất
+    private void OnValueChanged()
+    {
+        // Dừng Timer cũ nếu đang chạy
+        _typingTimer?.Stop();
+
+        // Khởi động Timer mới
+        _typingTimer = new System.Timers.Timer(_debounceDelay);
+        _typingTimer.Elapsed += async (_, _) =>
+        {
+            _typingTimer.Stop();
+            await InvokeAsync(OnTypingStopped); // Gọi hàm xử lý khi người dùng dừng nhập
+        };
+        _typingTimer.AutoReset = false;
+        _typingTimer.Start();
+    }
+    private async Task OnTypingStopped()
+    {
+        await Caculate();
+    }
+    public async Task Caculate()
+    {
+        Input.DinhMong = DinhMong(Input.HienTrangTKD, Input.CCTKDDDinhMong);
+        Input.DinhLotMong = DinhLotMong(Input.DinhMong, Input.CDMong);
+        Input.DinhDayDao = DinhDayDao(Input.DinhLotMong, Input.CDLotMong);
+        await InvokeAsync(() => { StateHasChanged(); });
+    }
+    private double DinhMong(double HienTrangTKD, double CCTKDDDinhMong)
+    {
+        double result = Math.Round((HienTrangTKD - CCTKDDDinhMong), 4);
+        return Math.Ceiling(result * 100) / 100;
+    }
+    private double DinhLotMong(double DinhMong, double CDMong)
+    {
+        double result = Math.Round((DinhMong - CDMong), 4);
+        return Math.Ceiling(result * 100) / 100;
+    }
+    private double DinhDayDao(double DinhLotMong, double CDLotMong)
+    {
+        double result = Math.Round((DinhLotMong - CDLotMong), 4);
+        return Math.Ceiling(result * 100) / 100;
+    }
+
+    // Sắp xếp data
+    private void SortTable(string columnName)
+    {
+        listModel = SortService.SortTable(listModel, columnName);
+        dmModel.PageNumber = 1;
+        Paging(listModel);
+    }
+    // Get css cho chức năng sắp xếp
+    private string GetSortStyle(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+    // Xử lý trường hợp đổi page hiển thị
+    private void SelectedPage(int page)
+    {
+        dmModel.PageNumber = page;
+        Paging(listModel);
+    }
+    // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
+    private void ChangePageSize(int pageSize)
+    {
+        dmModel.PageNumber = 1;
+        dmModel.pageSize = pageSize;
+        Paging(listModel);
+    }
+    // Xử lý paging
+    private List<D_CDoCDienModel> Paging(List<D_CDoCDienModel> DM_TuyenDuongs)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = DM_TuyenDuongs.Count();
+
+        // Lọc bản ghi theo page hiện tại và page size
+        DM_TuyenDuongs = DM_TuyenDuongs.Skip((dmModel.PageNumber - 1) * dmModel.PageSize).Take(dmModel.PageSize).ToList();
+
+        // Xóa danh sách đang hiển thị trên màn hình
+        listD_CDoCDienModel.Clear();
+
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var ndm in DM_TuyenDuongs)
+        {
+            listD_CDoCDienModel.Add(ndm);
+        }
+
+        // Tạo pagelist mới
+        var pagelist = new PageList<D_CDoCDienModel>(listD_CDoCDienModel, count, dmModel.PageNumber, dmModel.PageSize);
+        MetaData = pagelist.MetaData;
+        return DM_TuyenDuongs;
+    }
+
+
+    //model search tuyến đường
+    private bool isModalVisibleS = false;
+    public List<DM_TuyenDuongModel> listDM_TuyenDuongModel { get; set; } = new();
+    public List<DM_TuyenDuongModel> listModelS { get; set; } = new();
+    public MetaData MetaDataS { get; set; }
+    public DM_TuyenDuongModel dmModelS { get; set; } = new();
+    public DM_TuyenDuongModel pageModelS { get; set; } = new();
+
+    private List<SelectedItem> selectTuyenDuongSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectTuCotSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectDenCotSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectTuLyTrinhSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+    private List<SelectedItem> selectDenLyTrinhSearch = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
+
+    private async Task ShowModalS()
+    {
+        var DM_TuyenDuongs = await DM_TuyenDuongService.GetByVM(groupId, new DM_TuyenDuongModel());
+        foreach (var item in DM_TuyenDuongs)
+        {
+            if (!selectTuyenDuongSearch.Any(x => x.Value == item.TuyenDuong))
+            {
+                selectTuyenDuongSearch.Add(new SelectedItem
+                    {
+                        Value = item.TuyenDuong,
+                        Text = item.TuyenDuong
+                    });
+            }
+            if (!selectTuCotSearch.Any(x => x.Value == item.TuCot))
+            {
+                selectTuCotSearch.Add(new SelectedItem
+                    {
+                        Value = item.TuCot,
+                        Text = item.TuCot
+                    });
+            }
+           
+            if (!selectTuLyTrinhSearch.Any(x => x.Value == item.TuLyTrinh))
+            {
+                selectTuLyTrinhSearch.Add(new SelectedItem
+                    {
+                        Value = item.TuLyTrinh,
+                        Text = item.TuLyTrinh
+                    });
+            }
+            if (!selectDenLyTrinhSearch.Any(x => x.Value == item.DenLyTrinh))
+            {
+                selectDenLyTrinhSearch.Add(new SelectedItem
+                    {
+                        Value = item.DenLyTrinh,
+                        Text = item.DenLyTrinh
+                    });
+            }
+        }
+        StateHasChanged();
+        LoadDataS();
+        isModalVisibleS = true;
+    }
+    private void HandleModalCloseS(bool isVisible)
+    {
+        isModalVisibleS = isVisible;
+    }
+
+    private async Task OnSelectTuyenDuongSearch(SelectedItem selectedItem)
+    {
+        pageModelS.TuyenDuong = selectedItem.Value;
+    }
+    private async Task OnSelectTuCotSearch(SelectedItem selectedItem)
+    {
+        pageModelS.TuCot = selectedItem.Value;
+    }
+    private async Task OnSelectDenCotSearch(SelectedItem selectedItem)
+    {
+        pageModelS.DenCot = selectedItem.Value;
+    }
+    private async Task OnSelectTuLyTrinhSearch(SelectedItem selectedItem)
+    {
+        pageModelS.TuLyTrinh = selectedItem.Value;
+    }
+    private async Task OnSelectDenLyTrinhSearch(SelectedItem selectedItem)
+    {
+        pageModelS.DenLyTrinh = selectedItem.Value;
+    }
+    private void SortTableS(string columnName)
+    {
+        listModelS = SortService.SortTable(listModelS, columnName);
+        dmModelS.PageNumber = 1;
+        PagingS(listModelS);
+    }
+    private string GetSortStyleS(string columnName)
+    {
+        return SortService.GetSortStyle(columnName);
+    }
+    private void SelectedPageS(int page)
+    {
+        dmModelS.PageNumber = page;
+        PagingS(listModelS);
+    }
+    private void ChangePageSizeS(int pageSize)
+    {
+        dmModelS.PageNumber = 1;
+        dmModelS.pageSize = pageSize;
+        PagingS(listModelS);
+    }
+    private async Task LoadDataS()
+    {
+        try
+        {
+            isLoading = true;
+            var DM_TuyenDuongs = await DM_TuyenDuongService.GetByVM(groupId, pageModelS);
+            listModelS = DM_TuyenDuongs;
+            listDM_TuyenDuongModel = PagingS(DM_TuyenDuongs);
+            isLoading = false;
+            await InvokeAsync(() =>{StateHasChanged();});
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+    }
+    private List<DM_TuyenDuongModel> PagingS(List<DM_TuyenDuongModel> DM_TuyenDuongs)
+    {
+        // Đếm số bản ghi thỏa mãn
+        var count = DM_TuyenDuongs.Count();
+        // Lọc bản ghi theo page hiện tại và page size
+        DM_TuyenDuongs = DM_TuyenDuongs.Skip((dmModelS.PageNumber - 1) * dmModelS.PageSize).Take(dmModelS.PageSize).ToList();
+        // Xóa danh sách đang hiển thị trên màn hình
+        listDM_TuyenDuongModel.Clear();
+        // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
+        foreach (var ndm in DM_TuyenDuongs)
+        {
+            listDM_TuyenDuongModel.Add(ndm);
+        }
+        // Tạo pagelist mới
+        var pagelist = new PageList<DM_TuyenDuongModel>(listDM_TuyenDuongModel, count, dmModelS.PageNumber, dmModelS.PageSize);
+        MetaDataS= pagelist.MetaData;
+        return DM_TuyenDuongs;
+    }
+    private async Task HandleChooseId(DM_TuyenDuongModel item)
+    {
+        try
+        {
+            Input.Id_DM_TuyenDuong = item.Id;
+            dmModel.TuyenDuong = item.TuyenDuong;
+            dmModel.TuCot = item.TuCot;
+            dmModel.TuCot = item.TuCot;
+            dmModel.TuLyTrinh = item.TuLyTrinh;
+            dmModel.DenLyTrinh = item.DenLyTrinh;
+            isModalVisibleS = false;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast(
+                       "Thông báo",
+                        ex.Message,
+                        cssClass: "toast-danger",
+                        iconClass: "fa fa-exclamation-circle",
+                        progressBarClass: "bg-info",
+                        duration: 5000);
+        }
+
+    }
+}
