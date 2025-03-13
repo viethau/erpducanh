@@ -1,0 +1,59 @@
+# .NET Core/Blazor specific
+bin/
+obj/
+**/bin/
+**/obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# Visual Studio
+.vs/
+
+# Build and publish artifacts
+publish/
+out/
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+
+# Logs
+*.log
+
+# Entity Framework
+Migrations/
+
+# Secrets
+secrets.json
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
+
+# Node modules (if using npm/yarn)
+node_modules/
+
+# Blazor WebAssembly
+wwwroot/framework/
+wwwroot/_framework/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Coverage reports
+coverage/
+*.coverage
+
+# Others
+*.bak
+Thumbs.db
+Desktop.ini

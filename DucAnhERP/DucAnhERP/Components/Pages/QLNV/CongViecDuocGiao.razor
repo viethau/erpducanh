@@ -1,6 +1,6 @@
 ﻿@page "/QLNV/CongViecDuocGiao"
 
-@* <div class="container-fluid">
+<div class="container-fluid">
     <div class="card mt-3">
         <div class="card-header">
             <h3 class="card-title">Danh sách </h3>
@@ -33,14 +33,13 @@
                         <label>&nbsp;</label>
                         <button type="submit" form="SearchData" class="btn btn-primary form-control">Tìm kiếm</button>
                     </div>
-
                 </div>
             </EditForm>
             <div class="row our-table">
                 <table class="table table-hover table-bordered">
                     <thead class="bg-info">
                         <tr>
-                            <th class="text-center" rowspan="2"></th>
+                            
                             <th class="text-center sortable" scope="col">
                                 STT
                             </th>
@@ -85,34 +84,11 @@
                         <tbody>
                             @{
                                 int stt = 1;
-                                var groupedData = listQLNV_CongViecModel
-                                .GroupBy(x => x.Id_Task)
-                                .Select(g => new
-                                {
-                                    Id_Task = g.Key,
-                                    Id_NguoiGiaoViec = g.First().Id_NguoiGiaoViec,
-                                    NguoiThucHien = string.Join(", ", g.Select(x => x.NguoiThucHien)),
-                                    TenNhom = g.First().TenNhom,
-                                    NgayBatDau = g.First().NgayBatDau,
-                                    NgayKetThuc = g.First().NgayKetThuc,
-                                    MucDoUuTien = g.First().MucDoUuTien,
-                                    TuDanhGia = g.First().TuDanhGia,
-                                    TienDo = g.First().TienDo,
-                                    LapLai = g.First().LapLai,
-                                    NoiDungCongViec = g.First().NoiDungCongViec,
-                                    FileDinhKem = g.First().FileDinhKem,
-                                    Id = g.First().Id
-                                }).ToList();
                             }
 
-                            @foreach (var ndm in groupedData)
+                            @foreach (var ndm in listQLNV_CongViecModel)
                             {
                                 <tr>
-                                    <td class="text-center align-middle">
-                                        <div class="btn-group">
-
-                                        </div>
-                                    </td>
                                     <td class="text-center align-middle">@stt</td>
                                     <td class="align-middle readonly-cell">@ndm.Id_NguoiGiaoViec</td>
                                     <td class="align-middle readonly-cell">@ndm.NguoiThucHien</td>
@@ -122,10 +98,10 @@
                                     <td class="align-middle readonly-cell">@ndm.MucDoUuTien</td>
 
                                     <td class="align-middle">
-                                        <InputText @bind="@ndm.TuDanhGia" class="form-control border-0" @bind:event="onchange" @onchange="() => OnValueChanged(ndm)" />
+                                        @* <InputText @bind="@ndm.TuDanhGia" class="form-control border-0" @bind:event="onchange" @onchange="() => OnValueChanged(ndm)" /> *@
                                     </td>
                                     <td class="align-middle">
-                                        <InputNumber @bind="@ndm.TienDo" class="form-control border-0" @bind:event="onchange" @onchange="() => OnValueChanged(ndm)" />
+                                        @* <InputNumber @bind="@ndm.TienDo" class="form-control border-0" @bind:event="onchange" @onchange="() => OnValueChanged(ndm)" /> *@
                                     </td>
 
 
@@ -190,10 +166,8 @@
             }
         </div>
     </div>
-
-</div> *@
-
-@* @code {
+</div> 
+@code {
     public string userName { get; set; }
     public string userId { get; set; }
     public string groupId { get; set; }
@@ -202,8 +176,6 @@
     private QLNV_CongViec Input = new();
     private QLNV_CongViecCon InputCVC = new();
     private DateTime baseTime;
-
-
 
     private List<SelectedItem> selectNguoiThucHien = new ();
     private List<SelectedItem> selectNhom = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
@@ -220,10 +192,7 @@
     private List<SelectedItem> selectNDCV = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
     private List<SelectedItem> selectMDUT = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
 
-
-
     [Parameter]
-
     public List<QLNV_CongViecModel> listQLNV_CongViecModel{get;set;} = new();
     public List<QLNV_CongViecModel> listModel{get;set;} = new();
     public List<QLNV_CongViecCon> listCVC{get;set;} = new();
@@ -231,7 +200,6 @@
     [SupplyParameterFromForm(FormName = "SearchData")]
     public QLNV_CongViecModel pageModel { get;set;}
     public QLNV_CongViecModel dmModel { get; set; } = new();
-
 
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
@@ -315,7 +283,6 @@
     private int _debounceDelay = 1000; // Thời gian đợi sau khi người dùng dừng nhập (ms)
 
     // Hàm được gọi sau khi bind-value hoàn tất
-    
     private void OnValueChanged(QLNV_CongViecModel cv)
     {
         dmModel = cv;
@@ -341,11 +308,9 @@
 
     private async Task saveOnChange()
     {
-        Console.WriteLine("Id: " + Id);
+        Console.WriteLine("Id: " );
     }
 
-
-    
     private void Refresh()
     {
        
@@ -425,4 +390,3 @@
         return DM_LoaiKLs;
     }
 }
- *@
