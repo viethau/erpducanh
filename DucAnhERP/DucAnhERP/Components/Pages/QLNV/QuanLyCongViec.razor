@@ -10,44 +10,54 @@
     }
 </style>
 
-<section class="content mt-3">
-    <div class="card card-outline">
-        <div class="card-header">
-            <h3 class="card-title">Danh sách</h3>
+<div class="row col-12 h-100" style="background:#faf9f8;">
+    <div class="col-2 col-sm-2 pl-3 pt-3 pb-3 pr-0 cus-sidebar ">
+        <div class="card h-100">
+            <div class="card-header">
+                Nhóm
+            </div>
+            <div class="card-body " style="padding-right:0px;">
+                @foreach (var tab in tabs)
+                {
+                    <a class="nav-link d-flex justify-content-between @(tab.Id == activeTab ? "active bg-primary" : "")"
+                    id="@($"{tab.Id}-tab")"
+                    data-toggle="pill"
+                    href="#"
+                    role="tab"
+                    aria-controls="@tab.Id"
+                    aria-selected="@(tab.Id == activeTab ? "true" : "false")"
+                    @onclick="() => OnTabChanged(tab.Id)">
+                        <span>@tab.Label</span>
+                        <span>@tab.Total</span>
+                    </a>
+                }
+            </div>
         </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-2 col-sm-2">
-                    <div class="nav flex-column nav-tabs" id="vert-tabs-tab" role="tablist" aria-orientation="vertical">
-                        @foreach (var tab in tabs)
-                        {
-                            <a class="nav-link d-flex justify-content-between @(tab.Id == activeTab ? "active" : "")"
-                            id="@($"{tab.Id}-tab")"
-                            data-toggle="pill"
-                            href="#"
-                            role="tab"
-                            aria-controls="@tab.Id"
-                            aria-selected="@(tab.Id == activeTab ? "true" : "false")"
-                            @onclick="() => OnTabChanged(tab.Id)">
-                                <span>@tab.Label</span>
-                                <span>@tab.Total</span>
-                            </a>
-                        }
-                    </div>
+    </div>
+    <div class="col-10 col-sm-10 pl-3 pt-3 pb-3 pr-0 cus-content">
+        <div class="card h-100">
+            <div class="card-header">
+                <p class="mb-0 fw-bold text-primary">📅 Danh sách công việc</p>
+                <div>
+                    <button class="btn btn-sm btn-success me-2" @onclick="ShowModal">
+                        ➕ Thêm mới
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" @onclick="ShowCalendar">
+                        @(showCalendar ? "📋 Bảng" : "📆 Xem lịch")
+                    </button>
                 </div>
-                <div class="col-10 col-sm-10">
-                    <div class="tab-content" id="vert-tabs-tabContent">
-                        <EditForm Model="pageModel" FormName="SearchData" id="SearchData" OnValidSubmit="@Search">
-                            <DataAnnotationsValidator />
-                            <div class="d-flex row d-flex justify-content-end">
-                                @* @if (CheckQuyenService.HasPermission(3))
-                    { *@
-                                <div class="form-group mr-2">
-                                    <button class="btn btn-outline-info form-control" @onclick="ShowModal">Thêm mới</button>
-                                </div>
-                                @*  } *@
-                            </div>
-                        </EditForm>
+            </div>
+            <div class="card-body">
+                @if (showCalendar)
+                {
+                    <div class="tab-content">
+                        <FullCalendar Events="eventList" OnEventClicked="HandleEventClick" />
+
+                    </div>
+                }
+                else
+                {
+                    <div class="tab-content">
                         <div class="row our-table">
                             <table class="table table-hover table-bordered">
                                 <thead class="bg-info">
@@ -58,9 +68,6 @@
                                         </th>
                                         <th onclick="@(() => SortTable("NguoiThucHien"))" class="text-center sortable" scope="col" sortable>
                                             <div class="pb-3">Người thực hiện <span class="arrow @(GetSortStyle("NguoiThucHien"))"></span></div>
-                                        </th>
-                                        <th onclick="@(() => SortTable("TenNhom"))" class="text-center sortable" scope="col" sortable>
-                                            <div class="pb-3">Tên nhóm<span class="arrow @(GetSortStyle("TenNhom"))"></span></div>
                                         </th>
                                         <th onclick="@(() => SortTable("NgayBatDau"))" class="text-center sortable" scope="col" sortable>
                                             <div class="pb-3">Ngày bắt đầu<span class="arrow @(GetSortStyle("NgayBatDau"))"></span></div>
@@ -138,10 +145,9 @@
                                                 </td>
                                                 <td class="text-center align-middle">@stt</td>
                                                 <td class="align-middle">@ndm.NguoiThucHien</td>
-                                                <td class="align-middle">@ndm.TenNhom</td>
                                                 <td class="align-middle">@Format.FormatDate(ndm.NgayBatDau, "dd-MM-yyyy")</td>
-                                                <td class="align-middle">@Format.FormatDate(ndm.NgayKetThuc, "dd-MM-yyyy")</td>
-                                                <td class="align-middle">@ndm.MucDoUuTien</td>
+                                                <td class="align-middle @GetBackgroundColor(ndm.NgayKetThuc)">@Format.FormatDate(ndm.NgayKetThuc, "dd-MM-yyyy")</td>
+                                                <td class="align-middle @GetPriorityColor(ndm.MucDoUuTien)">@ndm.MucDoUuTien</td>
                                                 <td class="align-middle">@ndm.TuDanhGia</td>
                                                 <td class="align-middle">@ndm.TienDo</td>
                                                 <td class="align-middle">@ndm.LapLai</td>
@@ -184,7 +190,7 @@
                                                         </div>
                                                     </td>
                                                     <td class="align-middle">@sttcvc</td>
-                                                    <td class="align-middle" colspan="9">@cvc.NoiDungCongViec</td>
+                                                    <td class="align-middle" colspan="8">@cvc.NoiDungCongViec</td>
                                                     <td class="align-middle">
                                                         @if (!string.IsNullOrEmpty(cvc.FileDinhKem))
                                                         {
@@ -217,11 +223,14 @@
                             <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
                         }
                     </div>
-                </div>
+                }
+
             </div>
         </div>
     </div>
-</section>
+</div>
+
+
 <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
     <BodyTemplate>
         <EditForm Model="Input" id="editFormId" OnValidSubmit="HandleValidSubmit">
@@ -302,7 +311,7 @@
                         <ValidationMessage For="() => Input.LapLai" class="text-danger" />
                     </div>
                 </div>
-                 <div class="form-floating col-sm-6 col-md-3">
+                <div class="form-floating col-sm-6 col-md-3">
                     <label for="Ten">File đính kèm<span class="text-danger"></span></label>
                     <InputFile id="FileDinhKem" OnChange="HandleFileSelected" class="form-control" style="border:none" @bind-Value="Input.FileDinhKem" />
                     <ValidationMessage For="() => Input.FileDinhKem" class="text-danger" />
@@ -313,7 +322,7 @@
                     <InputTextArea id="NoiDungCongViec" class="form-control" @bind-Value="Input.NoiDungCongViec" />
                     <ValidationMessage For="() => Input.NoiDungCongViec" class="text-danger" />
                 </div>
-               
+
             </div>
         </EditForm>
     </BodyTemplate>
@@ -356,6 +365,9 @@
 </CustomModal>
 
 @code {
+    private bool showCalendar = false;
+    private List<EventModel> eventList = new();
+
     private string activeTab;
     private List<(string Id, string Label, int Total)> tabs = new();
     public string userName { get; set; }
@@ -391,6 +403,10 @@
         new SelectedItem { Value = "Khẩn cấp", Text = "Khẩn cấp"},
     };
 
+    private void ShowCalendar()
+    {
+        showCalendar = !showCalendar;
+    }
     private void ShowModal()
     {
         isEdit = false;
@@ -477,6 +493,33 @@
     private async Task OnSelectMucDoUuTien(SelectedItem selectedItem)
     {
         Input.MucDoUuTien = selectedItem.Value;
+    }
+
+    private string GetBackgroundColor(DateTime? NgayKetThuc)
+    {
+        if (!NgayKetThuc.HasValue)
+            return "";
+
+        int daysDiff = (NgayKetThuc.Value - DateTime.Today).Days;
+
+        if (daysDiff <= 3 && daysDiff >= 1)
+            return "bg-warning";
+
+        if (daysDiff <= 0)
+            return "bg-danger";
+
+        return "";
+    }
+    private string GetPriorityColor(string priority)
+    {
+        return priority switch
+        {
+            "Thấp" => "bg-success",       // Mức thấp - màu xanh lá
+            "Trung bình" => "bg-primary", // Mức trung bình - màu xanh dương
+            "Cao" => "bg-warning",        // Mức cao - màu vàng
+            "Khẩn cấp" => "bg-danger",    // Mức khẩn cấp - màu đỏ
+            _ => ""        
+        };
     }
 
     private async Task HandleFileSelected(InputFileChangeEventArgs e)
@@ -592,6 +635,11 @@
         }
     }
 
+    private async Task HandleEventClick(EventModel clickedEvent)
+    {
+        await Edit(clickedEvent.Id);
+        Console.WriteLine($"Bạn đã click vào sự kiện: {clickedEvent.Id}");
+    }
     protected override async Task OnInitializedAsync()
     {
         pageModel = new();
@@ -657,6 +705,41 @@
             listModel = DM_LoaiKLs;
             listQLNV_CongViecModel = Paging(DM_LoaiKLs);
             listCVC = await QLNV_CongViecService.GetAllCVC();
+            var groupedData = listModel.GroupBy(x => x.Id_Task).Select(g => new
+            {
+                Id_Task = g.Key,
+                Id_NguoiGiaoViec = g.First().Id_NguoiGiaoViec,
+                NguoiThucHien = string.Join(", ", g.Select(x => x.NguoiThucHien)),
+                TenNhom = g.First().TenNhom,
+                NgayBatDau = g.First().NgayBatDau,
+                NgayKetThuc = g.First().NgayKetThuc,
+                MucDoUuTien = g.First().MucDoUuTien,
+                TuDanhGia = g.First().TuDanhGia,
+                TienDo = g.First().TienDo,
+                LapLai = g.First().LapLai,
+                NoiDungCongViec = g.First().NoiDungCongViec,
+                FileDinhKem = g.First().FileDinhKem,
+                Id = g.First().Id
+            }).ToList();
+
+            eventList = new();
+            foreach (var item in groupedData)
+            {
+                var eventModel = new EventModel
+                    {
+                        Id = item.Id_Task,
+                        Title = item.NoiDungCongViec,
+                        DateStart = item.NgayBatDau ?? DateTime.Now,
+                        Color = GetBackgroundColor(item.NgayKetThuc)
+                    };
+
+                if (item.NgayKetThuc.HasValue)
+                {
+                    eventModel.DateEnd = item.NgayKetThuc ?? DateTime.Now;
+                   
+                }
+                eventList.Add(eventModel);
+            }
             StateHasChanged();
         }
         catch (Exception ex)

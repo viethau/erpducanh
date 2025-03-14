@@ -1,98 +1,93 @@
 ﻿@page "/QLNV/CongViecDuocGiao"
 
-<style>
-    .nav-tabs {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0px 0.3px 0.9px var(--bg-shadow), 0px 1.6px 3.6px var(--bg-shadow);
-    background-color: #fff;
-    }
-</style>
-
-<section class="content mt-3">
-    <div class="card card-outline">
-        <div class="card-header">
-            <h3 class="card-title">Danh sách</h3>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-2 col-sm-2">
-                    <div class="nav flex-column nav-tabs" id="vert-tabs-tab" role="tablist" aria-orientation="vertical">
-                        @foreach (var tab in tabs)
-                        {
-                            <a class="nav-link d-flex justify-content-between @(tab.Id == activeTab ? "active" : "")"
-                            id="@($"{tab.Id}-tab")"
-                            data-toggle="pill"
-                            href="#"
-                            role="tab"
-                            aria-controls="@tab.Id"
-                            aria-selected="@(tab.Id == activeTab ? "true" : "false")"
-                            @onclick="() => OnTabChanged(tab.Id)">
-                                <span>@tab.Label</span>
-                                <span>@tab.Total</span>
-                            </a>
-                        }
-                    </div>
-                </div>
-                <div class="col-10 col-sm-10">
-                    <div class="tab-content" id="vert-tabs-tabContent">
-                        <div class="row our-table">
-                            <table class="table table-hover table-light">
-                                <thead >
-                                    <tr>
-                                        <th class="sortable" scope="col">
-                                            STT
-                                        </th>
-                                        <th onclick="@(() => SortTable("NoiDungCongViec"))" class=" sortable" scope="col" sortable>
-                                            <div class="pb-3">Nội dung công việc <span class="arrow @(GetSortStyle("NoiDungCongViec"))"></span></div>
-                                        </th>
-                                        <th onclick="@(() => SortTable("NgayBatDau"))" class="sortable" scope="col" sortable>
-                                            <div class="pb-3">Ngày bắt đầu<span class="arrow @(GetSortStyle("NgayBatDau"))"></span></div>
-                                        </th>
-                                        <th onclick="@(() => SortTable("NgayKetThuc"))" class="sortable" scope="col" sortable>
-                                            <div class="pb-3">Ngày kết thúc <span class="arrow @(GetSortStyle("NgayKetThuc"))"></span></div>
-                                        </th>
-                                    </tr>
-
-                                </thead>
-                                @if (listQLNV_CongViecModel.Any())
-                                {
-                                    <tbody>
-                                        @for (int i = 0; i < listQLNV_CongViecModel.Count; i++)
-                                        {
-                                            var ndm = listQLNV_CongViecModel[i];
-                                            <tr class="bg-light" @onclick="() => chiTietCV(ndm)" style="cursor: pointer;">
-                                                <td class="text-center align-middle">@(i + 1)</td>
-                                                <td class="align-middle readonly-cell">@ndm.NoiDungCongViec</td>
-                                                <td class="align-middle readonly-cell">@Format.FormatDate(ndm.NgayBatDau, "dd-MM-yyyy")</td>
-                                                <td class="align-middle readonly-cell">@Format.FormatDate(ndm.NgayKetThuc, "dd-MM-yyyy")</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                }
-
-                                else
-                                {
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="5"> Không có dữ liệu</td>
-                                        </tr>
-                                    </tbody>
-                                }
-
-                            </table>
-                        </div>
-                        @if (listQLNV_CongViecModel.Any())
-                        {
-                            <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
-                        }
-                    </div>
+<div class="row col-12 h-100" style="background:#faf9f8;">
+    <div class="col-2 col-sm-2 pl-3 pt-3 pb-3 pr-0 cus-sidebar ">
+        <div class="card h-100">
+            <div class="card-header">
+                Nhóm
+            </div>
+            <div class="card-body " style="padding-right:0px;">
+                <div class="nav flex-column nav-tabs" id="vert-tabs-tab">
+                    @foreach (var tab in tabs)
+                    {
+                        <a class="nav-link p-2 d-flex justify-content-between @(tab.Id == activeTab ? "active bg-primary" : "")"
+                           id="@($"{tab.Id}-tab")"
+                           data-toggle="pill"
+                           href="#"
+                           role="tab"
+                           aria-controls="@tab.Id"
+                           aria-selected="@(tab.Id == activeTab ? "true" : "false")"
+                           @onclick="() => OnTabChanged(tab.Id)">
+                            <span>@tab.Label</span>
+                            <span>@tab.Total</span>
+                        </a>
+                    }
                 </div>
             </div>
         </div>
     </div>
-</section>
+    <div class="col-10 col-sm-10 pl-3 pt-3 pb-3 pr-0 cus-content">
+        <div class="card h-100">
+            <div class="card-header">
+                Danh sách công việc
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="vert-tabs-tabContent">
+                    <div class="row our-table">
+                        <table class="table table-hover table-light">
+                            <thead>
+                                <tr>
+                                    <th class="sortable" scope="col">
+                                        STT
+                                    </th>
+                                    <th onclick="@(() => SortTable("NoiDungCongViec"))" class=" sortable" scope="col" sortable>
+                                        <div class="pb-3">Nội dung công việc <span class="arrow @(GetSortStyle("NoiDungCongViec"))"></span></div>
+                                    </th>
+                                    <th onclick="@(() => SortTable("NgayBatDau"))" class="sortable" scope="col" sortable>
+                                        <div class="pb-3">Ngày bắt đầu<span class="arrow @(GetSortStyle("NgayBatDau"))"></span></div>
+                                    </th>
+                                    <th onclick="@(() => SortTable("NgayKetThuc"))" class="sortable" scope="col" sortable>
+                                        <div class="pb-3">Ngày kết thúc <span class="arrow @(GetSortStyle("NgayKetThuc"))"></span></div>
+                                    </th>
+                                </tr>
+
+                            </thead>
+                            @if (listQLNV_CongViecModel.Any())
+                            {
+                                <tbody>
+                                    @for (int i = 0; i < listQLNV_CongViecModel.Count; i++)
+                                    {
+                                        var ndm = listQLNV_CongViecModel[i];
+                                        <tr class="bg-light" @onclick="() => chiTietCV(ndm)" style="cursor: pointer;">
+                                            <td class="text-center align-middle">@(i + 1)</td>
+                                            <td class="align-middle readonly-cell">@ndm.NoiDungCongViec</td>
+                                            <td class="align-middle readonly-cell">@Format.FormatDate(ndm.NgayBatDau, "dd-MM-yyyy")</td>
+                                            <td class="align-middle readonly-cell @GetBackgroundColor(ndm.NgayKetThuc)">@Format.FormatDate(ndm.NgayKetThuc, "dd-MM-yyyy")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            }
+
+                            else
+                            {
+                                <tbody>
+                                    <tr>
+                                        <td colspan="5"> Không có dữ liệu</td>
+                                    </tr>
+                                </tbody>
+                            }
+
+                        </table>
+                    </div>
+                    @if (listQLNV_CongViecModel.Any())
+                    {
+                        <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <ControlSidebar IsOpen="@IsSidebarOpen" OnToggle="ToggleSidebar" Title="Chi tiết công việc" Width="600px">
     <EditForm Model="Input" id="editFormId">
@@ -353,6 +348,22 @@
         {
             ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
         }
+    }
+
+    private string GetBackgroundColor(DateTime? NgayKetThuc)
+    {
+        if (!NgayKetThuc.HasValue)
+            return "";
+
+        int daysDiff = (NgayKetThuc.Value - DateTime.Today).Days;
+
+        if (daysDiff <= 3 && daysDiff >= 1)
+            return "bg-warning";
+
+        if (daysDiff <= 0)
+            return "bg-danger";
+
+        return "";
     }
 
     private async Task chiTietCV(QLNV_CongViecModel model)

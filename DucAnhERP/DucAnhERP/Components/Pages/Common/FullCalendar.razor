@@ -3,7 +3,9 @@
 <div id="calendar"></div>
 
 @code {
+
     [Parameter] public List<EventModel> Events { get; set; } = new();
+    [Parameter] public EventCallback<EventModel> OnEventClicked { get; set; } // Callback khi click event
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -11,14 +13,27 @@
         {
             var formattedEvents = Events.Select(e => new
             {
+                id = e.Id,
                 title = e.Title,
-                start = e.DateStart.ToString("yyyy-MM-ddTHH:mm:ss"), // Chuyển về định dạng ISO 8601
-                end = e.DateEnd.ToString("yyyy-MM-ddTHH:mm:ss")
+                start = e.DateStart.ToString("yyyy-MM-ddTHH:mm:ss"),
+                end = e.DateEnd.ToString("yyyy-MM-ddTHH:mm:ss"),
+                color = e.Color
             }).ToList();
 
-            Console.WriteLine($"Dữ liệu sự kiện gửi sang JS: {System.Text.Json.JsonSerializer.Serialize(formattedEvents)}"); // Log dữ liệu
+            Console.WriteLine($"Dữ liệu sự kiện gửi sang JS: {System.Text.Json.JsonSerializer.Serialize(formattedEvents)}");
 
-            await JS.InvokeVoidAsync("initFullCalendar", formattedEvents);
+            await JS.InvokeVoidAsync("initFullCalendar", formattedEvents, DotNetObjectReference.Create(this));
+        }
+    }
+
+    [JSInvokable]
+    public async Task EventClicked(string eventId)
+    {
+        var eventModel = Events.FirstOrDefault(e => e.Id == eventId);
+        if (eventModel != null)
+        {
+            await OnEventClicked.InvokeAsync(eventModel);
         }
     }
 }
+
