@@ -168,12 +168,20 @@ namespace DucAnhERP.Services.QLNV
         public async Task<bool> CheckExist(string id, QLNV_NhanVien input)
         {
             using var context = _context.CreateDbContext();
+
+            if (string.IsNullOrEmpty(id))
+            {
+             
+                bool a = await context.QLNV_NhanViens
+                    .AnyAsync(x => x.TaiKhoan.ToLower() == input.TaiKhoan.ToLower());
+                return a;
+            }
             return await context.QLNV_NhanViens
                 .AnyAsync(x => x.Id != id &&
                                x.TenNhanVien.ToLower() == input.TenNhanVien.ToLower() &&
-                               x.TaiKhoan.ToLower() == input.TaiKhoan.ToLower()
-                               );
+                               x.TaiKhoan.ToLower() == input.TaiKhoan.ToLower());
         }
+
         public async Task<bool> IsIdInUse(string id)
         {
             using var context = _context.CreateDbContext();

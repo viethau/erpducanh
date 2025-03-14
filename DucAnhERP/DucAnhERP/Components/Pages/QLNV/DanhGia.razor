@@ -53,7 +53,7 @@
                     <table class="table table-striped table-hover">
                         <thead class="table-info">
                             <tr>
-                                <th style="width: 50px;">STT</th>
+                                <th>STT</th>
                                 <th>Nội dung công việc</th>
                                 <th>Tệp đính kèm</th>
                             </tr>
@@ -138,12 +138,12 @@
                 <table class="table table-hover table-bordered">
                     <thead class="bg-info">
                         <tr>
-                            <th class="text-center">STT</th>
+                            <th class="text-center" style="width:1%">STT</th>
                             <th class="text-center">Nội dung công việc</th>
                             <th class="text-center">Người thực hiện</th>
                             <th class="text-center">Đánh giá</th>
                             <th class="text-center">Ghi chú</th>
-                            <th class="text-center" colspan="2" rowspan="2"></th>
+                            <th class="text-center" colspan="2" rowspan="2" style="width:1%"></th>
                         </tr>
 
                     </thead>
@@ -168,7 +168,7 @@
                                         <td class="text-success">@ndm.DanhGia</td>
                                     }
                                     <th class="text-center">@ndm.GhiChu</th>
-                                    <td class="text-center">
+                                    <td class="text-center" style="width: 1%; white-space: nowrap;">
                                             <button class="btn btn-sm btn-primary" @onclick="()=>Edit(ndm)">
                                                 <i class="fas fa-edit"></i>
                                             </button>
@@ -349,6 +349,18 @@
             ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
         }
 
+    }
+    private async Task isValidate()
+    {
+        try
+        {
+            string[] id_cv = new string[] { Input.Id_CongViec };
+            await QLNV_CongViecService.CheckExclusive(id_cv,baseTime);
+        }
+        catch (Exception )
+        {
+            ToastService.ShowToast("Thông báo","Không tìm thấy công việc!", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
     }
 
     private string deleteId;

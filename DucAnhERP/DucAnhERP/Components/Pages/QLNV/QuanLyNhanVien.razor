@@ -70,12 +70,11 @@
                 <table class="table table-hover table-bordered">
                     <thead class="bg-info">
                         <tr>
-                            <th class="text-center">STT</th>
+                            <th class="text-center" style="width: 1%;">STT</th>
                             <th class="text-center">Tên nhân viên</th>
                             <th class="text-center">Tên nhóm</th>
-                            <th class="text-center" colspan="2" rowspan="2"></th>
+                            <th class="text-center" colspan="2" rowspan="2" style="width: 1%;"></th>
                         </tr>
-
                     </thead>
                     @if (listQLNV_QuanLyNhanVienModel.Any())
                     {
@@ -89,7 +88,7 @@
                                     <td class="text-center">@stt</td>
                                     <td>@ndm.TenNhanVien</td>
                                     <td>@ndm.TenNhom</td>
-                                    <td class="text-center">
+                                    <td class="text-center" style="width: 1%; white-space: nowrap;">
                                         <div class="btn-group">
                                             @if (CheckQuyenService.HasPermission(4))
                                             {
@@ -105,23 +104,21 @@
                                             }
                                         </div>
                                     </td>
-                                   
                                 </tr>
                                 stt++;
                             }
-
                         </tbody>
                     }
                     else
                     {
                         <tbody>
                             <tr>
-                                <td colspan="5"> Không có dữ liệu</td>
+                                <td colspan="5">Không có dữ liệu</td>
                             </tr>
                         </tbody>
                     }
-
                 </table>
+
             </div>
             @if (listQLNV_QuanLyNhanVienModel.Any())
             {
@@ -297,6 +294,7 @@
         try
         {
             Input.CreateBy = userName;
+            if (!await isValidate()) return;
             var isExist = await QLNV_QuanLyNhanVienService.CheckExist(Input.Id, Input);
             if (isExist)
             {
@@ -310,7 +308,6 @@
             }
             else
             {
-
                 if (isEdit)
                 {
                     var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "475f8637-7871-49f2-8214-5f8cfc245d1c");
@@ -343,6 +340,41 @@
         }
 
     }
+
+    private async Task<bool> isValidate()
+    {
+        try
+        {
+            try
+            {
+                await QLNV_NhomNhanVienService.CheckExclusive([Input.Id_NhomNhanVien], baseTime);
+            }
+            catch (Exception ex)
+            {
+                ToastService.ShowToast("Lỗi không tìm thấy nhóm", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+                return false;
+            }
+            try
+            {
+                await QLNV_NhanVienService.CheckExclusive([Input.Id_NhanVien], baseTime);
+            }
+            catch (Exception ex)
+            {
+                ToastService.ShowToast("Lỗi không tìm thấy nhân viên", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+                return false;
+            }
+
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Lỗi hệ thống", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-danger", duration: 5000);
+            return false;
+        }
+    }
+
+
 
     private string deleteId;
     private async Task ConfirmDelete(string id, string Ten)

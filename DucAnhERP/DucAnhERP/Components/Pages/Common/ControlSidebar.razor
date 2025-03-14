@@ -1,0 +1,92 @@
+﻿@inherits LayoutComponentBase
+
+<style>
+    .control-sidebar {
+        position: fixed;
+        top: 56px; /* Điều chỉnh theo chiều cao navbar */
+        bottom: 0;
+        right: 0;
+        background: #fff;
+        color: #000;
+        transition: transform 0.3s ease-in-out;
+        box-shadow: -3px 0px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1007;
+        border-left: 1px solid #ddd;
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 56px); /* Đảm bảo sidebar không bị che */
+        transform: translateX(100%);
+    }
+
+        .control-sidebar.open {
+            transform: translateX(0);
+        }
+
+    .control-sidebar-header,
+    .control-sidebar-footer {
+        flex-shrink: 0;
+        padding: 15px;
+        font-weight: bold;
+        border-bottom: 1px solid #ddd;
+        background: #f8f9fa;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .control-sidebar-footer {
+        border-top: 1px solid #ddd;
+        justify-content: center;
+    }
+
+    .control-sidebar-body {
+        flex-grow: 1;
+        padding: 15px;
+        overflow-y: auto; /* Cho phép cuộn */
+    }
+
+    .control-sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1006;
+    }
+</style>
+
+<div class="control-sidebar @(IsOpen ? "open" : "")" style="width: @Width;">
+    <div class="control-sidebar-header">
+        <span>@Title</span>
+        <button class="btn-close" @onclick="ToggleSidebar"></button>
+    </div>
+
+    <div class="control-sidebar-body">
+        @ChildContent
+    </div>
+
+    <div class="control-sidebar-footer">
+        <button class="btn btn-primary w-100" @onclick="ToggleSidebar">Đóng</button>
+    </div>
+</div>
+
+@if (IsOpen)
+{
+    <div class="control-sidebar-overlay" @onclick="ToggleSidebar"></div>
+}
+
+@code {
+    [Parameter] public bool IsOpen { get; set; }
+    [Parameter] public EventCallback<bool> OnToggle { get; set; }
+    [Parameter] public string Width { get; set; } = "300px"; // Giá trị mặc định
+    [Parameter] public string Title { get; set; } = "Control Sidebar";
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
+    private async Task ToggleSidebar()
+    {
+        IsOpen = !IsOpen;
+        await OnToggle.InvokeAsync(IsOpen);
+    }
+}

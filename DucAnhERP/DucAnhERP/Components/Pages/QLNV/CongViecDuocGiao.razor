@@ -1,185 +1,231 @@
 ﻿@page "/QLNV/CongViecDuocGiao"
 
-<div class="container-fluid">
-    <div class="card mt-3">
+<style>
+    .nav-tabs {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 0.3px 0.9px var(--bg-shadow), 0px 1.6px 3.6px var(--bg-shadow);
+    background-color: #fff;
+    }
+</style>
+
+<section class="content mt-3">
+    <div class="card card-outline">
         <div class="card-header">
-            <h3 class="card-title">Danh sách </h3>
+            <h3 class="card-title">Danh sách</h3>
         </div>
         <div class="card-body">
-            <EditForm Model="pageModel" FormName="SearchData" id="SearchData" OnValidSubmit="@Search">
-                <DataAnnotationsValidator />
-                <div class="d-flex row">
-                    <div class="form-floating col-sm-3 col-md-3">
-                        <label for="Id_NguoiThucHienS">Tên nhân viên</label>
-                        <Select2 Id="Id_NguoiThucHienS" Items="@selectTenNguoiThucHien" OnChange="@OnSelectTenNguoiThucHien"></Select2>
-                        <ValidationMessage For="()=>pageModel.Id_NguoiThucHien"></ValidationMessage>
-                    </div>
-                    <div class="form-floating col-sm-3 col-md-3">
-                        <label for="TenNhomS">Tên nhóm</label>
-                        <Select2 Id="TenNhomS" Items="@selectTenNhom" OnChange="@OnSelectTenNhom"></Select2>
-                        <ValidationMessage For="()=>pageModel.TenNhom"></ValidationMessage>
-                    </div>
-                    <div class="form-floating col-sm-3 col-md-3">
-                        <label for="MDUT">Mức độ ưu tiên</label>
-                        <Select2 Id="MDUT" Items="@selectMDUT" OnChange="@OnSelectMDUT"></Select2>
-                        <ValidationMessage For="()=>pageModel.MucDoUuTien"></ValidationMessage>
-                    </div>
-                    <div class="form-floating col-sm-3 col-md-3">
-                        <label for="NDCV">Nội dung công việc</label>
-                        <Select2 Id="NDCV" Items="@selectNDCV" OnChange="@OnSelectNDCV"></Select2>
-                        <ValidationMessage For="()=>pageModel.NoiDungCongViec"></ValidationMessage>
-                    </div>
-                    <div class="form-group ml-5">
-                        <label>&nbsp;</label>
-                        <button type="submit" form="SearchData" class="btn btn-primary form-control">Tìm kiếm</button>
+            <div class="row">
+                <div class="col-2 col-sm-2">
+                    <div class="nav flex-column nav-tabs" id="vert-tabs-tab" role="tablist" aria-orientation="vertical">
+                        @foreach (var tab in tabs)
+                        {
+                            <a class="nav-link d-flex justify-content-between @(tab.Id == activeTab ? "active" : "")"
+                            id="@($"{tab.Id}-tab")"
+                            data-toggle="pill"
+                            href="#"
+                            role="tab"
+                            aria-controls="@tab.Id"
+                            aria-selected="@(tab.Id == activeTab ? "true" : "false")"
+                            @onclick="() => OnTabChanged(tab.Id)">
+                                <span>@tab.Label</span>
+                                <span>@tab.Total</span>
+                            </a>
+                        }
                     </div>
                 </div>
-            </EditForm>
-            <div class="row our-table">
-                <table class="table table-hover table-bordered">
-                    <thead class="bg-info">
-                        <tr>
-                            
-                            <th class="text-center sortable" scope="col">
-                                STT
-                            </th>
-                            <th onclick="@(() => SortTable("Id_NguoiGiaoViec"))" class="text-center sortable" scope="col" sortable>
-                                <div class="pb-3">Người giao việc <span class="arrow @(GetSortStyle("Id_NguoiGiaoViec"))"></span></div>
-                            </th>
-                            <th onclick="@(() => SortTable("NguoiThucHien"))" class="text-center sortable" scope="col" sortable>
-                                <div class="pb-3">Người thực hiện <span class="arrow @(GetSortStyle("NguoiThucHien"))"></span></div>
-                            </th>
-                            <th onclick="@(() => SortTable("TenNhom"))" class="text-center sortable" scope="col" sortable>
-                                <div class="pb-3">Tên nhóm<span class="arrow @(GetSortStyle("TenNhom"))"></span></div>
-                            </th>
-                            <th onclick="@(() => SortTable("NgayBatDau"))" class="text-center sortable" scope="col" sortable>
-                                <div class="pb-3">Ngày bắt đầu<span class="arrow @(GetSortStyle("NgayBatDau"))"></span></div>
-                            </th>
-                            <th onclick="@(() => SortTable("NgayKetThuc"))" class="text-center sortable" scope="col" sortable>
-                                <div class="pb-3">Ngày kết thúc <span class="arrow @(GetSortStyle("NgayKetThuc"))"></span></div>
-                            </th>
-                            <th onclick="@(() => SortTable("MucDoUuTien"))" class="text-center sortable" scope="col" sortable>
-                                <div class="pb-3">Mức độ ưu tiên <span class="arrow @(GetSortStyle("MucDoUuTien"))"></span></div>
-                            </th>
-                            <th onclick="@(() => SortTable("TuDanhGia"))" class="text-center sortable" scope="col" sortable>
-                                <div class="pb-3">Tự đánh giá <span class="arrow @(GetSortStyle("TuDanhGia"))"></span></div>
-                            </th>
-                            <th onclick="@(() => SortTable("TienDo"))" class="text-center sortable" scope="col" sortable>
-                                <div class="pb-3">Tiến độ<span class="arrow @(GetSortStyle("TienDo"))"></span></div>
-                            </th>
-                            <th onclick="@(() => SortTable("LapLai"))" class="text-center sortable" scope="col" sortable>
-                                <div class="pb-3">Lặp lại<span class="arrow @(GetSortStyle("TienDo"))"></span></div>
-                            </th>
-                            <th onclick="@(() => SortTable("NoiDungCongViec"))" class="text-center sortable" scope="col" sortable>
-                                <div class="pb-3">Nội dung công việc <span class="arrow @(GetSortStyle("NoiDungCongViec"))"></span></div>
-                            </th>
-                            <th>
-                                <div class="pb-3">File đính kèm</div>
-                            </th>
-                        </tr>
+                <div class="col-10 col-sm-10">
+                    <div class="tab-content" id="vert-tabs-tabContent">
+                        <div class="row our-table">
+                            <table class="table table-hover table-light">
+                                <thead >
+                                    <tr>
+                                        <th class="sortable" scope="col">
+                                            STT
+                                        </th>
+                                        <th onclick="@(() => SortTable("NoiDungCongViec"))" class=" sortable" scope="col" sortable>
+                                            <div class="pb-3">Nội dung công việc <span class="arrow @(GetSortStyle("NoiDungCongViec"))"></span></div>
+                                        </th>
+                                        <th onclick="@(() => SortTable("NgayBatDau"))" class="sortable" scope="col" sortable>
+                                            <div class="pb-3">Ngày bắt đầu<span class="arrow @(GetSortStyle("NgayBatDau"))"></span></div>
+                                        </th>
+                                        <th onclick="@(() => SortTable("NgayKetThuc"))" class="sortable" scope="col" sortable>
+                                            <div class="pb-3">Ngày kết thúc <span class="arrow @(GetSortStyle("NgayKetThuc"))"></span></div>
+                                        </th>
+                                    </tr>
 
-                    </thead>
-                    @if (listQLNV_CongViecModel.Any())
+                                </thead>
+                                @if (listQLNV_CongViecModel.Any())
+                                {
+                                    <tbody>
+                                        @for (int i = 0; i < listQLNV_CongViecModel.Count; i++)
+                                        {
+                                            var ndm = listQLNV_CongViecModel[i];
+                                            <tr class="bg-light" @onclick="() => chiTietCV(ndm)" style="cursor: pointer;">
+                                                <td class="text-center align-middle">@(i + 1)</td>
+                                                <td class="align-middle readonly-cell">@ndm.NoiDungCongViec</td>
+                                                <td class="align-middle readonly-cell">@Format.FormatDate(ndm.NgayBatDau, "dd-MM-yyyy")</td>
+                                                <td class="align-middle readonly-cell">@Format.FormatDate(ndm.NgayKetThuc, "dd-MM-yyyy")</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                }
+
+                                else
+                                {
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="5"> Không có dữ liệu</td>
+                                        </tr>
+                                    </tbody>
+                                }
+
+                            </table>
+                        </div>
+                        @if (listQLNV_CongViecModel.Any())
+                        {
+                            <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<ControlSidebar IsOpen="@IsSidebarOpen" OnToggle="ToggleSidebar" Title="Chi tiết công việc" Width="600px">
+    <EditForm Model="Input" id="editFormId">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="Id_NguoiGiaoViec">Người Giao việc <span class="text-danger">*</span></label>
+                    <InputText id="Id_NguoiGiaoViec" class="form-control" readonly @bind-Value="cvModel.Id_NguoiGiaoViec" />
+                </div>
+                <div class="form-group">
+                    <label for="NguoiThucHien">Người thực hiện <span class="text-danger">*</span></label>
+                    <InputText id="NguoiThucHien" class="form-control" readonly @bind-Value="cvModel.NguoiThucHien" />
+                </div>
+
+                <div class="form-group">
+                    <label for="NgayBatDau">Ngày bắt đầu <span class="text-danger">*</span></label>
+                    <InputDate id="NgayBatDau" class="form-control" readonly @bind-Value="cvModel.NgayBatDau" />
+                </div>
+                <div class="form-group">
+                    <label for="LapLai">Lặp lại <span class="text-danger">*</span></label>
+                    <InputText id="LapLai" class="form-control" readonly @bind-Value="cvModel.LapLai" />
+                </div>
+               
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="TenNhom">Nhóm công việc <span class="text-danger">*</span></label>
+                    <InputText id="TenNhom" class="form-control" readonly @bind-Value="cvModel.TenNhom" />
+                </div>
+                <div class="form-group">
+                    <label for="MucDoUuTien">Mức độ ưu tiên <span class="text-danger">*</span></label>
+                    <InputText id="MucDoUuTien" class="form-control" readonly @bind-Value="cvModel.MucDoUuTien" />
+                </div>
+                <div class="form-group">
+                    <label for="NgayKetThuc">Ngày kết thúc <span class="text-danger">*</span></label>
+                    <InputDate id="NgayKetThuc" class="form-control" readonly @bind-Value="cvModel.NgayKetThuc" />
+                </div>
+                <div class="form-group">
+                    <label for="FileDinhKem">File đính kèm <span class="text-danger">*</span></label>
+                    @if (!string.IsNullOrEmpty(cvModel.FileDinhKem))
                     {
-                        <tbody>
-                            @{
-                                int stt = 1;
-                            }
-
-                            @foreach (var ndm in listQLNV_CongViecModel)
+                        <a href="@cvModel.FileDinhKem" class="btn btn-link" title="@cvModel.NoiDungCongViec" download>
+                            <i class="fas fa-download"></i> Tải file
+                        </a>
+                    }
+                </div>
+               
+            </div>
+            <div class="col-12 form-group">
+                <label for="NoiDungCongViec">Nội dung công việc <span class="text-danger">*</span></label>
+                <InputTextArea id="NoiDungCongViec" class="form-control" readonly @bind-Value="cvModel.NoiDungCongViec" />
+            </div>
+        </div>
+        <div class="row">
+                <p class="mt-4 mb-2">Công việc con</p>
+                <table class="table table-striped table-hover">
+                    <thead class="table-info">
+                        <tr>
+                            <th>STT</th>
+                            <th>Nội dung công việc</th>
+                            <th>Tệp đính kèm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int stt = 1;
+                        }
+                        @foreach (var cvc in listCVC)
+                        {
+                            if(cvc.Id_Task == cvModel.Id_Task)
                             {
                                 <tr>
-                                    <td class="text-center align-middle">@stt</td>
-                                    <td class="align-middle readonly-cell">@ndm.Id_NguoiGiaoViec</td>
-                                    <td class="align-middle readonly-cell">@ndm.NguoiThucHien</td>
-                                    <td class="align-middle readonly-cell">@ndm.TenNhom</td>
-                                    <td class="align-middle readonly-cell">@ndm.NgayBatDau</td>
-                                    <td class="align-middle readonly-cell">@ndm.NgayKetThuc</td>
-                                    <td class="align-middle readonly-cell">@ndm.MucDoUuTien</td>
-
-                                    <td class="align-middle">
-                                        @* <InputText @bind="@ndm.TuDanhGia" class="form-control border-0" @bind:event="onchange" @onchange="() => OnValueChanged(ndm)" /> *@
-                                    </td>
-                                    <td class="align-middle">
-                                        @* <InputNumber @bind="@ndm.TienDo" class="form-control border-0" @bind:event="onchange" @onchange="() => OnValueChanged(ndm)" /> *@
-                                    </td>
-
-
-                                    <td class="align-middle readonly-cell">@ndm.LapLai</td>
-                                    <td class="align-middle readonly-cell">@ndm.NoiDungCongViec</td>
-                                    <td class="align-middle">
-                                        @if (!string.IsNullOrEmpty(ndm.FileDinhKem))
+                                    <td>@stt</td>
+                                    <td>@cvc.NoiDungCongViec</td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(cvc.FileDinhKem))
                                         {
-                                            <a href="@ndm.FileDinhKem" class="btn btn-link" title="@ndm.NoiDungCongViec" download>
-                                                <i class="fas fa-download"></i> Tải file
+                                            <a href="@cvc.FileDinhKem" title="@cvc.FileDinhKem" download>
+                                                <i class="fa fa-download"></i> Tải về
                                             </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Không có</span>
                                         }
                                     </td>
                                 </tr>
-
-                                @if (listCVC.Any(x => x.Id_Task == ndm.Id_Task))
-                                {
-                                    <tr class="bg-light">
-                                        <td colspan="13" class="text-bold">🔹 Công việc con</td>
-                                    </tr>
-                                }
-
-                                int sttcvc = 1;
-                                @foreach (var cvc in listCVC.Where(x => x.Id_Task == ndm.Id_Task))
-                                {
-                                    <tr class="bg-light">
-                                        <td class="text-center align-middle">
-
-                                        </td>
-                                        <td class="align-middle">@sttcvc</td>
-                                        <td class="align-middle" colspan="10">@cvc.NoiDungCongViec</td>
-                                        <td class="align-middle">
-                                            @if (!string.IsNullOrEmpty(cvc.FileDinhKem))
-                                            {
-                                                <a href="@cvc.FileDinhKem" class="btn btn-link" title="@cvc.NoiDungCongViec" download>
-                                                    <i class="fas fa-download"></i> Tải file
-                                                </a>
-                                            }
-                                        </td>
-                                    </tr>
-                                    sttcvc++;
-                                }
-
                                 stt++;
                             }
-                        </tbody>
-                    }
-                    else
-                    {
-                        <tbody>
-                            <tr>
-                                <td colspan="5"> Không có dữ liệu</td>
-                            </tr>
-                        </tbody>
-                    }
-
+                            
+                        }
+                    </tbody>
                 </table>
-            </div>
-            @if (listQLNV_CongViecModel.Any())
-            {
-                <Pagination MetaData="MetaData" Spread="2" SelectedPage="SelectedPage" ChangePageSize="ChangePageSize"></Pagination>
-            }
         </div>
-    </div>
-</div> 
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="TienDo">Tiến độ <span class="text-danger">*</span></label>
+                    <InputNumber id="TienDo" @bind-Value:after="OnValueChanged" class="form-control" @bind-Value="Input.TienDo" />
+                    <ValidationMessage For="() => Input.TienDo" class="text-danger" />
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="TuDanhGia">Tự đánh giá <span class="text-danger">*</span></label>
+                    <InputTextArea id="TuDanhGia" @bind-Value:after="OnValueChanged" class="form-control" @bind-Value="Input.TuDanhGia" />
+                    <ValidationMessage For="() => Input.TuDanhGia" class="text-danger" />
+                </div>
+            </div>
+        </div>
+    </EditForm>
+
+</ControlSidebar>
+
 @code {
+    private bool IsSidebarOpen = false;
+    private string activeTab;
+    private List<(string Id, string Label, int Total)> tabs = new();
+
     public string userName { get; set; }
     public string userId { get; set; }
     public string groupId { get; set; }
+    public string IdNhanVien { get; set; }
     private ApplicationUser user;
 
     private QLNV_CongViec Input = new();
     private QLNV_CongViecCon InputCVC = new();
     private DateTime baseTime;
 
-    private List<SelectedItem> selectNguoiThucHien = new ();
-    private List<SelectedItem> selectNhom = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
-    private List<SelectedItem> selectLapLai = new List<SelectedItem> { 
+    private List<SelectedItem> selectLapLai = new List<SelectedItem> {
         new SelectedItem { Value = "", Text = "Chọn", IsSelected = true },
         new SelectedItem { Value = "Hàng ngày", Text = "Hàng ngày"},
         new SelectedItem { Value = "Hàng tuần", Text = "Hàng tuần"},
@@ -193,99 +239,22 @@
     private List<SelectedItem> selectMDUT = new List<SelectedItem> { new SelectedItem { Value = "", Text = "Chọn", IsSelected = true } };
 
     [Parameter]
-    public List<QLNV_CongViecModel> listQLNV_CongViecModel{get;set;} = new();
-    public List<QLNV_CongViecModel> listModel{get;set;} = new();
-    public List<QLNV_CongViecCon> listCVC{get;set;} = new();
-    public MetaData MetaData {get;set; }
+    public List<QLNV_CongViecModel> listQLNV_CongViecModel { get; set; } = new();
+    public List<QLNV_CongViecModel> listModel { get; set; } = new();
+    public List<QLNV_CongViecCon> listCVC { get; set; } = new();
+    public MetaData MetaData { get; set; }
     [SupplyParameterFromForm(FormName = "SearchData")]
-    public QLNV_CongViecModel pageModel { get;set;}
-    public QLNV_CongViecModel dmModel { get; set; } = new();
+    public QLNV_CongViecModel pageModel { get; set; }
+    public QLNV_CongViecModel cvModel { get; set; } = new();
 
-    // Khởi tạo màn hình
-    protected override async Task OnInitializedAsync()
-    {
-        pageModel = new();
-        dmModel = new();
-        Input = new();
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        if (authState.User.Identity.IsAuthenticated)
-        {
-            userName = authState.User.Identity.Name;
-            user = ApplicationUserService.GetByUserName(userName);
-            userId = user.Id;
-            groupId = user.GroupId;
-        }
-        if (!string.IsNullOrEmpty(groupId) && user != null)
-        {
-            await CheckQuyenService.InitializePermissions(groupId, user, "6f85445f-398d-47d6-bbea-04c267299535");
-        }
 
-        var cvs = await QLNV_CongViecService.GetByVM(new QLNV_CongViecModel());
-        foreach (var item in cvs)
-        {
-            if (!selectTenNhom.Any(x => x.Value == item.NhomCongViec))
-            {
-                selectTenNhom.Add(new SelectedItem
-                    {
-                        Value = item.NhomCongViec,
-                        Text = item.TenNhom
-                    });
-            }
-            if (!selectTenNguoiThucHien.Any(x => x.Value == item.Id_NguoiThucHien))
-            {
-                selectTenNguoiThucHien.Add(new SelectedItem
-                    {
-                        Value = item.Id_NguoiThucHien,
-                        Text = item.NguoiThucHien
-                    });
-            }
-            if (!selectNDCV.Any(x => x.Value == item.NoiDungCongViec))
-            {
-                selectNDCV.Add(new SelectedItem
-                    {
-                        Value = item.NoiDungCongViec,
-                        Text = item.NoiDungCongViec
-                    });
-            } 
-            if (!selectMDUT.Any(x => x.Value == item.MucDoUuTien))
-            {
-                selectMDUT.Add(new SelectedItem
-                    {
-                        Value = item.MucDoUuTien,
-                        Text = item.MucDoUuTien
-                    });
-            }
-        }
-
-        StateHasChanged();
-        baseTime = DateTime.Now;
-
-        await Task.WhenAll(Search());
-    }
-    // Truy vấn data theo điều kiện tìm kiếm
-    private async Task Search()
-    {
-        try
-        {
-            var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "dac0c890-7c4b-40e4-91f3-fd8b9fb4e517");
-            var DM_LoaiKLs = await QLNV_CongViecService.GetByVM(pageModel);
-            listModel = DM_LoaiKLs;
-            listQLNV_CongViecModel = Paging(DM_LoaiKLs);
-            listCVC = await QLNV_CongViecService.GetAllCVC();
-        }
-        catch (Exception ex)
-        {
-            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
-        }
-    }
     //bắt sự kiện khi thay đổi
     private System.Timers.Timer _typingTimer;
     private int _debounceDelay = 1000; // Thời gian đợi sau khi người dùng dừng nhập (ms)
 
     // Hàm được gọi sau khi bind-value hoàn tất
-    private void OnValueChanged(QLNV_CongViecModel cv)
+    private void OnValueChanged()
     {
-        dmModel = cv;
         // Dừng Timer cũ nếu đang chạy
         _typingTimer?.Stop();
 
@@ -303,20 +272,129 @@
     // Hàm xử lý logic khi người dùng dừng nhập
     private async Task OnTypingStopped()
     {
-        await saveOnChange();
+        if(Input.TienDo != cvModel.TienDo || Input.TuDanhGia != cvModel.TuDanhGia)
+        {
+            if (!await isValidate()) return;
+            await QLNV_CongViecService.Update(Input, userName);
+            await Search();
+            ToastService.ShowToast("Thông báo", "Cập nhật thành công.", cssClass: "toast-success", iconClass: "fa fa-check-circle", progressBarClass: "bg-info", duration: 2000);
+        }
+    }
+    private async Task<bool> isValidate()
+    {
+        try
+        {
+            await QLNV_CongViecService.CheckExclusive([Input.Id],baseTime);
+            return true;
+        }
+        catch (Exception)
+        {
+            ToastService.ShowToast("Thông báo","Không tìm thấy công việc ! Vui lòng load lại trang", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+            return false;
+        }
     }
 
-    private async Task saveOnChange()
+    // Khởi tạo màn hình
+    protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("Id: " );
+        pageModel = new();
+        cvModel = new();
+        Input = new();
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            userName = authState.User.Identity.Name;
+            user = ApplicationUserService.GetByUserName(userName);
+            userId = user.Id;
+            groupId = user.GroupId;
+        }
+        // if (!string.IsNullOrEmpty(groupId) && user != null)
+        // {
+        //     await CheckQuyenService.InitializePermissions(groupId, user, "6f85445f-398d-47d6-bbea-04c267299535");
+        // }
+        var nhanViens = await QLNV_NhanVienService.GetByVM(new QLNV_NhanVienModel{TaiKhoan=userName});
+        if (nhanViens.Any())
+        {
+            IdNhanVien = nhanViens[0].Id;
+            var nhoms = await QLNV_NhomNhanVienService.GetNhomNhanVienByCVDGAsync(userName);
+            foreach (var item in nhoms)
+            {
+                tabs.Add((item.Id, item.TenNhom, item.Total));
+            }
+            if (tabs.Any())
+            {
+                activeTab = tabs.First().Id;
+                pageModel.Id_NguoiThucHien = IdNhanVien;
+                pageModel.NhomCongViec = activeTab;
+            }
+            else
+            {
+                pageModel.Id_NguoiThucHien = "xxxx";
+                pageModel.NhomCongViec = "xxxx";
+            }
+        }
+        
+        baseTime = DateTime.Now;
+        await Search();
+    }
+    // Truy vấn data theo điều kiện tìm kiếm
+    private async Task Search()
+    {
+        try
+        {
+            // var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "dac0c890-7c4b-40e4-91f3-fd8b9fb4e517");
+            var dsCongViec = await QLNV_CongViecService.GetByVM(pageModel);
+            listModel = dsCongViec;
+            listQLNV_CongViecModel = Paging(dsCongViec);
+            listCVC = await QLNV_CongViecService.GetAllCVC();
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+        }
+    }
+
+    private async Task chiTietCV(QLNV_CongViecModel model)
+    {
+        cvModel = model;
+        Input.Id = model.Id;
+        Input.Id_NguoiGiaoViec = model.Id_NguoiGiaoViec;
+        Input.Id_NguoiThucHien = model.Id_NguoiThucHien;
+        Input.MucDoUuTien = model.MucDoUuTien;
+        Input.Id_Task = model.Id_Task;
+        Input.LapLai = model.LapLai;
+        Input.NhomCongViec = model.NhomCongViec;
+        Input.NgayBatDau = model.NgayBatDau?? DateTime.MinValue;
+        Input.NgayKetThuc = model.NgayKetThuc;
+        Input.FileDinhKem = model.FileDinhKem;
+        Input.TienDo = model.TienDo;
+        Input.TuDanhGia = model.TuDanhGia;
+        Input.NoiDungCongViec = model.NoiDungCongViec;
+        Input.CreateAt = model.CreateAt;
+        Input.CreateBy = model.CreateBy;
+        Input.IsActive = model.IsActive;
+
+        IsSidebarOpen = true;
+    }
+    private async Task ToggleSidebar(bool isOpen)
+    {
+        IsSidebarOpen = isOpen;
+        StateHasChanged(); // Cập nhật UI ngay lập tức
+    }
+
+    private async Task OnTabChanged(string tabId)
+    {
+        pageModel = new();
+        activeTab = tabId;
+        pageModel.Id_NguoiThucHien = IdNhanVien;
+        pageModel.NhomCongViec = tabId;
+        await Search();
     }
 
     private void Refresh()
     {
-       
         Input = new();
-        selectNhom.ForEach(item => item.IsSelected = item.Value == "");
-        selectNguoiThucHien= new();
         selectLapLai.ForEach(item => item.IsSelected = item.Value == "");
         Input.Id_NguoiGiaoViec = user.UserName;
         pageModel = new();
@@ -344,7 +422,7 @@
     private void SortTable(string columnName)
     {
         listModel = SortService.SortTable(listModel, columnName);
-        dmModel.PageNumber = 1;
+        cvModel.PageNumber = 1;
         Paging(listModel);
     }
     // Get css cho chức năng sắp xếp
@@ -355,38 +433,38 @@
     // Xử lý trường hợp đổi page hiển thị
     private void SelectedPage(int page)
     {
-        dmModel.PageNumber = page;
+        cvModel.PageNumber = page;
         Paging(listModel);
     }
     // Xử lý trường hợp đổi số lượng bản ghi hiển thị trên page
     private void ChangePageSize(int pageSize)
     {
 
-        dmModel.PageNumber = 1;
-        dmModel.pageSize = pageSize;
+        cvModel.PageNumber = 1;
+        cvModel.pageSize = pageSize;
         Paging(listModel);
     }
     // Xử lý paging
-    private List<QLNV_CongViecModel> Paging(List<QLNV_CongViecModel> DM_LoaiKLs)
+    private List<QLNV_CongViecModel> Paging(List<QLNV_CongViecModel> dsCongViec)
     {
         // Đếm số bản ghi thỏa mãn
-        var count = DM_LoaiKLs.Count();
+        var count = dsCongViec.Count();
 
         // Lọc bản ghi theo page hiện tại và page size
-        DM_LoaiKLs = DM_LoaiKLs.Skip((dmModel.PageNumber - 1) * dmModel.PageSize).Take(dmModel.PageSize).ToList();
+        dsCongViec = dsCongViec.Skip((cvModel.PageNumber - 1) * cvModel.PageSize).Take(cvModel.PageSize).ToList();
 
         // Xóa danh sách đang hiển thị trên màn hình
         listQLNV_CongViecModel.Clear();
 
         // Thêm những bản ghi sau khi lọc vào danh sách hiển thị
-        foreach (var ndm in DM_LoaiKLs)
+        foreach (var ndm in dsCongViec)
         {
             listQLNV_CongViecModel.Add(ndm);
         }
 
         // Tạo pagelist mới
-        var pagelist = new PageList<QLNV_CongViecModel>(listQLNV_CongViecModel, count, dmModel.PageNumber, dmModel.PageSize);
+        var pagelist = new PageList<QLNV_CongViecModel>(listQLNV_CongViecModel, count, cvModel.PageNumber, cvModel.PageSize);
         MetaData = pagelist.MetaData;
-        return DM_LoaiKLs;
+        return dsCongViec;
     }
 }

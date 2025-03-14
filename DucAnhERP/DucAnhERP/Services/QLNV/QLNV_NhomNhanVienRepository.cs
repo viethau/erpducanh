@@ -83,19 +83,40 @@ namespace DucAnhERP.Services.QLNV
             }
             return entity;
         }
-        public async Task<List<QLNV_NhomNhanVien>> GetNhomNhanVienByTaiKhoanAsync(string taiKhoan)
+        public async Task<List<QLNV_NhomNhanVienModel>> GetNhomNhanVienByTaiKhoanAsync(string taiKhoan)
         {
-            List<QLNV_NhomNhanVien> data = new();
+            List<QLNV_NhomNhanVienModel> data = new();
             try
             {
                 using var context = _context.CreateDbContext();
 
-                var result = from a in context.QLNV_NhanViens
-                             join nnv in context.QLNV_NhomNhanViens on a.Id equals nnv.Id_QuanLy
-                             where a.TaiKhoan.ToUpper() == taiKhoan.ToUpper().Trim()
+                //var result = from a in context.QLNV_NhanViens
+                //             join nnv in context.QLNV_NhomNhanViens on a.Id equals nnv.Id_QuanLy
+                //             where a.TaiKhoan.ToUpper() == taiKhoan.ToUpper().Trim()
+                //                   && a.IsActive != 100
+                //                   && nnv.IsActive != 100
+                //                   orderby nnv.CreateAt ascending
+                //             select nnv;
+                var result = from nnv in context.QLNV_NhomNhanViens
+                             join a in context.QLNV_NhanViens on nnv.Id_QuanLy equals a.Id
+                             where a.TaiKhoan.ToUpper().Trim() == taiKhoan.ToUpper().Trim()
                                    && a.IsActive != 100
                                    && nnv.IsActive != 100
-                             select nnv;
+                             orderby nnv.CreateAt ascending
+                             select new QLNV_NhomNhanVienModel
+                             {
+                                 Id= nnv.Id,
+                                 Id_QuanLy = nnv.Id_QuanLy,
+                                 TenNhanVien = a.TenNhanVien,
+                                 TaiKhoan = a.TaiKhoan,
+                                 TenNhom = nnv.TenNhom,
+                                 Total = context.QLNV_CongViecs
+                                     .Where(cv => cv.NhomCongViec == nnv.Id)
+                                     .Select(cv => cv.Id_Task)
+                                     .Distinct()
+                                     .Count()
+                             };
+
 
                 data = await result.ToListAsync();
                 return data;
@@ -106,6 +127,39 @@ namespace DucAnhERP.Services.QLNV
                 return data;
             }
         }
+        public async Task<List<QLNV_NhomNhanVienModel>> GetNhomNhanVienByCVDGAsync(string taiKhoan)
+        {
+            List<QLNV_NhomNhanVienModel> data = new();
+            try
+            {
+                using var context = _context.CreateDbContext();
+
+                var result = await (from nv in context.QLNV_NhanViens
+                                    join qlnv in context.QLNV_QuanLyNhanViens on nv.Id equals qlnv.Id_NhanVien
+                                    join nnv in context.QLNV_NhomNhanViens on qlnv.Id_NhomNhanVien equals nnv.Id
+                                    where nv.TaiKhoan == taiKhoan
+                                    select new QLNV_NhomNhanVienModel
+                                    {
+                                        Id = nnv.Id,
+                                        Id_QuanLy = qlnv.Id_NhanVien,
+                                        TenNhom = nnv.TenNhom,
+                                        CreateAt = nnv.CreateAt,
+                                        Total = context.QLNV_CongViecs
+                                                    .Count(cv => cv.Id_NguoiThucHien == qlnv.Id_NhanVien
+                                                              && cv.NhomCongViec == nnv.Id)
+                                    })
+                                    .OrderBy(x => x.CreateAt)
+                                    .ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"An error occurred: {ex.Message}");
+                return data;
+            }
+        }
+
 
         public async Task<bool> CheckExist(string id, QLNV_NhomNhanVien input)
         {

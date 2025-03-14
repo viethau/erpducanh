@@ -39258,6 +39258,24 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\files\KCNCK- Giá trị đền bù theo luật mới 22.10.2024 (7).xlsx'))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\files\qlnv.sql'))">
+      <SourceType>Package</SourceType>
+      <SourceId>DucAnhERP</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/DucAnhERP</BasePath>
+      <RelativePath>files/qlnv.sql</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>z7h2c98fqc</Fingerprint>
+      <Integrity>UaxCDCfkOFvHsoEZTYc4GR4ISEi1B28ip0QcTREoeGU=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\files\qlnv.sql'))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\files\Quản lý nhân viên.xlsx'))">
       <SourceType>Package</SourceType>
       <SourceId>DucAnhERP</SourceId>
@@ -39324,8 +39342,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>bx6hr2ua2y</Fingerprint>
-      <Integrity>sR+OYRyfc/aHEF5RgNtv54KHuttQHdx5ywqy6MQ5H+w=</Integrity>
+      <Fingerprint>vrl05z9rpc</Fingerprint>
+      <Integrity>O08WXprihJpNFmgBS3YF7gy5PK2sYAWKJWW0WvnjHWw=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\script.js'))</OriginalItemSpec>
@@ -39474,6 +39492,24 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\templates\register_mail.html'))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\upload_qlnv\02dcb708-6fe6-48c8-ba0c-42f8ba9963c3_Quản lý nhân viên.xlsx'))">
+      <SourceType>Package</SourceType>
+      <SourceId>DucAnhERP</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/DucAnhERP</BasePath>
+      <RelativePath>upload_qlnv/02dcb708-6fe6-48c8-ba0c-42f8ba9963c3_Quản lý nhân viên.xlsx</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>rq75b6or11</Fingerprint>
+      <Integrity>c7lsDSTItrdYC0+1xGdFrWW5+VeF7WC33B3En/cFN+k=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\upload_qlnv\02dcb708-6fe6-48c8-ba0c-42f8ba9963c3_Quản lý nhân viên.xlsx'))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\upload_qlnv\0fc51be0-9ec5-4ddf-a5ef-e1aae3ab853c_Quản lý nhân viên.xlsx'))">
       <SourceType>Package</SourceType>
       <SourceId>DucAnhERP</SourceId>
@@ -39491,6 +39527,60 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\upload_qlnv\0fc51be0-9ec5-4ddf-a5ef-e1aae3ab853c_Quản lý nhân viên.xlsx'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\upload_qlnv\6b7b9868-a07b-4725-a4fc-da8f72d27ea0_Quản lý nhân viên.xlsx'))">
+      <SourceType>Package</SourceType>
+      <SourceId>DucAnhERP</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/DucAnhERP</BasePath>
+      <RelativePath>upload_qlnv/6b7b9868-a07b-4725-a4fc-da8f72d27ea0_Quản lý nhân viên.xlsx</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>rq75b6or11</Fingerprint>
+      <Integrity>c7lsDSTItrdYC0+1xGdFrWW5+VeF7WC33B3En/cFN+k=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\upload_qlnv\6b7b9868-a07b-4725-a4fc-da8f72d27ea0_Quản lý nhân viên.xlsx'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\upload_qlnv\7eb2b3bb-9985-41b2-bb66-663f11723fc7_Quản lý nhân viên.xlsx'))">
+      <SourceType>Package</SourceType>
+      <SourceId>DucAnhERP</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/DucAnhERP</BasePath>
+      <RelativePath>upload_qlnv/7eb2b3bb-9985-41b2-bb66-663f11723fc7_Quản lý nhân viên.xlsx</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>rq75b6or11</Fingerprint>
+      <Integrity>c7lsDSTItrdYC0+1xGdFrWW5+VeF7WC33B3En/cFN+k=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\upload_qlnv\7eb2b3bb-9985-41b2-bb66-663f11723fc7_Quản lý nhân viên.xlsx'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\upload_qlnv\b31674cc-fd48-4667-bdbf-4ee55ce158f0_Quản lý nhân viên.xlsx'))">
+      <SourceType>Package</SourceType>
+      <SourceId>DucAnhERP</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/DucAnhERP</BasePath>
+      <RelativePath>upload_qlnv/b31674cc-fd48-4667-bdbf-4ee55ce158f0_Quản lý nhân viên.xlsx</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>rq75b6or11</Fingerprint>
+      <Integrity>c7lsDSTItrdYC0+1xGdFrWW5+VeF7WC33B3En/cFN+k=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\upload_qlnv\b31674cc-fd48-4667-bdbf-4ee55ce158f0_Quản lý nhân viên.xlsx'))</OriginalItemSpec>
     </StaticWebAsset>
   </ItemGroup>
 </Project>

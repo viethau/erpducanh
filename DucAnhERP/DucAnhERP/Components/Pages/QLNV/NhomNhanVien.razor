@@ -22,7 +22,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             </EditForm>
         </BodyTemplate>
         <FooterTemplate>
@@ -32,7 +32,6 @@
             </div>
         </FooterTemplate>
     </CustomModal>
-    
     <div class="card mt-3">
         <div class="card-header">
             <h3 class="card-title">Danh sách</h3>
@@ -68,10 +67,10 @@
                 <table class="table table-hover table-bordered">
                     <thead class="bg-info">
                         <tr>
-                            <th class="text-center">STT</th>
+                            <th class="text-center" style="width: 1%;">STT</th>
                             <th class="text-center">Quản lý</th>
                             <th class="text-center">Tên nhóm</th>
-                            <th class="text-center" colspan="2" rowspan="2"></th>
+                            <th class="text-center" style="width: 1%;" colspan="2" rowspan="2"></th>
                         </tr>
 
                     </thead>
@@ -87,7 +86,7 @@
                                     <td class="text-center">@stt</td>
                                     <td>@ndm.TenNhanVien</td>
                                     <td>@ndm.TenNhom</td>
-                                    <td class="text-center">
+                                    <td class="text-center" style="width: 1%; white-space: nowrap;">
                                         <div class="btn-group">
                                             @if (CheckQuyenService.HasPermission(4))
                                             {
@@ -103,7 +102,7 @@
                                             }
                                         </div>
                                     </td>
-                                   
+
                                 </tr>
                                 stt++;
                             }
@@ -273,6 +272,7 @@
         try
         {
             Input.CreateBy = userName;
+            if (!await isValidate()) return;
             var isExist = await QLNV_NhomNhanVienService.CheckExist(Input.Id, Input);
             if (isExist)
             {
@@ -286,7 +286,6 @@
             }
             else
             {
-
                 if (isEdit)
                 {
                     var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "430f04ce-e8a1-4d72-83ba-e1ab5c3b99ec");
@@ -318,6 +317,20 @@
             ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
         }
 
+    }
+    private async Task<bool> isValidate()
+    {
+        try
+        {
+            bool result = false;
+            result = await QLNV_NhanVienService.CheckExclusive([Input.Id_QuanLy], baseTime);
+            return result;
+        }
+        catch (Exception)   
+        {
+            ToastService.ShowToast("Thông báo","Không tìm thấy nhân viên", iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
+            return false;
+        }
     }
 
     private string deleteId;

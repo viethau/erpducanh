@@ -11,6 +11,7 @@ namespace DucAnhERP.ViewModel.QLNV
         public string TenNhanVien { get; set; } = "";
         public string TaiKhoan { get; set; } = "";
         public string TenNhom { get; set; } = "";
+        public int Total { get; set; } =0;
 
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
         public string CreateBy { get; set; }

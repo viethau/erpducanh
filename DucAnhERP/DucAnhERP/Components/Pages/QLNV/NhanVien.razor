@@ -36,7 +36,7 @@
     </CustomModal>
     <div class="card mt-3">
         <div class="card-header">
-            <h3 class="card-title">Danh sách </h3>
+            <h3 class="card-title">Danh sách nhóm</h3>
         </div>
         <div class="card-body">
             <EditForm Model="pageModel" FormName="SearchData" id="SearchData" OnValidSubmit="@Search">
@@ -70,10 +70,10 @@
                 <table class="table table-hover table-bordered">
                     <thead class="bg-info">
                         <tr>
-                            <th class="text-center">STT</th>
+                            <th class="text-center" style="width: 1%;">STT</th>
                             <th class="text-center">Tên nhân viên</th>
                             <th class="text-center">Tài khoản</th>
-                            <th class="text-center" colspan="2" rowspan="2"></th>
+                            <th class="text-center" colspan="2" rowspan="2" style="width: 1%;"></th>
                         </tr>
 
                     </thead>
@@ -89,7 +89,7 @@
                                     <td class="text-center">@stt</td>
                                     <td>@ndm.TenNhanVien (@ndm.TaiKhoan)</td>
                                     <td>@ndm.TaiKhoan</td>
-                                    <td class="text-center">
+                                    <td class="text-center" style="width: 1%; white-space: nowrap;">
                                         <div class="btn-group">
                                             @if (CheckQuyenService.HasPermission(4))
                                             {
@@ -133,8 +133,6 @@
 </div>
 
 @code {
-
-
     public string userName { get; set; }
     public string userId { get; set; }
     public string groupId { get; set; }
@@ -255,12 +253,12 @@
         try
         {
             Input.CreateBy = userName;
-            var isExist = await QLNV_NhanVienService.CheckExist(Input.Id, Input);
+            var isExist = await QLNV_NhanVienService.CheckExist(isEdit ? Input.Id :"", Input);
             if (isExist)
             {
                 ToastService.ShowToast(
                    "Thông báo",
-                    "Đã tồn tại.",
+                    "Đã tồn tại tài khoản.",
                     cssClass: "toast-danger",
                     iconClass: "fa fa-exclamation-circle",
                     progressBarClass: "bg-info",
@@ -268,7 +266,6 @@
             }
             else
             {
-
                 if (isEdit)
                 {
                     var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "f08e2d74-528b-487c-98d3-33c988878947");

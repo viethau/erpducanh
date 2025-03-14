@@ -22,5 +22,11 @@
             }
             return amount.ToString();
         }
+        public static string FormatDate(DateTime? date, string format = "dd/MM/yyyy")
+        {
+            return date.HasValue ? date.Value.ToString(format) : "";
+        }
+
+
     }
 }
