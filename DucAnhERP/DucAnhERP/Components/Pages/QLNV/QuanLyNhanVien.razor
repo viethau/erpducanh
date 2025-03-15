@@ -42,14 +42,14 @@
                 <DataAnnotationsValidator />
                 <div class="d-flex row">
                     <div class="form-floating col-sm-3 col-md-3">
-                        <label for="TenNhanVien">Tên nhân viên</label>
-                        <Select2 Id="TenNhanVien" Items="@selectTenNhanVien" OnChange="@OnSelectTenNhanVien"></Select2>
-                        <ValidationMessage For="()=>pageModel.TenNhanVien"></ValidationMessage>
-                    </div>
-                    <div class="form-floating col-sm-3 col-md-3">
                         <label for="TenNhom">Tên nhóm</label>
                         <Select2 Id="TenNhom" Items="@selectTenNhom" OnChange="@OnSelectTenNhom"></Select2>
                         <ValidationMessage For="()=>pageModel.TenNhom"></ValidationMessage>
+                    </div>
+                    <div class="form-floating col-sm-3 col-md-3">
+                        <label for="TenNhanVien">Tên nhân viên</label>
+                        <Select2 Id="TenNhanVien" Items="@selectTenNhanVien" OnChange="@OnSelectTenNhanVien"></Select2>
+                        <ValidationMessage For="()=>pageModel.TenNhanVien"></ValidationMessage>
                     </div>
                     <div class="form-group ml-5">
                         <label>&nbsp;</label>
@@ -61,7 +61,6 @@
                             <label>&nbsp;</label>
                             <button class="btn btn-default form-control" @onclick="ShowModal">Thêm mới</button>
                         </div>
-
                     }
                 </div>
             </EditForm>
@@ -70,8 +69,8 @@
                     <thead class="bg-info">
                         <tr>
                             <th class="text-center" style="width: 1%;">STT</th>
-                            <th class="text-center">Tên nhân viên</th>
                             <th class="text-center">Tên nhóm</th>
+                            <th class="text-center">Tên nhân viên</th>
                             <th class="text-center" colspan="2" rowspan="2" style="width: 1%;"></th>
                         </tr>
                     </thead>
@@ -85,8 +84,8 @@
                             {
                                 <tr>
                                     <td class="text-center">@stt</td>
-                                    <td>@ndm.TenNhanVien</td>
                                     <td>@ndm.TenNhom</td>
+                                    <td>@ndm.TenNhanVien</td>
                                     <td class="text-center" style="width: 1%; white-space: nowrap;">
                                         <div class="btn-group">
                                             @if (CheckQuyenService.HasPermission(4))
@@ -255,7 +254,7 @@
                         Text = item.TenNhanVien
                     });
             }
-            if (!selectTenNhom.Any(x => x.Value == item.TenNhom))
+            if (!selectTenNhom.Any(x => x.Value == item.Id_NhomNhanVien))
             {
                 selectTenNhom.Add(new SelectedItem
                     {

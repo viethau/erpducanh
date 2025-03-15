@@ -230,7 +230,6 @@
     </div>
 </div>
 
-
 <CustomModal IsVisible="isModalVisible" OnClose="HandleModalClose" Title="@TitleModal" Size="modal-lg">
     <BodyTemplate>
         <EditForm Model="Input" id="editFormId" OnValidSubmit="HandleValidSubmit">
@@ -510,6 +509,23 @@
 
         return "";
     }
+
+    private string GetBackGColor(DateTime? NgayKetThuc)
+    {
+        if (!NgayKetThuc.HasValue)
+            return "#FFFFFF"; // Trả về màu trắng nếu không có ngày kết thúc
+
+        int daysDiff = (NgayKetThuc.Value - DateTime.Today).Days;
+
+        if (daysDiff <= 3 && daysDiff >= 1)
+            return "#ffc107"; // Màu vàng (warning)
+
+        if (daysDiff <= 0)
+            return "#dc3545"; // Màu đỏ (danger)
+
+        return "#FFFFFF"; // Mặc định là màu trắng
+    }
+
     private string GetPriorityColor(string priority)
     {
         return priority switch
@@ -730,7 +746,7 @@
                         Id = item.Id_Task,
                         Title = item.NoiDungCongViec,
                         DateStart = item.NgayBatDau ?? DateTime.Now,
-                        Color = GetBackgroundColor(item.NgayKetThuc)
+                        Color = GetBackGColor(item.NgayKetThuc)
                     };
 
                 if (item.NgayKetThuc.HasValue)
