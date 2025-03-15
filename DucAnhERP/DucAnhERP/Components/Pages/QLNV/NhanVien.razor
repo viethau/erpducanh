@@ -253,6 +253,7 @@
         try
         {
             Input.CreateBy = userName;
+            Input.GroupId = groupId;
             var isExist = await QLNV_NhanVienService.CheckExist(isEdit ? Input.Id :"", Input);
             if (isExist)
             {

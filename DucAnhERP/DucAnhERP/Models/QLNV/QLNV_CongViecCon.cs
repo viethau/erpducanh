@@ -13,6 +13,8 @@ namespace DucAnhERP.Models.QLNV
         [Required(ErrorMessage = "Vui lòng nhập nội dung công việc!")]
         public string NoiDungCongViec { get; set; }
         public string? FileDinhKem { get; set; }="";
+
+        public string GroupId { get; set; } = "";
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
         public string CreateBy { get; set; }
         public int IsActive { get; set; } = 1;

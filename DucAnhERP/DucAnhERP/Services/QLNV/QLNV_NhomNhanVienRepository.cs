@@ -36,11 +36,16 @@ namespace DucAnhERP.Services.QLNV
                                  TaiKhoan = nv.TaiKhoan,
                                  TenNhom = p1.TenNhom,
 
+                                 GroupId = p1.GroupId,
                                  CreateAt = p1.CreateAt,
                                  CreateBy = p1.CreateBy,
                                  IsActive = p1.IsActive,
                              };
 
+                if (!string.IsNullOrEmpty(input.GroupId))
+                {
+                    result = result.Where(x => x.GroupId == input.GroupId);
+                }
                 if (!string.IsNullOrEmpty(input.TenNhanVien))
                 {
                     result = result.Where(x => x.TenNhanVien == input.TenNhanVien);

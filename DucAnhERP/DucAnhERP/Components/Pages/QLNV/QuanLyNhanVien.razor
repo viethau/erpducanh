@@ -33,7 +33,6 @@
             </div>
         </FooterTemplate>
     </CustomModal>
-
     <div class="card mt-3 ">
         <div class="card-header">
             <h3 class="card-title">Danh sách </h3>
@@ -126,7 +125,6 @@
             }
         </div>
     </div>
-
     <ConfirmModal @ref="confirmModal" OnResponseClick="HandleResponseClick"></ConfirmModal>
 </div>
 
@@ -215,7 +213,6 @@
         Input.Id_NhanVien = selectedItem.Value;
     }
 
-
     // Khởi tạo màn hình
     protected override async Task OnInitializedAsync()
     {
@@ -294,6 +291,7 @@
         try
         {
             Input.CreateBy = userName;
+            Input.GroupId = groupId;
             if (!await isValidate()) return;
             var isExist = await QLNV_QuanLyNhanVienService.CheckExist(Input.Id, Input);
             if (isExist)
@@ -373,8 +371,6 @@
             return false;
         }
     }
-
-
 
     private string deleteId;
     private async Task ConfirmDelete(string id, string Ten)

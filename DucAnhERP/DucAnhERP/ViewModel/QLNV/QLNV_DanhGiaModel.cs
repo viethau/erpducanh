@@ -15,6 +15,8 @@ namespace DucAnhERP.ViewModel.QLNV
         public string TaiKhoanThucHien { get; set; } = "";
         public Double DanhGia { get; set; }=0;
         public string GhiChu { get; set; } = "";
+
+        public string GroupId { get; set; } = "";
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
         public string CreateBy { get; set; }
         public int IsActive { get; set; } = 1;

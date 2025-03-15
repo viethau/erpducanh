@@ -45,11 +45,16 @@ namespace DucAnhERP.Services.QLNV
                                  LapLai=p1.LapLai,
                                  NoiDungCongViec = p1.NoiDungCongViec,
                                  FileDinhKem =p1.FileDinhKem??"",
+                                 GroupId = p1.GroupId,
                                  CreateAt = p1.CreateAt,
                                  CreateBy = p1.CreateBy,
                                  IsActive = p1.IsActive,
                              };
 
+                if (!string.IsNullOrEmpty(input.GroupId))
+                {
+                    result = result.Where(x => x.GroupId == input.GroupId);
+                }
                 if (!string.IsNullOrEmpty(input.Id_NguoiGiaoViec))
                 {
                     result = result.Where(x => x.Id_NguoiGiaoViec == input.Id_NguoiGiaoViec);

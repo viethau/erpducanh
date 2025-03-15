@@ -204,9 +204,6 @@
 </div>
 
 @code {
-
-
-
     public string userName { get; set; }
     public string userId { get; set; }
     public string groupId { get; set; }
@@ -317,6 +314,8 @@
     {
         try
         {
+            Input.CreateBy = userName;
+            Input.GroupId = groupId;
             if (isEdit)
             {
                 // var checkquyen = await PhanQuyenService.CheckPermission(groupId, "", user, "40acc55a-b536-4068-b946-217da164d118");

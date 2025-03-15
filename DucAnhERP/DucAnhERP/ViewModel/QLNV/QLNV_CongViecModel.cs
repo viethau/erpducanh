@@ -21,6 +21,7 @@ namespace DucAnhERP.ViewModel.QLNV
         public string NoiDungCongViec { get; set; } = "";
         public string FileDinhKem { get; set; } = "";
 
+        public string GroupId { get; set; } = "";
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
         public string CreateBy { get; set; }
         public int IsActive { get; set; } = 1;

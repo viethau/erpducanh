@@ -1,4 +1,4 @@
-﻿@inject IJSRuntime JS
+﻿@* @inject IJSRuntime JS
 
 <div id="calendar"></div>
 
@@ -37,3 +37,61 @@
     }
 }
 
+ *@
+@inject IJSRuntime JS
+
+@if (Events != null && Events.Any())
+{
+    <div id="calendar"></div>
+}
+
+@code {
+    [Parameter] public List<EventModel> Events { get; set; } = new();
+    [Parameter] public EventCallback<EventModel> OnEventClicked { get; set; }
+
+    private DotNetObjectReference<FullCalendar>? _dotNetRef;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadFullCalendar();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+            await LoadFullCalendar();
+        }
+    }
+
+    private async Task LoadFullCalendar()
+    {
+        if (Events != null && Events.Any())
+        {
+            await Task.Delay(50); // Đợi Blazor render xong
+            var formattedEvents = Events.Select(e => new
+            {
+                id = e.Id,
+                title = e.Title,
+                start = e.DateStart.ToString("yyyy-MM-ddTHH:mm:ss"),
+                end = e.DateEnd.ToString("yyyy-MM-ddTHH:mm:ss"),
+                color = e.Color
+            }).ToList();
+
+            Console.WriteLine($"📌 Cập nhật sự kiện: {System.Text.Json.JsonSerializer.Serialize(formattedEvents)}");
+
+            await JS.InvokeVoidAsync("initFullCalendar", formattedEvents, _dotNetRef);
+        }
+    }
+
+    [JSInvokable]
+    public async Task EventClicked(string eventId)
+    {
+        var eventModel = Events.FirstOrDefault(e => e.Id == eventId);
+        if (eventModel != null)
+        {
+            await OnEventClicked.InvokeAsync(eventModel);
+        }
+    }
+}

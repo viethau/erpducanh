@@ -753,6 +753,7 @@
         try
         {
             Input.CreateBy = userName;
+            Input.GroupId = groupId;
             if (!await isValidate()) return;
             if (isEdit)
             {
@@ -858,12 +859,12 @@
         }
     }
 
-
     private async Task HandleValidSubmitCVC()
     {
         try
         {
             InputCVC.CreateBy = userName;
+            InputCVC.GroupId = groupId;
             if (!await isValidateCVC()) return;
             var isExist = await QLNV_CongViecService.CheckExistCVC(InputCVC.Id, InputCVC);
             if (isExist)

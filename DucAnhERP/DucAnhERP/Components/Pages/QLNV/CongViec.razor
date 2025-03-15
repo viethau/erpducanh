@@ -677,6 +677,7 @@
         try
         {
             Input.CreateBy = userName;
+            Input.GroupId = groupId;
             if (!await isValidate()) return;
             if (isEdit)
             {
@@ -724,7 +725,6 @@
         {
             ToastService.ShowToast("Thông báo", ex.Message, iconClass: "fa fa-exclamation-circle", progressBarClass: "bg-info", duration: 5000);
         }
-
     }
 
     string message = "";
@@ -784,12 +784,12 @@
         }
     }
 
-
     private async Task HandleValidSubmitCVC()
     {
         try
         {
             InputCVC.CreateBy = userName;
+            InputCVC.GroupId = groupId;
             if (!await isValidateCVC()) return;
             var isExist = await QLNV_CongViecService.CheckExistCVC(InputCVC.Id, InputCVC);
             if (isExist)

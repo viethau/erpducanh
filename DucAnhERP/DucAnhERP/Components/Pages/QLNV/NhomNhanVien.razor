@@ -272,6 +272,7 @@
         try
         {
             Input.CreateBy = userName;
+            Input.GroupId = groupId;
             if (!await isValidate()) return;
             var isExist = await QLNV_NhomNhanVienService.CheckExist(Input.Id, Input);
             if (isExist)

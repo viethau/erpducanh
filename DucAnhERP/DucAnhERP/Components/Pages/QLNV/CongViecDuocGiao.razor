@@ -202,7 +202,6 @@
             </div>
         </div>
     </EditForm>
-
 </ControlSidebar>
 
 @code {
@@ -269,6 +268,8 @@
     {
         if(Input.TienDo != cvModel.TienDo || Input.TuDanhGia != cvModel.TuDanhGia)
         {
+            Input.CreateBy = userName;
+            Input.GroupId = groupId;
             if (!await isValidate()) return;
             await QLNV_CongViecService.Update(Input, userName);
             await Search();
@@ -382,6 +383,7 @@
         Input.TienDo = model.TienDo;
         Input.TuDanhGia = model.TuDanhGia;
         Input.NoiDungCongViec = model.NoiDungCongViec;
+        Input.GroupId = model.GroupId;
         Input.CreateAt = model.CreateAt;
         Input.CreateBy = model.CreateBy;
         Input.IsActive = model.IsActive;

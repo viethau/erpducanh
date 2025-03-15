@@ -12,7 +12,9 @@ namespace DucAnhERP.Models.QLNV
         [Required(ErrorMessage = "Vui lòng chọn người quản lý!")]
         public string Id_QuanLy { get; set; }
         [Required(ErrorMessage = "Vui lòng nhập tên nhóm!")]
-        public string TenNhom { get; set; } 
+        public string TenNhom { get; set; }
+
+        public string GroupId { get; set; } = "";
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
         public string CreateBy { get; set; }
         public int IsActive { get; set; } = 1;
